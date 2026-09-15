@@ -1,0 +1,262 @@
+# 15 · Glosario
+
+Vocabulario compartido entre el negocio, la contabilidad y el sistema. Cuando haya duda sobre
+qué significa algo, este documento manda.
+
+---
+
+## Términos financieros
+
+**Adelanto**
+Plata entregada a la empleada a cuenta de su salario. **No es gasto**: es una cuenta por cobrar
+que se descuenta al liquidar la nómina. Registrarlo como gasto y luego pagar el salario completo
+cuenta el mismo dinero dos veces.
+
+**Anticipo**
+El 50% que paga el cliente al confirmar un pedido. **No es un ingreso**: es una deuda con el
+cliente hasta que se entrega. Aumenta la caja pero no la utilidad.
+
+**Aporte de capital**
+Plata que entra al negocio desde afuera, puesta por la propiedad. Aumenta la caja y el
+patrimonio, pero no es un ingreso.
+
+**Caja**
+Movimiento real de dinero: lo que entró y salió de las cuentas en un período. Responde
+*"¿cuánta plata hay?"*
+
+**Caja libre**
+Saldo total menos anticipos de pedidos no entregados menos gastos fijos comprometidos. Responde
+*"¿cuánto puedo usar hoy sin meterme en problemas?"* **Es la cifra más importante del sistema.**
+
+**Causación**
+Registrar un ingreso o un gasto cuando ocurre el hecho económico, independientemente de cuándo
+se mueve la plata. En PRISMA, la venta se causa **al entregar el pedido**.
+
+**Contra-asiento**
+Movimiento nuevo que reversa uno anterior sin modificarlo. Es la forma de corregir un error
+cuando el original no se puede tocar.
+
+**Costo directo**
+Lo que cuesta producir específicamente ese pedido: insumos, consumibles y tiempo de trabajo.
+Varía con la cantidad.
+
+**Descapitalización**
+Retirar más de lo que el negocio genera. Se puede tener doce meses rentables seguidos y estar
+vaciando el negocio. El sistema alerta cuando los retiros de 12 meses superan las utilidades.
+
+**Distribución de utilidades**
+Plata que se saca del negocio por ser propietario. **No es gasto**: no reduce la utilidad, pero
+sí la caja y el patrimonio.
+
+**Gasto**
+Lo que el negocio consume para poder operar. La prueba es: *¿sin esto puedo producir?* Si la
+respuesta es no, es gasto. Arriendo, tinta, salario y pro-labore son gastos.
+
+**Gasto fijo**
+Se paga todos los meses sin importar cuánto se venda: arriendo, servicios, internet, pro-labore,
+salario.
+
+**Inversión**
+Compra de un activo que dura: una prensa, una máquina de bordar. **No reduce la utilidad**:
+cambia plata por un bien que sigue siendo del negocio.
+
+**Margen bruto**
+Ingresos menos costo directo. Lo que queda para cubrir gastos fijos.
+
+**Margen de contribución**
+Precio menos costo variable. Lo que aporta cada unidad vendida a cubrir los gastos fijos.
+Para el simulador de nómina se excluye el costo del tiempo, porque el tiempo es justamente el
+gasto fijo que se busca cubrir.
+
+**Margen neto**
+Utilidad causada dividida entre ingresos. Lo que realmente queda de cada peso vendido.
+
+**Margen por hora**
+Margen en pesos dividido entre las horas de trabajo que exige el producto. **Es el indicador
+que debe guiar qué priorizar** cuando hay más pedidos que tiempo disponible, no el margen
+porcentual.
+
+**Patrimonio**
+Aportes menos distribuciones más utilidades acumuladas. Lo que se ha construido.
+
+**Pro-labore**
+Sueldo que se asigna quien dirige el negocio por el trabajo que hace en el taller. **Es gasto**
+y reduce la utilidad. Sin él, el negocio parece rentable porque tiene mano de obra gratis.
+Se fija preguntándose *"¿cuánto tendría que pagarle a alguien para que hiciera lo que yo hago?"*
+
+**Punto de equilibrio**
+Ventas necesarias para no ganar ni perder. Gastos fijos divididos entre el margen de
+contribución porcentual.
+
+**Registro tardío**
+Movimiento digitado más de 7 días después de haber ocurrido. No es un error, es una señal de
+que el hábito de registro se está aflojando.
+
+**Reserva**
+Porcentaje de cada entrada que se aparta como colchón del negocio. Meta sugerida: tres meses de
+gastos fijos.
+
+**Retiro**
+Salida de plata hacia la propiedad. Se divide en **pro-labore** (gasto) y **distribución**
+(no gasto). Distinguirlos es la base de saber si el negocio realmente gana.
+
+**Sobres (los 4)**
+Reparto automático de cada peso que entra: costo directo, gastos fijos, reserva y retiro. Los
+porcentajes son parametrizables.
+
+**Tiempo ocioso**
+Horas pagadas menos horas cargadas a pedidos. El tiempo que se paga y no se vende.
+
+**Utilidad causada**
+Ingresos causados menos costos y gastos del período. Responde *"¿el negocio es rentable?"*
+
+---
+
+## Términos del sistema
+
+**Anulación**
+Marcar un registro como sin efecto, con motivo obligatorio, autor, fecha, dispositivo e IP.
+**Nunca se borra.**
+
+**Auditoría**
+Bitácora de todos los cambios: quién, cuándo, desde dónde y qué cambió. La escriben triggers de
+la base de datos, no la aplicación.
+
+**Bitácora de cambios**
+El panel de Gestión de usuarios que muestra quién cambió qué, cuándo y por qué, con lo más
+reciente arriba. Es la cara legible de la **auditoría**: la auditoría registra todo cambio del
+sistema y la escriben los triggers; la bitácora muestra los de usuarios y cargos en lenguaje
+llano y es el único sitio desde donde se puede **revertir**. En ninguna de las dos se borra nada.
+
+**Cargo**
+Lo que una persona **hace en el negocio**: Gerente, Empleada de producción, Domiciliaria,
+Asistente administrativa, Aprendiz SENA, Contratista externo. Es descriptivo y sirve para
+contexto y reportes. **Nunca decide un permiso.** Vive en `usuarios.cargo_id`.
+
+**Catálogo de cargos**
+La lista de cargos disponibles, administrada por Gerencia desde el sistema. Es abierta: se
+agregan y renombran cargos sin tocar el código. Un cargo no se borra, se desactiva con motivo,
+para que los usuarios que lo tuvieron sigan teniendo sentido. Vive en la tabla `cargos`.
+
+**Cierre mensual**
+Congelar un mes con sus cifras definitivas. Un movimiento registrado después con fecha de ese
+mes no altera el reporte histórico.
+
+**Clave temporal**
+Contraseña que Gerencia entrega en persona al crear un usuario o al restablecerle el acceso.
+Obliga a cambiarla en el primer ingreso (`debe_cambiar_clave`). Se entrega en persona porque
+no hay canal de correo para recuperar contraseñas.
+
+**Correo sintético**
+Dirección interna que el sistema arma a partir del nombre de usuario para autenticar contra
+el proveedor, que solo entiende correos: `marcela` → `marcela@usuarios.prismamy.co`. Es un
+detalle técnico: **nunca se muestra, nunca se pide, nunca se imprime.**
+
+**Descarga del Inicio**
+Bajar en CSV o PDF lo que el Inicio está mostrando: las tres cifras del mes, los saldos de
+cuentas al corte, los últimos doce meses, las alertas activas y los pedidos por entregar.
+**No es un respaldo**: no trae tablas completas ni manifiesto, y con ella no se restaura nada.
+Es el único archivo que el Inicio produce, y aun así no escribe nada en la base. Solo Gerencia.
+
+**Fecha del movimiento**
+Cuándo ocurrió de verdad. Es la que manda en todos los reportes.
+
+**Fecha de digitación**
+Cuándo se registró en el sistema. Automática, no editable, solo para auditoría.
+
+**Gerencia**
+Tipo de usuario con acceso total. Único que ve utilidad, retiros, patrimonio, nómina, costos y
+auditoría.
+
+**Nombre de usuario**
+Con lo que cada persona inicia sesión: entre 3 y 20 caracteres, minúsculas, números, punto,
+guion y guion bajo. Es único y no distingue mayúsculas, así que `Marcela` y `marcela` son la
+misma persona. Se usa en lugar del correo porque en el taller no todo el mundo tiene correo.
+
+**Operación**
+Tipo de usuario restringido. Registra ventas y gastos, consulta productos sin ver márgenes, y
+ve únicamente su propio desprendible.
+
+**PWA**
+Aplicación web que se instala en el celular como si fuera una app normal y funciona con señal
+intermitente.
+
+**Reversión**
+Deshacer un cambio registrado en la bitácora escribiendo una entrada nueva, nunca borrando la
+original: la entrada deshecha queda marcada como `Revertida` y la nueva dice qué se deshizo y
+por qué. Es al historial de usuarios lo que el **contra-asiento** es a la contabilidad. Se
+rechaza si dejaría el sistema sin un usuario activo de Gerencia. Un restablecimiento de
+contraseña no se puede revertir: el sistema nunca guardó la anterior.
+
+**Rol**
+Palabra ambigua que **este proyecto ya no usa**, porque significaba dos cosas a la vez: los
+permisos y el oficio de la persona. Lo primero es el **tipo de usuario**; lo segundo, el
+**cargo**. Si aparece «rol» en un documento viejo, se refiere al tipo de usuario.
+
+**Solo escritura**
+Diseño de base de datos en el que nada se elimina. El permiso de borrado está revocado en el
+motor, no solo en el código.
+
+**Tipo de usuario**
+Lo que una persona **puede ver y hacer** en el sistema. Solo hay dos valores y no se agregan
+más: `gerencia` y `operacion`. Es lo que evalúa Row Level Security. Vive en `usuarios.tipo`.
+**El tipo dice qué puede ver; el cargo dice qué hace.**
+
+**Usuario desactivado**
+Usuario al que se le quitó el acceso con motivo escrito, autor y fecha. **Nunca se borra**: su
+historia de movimientos, pedidos y nómina se conserva intacta. No puede iniciar sesión aunque
+la contraseña sea correcta. Siempre debe quedar al menos un usuario activo de tipo Gerencia.
+
+**Vista previa de Operación**
+Interruptor del menú de la sesión, disponible solo para Gerencia, que pinta la interfaz como la
+vería una persona de tipo Operación. **No es una prueba de permisos**: solo cambia lo que dibuja
+el navegador, y los permisos de verdad los aplica Row Level Security dentro de la base de datos.
+Sirve para decidir si a la empleada le falta o le sobra algo en pantalla; para comprobar que no
+puede llegar a los datos ocultos hay que entrar con una sesión real. Mientras está activa, una
+franja fija lo advierte y ofrece salir con un clic.
+
+---
+
+## Términos técnicos
+
+**Arquitectura hexagonal**
+Separar las reglas de negocio de la tecnología mediante interfaces. Permite cambiar de base de
+datos o de interfaz sin tocar los cálculos.
+
+**Caso de uso**
+Una acción completa del sistema, en un archivo propio. Corresponde a un `CU-xx` del documento 02.
+
+**Dominio**
+El núcleo del sistema: modelo y reglas de negocio. No conoce React, ni la base de datos, ni
+internet.
+
+**Función pura**
+Con las mismas entradas devuelve siempre el mismo resultado y no modifica nada externo. Todos
+los cálculos financieros son funciones puras, y por eso se pueden probar en milisegundos.
+
+**Puerto y adaptador**
+El puerto es la interfaz que declara qué necesita el dominio. El adaptador es la implementación
+concreta con una tecnología específica.
+
+**RLS (Row Level Security)**
+Mecanismo de PostgreSQL que decide qué filas puede ver cada usuario **dentro de la base de
+datos**. Los permisos no dependen de que la aplicación esconda un botón.
+
+**Trigger**
+Código que PostgreSQL ejecuta automáticamente al insertar o modificar una fila. Se usa para la
+auditoría, para que sea imposible evitarla desde la aplicación.
+
+---
+
+## Equivalencias con el lenguaje contable
+
+| En PRISMA se dice | Un contador diría |
+|---|---|
+| Utilidad causada | Utilidad del ejercicio |
+| Caja | Flujo de efectivo |
+| Anticipo por devengar | Anticipos recibidos de clientes (pasivo) |
+| Pro-labore | Gasto de personal de la administración |
+| Distribución | Retiro del propietario |
+| Los 4 sobres | Presupuesto por destinación |
+| Anulación | Reverso |
+| Contra-asiento | Asiento de reversión |
