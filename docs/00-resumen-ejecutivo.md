@@ -26,8 +26,13 @@ Eso produce cinco síntomas concretos:
 ## 2. Qué es PRISMA
 
 Una aplicación web instalable en el celular y usable desde el computador, que centraliza la
-administración y las finanzas del negocio. Sin servidor propio, sin instalaciones complicadas,
-con **costo mensual de $0** en los planes gratuitos de sus proveedores.
+administración y las finanzas del negocio.
+
+Por dentro son tres piezas: un front en Flutter, una API propia en Dart y una base de datos
+PostgreSQL siempre en línea. El front nunca toca la base directamente; todo pasa por la API, y
+los permisos los sigue decidiendo la base. Y ese conjunto existe cuatro veces, en cuatro
+ambientes separados —desarrollo, QA, aprobación y producción—, para que nadie pruebe sobre los
+datos reales del negocio.
 
 ### Lo que va a permitir hacer
 
@@ -117,10 +122,12 @@ período.
 
 | | |
 |---|---|
-| **Tecnología** | React + TypeScript + Supabase (PostgreSQL) |
+| **Tecnología** | Flutter Web (front) + Dart (API propia) + Supabase (PostgreSQL) |
 | **Dónde funciona** | Navegador del PC y app instalable en el celular |
-| **Duración** | 14 semanas de desarrollo + 2 de estabilización y capacitación |
-| **Costo mensual de operación** | $0 en planes gratuitos |
+| **Ambientes** | Cuatro: desarrollo, QA, aprobación y producción, cada uno con su propia base |
+| **Versión** | Cada proyecto la lleva por separado, y el front la muestra en pantalla junto al ambiente |
+| **Duración** | 23 semanas: 10 sprints de 2 semanas más 3 de estabilización y puesta en marcha |
+| **Costo mensual de operación** | Ya no es $0: producción y aprobación necesitan plan de pago para no pausarse; desarrollo y QA siguen en el gratuito |
 | **Seguridad** | Permisos dentro de la base de datos; borrado imposible por diseño |
 | **Tipos de usuario** | Gerencia (todo) y Operación (registro, sin ver utilidad ni nómina) |
 
@@ -134,14 +141,22 @@ ver, el cargo dice qué hace en el negocio.
 
 | Sprint | Semanas | Entrega |
 |---|---|---|
-| 1 | 1–2 | Acceso, usuarios y cargos, base de datos, auditoría |
-| 2 | 3–4 | Ingresos, gastos, cuentas, saldos |
-| 3 | 5–6 | Pedidos, anticipos, entregas |
-| 4 | 7–8 | Productos, costeo y márgenes |
-| 5 | 9–10 | Reportes y las tres cifras |
-| 6 | 11–12 | Inversiones, retiros, pro-labore, patrimonio |
-| 7 | 13–14 | Nómina, simulador, cotizador, PWA |
-| — | 15–16 | Estabilización, capacitación, go-live |
+| 0 | 1–2 | Los dos proyectos, los cuatro ambientes y la tubería que despliega sola |
+| 1 | 3–4 | Base de datos, permisos en la base e identidad propagada hasta PostgreSQL |
+| 2 | 5–6 | Acceso, usuarios y cargos |
+| 3 | 7–8 | Ingresos, gastos, cuentas, saldos |
+| 4 | 9–10 | Pedidos, anticipos, entregas |
+| 5 | 11–12 | Productos, costeo y márgenes |
+| 6 | 13–14 | Reportes y las tres cifras |
+| 7 | 15–16 | Inversiones, retiros, pro-labore, patrimonio |
+| 8 | 17–18 | Nómina, simulador, cotizador y cierre |
+| 9 | 19–20 | Promoción hasta producción, PWA y endurecimiento |
+| — | 21–23 | Estabilización, aprobación en UAT, migración, capacitación y go-live |
+
+> **Son 23 semanas y no 16 porque el backend volvió al proyecto.** Construir, probar y
+> desplegar la API en cuatro ambientes es trabajo nuevo, no las mismas horas repartidas en más
+> casillas. El detalle, sprint por sprint, está en
+> [`08-plan-de-desarrollo.md`](08-plan-de-desarrollo.md).
 
 ---
 
@@ -164,3 +179,9 @@ documento [`09-plan-de-implantacion.md`](09-plan-de-implantacion.md).
 
 **Nada se programa hasta que ese checklist esté firmado.** Corregir una pantalla en el mockup
 cuesta minutos; corregirla después de construida cuesta días.
+
+---
+
+### 🧭 Navegación
+
+**⬅️ Anterior:** [🏠 Inicio (README)](../README.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [01 · Visión y alcance](01-vision-y-alcance.md)

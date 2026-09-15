@@ -219,20 +219,60 @@ franja fija lo advierte y ofrece salir con un clic.
 
 ## Términos técnicos
 
+**Ambiente**
+Una copia completa del sistema —front, API y base de datos— separada de todas las demás. Hay
+cuatro: desarrollo, QA, aprobación y producción. Cada uno tiene su propia base, así que lo que
+se registra en uno no aparece en los otros. El front siempre dice en cuál estás, para que nadie
+anote la venta del día en el sitio equivocado y la dé por guardada.
+
 **Arquitectura hexagonal**
 Separar las reglas de negocio de la tecnología mediante interfaces. Permite cambiar de base de
 datos o de interfaz sin tocar los cálculos.
+
+**Artefacto**
+El paquete ya compilado que se instala en un ambiente: el front listo para servir o la API lista
+para ejecutar. Se construye una sola vez y ese mismo paquete va pasando de ambiente en ambiente.
+Volver a compilarlo para producción sería aprobar una cosa y publicar otra.
+
+**BFF**
+*Backend for frontend*: una capa de servidor hecha a la medida de una pantalla, que le entrega
+los datos ya armados como los necesita. En PRISMA no es un proyecto aparte: `prisma_api` hace de
+API y de BFF al mismo tiempo, porque hoy hay un solo cliente.
 
 **Caso de uso**
 Una acción completa del sistema, en un archivo propio. Corresponde a un `CU-xx` del documento 02.
 
 **Dominio**
-El núcleo del sistema: modelo y reglas de negocio. No conoce React, ni la base de datos, ni
+El núcleo del sistema: modelo y reglas de negocio. No conoce Flutter, ni la base de datos, ni
 internet.
+
+**Dominio (de base de datos)**
+Tipo propio que se define una sola vez en PostgreSQL con su regla incluida —por ejemplo,
+«dinero es un entero que no puede ser negativo»— y se usa en todas las columnas que lo
+necesiten. Así la regla vive en un solo sitio y no se puede olvidar en la siguiente tabla. Nada
+que ver con el **dominio** de la arquitectura hexagonal; coinciden en el nombre y en nada más.
 
 **Función pura**
 Con las mismas entradas devuelve siempre el mismo resultado y no modifica nada externo. Todos
 los cálculos financieros son funciones puras, y por eso se pueden probar en milisegundos.
+
+**Migración**
+Archivo con los cambios que hay que aplicarle a la base de datos para llevarla de una versión a
+la siguiente: una tabla nueva, una columna, una regla. Se aplican en orden, y **una migración ya
+aplicada no se edita jamás**: si estaba mal, se escribe otra que corrige. Es el mismo principio
+del **contra-asiento**, aplicado al esquema.
+
+**Promoción**
+Pasar a un ambiente lo mismo que ya funciona en el anterior, siempre en el mismo orden:
+desarrollo → QA → aprobación → producción. Se promueven las **migraciones** y se promueve el
+**artefacto**. Nada llega a producción sin haber pasado por los tres ambientes previos.
+
+**Propagación de identidad**
+Hacer que la base de datos sepa **quién** es la persona que está detrás de una petición, aunque
+quien se conecte sea la API y no el navegador. Antes de tocar ninguna tabla, la API le pasa a
+PostgreSQL los datos de la sesión, y así **RLS** sigue decidiendo los permisos. Sin esto, la
+base solo vería a la API, y los permisos se caerían a la aplicación: justo lo que este proyecto
+decidió no hacer.
 
 **Puerto y adaptador**
 El puerto es la interfaz que declara qué necesita el dominio. El adaptador es la implementación
@@ -241,6 +281,12 @@ concreta con una tecnología específica.
 **RLS (Row Level Security)**
 Mecanismo de PostgreSQL que decide qué filas puede ver cada usuario **dentro de la base de
 datos**. Los permisos no dependen de que la aplicación esconda un botón.
+
+**SemVer**
+Forma estándar de numerar versiones con tres números, `MAJOR.MINOR.PATCH`. El primero sube
+cuando algo deja de ser compatible y obliga a actualizar; el segundo, cuando se agrega
+funcionalidad que no rompe nada; el tercero, cuando solo se corrige. El front y la API llevan
+versiones independientes: fingir que van juntas esconde cuál de las dos cambió de verdad.
 
 **Trigger**
 Código que PostgreSQL ejecuta automáticamente al insertar o modificar una fila. Se usa para la
@@ -260,3 +306,9 @@ auditoría, para que sea imposible evitarla desde la aplicación.
 | Los 4 sobres | Presupuesto por destinación |
 | Anulación | Reverso |
 | Contra-asiento | Asiento de reversión |
+
+---
+
+### 🧭 Navegación
+
+**⬅️ Anterior:** [14 · Roadmap e ideas](14-roadmap-e-ideas.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md)

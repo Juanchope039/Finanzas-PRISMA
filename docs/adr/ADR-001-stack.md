@@ -1,6 +1,10 @@
 # ADR-001 · Stack tecnológico
 
-**Estado:** Aceptado · **Fecha:** 2026-09-13
+**Estado:** Reemplazado por ADR-011 · **Fecha:** 2026-09-13
+
+> **Lo reemplaza [ADR-011](ADR-011-stack-flutter-dart.md):** el front pasa a Flutter Web y se
+> agrega `prisma_api` en Dart, porque el navegador no debe hablar directo con la base ni cargar
+> sus credenciales. El cuerpo de abajo se conserva tal como se escribió.
 
 ## Contexto
 

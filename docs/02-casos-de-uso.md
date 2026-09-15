@@ -675,3 +675,9 @@ manifiesto y la descarga de pantalla no, así que no pueden ser el mismo caso de
 de los dos quede mal descrito. Tampoco agrega tablas: reutiliza `exportaciones` con
 `alcance_tipo = 'pantalla'` ([`13-respaldo-y-exportacion.md`](13-respaldo-y-exportacion.md),
 puntos 2.1 y 8).
+
+---
+
+### 🧭 Navegación
+
+**⬅️ Anterior:** [01 · Visión y alcance](01-vision-y-alcance.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [03 · Requisitos y BDD](03-requisitos-y-bdd.md)

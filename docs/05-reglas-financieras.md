@@ -534,7 +534,7 @@ Ninguna de las dos es obvia sin este cuadro. Ese es el punto de tenerlo.
 
 ## 13. Verificación
 
-Cada fórmula de este documento tiene su prueba automática en el dominio de TypeScript.
+Cada fórmula de este documento tiene su prueba automática en el dominio de `prisma_api`, en Dart.
 Los valores del ejemplo de la sección 12 se usan como **juego de datos de prueba oficial**
 (ver [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) §4).
 
@@ -548,3 +548,9 @@ Caja libre  = Saldo total − Anticipos por devengar − Gastos fijos comprometi
 ```
 
 Si alguna de estas igualdades falla, hay un error de registro o de cálculo.
+
+---
+
+### 🧭 Navegación
+
+**⬅️ Anterior:** [04 · Modelo de datos](04-modelo-de-datos.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [06 · Nómina y capacidad de pago](06-nomina-y-capacidad-de-pago.md)

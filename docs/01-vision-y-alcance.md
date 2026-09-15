@@ -158,7 +158,9 @@ solo tiene dos columnas porque solo hay dos tipos.
 | **Simulador** | Capacidad de pago y ventas adicionales necesarias |
 | **Importación** | Carga de histórico desde CSV/Excel |
 | **Alertas** | Caja libre negativa, anticipos sin entregar, registro tardío, descapitalización |
-| **PWA** | Instalable en el celular |
+| **PWA** | Flutter Web instalable en el celular |
+| **Cuatro ambientes** | Desarrollo, QA, aprobación y producción, cada uno con su propia base de datos. Nunca se prueba sobre datos reales |
+| **Versionado visible** | La versión y el ambiente a la vista en el front, franja de aviso fuera de producción y panel «Acerca de» con el detalle |
 
 ### 5.2 No está incluido en esta versión
 
@@ -192,7 +194,7 @@ solo tiene dos columnas porque solo hay dos tipos.
 
 | # | Restricción |
 |---|---|
-| R1 | Costo mensual de operación debe ser $0 (planes gratuitos) |
+| R1 | Costo de operación al mínimo: solo producción y aprobación en plan de pago —«siempre en línea» lo exige—; desarrollo y QA en el gratuito |
 | R2 | Debe funcionar bien en un celular de gama media con datos móviles |
 | R3 | Registrar un movimiento no puede tomar más de 30 segundos |
 | R4 | Ningún dato puede ser eliminado físicamente de la base |
@@ -211,3 +213,9 @@ El proyecto se considera exitoso si, a los 90 días del go-live:
    de un minuto cada una.
 4. El Excel y el cuaderno dejaron de usarse.
 5. Cero registros perdidos y cero anulaciones sin motivo.
+
+---
+
+### 🧭 Navegación
+
+**⬅️ Anterior:** [00 · Resumen ejecutivo](00-resumen-ejecutivo.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [02 · Casos de uso](02-casos-de-uso.md)

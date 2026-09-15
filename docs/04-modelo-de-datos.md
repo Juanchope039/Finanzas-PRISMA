@@ -110,10 +110,39 @@ CREATE TYPE tipo_movimiento AS ENUM ('ingreso','gasto','transferencia','inversio
 CREATE TYPE estado_pedido   AS ENUM ('cotizado','en_proceso','parcial','entregado','cancelado');
 CREATE TYPE tipo_item       AS ENUM ('producto','servicio');
 
+-- Dominios: la regla vive una sola vez y todas las columnas del mismo concepto la heredan.
+-- Cada restricción de dominio lleva nombre propio, igual que las de tabla (ver más abajo).
+
+CREATE DOMAIN dinero AS BIGINT
+  CONSTRAINT dinero_no_negativo CHECK (VALUE >= 0);
+
+CREATE DOMAIN dinero_positivo AS BIGINT
+  CONSTRAINT dinero_positivo_mayor_que_cero CHECK (VALUE > 0);
+
+CREATE DOMAIN dinero_con_signo AS BIGINT;   -- resultados que sí pueden dar negativo
+
+CREATE DOMAIN horas AS NUMERIC(6,2)
+  CONSTRAINT horas_no_negativas CHECK (VALUE >= 0);
+
+CREATE DOMAIN minutos AS NUMERIC(6,2)
+  CONSTRAINT minutos_no_negativos CHECK (VALUE >= 0);
+
+CREATE DOMAIN porcentaje AS SMALLINT
+  CONSTRAINT porcentaje_entre_cero_y_cien CHECK (VALUE BETWEEN 0 AND 100);
+
+CREATE DOMAIN anio AS SMALLINT
+  CONSTRAINT anio_en_rango CHECK (VALUE BETWEEN 2020 AND 2100);
+
+CREATE DOMAIN mes_del_anio AS SMALLINT
+  CONSTRAINT mes_del_anio_en_rango CHECK (VALUE BETWEEN 1 AND 12);
+
+CREATE DOMAIN motivo AS TEXT
+  CONSTRAINT motivo_con_contenido CHECK (length(trim(VALUE)) >= 5);
+
 -- Columnas de anulación presentes en TODAS las tablas de negocio
 --   anulado_en           TIMESTAMPTZ
 --   anulado_por          UUID REFERENCES usuarios(id)
---   anulado_motivo       TEXT
+--   anulado_motivo       motivo
 --   anulado_dispositivo  TEXT
 --   anulado_ip           INET
 ```
@@ -133,12 +162,70 @@ PostgreSQL: sin `CREATE EXTENSION IF NOT EXISTS citext;` la tabla no se crea.
 > `1.500.000` se almacena como `1500000`. Nunca decimales: el peso colombiano no usa centavos
 > en la práctica y los errores de redondeo de punto flotante se acumulan de forma invisible.
 
+**Por qué dominios y no un `CHECK` en cada columna.** El modelo tiene **32 columnas de dinero** y
+solo **9** traían un `CHECK` escrito a mano. Las otras 23 quedaban a merced de que nadie
+insertara un negativo. Ese es el problema de copiar la regla columna por columna: no es que
+cueste escribirla, es que no hay forma de saber en cuáles falta. Con el dominio la regla vive en
+un solo `CREATE DOMAIN` y la columna solo declara qué es; agregar una columna monetaria nueva ya
+no requiere acordarse de nada.
+
+Los dominios son además tipos de PostgreSQL, no comentarios: `ADR-003` deja de ser una convención
+que hay que recordar y pasa a ser algo que el motor sabe.
+
+| Dominio | Tipo base | Regla | Columnas | Dónde |
+|---|---|---|:---:|---|
+| `dinero` | `BIGINT` | `>= 0` | 22 | `cuentas.saldo_inicial`, `pedidos.costo_directo`, `pedido_lineas` (2), `productos.precio_actual`, `costos_producto` (4), `prolabore_config.valor_mensual`, `nomina_detalle` (6), `cierres_mensuales` (6) |
+| `dinero_positivo` | `BIGINT` | `> 0` | 7 | `movimientos.valor`, `pedidos.valor_total`, `anticipos.valor`, `activos.valor_compra`, `aportes_retiros.valor`, `empleados.salario_acordado`, `adelantos.valor` |
+| `dinero_con_signo` | `BIGINT` | ninguna | 3 | `cierres_mensuales.utilidad_causada`, `.flujo_caja`, `.caja_libre_cierre` |
+| `horas` | `NUMERIC(6,2)` | `>= 0` | 5 | `pedidos.horas_trabajo`, `pedido_lineas.horas_unitarias`, `prolabore_config.horas_mensuales`, `empleados.horas_mensuales`, `nomina_detalle.horas_extra` |
+| `minutos` | `NUMERIC(6,2)` | `>= 0` | 2 | `costos_producto.minutos_trabajo` y `.minutos_maquina` |
+| `porcentaje` | `SMALLINT` | `0..100` | 5 | `pedidos.anticipo_pct`, los cuatro `pct_` de `sobres_config` |
+| `anio` | `SMALLINT` | `2020..2100` | 2 | `nomina_periodos.anio`, `cierres_mensuales.anio` |
+| `mes_del_anio` | `SMALLINT` | `1..12` | 2 | `nomina_periodos.mes`, `cierres_mensuales.mes` |
+| `motivo` | `TEXT` | `length(trim(…)) >= 5` | 13 | los doce `anulado_motivo` y `usuarios.desactivado_motivo` |
+
+Son **nueve dominios**. Tres piden explicación, porque no son solo una mudanza de reglas ya
+escritas:
+
+- `dinero_con_signo` no lleva regla **a propósito**. Una utilidad causada negativa es un mes
+  malo, no un error, y meterla en `dinero` habría hecho imposible cerrar ese mes. Existe igual
+  porque declara «esto es plata en pesos enteros», que es lo que la API necesita saber para
+  formatearla.
+- `porcentaje` obliga a que cada sobre esté entre 0 y 100. Hasta ahora `sobres_config` solo
+  exigía que los cuatro sumaran 100 (`suma_cien`), así que un `-20` compensado con un `120`
+  pasaba sin chistar.
+- `motivo` exige que la explicación diga algo. `NOT NULL` acepta un espacio en blanco, y una
+  anulación con motivo `" "` cumple la restricción y no explica nada, que es justo lo que el
+  modelo quiere impedir.
+
+`anio` con tope 2100 no pretende adivinar el futuro: ataja el dedo que teclea `202` o `20255` al
+cerrar un mes, que es lo único que un `SMALLINT` pelado no sabía rechazar.
+
+**Toda restricción lleva nombre explícito.** No es estética: a la restricción que no trae nombre
+se lo pone PostgreSQL, y las de tabla las numera por posición —`pedidos_check`, `pedidos_check1`—
+así que basta agregar otra restricción para que las siguientes cambien de nombre. Sobre nombres
+que se mueven no se puede construir la tabla de traducción a mensajes en español del §11: el
+mensaje quedaría colgado del nombre equivocado sin que nada lo avise.
+
+| Clase | Patrón | Ejemplo |
+|---|---|---|
+| Llave primaria | `<tabla>_pkey` | `usuarios_pkey` |
+| Llave foránea | `<tabla>_<columna>_fkey` | `cargos_creado_por_fkey` |
+| Unicidad | `<tabla>_<columnas>_key` | `nomina_periodos_anio_mes_key` |
+| `CHECK` de tabla | frase que dice la regla | `transferencia_con_destino` |
+| `CHECK` de dominio | `<dominio>_<regla>` | `dinero_no_negativo` |
+
+Los patrones de llave primaria y foránea son **los mismos que PostgreSQL genera solo**, así que
+escribirlos no renombra nada de lo que ya existe; se escriben para que el nombre sea una decisión
+y no una casualidad. Las que de verdad cambiaban —y por eso eran el riesgo— son los `CHECK` y los
+`UNIQUE`, y esas quedaron todas nombradas en los `CREATE TABLE` de abajo.
+
 ### 4.2 Cargos, usuarios y cuentas
 
 ```sql
 CREATE TABLE cargos (
   id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  nombre         TEXT NOT NULL UNIQUE,
+  nombre         TEXT NOT NULL CONSTRAINT cargos_nombre_key UNIQUE,
   descripcion    TEXT,
   orden          SMALLINT NOT NULL DEFAULT 0,
   activo         BOOLEAN NOT NULL DEFAULT TRUE,
@@ -146,7 +233,7 @@ CREATE TABLE cargos (
   creado_por     UUID,   -- llave foránea a usuarios: se agrega más abajo
   anulado_en     TIMESTAMPTZ,
   anulado_por    UUID,   -- ídem
-  anulado_motivo TEXT,
+  anulado_motivo motivo,
   CONSTRAINT anulacion_con_motivo
     CHECK (anulado_en IS NULL OR (anulado_por IS NOT NULL AND anulado_motivo IS NOT NULL)),
   CONSTRAINT desactivacion_con_motivo
@@ -182,9 +269,13 @@ INSERT INTO cargos (nombre, descripcion, orden) VALUES
 ```sql
 CREATE TABLE usuarios (
   id                 UUID PRIMARY KEY REFERENCES auth.users(id),
-  usuario            CITEXT NOT NULL UNIQUE
-                       CHECK (usuario ~ '^[a-z0-9][a-z0-9._-]{2,19}$'),
-  nombre_completo    TEXT NOT NULL CHECK (length(trim(nombre_completo)) >= 3),
+  usuario            CITEXT NOT NULL
+                       CONSTRAINT usuarios_usuario_key UNIQUE
+                       CONSTRAINT usuarios_usuario_formato
+                         CHECK (usuario ~ '^[a-z0-9][a-z0-9._-]{2,19}$'),
+  nombre_completo    TEXT NOT NULL
+                       CONSTRAINT usuarios_nombre_completo_minimo
+                         CHECK (length(trim(nombre_completo)) >= 3),
   cargo_id           UUID REFERENCES cargos(id),
   tipo               tipo_usuario NOT NULL DEFAULT 'operacion',
   activo             BOOLEAN NOT NULL DEFAULT TRUE,
@@ -194,7 +285,7 @@ CREATE TABLE usuarios (
   creado_por         UUID REFERENCES usuarios(id),
   desactivado_en     TIMESTAMPTZ,
   desactivado_por    UUID REFERENCES usuarios(id),
-  desactivado_motivo TEXT,
+  desactivado_motivo motivo,
   CONSTRAINT desactivacion_con_motivo
     CHECK (activo OR (desactivado_en         IS NOT NULL
                       AND desactivado_por    IS NOT NULL
@@ -265,13 +356,14 @@ conserva lo suyo: salario, fecha de ingreso y horas mensuales.
 CREATE TABLE cuentas (
   id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   nombre        TEXT NOT NULL,
-  tipo          TEXT NOT NULL CHECK (tipo IN ('efectivo','billetera','banco')),
-  saldo_inicial BIGINT NOT NULL DEFAULT 0,
+  tipo          TEXT NOT NULL CONSTRAINT cuentas_tipo_valido
+                  CHECK (tipo IN ('efectivo','billetera','banco')),
+  saldo_inicial dinero NOT NULL DEFAULT 0,
   orden         SMALLINT NOT NULL DEFAULT 0,
   creado_en     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   anulado_en    TIMESTAMPTZ,
   anulado_por   UUID REFERENCES usuarios(id),
-  anulado_motivo TEXT,
+  anulado_motivo motivo,
   CONSTRAINT anulacion_con_motivo
     CHECK (anulado_en IS NULL OR (anulado_por IS NOT NULL AND anulado_motivo IS NOT NULL))
 );
@@ -280,12 +372,13 @@ CREATE TABLE categorias (
   id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   padre_id      UUID REFERENCES categorias(id),
   nombre        TEXT NOT NULL,
-  naturaleza    TEXT NOT NULL CHECK (naturaleza IN ('ingreso','gasto')),
+  naturaleza    TEXT NOT NULL CONSTRAINT categorias_naturaleza_valida
+                  CHECK (naturaleza IN ('ingreso','gasto')),
   es_fijo       BOOLEAN NOT NULL DEFAULT FALSE,
   creado_en     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   anulado_en    TIMESTAMPTZ,
   anulado_por   UUID REFERENCES usuarios(id),
-  anulado_motivo TEXT
+  anulado_motivo motivo
 );
 ```
 
@@ -298,7 +391,7 @@ usan para calcular la **caja libre**.
 CREATE TABLE movimientos (
   id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   tipo              tipo_movimiento NOT NULL,
-  valor             BIGINT NOT NULL CHECK (valor > 0),
+  valor             dinero_positivo NOT NULL,
   fecha_movimiento  DATE NOT NULL,
   cuenta_id         UUID NOT NULL REFERENCES cuentas(id),
   cuenta_destino_id UUID REFERENCES cuentas(id),
@@ -314,7 +407,7 @@ CREATE TABLE movimientos (
 
   anulado_en        TIMESTAMPTZ,
   anulado_por       UUID REFERENCES usuarios(id),
-  anulado_motivo    TEXT,
+  anulado_motivo    motivo,
   anulado_dispositivo TEXT,
   anulado_ip        INET,
 
@@ -364,27 +457,27 @@ CREATE TABLE clientes (
   creado_en   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   anulado_en  TIMESTAMPTZ,
   anulado_por UUID REFERENCES usuarios(id),
-  anulado_motivo TEXT
+  anulado_motivo motivo
 );
 
 CREATE TABLE pedidos (
   id                 UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  numero             TEXT UNIQUE NOT NULL,
+  numero             TEXT NOT NULL CONSTRAINT pedidos_numero_key UNIQUE,
   cliente_id         UUID NOT NULL REFERENCES clientes(id),
   fecha_pedido       DATE NOT NULL,
   fecha_entrega_prev DATE,
   fecha_entrega_real DATE,
   estado             estado_pedido NOT NULL DEFAULT 'en_proceso',
-  valor_total        BIGINT NOT NULL CHECK (valor_total > 0),
-  costo_directo      BIGINT NOT NULL DEFAULT 0,
-  anticipo_pct       SMALLINT NOT NULL DEFAULT 50 CHECK (anticipo_pct BETWEEN 0 AND 100),
-  horas_trabajo      NUMERIC(6,2) NOT NULL DEFAULT 0,
+  valor_total        dinero_positivo NOT NULL,
+  costo_directo      dinero NOT NULL DEFAULT 0,
+  anticipo_pct       porcentaje NOT NULL DEFAULT 50,
+  horas_trabajo      horas NOT NULL DEFAULT 0,
   notas              TEXT,
   creado_por         UUID NOT NULL REFERENCES usuarios(id),
   creado_en          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   anulado_en         TIMESTAMPTZ,
   anulado_por        UUID REFERENCES usuarios(id),
-  anulado_motivo     TEXT,
+  anulado_motivo     motivo,
   CONSTRAINT entregado_con_fecha
     CHECK (estado <> 'entregado' OR fecha_entrega_real IS NOT NULL)
 );
@@ -396,22 +489,23 @@ CREATE TABLE pedido_lineas (
   id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   pedido_id      UUID NOT NULL REFERENCES pedidos(id),
   producto_id    UUID NOT NULL REFERENCES productos(id),
-  cantidad       INTEGER NOT NULL CHECK (cantidad > 0),
-  precio_unitario BIGINT NOT NULL CHECK (precio_unitario >= 0),
-  costo_unitario BIGINT NOT NULL DEFAULT 0,
-  horas_unitarias NUMERIC(6,2) NOT NULL DEFAULT 0
+  cantidad       INTEGER NOT NULL CONSTRAINT pedido_lineas_cantidad_positiva
+                   CHECK (cantidad > 0),
+  precio_unitario dinero NOT NULL,
+  costo_unitario dinero NOT NULL DEFAULT 0,
+  horas_unitarias horas NOT NULL DEFAULT 0
 );
 
 CREATE TABLE anticipos (
   id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   pedido_id     UUID NOT NULL REFERENCES pedidos(id),
   movimiento_id UUID NOT NULL REFERENCES movimientos(id),
-  valor         BIGINT NOT NULL CHECK (valor > 0),
+  valor         dinero_positivo NOT NULL,
   fecha         DATE NOT NULL,
   devengado_en  DATE,
   anulado_en    TIMESTAMPTZ,
   anulado_por   UUID REFERENCES usuarios(id),
-  anulado_motivo TEXT
+  anulado_motivo motivo
 );
 
 CREATE INDEX idx_anticipos_pendientes ON anticipos (pedido_id)
@@ -429,24 +523,24 @@ CREATE TABLE productos (
   nombre        TEXT NOT NULL,
   tipo          tipo_item NOT NULL DEFAULT 'producto',
   unidad        TEXT NOT NULL DEFAULT 'unidad',
-  precio_actual BIGINT NOT NULL DEFAULT 0,
+  precio_actual dinero NOT NULL DEFAULT 0,
   activo        BOOLEAN NOT NULL DEFAULT TRUE,
   creado_en     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   anulado_en    TIMESTAMPTZ,
   anulado_por   UUID REFERENCES usuarios(id),
-  anulado_motivo TEXT
+  anulado_motivo motivo
 );
 
 CREATE TABLE costos_producto (
   id                 UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   producto_id        UUID NOT NULL REFERENCES productos(id),
   vigente_desde      DATE NOT NULL,
-  costo_insumo       BIGINT NOT NULL DEFAULT 0,
-  costo_consumibles  BIGINT NOT NULL DEFAULT 0,
-  minutos_trabajo    NUMERIC(6,2) NOT NULL DEFAULT 0,
-  minutos_maquina    NUMERIC(6,2) NOT NULL DEFAULT 0,
-  tarifa_hora        BIGINT NOT NULL DEFAULT 0,
-  precio_venta       BIGINT NOT NULL DEFAULT 0,
+  costo_insumo       dinero NOT NULL DEFAULT 0,
+  costo_consumibles  dinero NOT NULL DEFAULT 0,
+  minutos_trabajo    minutos NOT NULL DEFAULT 0,
+  minutos_maquina    minutos NOT NULL DEFAULT 0,
+  tarifa_hora        dinero NOT NULL DEFAULT 0,
+  precio_venta       dinero NOT NULL DEFAULT 0,
   creado_por         UUID NOT NULL REFERENCES usuarios(id),
   creado_en          TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -467,32 +561,33 @@ CREATE TABLE activos (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   nombre          TEXT NOT NULL,
   fecha_compra    DATE NOT NULL,
-  valor_compra    BIGINT NOT NULL CHECK (valor_compra > 0),
+  valor_compra    dinero_positivo NOT NULL,
   vida_util_meses SMALLINT,
   movimiento_id   UUID REFERENCES movimientos(id),
   estado          TEXT NOT NULL DEFAULT 'en_uso',
   anulado_en      TIMESTAMPTZ,
   anulado_por     UUID REFERENCES usuarios(id),
-  anulado_motivo  TEXT
+  anulado_motivo  motivo
 );
 
 CREATE TABLE aportes_retiros (
   id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  clase          TEXT NOT NULL CHECK (clase IN ('aporte','prolabore','distribucion')),
-  valor          BIGINT NOT NULL CHECK (valor > 0),
+  clase          TEXT NOT NULL CONSTRAINT aportes_retiros_clase_valida
+                   CHECK (clase IN ('aporte','prolabore','distribucion')),
+  valor          dinero_positivo NOT NULL,
   fecha          DATE NOT NULL,
   movimiento_id  UUID NOT NULL REFERENCES movimientos(id),
   nota           TEXT,
   anulado_en     TIMESTAMPTZ,
   anulado_por    UUID REFERENCES usuarios(id),
-  anulado_motivo TEXT
+  anulado_motivo motivo
 );
 
 CREATE TABLE prolabore_config (
   id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   vigente_desde  DATE NOT NULL,
-  valor_mensual  BIGINT NOT NULL CHECK (valor_mensual >= 0),
-  horas_mensuales NUMERIC(6,2) NOT NULL DEFAULT 0,
+  valor_mensual  dinero NOT NULL,
+  horas_mensuales horas NOT NULL DEFAULT 0,
   justificacion  TEXT,
   creado_por     UUID NOT NULL REFERENCES usuarios(id),
   creado_en      TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -507,25 +602,26 @@ CREATE TABLE prolabore_config (
 ```sql
 CREATE TABLE empleados (
   id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  usuario_id       UUID UNIQUE REFERENCES usuarios(id),
+  usuario_id       UUID CONSTRAINT empleados_usuario_id_key UNIQUE
+                     REFERENCES usuarios(id),
   nombre           TEXT NOT NULL,
   documento        TEXT,
   fecha_ingreso    DATE NOT NULL,
   fecha_retiro     DATE,
-  salario_acordado BIGINT NOT NULL CHECK (salario_acordado > 0),
-  horas_mensuales  NUMERIC(6,2) NOT NULL DEFAULT 192,
+  salario_acordado dinero_positivo NOT NULL,
+  horas_mensuales  horas NOT NULL DEFAULT 192,
   anulado_en       TIMESTAMPTZ,
   anulado_por      UUID REFERENCES usuarios(id),
-  anulado_motivo   TEXT
+  anulado_motivo   motivo
 );
 
 CREATE TABLE nomina_periodos (
   id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  anio        SMALLINT NOT NULL,
-  mes         SMALLINT NOT NULL CHECK (mes BETWEEN 1 AND 12),
+  anio        anio NOT NULL,
+  mes         mes_del_anio NOT NULL,
   cerrado_en  TIMESTAMPTZ,
   cerrado_por UUID REFERENCES usuarios(id),
-  UNIQUE (anio, mes)
+  CONSTRAINT nomina_periodos_anio_mes_key UNIQUE (anio, mes)
 );
 
 CREATE TABLE nomina_detalle (
@@ -533,29 +629,29 @@ CREATE TABLE nomina_detalle (
   periodo_id        UUID NOT NULL REFERENCES nomina_periodos(id),
   empleado_id       UUID NOT NULL REFERENCES empleados(id),
   dias_trabajados   SMALLINT NOT NULL DEFAULT 30,
-  salario_base      BIGINT NOT NULL,
-  horas_extra       NUMERIC(6,2) NOT NULL DEFAULT 0,
-  valor_horas_extra BIGINT NOT NULL DEFAULT 0,
-  otros_devengados  BIGINT NOT NULL DEFAULT 0,
-  adelantos_desc    BIGINT NOT NULL DEFAULT 0,
-  otros_descuentos  BIGINT NOT NULL DEFAULT 0,
-  neto_pagado       BIGINT NOT NULL,
+  salario_base      dinero NOT NULL,
+  horas_extra       horas NOT NULL DEFAULT 0,
+  valor_horas_extra dinero NOT NULL DEFAULT 0,
+  otros_devengados  dinero NOT NULL DEFAULT 0,
+  adelantos_desc    dinero NOT NULL DEFAULT 0,
+  otros_descuentos  dinero NOT NULL DEFAULT 0,
+  neto_pagado       dinero NOT NULL,
   movimiento_id     UUID REFERENCES movimientos(id),
   creado_por        UUID NOT NULL REFERENCES usuarios(id),
   creado_en         TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (periodo_id, empleado_id)
+  CONSTRAINT nomina_detalle_periodo_empleado_key UNIQUE (periodo_id, empleado_id)
 );
 
 CREATE TABLE adelantos (
   id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   empleado_id    UUID NOT NULL REFERENCES empleados(id),
   movimiento_id  UUID NOT NULL REFERENCES movimientos(id),
-  valor          BIGINT NOT NULL CHECK (valor > 0),
+  valor          dinero_positivo NOT NULL,
   fecha          DATE NOT NULL,
   descontado_en  UUID REFERENCES nomina_detalle(id),
   anulado_en     TIMESTAMPTZ,
   anulado_por    UUID REFERENCES usuarios(id),
-  anulado_motivo TEXT
+  anulado_motivo motivo
 );
 
 CREATE INDEX idx_adelantos_pendientes ON adelantos (empleado_id)
@@ -575,10 +671,10 @@ El índice parcial garantiza que **un adelanto se descuente una sola vez** (RN-1
 CREATE TABLE sobres_config (
   id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   vigente_desde     DATE NOT NULL,
-  pct_costo_directo SMALLINT NOT NULL,
-  pct_gastos_fijos  SMALLINT NOT NULL,
-  pct_reserva       SMALLINT NOT NULL,
-  pct_retiro        SMALLINT NOT NULL,
+  pct_costo_directo porcentaje NOT NULL,
+  pct_gastos_fijos  porcentaje NOT NULL,
+  pct_reserva       porcentaje NOT NULL,
+  pct_retiro        porcentaje NOT NULL,
   creado_por        UUID NOT NULL REFERENCES usuarios(id),
   creado_en         TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   CONSTRAINT suma_cien CHECK (
@@ -587,26 +683,32 @@ CREATE TABLE sobres_config (
 
 CREATE TABLE cierres_mensuales (
   id                 UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  anio               SMALLINT NOT NULL,
-  mes                SMALLINT NOT NULL CHECK (mes BETWEEN 1 AND 12),
-  ingresos_causados  BIGINT NOT NULL,
-  costos_directos    BIGINT NOT NULL,
-  gastos_operativos  BIGINT NOT NULL,
-  prolabore          BIGINT NOT NULL,
-  nomina             BIGINT NOT NULL,
-  utilidad_causada   BIGINT NOT NULL,
-  flujo_caja         BIGINT NOT NULL,
-  caja_libre_cierre  BIGINT NOT NULL,
-  anticipos_abiertos BIGINT NOT NULL,
+  anio               anio NOT NULL,
+  mes                mes_del_anio NOT NULL,
+  ingresos_causados  dinero NOT NULL,
+  costos_directos    dinero NOT NULL,
+  gastos_operativos  dinero NOT NULL,
+  prolabore          dinero NOT NULL,
+  nomina             dinero NOT NULL,
+  utilidad_causada   dinero_con_signo NOT NULL,
+  flujo_caja         dinero_con_signo NOT NULL,
+  caja_libre_cierre  dinero_con_signo NOT NULL,
+  anticipos_abiertos dinero NOT NULL,
   cerrado_por        UUID NOT NULL REFERENCES usuarios(id),
   cerrado_en         TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (anio, mes)
+  CONSTRAINT cierres_mensuales_anio_mes_key UNIQUE (anio, mes)
 );
 ```
 
 La restricción `suma_cien` impide guardar una configuración de sobres que no reparta
 exactamente el 100%. Los porcentajes son **parametrizables** y cada cambio crea una fila nueva
-con su fecha de vigencia: el historial queda completo.
+con su fecha de vigencia: el historial queda completo. El dominio `porcentaje` (§4.1) cubre el
+otro lado de la misma regla: `suma_cien` vigila el total, el dominio vigila cada sobre por
+separado, y hacen falta los dos.
+
+Las tres columnas de `cierres_mensuales` que llevan `dinero_con_signo` —utilidad causada, flujo
+de caja y caja libre— son las únicas del modelo que pueden dar negativo. Un mes en pérdida es un
+resultado, no un error de digitación, y la base no tiene por qué impedir guardarlo.
 
 `cierres_mensuales` es el **snapshot inmutable** que garantiza RN-16: un movimiento registrado
 tarde con fecha de un mes ya cerrado no altera el reporte histórico de ese mes.
@@ -640,7 +742,9 @@ aplicación, PostgreSQL lo rechaza.
 | `anulado_dispositivo` | Navegador y equipo | ✅ |
 | `anulado_ip` | Dirección de origen | ✅ |
 
-La restricción `anulacion_con_motivo` de cada tabla hace imposible anular sin explicar por qué.
+La restricción `anulacion_con_motivo` de cada tabla hace imposible anular sin explicar por qué, y
+el dominio `motivo` (§4.1) hace imposible que esa explicación sea un espacio en blanco. Una
+exige que el texto esté; el otro, que diga algo.
 
 ### 5.3 Corrección por contra-asiento
 
@@ -666,7 +770,7 @@ CREATE TABLE auditoria (
   id            BIGSERIAL PRIMARY KEY,
   tabla         TEXT NOT NULL,
   registro_id   UUID,
-  accion        TEXT NOT NULL CHECK (accion IN (
+  accion        TEXT NOT NULL CONSTRAINT auditoria_accion_valida CHECK (accion IN (
                   'INSERT','UPDATE','ANULAR',
                   'inicio_sesion','cierre_sesion','inicio_sesion_fallido',
                   'usuario_creado','usuario_desactivado',
@@ -962,8 +1066,9 @@ WHERE a.devengado_en IS NULL
 ```
 
 > Estas vistas existen para consulta y verificación. **El cálculo autoritativo vive en el
-> dominio de TypeScript**, probado unitariamente (ver [`07-arquitectura.md`](07-arquitectura.md)
-> §4). Tener dos implementaciones permite contrastarlas: si difieren, hay un error en alguna.
+> dominio de `prisma_api`, en Dart**, probado unitariamente (ver
+> [`07-arquitectura.md`](07-arquitectura.md) §4). Tener dos implementaciones permite
+> contrastarlas: si difieren, hay un error en alguna.
 
 ---
 
@@ -1301,6 +1406,64 @@ separar. El principio 6 del §1 se lee así: **en cada tabla donde haya algo que
 Las pruebas que ejercen estas políticas con una sesión real de tipo Operación son P-16 a P-31
 de [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) §3.
 
+### 7.1 `FORCE ROW LEVEL SECURITY`: por qué ahora sí hace falta
+
+`ENABLE ROW LEVEL SECURITY` tiene una excepción escrita en PostgreSQL: **el dueño de la tabla no
+pasa por sus políticas.** Hasta ahora eso no importaba, porque el único que hablaba con la base
+era el navegador con el rol `authenticated`, que no es dueño de nada.
+
+Con `prisma_api` en medio la cosa cambia. La API se conecta con un usuario de base de datos, y
+si ese usuario terminara siendo el dueño de las tablas —lo más fácil de hacer sin pensarlo, y lo
+que pasa solo si se reutiliza el rol de las migraciones— todas las políticas de este documento
+se apagarían en silencio. No fallaría nada. Simplemente se vería todo.
+
+`FORCE ROW LEVEL SECURITY` quita esa excepción: ni el dueño se libra. Es la tercera de las cuatro
+condiciones de **[ADR-012](adr/ADR-012-identidad-a-postgres.md)**, y es cinturón y tirantes a
+propósito: la segunda condición ya dice que
+`prisma_api` no debe ser dueño (§9), y esta la vuelve inofensiva si alguien la incumple.
+
+```sql
+-- Ni el dueño de la tabla se salta las políticas.
+ALTER TABLE cargos            FORCE ROW LEVEL SECURITY;
+ALTER TABLE movimientos       FORCE ROW LEVEL SECURITY;
+ALTER TABLE aportes_retiros   FORCE ROW LEVEL SECURITY;
+ALTER TABLE nomina_detalle    FORCE ROW LEVEL SECURITY;
+ALTER TABLE costos_producto   FORCE ROW LEVEL SECURITY;
+ALTER TABLE clientes          FORCE ROW LEVEL SECURITY;
+ALTER TABLE activos           FORCE ROW LEVEL SECURITY;
+ALTER TABLE prolabore_config  FORCE ROW LEVEL SECURITY;
+ALTER TABLE empleados         FORCE ROW LEVEL SECURITY;
+ALTER TABLE nomina_periodos   FORCE ROW LEVEL SECURITY;
+ALTER TABLE adelantos         FORCE ROW LEVEL SECURITY;
+ALTER TABLE sobres_config     FORCE ROW LEVEL SECURITY;
+ALTER TABLE cierres_mensuales FORCE ROW LEVEL SECURITY;
+```
+
+Son **trece de las quince tablas con RLS**. Las dos que faltan no son un olvido: el modelo, tal
+como está escrito, deja de funcionar si se les pone.
+
+| Tabla | Por qué no lleva `FORCE` | Qué la protege en su lugar |
+|---|---|---|
+| `usuarios` | `fn_es_gerencia()` consulta `usuarios` y las políticas de `usuarios` la llaman. Lo que corta el ciclo es que la función corre como el dueño y el dueño no pasa por RLS. Con `FORCE` vuelve el `infinite recursion detected in policy for relation "usuarios"` que ya advierte el §7 | `prisma_api` **no es dueño**, así que sus políticas sí lo juzgan |
+| `auditoria` | Solo tiene política de `SELECT`. La función `SECURITY DEFINER` del §5.4 escribe la bitácora amparada en que el dueño se salta RLS; con `FORCE`, **toda la auditoría deja de escribirse** | Igual: `prisma_api` no es dueño, y `UPDATE` y `DELETE` le están cerrados por política y por motor (§5.1) |
+
+> **La excepción del dueño no es un hueco mientras el dueño no sea la API.** `FORCE` protege del
+> descuido; lo que de verdad sostiene la seguridad es la segunda condición de ADR-012: el rol con
+> el que `prisma_api` se conecta no crea, no posee y no hereda nada. Eso es el §9, y no es
+> opcional.
+
+**El orden importa, como en el bloque anterior.** Este `ALTER TABLE` va después de las semillas,
+nunca antes: con `FORCE` ya puesto, el `INSERT` de los seis cargos del §4.2 chocaría con
+`cargos_escritura`, que exige `fn_es_gerencia()`, y durante una migración no hay `auth.uid()` a
+quien preguntarle. Lo mismo vale para las semillas de `sobres_config`. En el script real este
+bloque es **lo último**: corre cuando ya están creadas las tablas, escritas las políticas,
+encendida la RLS y sembrados los datos iniciales del §8.
+
+Para lo que venga después —una migración que corrija una fila de una tabla con `FORCE`— el rol de
+migraciones conserva `BYPASSRLS`, que gana incluso sobre `FORCE`. Es el único rol del proyecto que
+lo tiene, no atiende peticiones de usuario y su clave vive en un secreto aparte (§9). El script
+inicial, aun así, no depende de ese atributo: se ordena bien y listo.
+
 ---
 
 ## 8. Datos iniciales
@@ -1317,3 +1480,175 @@ de [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) §3.
 
 Los porcentajes iniciales de los sobres son una **sugerencia de arranque**, no una imposición:
 se ajustan desde la configuración y cada cambio queda registrado con su fecha de vigencia.
+
+---
+
+## 9. El rol con el que se conecta la API
+
+`prisma_api` se conecta a PostgreSQL con un rol dedicado, que también se llama `prisma_api`. No
+es el rol de las migraciones, no es `service_role` y no es dueño de nada. Son la primera y la
+segunda de las cuatro condiciones de **ADR-012**, y sin ellas el §7.1 no sirve de mucho.
+
+| Atributo | Valor | Por qué |
+|---|---|---|
+| `SUPERUSER` | ❌ | Un superusuario se salta RLS, los permisos y todo lo demás |
+| `BYPASSRLS` | ❌ | Es exactamente el atributo que apagaría este documento entero |
+| `CREATEDB` / `CREATEROLE` | ❌ | La API no crea bases ni reparte permisos |
+| Dueño de las tablas | ❌ | El dueño se salta RLS salvo `FORCE`, y no queremos depender solo de eso |
+| `INHERIT` | ❌ | Los permisos de `authenticated` solo llegan cuando la API los pide con `SET LOCAL ROLE` |
+| Permisos sobre tablas | `SELECT`, `INSERT`, `UPDATE` | Lo mínimo para operar. `DELETE` y `TRUNCATE` revocados, igual que para `authenticated` (§5.1) |
+
+```sql
+-- El rol con el que prisma_api abre cada conexión. La clave llega del gestor de secretos
+-- del ambiente; nunca del repositorio.
+CREATE ROLE prisma_api LOGIN
+  NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS
+  PASSWORD :'clave_prisma_api';
+
+-- Entra al esquema, pero no crea objetos dentro de él: nada de lo que hay ahí es suyo.
+GRANT USAGE ON SCHEMA public TO prisma_api;
+REVOKE CREATE ON SCHEMA public FROM prisma_api;
+
+-- Lo mínimo para operar. Nada de borrar.
+GRANT SELECT, INSERT, UPDATE ON ALL TABLES IN SCHEMA public TO prisma_api;
+REVOKE DELETE, TRUNCATE ON ALL TABLES IN SCHEMA public FROM prisma_api;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO prisma_api;
+
+-- Y lo mismo para lo que se cree después, sin tener que acordarse en cada migración.
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+  GRANT SELECT, INSERT, UPDATE ON TABLES TO prisma_api;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+  REVOKE DELETE, TRUNCATE ON TABLES FROM prisma_api;
+
+-- Puede asumir `authenticated`, que es el rol que evalúan las políticas del §7, pero tiene
+-- que pedirlo: NOINHERIT obliga al SET LOCAL ROLE explícito de cada transacción.
+GRANT authenticated TO prisma_api;
+```
+
+`NOINHERIT` es el detalle que más se subestima. Con `INHERIT`, `prisma_api` tendría desde el
+primer instante todo lo que tiene `authenticated`, lo pida o no. Con `NOINHERIT`, la única forma
+de operar como `authenticated` es el `SET LOCAL ROLE authenticated` que ADR-012 exige dentro de
+la transacción, junto al `set_config('request.jwt.claims', …)` que alimenta a `auth.uid()`. Si
+alguien escribe una consulta olvidando abrir esa transacción, no obtiene privilegios de más:
+se queda con los suyos, que no incluyen nada que `authenticated` no tenga.
+
+> **Y si el `SET LOCAL ROLE` se olvida, tampoco se cae la seguridad.** Ninguna política del §7
+> lleva cláusula `TO`, así que todas rigen para cualquier rol, `prisma_api` incluido. Sin claims
+> propagados `auth.uid()` es nulo, `fn_es_gerencia()` da falso y las consultas devuelven vacío.
+> **Falla cerrado.** El error se nota rápido y no filtra nada mientras tanto.
+
+| Rol | Para qué | Dónde vive su clave |
+|---|---|---|
+| `prisma_api` | Atender peticiones de usuario | Secreto del ambiente, leído por la API al arrancar |
+| Rol de migraciones (`postgres`) | Crear tablas, promover migraciones, sembrar | Secreto distinto, solo en la canalización de despliegue |
+| `service_role` de Supabase | Tareas administrativas puntuales | Secreto distinto. **Nunca en el camino de una petición de usuario** |
+
+Que sean tres claves distintas y no una es el punto: si la de la API se filtra, lo que se filtra
+es un rol que no puede borrar, no puede crear y no se salta RLS.
+
+La prueba que demuestra que esto funciona —entrar como Operación por la API y comprobar que la
+nómina, los usuarios y el patrimonio ajenos llegan vacíos **por decisión de la base**— vive en
+ADR-012 y se ejecuta en los cuatro ambientes.
+
+---
+
+## 10. Funciones de negocio atómicas
+
+Hay operaciones que tocan varias tablas y que **no pueden quedar a medias**. Si se escriben como
+tres llamadas seguidas desde Dart, basta un tiempo de espera agotado entre la segunda y la
+tercera para dejar la base mintiendo: un pedido entregado que nunca causó la venta, una nómina
+pagada sin descontar el adelanto.
+
+> **Lo que tiene que ser atómico vive en la base, no en la API.** No porque Dart no sepa hacer
+> transacciones, sino porque la regla queda en el único sitio que nadie puede saltarse, y porque
+> así hay una sola versión de los pasos en lugar de una por cada quien que llame.
+
+| Función | Qué hace, en una sola transacción | Qué impide |
+|---|---|---|
+| `fn_entregar_pedido(p_pedido UUID, p_fecha DATE, p_cuenta UUID)` | Marca el pedido `entregado` con su `fecha_entrega_real`, devenga sus anticipos (`devengado_en`) y escribe el movimiento que causa la venta | Un pedido entregado cuyo anticipo sigue contando como pasivo en la caja libre |
+| `fn_liquidar_nomina(p_periodo UUID, p_empleado UUID, …)` | Escribe la fila de `nomina_detalle`, marca con `descontado_en` los adelantos pendientes de esa persona y escribe el movimiento del pago | Que un adelanto se descuente dos veces, o ninguna (RN-11) |
+| La función `SECURITY DEFINER` del §5.4, usada en el §5.7 | Aplica el `UPDATE` que deshace un cambio y escribe la fila `cambio_revertido` con su `revierte_a` | Una bitácora que anota una reversión que no ocurrió, o al revés |
+
+La tercera **ya está en este documento**: es la misma función del §5.4 que escribe los eventos de
+acceso y administración. No se duplica aquí; se nombra para dejar claro que pertenece a esta
+lista y obedece las mismas reglas.
+
+Tres reglas que valen para las tres:
+
+1. **La API las llama; no rehace sus pasos.** Si `prisma_api` escribe por su cuenta los tres
+   `UPDATE` de una entrega, ya hay dos versiones del procedimiento y solo una se prueba.
+2. **Son `SECURITY INVOKER`**, que es el valor por omisión y aquí es la decisión correcta: corren
+   con los permisos de quien llama, así que **RLS sigue juzgando** cada fila que tocan. La única
+   excepción es la del §5.4, que es `SECURITY DEFINER` porque `auditoria` no tiene política de
+   `INSERT` a propósito.
+3. **Llevan `SET search_path = public, pg_temp`**, igual que todas las demás funciones del
+   documento y por la misma razón (§7).
+
+Los pasos financieros de cada una salen tal cual de
+[`05-reglas-financieras.md`](05-reglas-financieras.md) y de
+[`06-nomina-y-capacidad-de-pago.md`](06-nomina-y-capacidad-de-pago.md). No se repiten aquí:
+dos copias de una regla financiera es exactamente el problema que estas funciones resuelven.
+
+---
+
+## 11. El contrato de errores
+
+La base no sabe hablar. Cuando rechaza algo devuelve `23514 check_violation` en la restricción
+`transferencia_con_destino`, y eso no se le puede mostrar a la dueña del taller. La API traduce.
+Para que pueda traducir, cada restricción de este documento tiene **nombre explícito** (§4.1) y
+cada nombre tiene su entrada en la tabla de traducción de `prisma_api`: código HTTP, mensaje en
+español y campo del formulario al que señala.
+
+**La tabla de traducción se indexa por `(objeto, restricción)`, no por el nombre solo.** En este
+modelo `anulacion_con_motivo` existe en `cargos`, `cuentas` y `movimientos`, y
+`desactivacion_con_motivo` existe en `cargos` y en `usuarios` diciendo cosas distintas: en
+`cargos` amarra `activo` con `anulado_en`, en `usuarios` amarra `activo` con las tres columnas de
+desactivación. PostgreSQL permite repetir el nombre entre tablas; una tabla de traducción indexada
+solo por el nombre le daría el mensaje de una a la otra.
+
+Si la API recibe un error de la base que no está en esa tabla, **devuelve 500 y lo registra como
+defecto**. Significa que hay una regla en la base que la API no conocía, y eso es lo que hay que
+descubrir, no esconder.
+
+La prueba que lo sostiene recorre el catálogo de PostgreSQL y compara:
+
+```sql
+-- Toda restricción con nombre del esquema público: las de tabla y las de dominio.
+SELECT COALESCE(rel.relname, typ.typname) AS objeto,
+       CASE WHEN con.contypid <> 0 THEN 'dominio' ELSE 'tabla' END AS clase,
+       con.conname AS restriccion,
+       con.contype AS tipo   -- c = CHECK · u = UNIQUE · f = FOREIGN KEY · x = EXCLUDE
+FROM pg_constraint con
+LEFT JOIN pg_class     rel ON rel.oid = con.conrelid
+LEFT JOIN pg_type      typ ON typ.oid = con.contypid
+JOIN      pg_namespace ns  ON ns.oid  = con.connamespace
+WHERE ns.nspname = 'public'
+  AND con.contype IN ('c', 'u', 'f', 'x')
+ORDER BY objeto, restriccion;
+```
+
+Cada fila que salga de ahí y no tenga entrada en la tabla de traducción **hace fallar la prueba**.
+Agregar una restricción y olvidar el mensaje deja de ser un descubrimiento del día de producción
+y pasa a ser un rojo en la canalización.
+
+Dos cosas que esta consulta no cubre, y hay que decirlas:
+
+- **`NOT NULL` no aparece en `pg_constraint`.** Llega como `23502` trayendo la tabla y la columna,
+  no un nombre de restricción, así que la tabla de traducción lo resuelve por columna. Son
+  decenas de columnas y un solo patrón de mensaje: «Falta *campo*».
+- **Un dominio no dice qué columna falló.** `dinero_positivo_mayor_que_cero` informa el dominio,
+  no el `valor` de `movimientos`. Es el precio de que la regla viva en un solo sitio, y se paga
+  barato: la API sabe qué campo mandó, así que arma el mensaje con el campo de la petición y el
+  texto del dominio. A cambio, el mensaje de `dinero_no_negativo` se escribe una sola vez y sirve
+  para las veintidós columnas que usan ese dominio.
+
+Este contrato es la mitad que sostiene la validación en tres capas de
+**[ADR-015](adr/ADR-015-validacion-tres-capas.md)**. La otra mitad
+—que la API y el formulario repitan las mismas reglas— solo aguanta si esta prueba corre en cada
+despliegue. Sin ella, las tres capas se separan y ninguna avisa.
+
+---
+
+### 🧭 Navegación
+
+**⬅️ Anterior:** [03 · Requisitos y BDD](03-requisitos-y-bdd.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [05 · Reglas financieras](05-reglas-financieras.md)

@@ -2,6 +2,12 @@
 
 **Estado:** Aceptado · **Fecha:** 2026-09-13
 
+> **Esta decisión no se deroga: [ADR-011](ADR-011-stack-flutter-dart.md) la refuerza.** Con
+> `prisma_api` ya hay un backend donde aplicarla de verdad. Solo cambian dos nombres del cuerpo
+> de abajo: la capa `ui` se llama `interface` dentro de la API, y la regla de dependencias se
+> verifica con `analysis_options.yaml` de Dart en lugar de ESLint. Lo demás queda igual, y el
+> detalle está en [`07-arquitectura.md`](../07-arquitectura.md) §3.
+
 ## Contexto
 
 El activo más valioso del sistema no es la interfaz ni la base de datos: son **las reglas

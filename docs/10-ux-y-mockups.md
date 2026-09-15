@@ -2,6 +2,13 @@
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
+> **El mockup HTML es el contrato de diseño, y lo sigue siendo.** El front se construye en
+> Flutter, pero lo que Flutter implementa es esto: cada pantalla, cada estado y cada texto salen
+> del prototipo, no del criterio de quien programa. Cambió la tecnología con la que se construye,
+> no quién manda en el diseño. La regla de oro del proyecto sigue igual: **nada se construye
+> hasta que el mockup de esa pantalla esté aprobado.** Lo que no está dibujado aquí todavía no
+> existe.
+
 ---
 
 ## 1. Principios de diseño
@@ -304,11 +311,12 @@ negocio. Queda así, en este orden:
 | **Gestión de usuarios** | Solo Gerencia |
 | Cambiar mi contraseña | Todos |
 | Cambiar el tema | Todos |
+| Acerca de | Todos |
 | — separador — | |
 | Cerrar sesión | Todos |
 
 «Gestión de usuarios» va primero y separada del resto, porque es la única que lleva a una
-pantalla; las otras dos son acciones sobre la sesión misma. Si el tipo no es Gerencia, la
+pantalla; las demás se resuelven donde estás, sin moverte. Si el tipo no es Gerencia, la
 entrada no está: no se atenúa, no se deshabilita, no existe. Al elegirla se cierra el menú y el
 foco pasa al encabezado de la pantalla. En la sesión de Gerencia el menú lleva además el
 interruptor **Ver como Operación**, que se explica en §5.6.
@@ -408,6 +416,64 @@ El interruptor existe o no según el **tipo real** de la sesión, nunca según e
 simulando. Si dependiera del simulado, al activarlo desaparecería y Gerencia quedaría atrapada
 en la vista de Operación. El botón `Volver a mi vista` de la franja es la segunda red.
 
+### 5.7 La versión y el ambiente, a la vista
+
+Quien tiene la pantalla enfrente debe poder responder dos cosas sin preguntarle a nadie: **qué
+versión estoy usando** y **contra qué servidor está hablando**. Se resuelve con tres piezas, de
+la más discreta a la más detallada: una insignia siempre visible, una franja imposible de
+ignorar y un panel con el detalle. Cubren `RF-98`, `RF-99` y `RF-100`.
+
+**La insignia permanente.** En el topbar, junto al menú de la sesión, pequeña y sin competir con
+nada:
+
+```
+v0.4.2 · QA
+```
+
+| Decisión | Por qué |
+|---|---|
+| En dev, qa y uat la insignia va en color de advertencia | Es el mismo ámbar que ya significa «ojo con esto» en todo el sistema (§3.1). No hay que aprender un código nuevo |
+| En **prod** la insignia muestra solo la versión, en color neutro, y **no rotula «PROD»** | Si no dice nada, es el de verdad. Rotular el sistema real es ruido: un aviso que se lee todos los días deja de leerse, y el día que aparezca uno que sí importa tampoco se va a notar. La advertencia solo funciona si es la excepción |
+| El nombre del ambiente va completo y en español: `Desarrollo`, `QA`, `Aprobación` | Una sigla que hay que traducir no advierte: la lee quien ya sabe lo que significa, que es justo quien no la necesita |
+| La versión va siempre, también en prod | Es la mitad de la respuesta cuando alguien reporta un fallo, y no molesta a nadie |
+
+**La franja de ambiente.** En dev, qa y uat, además de la insignia, una franja fija arriba del
+contenido:
+
+> **Ambiente de QA · los datos no son reales**
+
+En prod no hay franja. La ausencia es el mensaje.
+
+| Decisión | Por qué |
+|---|---|
+| Reutiliza el patrón visual de la franja de «Ver como Operación» (§5.6) | Es exactamente el mismo propósito: avisar de que **lo que ves no es lo que crees**. El patrón ya está construido, aprobado y probado en celular; inventar un segundo aviso para el mismo trabajo solo agregaría una cosa más que mantener y una forma más que aprender |
+| Tampoco se puede cerrar | Una franja que se cierra es una franja que se olvida, y esta existe justo para el momento en que ya se olvidó |
+| No lleva botón de salida, a diferencia de la de vista previa | De la vista previa se sale con un clic porque es un modo; de un ambiente no se sale apagándolo. Ofrecer un botón que no puede cumplir sería peor que no ofrecer ninguno |
+
+> **Esto no es adorno: es lo que evita que alguien registre la venta del día en UAT y la dé por
+> guardada.** Ese error no avisa en el momento, se descubre en el cierre, y para entonces ya no
+> se sabe qué se registró dónde.
+
+**El panel «Acerca de».** Se abre desde el menú de la sesión (§5.3) y muestra:
+
+| Dato | Ejemplo |
+|---|---|
+| Versión del front | `0.4.2+118` |
+| Versión de la API | `0.3.9` |
+| Versión del esquema | `0.3.0` |
+| Ambiente | `QA` |
+| Fecha de compilación | `15 sep 2026, 9:40 a. m.` |
+| Referencia del commit | `a3f19c4` |
+
+Sirve para lo que sirve de verdad: **cuando alguien reporta un fallo, lo primero que hay que
+saber es qué versión estaba usando y contra qué servidor.** Sin eso, la conversación arranca con
+«¿y a ti te pasa?» y se va media hora en averiguar algo que la pantalla podía haber dicho de
+una. Por eso el panel se lee y se dicta por teléfono: seis renglones, ninguno que haya que
+interpretar.
+
+**En el mockup.** La insignia, la franja y el panel se dibujan en el prototipo con datos de
+ejemplo, igual que todo lo demás. Sin eso no estarían aprobadas, y sin aprobar no se construyen.
+
 ---
 
 ## 6. Micro-decisiones que importan
@@ -427,3 +493,9 @@ en la vista de Operación. El botón `Volver a mi vista` de la franja es la segu
 
 El checklist de aprobación pantalla por pantalla está en
 [`09-plan-de-implantacion.md`](09-plan-de-implantacion.md) §1.
+
+---
+
+### 🧭 Navegación
+
+**⬅️ Anterior:** [09 · Plan de implantación](09-plan-de-implantacion.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md)

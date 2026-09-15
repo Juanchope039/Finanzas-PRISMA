@@ -10,13 +10,60 @@
 
 | Nivel | Qué cubre | Frecuencia | Quién lo hace | Estado |
 |---|---|---|---|---|
-| 1 · Proveedor | Toda la base de datos | Diaria automática | Supabase | ✅ Desde el día 1 |
+| 1 · Proveedor | Toda la base de datos de prod | Diaria automática | Supabase | ✅ Desde el día 1 |
 | 2 · Exportación | Base completa o un mes | A demanda o programada | Gerencia | ⬜ Fase posterior |
-| 3 · Código | Todo el proyecto | Cada cambio | Control de versiones | ✅ Desde el día 1 |
+| 3 · Código | Los dos proyectos, `prisma_front` y `prisma_api` | Cada cambio | Control de versiones | ✅ Desde el día 1 |
 
 El nivel 1 protege contra fallas técnicas. **El nivel 2 protege contra algo distinto:** la
 dependencia de un proveedor. Un archivo propio, en un disco propio, es lo que garantiza que la
 información del negocio siga siendo del negocio pase lo que pase.
+
+### 1.1 El respaldo es por ambiente, y solo uno importa
+
+Ahora hay cuatro bases, una por ambiente ([`ADR-013`](adr/ADR-013-cuatro-ambientes.md)). Tratarlas
+igual sería caro y, peor, confundiría lo que hay que proteger de verdad.
+
+| Ambiente | Qué respaldo necesita | Por qué |
+|---|---|---|
+| **prod** | Los tres niveles, completos | Es el único con datos reales. Lo que se pierda ahí no está en ninguna otra parte |
+| **uat** | Ninguno. Se vuelve a sembrar | Sus datos son una siembra anonimizada (1.2). Si se pierden, se generan otra vez |
+| **qa** | Ninguno. Es desechable | Migraciones y semilla reproducible lo devuelven al mismo estado: [`16-base-de-datos-y-snapshots.md`](16-base-de-datos-y-snapshots.md) |
+| **dev** | Ninguno. Es desechable | Lo mismo, y además cada quien tiene la suya |
+
+> **Respaldar un ambiente desechable no es prudencia, es ruido.** Cuatro juegos de respaldos
+> diarios cuestan plata y, sobre todo, obligan a mirar cuatro veces para saber si corrió el que
+> importa. El que hay que vigilar es uno solo: el de prod.
+
+Consecuencia práctica: la retención de 12 archivos del punto 5, la programación automática del
+punto 6 y el historial del punto 7 **solo operan en prod**. En los demás ambientes la exportación
+se puede ejecutar —hay que probar que funciona— pero no se programa ni se conserva.
+
+### 1.2 Lo que sale de prod hacia otro ambiente va anonimizado
+
+Copiar datos de prod hacia uat es la forma más rápida de tener datos realistas, y también la más
+rápida de sacar datos personales del único sitio donde tienen tratamiento declarado. Por eso
+[`11-riesgos-y-proteccion-de-datos.md`](11-riesgos-y-proteccion-de-datos.md) (R-23) deja escrito
+que **copiar de prod a otro ambiente no existe como procedimiento**: el camino normal para uat es
+sembrar datos anonimizados. Esta sección no abre esa puerta; fija qué pasa si alguna vez hay que
+cruzarla.
+
+> **Un respaldo de prod nunca se restaura tal cual en otro ambiente.** Pasa antes por
+> anonimización, y la anonimización corre **antes de que el archivo salga de prod**. Un archivo con
+> datos reales guardado «un momentico» en uat es exactamente la fuga que se quiere evitar.
+
+| Dato | Qué se hace |
+|---|---|
+| Nombres y apellidos de empleadas y de clientes | Se reemplazan por nombres generados |
+| Documento de identidad | Se reemplaza conservando el formato |
+| Teléfono y correo de clientes | Se reemplazan |
+| Salarios, adelantos y desprendibles | Se escalan con un mismo factor, para que las cifras sigan siendo coherentes entre sí |
+| Contraseñas | No viajan. El ambiente destino siembra sus propios usuarios de prueba |
+| Cifras del negocio: ventas, costos, movimientos | Se conservan. Son lo que hace útil al ambiente |
+
+Nombres completos, documentos y salarios son datos personales bajo la **Ley 1581 de 2012**, y su
+tratamiento ya está fijado en [`11-riesgos-y-proteccion-de-datos.md`](11-riesgos-y-proteccion-de-datos.md) §3.
+El archivo anonimizado también lleva manifiesto, y su `ambiente` dice de dónde salió (4.1): un
+respaldo que no dice eso puede terminar restaurado en el sitio equivocado.
 
 ---
 
@@ -93,7 +140,8 @@ Todo archivo de exportación incluye un `manifiesto.json`:
   "generado_por": "gerencia@prismamyestampados.co",
   "alcance": { "tipo": "mes", "anio": 2026, "mes": 9 },
   "version_esquema": "1.4.0",
-  "version_aplicacion": "1.4.2",
+  "version_api": "1.4.2",
+  "ambiente": "prod",
   "zona_horaria": "America/Bogota",
   "archivos": [
     { "nombre": "movimientos.csv", "registros": 412,
@@ -116,11 +164,18 @@ Todo archivo de exportación incluye un `manifiesto.json`:
 | `sha256` por archivo | Detecta si un archivo se corrompió o fue alterado |
 | `registros` por archivo | Detecta una exportación truncada |
 | `version_esquema` | Permite saber si el respaldo corresponde a una estructura anterior |
+| `version_api` | Dice qué versión de `prisma_api` armó el archivo. Es la que genera, así que es la que responde |
+| `ambiente` | Dice de qué ambiente salió: `dev`, `qa`, `uat` o `prod` |
 | `totales_control` | Permite verificar el respaldo **sin abrirlo**: si los totales no coinciden con los del sistema, algo falló |
 | `zona_horaria` | Evita que las fechas se reinterpreten mal al abrir el archivo en otro lugar |
 
 Los `totales_control` son la verificación más práctica: comparar tres números basta para saber
 si un respaldo es confiable.
+
+`ambiente` es consecuencia directa de 1.1: ahora hay cuatro bases y dos archivos abiertos uno al
+lado del otro se ven idénticos. Sin ese campo, un respaldo de uat —con datos anonimizados y
+cifras escaladas— puede pasar por uno de prod, y se restaura donde no era o se le cree a una cifra
+que nunca fue real.
 
 ---
 
@@ -144,6 +199,33 @@ este punto solo hereda la última fila, la auditoría.
 > un servidor de terceros sin intervención humana. Que exista una acción explícita significa que
 > alguien decidió, en un momento concreto, sacar esa información del sistema — y eso queda
 > registrado.
+
+### 5.1 Quién arma el archivo: la API
+
+El diseño de la exportación no cambia; cambia quién lo ejecuta. Antes el cliente consultaba
+Supabase y armaba el archivo en el navegador. Ahora **el front no habla con Supabase nunca**
+([`ADR-011`](adr/ADR-011-stack-flutter-dart.md)), así que el trabajo queda entero del lado de
+`prisma_api`.
+
+| Paso | Quién | Qué pasa |
+|---|---|---|
+| 1 | `prisma_front` | Pide la exportación con su alcance y su formato |
+| 2 | `prisma_api` | Abre la transacción con la identidad de quien pidió y lee lo que RLS le permita |
+| 3 | `prisma_api` | Arma los archivos, calcula los `sha256`, escribe el `manifiesto.json` y la fila de `exportaciones` |
+| 4 | `prisma_front` | Baja el archivo por la API, con una acción explícita de la usuaria |
+
+Tres cosas mejoran con el cambio, y por eso vale la pena dejarlas escritas:
+
+- **El manifiesto lo firma el servidor.** Un `sha256` calculado en el navegador certifica lo que el
+  navegador quiso certificar; calculado en la API, certifica lo que salió de la base.
+- **Los totales de control se calculan donde están los datos**, en la misma transacción que los
+  leyó, así que no pueden quedar desfasados respecto del archivo.
+- **Un respaldo grande deja de depender de la memoria del navegador.** La API lo arma y lo entrega.
+
+Y una que no cambia, que es la importante: **el alcance por rol del punto 7 lo sigue decidiendo
+Row Level Security.** La API propaga la identidad de quien pide
+([`ADR-012`](adr/ADR-012-identidad-a-postgres.md)); una exportación pedida por Operación no trae de
+más porque **la base no se lo entrega**, no porque la API lo filtre después.
 
 ---
 
@@ -170,7 +252,8 @@ consistente y verificado, no a un momento arbitrario.
 | Ver historial de exportaciones | ✅ | ❌ |
 | Configurar la programación | ✅ | ❌ |
 
-Restricción aplicada por Row Level Security, igual que el resto de datos sensibles.
+Restricción aplicada por Row Level Security, igual que el resto de datos sensibles. `prisma_api`
+no la vuelve a implementar: la hereda, porque consulta con la identidad de quien pidió (5.1).
 
 ---
 
@@ -230,3 +313,9 @@ de cifras del Inicio lleva `0`, y eso ya distingue un reporte de un respaldo vac
 > El procedimiento de restauración y su prueba quedan explícitamente diferidos, y eso es una
 > limitación real de esta versión, no un olvido. Mientras tanto, el respaldo diario automático
 > del proveedor es la protección efectiva contra pérdida de datos.
+
+---
+
+### 🧭 Navegación
+
+**⬅️ Anterior:** [12 · Pruebas y calidad](12-pruebas-y-calidad.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [14 · Roadmap e ideas](14-roadmap-e-ideas.md)

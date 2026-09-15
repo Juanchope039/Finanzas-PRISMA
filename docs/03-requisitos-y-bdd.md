@@ -155,6 +155,16 @@ evalúa Row Level Security; el cargo es descriptivo y nunca decide un permiso.
 | RF-69 | Ser instalable como aplicación en el celular | S | — |
 | RF-70 | Encolar registros hechos sin conexión y sincronizarlos al reconectar | C | CU-01 |
 | RF-96 | Permitir descargar en CSV o PDF la información que muestra el Inicio | S | CU-37 |
+| RF-98 | Mostrar de forma permanente y visible la versión de la aplicación y el ambiente en que corre | M | — |
+| RF-99 | Señalar de forma inequívoca, con una franja fija, que el ambiente no es producción | M | — |
+| RF-100 | Ofrecer un panel «Acerca de» con las versiones del front, la API y el esquema, el ambiente, la fecha de compilación y la referencia del commit | M | — |
+| RF-101 | Comprobar al arrancar que la MAJOR de la API es compatible y detener el ingreso con un mensaje claro si no lo es | M | — |
+
+> **Estos cuatro requisitos no cuelgan de ningún caso de uso, y así debe ser.** No describen una
+> tarea del taller: describen lo que la aplicación tiene que decir de sí misma. Sirven para dos
+> cosas concretas: que nadie registre la venta del día en QA creyendo que es el sistema real, y
+> que un reporte de fallo empiece sabiendo qué versión estaba corriendo contra qué servidor.
+> Se verifican en `BDD-98-*`, `BDD-100-1` y `BDD-101-1`.
 
 ---
 
@@ -177,10 +187,22 @@ evalúa Row Level Security; el cargo es descriptivo y nunca decide un permiso.
 | RNF-13 | Disponibilidad | Respaldo diario automático del proveedor | Panel del proveedor |
 | RNF-14 | Costo | Costo mensual de operación igual a $0 | Planes gratuitos |
 | RNF-15 | Mantenibilidad | El dominio no depende de la interfaz ni de la base de datos | Revisión de importaciones |
-| RNF-16 | Mantenibilidad | Cobertura de pruebas del dominio ≥ 90% | Reporte de Vitest |
+| RNF-16 | Mantenibilidad | Cobertura de pruebas del dominio ≥ 90% | Reporte de `dart test --coverage` |
 | RNF-17 | Localización | Interfaz en español, formato de moneda colombiano | Revisión visual |
 | RNF-18 | Seguridad | Las contraseñas nunca se almacenan ni se registran en texto plano, ni siquiera en la bitácora de intentos fallidos | Revisión de la tabla `auditoria` y de los registros del proveedor |
 | RNF-19 | Usabilidad | El ingreso se completa en menos de 10 segundos con una sola mano en un celular | Prueba cronometrada con una usuaria real |
+| RNF-20 | Disponibilidad | La base de datos está siempre en línea: ningún ambiente de negocio se pausa por inactividad | Consulta contra prod y uat tras una semana sin uso; responde sin necesidad de reactivar el proyecto |
+| RNF-21 | Seguridad | Todo acceso a datos pasa por la API; el front no se conecta a la base ni a Auth | Revisión de dependencias y de importaciones del front: no existe cliente de Supabase |
+| RNF-22 | Seguridad | Los permisos los sigue aplicando PostgreSQL con Row Level Security aunque haya una API en medio | Prueba de integración con sesión real de Operación y la comprobación de la capa de aplicación desactivada |
+| RNF-23 | Mantenibilidad | Cada proyecto —front, API y esquema— se versiona por separado con SemVer | Revisión de `pubspec.yaml` y de la tabla `schema_version` en cada publicación |
+| RNF-24 | Seguridad | Ningún secreto vive en el repositorio | Escaneo de secretos en cada integración; la configuración entra por variables de entorno y `--dart-define` |
+| RNF-25 | Mantenibilidad | Toda restricción de la base tiene nombre explícito y mensaje traducido al español | Prueba que recorre `pg_constraint` y exige entrada en la tabla de traducción de la API |
+
+> **RNF-20 rompe a RNF-14, y hay que decirlo en voz alta.** «Siempre en línea» significa que prod
+> y uat no pueden quedarse en el plan gratuito, porque ese plan pausa el proyecto tras una semana
+> de inactividad. Un taller que factura los lunes encontraría el sistema dormido. El costo de
+> operación deja de ser $0: son, como mínimo, dos proyectos de pago. dev y qa sí se quedan en el
+> plan gratuito, porque ahí una pausa no le molesta a nadie.
 
 ---
 
@@ -292,6 +314,7 @@ Formato Gherkin tabulado. Cada escenario se convierte en una prueba automática.
 | BDD-02-3 | Simulador restringido | Sesión con rol Operación | Intento abrir el simulador por acceso directo | La base de datos rechaza la consulta |
 | BDD-02-4 | Desprendible propio | Sesión con rol Operación | Consulto nómina | Veo únicamente mi propio desprendible |
 | BDD-02-5 | Exportación restringida | Sesión con rol Operación | Intento exportar la base | Se rechaza en la base de datos |
+| BDD-02-6 | La base manda aunque haya una API en medio | Sesión real de Operación contra la API, con la comprobación de permisos de la capa de aplicación desactivada a propósito | Pido `GET /nomina`, `GET /usuarios` y `GET /patrimonio` | Las tres responden vacío o 403 porque lo decidió Row Level Security, no un `if` de la API; si al quitar la comprobación aparecen datos, la prueba falla |
 
 ### 4.8 Importación
 
@@ -325,6 +348,20 @@ Formato Gherkin tabulado. Cada escenario se convierte en una prueba automática.
 | BDD-35-3 | Revertir no borra: quedan las dos entradas | Una entrada `Desactivado` sobre `lorena` | La revierto con motivo | La bitácora queda con **dos** entradas: la original intacta y marcada como `Revertida`, y una nueva de tipo `Reversión` que dice qué se deshizo y por qué |
 | BDD-36-1 | Vista previa de Operación | Sesión de Gerencia con la vista previa activa | Recorro el menú y el tablero | Desaparecen Inversiones, Reportes, Nómina y Gestión de usuarios, y una franja fija avisa que la vista previa está activa, ofrece salir con un clic y advierte que no reemplaza la prueba con una sesión real |
 
+### 4.11 Versión, ambiente y compatibilidad
+
+| ID | Escenario | Dado | Cuando | Entonces |
+|---|---|---|---|---|
+| BDD-98-1 | La insignia de versión y ambiente se ve | Una sesión abierta en el ambiente de QA | Miro la barra superior | Veo `v0.4.2 · QA` en color de advertencia y una franja fija arriba que dice «Ambiente de QA · los datos no son reales» |
+| BDD-98-2 | En producción no hay franja ni rótulo | Una sesión abierta en producción | Miro la barra superior | Veo solo la versión, en color neutro, y no hay ninguna franja de ambiente: si no dice nada, es el de verdad |
+| BDD-100-1 | «Acerca de» responde la primera pregunta de todo reporte de fallo | Una sesión abierta en QA | Abro «Acerca de» desde el menú de la sesión | Veo la versión del front, la de la API, la del esquema, el ambiente, la fecha de compilación y la referencia del commit |
+| BDD-101-1 | El front rechaza una API con MAJOR incompatible | Un front compilado contra la MAJOR 1 de la API y un servidor que responde `2.0.0` en `GET /version` | Abro la aplicación | La sesión no abre: aparece «Esta versión de la aplicación ya no sirve con el servidor. Actualiza.» y no hay forma de seguir |
+
+> **El número del medio de `BDD-98-*`, `BDD-100-1` y `BDD-101-1` es el del requisito, no el de un
+> caso de uso.** Es la única excepción del documento y no admite ambigüedad: los casos de uso
+> llegan a CU-37, así que ningún identificador puede chocar. Se hace así porque estos escenarios
+> verifican requisitos que a propósito no cuelgan de ningún caso de uso (ver §1.8).
+
 ---
 
 ## 5. Matriz de trazabilidad
@@ -345,6 +382,13 @@ Sin huérfanos en ninguna dirección.
 | RF-71 … RF-83 | CU-28 · CU-29 · CU-30 · CU-31 · CU-32 · CU-33 | BDD-28-*, BDD-29-*, BDD-30-1, BDD-32-1, BDD-33-1 | 0 · Acceso · 9 · Gestión de usuarios | `usuarios`, `cargos`, `auditoria` |
 | RF-84 … RF-94 | CU-30 · CU-34 · CU-35 · CU-36 | BDD-34-*, BDD-35-*, BDD-36-1 | 9 · Gestión de usuarios | `usuarios`, `cargos`, `auditoria` |
 | RF-95 … RF-97 | CU-13 · CU-37 | BDD-13-4 | 1 · Dashboard · 3 · Movimientos | `cuentas`, `movimientos`, `exportaciones` |
+| RF-98 … RF-101 | — | BDD-98-*, BDD-100-1, BDD-101-1 | Todas (insignia y franja) · «Acerca de» | `schema_version` |
 
-**Cobertura:** 97 requisitos funcionales · 19 no funcionales · 19 reglas de negocio ·
-37 casos de uso · 59 escenarios BDD · 10 pantallas.
+**Cobertura:** 101 requisitos funcionales · 25 no funcionales · 19 reglas de negocio ·
+37 casos de uso · 64 escenarios BDD · 10 pantallas.
+
+---
+
+### 🧭 Navegación
+
+**⬅️ Anterior:** [02 · Casos de uso](02-casos-de-uso.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [04 · Modelo de datos](04-modelo-de-datos.md)

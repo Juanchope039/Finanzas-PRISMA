@@ -4,26 +4,71 @@
 
 ## 1. Estrategia
 
-La arquitectura hexagonal permite invertir el esfuerzo donde más importa: **los cálculos de
-plata**.
+Ahora hay **dos bases de código** —`prisma_front` en Flutter y `prisma_api` en Dart— y **cuatro
+ambientes** —dev, qa, uat y prod—. La estrategia cambia de forma, no de fondo: la arquitectura
+hexagonal sigue permitiendo invertir el esfuerzo donde más importa, **los cálculos de plata y los
+permisos**.
 
 ```
         ╱╲          Manuales en dispositivo real
-       ╱  ╲         ~10 recorridos · antes de cada entrega
+       ╱  ╲         10 recorridos · antes de cada entrega
       ╱────╲
-     ╱      ╲       Integración con base de datos
-    ╱        ╲      ~55 pruebas · acceso, permisos, transacciones
+     ╱      ╲       Integración de prisma_api contra la base real
+    ╱        ╲      Acceso, permisos, transacciones, contrato de errores
    ╱──────────╲
-  ╱            ╲    Unitarias del dominio
- ╱              ╲   ~120 pruebas · milisegundos, sin red
+  ╱            ╲    Unidad en Dart · widget en Flutter
+ ╱              ╲   Milisegundos, sin red y sin base de datos
 ╱────────────────╲
 ```
 
-| Nivel | Qué prueba | Herramienta | Meta |
-|---|---|---|---|
-| Unitario | Servicios de dominio: fórmulas financieras | Vitest | **≥ 90% de cobertura** |
-| Integración | Repositorios, transacciones, políticas RLS | Vitest + base de pruebas | Casos críticos |
-| Manual | Recorridos completos en celular real | Lista de verificación | Antes de cada entrega |
+| Nivel | Dónde vive | Qué prueba | Herramienta | Meta |
+|---|---|---|---|---|
+| Unitario de dominio | `prisma_api` | Servicios de dominio: fórmulas financieras | `dart test` | **≥ 90% de cobertura** |
+| Unitario de presentación | `prisma_front` | Formato de cifras y fechas, estado, validación de formularios | `flutter test` | Cada regla de formulario |
+| Widget | `prisma_front` | Que cada pantalla pinte lo que debe y reaccione a lo que recibe | `flutter test` | Las 10 pantallas |
+| Integración | `prisma_api` + base | Repositorios, transacciones, políticas RLS, contrato de errores | `dart test` contra la base del ambiente | Casos críticos |
+| Manual | Las dos | Recorridos completos en celular real | Lista de verificación | Antes de cada entrega |
+
+**Las pruebas de widget no levantan la API.** Hablan con un cliente HTTP falso. Si para probar una
+pantalla hubiera que levantar `prisma_api` y su base, la pantalla quedó pegada al transporte: eso
+es un defecto que se corrige, no una condición de la prueba. Lo que sí se prueba de verdad entre
+el front y la API es el contrato de versiones, y eso está en la sección 9.
+
+### 1.1 Dónde corre cada nivel
+
+| Ambiente | Qué se ejecuta ahí | Con qué datos |
+|---|---|---|
+| **dev** | Unidad y widget en cada guardado; integración contra la base de dev | Ficticios, se pueden borrar |
+| **qa** | Todo, en cada integración a la rama principal. **Es la que bloquea la promoción** | Ficticios, con semilla reproducible |
+| **uat** | P-01 a P-32 —P-32 sin su paso 3, ver 3.1— y los recorridos manuales, antes de la aprobación de Gerencia | Realistas y anonimizados |
+| **prod** | Pruebas de humo de solo lectura, después de publicar | Reales |
+
+> **Ninguna prueba automática escribe en prod.** Las de integración siembran filas y las borran;
+> en la base del negocio eso no es una prueba, es un daño. Contra prod solo corren lecturas después
+> de publicar: que `GET /version` devuelva la versión que se acaba de promover y que el Inicio
+> cargue. Nada más.
+
+Que qa sea la que bloquea la promoción es a propósito: es el único ambiente donde la suite completa
+corre contra una base con semilla reproducible. En dev los datos cambian a cada rato y una prueba
+que falla ahí no siempre significa que el código esté mal.
+
+### 1.2 Cuántas pruebas hay enumeradas
+
+| Grupo | Identificadores | Cuántas |
+|---|---|---:|
+| Reglas de negocio (§2) | RN-02 a RN-19 | 18 |
+| Permisos (§3) | P-01 a P-32 | 32 |
+| Invariantes financieros (§4.2) | Las cinco igualdades | 5 |
+| Casos límite (§5) | Sin identificador | 10 |
+| Recorridos manuales (§6) | M-01 a M-10 | 10 |
+| Acceso y administración de usuarios (§7) | A-01 a A-16 | 16 |
+| Vista previa de Operación (§7.1) | A-17 a A-19 | 3 |
+| Contrato entre las tres partes (§9) | C-01 y C-02 | 2 |
+| **Total** | | **96** |
+
+Son **86 automáticas y 10 manuales**. No son todas las que habrá: las unitarias del dominio serán
+muchas más y se miden por cobertura, no por lista. Estas 96 están escritas aquí una por una porque
+ninguna puede quedar al criterio de quien programe ese día.
 
 ---
 
@@ -58,7 +103,9 @@ llega a producción.**
 ## 3. Pruebas de permisos
 
 Las más importantes desde el punto de vista de confianza. Todas se ejecutan con una **sesión
-real de tipo Operación**, no simulada.
+real de tipo Operación**, no simulada, abierta **a través de `prisma_api`** con usuario y
+contraseña. La API propaga esa identidad a la sesión de PostgreSQL, así que quien decide sigue
+siendo RLS.
 
 | # | Prueba | Resultado esperado |
 |---|---|---|
@@ -93,14 +140,16 @@ real de tipo Operación**, no simulada.
 | P-29 | Leer los propios `adelantos` y los de otra persona | Solo los propios; los ajenos, conjunto vacío |
 | P-30 | Registrarse un adelanto | Rechazado |
 | P-31 | Cargar el desprendible propio completo en una sola consulta | Permitido: llegan las cuatro tablas |
+| P-32 | Leer nómina, usuarios y patrimonio **con la guarda de la capa de aplicación desactivada** | El mismo resultado que con la guarda puesta: vacío o 403. Ver 3.1 |
 
-> **Criterio clave:** el rechazo debe venir de PostgreSQL, no de un `if` en el código de la
-> interfaz. La prueba se hace consultando directamente, sin pasar por las pantallas.
+> **Criterio clave:** el rechazo debe venir de PostgreSQL, no de un `if` de Dart ni de una pantalla
+> que no dibuja el botón. La prueba se hace llamando a la API con un token real, sin pasar por las
+> pantallas. Y quien demuestra que el juez fue la base y no la API es P-32.
 
 Esto vale doble para las pantallas de acceso y de Gestión de usuarios. Que la interfaz esconda
 la entrada de Gestión de usuarios no prueba nada: prueba que el menú está escondido. La prueba
-válida abre una sesión real de tipo Operación con su usuario y su contraseña, y consulta la
-base directamente. P-10 a P-15 ejercen las políticas `usuarios_lectura`, `usuarios_insercion`
+válida abre una sesión real de tipo Operación con su usuario y su contraseña, y le pide los datos
+a la API, nunca a la pantalla. P-10 a P-15 ejercen las políticas `usuarios_lectura`, `usuarios_insercion`
 y `usuarios_actualizacion` sobre `usuarios`, y `cargos_lectura` y `cargos_escritura` sobre
 `cargos`. Es exactamente lo que decidió [`ADR-006`](adr/ADR-006-rls-por-rol.md):
 **los permisos viven en la base, no en la pantalla.**
@@ -128,6 +177,44 @@ leerlas con tres cosas en mente:
   mira `empleados` en una subconsulta, y si esa subconsulta deja de ver la fila propia el
   desprendible **se vacía sin dar ningún error**. P-24 sola no lo detecta: la ficha se lee bien
   y el desprendible igual sale en blanco.
+
+### 3.1 P-32 · La prueba que distingue «protegido» de «parece protegido»
+
+Es la prueba que hay que escribir primero y la única que no puede faltar: es la que verifica
+[`ADR-012`](adr/ADR-012-identidad-a-postgres.md) y la que hace exigible el **RNF-22**. Con
+`prisma_api` en medio, la base ya no ve a la empleada: ve a la API. Si la API se conectara con la
+clave de servicio, RLS dejaría de aplicar,
+todas las políticas de [`ADR-006`](adr/ADR-006-rls-por-rol.md) se volverían decorado **y ninguna
+prueba existente se pondría roja**: P-01 a P-31 seguirían en verde porque el `if` de Dart las
+estaría sosteniendo. Eso es lo que P-32 rompe.
+
+| Paso | Qué se hace |
+|---|---|
+| 1 | Abrir sesión **a través de la API** como una usuaria de tipo Operación, con su usuario y su contraseña del ambiente de pruebas |
+| 2 | Pedir `GET /nomina`, `GET /usuarios` y `GET /patrimonio`. Deben devolver conjunto vacío o 403 |
+| 3 | **Desactivar la comprobación de la capa de aplicación** con la bandera de configuración que solo se acepta en dev y en qa, y repetir las tres peticiones |
+| 4 | Comparar. El resultado debe ser **exactamente el mismo** |
+
+> **Si al quitar el `if` los datos aparecen, RLS no está actuando y la prueba falla.** Ese es el
+> punto entero: sin el paso 3 no se prueba la base, se prueba el `if`. Y un `if` lo borra
+> cualquiera en una limpieza de código un martes por la tarde.
+
+Lo que P-32 atrapa, y que ninguna otra prueba ve:
+
+| Fallo real | ¿Lo atrapa P-32? |
+|---|---|
+| La API se conecta con la clave `service_role` en el camino de una petición de usuaria | **Sí.** Con esa clave RLS no aplica y los datos aparecen |
+| El rol de base de datos de la API tiene `BYPASSRLS` | **Sí.** Mismo síntoma |
+| El rol de la API es dueño de las tablas y falta `FORCE ROW LEVEL SECURITY` | **Sí.** El dueño se salta RLS por defecto |
+| La API olvida propagar los claims a la sesión de PostgreSQL | No hace falta: sin identidad no se lee nada y P-04, P-11 y P-24 ya fallan por venir vacías |
+
+Esa última fila es lo que hace que el conjunto funcione. P-32 vigila el lado permisivo —que la API
+no sea más poderosa de la cuenta— y las pruebas de «Permitido» vigilan el restrictivo —que la
+identidad sí esté llegando—. Ninguna de las dos sirve sola.
+
+**Dónde corre.** Completa, en dev y en qa. En uat se ejecutan solo los pasos 1 y 2: la bandera no
+existe allá, y un ambiente donde se puede apagar la guarda de la aplicación no sirve para aprobar
+nada. En prod no corre.
 
 ---
 
@@ -263,8 +350,8 @@ Gerencia pueda salir; ninguna verifica un permiso.
 > **La vista previa NO sustituye la prueba de permisos, y confundirla con una es el error grave
 > de esta función.** Ninguna de las pruebas A-17 a A-19 demuestra que una persona de Operación no
 > pueda llegar a los datos ocultos: solo demuestran que la pantalla no los dibuja. Eso lo prueban
-> P-01 a P-31 de la sección 3, con una **sesión real de tipo Operación consultando la base de
-> datos**. Es exactamente lo que decidió [`ADR-006`](adr/ADR-006-rls-por-rol.md): **ocultar un
+> P-01 a P-32 de la sección 3, con una **sesión real de tipo Operación llamando a la API**, y muy
+> especialmente P-32. Es exactamente lo que decidió [`ADR-006`](adr/ADR-006-rls-por-rol.md): **ocultar un
 > menú no es seguridad.** Una pantalla revisada con la vista previa sigue teniendo sus permisos
 > sin probar mientras no se ejecuten esas pruebas.
 
@@ -274,10 +361,71 @@ Gerencia pueda salir; ninguna verifica un permiso.
 
 | Control | Herramienta | Cuándo |
 |---|---|---|
-| Tipado estricto | TypeScript en modo `strict` | Cada compilación |
-| Regla de frontera de arquitectura | ESLint | Cada compilación |
-| Formato consistente | Prettier | Al guardar |
-| Cobertura del dominio | Vitest | Cada cambio |
-| Sin `any` en el dominio | ESLint | Cada compilación |
+| Tipado estricto | `dart analyze` con `strict-casts` y `strict-raw-types` | Cada compilación |
+| Regla de frontera de arquitectura | Lint de importaciones: `domain/` no importa `infrastructure/` ni `interface/` | Cada compilación |
+| Formato consistente | `dart format` | Al guardar |
+| Cobertura del dominio | `dart test --coverage` | Cada cambio |
+| Sin `dynamic` en el dominio | `dart analyze` con `avoid_dynamic_calls` | Cada compilación |
+
+Los cinco controles corren en **las dos bases de código**, con el mismo `analysis_options.yaml`
+de partida; `prisma_front` le suma encima las reglas propias de Flutter. Un solo lenguaje en todo
+el proyecto sirve para poco si cada mitad se revisa con otra vara.
 
 **Regla de oro del proyecto:** si un cálculo financiero no tiene prueba, no está terminado.
+
+---
+
+## 9. Pruebas del contrato entre las tres partes
+
+Validar la misma regla tres veces —en la base, en `prisma_api` y en el formulario— solo es
+sostenible si algo vigila que las tres versiones no se separen con el tiempo. Y versionar el front
+y la API por separado solo es sostenible si algo detecta cuándo dejaron de entenderse. Estas dos
+pruebas son ese vigilante.
+
+| # | Prueba | Resultado esperado |
+|---|---|---|
+| C-01 | Recorrer `pg_constraint` y cruzar cada restricción nombrada con la tabla de traducción de `prisma_api` | Todas tienen entrada. Si falta una, la prueba falla y dice cuál |
+| C-02 | Arrancar el front declarando una MAJOR de API distinta a la que responde `GET /version` | El front se planta en la primera pantalla y no deja seguir |
+
+### 9.1 C-01 · Ninguna restricción sin mensaje
+
+La base no sabe hablar: rechaza con `23514 check_violation` sobre `movimientos_valor_positivo`, y
+eso no se le muestra a la dueña del taller. La API traduce **nombre de restricción → código HTTP +
+mensaje en español + campo del formulario**. C-01 recorre `pg_constraint` del ambiente y comprueba
+que cada restricción nombrada tenga su entrada en esa tabla. Es la prueba que sostiene
+[`ADR-015`](adr/ADR-015-validacion-tres-capas.md) y la que verifica el **RNF-25**.
+
+Tres detalles deciden si la prueba sirve de algo:
+
+- **Lee la base, no una lista escrita a mano.** Una lista se actualiza cuando alguien se acuerda;
+  `pg_constraint` es lo que la base tiene hoy, le guste a quien le guste.
+- **Falla nombrando la restricción huérfana.** «Faltan traducciones» no sirve: la prueba tiene que
+  decir cuál, o el arreglo se vuelve una búsqueda a ciegas.
+- **También falla al revés.** Una entrada en la tabla de traducción que ya no corresponde a ninguna
+  restricción es un mensaje muerto, y peor: esconde que la regla desapareció de la base.
+
+En ejecución, la contraparte es la regla de `prisma_api`: un error de la base que no esté en la
+tabla se devuelve como 500 y se registra como defecto. C-01 existe para que eso nunca ocurra
+por primera vez en prod.
+
+### 9.2 C-02 · Un front viejo se planta, no se arrastra
+
+El front y la API se versionan por separado ([`ADR-014`](adr/ADR-014-semver.md)), así que puede
+haber un navegador con la aplicación de hace tres semanas pidiéndole cosas a una API que ya cambió
+el contrato. Es **BDD-101-1** convertido en prueba automática, y cubre los tres casos:
+
+| Caso | Qué debe pasar |
+|---|---|
+| El front pide una MAJOR **menor** que la de la API | Pantalla `Esta versión de la aplicación ya no sirve con el servidor. Actualiza.` y ninguna pantalla más |
+| El front pide una MAJOR **mayor** que la de la API | Lo mismo. Un front adelantado contra un servidor viejo se rompe igual |
+| Las dos MAJOR coinciden | Entra normal. Sin esta tercera no se sabe si la prueba está fallando por la razón correcta |
+
+> **Fallar ruidoso al arrancar es mejor que fallar en la pantalla 7 con un campo nulo.** Un front
+> que sigue andando contra una API incompatible no da un error: da cifras raras. Y una cifra rara
+> en un sistema de plata se cree, se anota y se usa para decidir.
+
+---
+
+### 🧭 Navegación
+
+**⬅️ Anterior:** [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [13 · Respaldo y exportación](13-respaldo-y-exportacion.md)

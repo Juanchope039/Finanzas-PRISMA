@@ -32,6 +32,36 @@ pantalla:
 
 **Firma de aprobación:** ______________________  **Fecha:** ____________
 
+### 1.1 La segunda firma: el mismo checklist, en UAT
+
+El mockup se aprueba antes de programar. Pero aprobar un prototipo no es aprobar el sistema: el
+prototipo no tiene datos, no falla y no se demora. Por eso **estas mismas 12 filas se vuelven a
+recorrer en UAT, contra el sistema real**, con datos realistas anonimizados, antes de publicar
+nada en prod.
+
+| Firma | Qué autoriza | Sobre qué se hace |
+|---|---|---|
+| Firma del mockup | Empezar a construir | El mockup HTML |
+| **Firma de UAT** | Publicar en prod | El sistema real corriendo en el ambiente uat |
+
+En UAT se verifica, además, lo que un prototipo no puede mostrar:
+
+| # | Qué verificar | ✓ |
+|---|---|:---:|
+| 13 | La franja dice **«Ambiente de Aprobación · los datos no son reales»** y la insignia muestra la versión | ⬜ |
+| 14 | Registrar un movimiento con datos de verdad sigue tomando menos de 30 segundos | ⬜ |
+| 15 | La sesión de Operación se prueba con un usuario real de uat, no con la vista previa de Gerencia | ⬜ |
+| 16 | Lo que Operación no debe ver, no llega: lo niega la base, no la pantalla | ⬜ |
+| 17 | Las tres cifras del mes de prueba cuadran con el cálculo hecho a mano | ⬜ |
+
+> **Se firma una versión, no una impresión.** Lo que se aprueba en UAT es el artefacto con su
+> número de versión, y **ese mismo artefacto es el que va a prod, sin recompilar**
+> ([ADR-013](adr/ADR-013-cuatro-ambientes.md)). Si se vuelve a compilar, se publicó algo distinto
+> de lo que se aprobó.
+
+**Firma de aprobación en UAT:** ______________________  **Versión aprobada:** ____________
+**Fecha:** ____________
+
 ---
 
 ## 2. Fase previa opcional: formalización
@@ -56,11 +86,53 @@ análisis está fuera del alcance de esta versión y queda en
 
 ---
 
-## 3. Migración de datos históricos
+## 3. Los cuatro ambientes en la puesta en marcha
+
+Poner PRISMA a andar ya no es «subirlo». Hay cuatro ambientes y lo que entra a prod solo llega
+por promoción, en orden ([ADR-013](adr/ADR-013-cuatro-ambientes.md)). El procedimiento técnico
+completo vive en [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md); aquí va lo que le
+toca a la implantación.
+
+| Ambiente | Qué pasa aquí durante la implantación | Datos |
+|---|---|---|
+| **dev** | Se prueba la importación con archivos inventados y se corrigen los mapeos de columnas | Ficticios |
+| **qa** | **Se ensaya la migración completa de punta a punta** y se cronometra la jornada de digitación | Ficticios, semilla reproducible |
+| **uat** | Gerencia recorre el checklist (§1.1) contra el sistema real y firma la versión | Realistas, **anonimizados** |
+| **prod** | Recibe únicamente la versión firmada en uat, sin recompilar. Aquí entra el alistamiento de usuarios y la migración de verdad | Reales |
+
+> **Ensayo general antes del estreno.** La migración se ensaya completa en qa antes de hacerla
+> en prod. La primera vez que se importe el Excel del negocio no puede ser también la primera
+> vez que alguien importa un Excel.
+
+### 3.1 Alistamiento técnico de los ambientes
+
+Va numerado primero porque **es lo primero**: sin esto no hay a dónde promover nada, y dos de los
+pasos cuestan plata y hay que decidirlos con tiempo.
+
+| # | Paso | Responsable | Cuándo |
+|---|---|---|---|
+| 1 | Crear los **cuatro proyectos de Supabase**: dev, qa, uat y prod. Cada uno con su propia base, sus claves y su almacenamiento | Apoyo técnico | Sprint 0 |
+| 2 | **Contratar el plan de pago de uat y prod.** dev y qa se quedan en el plan gratuito | Gerencia | Antes de levantar uat |
+| 3 | Crear el rol **`prisma_api`** en cada ambiente: sin `BYPASSRLS`, sin `SUPERUSER` y sin ser dueño de las tablas | Apoyo técnico | Sprint 0 |
+| 4 | Cargar los **secretos de cada ambiente** fuera del repositorio: variables de entorno en la API, `--dart-define` al compilar el front | Apoyo técnico | Sprint 0 |
+| 5 | Guardar la clave `service_role` de cada ambiente en un **secreto aparte**, reservado para migraciones y tareas administrativas | Apoyo técnico | Sprint 0 |
+| 6 | Promover el esquema dev → qa → uat → prod y verificar `schema_version` en cada base | Apoyo técnico | Antes de cada hito |
+| 7 | Comprobar en cada ambiente que `GET /version` responde el ambiente correcto y que la franja aparece donde debe | Apoyo técnico | Antes de cada hito |
+| 8 | Ejecutar la prueba de permisos con sesión real en los cuatro ambientes ([ADR-012](adr/ADR-012-identidad-a-postgres.md)) | Apoyo técnico | Antes del go-live |
+
+> **Esto no es un impedimento, es una factura.** «Siempre en línea» significa que prod y uat no
+> pueden estar en el plan gratuito de Supabase: ese plan pausa el proyecto tras una semana de
+> inactividad y un taller que factura los lunes encontraría el sistema dormido. Son **dos
+> proyectos de pago**, y [ADR-001](adr/ADR-001-stack.md) había declarado presupuesto de operación
+> cero. Se dice aquí para que nadie lo descubra el día del go-live.
+
+---
+
+## 4. Migración de datos históricos
 
 Hay dos fuentes: **Excel/Sheets** y **cuaderno físico con fotos**.
 
-### 3.1 Qué se migra y qué no
+### 4.1 Qué se migra y qué no
 
 | Dato | ¿Se migra? | Por qué |
 |---|:---:|---|
@@ -78,7 +150,11 @@ Hay dos fuentes: **Excel/Sheets** y **cuaderno físico con fotos**.
 > pago.** Sin ellos, la respuesta a "¿puedo contratar?" se basa en muy pocos datos y no es
 > confiable.
 
-### 3.2 Cómo se migra
+### 4.2 Cómo se migra
+
+**Se ensaya primero en qa.** La misma importación, con una copia del Excel real, contra la base de
+qa. Sirve para dos cosas: descubrir los errores de mapeo sin tocar prod y saber cuánto se demora
+de verdad la jornada. Solo cuando el ensayo sale limpio se repite en prod.
 
 **Del Excel — importación asistida (CU-21)**
 
@@ -107,7 +183,7 @@ Una sesión de trabajo de medio día, acompañada:
 con el dinero que realmente hay, falta información. Se ajusta con un movimiento de
 *"ajuste de saldo inicial"* documentado, no forzando números.
 
-### 3.3 Regla de corte
+### 4.3 Regla de corte
 
 Se define una **fecha de corte**, idealmente el primer día de un mes:
 
@@ -117,7 +193,7 @@ Se define una **fecha de corte**, idealmente el primer día de un mes:
 
 > Usar los dos sistemas al mismo tiempo es la forma más segura de terminar sin usar ninguno.
 
-### 3.4 Alistamiento de usuarios
+### 4.4 Alistamiento de usuarios
 
 Va numerado de último pero **se hace de primero**: la migración necesita una sesión abierta, y
 cada dato que entra queda firmado con el usuario que lo registró. Si se migra sin usuarios, la
@@ -134,9 +210,13 @@ auditoría arranca en blanco y no hay forma de reconstruirla después.
 **El tipo dice qué puede ver. El cargo dice qué hace.** Solo Gerencia lleva tipo `gerencia`;
 todo el resto del equipo va como `operacion`, sin importar el cargo que tenga.
 
+> **Estos pasos se hacen en prod.** En uat hay usuarios de prueba con los mismos tipos y cargos,
+> pero **con claves distintas y sin los nombres reales del equipo**: uat lleva datos anonimizados
+> y una clave que sirve en dos ambientes es una clave que se filtró en el más flojo de los dos.
+
 ---
 
-## 4. Capacitación
+## 5. Capacitación
 
 Tres sesiones cortas, separadas en el tiempo. Nadie aprende un sistema completo de una sentada.
 
@@ -187,9 +267,26 @@ segundos en total.
 
 ---
 
-## 5. Go-live
+## 6. Go-live
 
-### 5.1 Antes (día −1)
+### 6.1 La promoción hasta prod
+
+El go-live no empieza el día −1: empieza cuando la versión firmada en UAT termina de recorrer los
+cuatro ambientes. Ninguno se salta.
+
+| # | Paso | Quién | Qué tiene que pasar para seguir |
+|---|---|---|---|
+| 1 | Las migraciones pendientes se aplican en qa y pasan las pruebas | Apoyo técnico | Las pruebas de extremo a extremo pasan en qa |
+| 2 | El artefacto se promueve a uat y se siembra con datos anonimizados | Apoyo técnico | `GET /version` en uat responde la versión candidata |
+| 3 | Gerencia recorre el checklist de UAT (§1.1) y firma la versión | Gerencia | La firma queda con número de versión y fecha |
+| 4 | **El mismo artefacto** se promueve a prod, sin recompilar | Apoyo técnico | La versión en prod es idéntica a la firmada |
+| 5 | Alistamiento de usuarios y migración de datos en prod (§4) | Gerencia + apoyo técnico | Los saldos cuadran con el dinero real |
+
+> **Recompilar para prod sería aprobar una cosa y publicar otra.** Si hace falta un cambio
+> después de la firma, se vuelve a empezar en el paso 1 con una versión nueva. No hay atajo, y
+> por eso el número de versión aparece en la línea de la firma.
+
+### 6.2 Antes (día −1)
 
 | # | Verificación | ✓ |
 |---|---|:---:|
@@ -204,14 +301,21 @@ segundos en total.
 | 9 | La confirmación de correo está **desactivada** en el proveedor de autenticación | ⬜ |
 | 10 | Existe al menos un usuario de Gerencia activo y con la clave temporal ya cambiada | ⬜ |
 | 11 | Cada persona del equipo entró al menos una vez con su propio usuario | ⬜ |
+| 12 | La versión en prod es **exactamente** la firmada en UAT, con el mismo número | ⬜ |
+| 13 | El plan de pago de prod está activo y la base no se pausa por inactividad | ⬜ |
+| 14 | `GET /version` en prod responde la versión del front, la de la API, la del esquema y el ambiente | ⬜ |
+| 15 | En prod **no hay franja de ambiente** y la insignia muestra solo la versión, en color neutro | ⬜ |
+| 16 | El rol `prisma_api` de prod no tiene `BYPASSRLS` ni es dueño de las tablas | ⬜ |
+| 17 | La prueba de permisos con sesión real se ejecutó **contra prod** y la base fue la que negó | ⬜ |
+| 18 | La reversión está ensayada y se sabe a qué versión anterior se vuelve (§7) | ⬜ |
 
-### 5.2 El día del go-live
+### 6.3 El día del go-live
 
 - Se registra todo el día **solo en PRISMA**.
 - Al cerrar, se compara el efectivo en caja con el saldo del sistema.
 - Si no coincide, se identifica qué faltó registrar. No se ajusta a ciegas.
 
-### 5.3 Primera semana
+### 6.4 Primera semana
 
 | Día | Acompañamiento |
 |---|---|
@@ -222,7 +326,36 @@ segundos en total.
 
 ---
 
-## 6. Soporte de 90 días
+## 7. Qué se hace si una versión rompe prod
+
+Va escrito antes del go-live, no después del primer susto. El procedimiento paso a paso —comandos,
+artefactos y quién tiene acceso a qué— vive en
+[`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) y no se repite aquí; esta sección fija
+**cuándo se revierte y quién decide**.
+
+> **Primero se revierte, después se investiga.** Mientras el taller no pueda registrar, el
+> diagnóstico puede esperar. Buscar la causa con el negocio detenido es la forma más rápida de
+> perder un día de operación y la confianza en el sistema.
+
+| Situación | Qué se hace |
+|---|---|
+| La API nueva falla y el front queda inservible | Se vuelve a la versión anterior de la API. El artefacto anterior sigue publicado: **se promueve, no se reconstruye** |
+| El front nuevo falla y la API responde bien | Se republica el front anterior, que sigue siendo compatible con el mismo MAJOR de la API |
+| El front bloquea con «Esta versión de la aplicación ya no sirve con el servidor. Actualiza.» | Las dos versiones quedaron descuadradas: se vuelve la que se haya movido de último ([ADR-014](adr/ADR-014-semver.md)) |
+| Una migración dejó el esquema mal | **El esquema no se devuelve.** Se escribe otra migración que corrige y se promueve por los cuatro ambientes ([ADR-004](adr/ADR-004-base-solo-escritura.md), [ADR-013](adr/ADR-013-cuatro-ambientes.md)) |
+| Se dañaron o se perdieron datos | Restauración desde el respaldo más reciente y comparación con la última exportación (CU-22) |
+
+| Quién | Qué decide |
+|---|---|
+| Gerencia | Avisa que el taller no puede trabajar. No tiene que diagnosticar nada |
+| Apoyo técnico | Revierte sin pedir autorización cuando el registro diario está detenido, e informa después |
+
+Mientras dura la reversión, el taller **registra en papel con la fecha real y digita después**:
+la doble fecha del sistema lo respeta y el registro tardío queda marcado como lo que es.
+
+---
+
+## 8. Soporte de 90 días
 
 | Período | Qué incluye | Frecuencia |
 |---|---|---|
@@ -231,7 +364,7 @@ segundos en total.
 | Días 31–60 | Revisión quincenal + primer cierre mensual acompañado | Quincenal |
 | Días 61–90 | Revisión mensual + segundo cierre + ajustes finales | Mensual |
 
-### 6.1 Los tres momentos críticos
+### 8.1 Los tres momentos críticos
 
 | Momento | Riesgo | Qué se hace |
 |---|---|---|
@@ -239,7 +372,7 @@ segundos en total.
 | **Primer cierre mensual** | Los números no cuadran y se pierde la confianza | Cierre acompañado, revisando cada diferencia hasta explicarla |
 | **Día 60** | Aparece la tentación de volver al cuaderno "para lo rápido" | Revisar qué se sintió lento y corregirlo |
 
-### 6.2 Manejo de usuarios en la operación diaria
+### 8.2 Manejo de usuarios en la operación diaria
 
 Dos cosas van a pasar seguro: alguien va a olvidar su contraseña y alguien se va a retirar.
 Conviene tener resuelto de antemano cómo se atienden.
@@ -266,7 +399,7 @@ Conviene tener resuelto de antemano cómo se atienden.
 
 ---
 
-## 7. Indicadores de adopción
+## 9. Indicadores de adopción
 
 Se miden durante los 90 días. Son los que dicen si la implantación funcionó.
 
@@ -282,7 +415,7 @@ Se miden durante los 90 días. Son los que dicen si la implantación funcionó.
 
 ---
 
-## 8. Criterio de éxito de la implantación
+## 10. Criterio de éxito de la implantación
 
 A los 90 días, la implantación se considera exitosa si:
 
@@ -299,7 +432,7 @@ sin retorno.
 
 ---
 
-## 9. Plan de contingencia
+## 11. Plan de contingencia
 
 | Situación | Respuesta |
 |---|---|
@@ -307,5 +440,12 @@ sin retorno.
 | Los saldos no cuadran y no se sabe por qué | Revisar la bitácora de auditoría movimiento por movimiento |
 | Se descubre un error en una fórmula | Corregir, agregar prueba automática, recalcular períodos afectados |
 | El sistema no está disponible | Registrar en papel con fecha real y digitar después; la doble fecha lo respeta |
-| Se pierde el acceso a la cuenta | Gerencia restablece la clave en persona (§6.2). No hay recuperación por correo |
+| Se pierde el acceso a la cuenta | Gerencia restablece la clave en persona (§8.2). No hay recuperación por correo |
 | Se necesita volver a los datos anteriores | Exportación de respaldo (CU-22) |
+| Una versión nueva rompe prod | Se revierte primero y se investiga después (§7) |
+
+---
+
+### 🧭 Navegación
+
+**⬅️ Anterior:** [08 · Plan de desarrollo](08-plan-de-desarrollo.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [10 · UX y mockups](10-ux-y-mockups.md)

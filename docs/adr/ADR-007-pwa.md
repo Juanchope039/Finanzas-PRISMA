@@ -1,6 +1,10 @@
 # ADR-007 · PWA en lugar de aplicación nativa
 
-**Estado:** Aceptado · **Fecha:** 2026-09-13
+**Estado:** Reemplazado por ADR-016 · **Fecha:** 2026-09-13
+
+> **Lo reemplaza [ADR-016](ADR-016-flutter-web-pwa.md):** sigue siendo una PWA, pero construida
+> con Flutter Web y no con `vite-plugin-pwa`, que ya no aplica sin Vite. El cuerpo de abajo
+> se conserva tal como se escribió.
 
 ## Contexto
 

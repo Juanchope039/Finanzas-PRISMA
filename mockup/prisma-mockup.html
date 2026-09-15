@@ -531,17 +531,61 @@ input[type=number],select{
 .sesion-panel .sw[aria-checked="true"] .luz{background:var(--warn); border-color:var(--warn)}
 .sesion-panel .sw[aria-checked="true"] .luz::after{background:var(--on-accent); transform:translateX(15px)}
 
-/* ============ FRANJA DE VISTA PREVIA ============ */
-/* Va dentro del topbar, que ya queda fijo al bajar: así la advertencia nunca se pierde de vista. */
-.franja-ope{
+/* ============ PANEL «ACERCA DE» ============ */
+/* Cuelga del mismo sitio que el menú de la sesión y no tapa el tablero: así se cambia el
+   ambiente simulado y se ve al instante qué le pasa a la insignia y a la franja, que están
+   justo encima. Una capa a pantalla completa obligaría a cerrarla para mirar. */
+.acerca{
+  position:absolute; top:calc(100% + 6px); right:0; z-index:31; text-align:left;
+  width:330px; max-width:calc(100vw - 32px); padding:14px;
+  background:var(--surface); border:1px solid var(--line-strong);
+  border-radius:var(--r); box-shadow:var(--shadow);
+  /* Cuelga de un topbar que queda fijo: lo que se salga por abajo no se alcanza bajando
+     la pantalla. En celular bajo se le pone techo y se desplaza por dentro. */
+  overflow-y:auto;
+}
+.acerca-head{display:flex; align-items:baseline; gap:10px; margin-bottom:10px}
+.acerca-head .grow{flex:1}
+.acerca table{font-size:.78rem}
+.acerca td{padding:6px 0; border-bottom:1px solid var(--line)}
+.acerca td:first-child{color:var(--muted); padding-right:12px}
+.acerca td.dato{
+  text-align:right; white-space:nowrap;
+  font-family:var(--mono); font-variant-numeric:tabular-nums;
+}
+.acerca .porque{font-size:.76rem; line-height:1.45; color:var(--muted); margin-top:11px}
+.acerca .nota-mock{margin-top:12px}
+.acerca .campo{margin-top:10px}
+.acerca .campo select{width:100%}
+.acerca .cerrar{width:100%; margin-top:12px}
+
+/* ============ INSIGNIA DE VERSIÓN Y AMBIENTE ============ */
+/* Va pegada al menú de la sesión y no se puede apagar. Quien reporta un fallo casi nunca sabe
+   contra qué servidor estaba: con la versión y el ambiente siempre a la vista, basta una foto
+   de la pantalla para saberlo. */
+.insignia-amb{
+  flex:none; white-space:nowrap; padding:3px 7px; border-radius:6px;
+  font-family:var(--mono); font-size:.62rem; font-weight:600; letter-spacing:.06em;
+  border:1px solid var(--line); background:var(--surface-2); color:var(--muted);
+}
+/* dev, qa y uat van con color de advertencia. En prod la insignia se queda neutra y sin
+   nombre de ambiente: rotular «PROD» sería ruido, y si no dice nada es el de verdad. */
+.insignia-amb.aviso{border-color:var(--warn); background:var(--warn-soft); color:var(--warn)}
+
+/* ============ FRANJAS FIJAS DEL TOPBAR ============ */
+/* Van dentro del topbar, que ya queda fijo al bajar: así la advertencia nunca se pierde de
+   vista. Son dos con el mismo propósito —el ambiente y la vista previa de Operación— y por
+   eso comparten patrón. Cada una ocupa una fila entera de un topbar que envuelve, de modo que
+   cuando están encendidas a la vez se apilan en lugar de pisarse. */
+.franja{
   flex:0 0 100%; display:flex; align-items:center; gap:12px; flex-wrap:wrap;
   padding:10px 13px; border-radius:9px;
   background:var(--warn-soft); border:1px solid var(--warn); color:var(--warn);
 }
-.franja-ope .txt{flex:1 1 210px; min-width:0}
-.franja-ope .txt > b{display:block; font-size:.85rem; font-weight:700}
-.franja-ope p{font-size:.74rem; line-height:1.45; opacity:.85; max-width:72ch; margin-top:3px}
-.franja-ope .cta{flex:none; background:var(--warn); color:var(--on-accent)}
+.franja .txt{flex:1 1 210px; min-width:0}
+.franja .txt > b{display:block; font-size:.85rem; font-weight:700}
+.franja p{font-size:.74rem; line-height:1.45; opacity:.85; max-width:72ch; margin-top:3px}
+.franja .cta{flex:none; background:var(--warn); color:var(--on-accent)}
 
 /* ============ TABLA ÚNICA DE USUARIOS ============ */
 /* La columna Estado es un botón, no un texto: desactivar y reactivar se hacen desde la fila. */
@@ -705,6 +749,9 @@ tbody tr.bit-foco,tbody tr.bit-foco:hover{background:var(--accent-soft)}
     <div class="topbar">
       <div class="eyebrow">Vista previa · datos de ejemplo</div>
       <div class="grow"></div>
+      <!-- Permanente y sin interruptor: es la respuesta a «¿qué versión usabas y contra qué
+           servidor?», que es la primera pregunta de cualquier reporte de fallo. -->
+      <span class="insignia-amb aviso" id="insignia-ambiente">v0.4.2 · QA</span>
       <div class="sesion sesion-menu">
         <button class="sesion-btn" id="sesion-abrir" aria-haspopup="menu"
                 aria-expanded="false" aria-controls="sesion-panel" title="Mi cuenta">
@@ -728,14 +775,62 @@ tbody tr.bit-foco,tbody tr.bit-foco:hover{background:var(--accent-soft)}
             Ver como Operación<span class="luz" aria-hidden="true"></span>
           </button>
           <button type="button" role="menuitem" id="btn-cambiar-clave">Cambiar mi contraseña</button>
-          <button type="button" role="menuitem" id="tema">Cambiar el tema</button>
+          <button type="button" role="menuitem" id="tema">Modo claro</button>
+          <!-- Sin data-ger: la ve todo el mundo. Quien reporta el fallo suele ser Operación,
+               así que es justo quien más necesita poder leer la versión. -->
+          <button type="button" role="menuitem" id="btn-acerca"
+                  aria-haspopup="dialog" aria-controls="acerca-panel">Acerca de</button>
           <hr class="sep">
           <button type="button" role="menuitem" class="salir" id="btn-salir">Cerrar sesión</button>
+        </div>
+
+        <div class="acerca" id="acerca-panel" role="dialog" tabindex="-1"
+             aria-labelledby="acerca-titulo" hidden>
+          <div class="acerca-head">
+            <h2 class="grow" id="acerca-titulo">Acerca de</h2>
+            <span class="eyebrow">PRISMA</span>
+          </div>
+          <table>
+            <tbody>
+              <tr><td>Versión del front</td><td class="dato" id="ac-front">0.4.2+118</td></tr>
+              <tr><td>Versión de la API</td><td class="dato" id="ac-api">0.3.9</td></tr>
+              <tr><td>Versión del esquema</td><td class="dato" id="ac-esquema">0.3.0</td></tr>
+              <tr><td>Ambiente</td><td class="dato" id="ac-ambiente">QA</td></tr>
+              <tr><td>Fecha de compilación</td><td class="dato" id="ac-compilado">15 sep 2026, 9:40 a. m.</td></tr>
+              <tr><td>Referencia del commit</td><td class="dato" id="ac-commit">a3f19c4</td></tr>
+            </tbody>
+          </table>
+          <p class="porque">Cuando alguien reporta un fallo, lo primero que hay que saber es qué
+          versión usaba y contra qué servidor. Esta tabla lo dice sin tener que preguntárselo.</p>
+
+          <p class="nota-mock">Solo en el prototipo: aquí no hay ambientes de verdad. Este
+          selector los finge para poder ver cómo quedan la insignia y la franja en cada uno.</p>
+          <div class="campo">
+            <label for="ac-simular">Ambiente simulado</label>
+            <select id="ac-simular">
+              <option value="dev">Desarrollo</option>
+              <option value="qa">QA</option>
+              <option value="uat">Aprobación</option>
+              <option value="prod">Producción</option>
+            </select>
+          </div>
+
+          <button type="button" class="ghost cerrar" id="ac-cerrar">Cerrar</button>
+        </div>
+      </div>
+
+      <!-- En dev, qa y uat. No se puede apagar desde la pantalla, y ese es el punto: evita
+           que alguien registre la venta del día en Aprobación y la dé por guardada. -->
+      <div class="franja" id="franja-ambiente" role="status" hidden>
+        <div class="txt">
+          <b id="franja-ambiente-titulo">Ambiente de QA · los datos no son reales</b>
+          <p>Cada ambiente tiene su propia base y se puede borrar y volver a sembrar sin avisar.
+          Lo que escribas aquí no llega al negocio. El sistema de verdad no lleva esta franja.</p>
         </div>
       </div>
 
       <!-- No tiene aspa ni se cierra sola: la única salida es apagar el modo. -->
-      <div class="franja-ope" id="franja-ope" role="status" hidden>
+      <div class="franja" id="franja-ope" role="status" hidden>
         <div class="txt">
           <b>Estás viendo el sistema como lo ve Operación</b>
           <p>Sirve para decidir si la pantalla de la empleada tiene sentido: si le falta algo
@@ -1952,12 +2047,144 @@ $('#sw-vista-ope').addEventListener('click', function(){ alternarVistaOpe(!vista
 /* La franja no se puede cerrar: este botón es la única salida, y es la red de seguridad. */
 $('#btn-volver-vista').addEventListener('click', function(){ alternarVistaOpe(false); });
 
+/* ---------- versión y ambiente ---------- */
+/* El front, la API y el esquema se versionan por separado: son tres números que no tienen por
+   qué coincidir, y fingir que van juntos escondería cuál de los tres cambió. Aquí van con
+   datos de ejemplo, que es lo que le toca a un mockup. */
+var VERSIONES = {
+  front:'0.4.2+118', api:'0.3.9', esquema:'0.3.0', commit:'a3f19c4',
+  compilado:new Date(2026, 8, 15, 9, 40)
+};
+/* aviso:true son los ambientes que no son el negocio de verdad. Producción no se rotula ni
+   lleva franja: si la pantalla no advierte nada, es la real. */
+var AMBIENTES = [
+  {id:'dev',  nom:'Desarrollo', aviso:true},
+  {id:'qa',   nom:'QA',         aviso:true},
+  {id:'uat',  nom:'Aprobación', aviso:true},
+  {id:'prod', nom:'Producción', aviso:false}
+];
+var ambiente = 'qa';
+
+function ambienteActual(){
+  var a = AMBIENTES.filter(function(x){ return x.id === ambiente; })[0];
+  return a || AMBIENTES[1];
+}
+
+/* La insignia lleva la versión sin el número de compilación: el +118 le sirve a quien depura,
+   no a quien mira la barra. Completo está en «Acerca de». */
+function pintarAmbiente(){
+  var a = ambienteActual();
+  var version = 'v' + VERSIONES.front.split('+')[0];
+  var ins = $('#insignia-ambiente');
+  if (ins){
+    ins.textContent = a.aviso ? version + ' · ' + a.nom : version;
+    ins.className   = 'insignia-amb' + (a.aviso ? ' aviso' : '');
+    ins.title = a.aviso
+      ? 'Versión ' + VERSIONES.front + ' · ambiente de ' + a.nom + ': los datos no son reales'
+      : 'Versión ' + VERSIONES.front;
+  }
+  var fr = $('#franja-ambiente'), tit = $('#franja-ambiente-titulo');
+  if (tit && a.aviso) tit.textContent = 'Ambiente de ' + a.nom + ' · los datos no son reales';
+  if (fr) fr.hidden = !a.aviso;
+  var amb = $('#ac-ambiente');
+  if (amb) amb.textContent = a.nom;
+}
+
+/* ---------- panel «Acerca de» ---------- */
+function acercaAbierto(){
+  var p = $('#acerca-panel');
+  return !!(p && !p.hidden);
+}
+
+function mostrarAcerca(abierto){
+  var p = $('#acerca-panel');
+  if (!p) return;
+  p.hidden = !abierto;
+  if (!abierto) return;
+  $('#ac-front').textContent     = VERSIONES.front;
+  $('#ac-api').textContent       = VERSIONES.api;
+  $('#ac-esquema').textContent   = VERSIONES.esquema;
+  $('#ac-commit').textContent    = VERSIONES.commit;
+  $('#ac-compilado').textContent = fmtFechaHora(VERSIONES.compilado);
+  $('#ac-simular').value = ambiente;
+  pintarAmbiente();
+  encajarAcerca(p);
+  /* El foco va al panel, no al primer botón: el lector de pantalla anuncia primero qué abrió. */
+  p.focus();
+}
+
+/* A 375 px el topbar envuelve y el menú de la sesión deja de estar pegado al borde derecho:
+   arranca donde acaba la insignia. Un panel de 330 px colgado de ahí se sale por la izquierda
+   en cuanto el nombre es corto. Se mide al abrir y cada vez que cambia el tamaño de la
+   ventana, y se corre lo justo para dejar el mismo margen de 16 px que usa el resto de la
+   pantalla en celular. */
+function encajarAcerca(p){
+  p.style.right = '0px';
+  var falta = 16 - p.getBoundingClientRect().left;
+  if (falta > 0) p.style.right = (-falta) + 'px';
+  /* En una pantalla de 667 px de alto el panel no cabe entero, y como el topbar es fijo
+     el botón «Cerrar» quedaba fuera sin forma de llegar a él. Se le da como techo lo que
+     queda hasta el borde, con el mismo margen de 16 px. */
+  p.style.maxHeight = 'none';
+  var alto = window.innerHeight - p.getBoundingClientRect().top - 16;
+  if (alto > 0) p.style.maxHeight = alto + 'px';
+}
+
+$('#btn-acerca').addEventListener('click', function(){ mostrarAcerca(true); });
+$('#ac-cerrar').addEventListener('click', function(){
+  mostrarAcerca(false);
+  $('#sesion-abrir').focus();
+});
+$('#ac-simular').addEventListener('change', function(){
+  ambiente = this.value;
+  pintarAmbiente();
+});
+
+/* El menú de la sesión y este panel cuelgan del mismo sitio, así que abrir uno cierra el otro.
+   Va enganchado al propio botón y no al documento porque su manejador detiene la propagación. */
+$('#sesion-abrir').addEventListener('click', function(){ mostrarAcerca(false); });
+
+/* Un clic fuera o Escape lo cierran, igual que el menú de la sesión. El clic que lo abre
+   también llega hasta aquí, y por eso se deja pasar lo que salga del panel o de su opción. */
+document.addEventListener('click', function(e){
+  if (!acercaAbierto()) return;
+  if (e.target && e.target.closest && e.target.closest('#acerca-panel, #btn-acerca')) return;
+  mostrarAcerca(false);
+});
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape' && acercaAbierto()){
+    mostrarAcerca(false);
+    $('#sesion-abrir').focus();
+  }
+});
+
+/* Girar el teléfono con el panel abierto dejaba puesto el desplazamiento medido antes: el
+   panel se salía por la derecha y aparecía barra horizontal en toda la página. Se remide. */
+window.addEventListener('resize', function(){
+  if (acercaAbierto()) encajarAcerca($('#acerca-panel'));
+});
+
+/* El botón muestra la acción: el modo al que cambiará al pulsarlo. */
+function temaOscuroActivo(){
+  var r = document.documentElement;
+  return r.getAttribute('data-theme') === 'dark' ||
+    (!r.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+}
+function actualizarEtiquetaTema(){
+  $('#tema').textContent = temaOscuroActivo() ? 'Modo claro' : 'Modo oscuro';
+}
+actualizarEtiquetaTema();
+
 $('#tema').addEventListener('click', function(){
   var r = document.documentElement;
-  var oscuro = r.getAttribute('data-theme') === 'dark' ||
-    (!r.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  r.setAttribute('data-theme', oscuro ? 'light' : 'dark');
+  r.setAttribute('data-theme', temaOscuroActivo() ? 'light' : 'dark');
+  actualizarEtiquetaTema();
   grafico();
+});
+
+/* Si el usuario no ha fijado un tema, seguimos la preferencia del sistema y refrescamos la etiqueta. */
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(){
+  if(!document.documentElement.getAttribute('data-theme')) actualizarEtiquetaTema();
 });
 
 /* ---------- gráfico de 12 meses ---------- */
@@ -3256,6 +3483,7 @@ function abrirSesion(){
 function cerrarSesion(){
   sesion = null;
   vistaOpe = false;   /* nadie hereda la vista previa de la sesión anterior */
+  mostrarAcerca(false);   /* si no, reaparece abierto encima del topbar del que entre después */
   $('#acc-usuario').value = '';
   $('#acc-clave').value   = '';
   ocultarClave('acc-ver-clave', 'acc-clave');
@@ -4472,6 +4700,7 @@ cotizar();
 aplicarRol();
 tablaCargos();
 tablaUsuarios();
+pintarAmbiente();
 
 /* Sin sesión no se ve el tablero: manda la capa de acceso. */
 mostrarAcceso();

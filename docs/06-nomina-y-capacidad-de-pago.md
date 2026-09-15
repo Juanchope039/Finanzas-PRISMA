@@ -172,15 +172,27 @@ Empleada con salario acordado de **$1.300.000**, jornada de 192 horas mensuales,
 hora extra del 25%, 30 días trabajados, 6 horas extra y un adelanto de $300.000 recibido el
 día 12.
 
+**Paso 1 · Tarifas por hora** *(cálculo previo — estos valores son unitarios, no se suman al devengado)*
+
+| Tarifa | Cálculo | Valor por hora |
+|---|---|---:|
+| Valor hora ordinaria | 1.300.000 ÷ 192 | $6.771 |
+| Valor hora extra | 6.771 × 1,25 | $8.464 |
+
+**Paso 2 · Desglose del devengado** *(estos son los conceptos que sí se suman)*
+
 | Concepto | Cálculo | Valor |
 |---|---|---:|
 | Salario del período | 30 de 30 días | $1.300.000 |
-| Valor hora ordinaria | 1.300.000 ÷ 192 | $6.771 |
-| Valor hora extra | 6.771 × 1,25 | $8.464 |
-| Horas extra | 6 × 8.464 | $50.784 |
-| **Total devengado** | | **$1.350.784** |
-| − Adelanto del día 12 | | −$300.000 |
-| **NETO A PAGAR** | | **$1.050.784** |
+| + Horas extra | 6 h × $8.464 | $50.784 |
+| **= Total devengado** | 1.300.000 + 50.784 | **$1.350.784** |
+| − Adelanto del día 12 | recibido antes de liquidar | −$300.000 |
+| **= NETO A PAGAR** | 1.350.784 − 300.000 | **$1.050.784** |
+
+> **Ojo con un error frecuente.** El total devengado es **$1.350.784**, no $1.366.019. La
+> diferencia sale de sumar por equivocación las *tarifas por hora* ($6.771 y $8.464): esas son
+> el precio de **una** hora, un paso para calcular las horas extra, no un monto que se devengue.
+> Al devengado solo entran el salario del período y el total de las horas extra ($50.784).
 
 ### 6.3 El efecto correcto sobre utilidad y caja
 
@@ -271,3 +283,9 @@ conforme a la normativa colombiana.
 y el costo real del empleador será **mayor** que el salario acordado que aquí se maneja. El
 simulador, por tanto, entrega una cota **optimista**: si con estos números no alcanza, con los
 números completos tampoco.
+
+---
+
+### 🧭 Navegación
+
+**⬅️ Anterior:** [05 · Reglas financieras](05-reglas-financieras.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [07 · Arquitectura](07-arquitectura.md)
