@@ -4,30 +4,41 @@
 
 ## 1. Estrategia
 
-Ahora hay **dos bases de código** —`prisma_front` en Flutter y `prisma_api` en Dart— y **cuatro
-ambientes** —dev, qa, uat y prod—. La estrategia cambia de forma, no de fondo: la arquitectura
-hexagonal sigue permitiendo invertir el esfuerzo donde más importa, **los cálculos de plata y los
-permisos**.
+Ahora hay **dos bases de código** —`prisma_front` en Flutter y `prisma_api` en Java 21 con Spring
+Boot— y **cuatro ambientes** —dev, qa, uat y prod—. La estrategia cambia de forma, no de fondo: la
+arquitectura hexagonal sigue permitiendo invertir el esfuerzo donde más importa, **los cálculos de
+plata y los permisos**.
 
 ```
         ╱╲          Manuales en dispositivo real
        ╱  ╲         10 recorridos · antes de cada entrega
       ╱────╲
-     ╱      ╲       Integración de prisma_api contra la base real
+     ╱      ╲       Integración de prisma_api contra un PostgreSQL real
     ╱        ╲      Acceso, permisos, transacciones, contrato de errores
    ╱──────────╲
-  ╱            ╲    Unidad en Dart · widget en Flutter
+  ╱            ╲    Unidad en JUnit 5 · widget en Flutter
  ╱              ╲   Milisegundos, sin red y sin base de datos
 ╱────────────────╲
 ```
 
 | Nivel | Dónde vive | Qué prueba | Herramienta | Meta |
 |---|---|---|---|---|
-| Unitario de dominio | `prisma_api` | Servicios de dominio: fórmulas financieras | `dart test` | **≥ 90% de cobertura** |
-| Unitario de presentación | `prisma_front` | Formato de cifras y fechas, estado, validación de formularios | `flutter test` | Cada regla de formulario |
+| Unitario de dominio | `prisma_api` | Servicios de dominio: fórmulas financieras | **JUnit 5** | **≥ 90% de cobertura** |
+| Unitario de presentación | `prisma_front` | Formato de cifras y fechas, estado, y que el formulario aplique el descriptor que la API le dictó | `flutter test` | Cada regla del descriptor |
 | Widget | `prisma_front` | Que cada pantalla pinte lo que debe y reaccione a lo que recibe | `flutter test` | Las 10 pantallas |
-| Integración | `prisma_api` + base | Repositorios, transacciones, políticas RLS, contrato de errores | `dart test` contra la base del ambiente | Casos críticos |
+| Integración | `prisma_api` + base | Repositorios, transacciones, políticas RLS, contrato de errores | **JUnit 5 con contenedores de prueba** (`Testcontainers`): un PostgreSQL real y desechable | Casos críticos |
 | Manual | Las dos | Recorridos completos en celular real | Lista de verificación | Antes de cada entrega |
+
+> **Las pruebas de integración levantan su propio PostgreSQL, no se cuelgan de la base de un
+> ambiente.** El contenedor nace con las migraciones aplicadas y la semilla de `supabase/seed.sql`,
+> muere al terminar y no le deja basura a nadie. Una suite que depende de la base compartida de dev
+> falla por lo que otra persona guardó hace diez minutos, y una prueba que falla por motivos ajenos
+> se termina ignorando.
+
+Un remedo con objetos falsos no sirve aquí: lo que se está probando son **restricciones, triggers y
+políticas RLS**, y eso solo lo sabe PostgreSQL de verdad. Contra la base del ambiente corre otra
+cosa distinta, la de la promoción ([`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) §6.2):
+comprobar que las migraciones aplican sobre lo que ese ambiente ya tiene escrito.
 
 **Las pruebas de widget no levantan la API.** Hablan con un cliente HTTP falso. Si para probar una
 pantalla hubiera que levantar `prisma_api` y su base, la pantalla quedó pegada al transporte: eso
@@ -38,9 +49,9 @@ el front y la API es el contrato de versiones, y eso está en la sección 9.
 
 | Ambiente | Qué se ejecuta ahí | Con qué datos |
 |---|---|---|
-| **dev** | Unidad y widget en cada guardado; integración contra la base de dev | Ficticios, se pueden borrar |
+| **dev** | Unidad y widget en cada guardado; integración sobre su propio contenedor de PostgreSQL | Ficticios, se pueden borrar |
 | **qa** | Todo, en cada integración a la rama principal. **Es la que bloquea la promoción** | Ficticios, con semilla reproducible |
-| **uat** | P-01 a P-32 —P-32 sin su paso 3, ver 3.1— y los recorridos manuales, antes de la aprobación de Gerencia | Realistas y anonimizados |
+| **uat** | P-01 a P-32 —P-32 sin su paso 3, ver 3.1— y los recorridos manuales, antes de la aprobación de Gerencia. Además, RE-01 una vez por trimestre (§10.3) | Realistas y anonimizados |
 | **prod** | Pruebas de humo de solo lectura, después de publicar | Reales |
 
 > **Ninguna prueba automática escribe en prod.** Las de integración siembran filas y las borran;
@@ -63,12 +74,14 @@ que falla ahí no siempre significa que el código esté mal.
 | Recorridos manuales (§6) | M-01 a M-10 | 10 |
 | Acceso y administración de usuarios (§7) | A-01 a A-16 | 16 |
 | Vista previa de Operación (§7.1) | A-17 a A-19 | 3 |
-| Contrato entre las tres partes (§9) | C-01 y C-02 | 2 |
-| **Total** | | **96** |
+| Contrato entre las tres partes (§9) | C-01 a C-04 | 4 |
+| Idempotencia, canal firmado y durabilidad (§10) | I-01, I-02, F-01, F-02, T-01, RE-01 | 6 |
+| **Total** | | **104** |
 
-Son **86 automáticas y 10 manuales**. No son todas las que habrá: las unitarias del dominio serán
-muchas más y se miden por cobertura, no por lista. Estas 96 están escritas aquí una por una porque
-ninguna puede quedar al criterio de quien programe ese día.
+Son **93 automáticas, 10 manuales y 1 de operación trimestral** —RE-01, la restauración del
+respaldo—. No son todas las que habrá: las unitarias del dominio serán muchas más y se miden por
+cobertura, no por lista. Estas 104 están escritas aquí una por una porque ninguna puede quedar al
+criterio de quien programe ese día.
 
 ---
 
@@ -142,7 +155,7 @@ siendo RLS.
 | P-31 | Cargar el desprendible propio completo en una sola consulta | Permitido: llegan las cuatro tablas |
 | P-32 | Leer nómina, usuarios y patrimonio **con la guarda de la capa de aplicación desactivada** | El mismo resultado que con la guarda puesta: vacío o 403. Ver 3.1 |
 
-> **Criterio clave:** el rechazo debe venir de PostgreSQL, no de un `if` de Dart ni de una pantalla
+> **Criterio clave:** el rechazo debe venir de PostgreSQL, no de un `if` de Java ni de una pantalla
 > que no dibuja el botón. La prueba se hace llamando a la API con un token real, sin pasar por las
 > pantallas. Y quien demuestra que el juez fue la base y no la API es P-32.
 
@@ -181,11 +194,12 @@ leerlas con tres cosas en mente:
 ### 3.1 P-32 · La prueba que distingue «protegido» de «parece protegido»
 
 Es la prueba que hay que escribir primero y la única que no puede faltar: es la que verifica
-[`ADR-012`](adr/ADR-012-identidad-a-postgres.md) y la que hace exigible el **RNF-22**. Con
+[`ADR-012`](adr/ADR-012-identidad-a-postgres.md) y la que hace exigible el **RNF-22**. Se escribe en
+Java, con JUnit 5, igual que el resto de la integración de `prisma_api`. Con
 `prisma_api` en medio, la base ya no ve a la empleada: ve a la API. Si la API se conectara con la
 clave de servicio, RLS dejaría de aplicar,
 todas las políticas de [`ADR-006`](adr/ADR-006-rls-por-rol.md) se volverían decorado **y ninguna
-prueba existente se pondría roja**: P-01 a P-31 seguirían en verde porque el `if` de Dart las
+prueba existente se pondría roja**: P-01 a P-31 seguirían en verde porque el `if` de Java las
 estaría sosteniendo. Eso es lo que P-32 rompe.
 
 | Paso | Qué se hace |
@@ -359,17 +373,19 @@ Gerencia pueda salir; ninguna verifica un permiso.
 
 ## 8. Calidad del código
 
-| Control | Herramienta | Cuándo |
-|---|---|---|
-| Tipado estricto | `dart analyze` con `strict-casts` y `strict-raw-types` | Cada compilación |
-| Regla de frontera de arquitectura | Lint de importaciones: `domain/` no importa `infrastructure/` ni `interface/` | Cada compilación |
-| Formato consistente | `dart format` | Al guardar |
-| Cobertura del dominio | `dart test --coverage` | Cada cambio |
-| Sin `dynamic` en el dominio | `dart analyze` con `avoid_dynamic_calls` | Cada compilación |
+| Control | En `prisma_front` (Flutter) | En `prisma_api` (Java) | Cuándo |
+|---|---|---|---|
+| Formato consistente | `dart format` | `Spotless` | Al guardar |
+| Tipado estricto y avisos | `dart analyze` con `strict-casts` y `strict-raw-types` | Compilación con `-Xlint:all -Werror` | Cada compilación |
+| Estilo y malas prácticas | Reglas de Flutter en `analysis_options.yaml` | `Checkstyle` | Cada compilación |
+| Regla de frontera de arquitectura | Lint de importaciones: `dominio` no importa `infraestructura` ni `interfaz` | `ArchUnit`: `dominio` no conoce Spring, ni JDBC, ni HTTP | Cada compilación |
+| Cobertura del dominio | `flutter test --coverage` | `JaCoCo`, **≥ 90%** | Cada cambio |
 
-Los cinco controles corren en **las dos bases de código**, con el mismo `analysis_options.yaml`
-de partida; `prisma_front` le suma encima las reglas propias de Flutter. Un solo lenguaje en todo
-el proyecto sirve para poco si cada mitad se revisa con otra vara.
+**Son dos lenguajes, y eso es parte de lo que cuesta tener la API en Java.** El argumento de «un
+solo lenguaje en todo el proyecto» ya no aplica y no hay que fingir que sí. Lo que se sostiene es
+el listón: formato automático, avisos tratados como errores, frontera de arquitectura verificada
+por una prueba y cobertura medida. Cada ecosistema lo cumple con su herramienta; ninguna mitad se
+revisa con una vara más floja que la otra.
 
 **Regla de oro del proyecto:** si un cálculo financiero no tiene prueba, no está terminado.
 
@@ -377,23 +393,26 @@ el proyecto sirve para poco si cada mitad se revisa con otra vara.
 
 ## 9. Pruebas del contrato entre las tres partes
 
-Validar la misma regla tres veces —en la base, en `prisma_api` y en el formulario— solo es
-sostenible si algo vigila que las tres versiones no se separen con el tiempo. Y versionar el front
-y la API por separado solo es sostenible si algo detecta cuándo dejaron de entenderse. Estas dos
-pruebas son ese vigilante.
+Dos capas deciden —la base y `prisma_api`— y una tercera solo pinta: el formulario, que aplica el
+descriptor que la API le dictó. Eso solo es sostenible si algo vigila que las tres no se separen
+con el tiempo. Y versionar el front y la API por separado solo es sostenible si algo detecta cuándo
+dejaron de entenderse. Estas cuatro pruebas son ese vigilante.
 
 | # | Prueba | Resultado esperado |
 |---|---|---|
 | C-01 | Recorrer `pg_constraint` y cruzar cada restricción nombrada con la tabla de traducción de `prisma_api` | Todas tienen entrada. Si falta una, la prueba falla y dice cuál |
 | C-02 | Arrancar el front declarando una MAJOR de API distinta a la que responde `GET /version` | El front se planta en la primera pantalla y no deja seguir |
+| C-03 | Cruzar los códigos de cinco dígitos que emite el código fuente contra el catálogo | Ninguno emitido falta en el catálogo y ninguno del catálogo sobra. Falla nombrando el código |
+| C-04 | Regenerar el OpenAPI desde los controladores y compararlo con el `openapi.json` versionado | Idénticos. Cualquier diferencia rompe la compilación |
 
 ### 9.1 C-01 · Ninguna restricción sin mensaje
 
 La base no sabe hablar: rechaza con `23514 check_violation` sobre `movimientos_valor_positivo`, y
 eso no se le muestra a la dueña del taller. La API traduce **nombre de restricción → código HTTP +
 mensaje en español + campo del formulario**. C-01 recorre `pg_constraint` del ambiente y comprueba
-que cada restricción nombrada tenga su entrada en esa tabla. Es la prueba que sostiene
-[`ADR-015`](adr/ADR-015-validacion-tres-capas.md) y la que verifica el **RNF-25**.
+que cada restricción nombrada tenga su entrada en esa tabla. Es la prueba que sostiene la
+traducción de restricciones —de [`ADR-015`](adr/ADR-015-validacion-tres-capas.md), recogida después
+por [`ADR-018`](adr/ADR-018-front-sin-decisiones.md)— y la que verifica el **RNF-25**.
 
 Tres detalles deciden si la prueba sirve de algo:
 
@@ -423,6 +442,102 @@ el contrato. Es **BDD-101-1** convertido en prueba automática, y cubre los tres
 > **Fallar ruidoso al arrancar es mejor que fallar en la pantalla 7 con un campo nulo.** Un front
 > que sigue andando contra una API incompatible no da un error: da cifras raras. Y una cifra rara
 > en un sistema de plata se cree, se anota y se usa para decidir.
+
+### 9.3 C-03 · El catálogo de códigos, completo y sin sobras
+
+Hay **un solo catálogo** de códigos de cinco dígitos en `prisma_api`: código, HTTP, módulo, mensaje
+en español y cuándo se emite. De él salen las respuestas, la documentación de Swagger y la tabla de
+traducción de restricciones. C-03 lo compara con la realidad del código fuente, en los dos sentidos:
+
+| Fallo | Qué pasaría sin C-03 |
+|---|---|
+| Un código emitido que **no está** en el catálogo | La API le devuelve al front un número sin mensaje redactado. La empleada ve una pantalla que no sabe explicar qué pasó |
+| Un código del catálogo que **ya nadie emite** | Un mensaje muerto que nadie borra, y la falsa idea de que ese caso sigue cubierto |
+
+> **La prueba falla nombrando el código, no diciendo «hay diferencias».** Un error que obliga a
+> buscar a ciegas se termina silenciando.
+
+### 9.4 C-04 · El OpenAPI versionado es el que sale del código
+
+El `openapi.json` está versionado en el repositorio y se genera de los controladores, nunca se
+escribe a mano. C-04 lo regenera y lo compara con el versionado; si difiere, la compilación falla.
+La comparación se hace sobre el documento normalizado —mismo orden de claves, mismo formato—,
+porque un falso rojo por cómo quedaron ordenadas las llaves enseña a ignorar la prueba. Es la que
+hace exigible el **RNF-30** y la que sostiene [`ADR-022`](adr/ADR-022-openapi-generado.md).
+
+> **Actualizar la documentación deja de ser disciplina y pasa a ser un requisito para poder mezclar
+> el cambio.** Un documento que depende de que alguien se acuerde se desactualiza el primer día en
+> que alguien tiene prisa, y a partir de ahí miente con toda seguridad.
+
+---
+
+## 10. Idempotencia, canal firmado y durabilidad
+
+Cuatro promesas que, sin una prueba que las ejerza, se quedan en promesas: que reintentar no cobra
+dos veces, que una petición capturada no le sirve a nadie, que la identidad llega siempre a
+PostgreSQL y que el respaldo de verdad se puede restaurar.
+
+| # | Prueba | Resultado esperado |
+|---|---|---|
+| I-01 | Enviar dos veces la misma petición de escritura con la **misma** `Idempotency-Key` | Un solo efecto en la base. La segunda respuesta es la guardada, con el mismo `status` y el mismo `mensaje` |
+| I-02 | Inyectar un fallo **dentro** de la transacción, entre el registro de la clave y el efecto, y reintentar | Nada quedó escrito a medias: ni la clave sin efecto ni el efecto sin clave. El reintento se procesa como si fuera el primero |
+| F-01 | Reenviar una petición válida, tal cual, con el mismo `X-Prisma-Nonce` | Rechazada con `40103`. El efecto ocurre una sola vez |
+| F-02 | Enviar una petición con `X-Prisma-Timestamp` fuera de la ventana de ±5 minutos | Rechazada con `40102`, aunque la firma cuadre |
+| T-01 | Recorrer las llamadas a repositorios y ejecutarlas sin transacción abierta | La llamada falla de inmediato. Ninguna consulta sale sin identidad |
+| RE-01 | Restaurar en uat el respaldo de prod anonimizado y arrancar el sistema contra él | El sistema arranca, el Inicio carga y los cinco invariantes del §4.2 se cumplen sobre lo restaurado. **Una vez por trimestre** |
+
+### 10.1 I-02 · El corte es lo que hace real la idempotencia
+
+I-01 sola da una falsa sensación de seguridad: pasa igual aunque la clave y el efecto se guarden en
+dos escrituras separadas, porque en una prueba feliz nunca se corta nada en la mitad.
+
+> **El registro de la clave y el efecto de la operación tienen que ocurrir en la MISMA transacción
+> de base de datos.** Si se guardan por separado, un corte entre las dos escrituras deja el sistema
+> exactamente en el estado que la idempotencia prometía evitar: o una clave marcada como usada sin
+> que se hiciera nada —y el reintento no vuelve a intentarlo—, o un gasto registrado sin clave —y
+> el reintento lo cobra otra vez—.
+
+Por eso I-02 no espera a que ocurra un corte: lo provoca. Se inyecta la falla después de escribir
+la clave y antes de confirmar la transacción, y se afirma sobre el **número de filas** de las dos
+tablas: quedan exactamente como estaban antes del intento, o la prueba falla.
+
+### 10.2 T-01 · Sin transacción no hay identidad
+
+Es la compañera de P-32 y sale del mismo sitio: la identidad se fija con `SET LOCAL` al abrir la
+transacción, y `SET LOCAL` solo dura lo que dure esa transacción. Con un pool de conexiones, una
+consulta que se ejecute **fuera** de una transacción viaja sin identidad, y ahí RLS no protege,
+pero tampoco avisa: devuelve lo que le corresponda a la sesión de turno.
+
+> **P-32 demuestra que la base juzga; T-01 demuestra que la base siempre sabe a quién está
+> juzgando.** Un repositorio llamado fuera de transacción no rompe nada visible el día que se
+> escribe. Rompe el día que alguien lee lo que no debía, y sin dejar rastro.
+
+Regla que verifica: **ningún repositorio se llama fuera de una transacción.** La prueba la ejerce
+en ejecución, comprobando que no hay transacción activa y exigiendo que la llamada falle en vez de
+seguir.
+
+### 10.3 RE-01 · Un respaldo que nunca se restauró no es un respaldo
+
+Es la única prueba de esta lista que no corre en cada cambio: corre **una vez por trimestre, en
+uat**, y la ejecuta quien desarrolle con Gerencia avisada. Se restaura el respaldo de prod
+anonimizado —anonimizado siempre, como exige
+[`11-riesgos-y-proteccion-de-datos.md`](11-riesgos-y-proteccion-de-datos.md)— y se comprueba que el
+sistema arranca contra él.
+
+| Qué se anota cada trimestre | Por qué |
+|---|---|
+| Cuánto tardó la restauración | Es el tiempo real de recuperación, no el que uno se imagina |
+| Hasta qué momento llegaron los datos | Es la pérdida máxima real ante un desastre |
+| Qué falló o faltó | Un paso manual que nadie recordaba es exactamente lo que se busca encontrar hoy y no ese día |
+
+> **Lo que se programa es una copia; lo que se prueba es un respaldo.** Entre las dos cosas hay un
+> archivo corrupto, una migración que la copia no alcanzó, o una clave que ya nadie tiene. Eso se
+> descubre restaurando, y es mejor descubrirlo un martes cualquiera en uat.
+
+El procedimiento y las políticas de retención están en
+[`13-respaldo-y-exportacion.md`](13-respaldo-y-exportacion.md) y en
+[`16-base-de-datos-y-snapshots.md`](16-base-de-datos-y-snapshots.md). Aquí solo queda fijado que
+**restaurar es una prueba con fecha, no una buena intención.**
 
 ---
 

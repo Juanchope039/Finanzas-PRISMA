@@ -1,6 +1,10 @@
 # ADR-015 · Validación en tres capas, con la base como juez
 
-**Estado:** Aceptado · **Fecha:** 2026-09-15
+**Estado:** Reemplazado por ADR-018 · **Fecha:** 2026-09-15
+
+> **Lo reemplaza [ADR-018](ADR-018-front-sin-decisiones.md):** la base y la API siguen decidiendo
+> y el contrato de errores se conserva, pero el front deja de tener su copia de las reglas y pasa
+> a pintar el descriptor que la API le dicta. El cuerpo de abajo se conserva tal como se escribió.
 
 ## Contexto
 

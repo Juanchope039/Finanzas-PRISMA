@@ -15,14 +15,20 @@ consideraron y qué consecuencias tiene.
 | [008](ADR-008-exportacion.md) | Exportación con descarga manual | Aceptado |
 | [009](ADR-009-login-por-usuario.md) | Acceso con nombre de usuario, no con correo | Aceptado |
 | [010](ADR-010-almacenamiento-contrasenas.md) | Contraseñas: hashing delegado con salt por usuario | Aceptado |
-| [011](ADR-011-stack-flutter-dart.md) | Stack: Flutter y Dart con API propia | Aceptado |
+| [011](ADR-011-stack-flutter-dart.md) | Stack: Flutter y Dart con API propia | Reemplazado por [017](ADR-017-api-en-java.md) |
 | [012](ADR-012-identidad-a-postgres.md) | La API propaga la identidad a PostgreSQL para que RLS siga juzgando | Aceptado |
 | [013](ADR-013-cuatro-ambientes.md) | Cuatro ambientes y promoción de migraciones | Aceptado |
 | [014](ADR-014-semver.md) | SemVer independiente por proyecto y contrato de compatibilidad | Aceptado |
-| [015](ADR-015-validacion-tres-capas.md) | Validación en tres capas, con la base como juez | Aceptado |
+| [015](ADR-015-validacion-tres-capas.md) | Validación en tres capas, con la base como juez | Reemplazado por [018](ADR-018-front-sin-decisiones.md) |
 | [016](ADR-016-flutter-web-pwa.md) | Flutter Web instalable como PWA | Aceptado |
+| [017](ADR-017-api-en-java.md) | Stack: Flutter en el front, Java con Spring Boot en la API | Aceptado |
+| [018](ADR-018-front-sin-decisiones.md) | Tres partes, y el front no toma decisiones | Aceptado |
+| [019](ADR-019-contrato-de-respuesta.md) | Contrato de respuesta y catálogo de códigos de cinco dígitos | Aceptado |
+| [020](ADR-020-idempotencia.md) | Idempotencia obligatoria en toda escritura | Aceptado |
+| [021](ADR-021-canal-firmado.md) | Canal firmado contra repetición y manipulación | Aceptado |
+| [022](ADR-022-openapi-generado.md) | OpenAPI generado del código y verificado en integración continua | Aceptado |
 
-Son **16 decisiones** registradas: 14 aceptadas y 2 reemplazadas.
+Son **22 decisiones** registradas: 18 aceptadas y 4 reemplazadas.
 
 > **Sobre la numeración.** El cambio de stack se planeó como ADR-010 y ADR-011, pero el 010 ya
 > estaba ocupado por la decisión de contraseñas. Un número asignado no se reutiliza, así que el

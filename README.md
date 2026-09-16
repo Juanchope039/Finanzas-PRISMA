@@ -36,7 +36,7 @@ PRISMA existe para responder esas tres preguntas con números, no con intuición
 | 05 | [Reglas financieras](docs/05-reglas-financieras.md) | **Las fórmulas exactas. El corazón del sistema.** |
 | 06 | [Nómina y capacidad de pago](docs/06-nomina-y-capacidad-de-pago.md) | Cuánto se puede pagar y cómo se liquida |
 | 07 | [Arquitectura](docs/07-arquitectura.md) | Hexagonal, SOLID, stack, seguridad |
-| 08 | [Plan de desarrollo](docs/08-plan-de-desarrollo.md) | 10 sprints en 23 semanas, backlog, cronograma |
+| 08 | [Plan de desarrollo](docs/08-plan-de-desarrollo.md) | 10 sprints en 26 semanas, backlog, cronograma |
 | 09 | [Plan de implantación](docs/09-plan-de-implantacion.md) | Migración, capacitación, go-live, soporte |
 | 10 | [UX y mockups](docs/10-ux-y-mockups.md) | Pantallas, navegación, sistema de diseño |
 | 11 | [Riesgos y protección de datos](docs/11-riesgos-y-proteccion-de-datos.md) | Matriz de riesgos, respaldos, Ley 1581 |
@@ -48,7 +48,8 @@ PRISMA existe para responder esas tres preguntas con números, no con intuición
 | 17 | [Resiliencia, offline y caché](docs/17-resiliencia-offline-y-cache.md) | Trabajar sin conexión, sincronizar al reconectar y purgar la caché |
 | 18 | [Distribución y pipelines](docs/18-distribucion-y-pipelines.md) | Descargas web/Android/iPhone/Windows y automatización (idea) |
 | 19 | [Ambientes, versionado y entrega](docs/19-ambientes-y-entrega.md) | Los 4 ambientes, promoción de migraciones, SemVer y publicación |
-| — | [ADRs](docs/adr/) | Las 16 decisiones de arquitectura registradas |
+| 20 | [Contrato de API](docs/20-contrato-de-api.md) | El sobre `{status, mensaje, data}`, los códigos de 5 dígitos, la idempotencia y el canal firmado |
+| — | [ADRs](docs/adr/) | Las 22 decisiones de arquitectura registradas |
 
 ---
 
@@ -86,15 +87,19 @@ Son 10 pantallas con datos ficticios realistas, contando la de acceso.
 El mockup es un archivo HTML suelto y se abre con doble clic. El sistema de verdad no: son
 **tres piezas con vidas separadas**, y hay que saber cuál es cuál antes de tocar nada.
 
-| Pieza | Qué es |
-|---|---|
-| `prisma_front` | Flutter Web, instalable como PWA. Es lo único que ve la gente del taller |
-| `prisma_api` | API propia en Dart. Hace de API y de BFF a la vez, y es la única que habla con la base |
-| Base de datos | PostgreSQL en Supabase, siempre en línea. Ahí viven las reglas y los permisos |
+| Pieza | Qué es | Qué hace |
+|---|---|---|
+| `prisma_front` | Flutter, un solo código: el objetivo por defecto es **web**, instalable como PWA, y el mismo código compila a Android, iOS y escritorio | Pide, recibe y muestra. Nada más |
+| `prisma_api` | API propia en **Java 21 con Spring Boot**. Hace de API y de BFF a la vez, y es la única que habla con la base | Toda la lógica. Toma las decisiones y dicta los mensajes que se ven |
+| Capa de datos | PostgreSQL en Supabase, siempre en línea | Garantiza lo que no se puede romper: restricciones, permisos y durabilidad |
+
+> **El front no decide nada.** Ni una regla de negocio, ni un permiso, ni un mensaje de error, ni
+> una cifra calculada: todo eso lo dicta la API y el front solo lo pinta. Escribir una regla en
+> Flutter es saltarse la arquitectura y se rechaza en revisión de código.
 
 > **El front nunca habla con Supabase directamente.** Ni con la base, ni con Auth, ni con
 > Storage: todo pasa por `prisma_api`. Meter el cliente de Supabase dentro del código Flutter
-> es saltarse la arquitectura y se rechaza en revisión de código.
+> también se rechaza en revisión.
 
 Cada proyecto lleva su propia versión SemVer, y las tres piezas existen cuatro veces: en
 desarrollo, QA, aprobación y producción, cada ambiente con su propia base. El front muestra
@@ -132,7 +137,7 @@ siempre en pantalla qué versión es y contra qué ambiente está hablando. El d
 ## 7. Cómo usar esta documentación
 
 - **Si diriges el negocio:** lee `00-resumen-ejecutivo.md`, abre el mockup, y luego `05-reglas-financieras.md`.
-- **Si vas a programar:** lee `01`, `02`, `03`, `04`, `07` y `19` en ese orden.
+- **Si vas a programar:** lee `01`, `02`, `03`, `04`, `07`, `19` y `20` en ese orden.
 - **Si eres el contador:** lee `05`, `06` y `11`.
 
 ---

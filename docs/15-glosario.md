@@ -242,6 +242,29 @@ API y de BFF al mismo tiempo, porque hoy hay un solo cliente.
 **Caso de uso**
 Una acción completa del sistema, en un archivo propio. Corresponde a un `CU-xx` del documento 02.
 
+**Clave de idempotencia**
+Un número irrepetible que la aplicación le pega a cada acción que va a guardar algo, como el
+consecutivo de un recibo. Se genera una sola vez, cuando la persona decide la acción, y viaja
+igual en todos los reintentos. Es lo que le permite a la API distinguir *"la misma venta que
+llegó dos veces"* de *"dos ventas distintas"*.
+
+**Código de status**
+Número de cinco cifras que acompaña a toda respuesta de la API y dice exactamente qué pasó:
+`20101` es «se creó», `42201` es «los datos no pasan las reglas». Las tres primeras cifras son el
+resultado general y las dos últimas dicen de qué módulo y de qué caso se trata. Sirve para
+soporte: con ese número se sabe qué ocurrió sin tener que adivinar por el texto.
+
+**Contrato de API**
+El acuerdo escrito de cómo se hablan el front y la API: qué se le pide, qué devuelve, con qué
+forma y con qué códigos. Se llama contrato porque ninguna de las dos partes puede cambiarlo por
+su cuenta. Está en el documento [20 · Contrato de API](20-contrato-de-api.md).
+
+**Descriptor de formulario**
+La lista de reglas de un formulario que la API le manda al front **como datos**: qué campos hay,
+cuáles son obligatorios, qué mínimo y qué máximo tienen y qué frase mostrar si algo no cumple.
+Así el front puede avisar de un error al instante sin llevar la regla escrita dentro. La regla
+sigue siendo de la API, que la vuelve a comprobar cuando la petición llega, siempre.
+
 **Dominio**
 El núcleo del sistema: modelo y reglas de negocio. No conoce Flutter, ni la base de datos, ni
 internet.
@@ -252,15 +275,37 @@ Tipo propio que se define una sola vez en PostgreSQL con su regla incluida —po
 necesiten. Así la regla vive en un solo sitio y no se puede olvidar en la siguiente tabla. Nada
 que ver con el **dominio** de la arquitectura hexagonal; coinciden en el nombre y en nada más.
 
+**Firma de petición**
+Sello que el front le pone a cada petición con una clave secreta que solo él y la API conocen.
+Si alguien cambia aunque sea una coma en el camino, el sello deja de cuadrar y la API rechaza la
+petición. **Protege el trayecto, no el aparato:** si el celular o el computador desde donde se
+trabaja están comprometidos, esto no ayuda.
+
 **Función pura**
 Con las mismas entradas devuelve siempre el mismo resultado y no modifica nada externo. Todos
 los cálculos financieros son funciones puras, y por eso se pueden probar en milisegundos.
+
+**Idempotencia**
+Propiedad de una acción que se puede repetir sin que el efecto se duplique. Si la empleada toca
+Guardar tres veces porque no vio la confirmación, el gasto queda registrado una sola vez. Es lo
+que hace seguro reintentar cuando la señal se cae a mitad de camino, y sin ella la única forma
+de no duplicar sería no reintentar.
 
 **Migración**
 Archivo con los cambios que hay que aplicarle a la base de datos para llevarla de una versión a
 la siguiente: una tabla nueva, una columna, una regla. Se aplican en orden, y **una migración ya
 aplicada no se edita jamás**: si estaba mal, se escribe otra que corrige. Es el mismo principio
 del **contra-asiento**, aplicado al esquema.
+
+**Nonce**
+Un valor que se usa una sola vez y nunca se repite, y que acompaña a cada petición. Si a la API
+le llega dos veces el mismo, sabe que alguien capturó una petición vieja y la está reenviando, y
+la rechaza. Se pronuncia «nons» y no tiene traducción cómoda al español.
+
+**OpenAPI**
+Formato estándar para describir todo lo que una API sabe hacer: qué operaciones tiene, qué recibe
+y qué devuelve. Es un archivo, no una pantalla. En PRISMA se genera solo, a partir del código, y
+así nunca puede decir una cosa distinta de la que el sistema hace de verdad.
 
 **Promoción**
 Pasar a un ambiente lo mismo que ya funciona en el anterior, siempre en el mismo orden:
@@ -287,6 +332,18 @@ Forma estándar de numerar versiones con tres números, `MAJOR.MINOR.PATCH`. El 
 cuando algo deja de ser compatible y obliga a actualizar; el segundo, cuando se agrega
 funcionalidad que no rompe nada; el tercero, cuando solo se corrige. El front y la API llevan
 versiones independientes: fingir que van juntas esconde cuál de las dos cambió de verdad.
+
+**Sobre de respuesta**
+La forma fija que tiene toda respuesta de la API, salga bien o salga mal: siempre las mismas
+tres casillas. `status`, el **código de status**; `mensaje`, la frase en español lista para
+mostrarle a alguien del taller; y `data`, la información pedida, si la hay. Que sea siempre igual
+evita que cada pantalla tenga que entender una respuesta distinta.
+
+**Swagger**
+La página que muestra el **OpenAPI** de forma legible y deja probar la API desde el navegador.
+Sirve para entender y revisar qué hace el sistema sin leer código. En desarrollo, QA y aprobación
+está abierta; en producción va detrás de contraseña, porque la lista de operaciones es un mapa
+del sistema.
 
 **Trigger**
 Código que PostgreSQL ejecuta automáticamente al insertar o modificar una fila. Se usa para la

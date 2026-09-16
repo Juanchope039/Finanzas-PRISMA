@@ -88,15 +88,21 @@ button{font:inherit; color:inherit; cursor:pointer}
 
 /* ============ SHELL ============ */
 .shell{display:flex; min-height:100vh}
+/* El relleno de abajo le reserva el sitio al pie fijo. 66 px: los 47 que mide el pie —12 de
+   relleno, 22 de la insignia, 12 de relleno y 1 del borde—, redondeados a 48, más los 18 de
+   aire que la barra ya tenía. Sin esa reserva, en una ventana baja el pie se monta encima del
+   último botón del menú y se queda con sus clics. Y como el menú puede no caber en lo que
+   sobra, se desplaza por dentro: min-height:0 hace falta para que un hijo de una columna
+   flexible pueda encogerse por debajo de su contenido. */
 .side{
   width:224px; flex:none; background:var(--surface); border-right:1px solid var(--line);
-  padding:18px 12px; display:flex; flex-direction:column; gap:20px; position:sticky; top:0; height:100vh;
+  padding:18px 12px 66px; display:flex; flex-direction:column; gap:20px; position:sticky; top:0; height:100vh;
 }
 .brand{display:flex; align-items:center; gap:10px; padding:0 8px}
 .brand svg{flex:none}
 .brand b{font-family:var(--display); font-size:1.05rem; font-weight:800; letter-spacing:-.02em; display:block; line-height:1.1}
 .brand span{font-family:var(--mono); font-size:.6rem; letter-spacing:.08em; color:var(--faint); text-transform:uppercase}
-.nav{display:flex; flex-direction:column; gap:2px}
+.nav{display:flex; flex-direction:column; gap:2px; min-height:0; overflow-y:auto}
 .nav button{
   display:flex; align-items:center; gap:10px; width:100%; text-align:left;
   background:none; border:0; padding:9px 10px; border-radius:8px; color:var(--muted);
@@ -532,9 +538,10 @@ input[type=number],select{
 .sesion-panel .sw[aria-checked="true"] .luz::after{background:var(--on-accent); transform:translateX(15px)}
 
 /* ============ PANEL «ACERCA DE» ============ */
-/* Cuelga del mismo sitio que el menú de la sesión y no tapa el tablero: así se cambia el
-   ambiente simulado y se ve al instante qué le pasa a la insignia y a la franja, que están
-   justo encima. Una capa a pantalla completa obligaría a cerrarla para mirar. */
+/* Cuelga del menú de la sesión, uno de los dos sitios desde donde se abre, y no tapa el
+   tablero: así se cambia el ambiente simulado y se ve al instante qué le pasa a la franja,
+   justo encima, y a la insignia del pie. Una capa a pantalla completa obligaría a cerrarla
+   para mirar. */
 .acerca{
   position:absolute; top:calc(100% + 6px); right:0; z-index:31; text-align:left;
   width:330px; max-width:calc(100vw - 32px); padding:14px;
@@ -559,18 +566,47 @@ input[type=number],select{
 .acerca .campo select{width:100%}
 .acerca .cerrar{width:100%; margin-top:12px}
 
+/* ============ PIE DE LA BARRA LATERAL ============ */
+/* La barra superior es donde viven la identidad y las acciones de la sesión. La versión no es
+   ninguna de las dos: es un dato de soporte. Al pie de la barra lateral queda siempre visible,
+   no compite con nada y es donde la gente la busca por costumbre.
+   Cuelga del .shell y no del .side porque en pantalla angosta tiene que terminar al final del
+   contenido, y CSS no mueve un elemento de un contenedor a otro. Fija al borde inferior con el
+   ancho y el fondo del .side: se lee como su pie y queda pegada abajo aunque el menú sea corto. */
+.side-pie{
+  position:fixed; left:0; bottom:0; z-index:4;
+  width:224px; padding:12px; display:flex;
+  background:var(--surface);
+  border-top:1px solid var(--line); border-right:1px solid var(--line);
+}
+/* Por debajo de 760 px la barra lateral es una fila de pestañas y el pie no cabe en ella.
+   Vuelve al flujo y cae al final del contenido conservando la esquina inferior izquierda: el
+   .shell es una columna y el pie es su último hijo, así que llega solo a su sitio. Se alinea
+   con el relleno de 16 px del .content para quedar a plomo con el texto de la pantalla.
+   Va aquí y no en el bloque de 760 px de más arriba porque este archivo es una sola hoja: allá
+   llegaba antes que la regla de encima y, a igual especificidad, perdía por orden. */
+@media (max-width:760px){
+  .side-pie{
+    position:static; width:100%; padding:14px 16px 20px;
+    background:none; border-right:0;
+  }
+}
+
 /* ============ INSIGNIA DE VERSIÓN Y AMBIENTE ============ */
-/* Va pegada al menú de la sesión y no se puede apagar. Quien reporta un fallo casi nunca sabe
-   contra qué servidor estaba: con la versión y el ambiente siempre a la vista, basta una foto
-   de la pantalla para saberlo. */
+/* No se puede apagar. Quien reporta un fallo casi nunca sabe contra qué servidor estaba: con
+   la versión y el ambiente siempre a la vista, basta una foto de la pantalla para saberlo.
+   Es un botón porque quien mira la versión del front suele querer también la de la API y la
+   del esquema, y esas viven en «Acerca de». */
 .insignia-amb{
   flex:none; white-space:nowrap; padding:3px 7px; border-radius:6px;
   font-family:var(--mono); font-size:.62rem; font-weight:600; letter-spacing:.06em;
   border:1px solid var(--line); background:var(--surface-2); color:var(--muted);
 }
+.insignia-amb:hover{border-color:var(--line-strong); color:var(--text)}
 /* dev, qa y uat van con color de advertencia. En prod la insignia se queda neutra y sin
    nombre de ambiente: rotular «PROD» sería ruido, y si no dice nada es el de verdad. */
 .insignia-amb.aviso{border-color:var(--warn); background:var(--warn-soft); color:var(--warn)}
+.insignia-amb.aviso:hover{background:var(--warn); color:var(--on-accent)}
 
 /* ============ FRANJAS FIJAS DEL TOPBAR ============ */
 /* Van dentro del topbar, que ya queda fijo al bajar: así la advertencia nunca se pierde de
@@ -749,9 +785,6 @@ tbody tr.bit-foco,tbody tr.bit-foco:hover{background:var(--accent-soft)}
     <div class="topbar">
       <div class="eyebrow">Vista previa · datos de ejemplo</div>
       <div class="grow"></div>
-      <!-- Permanente y sin interruptor: es la respuesta a «¿qué versión usabas y contra qué
-           servidor?», que es la primera pregunta de cualquier reporte de fallo. -->
-      <span class="insignia-amb aviso" id="insignia-ambiente">v0.4.2 · QA</span>
       <div class="sesion sesion-menu">
         <button class="sesion-btn" id="sesion-abrir" aria-haspopup="menu"
                 aria-expanded="false" aria-controls="sesion-panel" title="Mi cuenta">
@@ -1727,6 +1760,14 @@ tbody tr.bit-foco,tbody tr.bit-foco:hover{background:var(--accent-soft)}
 
     </div>
   </div>
+
+  <!-- Permanente y sin interruptor: es la respuesta a «¿qué versión usabas y contra qué
+       servidor?», que es la primera pregunta de cualquier reporte de fallo. Va aquí, fuera
+       del .side, porque en celular el pie tiene que terminar al final del contenido. -->
+  <div class="side-pie">
+    <button type="button" class="insignia-amb aviso" id="insignia-ambiente"
+            aria-haspopup="dialog" aria-controls="acerca-panel">v0.4.2 · QA</button>
+  </div>
 </div>
 
 <script>
@@ -2114,10 +2155,10 @@ function mostrarAcerca(abierto){
 }
 
 /* A 375 px el topbar envuelve y el menú de la sesión deja de estar pegado al borde derecho:
-   arranca donde acaba la insignia. Un panel de 330 px colgado de ahí se sale por la izquierda
-   en cuanto el nombre es corto. Se mide al abrir y cada vez que cambia el tamaño de la
-   ventana, y se corre lo justo para dejar el mismo margen de 16 px que usa el resto de la
-   pantalla en celular. */
+   baja a una fila propia y arranca desde la izquierda. Un panel de 330 px colgado de ahí se
+   sale por la izquierda en cuanto el nombre es corto. Se mide al abrir y cada vez que cambia
+   el tamaño de la ventana, y se corre lo justo para dejar el mismo margen de 16 px que usa el
+   resto de la pantalla en celular. */
 function encajarAcerca(p){
   p.style.right = '0px';
   var falta = 16 - p.getBoundingClientRect().left;
@@ -2130,11 +2171,31 @@ function encajarAcerca(p){
   if (alto > 0) p.style.maxHeight = alto + 'px';
 }
 
-$('#btn-acerca').addEventListener('click', function(){ mostrarAcerca(true); });
-$('#ac-cerrar').addEventListener('click', function(){
+/* El panel se abre desde dos sitios muy separados —el menú de la sesión, arriba a la derecha,
+   y la insignia del pie, abajo a la izquierda—, así que al cerrarlo el foco tiene que volver
+   al que lo abrió. Devolverlo siempre al topbar dejaría perdido a quien vino del pie. */
+var acercaVuelve = null;
+
+function cerrarAcerca(){
   mostrarAcerca(false);
-  $('#sesion-abrir').focus();
+  if (acercaVuelve) acercaVuelve.focus();
+}
+
+$('#btn-acerca').addEventListener('click', function(){
+  acercaVuelve = $('#sesion-abrir');   /* la opción desaparece con el menú: el foco vuelve al chip */
+  mostrarAcerca(true);
 });
+
+/* La insignia del pie es el otro camino al panel, y el corto: quien está mirando la versión
+   del front casi siempre quiere también la de la API o la del esquema. Alterna, para que el
+   segundo clic la cierre sin tener que buscar el botón «Cerrar». */
+$('#insignia-ambiente').addEventListener('click', function(){
+  if (acercaAbierto()){ cerrarAcerca(); return; }
+  acercaVuelve = $('#insignia-ambiente');
+  mostrarAcerca(true);
+});
+
+$('#ac-cerrar').addEventListener('click', cerrarAcerca);
 $('#ac-simular').addEventListener('change', function(){
   ambiente = this.value;
   pintarAmbiente();
@@ -2145,17 +2206,16 @@ $('#ac-simular').addEventListener('change', function(){
 $('#sesion-abrir').addEventListener('click', function(){ mostrarAcerca(false); });
 
 /* Un clic fuera o Escape lo cierran, igual que el menú de la sesión. El clic que lo abre
-   también llega hasta aquí, y por eso se deja pasar lo que salga del panel o de su opción. */
+   también llega hasta aquí, y por eso se deja pasar lo que salga del panel o de cualquiera
+   de sus dos disparadores. */
 document.addEventListener('click', function(e){
   if (!acercaAbierto()) return;
-  if (e.target && e.target.closest && e.target.closest('#acerca-panel, #btn-acerca')) return;
+  if (e.target && e.target.closest &&
+      e.target.closest('#acerca-panel, #btn-acerca, #insignia-ambiente')) return;
   mostrarAcerca(false);
 });
 document.addEventListener('keydown', function(e){
-  if (e.key === 'Escape' && acercaAbierto()){
-    mostrarAcerca(false);
-    $('#sesion-abrir').focus();
-  }
+  if (e.key === 'Escape' && acercaAbierto()) cerrarAcerca();
 });
 
 /* Girar el teléfono con el panel abierto dejaba puesto el desplazamiento medido antes: el

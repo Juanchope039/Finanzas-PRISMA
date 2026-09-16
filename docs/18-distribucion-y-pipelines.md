@@ -1,10 +1,11 @@
 # 18 · Distribución multiplataforma y automatización (pipelines)
 
 > **Estado: idea, no decidida.** Este documento recoge la intención de distribuir la aplicación
-> en **web, Android, iPhone y escritorio Windows**, y de automatizar pruebas y publicación. La
-> tecnología de empaquetado **queda por decidir**; aquí se dejan las opciones y sus costos para
-> resolverlas cuando exista la aplicación. Hoy la decisión vigente sigue siendo la PWA
-> ([ADR-016](adr/ADR-016-flutter-web-pwa.md)); las apps empaquetadas amplían la **idea 30** del
+> en **web, Android, iPhone y escritorio Windows**, y de automatizar pruebas y publicación.
+> Con Flutter multiplataforma no hay nada que empaquetar: el mismo código compila a cada
+> objetivo. Lo que **queda por decidir** es **qué objetivos se publican y cuándo** (§5), con sus
+> costos a la vista. Hoy la decisión vigente sigue siendo la PWA
+> ([ADR-016](adr/ADR-016-flutter-web-pwa.md)); las apps de tienda amplían la **idea 30** del
 > [roadmap](14-roadmap-e-ideas.md).
 
 ---
@@ -21,27 +22,36 @@
 
 ## 2. Punto de partida
 
-Hoy el producto es una **PWA** construida con Flutter Web (un solo código que se instala desde el
+Hoy el producto es una **PWA** construida con Flutter (un solo código que se instala desde el
 navegador, [ADR-016](adr/ADR-016-flutter-web-pwa.md)). Eso ya cubre «web» y da una instalación
-básica en Android, iOS y Windows **sin** tiendas de aplicaciones. Empaquetarla como app nativa
-por plataforma es un **salto de alcance** que se documenta aquí como idea, no como compromiso.
+básica en Android, iOS y Windows **sin** tiendas de aplicaciones.
+
+El mismo código fuente compila además a Android, iOS y escritorio sin envolver nada ni reescribir
+pantallas. Eso abarata el **salto técnico**, pero no el salto de alcance: publicar en una tienda
+sigue costando cuentas, revisiones y mantenimiento permanente (§5.2 y §6). Por eso los objetivos
+nativos se documentan aquí como idea, no como compromiso.
 
 ---
 
 ## 3. Integración continua — el pipeline de pruebas
 
-Sobre GitHub Actions (el repositorio ya vive en GitHub). Se dispara en cada *push* y *pull request*:
+Sobre GitHub Actions (el repositorio ya vive en GitHub). Se dispara en cada *push* y *pull
+request*. Son **dos proyectos con herramientas distintas** —el front es Flutter y la API es
+Java—, así que el pipeline los corre como dos trabajos en paralelo, no como uno solo.
 
-| Etapa | Qué hace | Bloquea la fusión si… |
-|---|---|---|
-| Instalar | Dependencias con caché (`dart pub get`) | — |
-| Formato | `dart format --set-exit-if-changed` | El código no está formateado |
-| Análisis estático | `dart analyze --fatal-infos` en los dos proyectos | Hay un aviso sin resolver |
-| Pruebas unitarias | `dart test` y `flutter test` (dominio financiero, [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md)) | Falla una prueba |
-| Build | `flutter build web` y compilación de `prisma_api` | No compila |
+| Etapa | Front (`prisma_front`, Flutter) | API (`prisma_api`, Java) | Bloquea la fusión si… |
+|---|---|---|---|
+| Instalar | `flutter pub get` con caché | Dependencias de la herramienta de construcción, con caché | — |
+| Formato | `dart format --set-exit-if-changed` | Formateador del proyecto en modo verificación | El código no está formateado |
+| Análisis estático | `flutter analyze --fatal-infos` | Compilación con los avisos tratados como error | Hay un aviso sin resolver |
+| Pruebas unitarias | `flutter test` | Pruebas del dominio financiero, sin base ni red ([`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md)) | Falla una prueba |
+| Contrato de la API | — | Regenera el OpenAPI y lo compara con el versionado en el repositorio | El documento versionado quedó desactualizado |
+| Compilación | `flutter build web` | Empaquetado del artefacto ejecutable de la API | No compila |
 
-Este pipeline **se puede crear en cuanto existan los dos `pubspec.yaml`**, incluso antes de tener
-apps nativas. Es la primera automatización recomendada.
+Este pipeline **se puede crear en cuanto existan los dos proyectos** —el `pubspec.yaml` del front
+y el descriptor de construcción de la API—, incluso antes de compilar para ninguna tienda. Es la
+primera automatización recomendada. Cuál herramienta de construcción use la API —Maven o
+Gradle— se fija al andamiarla; las etapas de arriba son las mismas con cualquiera de las dos.
 
 > **La versión definitiva de este pipeline vive en
 > [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) §6.** Allí está lo que aquí no cabe:
@@ -52,34 +62,75 @@ apps nativas. Es la primera automatización recomendada.
 
 ## 4. Entrega continua — el pipeline de descargas por plataforma
 
-| Plataforma | Artefacto | Cómo se genera (previsto) | Publicación |
+| Objetivo | Artefacto | Cómo se genera (previsto) | Publicación |
 |---|---|---|---|
 | **Web / PWA** | Sitio desplegado | `flutter build web` y promoción del artefacto ([`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) §2.3) | Por promoción, no por *push* |
-| **Android** | `.apk` / `.aab` | Empaquetar la aplicación (ver §5) y compilar con Gradle | Google Play (cuenta de desarrollador) |
-| **iPhone (iOS)** | `.ipa` | Empaquetar la aplicación (ver §5) y compilar con Xcode | App Store (cuenta Apple Developer) |
-| **Windows** | `.exe` / `.msi` | Empaquetar como app de escritorio (ver §5) | Descarga directa + firma de código |
+| **Android** | `.aab` (y `.apk` para pruebas) | `flutter build appbundle` | Google Play (cuenta de desarrollador) |
+| **iPhone (iOS)** | `.ipa` | `flutter build ipa`, **solo en un Mac** | App Store (cuenta Apple Developer) |
+| **Windows** | `.exe` / `.msi` | `flutter build windows` más el armado del instalador | Descarga directa + firma de código |
+| **API** (`prisma_api`) | Ejecutable de Java o imagen de contenedor | Empaquetado del proyecto Java | **No se descarga**: se despliega por promoción de ambiente ([`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md)) |
+
+La API va en esta tabla aunque nadie la descargue: el mismo pipeline tiene que producir su
+artefacto y promoverlo por los ambientes. Su número de versión es **independiente** del front
+([ADR-014](adr/ADR-014-semver.md)); lo que comparten es el recorrido, no la numeración.
 
 ---
 
-## 5. Opciones de empaquetado (a decidir)
+## 5. Qué objetivos de compilación se publican, y cuándo
 
-No hay que elegir hoy, pero estas son las candidatas realistas para reutilizar el código Flutter
-Web:
+Con Flutter, la pregunta **cambió**. Ya no es «con qué envolvemos la web para que corra como app»
+—no hay que envolver nada—, sino «cuál de los objetivos que el mismo código ya compila se
+publica, cuándo y a cambio de qué». La decisión dejó de ser técnica y pasó a ser de alcance.
 
-| Tecnología | Cubre | A favor | En contra |
+### 5.1 Los objetivos disponibles
+
+| Objetivo | Comando | Estado hoy | Qué habría que pagar para publicarlo |
 |---|---|---|---|
-| **PWA sola** | Web + instalación básica en todas | Cero código extra; ya decidida | Sin tiendas; APIs nativas limitadas (sobre todo iOS) |
-| **Capacitor** | Android + iOS | Reusa la web tal cual; acceso a cámara, archivos, etc. | Requiere Xcode/Android Studio y cuentas de tienda |
-| **Tauri** | Windows (y más) | Instalable **liviano** (~pocos MB); usa el navegador del sistema | Ecosistema más joven; requiere Rust en el pipeline |
-| **Electron** | Windows (y más) | Muy conocido y documentado | Instalable **pesado** (~100 MB) y mayor consumo |
+| **Web (PWA)** | `flutter build web` | **Publicado.** Es el objetivo por defecto ([ADR-016](adr/ADR-016-flutter-web-pwa.md)) | Nada nuevo |
+| **Android** | `flutter build appbundle` | Disponible sin código extra; no se publica | Cuenta de Play, firma y revisión de tienda |
+| **iOS** | `flutter build ipa` | Disponible, pero solo se compila en un Mac; no se publica | Cuenta Apple anual, un Mac y revisión |
+| **Escritorio Windows** | `flutter build windows` | Disponible sin código extra; no se publica | Certificado de firma de código anual |
 
-Combinación de referencia (sujeta a decisión): **PWA** para web · **Capacitor** para Android/iOS ·
-**Tauri** para Windows. Se registrará en un ADR cuando se decida.
+Los cuatro salen del **mismo código**, sin capas intermedias ni pantallas duplicadas. Lo que
+diferencia a uno de otro ya no es el esfuerzo de programación, sino lo del §6: cuentas, firmas,
+revisiones y máquinas.
 
-> **Esta sección quedó pendiente de revisión por el cambio de stack.** Flutter compila por sí
-> mismo a Android, iOS y Windows, así que envolver la web dejó de ser el único camino. La
-> comparación de arriba se escribió para una web empaquetada y hay que rehacerla antes de
-> decidir; hoy no se decide nada, igual que antes.
+### 5.2 Cuándo se agrega un objetivo
+
+Un objetivo nativo entra cuando **la PWA se queda corta para algo concreto del taller**, no
+porque quede bien estar en una tienda. Disparadores que sí lo justificarían:
+
+| Disparador | Objetivo que lo resuelve |
+|---|---|
+| Hace falta escanear con la cámara de forma confiable | Android, iOS |
+| Hacen falta avisos que lleguen con el celular bloqueado, sobre todo en iPhone | iOS |
+| Hace falta imprimir en una impresora del taller conectada al equipo | Windows |
+| La empleada necesita abrir la app sin pasar por el navegador | Android, Windows |
+
+> **Cada objetivo publicado se mantiene para siempre.** Una tienda agrega revisiones antes de
+> cada publicación, versiones mínimas de sistema operativo y usuarios que se quedan en versiones
+> viejas. Con un equipo pequeño, sumar un objetivo es sumar trabajo permanente, no una casilla
+> más en el pipeline.
+
+Cuando se decida publicar alguno, se registra en un ADR propio con el disparador que lo motivó.
+Hoy no se decide ninguno.
+
+### 5.3 Registro: la comparación que dejó de aplicar
+
+Hasta el cambio de stack, esta sección comparaba **Capacitor**, **Tauri** y **Electron**. Las
+tres son formas de **envolver una aplicación web** en un contenedor nativo. Se deja el registro
+porque la decisión de no usarlas tiene que poder rastrearse:
+
+| Tecnología | Qué cubría | Por qué ya no aplica |
+|---|---|---|
+| **Capacitor** | Android + iOS | Flutter compila nativo a ambos: no hay una web que envolver |
+| **Tauri** | Windows (y más) | Igual en escritorio, y sin meter Rust en el pipeline |
+| **Electron** | Windows (y más) | Igual, y sin el instalable pesado que era su mayor costo |
+
+La comparación no estaba equivocada: estaba resuelta **para otro stack**. Con Flutter
+multiplataforma desaparecieron a la vez sus costos (una cadena de herramientas extra por
+plataforma) y su ventaja (reusar la web tal cual). Lo que queda es §5.1: elegir objetivos, no
+envoltorios.
 
 ---
 
@@ -93,8 +144,8 @@ Combinación de referencia (sujeta a decisión): **PWA** para web · **Capacitor
 | Secretos en CI | Claves de firma y tokens de tienda guardados como *secrets* del repositorio, nunca en el código |
 
 Estos costos son la razón por la que la PWA fue la decisión inicial: **cero tiendas, cero cuotas,
-actualización inmediata**. Las apps empaquetadas se justifican solo si aparece una necesidad que
-la PWA no cubra.
+actualización inmediata**. Un objetivo nativo se justifica solo si aparece una necesidad que la
+PWA no cubra (§5.2); el costo de compilarlo es cero, el de publicarlo no.
 
 ---
 
@@ -102,20 +153,24 @@ la PWA no cubra.
 
 | | Pipeline de pruebas | Pipeline de descarga | Depende de |
 |---|:---:|:---:|---|
-| Web / PWA | ✅ | ✅ (promoción) | `pubspec.yaml` |
-| Android | ✅ | ⬜ | Empaquetado (§5) + cuenta Play |
-| iOS | ✅ | ⬜ | Empaquetado (§5) + cuenta Apple + Mac |
-| Windows | ✅ | ⬜ | Empaquetado (§5) + firma |
+| Web / PWA | ✅ | ✅ (promoción) | `pubspec.yaml` del front |
+| Android | ✅ | ⬜ | Decidir el objetivo (§5.2) + cuenta Play + firma |
+| iOS | ✅ | ⬜ | Decidir el objetivo (§5.2) + cuenta Apple + Mac |
+| Windows | ✅ | ⬜ | Decidir el objetivo (§5.2) + certificado de firma |
+| API (`prisma_api`) | ✅ | ➖ (se promueve, no se descarga) | Proyecto Java andamiado |
 
 ---
 
 ## 8. Estado y siguiente paso
 
-- **Decidido hoy:** nada nuevo. La PWA sigue vigente, ahora sobre Flutter Web
+- **Decidido hoy:** nada nuevo. La PWA sigue vigente y web sigue siendo el objetivo por defecto
   ([ADR-016](adr/ADR-016-flutter-web-pwa.md)).
-- **Primer paso barato cuando exista la app:** el pipeline de pruebas del §3.
-- **Pendiente de decisión:** la tecnología de empaquetado del §5, que se registrará en un ADR
-  propio, y la apertura de cuentas de tienda del §6.
+- **Resuelto:** ya no hay que elegir tecnología de empaquetado. Flutter compila nativo y la
+  comparación de envoltorios quedó registrada como histórica en §5.3.
+- **Primer paso barato cuando existan los dos proyectos:** el pipeline de pruebas del §3, con sus
+  dos trabajos, el de Flutter y el de Java.
+- **Pendiente de decisión:** qué objetivos nativos se publican y cuándo (§5.2), que se registrará
+  en un ADR propio, y la apertura de cuentas de tienda del §6.
 
 ---
 

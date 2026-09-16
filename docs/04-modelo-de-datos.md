@@ -84,15 +84,23 @@ erDiagram
 | 22 | `cierres_mensuales` | Snapshot inmutable de cada mes cerrado | ✅ |
 | 23 | `auditoria` | Bitácora de todos los cambios | ✅ |
 | 24 | `cargos` | Catálogo de cargos del negocio, administrado por Gerencia | |
+| 25 | `peticiones_idempotentes` | Claves de idempotencia y la respuesta que devolvió cada una | ✅ |
 
 *Sensible = el acceso a la tabla está restringido por Row Level Security (§7). En la mayoría eso
 significa «solo Gerencia», pero no en todas: en `usuarios`, `empleados`, `nomina_periodos`,
-`nomina_detalle` y `adelantos` cada persona alcanza **su propia fila y nada más**; `clientes` lo
-lee y lo crea cualquiera, porque sin cliente no hay pedido (CU-05); y `movimientos` lo lee todo
-el mundo, porque los dos tipos registran el día a día. La regla de cada tabla está en el §7.*
+`nomina_detalle`, `adelantos` y `peticiones_idempotentes` cada persona alcanza **su propia fila y
+nada más**; `clientes` lo lee y lo crea cualquiera, porque sin cliente no hay pedido (CU-05); y
+`movimientos` lo lee todo el mundo, porque los dos tipos registran el día a día. La regla de cada
+tabla está en el §7.*
 
 `cargos` va al final de la lista para no renumerar las 23 entidades anteriores. En el esquema
 SQL sí aparece antes de `usuarios`, porque `usuarios` la referencia.
+
+`peticiones_idempotentes` es la entidad **25** y la única que no es del negocio: no guarda plata,
+ni personas, ni pedidos. Guarda el rastro de qué peticiones ya se atendieron, para no cobrar dos
+veces lo mismo (§4.9). Está en el catálogo porque es una tabla más del esquema y hay que poder
+contarla, y no está en el diagrama del §2 por la misma razón por la que sí puede borrarse: no es
+una entidad del taller.
 
 ---
 
@@ -713,6 +721,86 @@ resultado, no un error de digitación, y la base no tiene por qué impedir guard
 `cierres_mensuales` es el **snapshot inmutable** que garantiza RN-16: un movimiento registrado
 tarde con fecha de un mes ya cerrado no altera el reporte histórico de ese mes.
 
+### 4.9 Claves de idempotencia
+
+Toda petición que escribe llega con una clave de idempotencia (RNF-27). La base la guarda junto
+con la huella de esa petición y con la respuesta que se devolvió, para que un reintento devuelva
+lo mismo en vez de volver a registrar el gasto.
+
+```sql
+CREATE TABLE peticiones_idempotentes (
+  clave      UUID PRIMARY KEY,
+  huella     TEXT NOT NULL,
+  usuario_id UUID NOT NULL REFERENCES usuarios(id),
+  estado     TEXT NOT NULL CONSTRAINT peticiones_idempotentes_estado_valido
+               CHECK (estado IN ('en_curso','terminada')),
+  status     INTEGER,
+  respuesta  JSONB,
+  creado_en  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  expira_en  TIMESTAMPTZ NOT NULL
+);
+
+CREATE INDEX idx_idem_expira ON peticiones_idempotentes (expira_en);
+```
+
+`huella` es el hash del método, la ruta, el cuerpo y el usuario. Sirve para distinguir el
+reintento legítimo —misma clave, misma huella: se devuelve `respuesta` sin ejecutar nada— del
+cliente que reutilizó una clave para otra cosa, que es un error suyo y se rechaza.
+
+> **La fila de la clave y el efecto de la operación se escriben en la MISMA transacción.** Si se
+> guardaran por separado, un corte entre las dos escrituras dejaría el sistema justo en el estado
+> que la idempotencia prometía evitar: el gasto registrado sin rastro de su clave, o la clave
+> anotada sin el gasto.
+
+`clave` es la llave primaria y eso hace el trabajo pesado de la concurrencia: dos peticiones
+simultáneas con la misma clave no compiten, porque la segunda se queda esperando en el índice
+único hasta que la primera confirme o se caiga. `status` y `respuesta` quedan nulos mientras
+`estado = 'en_curso'`, que es exactamente lo que significa ese estado: todavía no hay nada que
+repetir.
+
+La tabla **no lleva columnas de anulación ni trigger de auditoría** (§5.4), y no es un olvido:
+auditar quién reintentó una petición no le dice nada a nadie, y el cambio que esa petición
+provocó ya quedó auditado en su propia tabla.
+
+**Retención: 72 horas.** Alcanzan para cubrir un fin de semana sin señal, que es el peor caso
+real del taller. Pasadas, la fila se borra.
+
+> **Aquí sí se borra, y es la única excepción de todo el modelo.** No contradice a
+> [`ADR-004`](adr/ADR-004-base-solo-escritura.md): «nada se borra» protege la **información del
+> negocio**, y una clave de idempotencia no lo es. Es un mecanismo de transporte con fecha de
+> caducidad. El gasto, el pedido o la nómina que esa clave hizo posibles se quedan donde
+> siempre, intactos y auditados; lo que se va es el comprobante de que el mensaje llegó.
+
+Hay que decirlo con todas las letras porque el §5.1 revoca `DELETE` en el motor, y quien lea esa
+revocación junto a esta purga va a pensar que una de las dos está mal. No lo está: la purga no
+pasa por ahí.
+
+```sql
+-- pg_cron se habilita una sola vez por ambiente, desde el panel de Supabase o con esta línea
+-- ejecutada por el rol de migraciones. Es lo que agenda la purga dentro de la propia base.
+CREATE EXTENSION IF NOT EXISTS pg_cron;
+
+-- La purga corre como el rol de migraciones, no como la aplicación. Es dueño de la tabla y es
+-- el único rol del proyecto con BYPASSRLS (§7.1 y §9), así que atraviesa el FORCE ROW LEVEL
+-- SECURITY de la tabla y no necesita una política de DELETE escrita para él.
+SELECT cron.schedule(
+  'purgar_peticiones_idempotentes',
+  '20 3 * * *',
+  $cron$ DELETE FROM peticiones_idempotentes WHERE expira_en < NOW() $cron$
+);
+```
+
+**Qué permisos hacen falta, y cuáles no.** Ninguno nuevo. `authenticated` y `prisma_api` siguen
+sin `DELETE` sobre ninguna tabla del esquema, esta incluida: el `REVOKE` global del §5.1 y el
+del §9 se quedan exactamente como están, y el `ALTER DEFAULT PRIVILEGES` de los dos sigue
+cubriendo la tabla nueva sin tocar nada. Conceder `DELETE` sobre esta tabla al rol de la API
+sería el error: le abriría el borrado a quien atiende peticiones de usuario para resolver una
+tarea de mantenimiento que ocurre de madrugada y sin nadie conectado.
+
+Si la purga se cae y nadie se entera, no se pierde información ni se rompe la idempotencia: la
+tabla crece y ya. Cada fila trae su `expira_en`, y la API ignora las vencidas sin importar si
+siguen ahí. Es una tarea de higiene, no de corrección.
+
 ---
 
 ## 5. Diseño de solo escritura
@@ -731,6 +819,11 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public
 
 Aunque alguien escriba un `DELETE` por error, o intente ejecutarlo desde fuera de la
 aplicación, PostgreSQL lo rechaza.
+
+> **Una sola excepción en todo el modelo, y no está en este bloque.** Las claves de idempotencia
+> vencidas de `peticiones_idempotentes` sí se borran, a las 72 horas (§4.9). Este `REVOKE` no se
+> toca para lograrlo: la purga la ejecuta el rol de migraciones, que es dueño de la tabla y no
+> atiende peticiones de usuario. La aplicación sigue sin poder borrar nada, ahí incluido.
 
 ### 5.2 Anulación lógica con trazabilidad
 
@@ -1066,7 +1159,7 @@ WHERE a.devengado_en IS NULL
 ```
 
 > Estas vistas existen para consulta y verificación. **El cálculo autoritativo vive en el
-> dominio de `prisma_api`, en Dart**, probado unitariamente (ver
+> dominio de `prisma_api`, en Java**, probado unitariamente (ver
 > [`07-arquitectura.md`](07-arquitectura.md) §4). Tener dos implementaciones permite
 > contrastarlas: si difieren, hay un error en alguna.
 
@@ -1397,8 +1490,38 @@ trigger de auditoría.
 > decisión aparte, con su propio costo sobre lo que Operación necesita ver del día a día, y no
 > se toma aquí.
 
-Con esto, las catorce tablas que el §3 marca como sensibles tienen política, y con `cargos` son
-quince las que llevan RLS encendida. Las nueve restantes —`cuentas`, `categorias`, `adjuntos`,
+**Y la decimoquinta sensible: `peticiones_idempotentes`.** Es la entidad 25 del §3 y llega con la
+regla más simple de todo el documento: cada persona alcanza las claves que ella misma generó, y
+ninguna más.
+
+```sql
+-- Idempotencia: cada quien ve y escribe solo sus propias claves.
+CREATE POLICY idem_lectura ON peticiones_idempotentes FOR SELECT
+  USING (usuario_id = auth.uid());
+CREATE POLICY idem_insercion ON peticiones_idempotentes FOR INSERT
+  WITH CHECK (usuario_id = auth.uid());
+CREATE POLICY idem_actualizacion ON peticiones_idempotentes FOR UPDATE
+  USING (usuario_id = auth.uid()) WITH CHECK (usuario_id = auth.uid());
+
+ALTER TABLE peticiones_idempotentes ENABLE ROW LEVEL SECURITY;
+```
+
+**Aquí `fn_es_gerencia()` no aparece, y es una decisión.** Es la única tabla sensible sin
+excepción de Gerencia, porque no hay nada en ella que Gerencia necesite. La clave y la huella no
+son información del negocio: son el comprobante de que una petición ya se atendió, y solo le
+sirven a quien la envió. Abrirla «por si acaso» solo agregaría un sitio más donde queda legible
+el cuerpo de una respuesta ajena, guardado en `respuesta`. Lo que Gerencia sí necesita —quién
+hizo qué y cuándo— vive en `auditoria`, que para eso está.
+
+La política de `UPDATE` no sobra: la fila nace `en_curso` y se sella `terminada` con su `status` y
+su `respuesta` en la misma transacción (§4.9). Sin ella, el segundo paso se quedaría sin permiso y
+ninguna clave llegaría nunca a servir para un reintento.
+
+`DELETE` no lleva política, y por eso la purga del §4.9 no corre como la aplicación: corre como el
+rol de migraciones, que es dueño de la tabla y tiene `BYPASSRLS`.
+
+Con esto, las quince tablas que el §3 marca como sensibles tienen política, y con `cargos` son
+dieciséis las que llevan RLS encendida. Las nueve restantes —`cuentas`, `categorias`, `adjuntos`,
 `pedidos`, `pedido_lineas`, `anticipos`, `productos`, `cotizaciones` y `cotizacion_lineas`—
 siguen sin RLS a propósito: los dos tipos trabajan con ellas todo el día y no hay nada que
 separar. El principio 6 del §1 se lee así: **en cada tabla donde haya algo que proteger.**
@@ -1437,10 +1560,11 @@ ALTER TABLE nomina_periodos   FORCE ROW LEVEL SECURITY;
 ALTER TABLE adelantos         FORCE ROW LEVEL SECURITY;
 ALTER TABLE sobres_config     FORCE ROW LEVEL SECURITY;
 ALTER TABLE cierres_mensuales FORCE ROW LEVEL SECURITY;
+ALTER TABLE peticiones_idempotentes FORCE ROW LEVEL SECURITY;
 ```
 
-Son **trece de las quince tablas con RLS**. Las dos que faltan no son un olvido: el modelo, tal
-como está escrito, deja de funcionar si se les pone.
+Son **catorce de las dieciséis tablas con RLS**. Las dos que faltan no son un olvido: el modelo,
+tal como está escrito, deja de funcionar si se les pone.
 
 | Tabla | Por qué no lleva `FORCE` | Qué la protege en su lugar |
 |---|---|---|
@@ -1555,11 +1679,11 @@ ADR-012 y se ejecuta en los cuatro ambientes.
 ## 10. Funciones de negocio atómicas
 
 Hay operaciones que tocan varias tablas y que **no pueden quedar a medias**. Si se escriben como
-tres llamadas seguidas desde Dart, basta un tiempo de espera agotado entre la segunda y la
+tres llamadas seguidas desde la API, basta un tiempo de espera agotado entre la segunda y la
 tercera para dejar la base mintiendo: un pedido entregado que nunca causó la venta, una nómina
 pagada sin descontar el adelanto.
 
-> **Lo que tiene que ser atómico vive en la base, no en la API.** No porque Dart no sepa hacer
+> **Lo que tiene que ser atómico vive en la base, no en la API.** No porque la API no sepa hacer
 > transacciones, sino porque la regla queda en el único sitio que nadie puede saltarse, y porque
 > así hay una sola versión de los pasos en lugar de una por cada quien que llame.
 
@@ -1642,10 +1766,11 @@ Dos cosas que esta consulta no cubre, y hay que decirlas:
   texto del dominio. A cambio, el mensaje de `dinero_no_negativo` se escribe una sola vez y sirve
   para las veintidós columnas que usan ese dominio.
 
-Este contrato es la mitad que sostiene la validación en tres capas de
-**[ADR-015](adr/ADR-015-validacion-tres-capas.md)**. La otra mitad
-—que la API y el formulario repitan las mismas reglas— solo aguanta si esta prueba corre en cada
-despliegue. Sin ella, las tres capas se separan y ninguna avisa.
+Este contrato es la mitad que sostiene el modelo de **dos capas que deciden —la base y la API— y
+una que pinta**, que [ADR-018](adr/ADR-018-front-sin-decisiones.md) fijó al reemplazar a
+[ADR-015](adr/ADR-015-validacion-tres-capas.md). La otra mitad —que la API repita en su idioma las
+mismas reglas que la base— solo aguanta si esta prueba corre en cada despliegue. Sin ella, las dos
+capas que deciden se separan y ninguna avisa.
 
 ---
 

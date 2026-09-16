@@ -160,7 +160,7 @@ Vale la pena dejar constancia de lo que se pensó y se decidió no hacer.
 
 Durante el desarrollo del MVP, **toda idea nueva se anota aquí, no se agrega al sprint en
 curso.** Esa es la única defensa efectiva contra el crecimiento descontrolado del alcance, que
-es la forma más común de que un proyecto de 23 semanas se convierta en uno de 40.
+es la forma más común de que un proyecto de 26 semanas se convierta en uno de 45.
 
 Al final de cada sprint se revisa esta lista y se decide si algo merece entrar al siguiente.
 **La respuesta por defecto es no.**

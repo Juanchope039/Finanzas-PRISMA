@@ -534,7 +534,7 @@ Ninguna de las dos es obvia sin este cuadro. Ese es el punto de tenerlo.
 
 ## 13. Verificación
 
-Cada fórmula de este documento tiene su prueba automática en el dominio de `prisma_api`, en Dart.
+Cada fórmula de este documento tiene su prueba automática en el dominio de `prisma_api`, en Java.
 Los valores del ejemplo de la sección 12 se usan como **juego de datos de prueba oficial**
 (ver [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) §4).
 

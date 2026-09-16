@@ -1,6 +1,10 @@
 # ADR-011 · Stack: Flutter y Dart con API propia
 
-**Estado:** Aceptado · **Fecha:** 2026-09-15
+**Estado:** Reemplazado por ADR-017 · **Fecha:** 2026-09-15
+
+> **Lo reemplaza [ADR-017](ADR-017-api-en-java.md):** el front sigue en Flutter, pero `prisma_api`
+> pasa de Dart a Java 21 con Spring Boot, así que el argumento del lenguaje único ya no aplica.
+> El cuerpo de abajo se conserva tal como se escribió.
 
 ## Contexto
 

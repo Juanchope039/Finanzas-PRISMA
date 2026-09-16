@@ -18,7 +18,7 @@
 | 🧑‍💼 **Dueña o gerente del negocio** | [Resumen ejecutivo](00-resumen-ejecutivo.md) → abre el [mockup](../mockup/prisma-mockup.html) → [Reglas financieras](05-reglas-financieras.md) |
 | 👷 **Trabajas en el negocio (Operación)** | [Resumen ejecutivo](00-resumen-ejecutivo.md) → abre el [mockup](../mockup/prisma-mockup.html) |
 | 🧾 **Eres el contador** | [Reglas financieras](05-reglas-financieras.md) → [Nómina y capacidad de pago](06-nomina-y-capacidad-de-pago.md) → [Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) |
-| 💻 **Vas a programar** | [Visión y alcance](01-vision-y-alcance.md) → [Casos de uso](02-casos-de-uso.md) → [Requisitos y BDD](03-requisitos-y-bdd.md) → [Modelo de datos](04-modelo-de-datos.md) → [Arquitectura](07-arquitectura.md) |
+| 💻 **Vas a programar** | [Visión y alcance](01-vision-y-alcance.md) → [Casos de uso](02-casos-de-uso.md) → [Requisitos y BDD](03-requisitos-y-bdd.md) → [Modelo de datos](04-modelo-de-datos.md) → [Arquitectura](07-arquitectura.md) → [Contrato de API](20-contrato-de-api.md) |
 | 📚 **Solo quieres entender una palabra** | [Glosario](15-glosario.md) |
 
 ---
@@ -65,6 +65,7 @@
 | 17 | [Resiliencia, offline y caché](17-resiliencia-offline-y-cache.md) | Cómo el sistema seguirá funcionando cuando se cae el internet y cómo se limpia lo guardado. | 📘 |
 | 18 | [Distribución y pipelines](18-distribucion-y-pipelines.md) | La idea de ofrecer el sistema en web, celular y computador, y de automatizar las pruebas. | 📘 |
 | 19 | [Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | Los cuatro ambientes, cómo sube un cambio hasta el taller y cómo se devuelve si sale mal. | 🔧 |
+| 20 | [Contrato de API](20-contrato-de-api.md) | Cómo le habla el front a la API: qué responde siempre, cómo se evita cobrar dos veces lo mismo y cómo se protege el camino. | 🔧 |
 | — | [Decisiones de arquitectura (ADRs)](adr/) | Por qué se tomó cada decisión técnica importante. | 🔧 |
 
 ---
@@ -86,12 +87,22 @@ a una pregunta concreta. Ver el [índice de ADRs](adr/README.md).
 | [008](adr/ADR-008-exportacion.md) | Cómo se exporta la información | ¿Cómo sacamos los datos cuando haga falta? |
 | [009](adr/ADR-009-login-por-usuario.md) | Cada persona entra con su propio usuario | ¿Cómo distinguimos quién es quién? |
 | [010](adr/ADR-010-almacenamiento-contrasenas.md) | Contraseñas guardadas con "sal" por usuario | ¿Cómo evitamos que dos claves iguales se vean iguales? |
-| [011](adr/ADR-011-stack-flutter-dart.md) | Con qué herramientas se construye: Flutter y Dart, con API propia | ¿Qué tecnología usamos? |
+| [011](adr/ADR-011-stack-flutter-dart.md) | Con qué herramientas se construye: Flutter y Dart, con API propia · **Reemplazado por 017** | ¿Qué tecnología usamos? |
 | [012](adr/ADR-012-identidad-a-postgres.md) | La API le dice a la base quién está pidiendo | ¿Los permisos siguen decidiéndose en la base? |
 | [013](adr/ADR-013-cuatro-ambientes.md) | Cuatro copias del sistema: desarrollo, pruebas, aprobación y el de verdad | ¿Dónde se prueba antes de tocar lo real? |
 | [014](adr/ADR-014-semver.md) | Cada parte lleva su propio número de versión | ¿Cómo sabemos qué versión está corriendo? |
-| [015](adr/ADR-015-validacion-tres-capas.md) | Se valida tres veces y la base es la que manda | ¿Por qué se repite la misma regla? |
+| [015](adr/ADR-015-validacion-tres-capas.md) | Se valida tres veces y la base es la que manda · **Reemplazado por 018** | ¿Por qué se repite la misma regla? |
 | [016](adr/ADR-016-flutter-web-pwa.md) | Funciona como app sin tienda de apps, con Flutter Web | ¿Cómo se instala y se usa? |
+| [017](adr/ADR-017-api-en-java.md) | El front sigue en Flutter y la API pasa a Java con Spring Boot | ¿En qué está hecha cada parte? |
+| [018](adr/ADR-018-front-sin-decisiones.md) | Tres partes, y la pantalla no decide nada por su cuenta | ¿Quién manda cuando hay una regla? |
+| [019](adr/ADR-019-contrato-de-respuesta.md) | La API responde siempre con la misma forma y un código de cinco dígitos | ¿Cómo sé qué me contestó el sistema? |
+| [020](adr/ADR-020-idempotencia.md) | Tocar Guardar dos veces no cobra dos veces | ¿Y si se me va la señal a mitad? |
+| [021](adr/ADR-021-canal-firmado.md) | Cada petición va sellada contra reenvíos y cambios en el camino | ¿Alguien puede copiar una petición y repetirla? |
+| [022](adr/ADR-022-openapi-generado.md) | La documentación de la API sale del código, no de la memoria de nadie | ¿Cómo sé que el manual dice la verdad? |
+
+Del 017 al 022 están las decisiones del modelo de tres partes: el cambio de Dart a Java en la
+API, que el front no decide nada, el contrato de respuesta, la idempotencia, el canal firmado y
+la documentación generada del código.
 
 ---
 

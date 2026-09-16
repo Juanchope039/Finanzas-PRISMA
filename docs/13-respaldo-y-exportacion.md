@@ -204,7 +204,7 @@ este punto solo hereda la última fila, la auditoría.
 
 El diseño de la exportación no cambia; cambia quién lo ejecuta. Antes el cliente consultaba
 Supabase y armaba el archivo en el navegador. Ahora **el front no habla con Supabase nunca**
-([`ADR-011`](adr/ADR-011-stack-flutter-dart.md)), así que el trabajo queda entero del lado de
+([`ADR-018`](adr/ADR-018-front-sin-decisiones.md)), así que el trabajo queda entero del lado de
 `prisma_api`.
 
 | Paso | Quién | Qué pasa |

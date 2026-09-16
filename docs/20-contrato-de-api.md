@@ -1,0 +1,549 @@
+# 20 · Contrato de la API
+
+Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
+cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
+
+> **Estado: diseñado, no construido.** `prisma_api` todavía no existe. Este documento fija el
+> contrato antes de escribir el primer controlador, porque un contrato acordado después es un
+> contrato que ya se rompió en tres sitios distintos.
+
+**Este documento no repite la arquitectura.** Cómo está construido el sistema por dentro —las
+capas, la regla de dependencias, cómo la identidad llega hasta PostgreSQL— está en
+[`07-arquitectura.md`](07-arquitectura.md). Aquí solo está **lo que viaja por el cable**.
+
+---
+
+## 1. El sobre de respuesta
+
+### 1.1 Las tres claves
+
+**Toda** respuesta de la API, con éxito o con error, tiene exactamente estas tres claves. Ni una
+más, ni una menos, ni en un orden distinto:
+
+```json
+{
+  "status": 20101,
+  "mensaje": "Gasto registrado.",
+  "data": { }
+}
+```
+
+| Clave | Tipo | Regla |
+|---|---|---|
+| `status` | Entero de cinco dígitos | Siempre presente. Ver §2 |
+| `mensaje` | Texto | Siempre presente. **En español, listo para mostrarle a una persona del taller.** Nunca jerga técnica, nunca un nombre de restricción, nunca una traza |
+| `data` | Cualquiera | El contrato propio de cada operación. `null` cuando no hay datos que devolver |
+
+> **El sobre es el mismo siempre, y por eso el front puede ser tonto.** Si la respuesta de error
+> tuviera otra forma que la de éxito, el cliente necesitaría saber cuándo esperar cuál —y saber
+> eso ya es decidir—. Con un solo sobre, el front lee `status`, muestra `mensaje` y pinta `data`
+> sin entender nada del negocio.
+
+La decisión completa, con las alternativas que se descartaron, está en
+[ADR-019](adr/ADR-019-contrato-de-respuesta.md).
+
+El `mensaje` lo dicta la API, no el front. Es la consecuencia directa de que el front no contenga
+ningún catálogo de textos: el día que una regla cambie, cambia el mensaje en un solo sitio y todos
+los clientes —web, Android, escritorio— lo dicen igual sin recompilar nada.
+
+### 1.2 Los errores de campo van dentro de `data`
+
+Un formulario con tres campos malos necesita decir cuáles son los tres. Eso **no puede agregar una
+cuarta clave al sobre**: viaja dentro de `data`, en una lista llamada `errores`.
+
+```json
+{
+  "status": 42201,
+  "mensaje": "Revisa los datos del gasto.",
+  "data": {
+    "errores": [
+      { "campo": "valor", "mensaje": "El gasto tiene que ser mayor que cero." }
+    ]
+  }
+}
+```
+
+| Clave dentro de `errores[]` | Qué es |
+|---|---|
+| `campo` | El mismo nombre que la API usó en el descriptor del formulario (§4). Así el front sabe junto a qué caja pintar el aviso |
+| `mensaje` | El texto en español que se muestra debajo de esa caja |
+
+El `mensaje` de arriba —el del sobre— resume; los de `errores` señalan. Los dos vienen de la API y
+ninguno se escribe en el cliente.
+
+---
+
+## 2. El código de cinco dígitos
+
+### 2.1 Cómo se compone
+
+**`HTTP(3) + caso(2)`.** Los tres primeros dígitos son el código HTTP de la respuesta; los dos
+últimos, el caso concreto dentro de ese código.
+
+```
+2 0 1 0 1
+└───┘ └─┘
+ 201   01      →  HTTP 201 Created, caso 01
+```
+
+Que los tres primeros dígitos sean el HTTP no es adorno: significa que el `status` del sobre y el
+código de la respuesta HTTP **nunca pueden contradecirse**, porque uno se deriva del otro. Un `404`
+con `status` `20001` es imposible de escribir por accidente.
+
+### 2.2 Los códigos base
+
+Nueve códigos transversales, los que aparecen en cualquier módulo:
+
+| Código | HTTP | Significado |
+|---|---|---|
+| `20001` | 200 | Consulta correcta |
+| `20101` | 201 | Recurso creado |
+| `40001` | 400 | Petición mal formada |
+| `40101` | 401 | Firma inválida |
+| `40301` | 403 | Sin permiso |
+| `40401` | 404 | No existe |
+| `40901` | 409 | Clave de idempotencia repetida con petición distinta |
+| `42201` | 422 | Los datos no pasan las reglas |
+| `50001` | 500 | Error no previsto |
+
+La idempotencia (§5) y el canal firmado (§6) agregan los suyos, y están listados en esas secciones.
+
+### 2.3 El límite del formato, dicho con honestidad
+
+Este formato tiene dos límites reales y hay que escribirlos, no descubrirlos:
+
+1. **Solo caben 99 casos por cada estado HTTP.**
+2. **El código no dice de qué módulo vino.** `42207` no se lee solo.
+
+El segundo se mitiga sin cambiar el formato: **los dos dígitos de caso se reparten por rango de
+módulo, igual en todos los estados HTTP.**
+
+### 2.4 Los rangos por módulo
+
+| Rango | Módulo |
+|---|---|
+| `01`–`09` | Sesión y seguridad |
+| `10`–`19` | Usuarios y cargos |
+| `20`–`29` | Movimientos y cuentas |
+| `30`–`39` | Pedidos y clientes |
+| `40`–`49` | Productos y costeo |
+| `50`–`59` | Nómina y adelantos |
+| `60`–`69` | Reportes y cierres |
+| `70`–`79` | Exportación y respaldo |
+| `80`–`89` | Cotizaciones |
+| `90`–`99` | Reservado |
+
+Así `42213` se lee de un vistazo: **HTTP 422, módulo de usuarios, caso 3 de ese módulo.**
+
+> **Falta cerrar un detalle, y se deja escrito en vez de descubrirlo escribiendo el catálogo.** Los
+> nueve códigos base del §2.2 terminan en `01`, que cae dentro del rango de Sesión y seguridad. O
+> esos nueve quedan **exentos del reparto** por ser transversales, o se les asigna caso propio. Hay
+> que decidirlo **antes** de la primera entrada del catálogo: después ya hay códigos emitidos y
+> cambiarlos rompe a todo cliente que los interprete.
+
+Y el primer límite deja de ser un problema por lo que significa cuando aparece:
+
+> **Si un módulo agota su rango en un estado HTTP, el formato no se quedó corto: ese estado está
+> haciendo demasiado trabajo.** Diez casos distintos de 422 en un solo módulo quieren decir que
+> varios de ellos merecían un estado más preciso —409, 404, 403— y se metieron todos en el mismo
+> cajón. La solución es repartirlos, no ampliar el código.
+
+---
+
+## 3. El catálogo
+
+### 3.1 Uno solo, y de él sale todo lo demás
+
+Existe **un solo catálogo** de códigos, y vive en `prisma_api`. Cada entrada lleva código, HTTP,
+módulo, mensaje en español y cuándo se emite.
+
+De ese catálogo salen tres cosas, **generadas, nunca copiadas a mano**:
+
+| # | Qué se genera | Por qué de ahí y no aparte |
+|---|---|---|
+| 1 | Las respuestas de la API | El `status` y el `mensaje` que viajan en el sobre son los del catálogo, sin intermediario |
+| 2 | La documentación de Swagger (§7) | Documentar a mano qué códigos devuelve una operación se desactualiza el primer día en que alguien tiene prisa |
+| 3 | La tabla de traducción de restricciones de base de datos que fijó [ADR-015](adr/ADR-015-validacion-tres-capas.md) —reemplazado por [ADR-018](adr/ADR-018-front-sin-decisiones.md), que conserva intacto ese contrato de errores— | Un `23514 check_violation` tiene que salir como mensaje en español, y ese mensaje es el mismo del catálogo |
+
+Copiar sería tenerlo tres veces, y tres copias de una lista se separan siempre: la pregunta no es
+si pasa, es en qué mes.
+
+### 3.2 La prueba que lo mantiene honesto
+
+Es la prueba `C-03` de [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md), y comprueba las dos
+direcciones:
+
+| Dirección | Qué comprueba | Qué significa si falla |
+|---|---|---|
+| Código → catálogo | **Ningún código emitido por el código fuente falta en el catálogo** | Alguien inventó un `status` en un controlador. Sale al taller sin mensaje revisado y sin quedar en Swagger |
+| Catálogo → código | **Ningún código del catálogo quedó sin usar** | Un mensaje muerto. Peor que sobrar: esconde que el caso que lo emitía desapareció |
+
+> **La segunda dirección es la que casi nadie escribe, y es la que descubre las regresiones.** Un
+> código huérfano en el catálogo no rompe nada hoy: solo deja creyendo que el sistema todavía
+> cubre un caso que dejó de cubrir hace cuatro versiones.
+
+---
+
+## 4. El descriptor de formulario
+
+### 4.1 El problema que resuelve
+
+Que el front no decida no puede significar que cada campo mal escrito cueste un viaje por datos
+móviles en un taller con señal intermitente. La salida no es devolverle las reglas al cliente: es
+que **las reglas viajen como datos**.
+
+La API entrega, junto a cada formulario, el descriptor de sus campos:
+
+```json
+{
+  "campo": "valor",
+  "etiqueta": "Valor del gasto",
+  "tipo": "dinero",
+  "obligatorio": true,
+  "minimo": 1,
+  "maximo": 99999999,
+  "teclado": "numerico",
+  "ayuda": "En pesos, sin centavos",
+  "mensajes": {
+    "obligatorio": "Escribe cuánto fue el gasto.",
+    "minimo": "El gasto tiene que ser mayor que cero."
+  }
+}
+```
+
+| Clave | Para qué sirve |
+|---|---|
+| `campo` | El nombre con el que viaja el dato, y con el que vuelve un error de §1.2 |
+| `etiqueta` | Lo que se pinta encima de la caja |
+| `tipo` | Cómo se presenta y se formatea: `dinero`, `texto`, `fecha`, `lista` |
+| `obligatorio` | Si puede quedar vacío |
+| `minimo` · `maximo` | Los límites, como valores, no como condición programada |
+| `teclado` | Qué teclado abre el celular. Es presentación pura |
+| `ayuda` | La línea gris debajo de la caja |
+| `mensajes` | Qué decir cuando una regla no se cumple, ya redactado en español |
+
+### 4.2 Por qué esto no es devolverle las reglas al front
+
+> **El front no sabe que el valor debe ser mayor que cero.** Sabe que hay una regla llamada
+> `minimo` con valor `1` y un texto que mostrar si el contenido de la caja es menor. La regla
+> sigue siendo de la API, y **la API la vuelve a comprobar cuando llega la petición, siempre.**
+
+La diferencia es toda la diferencia: el front interpreta un dato, no ejecuta una decisión. El día
+que el mínimo cambie a otra cifra, cambia en la API y el front lo obedece sin enterarse.
+
+Y el descriptor **se genera del mismo sitio que las validaciones del servidor**. No se escribe a
+mano dos veces: si se escribiera dos veces, se separarían, que es justo lo que este diseño evita.
+
+La decisión de que el front no contenga ninguna regla está en
+[ADR-018](adr/ADR-018-front-sin-decisiones.md).
+
+---
+
+## 5. Idempotencia
+
+### 5.1 La cabecera
+
+Toda petición que **escribe** —`POST`, `PUT`, `PATCH`, `DELETE`— lleva obligatoriamente la cabecera
+`Idempotency-Key` con un UUID v4. Sin ella, la API responde `40002` y no procesa nada.
+
+`GET`, `HEAD` y `OPTIONS` son idempotentes por naturaleza y no la llevan.
+
+> **La clave la genera el front en el momento en que la persona decide la acción**, no en cada
+> reintento. Es la diferencia entre «reintentar esta acción» y «hacer otra acción igual»: si la
+> empleada toca Guardar dos veces porque no vio la confirmación, es la misma intención y debe
+> cobrarse una vez.
+
+La cola local del front guarda cada intención **con su clave ya puesta antes de intentar enviarla**
+([`17-resiliencia-offline-y-cache.md`](17-resiliencia-offline-y-cache.md)). Así el reintento es
+seguro por construcción y no por disciplina de quien programa el reintento.
+
+### 5.2 Las cuatro situaciones
+
+| Situación | Qué hace la API |
+|---|---|
+| Clave nueva | Procesa y guarda la respuesta junto con la huella de la petición |
+| Clave repetida, **misma** huella | Devuelve la respuesta guardada. **No vuelve a ejecutar nada** |
+| Clave repetida, **distinta** huella | `40901` · «Esa operación ya se registró con otros datos.» |
+| Clave repetida, la primera sigue en curso | `40902` · «Esa operación se está procesando. Espera un momento.» |
+
+La segunda fila es el corazón del asunto: devuelve **la respuesta guardada**, no una respuesta
+nueva equivalente. El cliente que reintenta ve exactamente lo mismo que habría visto si el primer
+intento hubiera llegado, incluido el `status`.
+
+### 5.3 La huella, y para qué sirve
+
+La huella es el **hash del método, la ruta, el cuerpo y el usuario**.
+
+Sirve para una sola cosa, y conviene decir cuál: **detectar que alguien reutilizó una clave para
+otra cosa.** Eso no es una repetición legítima, es un error del cliente —una clave que se quedó
+pegada en una variable, un formulario que no la renovó— y responder «ya lo hice» sería mentir.
+Por eso `40901` existe en vez de devolver la respuesta vieja.
+
+### 5.4 Retención: 72 horas
+
+Las claves viven **72 horas**, suficiente para cubrir un fin de semana sin señal. Las vencidas se
+purgan con una tarea programada.
+
+> **Es la única tabla del sistema de la que sí se borran filas.** Hay que decirlo explícitamente
+> porque contradice en apariencia a [ADR-004](adr/ADR-004-base-solo-escritura.md): no es
+> información del negocio, es un mecanismo de transporte con fecha de caducidad. Lo que no se
+> borra nunca es el efecto de la operación; lo que caduca es el recibo de que ya se hizo.
+
+La tabla vive en la capa de datos, con la clave, la huella, el usuario, el estado, el `status` y la
+respuesta guardados, más la fecha de vencimiento indexada para la purga. Su forma exacta está en
+[`04-modelo-de-datos.md`](04-modelo-de-datos.md).
+
+### 5.5 La regla que hace que esto sea real y no decorativo
+
+> **El registro de la clave y el efecto de la operación tienen que ocurrir en la MISMA transacción
+> de base de datos.** Si se guardan por separado, un corte entre las dos escrituras deja el sistema
+> exactamente en el estado que la idempotencia prometía evitar.
+
+Los dos órdenes posibles fallan igual de mal, y por eso no hay un orden bueno:
+
+| Si se escribe primero… | Y se cae antes de la segunda escritura | Resultado |
+|---|---|---|
+| El efecto | La clave no queda registrada | El reintento **vuelve a cobrar el gasto** |
+| La clave | El efecto no se aplica | El reintento devuelve «ya está hecho» y **nunca se hizo** |
+
+Una transacción, las dos escrituras adentro, o ninguna. Encaja con la **transacción por petición**
+que ya fija [`07-arquitectura.md`](07-arquitectura.md) para propagar la identidad hasta PostgreSQL:
+es la misma transacción, no una segunda.
+
+La decisión está en [ADR-020](adr/ADR-020-idempotencia.md).
+
+---
+
+## 6. El canal firmado
+
+Sobre HTTPS, **no en vez de HTTPS**. Protege contra repetición y manipulación.
+
+### 6.1 Las tres cabeceras
+
+Al iniciar sesión, la API entrega —además del token— una **clave de firma de sesión**, que vive
+**solo en memoria** del cliente: nunca en `localStorage`, nunca en una cookie, nunca en disco.
+
+| Cabecera | Contenido |
+|---|---|
+| `X-Prisma-Nonce` | UUID v4 único por petición |
+| `X-Prisma-Timestamp` | ISO 8601 en UTC |
+| `X-Prisma-Firma` | El HMAC del §6.2 |
+
+### 6.2 Cómo se arma la firma
+
+**HMAC-SHA256** sobre la concatenación de cinco piezas, con la clave de sesión:
+
+```
+método + ruta + timestamp + nonce + sha256(cuerpo)
+```
+
+Cada pieza está por una razón concreta:
+
+| Pieza | Qué impide cambiar por el camino |
+|---|---|
+| Método | Convertir un `GET` en un `DELETE` |
+| Ruta | Mover la misma operación a otro recurso |
+| Marca de tiempo | Guardar la petición para reenviarla mañana |
+| Nonce | Reenviarla dos veces dentro de la ventana |
+| `sha256(cuerpo)` | Cambiar el valor del gasto sin tocar nada más |
+
+### 6.3 Los tres códigos de rechazo
+
+| Caso | Código |
+|---|---|
+| Firma que no cuadra | `40101` |
+| Marca de tiempo fuera de ±5 minutos | `40102` |
+| Nonce ya visto dentro de la ventana | `40103` |
+
+Los nonce se guardan en memoria con vencimiento igual a la ventana. **Cinco minutos** es el
+equilibrio entre los relojes desajustados de celulares reales y el tiempo que un atacante tendría
+para reenviar algo capturado: más ventana es más margen para el atacante, menos ventana es rechazar
+peticiones legítimas de un teléfono con la hora corrida.
+
+### 6.4 Lo que esto NO protege, escrito para que nadie se confíe
+
+> **Esto protege el trayecto, no el extremo.** Impide que alguien reenvíe una petición capturada o
+> la manipule en el camino. **No protege de un cliente comprometido**: en un navegador, la clave de
+> firma vive en memoria de JavaScript, y quien controla la página controla la clave.
+
+Creer que esto sustituye a la autenticación, a los permisos o a RLS sería peligroso. Es una capa
+más, y la única que de verdad decide sigue siendo la base de datos
+([ADR-006](adr/ADR-006-rls-por-rol.md), [ADR-012](adr/ADR-012-identidad-a-postgres.md)).
+
+La higiene de siempre va igual y no es alternativa a nada de lo anterior: HSTS, CSP estricta,
+tokens de vida corta con rotación del token de refresco, cookies `HttpOnly` y `SameSite`, y fijado
+de certificado en las compilaciones nativas de Flutter, donde sí es posible.
+
+La decisión está en [ADR-021](adr/ADR-021-canal-firmado.md).
+
+---
+
+## 7. Swagger
+
+### 7.1 Generado del código, nunca escrito a mano
+
+El documento OpenAPI 3.1 se produce desde los controladores y los DTO de la API. Un documento
+escrito a mano se desactualiza el primer día en que alguien tiene prisa, y a partir de ahí miente
+con toda la autoridad de un documento oficial.
+
+### 7.2 Dónde se publica en cada ambiente
+
+| Ambiente | Dónde | Quién entra |
+|---|---|---|
+| dev | `/docs` | Abierto |
+| qa | `/docs` | Abierto |
+| uat | `/docs` | Abierto |
+| **prod** | `/docs` | **Detrás de autenticación** |
+
+En producción va cerrado a propósito: **el catálogo de endpoints es un mapa del sistema** y no
+tiene por qué ser público. Los cuatro ambientes están descritos en
+[`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md).
+
+### 7.3 Qué documenta cada operación
+
+Además de su forma técnica —ruta, parámetros, esquema—, cada operación documenta cinco cosas, y
+son las que la vuelven **documentación funcional** y no una lista de campos:
+
+| Qué | De dónde sale |
+|---|---|
+| Qué caso de uso implementa | Enlazado a [`02-casos-de-uso.md`](02-casos-de-uso.md), de CU-01 a CU-37 |
+| La regla de negocio que aplica | En español y sin jerga, como en [`05-reglas-financieras.md`](05-reglas-financieras.md) |
+| Qué códigos de `status` puede devolver, con su mensaje | Del catálogo del §3, generado |
+| Un ejemplo real de petición y respuesta | Como los del §8 |
+| Qué tipo de usuario puede llamarla | Y que **el permiso lo aplica la base**, no la anotación |
+
+### 7.4 Cómo se verifica que está al día
+
+> El archivo `openapi.json` está **versionado en el repositorio**. La integración continua regenera
+> el documento y **falla la compilación si difiere del versionado**. Actualizar la documentación
+> deja de ser disciplina y pasa a ser un requisito para poder mezclar el cambio.
+
+Es la prueba `C-04` de [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md), y el mismo mecanismo
+que sostiene a `C-01`: nada que dependa de que alguien se acuerde. Se acuerda la máquina o no se
+acuerda nadie. La decisión está en [ADR-022](adr/ADR-022-openapi-generado.md).
+
+---
+
+## 8. El contrato funcionando
+
+Tres intercambios completos sobre la misma operación —registrar un gasto— para que el contrato se
+vea, no solo se lea. Las cabeceras van enteras; el sobre, entero.
+
+### 8.1 Éxito · `20101`
+
+```http
+POST /gastos HTTP/1.1
+Host: api.prismamy.co
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Idempotency-Key: 6f1c2f3a-8f4b-4f9a-9a2e-1b7c5d3e0a11
+X-Prisma-Nonce: c9d2b4e1-7a03-4f52-8b6d-2e9f1a4c7b08
+X-Prisma-Timestamp: 2026-09-15T19:32:07Z
+X-Prisma-Firma: 9f2a4c7d1e85b03a6f4c2d9e7b1a5c38d0f6e2b49a7c1d3e5f8a0b2c4d6e8f1a
+
+{ "valor": 120000, "concepto": "Tinta plastisol negra", "cuenta": "caja" }
+```
+
+```http
+HTTP/1.1 201 Created
+Content-Type: application/json
+
+{
+  "status": 20101,
+  "mensaje": "Gasto registrado.",
+  "data": {
+    "id": "b21f8c40-3d7e-4a19-9c62-0e5a7f1d8b34",
+    "valor": 120000,
+    "concepto": "Tinta plastisol negra",
+    "fecha": "2026-09-15"
+  }
+}
+```
+
+### 8.2 Los datos no pasan las reglas · `42201`
+
+Mismo endpoint, un valor en cero y una clave de idempotencia nueva, porque es otra intención:
+
+```http
+POST /gastos HTTP/1.1
+Host: api.prismamy.co
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Idempotency-Key: 0a4d9e17-5c82-4b31-8f06-7e2c1a9d4b55
+X-Prisma-Nonce: 41e0b8a2-96c5-4d17-b3ea-58f7c0d21e6b
+X-Prisma-Timestamp: 2026-09-15T19:34:52Z
+X-Prisma-Firma: 3c7e19a5d84b0f62c1e73a9d5b08f4e6a2c9d17b30e58f4a6c2b9d0e7f1a3c58
+
+{ "valor": 0, "concepto": "Tinta plastisol negra", "cuenta": "caja" }
+```
+
+```http
+HTTP/1.1 422 Unprocessable Content
+Content-Type: application/json
+
+{
+  "status": 42201,
+  "mensaje": "Revisa los datos del gasto.",
+  "data": {
+    "errores": [
+      { "campo": "valor", "mensaje": "El gasto tiene que ser mayor que cero." }
+    ]
+  }
+}
+```
+
+El texto de `errores[0].mensaje` es **el mismo** que el descriptor del §4 ya le había entregado al
+front bajo `mensajes.minimo`. No son dos redacciones parecidas: es una sola, la del catálogo, que
+llega dos veces por caminos distintos.
+
+### 8.3 Clave de idempotencia repetida con otros datos · `40901`
+
+La clave del §8.1, reutilizada con un cuerpo distinto:
+
+```http
+POST /gastos HTTP/1.1
+Host: api.prismamy.co
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Idempotency-Key: 6f1c2f3a-8f4b-4f9a-9a2e-1b7c5d3e0a11
+X-Prisma-Nonce: 7b3f2e08-c194-4a6d-85f1-2c0e9a4d7b63
+X-Prisma-Timestamp: 2026-09-15T19:36:10Z
+X-Prisma-Firma: e5a1c39d7f204b86e0c1a7d3f95b28c4d6e0a71f39b5c2d8e4a06f1b7c3d9e52
+
+{ "valor": 95000, "concepto": "Tinta plastisol roja", "cuenta": "caja" }
+```
+
+```http
+HTTP/1.1 409 Conflict
+Content-Type: application/json
+
+{
+  "status": 40901,
+  "mensaje": "Esa operación ya se registró con otros datos.",
+  "data": null
+}
+```
+
+Si el cuerpo hubiera sido **idéntico** al del §8.1, la respuesta no sería esta: sería palabra por
+palabra la del §8.1, con su `201` y su `20101`, sin registrar un segundo gasto. Esa es la
+diferencia entre reintentar y repetir, y la huella del §5.3 es lo único que la distingue.
+
+---
+
+## 9. Lo que este documento no cubre
+
+| Si buscas… | Ve a… |
+|---|---|
+| Cómo está construido el sistema por dentro | [`07-arquitectura.md`](07-arquitectura.md) |
+| Qué puede hacer cada operación, contada como pasos | [`02-casos-de-uso.md`](02-casos-de-uso.md) |
+| Las fórmulas del dinero que la API aplica | [`05-reglas-financieras.md`](05-reglas-financieras.md) |
+| Dónde vive la tabla de idempotencia | [`04-modelo-de-datos.md`](04-modelo-de-datos.md) |
+| Qué se prueba y con qué criterio | [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) |
+| Qué pasa cuando no hay señal y cómo espera la cola local | [`17-resiliencia-offline-y-cache.md`](17-resiliencia-offline-y-cache.md) |
+| Con qué configuración corre cada ambiente y cómo se publica | [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
+
+---
+
+### 🧭 Navegación
+
+**⬅️ Anterior:** [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [🏛️ Decisiones de arquitectura (ADRs)](adr/README.md)

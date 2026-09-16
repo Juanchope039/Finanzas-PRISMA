@@ -48,11 +48,13 @@ En UAT se verifica, además, lo que un prototipo no puede mostrar:
 
 | # | Qué verificar | ✓ |
 |---|---|:---:|
-| 13 | La franja dice **«Ambiente de Aprobación · los datos no son reales»** y la insignia muestra la versión | ⬜ |
+| 13 | La franja dice **«Ambiente de Aprobación · los datos no son reales»** arriba, y la versión aparece **en el pie de la barra lateral, abajo a la izquierda** | ⬜ |
 | 14 | Registrar un movimiento con datos de verdad sigue tomando menos de 30 segundos | ⬜ |
 | 15 | La sesión de Operación se prueba con un usuario real de uat, no con la vista previa de Gerencia | ⬜ |
 | 16 | Lo que Operación no debe ver, no llega: lo niega la base, no la pantalla | ⬜ |
 | 17 | Las tres cifras del mes de prueba cuadran con el cálculo hecho a mano | ⬜ |
+| 18 | Tocar **Guardar dos veces** porque la confirmación se demoró deja **un solo** movimiento, no dos | ⬜ |
+| 19 | Con el celular en modo avión se registra un gasto, queda visible como pendiente de enviar, y al volver la señal se envía solo y una sola vez | ⬜ |
 
 > **Se firma una versión, no una impresión.** Lo que se aprueba en UAT es el artefacto con su
 > número de versión, y **ese mismo artefacto es el que va a prod, sin recompilar**
@@ -112,19 +114,72 @@ pasos cuestan plata y hay que decidirlos con tiempo.
 | # | Paso | Responsable | Cuándo |
 |---|---|---|---|
 | 1 | Crear los **cuatro proyectos de Supabase**: dev, qa, uat y prod. Cada uno con su propia base, sus claves y su almacenamiento | Apoyo técnico | Sprint 0 |
-| 2 | **Contratar el plan de pago de uat y prod.** dev y qa se quedan en el plan gratuito | Gerencia | Antes de levantar uat |
+| 2 | **Contratar lo que hay que pagar:** el plan de pago de Supabase en uat y prod, y el alojamiento de `prisma_api` en prod, que no se puede apagar. dev y qa se quedan en planes gratuitos o apagables | Gerencia | Antes de levantar uat |
 | 3 | Crear el rol **`prisma_api`** en cada ambiente: sin `BYPASSRLS`, sin `SUPERUSER` y sin ser dueño de las tablas | Apoyo técnico | Sprint 0 |
-| 4 | Cargar los **secretos de cada ambiente** fuera del repositorio: variables de entorno en la API, `--dart-define` al compilar el front | Apoyo técnico | Sprint 0 |
-| 5 | Guardar la clave `service_role` de cada ambiente en un **secreto aparte**, reservado para migraciones y tareas administrativas | Apoyo técnico | Sprint 0 |
-| 6 | Promover el esquema dev → qa → uat → prod y verificar `schema_version` en cada base | Apoyo técnico | Antes de cada hito |
-| 7 | Comprobar en cada ambiente que `GET /version` responde el ambiente correcto y que la franja aparece donde debe | Apoyo técnico | Antes de cada hito |
-| 8 | Ejecutar la prueba de permisos con sesión real en los cuatro ambientes ([ADR-012](adr/ADR-012-identidad-a-postgres.md)) | Apoyo técnico | Antes del go-live |
+| 4 | **Levantar el alojamiento de la API en los cuatro ambientes**: una imagen de contenedor por versión, con su memoria y sus variables (§3.2) | Apoyo técnico | Sprint 0 |
+| 5 | Cargar los **secretos de cada ambiente** fuera del repositorio: variables de entorno en la API, `--dart-define` al compilar el front | Apoyo técnico | Sprint 0 |
+| 6 | Guardar la clave `service_role` de cada ambiente en un **secreto aparte**, reservado para migraciones y tareas administrativas | Apoyo técnico | Sprint 0 |
+| 7 | Promover el esquema dev → qa → uat → prod y verificar `schema_version` en cada base | Apoyo técnico | Antes de cada hito |
+| 8 | Comprobar en cada ambiente que `GET /version` responde el ambiente correcto y que la franja aparece donde debe | Apoyo técnico | Antes de cada hito |
+| 9 | Ejecutar la prueba de permisos con sesión real en los cuatro ambientes ([ADR-012](adr/ADR-012-identidad-a-postgres.md)) | Apoyo técnico | Antes del go-live |
 
 > **Esto no es un impedimento, es una factura.** «Siempre en línea» significa que prod y uat no
 > pueden estar en el plan gratuito de Supabase: ese plan pausa el proyecto tras una semana de
-> inactividad y un taller que factura los lunes encontraría el sistema dormido. Son **dos
-> proyectos de pago**, y [ADR-001](adr/ADR-001-stack.md) había declarado presupuesto de operación
-> cero. Se dice aquí para que nadie lo descubra el día del go-live.
+> inactividad y un taller que factura los lunes encontraría el sistema dormido. Y la API en Java
+> necesita un contenedor encendido en prod, que también se paga. Son **dos proyectos de Supabase
+> de pago y un alojamiento de API**. Por eso **RNF-14 ya no exige costo cero sino costo mensual al
+> mínimo sostenible**: el costo cero era incompatible con RNF-20, y sostener la contradicción en
+> el papel no la habría hecho desaparecer el día del go-live.
+
+### 3.2 Alojar la API de Java en los cuatro ambientes
+
+`prisma_api` es Java 21 con Spring Boot (ADR-017). Eso no cambia ni un caso de uso, pero sí cambia
+el alistamiento: ya no basta con publicar archivos estáticos, hay **un proceso encendido** en cada
+ambiente. Lo que hay que dejar listo antes del go-live:
+
+**La imagen**
+
+| Qué | Cómo queda | Por qué |
+|---|---|---|
+| Base | Imagen con solo el **entorno de ejecución de Java 21**, sin JDK ni herramientas | Lo que no está en la imagen no se puede ejecutar por error, y pesa menos multiplicado por cuatro |
+| Contenido | El `jar` de Spring Boot y nada más | Ninguna consola, ningún script suelto |
+| Etiqueta | El número de versión exacto, **nunca `latest`** | Lo que se promueve de uat a prod es una etiqueta, no una compilación nueva ([ADR-013](adr/ADR-013-cuatro-ambientes.md), [ADR-014](adr/ADR-014-semver.md)) |
+| Verificación de salud | Recibe tráfico solo cuando `GET /version` responde | Un contenedor que arrancó todavía no es un contenedor listo |
+
+**La memoria y el arranque**
+
+| Ambiente | Memoria mínima del contenedor | ¿Se acepta que arranque en frío? |
+|---|---:|---|
+| dev | 512 MB | Sí. Se puede apagar fuera de horario |
+| qa | 512 MB | Sí. Se enciende para la tanda de pruebas |
+| uat | 768 MB | Sí, avisándole a Gerencia: el primer clic de la sesión de aprobación puede tardar unos segundos |
+| **prod** | **1 GB** | **No.** RNF-20 exige estar siempre en línea; prod no baja a cero |
+
+> **La JVM pide memoria y eso no se negocia, se presupuesta.** Por debajo de 512 MB, Spring Boot
+> arranca al límite y el primer pico de trabajo lo tumba. Estas cifras son el punto de partida:
+> **se miden en qa con datos de verdad antes de fijarlas en prod**, y si el consumo real pide más,
+> se sube. Apretar la memoria para ahorrar unos pesos y que el taller encuentre la API caída es
+> ahorrar por el lado más caro.
+
+**Las variables de entorno, una tanda por ambiente**
+
+La lista completa con sus valores de ejemplo vive en
+[`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) §3.2. Aquí importa qué hay que tener
+cargado, y cuatro veces, antes de promover nada:
+
+| Variable | Qué cambia entre ambientes |
+|---|---|
+| `PRISMA_AMBIENTE` | `dev`, `qa`, `uat` o `prod`. Es lo que responde `GET /version` y lo que pinta la franja |
+| Perfil de Spring | El mismo valor del ambiente, para que no se mezclen configuraciones |
+| Memoria de la JVM | La de la tabla anterior, como variable y no dentro de la imagen: así se ajusta sin recompilar |
+| `DATABASE_URL` | La base de ese ambiente, siempre con el rol `prisma_api` |
+| `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_JWT_SECRET` | Uno por proyecto de Supabase. Son secretos |
+| `SUPABASE_SERVICE_ROLE_KEY` | Uno por proyecto, y **fuera del despliegue que atiende usuarios** |
+| `ORIGENES_PERMITIDOS` | Solo el dominio del front de ese ambiente. Prod no le responde al front de qa |
+
+> **La misma imagen en los cuatro ambientes; lo único distinto son las variables.** Si para que
+> uat funcione hubo que compilar algo aparte, entonces lo que Gerencia firma en uat no es lo que
+> va a correr en prod, y la firma de §1.1 deja de significar lo que dice.
 
 ---
 
@@ -166,6 +221,10 @@ de verdad la jornada. Solo cuando el ensayo sale limpio se repite en prod.
 | 4 | Confirmar la importación | Gerencia |
 | 5 | Revisar el reporte de errores por fila | Gerencia + apoyo técnico |
 | 6 | Corregir y reimportar solo las filas fallidas | Gerencia |
+
+> **Reimportar no duplica.** Cada fila viaja con su propia clave de idempotencia, así que volver a
+> cargar el archivo completo por error deja los mismos datos, no el doble. Es justo el día en que
+> esa garantía se necesita: el día en que nadie está seguro de qué alcanzó a entrar.
 
 **Del cuaderno — jornada de digitación asistida**
 
@@ -279,7 +338,7 @@ cuatro ambientes. Ninguno se salta.
 | 1 | Las migraciones pendientes se aplican en qa y pasan las pruebas | Apoyo técnico | Las pruebas de extremo a extremo pasan en qa |
 | 2 | El artefacto se promueve a uat y se siembra con datos anonimizados | Apoyo técnico | `GET /version` en uat responde la versión candidata |
 | 3 | Gerencia recorre el checklist de UAT (§1.1) y firma la versión | Gerencia | La firma queda con número de versión y fecha |
-| 4 | **El mismo artefacto** se promueve a prod, sin recompilar | Apoyo técnico | La versión en prod es idéntica a la firmada |
+| 4 | **El mismo artefacto** se promueve a prod, sin recompilar: la misma etiqueta de la imagen de la API y el mismo paquete web del front | Apoyo técnico | La versión en prod es idéntica a la firmada |
 | 5 | Alistamiento de usuarios y migración de datos en prod (§4) | Gerencia + apoyo técnico | Los saldos cuadran con el dinero real |
 
 > **Recompilar para prod sería aprobar una cosa y publicar otra.** Si hace falta un cambio
@@ -304,10 +363,15 @@ cuatro ambientes. Ninguno se salta.
 | 12 | La versión en prod es **exactamente** la firmada en UAT, con el mismo número | ⬜ |
 | 13 | El plan de pago de prod está activo y la base no se pausa por inactividad | ⬜ |
 | 14 | `GET /version` en prod responde la versión del front, la de la API, la del esquema y el ambiente | ⬜ |
-| 15 | En prod **no hay franja de ambiente** y la insignia muestra solo la versión, en color neutro | ⬜ |
+| 15 | En prod **no hay franja de ambiente** y la versión se ve en el pie de la barra lateral, en color neutro | ⬜ |
 | 16 | El rol `prisma_api` de prod no tiene `BYPASSRLS` ni es dueño de las tablas | ⬜ |
 | 17 | La prueba de permisos con sesión real se ejecutó **contra prod** y la base fue la que negó | ⬜ |
 | 18 | La reversión está ensayada y se sabe a qué versión anterior se vuelve (§7) | ⬜ |
+| 19 | La memoria de la JVM de prod está fijada por variable y **medida en qa**, no copiada de un ejemplo | ⬜ |
+| 20 | El alojamiento de la API de prod **no escala a cero** y no se pausa por inactividad | ⬜ |
+| 21 | Swagger está **detrás de autenticación en prod**; en dev, qa y uat queda abierto en `/docs` | ⬜ |
+| 22 | Una escritura repetida con la misma clave de idempotencia **no duplica**, probado contra prod antes de abrir | ⬜ |
+| 23 | El `openapi.json` publicado corresponde a la versión que está corriendo, y la integración continua lo comprobó | ⬜ |
 
 ### 6.3 El día del go-live
 
@@ -339,7 +403,7 @@ artefactos y quién tiene acceso a qué— vive en
 
 | Situación | Qué se hace |
 |---|---|
-| La API nueva falla y el front queda inservible | Se vuelve a la versión anterior de la API. El artefacto anterior sigue publicado: **se promueve, no se reconstruye** |
+| La API nueva falla y el front queda inservible | Se vuelve a la versión anterior de la API: **se despliega la etiqueta anterior de la imagen, que sigue publicada.** No se reconstruye nada |
 | El front nuevo falla y la API responde bien | Se republica el front anterior, que sigue siendo compatible con el mismo MAJOR de la API |
 | El front bloquea con «Esta versión de la aplicación ya no sirve con el servidor. Actualiza.» | Las dos versiones quedaron descuadradas: se vuelve la que se haya movido de último ([ADR-014](adr/ADR-014-semver.md)) |
 | Una migración dejó el esquema mal | **El esquema no se devuelve.** Se escribe otra migración que corrige y se promueve por los cuatro ambientes ([ADR-004](adr/ADR-004-base-solo-escritura.md), [ADR-013](adr/ADR-013-cuatro-ambientes.md)) |
@@ -439,7 +503,7 @@ sin retorno.
 | El registro se abandona en la semana 2 | Sesión de diagnóstico: identificar qué se siente lento y simplificarlo |
 | Los saldos no cuadran y no se sabe por qué | Revisar la bitácora de auditoría movimiento por movimiento |
 | Se descubre un error en una fórmula | Corregir, agregar prueba automática, recalcular períodos afectados |
-| El sistema no está disponible | Registrar en papel con fecha real y digitar después; la doble fecha lo respeta |
+| El sistema no está disponible | Si la aplicación abre, lo registrado queda en la cola local y se envía solo cuando vuelve la señal, una sola vez. Si no abre, se registra en papel con la fecha real y se digita después; la doble fecha lo respeta |
 | Se pierde el acceso a la cuenta | Gerencia restablece la clave en persona (§8.2). No hay recuperación por correo |
 | Se necesita volver a los datos anteriores | Exportación de respaldo (CU-22) |
 | Una versión nueva rompe prod | Se revierte primero y se investiga después (§7) |

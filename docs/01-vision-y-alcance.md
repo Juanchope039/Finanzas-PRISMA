@@ -158,7 +158,9 @@ solo tiene dos columnas porque solo hay dos tipos.
 | **Simulador** | Capacidad de pago y ventas adicionales necesarias |
 | **Importación** | Carga de histórico desde CSV/Excel |
 | **Alertas** | Caja libre negativa, anticipos sin entregar, registro tardío, descapitalización |
-| **PWA** | Flutter Web instalable en el celular |
+| **PWA** | Flutter multiplataforma, con **web por defecto**: el mismo código instalable en el celular como PWA y compilable a Android, iOS y escritorio sin envolver nada |
+| **La API** | Java 21 con Spring Boot. Toma todas las decisiones del sistema y dicta los mensajes que muestra el front |
+| **La capa de datos** | PostgreSQL en Supabase, con Row Level Security aplicando los permisos dentro de la base |
 | **Cuatro ambientes** | Desarrollo, QA, aprobación y producción, cada uno con su propia base de datos. Nunca se prueba sobre datos reales |
 | **Versionado visible** | La versión y el ambiente a la vista en el front, franja de aviso fuera de producción y panel «Acerca de» con el detalle |
 
@@ -194,7 +196,7 @@ solo tiene dos columnas porque solo hay dos tipos.
 
 | # | Restricción |
 |---|---|
-| R1 | Costo de operación al mínimo: solo producción y aprobación en plan de pago —«siempre en línea» lo exige—; desarrollo y QA en el gratuito |
+| R1 | Costo mensual de operación al mínimo sostenible: solo producción y aprobación en plan de pago —«siempre en línea» lo exige—; desarrollo y QA en el gratuito. Es la misma exigencia que fija `RNF-14`, escrita con las mismas palabras a propósito |
 | R2 | Debe funcionar bien en un celular de gama media con datos móviles |
 | R3 | Registrar un movimiento no puede tomar más de 30 segundos |
 | R4 | Ningún dato puede ser eliminado físicamente de la base |

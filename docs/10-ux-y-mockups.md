@@ -20,9 +20,10 @@ Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.ht
 | 3 | **Las tres cifras nunca van solas** | Utilidad, caja y caja libre siempre juntas, nunca una sin las otras |
 | 4 | **Nada de jerga contable** | "Lo que ganaste" en vez de "utilidad neta del ejercicio" |
 | 5 | **Las alertas dicen qué hacer** | No "caja libre negativa" sino "estás usando plata de anticipos" |
-| 6 | **Lo restringido no se ve, no se atenúa** | El rol Operación no ve menús deshabilitados: simplemente no existen. El menú se arma con el tipo de la sesión desde el ingreso, no se recorta después |
+| 6 | **Lo restringido no se ve, no se atenúa** | El rol Operación no ve menús deshabilitados: simplemente no existen. El menú llega armado desde el ingreso —lo manda la API según el tipo de la sesión (principio 9, RF-103)—, no se recorta después |
 | 7 | **El dinero siempre con formato colombiano** | `$1.350.784` — punto de miles, sin decimales |
 | 8 | **El Inicio es un espejo, no un formulario** | Ninguna acción que escriba en la base vive en el Inicio: cada cosa se registra en la pantalla de su asunto —el dinero en Movimientos, los pedidos en Pedidos, el catálogo en Productos, la gente en Gestión de usuarios |
+| 9 | **El front no decide nada** | Los mensajes de error, las reglas de los formularios y qué opciones de menú existen los dicta la API; el front los pinta |
 
 > **Por qué el Inicio no escribe.** Un tablero que además crea datos compite consigo mismo: la
 > cifra que acabas de mirar cambia por algo que hiciste dos centímetros más abajo, y ya no sabes
@@ -31,6 +32,13 @@ Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.ht
 > está a medio hacer. Por eso el botón flotante de registro rápido del principio 2 flota sobre
 > todas las pantallas menos esta: un botón que escribe plata volvería formulario justo a la
 > pantalla que se definió como espejo.
+
+> **Por qué el front no decide.** Una regla escrita en dos sitios se separa. Y cuando se separa,
+> la que la persona ve en pantalla deja de ser la que el sistema aplica: el formulario acepta algo
+> que la API después rechaza, o avisa de algo que la API ya permitía. Quien queda mal es la
+> pantalla, y quien pierde el trabajo escrito es la empleada. Con una sola fuente —la API— el
+> aviso y la decisión no pueden divergir. Esto no le quita agilidad al diseño: la pantalla sigue
+> avisando al instante, pero lo que avisa se lo dictaron (§3.4).
 
 ---
 
@@ -142,6 +150,32 @@ Todas las cifras usan **numeración tabular** para que las columnas se alineen.
 - Objetivos táctiles de 44×44 px como mínimo.
 - El color nunca es el único portador de información: siempre hay ícono o texto.
 - Soporte de tema claro y oscuro.
+
+### 3.4 El descriptor de formulario
+
+Un formulario que solo avisa cuando el servidor contesta se siente lento y gasta datos móviles en
+cada equivocación. Un formulario que decide por su cuenta vuelve a poner la regla en dos sitios,
+que es justo lo que prohíbe el principio 9. El diseño no escoge entre las dos cosas: **la pantalla
+sigue avisando al instante, pero lo que avisa se lo dictaron.**
+
+Junto con cada formulario, la API entrega el **descriptor** de sus campos: etiqueta, tipo, si es
+obligatorio, mínimos y máximos, qué teclado conviene abrir, el texto de ayuda y **las palabras
+exactas** del aviso cuando una regla no se cumple. El front lee ese descriptor y pinta.
+
+| Lo dicta la API | Lo hace la pantalla |
+|---|---|
+| Qué campos hay y en qué orden | Los dibuja en ese orden, sin reordenarlos |
+| Qué regla aplica a cada campo | La comprueba mientras se escribe, sin ir al servidor |
+| Con qué palabras se avisa | Muestra el texto tal cual, sin redactar nada |
+| Qué teclado conviene | Abre el numérico donde va plata, el de texto donde va texto |
+
+> **La pantalla no sabe por qué existe la regla.** No sabe que un gasto tiene que ser mayor que
+> cero: sabe que hay una regla llamada `minimo` con valor 1 y un mensaje que mostrar si no se
+> cumple. Por eso corregir una palabra o mover un tope no obliga a publicar una versión nueva del
+> front, y por eso el aviso que se lee en el celular es siempre el mismo que aplica el servidor.
+
+El aviso inmediato es cortesía, no autoridad: la API vuelve a comprobar todo cuando llega la
+petición, siempre. Cubre `RF-102`.
 
 ---
 
@@ -409,7 +443,7 @@ activa:
 |---|---|
 | Una franja fija arriba del contenido, en color de advertencia | Dice `Estás viendo el sistema como lo ve Operación` y trae el botón **`Volver a mi vista`** |
 | La franja no se puede cerrar | Solo desaparece al salir del modo. Una franja que se cierra es una franja que se olvida |
-| La insignia del topbar muestra `OPE`, pero marcada como simulada | Su `title` dice `Vista previa de Operación · tu tipo real es Gerencia`, para que la insignia no mienta |
+| La insignia de tipo del chip de la sesión, en el topbar, muestra `OPE`, pero marcada como simulada | Su `title` dice `Vista previa de Operación · tu tipo real es Gerencia`, para que la insignia no mienta |
 | Cerrar sesión apaga la vista previa | Nadie hereda el modo de otra sesión |
 
 El interruptor existe o no según el **tipo real** de la sesión, nunca según el que se está
@@ -423,15 +457,27 @@ versión estoy usando** y **contra qué servidor está hablando**. Se resuelve c
 la más discreta a la más detallada: una insignia siempre visible, una franja imposible de
 ignorar y un panel con el detalle. Cubren `RF-98`, `RF-99` y `RF-100`.
 
-**La insignia permanente.** En el topbar, junto al menú de la sesión, pequeña y sin competir con
-nada:
+**La insignia permanente.** En el **pie de la barra lateral, abajo a la izquierda**, debajo de la
+navegación, pequeña y sin competir con nada:
 
 ```
-v0.4.2 · QA
+┌──────────────┐
+│  PRISMA M&Y  │
+│              │
+│  • Inicio    │
+│  • Pedidos   │
+│  ...         │
+│              │
+│              │
+│  v0.4.2 · QA │  ← pie de la barra lateral
+└──────────────┘
 ```
 
 | Decisión | Por qué |
 |---|---|
+| La insignia va en el pie de la barra lateral, no en el topbar | La barra superior es donde viven la identidad y las acciones de la sesión. La versión no es ninguna de las dos cosas: es un dato de soporte. Abajo a la izquierda está siempre visible, no compite con nada y es donde la gente la busca por costumbre |
+| En pantallas angostas el pie pasa al final del contenido | Cuando la barra lateral se vuelve pestañas horizontales ya no hay pie donde vivir. La insignia baja al final del contenido conservando la esquina inferior izquierda: cambia el sitio en el árbol, no el sitio donde la mira quien la busca |
+| Sigue siendo pulsable y abre el panel «Acerca de» | Cambió de lugar, no de trabajo. Es el atajo al detalle que se dicta por teléfono cuando alguien reporta un fallo |
 | En dev, qa y uat la insignia va en color de advertencia | Es el mismo ámbar que ya significa «ojo con esto» en todo el sistema (§3.1). No hay que aprender un código nuevo |
 | En **prod** la insignia muestra solo la versión, en color neutro, y **no rotula «PROD»** | Si no dice nada, es el de verdad. Rotular el sistema real es ruido: un aviso que se lee todos los días deja de leerse, y el día que aparezca uno que sí importa tampoco se va a notar. La advertencia solo funciona si es la excepción |
 | El nombre del ambiente va completo y en español: `Desarrollo`, `QA`, `Aprobación` | Una sigla que hay que traducir no advierte: la lee quien ya sabe lo que significa, que es justo quien no la necesita |
@@ -449,6 +495,7 @@ En prod no hay franja. La ausencia es el mensaje.
 | Reutiliza el patrón visual de la franja de «Ver como Operación» (§5.6) | Es exactamente el mismo propósito: avisar de que **lo que ves no es lo que crees**. El patrón ya está construido, aprobado y probado en celular; inventar un segundo aviso para el mismo trabajo solo agregaría una cosa más que mantener y una forma más que aprender |
 | Tampoco se puede cerrar | Una franja que se cierra es una franja que se olvida, y esta existe justo para el momento en que ya se olvidó |
 | No lleva botón de salida, a diferencia de la de vista previa | De la vista previa se sale con un clic porque es un modo; de un ambiente no se sale apagándolo. Ofrecer un botón que no puede cumplir sería peor que no ofrecer ninguno |
+| **La franja no se movió con la insignia**: sigue arriba del contenido | Las dos dicen el ambiente, pero no hacen el mismo trabajo. La insignia está para que la encuentres cuando la buscas, y por eso vive tranquila en el pie. La franja está para interrumpir a quien no está buscando nada, y solo interrumpe desde arriba, en el camino de la mirada |
 
 > **Esto no es adorno: es lo que evita que alguien registre la venta del día en UAT y la dé por
 > guardada.** Ese error no avisa en el momento, se descubre en el cierre, y para entonces ya no

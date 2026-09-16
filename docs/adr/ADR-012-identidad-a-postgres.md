@@ -54,6 +54,9 @@ Future<T> conIdentidad<T>(Claims claims, Future<T> Function(Session tx) cuerpo) 
 }
 ```
 
+> **Este ejemplo está en Dart, que [ADR-017](ADR-017-api-en-java.md) derogó; la implementación
+> vigente, en Java, está en [`07-arquitectura.md`](../07-arquitectura.md).**
+
 `auth.uid()` de Supabase lee `request.jwt.claims ->> 'sub'`. Al fijarlo así, **todas las
 políticas ya escritas funcionan sin tocar una sola línea de SQL.** RLS sigue siendo el juez.
 

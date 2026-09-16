@@ -28,11 +28,14 @@ Eso produce cinco síntomas concretos:
 Una aplicación web instalable en el celular y usable desde el computador, que centraliza la
 administración y las finanzas del negocio.
 
-Por dentro son tres piezas: un front en Flutter, una API propia en Dart y una base de datos
-PostgreSQL siempre en línea. El front nunca toca la base directamente; todo pasa por la API, y
-los permisos los sigue decidiendo la base. Y ese conjunto existe cuatro veces, en cuatro
-ambientes separados —desarrollo, QA, aprobación y producción—, para que nadie pruebe sobre los
-datos reales del negocio.
+Por dentro son **tres partes**: un front hecho en Flutter —web por defecto, y el mismo código
+compila a celular y a escritorio—, una API propia en Java 21 con Spring Boot y una base de datos
+PostgreSQL siempre en línea. **El front solo pide, recibe y muestra**: no lleva dentro ni una
+regla de negocio, ni un permiso, ni un mensaje de error. La API toma todas las decisiones, hace
+todos los cálculos y le dicta al front qué mostrar y cuándo; la base, además, vuelve a aplicar
+los permisos por su cuenta. Y ese conjunto existe cuatro veces, en cuatro ambientes separados
+—desarrollo, QA, aprobación y producción—, para que nadie pruebe sobre los datos reales del
+negocio.
 
 ### Lo que va a permitir hacer
 
@@ -122,11 +125,11 @@ período.
 
 | | |
 |---|---|
-| **Tecnología** | Flutter Web (front) + Dart (API propia) + Supabase (PostgreSQL) |
-| **Dónde funciona** | Navegador del PC y app instalable en el celular |
+| **Tecnología** | Flutter multiplataforma, web por defecto (front) + Java 21 con Spring Boot (API propia) + Supabase (PostgreSQL) |
+| **Dónde funciona** | Navegador del PC y app instalable en el celular, con el mismo código |
 | **Ambientes** | Cuatro: desarrollo, QA, aprobación y producción, cada uno con su propia base |
-| **Versión** | Cada proyecto la lleva por separado, y el front la muestra en pantalla junto al ambiente |
-| **Duración** | 23 semanas: 10 sprints de 2 semanas más 3 de estabilización y puesta en marcha |
+| **Versión** | Cada proyecto la lleva por separado, y el front la muestra abajo a la izquierda junto al ambiente |
+| **Duración** | 26 semanas: 10 sprints —siete de 2 semanas y tres de 3— más 3 de estabilización y puesta en marcha |
 | **Costo mensual de operación** | Ya no es $0: producción y aprobación necesitan plan de pago para no pausarse; desarrollo y QA siguen en el gratuito |
 | **Seguridad** | Permisos dentro de la base de datos; borrado imposible por diseño |
 | **Tipos de usuario** | Gerencia (todo) y Operación (registro, sin ver utilidad ni nómina) |
@@ -141,21 +144,23 @@ ver, el cargo dice qué hace en el negocio.
 
 | Sprint | Semanas | Entrega |
 |---|---|---|
-| 0 | 1–2 | Los dos proyectos, los cuatro ambientes y la tubería que despliega sola |
-| 1 | 3–4 | Base de datos, permisos en la base e identidad propagada hasta PostgreSQL |
-| 2 | 5–6 | Acceso, usuarios y cargos |
-| 3 | 7–8 | Ingresos, gastos, cuentas, saldos |
-| 4 | 9–10 | Pedidos, anticipos, entregas |
-| 5 | 11–12 | Productos, costeo y márgenes |
-| 6 | 13–14 | Reportes y las tres cifras |
-| 7 | 15–16 | Inversiones, retiros, pro-labore, patrimonio |
-| 8 | 17–18 | Nómina, simulador, cotizador y cierre |
-| 9 | 19–20 | Promoción hasta producción, PWA y endurecimiento |
-| — | 21–23 | Estabilización, aprobación en UAT, migración, capacitación y go-live |
+| 0 | 1–3 | Los dos proyectos, los cuatro ambientes, la tubería que despliega sola y el contrato de respuesta |
+| 1 | 4–6 | Base de datos, permisos en la base, identidad propagada hasta PostgreSQL e idempotencia |
+| 2 | 7–9 | Acceso, usuarios, cargos y canal firmado |
+| 3 | 10–11 | Ingresos, gastos, cuentas, saldos |
+| 4 | 12–13 | Pedidos, anticipos, entregas |
+| 5 | 14–15 | Productos, costeo y márgenes |
+| 6 | 16–17 | Reportes y las tres cifras |
+| 7 | 18–19 | Inversiones, retiros, pro-labore, patrimonio |
+| 8 | 20–21 | Nómina, simulador, cotizador y cierre |
+| 9 | 22–23 | Promoción hasta producción, PWA y endurecimiento |
+| — | 24–26 | Estabilización, aprobación en UAT, migración, capacitación y go-live |
 
-> **Son 23 semanas y no 16 porque el backend volvió al proyecto.** Construir, probar y
+> **Son 26 semanas y no 16 porque el backend volvió al proyecto.** Construir, probar y
 > desplegar la API en cuatro ambientes es trabajo nuevo, no las mismas horas repartidas en más
-> casillas. El detalle, sprint por sprint, está en
+> casillas. Los tres primeros sprints duran tres semanas en lugar de dos porque ahí se construye
+> el contrato entre las tres partes: el sobre de respuesta, la idempotencia y el canal firmado.
+> El detalle, sprint por sprint, está en
 > [`08-plan-de-desarrollo.md`](08-plan-de-desarrollo.md).
 
 ---
