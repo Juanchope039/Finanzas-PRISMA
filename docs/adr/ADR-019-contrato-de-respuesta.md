@@ -5,7 +5,7 @@
 ## Contexto
 
 El usuario pidió un estándar de respuesta explícito: `{status, mensaje, data}`, donde `status` es
-un código interno de cinco dígitos, y dio un ejemplo concreto, `20101`. No es un capricho de
+un código interno de cinco dígitos, y dio un ejemplo concreto, `20100`. No es un capricho de
 formato. Es la consecuencia directa de que el front no tome decisiones: si la API dicta qué
 mensaje se muestra, el sobre que lleva ese mensaje es parte del contrato y no un detalle de
 implementación de cada endpoint.
@@ -22,7 +22,7 @@ Un código mal compuesto no se corrige después. Se arrastra.
 
 | Opción | A favor | En contra |
 |---|---|---|
-| **`HTTP(3)` + `caso(2)`** | El HTTP se lee de un vistazo y coincide con el de la respuesta; es lo que el usuario ejemplificó con `20101` | Solo 99 casos por estado, y el código no dice de qué módulo vino |
+| **`HTTP(3)` + `caso(2)`** | El HTTP se lee de un vistazo y coincide con el de la respuesta; es lo que el usuario ejemplificó con `20100` | Solo 99 casos por estado, y el código no dice de qué módulo vino |
 | `familia(1)` + `módulo(2)` + `caso(2)` | Dice el módulo sin ambigüedad; 99 casos por módulo | Se pierde el HTTP exacto; `4` no distingue un 403 de un 422, que es justo lo que el front necesita para saber si reintentar |
 | `familia(2)` + `secuencia(3)` | 999 códigos por familia, sin límite práctico | Un número corrido no dice nada por sí solo; obliga a consultar la tabla para cada código |
 | Solo los códigos HTTP, sin código interno | Cero invención; cualquiera lo entiende | 422 no distingue «el valor es negativo» de «ese cliente ya no existe». Obligaría a meter la causa en un campo aparte, que es reinventar el código interno peor |
@@ -38,7 +38,7 @@ No hay excepciones por endpoint. Un endpoint que devuelva otra cosa es un defect
 
 ```json
 {
-  "status": 20101,
+  "status": 20100,
   "mensaje": "Gasto registrado.",
   "data": { }
 }
@@ -54,7 +54,7 @@ Los errores de campo van **dentro de `data`**, para no romper el sobre de tres c
 
 ```json
 {
-  "status": 42201,
+  "status": 42200,
   "mensaje": "Revisa los datos del gasto.",
   "data": { "errores": [ { "campo": "valor", "mensaje": "El gasto tiene que ser mayor que cero." } ] }
 }
@@ -62,19 +62,20 @@ Los errores de campo van **dentro de `data`**, para no romper el sobre de tres c
 
 ### Los cinco dígitos
 
-`20101` es HTTP **201** Created, caso **01**. Códigos base:
+`20100` es HTTP **201** Created, caso **00**, el genérico de ese estado. El caso `00` está
+reservado al genérico de cada estado HTTP y no pertenece a ningún módulo. Códigos base:
 
 | Código | HTTP | Significado |
 |---|---|---|
-| `20001` | 200 | Consulta correcta |
-| `20101` | 201 | Recurso creado |
-| `40001` | 400 | Petición mal formada |
-| `40101` | 401 | Firma inválida |
-| `40301` | 403 | Sin permiso |
-| `40401` | 404 | No existe |
-| `40901` | 409 | Clave de idempotencia repetida con petición distinta |
-| `42201` | 422 | Los datos no pasan las reglas |
-| `50001` | 500 | Error no previsto |
+| `20000` | 200 | Consulta correcta |
+| `20100` | 201 | Recurso creado |
+| `40000` | 400 | Petición mal formada |
+| `40100` | 401 | No autenticado |
+| `40300` | 403 | Sin permiso |
+| `40400` | 404 | No existe |
+| `40900` | 409 | Conflicto de estado |
+| `42200` | 422 | Los datos no pasan las reglas |
+| `50000` | 500 | Error no previsto |
 
 Son los códigos base, no la lista completa: la lista completa vive en el catálogo (ver abajo) y
 crece con cada caso de uso.
@@ -85,14 +86,15 @@ crece con cada caso de uso.
 > no dice de qué módulo vino.** Se elige igual, pero se escribe aquí para que nadie lo descubra
 > tarde y crea que fue un descuido.
 
-Son 99 y no 100 porque el caso `00` no se usa: ningún código termina en dos ceros.
+Son 99 y no 100 porque el caso `00` queda **reservado al genérico** de cada estado HTTP.
 
 **La mitigación** recupera el módulo sin cambiar el formato: los dos dígitos de caso se reparten
 por rango de módulo, y el reparto es **igual en todos los estados HTTP**.
 
 | Rango | Módulo |
 |---|---|
-| `01`–`09` | Sesión y seguridad |
+| `00` | **Genérico, sin módulo** |
+| `01`–`09` | Sesión, seguridad y transporte |
 | `10`–`19` | Usuarios y cargos |
 | `20`–`29` | Movimientos y cuentas |
 | `30`–`39` | Pedidos y clientes |
@@ -103,11 +105,17 @@ por rango de módulo, y el reparto es **igual en todos los estados HTTP**.
 | `80`–`89` | Cotizaciones |
 | `90`–`99` | Reservado |
 
-Son diez rangos y cubren los 99 casos disponibles. Así `42213` se lee de un vistazo: HTTP 422,
-módulo de usuarios, caso 3 de ese módulo.
+Así `42213` se lee de un vistazo: HTTP 422, módulo de usuarios, caso 3 de ese módulo.
 
-El primer rango es el más apretado —nueve casos en vez de diez— y además aloja los códigos base
-de la tabla anterior, que son los genéricos de cada estado. Es el que hay que vigilar primero.
+> **Reservar el `00` no es un detalle cosmético: es lo que evita que el sistema mienta sobre sí
+> mismo.** Sin esa reserva, los nueve códigos base habrían terminado en `01` y `42200` habría
+> afirmado pertenecer al módulo de Sesión y seguridad, del que no forma parte. Un código que
+> dice de dónde viene y se equivoca es peor que uno que no lo dice.
+
+El rango `01`–`09` cubre **sesión, seguridad y transporte**: lo que ocurre antes de que la
+petición llegue a un módulo de negocio. Ahí viven `40101`, `40102` y `40103` del canal firmado, y
+`40002`, `40901` y `40902` de la idempotencia. Es el rango más apretado, nueve casos en vez de
+diez, y el que hay que vigilar primero.
 
 **Qué hacer si un módulo agota su rango.** No se amplía el rango ni se estira el formato: se
 revisa el estado HTTP. Que un solo módulo necesite más casos de los que caben en su rango dentro

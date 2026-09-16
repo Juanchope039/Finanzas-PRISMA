@@ -22,7 +22,7 @@ más, ni una menos, ni en un orden distinto:
 
 ```json
 {
-  "status": 20101,
+  "status": 20100,
   "mensaje": "Gasto registrado.",
   "data": { }
 }
@@ -53,7 +53,7 @@ cuarta clave al sobre**: viaja dentro de `data`, en una lista llamada `errores`.
 
 ```json
 {
-  "status": 42201,
+  "status": 42200,
   "mensaje": "Revisa los datos del gasto.",
   "data": {
     "errores": [
@@ -81,30 +81,31 @@ ninguno se escribe en el cliente.
 últimos, el caso concreto dentro de ese código.
 
 ```
-2 0 1 0 1
-└───┘ └─┘
- 201   01      →  HTTP 201 Created, caso 01
+2 0 1 0 0                      4 2 2 1 3
+└───┘ └─┘                      └───┘ └─┘
+ 201   00  → genérico           422   13  → módulo de usuarios, caso 3
 ```
 
 Que los tres primeros dígitos sean el HTTP no es adorno: significa que el `status` del sobre y el
 código de la respuesta HTTP **nunca pueden contradecirse**, porque uno se deriva del otro. Un `404`
-con `status` `20001` es imposible de escribir por accidente.
+con `status` `20000` es imposible de escribir por accidente.
 
 ### 2.2 Los códigos base
 
-Nueve códigos transversales, los que aparecen en cualquier módulo:
+Nueve códigos transversales, los que aparecen en cualquier módulo. **Todos terminan en `00`**,
+que es el caso reservado al genérico de cada estado HTTP:
 
 | Código | HTTP | Significado |
 |---|---|---|
-| `20001` | 200 | Consulta correcta |
-| `20101` | 201 | Recurso creado |
-| `40001` | 400 | Petición mal formada |
-| `40101` | 401 | Firma inválida |
-| `40301` | 403 | Sin permiso |
-| `40401` | 404 | No existe |
-| `40901` | 409 | Clave de idempotencia repetida con petición distinta |
-| `42201` | 422 | Los datos no pasan las reglas |
-| `50001` | 500 | Error no previsto |
+| `20000` | 200 | Consulta correcta |
+| `20100` | 201 | Recurso creado |
+| `40000` | 400 | Petición mal formada |
+| `40100` | 401 | No autenticado |
+| `40300` | 403 | Sin permiso |
+| `40400` | 404 | No existe |
+| `40900` | 409 | Conflicto de estado |
+| `42200` | 422 | Los datos no pasan las reglas |
+| `50000` | 500 | Error no previsto |
 
 La idempotencia (§5) y el canal firmado (§6) agregan los suyos, y están listados en esas secciones.
 
@@ -122,7 +123,8 @@ módulo, igual en todos los estados HTTP.**
 
 | Rango | Módulo |
 |---|---|
-| `01`–`09` | Sesión y seguridad |
+| `00` | **Genérico, sin módulo.** El caso base de cada estado HTTP |
+| `01`–`09` | Sesión, seguridad y transporte |
 | `10`–`19` | Usuarios y cargos |
 | `20`–`29` | Movimientos y cuentas |
 | `30`–`39` | Pedidos y clientes |
@@ -135,11 +137,15 @@ módulo, igual en todos los estados HTTP.**
 
 Así `42213` se lee de un vistazo: **HTTP 422, módulo de usuarios, caso 3 de ese módulo.**
 
-> **Falta cerrar un detalle, y se deja escrito en vez de descubrirlo escribiendo el catálogo.** Los
-> nueve códigos base del §2.2 terminan en `01`, que cae dentro del rango de Sesión y seguridad. O
-> esos nueve quedan **exentos del reparto** por ser transversales, o se les asigna caso propio. Hay
-> que decidirlo **antes** de la primera entrada del catálogo: después ya hay códigos emitidos y
-> cambiarlos rompe a todo cliente que los interprete.
+> **El caso `00` está reservado al genérico y no pertenece a ningún módulo.** Sin esa reserva, los
+> nueve códigos base habrían caído dentro del rango de Sesión y seguridad y `42200` habría
+> afirmado ser de un módulo al que no pertenece. El reparto por rangos empieza en `01`.
+
+El rango `01`–`09` cubre **sesión, seguridad y transporte**: lo que ocurre *antes* de que la
+petición llegue a un módulo de negocio. Ahí viven los códigos del canal firmado —`40101` firma
+inválida, `40102` marca de tiempo fuera de ventana, `40103` nonce repetido— y los de idempotencia
+—`40901` clave repetida con petición distinta, `40902` operación en curso—. No son excepciones al
+reparto: son un módulo más, el del transporte.
 
 Y el primer límite deja de ser un problema por lo que significa cuando aparece:
 
@@ -355,10 +361,15 @@ Cada pieza está por una razón concreta:
 | Marca de tiempo fuera de ±5 minutos | `40102` |
 | Nonce ya visto dentro de la ventana | `40103` |
 
-Los nonce se guardan en memoria con vencimiento igual a la ventana. **Cinco minutos** es el
-equilibrio entre los relojes desajustados de celulares reales y el tiempo que un atacante tendría
-para reenviar algo capturado: más ventana es más margen para el atacante, menos ventana es rechazar
-peticiones legítimas de un teléfono con la hora corrida.
+Los nonce vistos se guardan en **PostgreSQL**, en la tabla `nonces_vistos`, con vencimiento igual
+a la ventana. No en memoria de la API: con más de una instancia, un reenvío que caiga en la que no
+vio el nonce pasaría, y la protección desaparecería justo al crecer. El rechazo lo produce la
+**llave primaria** al insertar, no una consulta previa: consultar antes sería más lento y abriría
+una carrera entre las dos operaciones.
+
+**Cinco minutos** es el equilibrio entre los relojes desajustados de celulares reales y el tiempo
+que un atacante tendría para reenviar algo capturado: más ventana es más margen para el atacante,
+menos ventana es rechazar peticiones legítimas de un teléfono con la hora corrida.
 
 ### 6.4 Lo que esto NO protege, escrito para que nadie se confíe
 
@@ -429,7 +440,7 @@ acuerda nadie. La decisión está en [ADR-022](adr/ADR-022-openapi-generado.md).
 Tres intercambios completos sobre la misma operación —registrar un gasto— para que el contrato se
 vea, no solo se lea. Las cabeceras van enteras; el sobre, entero.
 
-### 8.1 Éxito · `20101`
+### 8.1 Éxito · `20100`
 
 ```http
 POST /gastos HTTP/1.1
@@ -449,7 +460,7 @@ HTTP/1.1 201 Created
 Content-Type: application/json
 
 {
-  "status": 20101,
+  "status": 20100,
   "mensaje": "Gasto registrado.",
   "data": {
     "id": "b21f8c40-3d7e-4a19-9c62-0e5a7f1d8b34",
@@ -460,7 +471,7 @@ Content-Type: application/json
 }
 ```
 
-### 8.2 Los datos no pasan las reglas · `42201`
+### 8.2 Los datos no pasan las reglas · `42200`
 
 Mismo endpoint, un valor en cero y una clave de idempotencia nueva, porque es otra intención:
 
@@ -482,7 +493,7 @@ HTTP/1.1 422 Unprocessable Content
 Content-Type: application/json
 
 {
-  "status": 42201,
+  "status": 42200,
   "mensaje": "Revisa los datos del gasto.",
   "data": {
     "errores": [
@@ -525,7 +536,7 @@ Content-Type: application/json
 ```
 
 Si el cuerpo hubiera sido **idéntico** al del §8.1, la respuesta no sería esta: sería palabra por
-palabra la del §8.1, con su `201` y su `20101`, sin registrar un segundo gasto. Esa es la
+palabra la del §8.1, con su `201` y su `20100`, sin registrar un segundo gasto. Esa es la
 diferencia entre reintentar y repetir, y la huella del §5.3 es lo único que la distingue.
 
 ---
@@ -546,4 +557,4 @@ diferencia entre reintentar y repetir, y la huella del §5.3 es lo único que la
 
 ### 🧭 Navegación
 
-**⬅️ Anterior:** [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [🏛️ Decisiones de arquitectura (ADRs)](adr/README.md)
+**⬅️ Anterior:** [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [21 · Trabajo en paralelo con dos equipos](21-trabajo-en-paralelo.md)

@@ -25,7 +25,7 @@ plata y los permisos**.
 |---|---|---|---|---|
 | Unitario de dominio | `prisma_api` | Servicios de dominio: fórmulas financieras | **JUnit 5** | **≥ 90% de cobertura** |
 | Unitario de presentación | `prisma_front` | Formato de cifras y fechas, estado, y que el formulario aplique el descriptor que la API le dictó | `flutter test` | Cada regla del descriptor |
-| Widget | `prisma_front` | Que cada pantalla pinte lo que debe y reaccione a lo que recibe | `flutter test` | Las 10 pantallas |
+| Widget | `prisma_front` | Que cada pantalla pinte lo que debe y reaccione a lo que recibe | `flutter test` | Las 11 pantallas |
 | Integración | `prisma_api` + base | Repositorios, transacciones, políticas RLS, contrato de errores | **JUnit 5 con contenedores de prueba** (`Testcontainers`): un PostgreSQL real y desechable | Casos críticos |
 | Manual | Las dos | Recorridos completos en celular real | Lista de verificación | Antes de cada entrega |
 
@@ -51,7 +51,7 @@ el front y la API es el contrato de versiones, y eso está en la sección 9.
 |---|---|---|
 | **dev** | Unidad y widget en cada guardado; integración sobre su propio contenedor de PostgreSQL | Ficticios, se pueden borrar |
 | **qa** | Todo, en cada integración a la rama principal. **Es la que bloquea la promoción** | Ficticios, con semilla reproducible |
-| **uat** | P-01 a P-32 —P-32 sin su paso 3, ver 3.1— y los recorridos manuales, antes de la aprobación de Gerencia. Además, RE-01 una vez por trimestre (§10.3) | Realistas y anonimizados |
+| **uat** | P-01 a P-39 —P-32 sin su paso 3, ver 3.1— y los recorridos manuales, antes de la aprobación de Gerencia. Además, RE-01 una vez por trimestre (§10.3) | Realistas y anonimizados |
 | **prod** | Pruebas de humo de solo lectura, después de publicar | Reales |
 
 > **Ninguna prueba automática escribe en prod.** Las de integración siembran filas y las borran;
@@ -68,7 +68,7 @@ que falla ahí no siempre significa que el código esté mal.
 | Grupo | Identificadores | Cuántas |
 |---|---|---:|
 | Reglas de negocio (§2) | RN-02 a RN-19 | 18 |
-| Permisos (§3) | P-01 a P-32 | 32 |
+| Permisos (§3) | P-01 a P-39 | 39 |
 | Invariantes financieros (§4.2) | Las cinco igualdades | 5 |
 | Casos límite (§5) | Sin identificador | 10 |
 | Recorridos manuales (§6) | M-01 a M-10 | 10 |
@@ -76,11 +76,11 @@ que falla ahí no siempre significa que el código esté mal.
 | Vista previa de Operación (§7.1) | A-17 a A-19 | 3 |
 | Contrato entre las tres partes (§9) | C-01 a C-04 | 4 |
 | Idempotencia, canal firmado y durabilidad (§10) | I-01, I-02, F-01, F-02, T-01, RE-01 | 6 |
-| **Total** | | **104** |
+| **Total** | | **111** |
 
-Son **93 automáticas, 10 manuales y 1 de operación trimestral** —RE-01, la restauración del
+Son **100 automáticas, 10 manuales y 1 de operación trimestral** —RE-01, la restauración del
 respaldo—. No son todas las que habrá: las unitarias del dominio serán muchas más y se miden por
-cobertura, no por lista. Estas 104 están escritas aquí una por una porque ninguna puede quedar al
+cobertura, no por lista. Estas 111 están escritas aquí una por una porque ninguna puede quedar al
 criterio de quien programe ese día.
 
 ---
@@ -154,6 +154,13 @@ siendo RLS.
 | P-30 | Registrarse un adelanto | Rechazado |
 | P-31 | Cargar el desprendible propio completo en una sola consulta | Permitido: llegan las cuatro tablas |
 | P-32 | Leer nómina, usuarios y patrimonio **con la guarda de la capa de aplicación desactivada** | El mismo resultado que con la guarda puesta: vacío o 403. Ver 3.1 |
+| P-33 | Leer las claves de `peticiones_idempotentes` de otra persona | Conjunto vacío |
+| P-34 | Escribir una clave de idempotencia con el `usuario_id` de otra persona | Rechazado |
+| P-35 | Leer los `nonces_vistos` de otra persona | Conjunto vacío |
+| P-36 | Reenviar una petición con un nonce ya usado | Rechazado con `40103`, **por la llave primaria**, no por una consulta previa |
+| P-37 | Borrar una fila de `peticiones_idempotentes` o de `nonces_vistos` con el rol de la aplicación | Rechazado: el `REVOKE DELETE` del doc 04 §5.1 también las cubre |
+| P-38 | Ejecutar la purga y comprobar qué borró | Solo filas con `expira_en` vencido. Ninguna fila vigente, y ninguna fila de ninguna otra tabla |
+| P-39 | Detener la tarea programada y esperar más de la ventana de retención | La consulta de vigilancia del doc 16 §10.2 devuelve filas, que es la señal de que algo dejó de correr |
 
 > **Criterio clave:** el rechazo debe venir de PostgreSQL, no de un `if` de Java ni de una pantalla
 > que no dibuja el botón. La prueba se hace llamando a la API con un token real, sin pasar por las
@@ -166,6 +173,12 @@ a la API, nunca a la pantalla. P-10 a P-15 ejercen las políticas `usuarios_lect
 y `usuarios_actualizacion` sobre `usuarios`, y `cargos_lectura` y `cargos_escritura` sobre
 `cargos`. Es exactamente lo que decidió [`ADR-006`](adr/ADR-006-rls-por-rol.md):
 **los permisos viven en la base, no en la pantalla.**
+
+**P-33 a P-39 cubren las dos tablas de transporte** —`peticiones_idempotentes` y
+`nonces_vistos`— y su purga. Van aparte porque se rompen distinto: las demás fallan dejando
+ver lo que no debía verse; estas fallan dejando **crecer sin freno** una tabla que nadie mira.
+P-38 y P-39 no prueban permisos: prueban que el mantenimiento automático hace lo que dice y
+que se nota cuando deja de hacerlo.
 
 **P-16 a P-31 ejercen las ocho tablas sensibles del §7 de
 [`04-modelo-de-datos.md`](04-modelo-de-datos.md):** `clientes`, `activos`, `prolabore_config`,
@@ -364,7 +377,7 @@ Gerencia pueda salir; ninguna verifica un permiso.
 > **La vista previa NO sustituye la prueba de permisos, y confundirla con una es el error grave
 > de esta función.** Ninguna de las pruebas A-17 a A-19 demuestra que una persona de Operación no
 > pueda llegar a los datos ocultos: solo demuestran que la pantalla no los dibuja. Eso lo prueban
-> P-01 a P-32 de la sección 3, con una **sesión real de tipo Operación llamando a la API**, y muy
+> P-01 a P-39 de la sección 3, con una **sesión real de tipo Operación llamando a la API**, y muy
 > especialmente P-32. Es exactamente lo que decidió [`ADR-006`](adr/ADR-006-rls-por-rol.md): **ocultar un
 > menú no es seguridad.** Una pantalla revisada con la vista previa sigue teniendo sus permisos
 > sin probar mientras no se ejecuten esas pruebas.

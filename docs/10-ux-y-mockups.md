@@ -46,7 +46,10 @@ Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.ht
 
 ```mermaid
 graph TD
-  L[Acceso · usuario y contraseña] --> V{¿Debe cambiar la clave?}
+  A0{¿La versión del front sirve
+con la de la API?} -->|No| VI[Versión incompatible · no hay salida]
+  A0 -->|Sí| L[Acceso · usuario y contraseña]
+  L --> V{¿Debe cambiar la clave?}
   V -->|Sí| CC[Crea tu contraseña]
   V -->|No| D[Dashboard]
   CC --> D
@@ -87,6 +90,7 @@ graph TD
   style I fill:#fde68a
   style CF fill:#fde68a
   style U fill:#fde68a
+  style VI fill:#fecaca
 ```
 
 Las pantallas en amarillo son **exclusivas de Gerencia**.
@@ -95,7 +99,7 @@ Las pantallas en amarillo son **exclusivas de Gerencia**.
 menú de la sesión, el que aparece al pulsar el nombre en el topbar. Administrar quién entra no
 es una tarea del día a día del taller, como sí lo son Pedidos o Movimientos: es una tarea de
 cuenta, y vive donde ya están «Cambiar mi contraseña» y «Cerrar sesión». Las pantallas siguen
-siendo 10; lo que cambia es por dónde se llega a una de ellas.
+siendo 11; lo que cambia es por dónde se llega a una de ellas.
 
 El acceso ya no es una caja de paso: es una pantalla con diseño propio, y es donde se decide
 todo lo demás. Quien entra con la clave temporal que le dio Gerencia no llega al Dashboard
@@ -179,7 +183,7 @@ petición, siempre. Cubre `RF-102`.
 
 ---
 
-## 4. Las 10 pantallas
+## 4. Las 11 pantallas
 
 ### 4.0 Acceso
 
@@ -285,6 +289,26 @@ juntas— arriba, la **bitácora de cambios** en medio y el **catálogo de cargo
 administran juntos porque no se puede crear a alguien sin el cargo que le toca, y porque cada
 cambio del primer bloque queda explicado en el segundo. Es la única pantalla que no se abre
 desde el menú lateral sino desde el menú de la sesión. El detalle de sus decisiones está en §5.
+
+### 4.10 Versión incompatible
+
+**Pregunta:** *¿por qué no puedo entrar?*
+
+Capa a pantalla completa, como la de Acceso. Aparece cuando el front arranca y descubre que la
+versión mayor que necesita no coincide con la que ofrece la API (`RF-101`). Muestra el logo, el
+título **«Esta versión ya no sirve con el servidor»**, una explicación sin jerga, **las dos
+versiones** —la que se tiene y la que el servidor necesita— y un único botón, **Reintentar**.
+
+Dos decisiones que merecen su razón:
+
+| Decisión | Por qué |
+|---|---|
+| **Se muestran las dos versiones** | Es lo primero que pregunta quien atiende el reporte. Sin ellas, la llamada empieza con «no me deja entrar» y hay que ir a buscarlas al dispositivo de la persona |
+| **No hay forma de continuar** | Es el punto entero de la pantalla. Dejar seguir con un contrato roto no evita el fallo: lo aplaza hasta un campo nulo en la pantalla 7, donde ya nadie lo relaciona con la versión. Fallar ruidoso al arrancar es más barato que fallar tarde |
+
+El texto no dice «versión mayor incompatible» ni menciona la API: dice que la aplicación y el
+servidor no se entienden y que casi siempre se arregla actualizando. Quien la lee está en un
+taller, no en una consola.
 
 ---
 

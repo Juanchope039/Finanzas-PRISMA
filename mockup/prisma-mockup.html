@@ -478,6 +478,16 @@ input[type=number],select{
 .capa-ayuda{font-size:.74rem; color:var(--faint)}
 .capa-pie{display:flex; justify-content:center}
 
+/* Tabla de versiones de la capa de versión incompatible (RF-101). Las dos cifras son lo
+   primero que pregunta quien atiende el reporte, así que van grandes y legibles. */
+.vi-tabla{width:100%; font-size:.82rem; border-collapse:collapse}
+.vi-tabla td{padding:9px 0; border-bottom:1px solid var(--line)}
+.vi-tabla td:first-child{color:var(--muted); padding-right:12px}
+.vi-tabla td.dato{
+  text-align:right; white-space:nowrap; color:var(--text); font-weight:600;
+  font-family:var(--mono); font-variant-numeric:tabular-nums;
+}
+
 /* Entrada rápida: reemplaza al interruptor de rol como atajo de demostración. */
 .demo{background:var(--surface-2); border:1px dashed var(--line-strong); border-radius:var(--r); padding:16px}
 .demo-lista{display:flex; flex-direction:column; gap:7px; margin-top:11px}
@@ -773,6 +783,35 @@ tbody tr.bit-foco,tbody tr.bit-foco:hover{background:var(--accent-soft)}
   </div>
 </div>
 
+<!-- RF-101 · La versión del front no sirve con la que ofrece la API. No hay forma de seguir,
+     y ese es el punto: fallar ruidoso al arrancar es mejor que fallar en la pantalla 7 con
+     un campo nulo. -->
+<div class="capa" id="version-incompatible" hidden>
+  <div class="capa-caja">
+    <span class="logo" role="img" aria-label="Prisma M&amp;Y Estampados"></span>
+    <div>
+      <div class="eyebrow">No se puede continuar</div>
+      <h1>Esta versión ya no sirve con el servidor</h1>
+    </div>
+    <p class="capa-intro">La aplicación que tienes en este equipo y el servidor de PRISMA no
+    se entienden entre sí. Casi siempre se arregla actualizando la aplicación: cierra todo,
+    vuelve a abrirla y deja que se actualice.</p>
+
+    <table class="vi-tabla">
+      <tbody>
+        <tr><td>Tienes la versión</td><td class="dato" id="vi-tiene">0.4.2</td></tr>
+        <tr><td>El servidor necesita</td><td class="dato" id="vi-necesita">1.0.0 o superior</td></tr>
+      </tbody>
+    </table>
+
+    <button type="button" class="cta" id="vi-reintentar">Reintentar</button>
+
+    <p class="capa-ayuda">Si después de actualizar sigue apareciendo esta pantalla, avísale a
+    Gerencia y dile las dos versiones de arriba. Son lo primero que hay que saber para
+    resolverlo.</p>
+  </div>
+</div>
+
 <div class="shell">
   <aside class="side">
     <div class="brand">
@@ -846,6 +885,14 @@ tbody tr.bit-foco,tbody tr.bit-foco:hover{background:var(--accent-soft)}
               <option value="uat">Aprobación</option>
               <option value="prod">Producción</option>
             </select>
+          </div>
+
+          <p class="nota-mock">Solo en el prototipo: aquí tampoco hay una API de verdad que
+          consultar. Esto finge que el servidor pide una versión que este front no tiene, para
+          poder ver la pantalla que aparece cuando eso pasa.</p>
+          <div class="campo">
+            <button type="button" class="ghost" id="ac-simular-version">Simular versión
+            incompatible</button>
           </div>
 
           <button type="button" class="ghost cerrar" id="ac-cerrar">Cerrar</button>
@@ -2186,6 +2233,10 @@ $('#btn-acerca').addEventListener('click', function(){
   mostrarAcerca(true);
 });
 
+/* RF-101 · los dos extremos de la pantalla de versión incompatible. */
+$('#ac-simular-version').addEventListener('click', mostrarVersionIncompatible);
+$('#vi-reintentar').addEventListener('click', reintentarVersion);
+
 /* La insignia del pie es el otro camino al panel, y el corto: quien está mirando la versión
    del front casi siempre quiere también la de la API o la del esquema. Alterna, para que el
    segundo clic la cierre sin tener que buscar el botón «Cerrar». */
@@ -3509,6 +3560,38 @@ function mostrarAcceso(){
   $('#cambio-clave').hidden = true;
   $('#acceso').hidden = false;
   $('#acc-usuario').focus();
+}
+
+/* ---------- RF-101 · versión del front incompatible con la de la API ---------- */
+
+/* En el sistema real esto lo decide GET /version al arrancar. Aquí es un interruptor del
+   prototipo, porque no hay API que consultar. */
+var versionIncompatible = false;
+
+/* La que el servidor exigiría. Es dato del prototipo: en el sistema real llega en /version. */
+var VERSION_API_EXIGIDA = '1.0.0 o superior';
+
+function mostrarVersionIncompatible(){
+  versionIncompatible = true;
+  cerrarAcerca();
+  var mp = $('#sesion-panel'), md = $('#sesion-abrir');
+  if (mp) mp.hidden = true;
+  if (md) md.setAttribute('aria-expanded', 'false');
+  verShell(false);
+  $('#acceso').hidden = true;
+  $('#cambio-clave').hidden = true;
+  $('#vi-tiene').textContent    = VERSIONES.front;
+  $('#vi-necesita').textContent = VERSION_API_EXIGIDA;
+  $('#version-incompatible').hidden = false;
+  $('#vi-reintentar').focus();
+}
+
+/* Reintentar vuelve a preguntar. En el prototipo siempre vuelve a estar bien: lo que se
+   demuestra es que existe la salida, no el fallo. */
+function reintentarVersion(){
+  versionIncompatible = false;
+  $('#version-incompatible').hidden = true;
+  if (sesion) abrirSesion(); else mostrarAcceso();
 }
 
 /* La única salida de esta capa es cerrar sesión: por eso tapa el tablero entero. */

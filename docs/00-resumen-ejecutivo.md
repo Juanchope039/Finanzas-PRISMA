@@ -179,7 +179,7 @@ para fases posteriores.
 ## 8. La decisión que se pide ahora
 
 Abrir [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html), entrar con el usuario de
-ejemplo `yuliana` (Gerencia), recorrer las 10 pantallas y marcar el checklist de aprobación del
+ejemplo `yuliana` (Gerencia), recorrer las 11 pantallas y marcar el checklist de aprobación del
 documento [`09-plan-de-implantacion.md`](09-plan-de-implantacion.md).
 
 **Nada se programa hasta que ese checklist esté firmado.** Corregir una pantalla en el mockup

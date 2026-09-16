@@ -250,7 +250,7 @@ llegó dos veces"* de *"dos ventas distintas"*.
 
 **Código de status**
 Número de cinco cifras que acompaña a toda respuesta de la API y dice exactamente qué pasó:
-`20101` es «se creó», `42201` es «los datos no pasan las reglas». Las tres primeras cifras son el
+`20100` es «se creó», `42200` es «los datos no pasan las reglas». Las tres primeras cifras son el
 resultado general y las dos últimas dicen de qué módulo y de qué caso se trata. Sirve para
 soporte: con ese número se sabe qué ocurrió sin tener que adivinar por el texto.
 

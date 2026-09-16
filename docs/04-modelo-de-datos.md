@@ -85,10 +85,11 @@ erDiagram
 | 23 | `auditoria` | Bitácora de todos los cambios | ✅ |
 | 24 | `cargos` | Catálogo de cargos del negocio, administrado por Gerencia | |
 | 25 | `peticiones_idempotentes` | Claves de idempotencia y la respuesta que devolvió cada una | ✅ |
+| 26 | `nonces_vistos` | Nonce ya usados por el canal firmado, dentro de su ventana | ✅ |
 
 *Sensible = el acceso a la tabla está restringido por Row Level Security (§7). En la mayoría eso
 significa «solo Gerencia», pero no en todas: en `usuarios`, `empleados`, `nomina_periodos`,
-`nomina_detalle`, `adelantos` y `peticiones_idempotentes` cada persona alcanza **su propia fila y
+`nomina_detalle`, `adelantos`, `peticiones_idempotentes` y `nonces_vistos` cada persona alcanza **su propia fila y
 nada más**; `clientes` lo lee y lo crea cualquiera, porque sin cliente no hay pedido (CU-05); y
 `movimientos` lo lee todo el mundo, porque los dos tipos registran el día a día. La regla de cada
 tabla está en el §7.*
@@ -96,11 +97,12 @@ tabla está en el §7.*
 `cargos` va al final de la lista para no renumerar las 23 entidades anteriores. En el esquema
 SQL sí aparece antes de `usuarios`, porque `usuarios` la referencia.
 
-`peticiones_idempotentes` es la entidad **25** y la única que no es del negocio: no guarda plata,
-ni personas, ni pedidos. Guarda el rastro de qué peticiones ya se atendieron, para no cobrar dos
-veces lo mismo (§4.9). Está en el catálogo porque es una tabla más del esquema y hay que poder
-contarla, y no está en el diagrama del §2 por la misma razón por la que sí puede borrarse: no es
-una entidad del taller.
+Las entidades **25** y **26** —`peticiones_idempotentes` y `nonces_vistos`— son las dos únicas
+que no son del negocio: no guardan plata, ni personas, ni pedidos. Una guarda el rastro de qué
+peticiones ya se atendieron, para no cobrar dos veces lo mismo (§4.9); la otra, qué nonce ya se
+usaron, para que nadie reenvíe una petición capturada (§4.10). Están en el catálogo porque son
+tablas más del esquema y hay que poder contarlas, y no están en el diagrama del §2 por la misma
+razón por la que sí pueden borrarse: no son entidades del taller, son mecanismos de transporte.
 
 ---
 
@@ -801,6 +803,58 @@ Si la purga se cae y nadie se entera, no se pierde información ni se rompe la i
 tabla crece y ya. Cada fila trae su `expira_en`, y la API ignora las vencidas sin importar si
 siguen ahí. Es una tarea de higiene, no de corrección.
 
+### 4.10 Los nonce vistos
+
+El canal firmado de [`ADR-021`](adr/ADR-021-canal-firmado.md) rechaza una petición cuyo nonce ya
+se procesó dentro de la ventana de cinco minutos. Para eso hay que recordar los nonce, y ese
+registro **vive aquí, no en la memoria de la API**.
+
+> **En memoria funcionaría hoy y dejaría de funcionar el día que crezca, sin avisar.** Con una
+> sola instancia de la API alcanza; con dos, el reenvío que caiga en la instancia que no vio el
+> nonce **pasa**. Es el mismo modo de fallo que hace peligroso conectar la API con la clave de
+> servicio: no se rompe nada, simplemente deja de proteger.
+
+```sql
+CREATE TABLE nonces_vistos (
+  nonce      UUID PRIMARY KEY,
+  usuario_id UUID NOT NULL REFERENCES usuarios(id),
+  visto_en   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  expira_en  TIMESTAMPTZ NOT NULL CONSTRAINT nonces_vistos_vence_despues
+               CHECK (expira_en > visto_en)
+);
+
+CREATE INDEX idx_nonces_expira ON nonces_vistos (expira_en);
+```
+
+`nonce` es la llave primaria y ahí está toda la defensa: el segundo intento con el mismo nonce
+choca contra el índice único y se rechaza con `40103`, sin necesidad de consultar primero. Dos
+peticiones simultáneas con el mismo nonce no compiten: una entra y la otra falla, que es
+exactamente lo que se quiere.
+
+Como la de idempotencia, **no lleva columnas de anulación ni trigger de auditoría** (§5.4):
+auditar qué nonce se vio no le dice nada a nadie.
+
+**Retención: la ventana de la firma, cinco minutos**, con margen. Fuera de ella la marca de
+tiempo ya rechaza la petición por su cuenta, así que recordar el nonce deja de servir para nada.
+La purga corre con la misma tarea programada y el mismo rol que la de idempotencia:
+
+```sql
+SELECT cron.schedule(
+  'purgar_nonces_vistos',
+  '*/10 * * * *',
+  $cron$ DELETE FROM nonces_vistos WHERE expira_en < NOW() $cron$
+);
+```
+
+> **Esta es la segunda y última tabla de la que sí se borran filas**, por la misma razón que la
+> primera: no es información del negocio, es un mecanismo de transporte con fecha de caducidad.
+> [`ADR-004`](adr/ADR-004-base-solo-escritura.md) protege lo que el taller necesita recordar, y
+> el comprobante de que un mensaje llegó una sola vez no es eso.
+
+Aquí la purga sí es de corrección y no solo de higiene, y conviene notar la diferencia: se ejecuta
+cada diez minutos, no una vez al día, porque una tabla que recibe una fila por petición y solo
+necesita recordarlas cinco minutos crece rápido si nadie la limpia.
+
 ---
 
 ## 5. Diseño de solo escritura
@@ -821,9 +875,10 @@ Aunque alguien escriba un `DELETE` por error, o intente ejecutarlo desde fuera d
 aplicación, PostgreSQL lo rechaza.
 
 > **Una sola excepción en todo el modelo, y no está en este bloque.** Las claves de idempotencia
-> vencidas de `peticiones_idempotentes` sí se borran, a las 72 horas (§4.9). Este `REVOKE` no se
-> toca para lograrlo: la purga la ejecuta el rol de migraciones, que es dueño de la tabla y no
-> atiende peticiones de usuario. La aplicación sigue sin poder borrar nada, ahí incluido.
+> vencidas de `peticiones_idempotentes` sí se borran, a las 72 horas (§4.9), y las de
+> `nonces_vistos` a los cinco minutos (§4.10). Este `REVOKE` no se toca para lograrlo: las purgas
+> las ejecuta el rol de migraciones, que es dueño de las tablas y no atiende peticiones de
+> usuario. La aplicación sigue sin poder borrar nada, ahí incluido.
 
 ### 5.2 Anulación lógica con trazabilidad
 
@@ -1506,6 +1561,24 @@ CREATE POLICY idem_actualizacion ON peticiones_idempotentes FOR UPDATE
 ALTER TABLE peticiones_idempotentes ENABLE ROW LEVEL SECURITY;
 ```
 
+**Y la decimosexta: `nonces_vistos`.** Entidad 26 del §3, misma regla y por la misma razón. No
+lleva política de `UPDATE`: un nonce se escribe una vez y no se toca nunca más.
+
+```sql
+-- Nonce del canal firmado: cada quien ve y escribe solo los suyos.
+CREATE POLICY nonce_lectura ON nonces_vistos FOR SELECT
+  USING (usuario_id = auth.uid());
+CREATE POLICY nonce_insercion ON nonces_vistos FOR INSERT
+  WITH CHECK (usuario_id = auth.uid());
+
+ALTER TABLE nonces_vistos ENABLE ROW LEVEL SECURITY;
+```
+
+> **Ojo con una tentación: no hace falta leer para rechazar.** La defensa contra el reenvío es el
+> `INSERT` contra la llave primaria, no una consulta previa. Un `SELECT` antes del `INSERT` sería
+> más lento y además abriría una carrera entre las dos operaciones. Se inserta, y si choca, se
+> responde `40103`.
+
 **Aquí `fn_es_gerencia()` no aparece, y es una decisión.** Es la única tabla sensible sin
 excepción de Gerencia, porque no hay nada en ella que Gerencia necesite. La clave y la huella no
 son información del negocio: son el comprobante de que una petición ya se atendió, y solo le
@@ -1561,6 +1634,7 @@ ALTER TABLE adelantos         FORCE ROW LEVEL SECURITY;
 ALTER TABLE sobres_config     FORCE ROW LEVEL SECURITY;
 ALTER TABLE cierres_mensuales FORCE ROW LEVEL SECURITY;
 ALTER TABLE peticiones_idempotentes FORCE ROW LEVEL SECURITY;
+ALTER TABLE nonces_vistos         FORCE ROW LEVEL SECURITY;
 ```
 
 Son **catorce de las dieciséis tablas con RLS**. Las dos que faltan no son un olvido: el modelo,

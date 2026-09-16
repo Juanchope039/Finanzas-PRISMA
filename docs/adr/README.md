@@ -27,8 +27,9 @@ consideraron y qué consecuencias tiene.
 | [020](ADR-020-idempotencia.md) | Idempotencia obligatoria en toda escritura | Aceptado |
 | [021](ADR-021-canal-firmado.md) | Canal firmado contra repetición y manipulación | Aceptado |
 | [022](ADR-022-openapi-generado.md) | OpenAPI generado del código y verificado en integración continua | Aceptado |
+| [023](ADR-023-tres-repositorios.md) | Tres repositorios y el contrato como artefacto versionado | Aceptado |
 
-Son **22 decisiones** registradas: 18 aceptadas y 4 reemplazadas.
+Son **23 decisiones** registradas: 19 aceptadas y 4 reemplazadas.
 
 > **Sobre la numeración.** El cambio de stack se planeó como ADR-010 y ADR-011, pero el 010 ya
 > estaba ocupado por la decisión de contraseñas. Un número asignado no se reutiliza, así que el

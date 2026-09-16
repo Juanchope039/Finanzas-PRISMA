@@ -62,8 +62,21 @@ Los mensajes en español de esos tres códigos salen del catálogo único de
 [ADR-019](ADR-019-contrato-de-respuesta.md), como los de cualquier otro código. Aquí se fija
 cuándo se emiten, no cómo se redactan.
 
-Los nonce se guardan en memoria de la API con vencimiento igual a la ventana. Fuera de la
-ventana no hace falta recordarlos, porque la marca de tiempo ya los rechaza.
+Los nonce vistos se guardan en **PostgreSQL**, en la tabla `nonces_vistos`, con vencimiento igual
+a la ventana. Fuera de la ventana no hace falta recordarlos, porque la marca de tiempo ya los
+rechaza, y una tarea programada los purga junto con las claves de idempotencia.
+
+> **En memoria no sirve, y conviene decir por qué antes de que alguien lo intente.** Guardar los
+> nonce en memoria de la API funciona mientras haya una sola instancia. Con dos, un reenvío que
+> caiga en la instancia que no vio el nonce **pasa**: la protección desaparece justo cuando el
+> sistema crece, sin fallar y sin avisar. Es el mismo modo de fallo que hace peligroso conectar
+> la API con la clave de servicio ([ADR-012](ADR-012-identidad-a-postgres.md)): no se rompe, deja
+> de proteger.
+
+No hace falta infraestructura nueva. Ya hay base de datos y ya existe el patrón idéntico
+funcionando: la tabla de claves de idempotencia de [ADR-020](ADR-020-idempotencia.md), con su
+mismo vencimiento y su misma purga. El costo es **una consulta más por petición**; a cambio, la
+protección sobrevive a tener más de una instancia sin que nadie tenga que acordarse de nada.
 
 **Cinco minutos de ventana es un equilibrio, no una cifra bonita.** Más corta empieza a rechazar
 peticiones legítimas de celulares reales, que llevan el reloj corrido con toda naturalidad; más
@@ -116,10 +129,9 @@ más, y la única que de verdad decide sigue siendo la base de datos
   por un error genérico; y la clave, al vivir solo en memoria, no queda en el dispositivo
   después de cerrar.
 - **Negativas:** un celular con el reloj muy corrido recibe `40102` y no entiende por qué, así
-  que soporte tiene que saber que la primera pregunta es la hora del teléfono. El registro de
-  nonce es estado en memoria de la API: **el día que haya más de una instancia hay que
-  compartirlo o fijar cada sesión a su instancia**, o el reenvío pasará por la instancia que no
-  vio el nonce. Cada petición cuesta un HMAC y un hash del cuerpo, que es poco pero no es cero.
+  que soporte tiene que saber que la primera pregunta es la hora del teléfono. Cada petición
+  cuesta un HMAC, un hash del cuerpo y **una consulta más a la base** para el registro de nonce,
+  que es poco pero no es cero, y ata la disponibilidad de la firma a la de la base de datos.
   Y probar la API a mano con `curl` deja de ser trivial: hay que firmar, así que el proyecto
   debe entregar un script que firme, o depurar se vuelve un castigo.
 

@@ -2,6 +2,14 @@
 
 **Estado:** Aceptado · **Fecha:** 2026-09-15
 
+> **Sigue vigente, y [ADR-017](ADR-017-api-en-java.md) la amplía sin contradecirla.** El front es
+> Flutter **multiplataforma** y **web sigue siendo el objetivo por defecto**, que es exactamente
+> lo que este ADR decidió; lo que se añade es que el mismo código compila también a Android, iOS
+> y escritorio sin envolver nada. Dos referencias del cuerpo envejecieron: remite a
+> [ADR-011](ADR-011-stack-flutter-dart.md), que quedó reemplazado por ADR-017, y menciona Android
+> como objetivo futuro cuando ya es un objetivo de compilación más. Para el stack vigente,
+> ADR-017.
+
 ## Contexto
 
 [ADR-007](ADR-007-pwa.md) decidió una PWA construida con `vite-plugin-pwa`. Ese complemento

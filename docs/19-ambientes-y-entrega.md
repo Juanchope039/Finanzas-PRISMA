@@ -94,7 +94,7 @@ promueve y qué hace falta para alojarla:
 
 | Asunto | Cómo queda | Por qué |
 |---|---|---|
-| **Construcción** | El gestor del proyecto produce un **JAR ejecutable** de Spring Boot: un solo archivo con la aplicación y sus dependencias | Un JAR y nada más que copiar. Lo que corre en prod no depende de qué haya instalado en la máquina |
+| **Construcción** | **Maven** (`mvn package`) produce un **JAR ejecutable** de Spring Boot: un solo archivo con la aplicación y sus dependencias | Un JAR y nada más que copiar. Lo que corre en prod no depende de qué haya instalado en la máquina. Maven es lo que produce Spring Initializr por defecto y lo que más gente sabe leer |
 | **Artefacto** | Una **imagen de contenedor** en dos etapas: se compila con el JDK, se publica solo con el JRE 21 | La etiqueta de la imagen es la versión SemVer del §4. Esa imagen es la que se promueve tal cual por los cuatro ambientes |
 | **Memoria** | **512 MB como mínimo** por instancia, y el contenedor arranca con `-XX:MaxRAMPercentage=75` | La JVM reserva su montón según lo que cree que tiene disponible |
 | **Arranque** | Segundos, no milisegundos. La comprobación de salud espera a que termine | Un orquestador impaciente reinicia en bucle una aplicación que solo estaba arrancando |

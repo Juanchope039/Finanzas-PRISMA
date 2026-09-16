@@ -2,11 +2,17 @@
 
 **Estado:** Aceptado · **Fecha:** 2026-09-13
 
-> **Esta decisión no se deroga: [ADR-011](ADR-011-stack-flutter-dart.md) la refuerza.** Con
-> `prisma_api` ya hay un backend donde aplicarla de verdad. Solo cambian dos nombres del cuerpo
-> de abajo: la capa `ui` se llama `interface` dentro de la API, y la regla de dependencias se
-> verifica con `analysis_options.yaml` de Dart en lugar de ESLint. Lo demás queda igual, y el
-> detalle está en [`07-arquitectura.md`](../07-arquitectura.md) §3.
+> **Esta decisión no se deroga: [ADR-017](ADR-017-api-en-java.md) la refuerza.** Con `prisma_api`
+> ya hay un backend donde aplicarla de verdad. Solo cambian nombres del cuerpo de abajo: la capa
+> `ui` se llama `interfaz` dentro de la API, y las capas van en paquetes Java —`dominio`,
+> `aplicacion`, `infraestructura`, `interfaz`—. Lo demás queda igual, y el detalle está en
+> [`07-arquitectura.md`](../07-arquitectura.md) §3.
+>
+> **Cómo se verifica la regla de dependencias, hoy:** con **ArchUnit** en la API y con
+> `analysis_options.yaml` en el front. Una nota anterior de este ADR decía que la verificaba
+> `analysis_options.yaml` de Dart, y eso dejó de ser cierto para la API cuando
+> [ADR-017](ADR-017-api-en-java.md) la pasó a Java. La decisión —que la regla se verifica de
+> forma automática y no por disciplina— no cambia; cambia la herramienta.
 
 ## Contexto
 

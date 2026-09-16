@@ -169,7 +169,56 @@ Cada uno de estos puntos está comentado en el propio SQL para que no pase desap
 
 ---
 
-## 10. Snapshots incrementales (diseño)
+## 10. Tareas programadas dentro de la base
+
+Dos tablas del modelo se limpian solas. Van aquí y no solo en el doc 04 porque **una tarea
+programada que nadie mira es una tarea que se cae en silencio**, y quien administra la base es
+quien tiene que saber que existen.
+
+| Tarea | Tabla | Cuándo corre | Retención |
+|---|---|---|---|
+| `purgar_peticiones_idempotentes` | `peticiones_idempotentes` | `20 3 * * *` — cada día a las 3:20 | 72 horas |
+| `purgar_nonces_vistos` | `nonces_vistos` | `*/10 * * * *` — cada diez minutos | 5 minutos |
+
+### 10.1 Qué hace falta en cada ambiente
+
+`pg_cron` es una extensión y **se habilita una sola vez por ambiente**, desde el panel de Supabase
+o con `CREATE EXTENSION IF NOT EXISTS pg_cron;` ejecutado por el rol de migraciones. Son los
+cuatro ambientes de [`ADR-013`](adr/ADR-013-cuatro-ambientes.md): dev, qa, uat y prod.
+
+Las dos purgas corren como el **rol de migraciones**, no como la aplicación. Es dueño de las
+tablas y el único rol del proyecto con `BYPASSRLS`, así que atraviesa el `FORCE ROW LEVEL
+SECURITY` sin necesitar una política de `DELETE` escrita para él. Conceder `DELETE` al rol de la
+API sería el error: abriría el borrado a quien atiende peticiones de usuario para resolver una
+tarea de madrugada.
+
+### 10.2 Cómo se vigila que siguen corriendo
+
+Las dos fallan distinto y por eso se vigilan distinto:
+
+| Si se cae… | Qué pasa | Gravedad |
+|---|---|---|
+| `purgar_peticiones_idempotentes` | La tabla crece. No se pierde información ni se rompe la idempotencia: cada fila trae su `expira_en` y la API ignora las vencidas | Higiene |
+| `purgar_nonces_vistos` | La tabla crece **rápido**: una fila por petición, y solo necesita recordarlas cinco minutos | Corrección |
+
+La comprobación es la misma para las dos y no necesita herramientas nuevas: **si la fila más
+vieja supera su ventana de retención, algo dejó de correr.**
+
+```sql
+-- Devuelve filas solo cuando hay un problema. Vacío es la respuesta sana.
+SELECT 'peticiones_idempotentes' AS tabla, min(expira_en) AS mas_vieja
+  FROM peticiones_idempotentes WHERE expira_en < NOW() - INTERVAL '2 hours'
+UNION ALL
+SELECT 'nonces_vistos', min(expira_en)
+  FROM nonces_vistos WHERE expira_en < NOW() - INTERVAL '30 minutes';
+```
+
+El margen —dos horas y treinta minutos— es deliberado: da espacio a que una ejecución se salte
+sin levantar una alarma falsa, y sigue detectando que la tarea lleva días muerta.
+
+---
+
+## 11. Snapshots incrementales (diseño)
 
 > **Estado: diseñado, no construido.** El `snapshot.ps1` actual es **completo** (vuelca todo).
 > Aquí se especifica cómo hacerlo **incremental** cuando el volumen lo justifique.
@@ -178,7 +227,7 @@ El diseño de solo escritura ([ADR-004](adr/ADR-004-base-solo-escritura.md)) hac
 incremental natural: como **nada se edita ni se borra**, "lo nuevo desde la última vez" se
 identifica por la marca de tiempo de creación.
 
-### 10.1 Incremental propio (por marca de tiempo)
+### 11.1 Incremental propio (por marca de tiempo)
 
 - Cada tabla de negocio tiene `creado_en`; `auditoria` además tiene `fecha_hora` y un `id`
   `BIGSERIAL` siempre creciente.
@@ -203,7 +252,7 @@ Sketch del comando (una tabla):
 
 En el script, esto sería un modo `-Incremental` de `snapshot.ps1` que lee y actualiza el cursor.
 
-### 10.2 Alternativa del proveedor (PITR)
+### 11.2 Alternativa del proveedor (PITR)
 
 Supabase (plan de pago) ofrece **Point-in-Time Recovery** basado en WAL: recuperación a cualquier
 segundo, sin escribir scripts. Es la opción recomendada para el **respaldo real de producción**;

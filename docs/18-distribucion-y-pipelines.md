@@ -51,7 +51,8 @@ Java—, así que el pipeline los corre como dos trabajos en paralelo, no como u
 Este pipeline **se puede crear en cuanto existan los dos proyectos** —el `pubspec.yaml` del front
 y el descriptor de construcción de la API—, incluso antes de compilar para ninguna tienda. Es la
 primera automatización recomendada. Cuál herramienta de construcción use la API —Maven o
-Gradle— se fija al andamiarla; las etapas de arriba son las mismas con cualquiera de las dos.
+Maven, como fija docs/07 §2— ya está decidida: es lo que produce Spring Initializr por defecto
+y lo que más gente sabe leer. Las etapas de arriba no dependen de esa elección.
 
 > **La versión definitiva de este pipeline vive en
 > [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) §6.** Allí está lo que aquí no cabe:

@@ -426,7 +426,7 @@ Sin huérfanos en ninguna dirección.
 > que esta sección promete que no pasa.
 
 **Cobertura:** 103 requisitos funcionales · 31 no funcionales · 19 reglas de negocio ·
-37 casos de uso · 67 escenarios BDD · 10 pantallas.
+37 casos de uso · 67 escenarios BDD · 11 pantallas.
 
 ---
 

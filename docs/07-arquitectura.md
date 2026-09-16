@@ -685,7 +685,7 @@ se separen con el tiempo y digan cosas distintas. Se ataca así:
 2. **Existe una tabla única de traducción** en `prisma_api`: nombre de restricción → código de
    cinco dígitos + mensaje en español + campo del formulario al que señala. Un solo archivo,
    revisable de un vistazo, alimentado por el mismo catálogo de códigos de §9.1.
-3. **Si la API recibe un error de la base que no está en esa tabla, responde `50001` y lo registra
+3. **Si la API recibe un error de la base que no está en esa tabla, responde `50000` y lo registra
    como defecto.** Significa que hay una regla en la base que la API no conocía: eso es
    exactamente lo que hay que descubrir, no esconder.
 4. **Prueba automática**: recorrer todas las restricciones nombradas de la base (`pg_constraint`)
@@ -735,7 +735,7 @@ Aquí va **la arquitectura**: por qué cada pieza existe y qué obliga en el dis
 `status` —un entero de cinco dígitos—, `mensaje` y `data`.
 
 ```json
-{ "status": 20101, "mensaje": "Gasto registrado.", "data": { } }
+{ "status": 20100, "mensaje": "Gasto registrado.", "data": { } }
 ```
 
 Lo que esto obliga en la arquitectura:
@@ -906,7 +906,7 @@ Flutter entra por `--dart-define` en el momento de compilar; en la API, por vari
 | [ADR-021](adr/ADR-021-canal-firmado.md) | Canal firmado contra repetición y manipulación | Aceptado (§9.3) |
 | [ADR-022](adr/ADR-022-openapi-generado.md) | OpenAPI generado del código y verificado en integración continua | Aceptado (§9.4) |
 
-Son **22 decisiones registradas**. El índice completo, con el estado de cada una, vive en
+Son **23 decisiones registradas**. El índice completo, con el estado de cada una, vive en
 [`adr/README.md`](adr/README.md).
 
 Un ADR no se modifica: si una decisión cambia, se escribe uno nuevo que reemplaza al anterior y

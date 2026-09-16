@@ -1,13 +1,26 @@
 # 08 · Plan de desarrollo
 
 10 sprints —siete de 2 semanas y tres de 3— + 3 semanas de estabilización y promoción =
-**26 semanas**.
+**26 semanas con un equipo**, o **≈ 17 semanas con dos**.
 
 > **El plan de 7 sprints daba por hecho que no había backend.**
 > ADR-011 lo devolvió al proyecto y **ADR-017 lo reescribió en Java**: ahora hay dos bases de
 > código que construir, versionar y desplegar —`prisma_front` en Flutter, con web por defecto, y
 > `prisma_api` en Java 21 con Spring Boot— y cuatro ambientes por donde promoverlas. Apretar lo
 > nuevo en el mismo calendario sería mentir.
+
+> **Este documento describe el trabajo, no cuántas personas lo hacen.** Los diez sprints y su
+> orden son los mismos con uno o con dos equipos; lo que cambia es cuáles se solapan. El reparto
+> entre equipos, los tres repositorios y las reglas para no pisarse están en
+> [`21-trabajo-en-paralelo.md`](21-trabajo-en-paralelo.md) y en
+> [ADR-023](adr/ADR-023-tres-repositorios.md).
+>
+> **Con dos equipos no se tarda la mitad, y quien lo prometa se va a equivocar.** Los Sprints 0
+> a 2 son cimientos transversales y casi no se parten: hay que construirlos igual, solo se
+> solapan algunas tareas (9 semanas pasan a 7). Los Sprints 3 a 8 sí se parten en dos cadenas
+> independientes (12 semanas pasan a 7). Y las 3 semanas de estabilización **no se parten en
+> absoluto**, porque consisten en integrar y probar lo de todos. Nueve semanas de ahorro sobre
+> veintiséis es un buen resultado; trece sería una promesa falsa.
 
 ---
 
@@ -37,7 +50,7 @@ cambio lo devuelve. Las semanas vuelven con él, y cada una tiene nombre:
 
 | Días nuevos | Qué | Sprint |
 |:---:|---|:---:|
-| **+0,5** | Proyecto Java con Gradle y ArchUnit, en lugar del proyecto Dart | S0 |
+| **+0,5** | Proyecto Java con Maven y ArchUnit, en lugar del proyecto Dart | S0 |
 | **+1** | Imagen de contenedor y memoria de la JVM acotada, en cuatro ambientes | S0 |
 | **+2,5** | Sobre de respuesta y catálogo de códigos, con la prueba que los amarra (RNF-26) | S0 |
 | **+2** | Descriptor de formulario generado de la validación del servidor (RF-102) | S0 |
@@ -135,6 +148,20 @@ gantt
 > en una herramienta de pruebas: está hecha cuando la pantalla de Flutter la usa, sus códigos
 > están en el catálogo con su mensaje en español y el cambio llegó por lo menos hasta qa.
 
+**Con dos equipos**, los sprints se reparten así ([`21-trabajo-en-paralelo.md`](21-trabajo-en-paralelo.md) §4):
+
+| Sprints | Cómo se reparte | Por qué |
+|---|---|---|
+| **0 a 2** · cimientos | **Por capa**: el equipo API construye base, RLS, identidad e idempotencia; el equipo Front construye el sistema de diseño en widgets, el renderizador del descriptor y la cola de pendientes | Lo que se construye es la capa misma. No hay rebanada que repartir todavía, y duplicar los cimientos es donde se rompen los sistemas |
+| **3 a 8** · funcionalidades | **Por rebanada vertical**: el equipo A toma la cadena del dinero —Movimientos, Reportes, Capital—; el equipo B la cadena del pedido —Productos, Pedidos, Cotizador—. Nómina es el amortiguador | Cada equipo entrega funciones completas, con su SQL, su endpoint y su pantalla. Nadie espera a la mitad del otro |
+| **9** · estabilización | **Los dos juntos** | Consiste en integrar y probar lo de todos: no se puede partir |
+
+> **El equipo Front no se queda esperando durante los cimientos, pero hay que planificarlo o
+> pasará.** En los Sprints 0 y 1 la API todavía no tiene endpoints de negocio. Ese tiempo va en
+> traducir el mockup a componentes de Flutter: la paleta, las tablas, los paneles de confirmación
+> en línea, el formato colombiano de dinero y fecha. Es trabajo imprescindible que no depende de
+> ningún endpoint, y si no se hace ahí, se hace después bloqueando funcionalidades.
+
 ### Sprint 0 · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta · **3 semanas**
 
 | | |
@@ -145,7 +172,7 @@ gantt
 
 | # | Tarea | Días |
 |---|---|---:|
-| 0.1 | Proyecto `prisma_api` en **Java 21 con Spring Boot**, construido con Gradle, con el esqueleto hexagonal en paquetes: `dominio`, `aplicacion`, `infraestructura`, `interfaz` | 2 |
+| 0.1 | Proyecto `prisma_api` en **Java 21 con Spring Boot**, construido con Maven, con el esqueleto hexagonal en paquetes: `dominio`, `aplicacion`, `infraestructura`, `interfaz` | 2 |
 | 0.2 | Regla de frontera verificada en la integración continua con **ArchUnit**: la construcción falla si `dominio` importa Spring, JDBC o HTTP | 1 |
 | 0.3 | Proyecto `prisma_front` en Flutter, con **web por defecto** y la misma separación por capas | 1,5 |
 | 0.4 | Los cuatro proyectos de Supabase —dev, qa, uat y prod— cada uno con su base, sus claves y su almacenamiento | 1 |
@@ -154,7 +181,7 @@ gantt
 | 0.7 | Integración continua: formato con `spotless`, análisis estático, pruebas y compilación en la API; `dart format`, `dart analyze`, pruebas y compilación en el front, **para cada proyecto por separado** | 2 |
 | 0.8 | **Imagen de contenedor de la API**: JRE 21 mínimo, memoria de la JVM acotada por variable, y arranque verificado en los cuatro ambientes | 1 |
 | 0.9 | Entrega a dev al fusionar en la rama principal: despliegue de la imagen de la API y publicación del front | 1,5 |
-| 0.10 | SemVer en el `pubspec.yaml` del front y en el `build.gradle` de la API, y migraciones numeradas con tabla `schema_version` | 1 |
+| 0.10 | SemVer en el `pubspec.yaml` del front y en el `pom.xml` de la API, y migraciones numeradas con tabla `schema_version` | 1 |
 | 0.11 | `GET /version`: versión de la API, versión del esquema y ambiente | 0,5 |
 | 0.12 | Insignia `v0.1.0 · Desarrollo` **en el pie de la barra lateral, abajo a la izquierda**, y franja fija de ambiente arriba en dev, qa y uat; en prod, franja ninguna y la versión en color neutro | 1 |
 | 0.13 | El front declara qué MAJOR de la API necesita y bloquea con pantalla clara si no coincide | 1 |

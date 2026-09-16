@@ -66,6 +66,7 @@
 | 18 | [Distribución y pipelines](18-distribucion-y-pipelines.md) | La idea de ofrecer el sistema en web, celular y computador, y de automatizar las pruebas. | 📘 |
 | 19 | [Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | Los cuatro ambientes, cómo sube un cambio hasta el taller y cómo se devuelve si sale mal. | 🔧 |
 | 20 | [Contrato de API](20-contrato-de-api.md) | Cómo le habla el front a la API: qué responde siempre, cómo se evita cobrar dos veces lo mismo y cómo se protege el camino. | 🔧 |
+| 21 | [Trabajo en paralelo](21-trabajo-en-paralelo.md) | Cómo se reparte el trabajo entre dos equipos que construyen a la vez, y qué reglas impiden que se pisen. | 🔧 |
 | — | [Decisiones de arquitectura (ADRs)](adr/) | Por qué se tomó cada decisión técnica importante. | 🔧 |
 
 ---

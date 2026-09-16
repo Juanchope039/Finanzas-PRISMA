@@ -49,7 +49,8 @@ PRISMA existe para responder esas tres preguntas con números, no con intuición
 | 18 | [Distribución y pipelines](docs/18-distribucion-y-pipelines.md) | Descargas web/Android/iPhone/Windows y automatización (idea) |
 | 19 | [Ambientes, versionado y entrega](docs/19-ambientes-y-entrega.md) | Los 4 ambientes, promoción de migraciones, SemVer y publicación |
 | 20 | [Contrato de API](docs/20-contrato-de-api.md) | El sobre `{status, mensaje, data}`, los códigos de 5 dígitos, la idempotencia y el canal firmado |
-| — | [ADRs](docs/adr/) | Las 22 decisiones de arquitectura registradas |
+| 21 | [Trabajo en paralelo](docs/21-trabajo-en-paralelo.md) | Cómo avanzan dos equipos a la vez sin bloquearse: repartos, repositorios y reglas de convivencia |
+| — | [ADRs](docs/adr/) | Las 23 decisiones de arquitectura registradas |
 
 ---
 
@@ -75,7 +76,7 @@ Trae usuarios de ejemplo con **entrada de un clic**, para no teclear nada:
 `camila` entra con clave temporal: el prototipo la obliga a cambiarla antes de mostrar nada.
 `lorena` está desactivada y sirve para ver el rechazo aunque la contraseña sea correcta.
 
-Son 10 pantallas con datos ficticios realistas, contando la de acceso.
+Son 11 pantallas con datos ficticios realistas, contando la de acceso.
 
 > **Regla de oro del proyecto:** nada se construye hasta que el mockup de esa pantalla
 > esté aprobado.
