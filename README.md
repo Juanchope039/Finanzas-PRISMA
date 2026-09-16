@@ -50,8 +50,9 @@ PRISMA existe para responder esas tres preguntas con números, no con intuición
 | 19 | [Ambientes, versionado y entrega](docs/19-ambientes-y-entrega.md) | Los 4 ambientes, promoción de migraciones, SemVer y publicación |
 | 20 | [Contrato de API](docs/20-contrato-de-api.md) | El sobre `{status, mensaje, data}`, los códigos de 5 dígitos, la idempotencia y el canal firmado |
 | 21 | [Trabajo en paralelo](docs/21-trabajo-en-paralelo.md) | Cómo avanzan dos equipos a la vez sin bloquearse: repartos, repositorios y reglas de convivencia |
-| — | [ADRs](docs/adr/) | Las 25 decisiones de arquitectura registradas |
+| — | [ADRs](docs/adr/) | Las 26 decisiones de arquitectura registradas |
 | — | [Contrato de la API](contrato/) | El `openapi.json` acordado entre front y API, con el catálogo de códigos dentro |
+| — | [Tareas](TODO.md) | Lo hecho y lo pendiente, tarea por tarea, y qué se puede avanzar en paralelo |
 
 ---
 
@@ -147,9 +148,9 @@ siempre en pantalla qué versión es y contra qué ambiente está hablando. El d
 |------|--------|
 | Documentación y plan | ✅ Completo |
 | Mockup navegable | ✅ Completo |
-| Validación con la gerencia | ⬜ Pendiente |
+| Validación del mockup con la gerencia | ✅ Confirmado en reunión el 16/09/2026 |
 | **Sprint 0** · proyectos, ambientes y contrato | 🔄 **En curso** |
-| Desarrollo MVP (Sprints 1 a 9) | ⬜ No iniciado |
+| Desarrollo MVP (Sprints 1 a 9) | 🔄 **Iniciado**: la tarea 1.9, `Dinero`, está hecha |
 | Implantación | ⬜ No iniciado |
 
 **Lo que ya existe del Sprint 0:** los cuatro repositorios, con el esqueleto de cada pieza, la
@@ -158,10 +159,15 @@ endpoint: el sobre en toda respuesta, el catálogo de códigos, `GET /version`, 
 verificadas, **el contrato v0.2.0** en [`contrato/`](contrato/), que era el camino crítico del
 sprint, y el descriptor de formulario. Todavía no hay ninguna funcionalidad de negocio.
 
-**Lo que falta para cerrarlo** son, sobre todo, cosas que no se pueden hacer desde el código: los
-cuatro proyectos de Supabase y dónde se aloja cada ambiente. Del lado del código solo quedan las
-dos tareas que necesitan una base de datos corriendo (0.5 y 0.10), bloqueadas mientras Docker no
-arranque en la máquina de desarrollo.
+**Lo que falta para cerrarlo** son las dos tareas que necesitan una base de datos corriendo, 0.5 y
+0.10. Se hacen contra el proyecto dev de Supabase, que ya existe y falta configurar, porque Docker
+sigue sin arrancar en la máquina de desarrollo. Los otros tres proyectos de Supabase (0.4) se crean
+antes de promover. La imagen de la API y la entrega automática a dev (0.8 y 0.9) pasan al Sprint 9:
+el sistema se despliega en Railway al final del desarrollo
+([ADR-026](docs/adr/ADR-026-railway-al-final.md)).
+
+El detalle tarea por tarea —lo hecho, lo pendiente, lo bloqueado y qué se puede avanzar en
+paralelo— está en [`TODO.md`](TODO.md).
 
 ---
 

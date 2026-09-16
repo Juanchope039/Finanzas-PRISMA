@@ -330,8 +330,9 @@ public record Dinero(long pesos) {
 
     public static Dinero de(long pesos) { return new Dinero(pesos); }
 
-    public Dinero mas(Dinero otro)   { return new Dinero(pesos + otro.pesos()); }
-    public Dinero menos(Dinero otro) { return new Dinero(pesos - otro.pesos()); }
+    // Desbordar lanza ArithmeticException: un long que da la vuelta volvería pérdida una venta
+    public Dinero mas(Dinero otro)   { return new Dinero(Math.addExact(pesos, otro.pesos())); }
+    public Dinero menos(Dinero otro) { return new Dinero(Math.subtractExact(pesos, otro.pesos())); }
 
     public Dinero porcentaje(BigDecimal pct) {
         return new Dinero(BigDecimal.valueOf(pesos)
@@ -341,6 +342,9 @@ public record Dinero(long pesos) {
     }
 
     public boolean esNegativo() { return pesos < 0; }
+
+    // "$1.350.784" y "−$1.255.000", igual que el mockup: los mensajes que dicta la API salen de aquí
+    public String formateado() { ... }
 }
 ```
 
