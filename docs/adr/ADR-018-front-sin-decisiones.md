@@ -2,6 +2,11 @@
 
 **Estado:** Aceptado · **Fecha:** 2026-09-15
 
+> **La decisión sigue vigente; un dato del cuerpo dejó de serlo.** Donde abajo dice «Java 21», la
+> API ya es **Java 25**: lo cambió [ADR-024](ADR-024-java-25-y-gradle.md), que reemplazó a
+> [ADR-017](ADR-017-api-en-java.md). Nada de lo que este ADR decide depende de esa versión. El
+> cuerpo se conserva tal como se escribió.
+
 ## Contexto
 
 El desarrollo queda en **tres partes**: front, API y capa de datos. Y sobre ellas se pide una

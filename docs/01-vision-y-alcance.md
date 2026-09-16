@@ -159,7 +159,7 @@ solo tiene dos columnas porque solo hay dos tipos.
 | **Importación** | Carga de histórico desde CSV/Excel |
 | **Alertas** | Caja libre negativa, anticipos sin entregar, registro tardío, descapitalización |
 | **PWA** | Flutter multiplataforma, con **web por defecto**: el mismo código instalable en el celular como PWA y compilable a Android, iOS y escritorio sin envolver nada |
-| **La API** | Java 21 con Spring Boot. Toma todas las decisiones del sistema y dicta los mensajes que muestra el front |
+| **La API** | Java 25 con Spring Boot. Toma todas las decisiones del sistema y dicta los mensajes que muestra el front |
 | **La capa de datos** | PostgreSQL en Supabase, con Row Level Security aplicando los permisos dentro de la base |
 | **Cuatro ambientes** | Desarrollo, QA, aprobación y producción, cada uno con su propia base de datos. Nunca se prueba sobre datos reales |
 | **Versionado visible** | La versión y el ambiente a la vista en el front, franja de aviso fuera de producción y panel «Acerca de» con el detalle |

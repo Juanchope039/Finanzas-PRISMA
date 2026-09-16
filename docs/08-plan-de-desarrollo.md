@@ -6,14 +6,14 @@
 > **El plan de 7 sprints daba por hecho que no había backend.**
 > ADR-011 lo devolvió al proyecto y **ADR-017 lo reescribió en Java**: ahora hay dos bases de
 > código que construir, versionar y desplegar —`prisma_front` en Flutter, con web por defecto, y
-> `prisma_api` en Java 21 con Spring Boot— y cuatro ambientes por donde promoverlas. Apretar lo
+> `prisma_api` en Java 25 con Spring Boot— y cuatro ambientes por donde promoverlas. Apretar lo
 > nuevo en el mismo calendario sería mentir.
 
 > **Este documento describe el trabajo, no cuántas personas lo hacen.** Los diez sprints y su
 > orden son los mismos con uno o con dos equipos; lo que cambia es cuáles se solapan. El reparto
-> entre equipos, los tres repositorios y las reglas para no pisarse están en
+> entre equipos, los cuatro repositorios y las reglas para no pisarse están en
 > [`21-trabajo-en-paralelo.md`](21-trabajo-en-paralelo.md) y en
-> [ADR-023](adr/ADR-023-tres-repositorios.md).
+> [ADR-025](adr/ADR-025-cuatro-repositorios.md).
 >
 > **Con dos equipos no se tarda la mitad, y quien lo prometa se va a equivocar.** Los Sprints 0
 > a 2 son cimientos transversales y casi no se parten: hay que construirlos igual, solo se
@@ -50,7 +50,7 @@ cambio lo devuelve. Las semanas vuelven con él, y cada una tiene nombre:
 
 | Días nuevos | Qué | Sprint |
 |:---:|---|:---:|
-| **+0,5** | Proyecto Java con Maven y ArchUnit, en lugar del proyecto Dart | S0 |
+| **+0,5** | Proyecto Java con Gradle y ArchUnit, en lugar del proyecto Dart | S0 |
 | **+1** | Imagen de contenedor y memoria de la JVM acotada, en cuatro ambientes | S0 |
 | **+2,5** | Sobre de respuesta y catálogo de códigos, con la prueba que los amarra (RNF-26) | S0 |
 | **+2** | Descriptor de formulario generado de la validación del servidor (RF-102) | S0 |
@@ -172,16 +172,16 @@ gantt
 
 | # | Tarea | Días |
 |---|---|---:|
-| 0.1 | Proyecto `prisma_api` en **Java 21 con Spring Boot**, construido con Maven, con el esqueleto hexagonal en paquetes: `dominio`, `aplicacion`, `infraestructura`, `interfaz` | 2 |
+| 0.1 | Proyecto `prisma_api` en **Java 25 con Spring Boot**, construido con **Gradle**, con el esqueleto hexagonal en paquetes: `dominio`, `aplicacion`, `infraestructura`, `interfaz` | 2 |
 | 0.2 | Regla de frontera verificada en la integración continua con **ArchUnit**: la construcción falla si `dominio` importa Spring, JDBC o HTTP | 1 |
 | 0.3 | Proyecto `prisma_front` en Flutter, con **web por defecto** y la misma separación por capas | 1,5 |
 | 0.4 | Los cuatro proyectos de Supabase —dev, qa, uat y prod— cada uno con su base, sus claves y su almacenamiento | 1 |
 | 0.5 | Rol `prisma_api` en los cuatro: sin `BYPASSRLS`, sin `SUPERUSER` y sin ser dueño de las tablas | 1 |
 | 0.6 | Secretos por ambiente fuera del repositorio: variables de entorno en la API, `--dart-define` en el front | 1 |
 | 0.7 | Integración continua: formato con `spotless`, análisis estático, pruebas y compilación en la API; `dart format`, `dart analyze`, pruebas y compilación en el front, **para cada proyecto por separado** | 2 |
-| 0.8 | **Imagen de contenedor de la API**: JRE 21 mínimo, memoria de la JVM acotada por variable, y arranque verificado en los cuatro ambientes | 1 |
+| 0.8 | **Imagen de contenedor de la API**: JRE 25 mínimo, memoria de la JVM acotada por variable, y arranque verificado en los cuatro ambientes | 1 |
 | 0.9 | Entrega a dev al fusionar en la rama principal: despliegue de la imagen de la API y publicación del front | 1,5 |
-| 0.10 | SemVer en el `pubspec.yaml` del front y en el `pom.xml` de la API, y migraciones numeradas con tabla `schema_version` | 1 |
+| 0.10 | SemVer en el `pubspec.yaml` del front y en el `build.gradle.kts` de la API, y migraciones numeradas con tabla `schema_version` | 1 |
 | 0.11 | `GET /version`: versión de la API, versión del esquema y ambiente | 0,5 |
 | 0.12 | Insignia `v0.1.0 · Desarrollo` **en el pie de la barra lateral, abajo a la izquierda**, y franja fija de ambiente arriba en dev, qa y uat; en prod, franja ninguna y la versión en color neutro | 1 |
 | 0.13 | El front declara qué MAJOR de la API necesita y bloquea con pantalla clara si no coincide | 1 |

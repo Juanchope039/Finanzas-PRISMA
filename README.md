@@ -50,7 +50,8 @@ PRISMA existe para responder esas tres preguntas con números, no con intuición
 | 19 | [Ambientes, versionado y entrega](docs/19-ambientes-y-entrega.md) | Los 4 ambientes, promoción de migraciones, SemVer y publicación |
 | 20 | [Contrato de API](docs/20-contrato-de-api.md) | El sobre `{status, mensaje, data}`, los códigos de 5 dígitos, la idempotencia y el canal firmado |
 | 21 | [Trabajo en paralelo](docs/21-trabajo-en-paralelo.md) | Cómo avanzan dos equipos a la vez sin bloquearse: repartos, repositorios y reglas de convivencia |
-| — | [ADRs](docs/adr/) | Las 23 decisiones de arquitectura registradas |
+| — | [ADRs](docs/adr/) | Las 25 decisiones de arquitectura registradas |
+| — | [Contrato de la API](contrato/) | El `openapi.json` acordado entre front y API, con el catálogo de códigos dentro |
 
 ---
 
@@ -91,7 +92,7 @@ El mockup es un archivo HTML suelto y se abre con doble clic. El sistema de verd
 | Pieza | Qué es | Qué hace |
 |---|---|---|
 | `prisma_front` | Flutter, un solo código: el objetivo por defecto es **web**, instalable como PWA, y el mismo código compila a Android, iOS y escritorio | Pide, recibe y muestra. Nada más |
-| `prisma_api` | API propia en **Java 21 con Spring Boot**. Hace de API y de BFF a la vez, y es la única que habla con la base | Toda la lógica. Toma las decisiones y dicta los mensajes que se ven |
+| `prisma_api` | API propia en **Java 25 con Spring Boot**. Hace de API y de BFF a la vez, y es la única que habla con la base | Toda la lógica. Toma las decisiones y dicta los mensajes que se ven |
 | Capa de datos | PostgreSQL en Supabase, siempre en línea | Garantiza lo que no se puede romper: restricciones, permisos y durabilidad |
 
 > **El front no decide nada.** Ni una regla de negocio, ni un permiso, ni un mensaje de error, ni
@@ -101,6 +102,23 @@ El mockup es un archivo HTML suelto y se abre con doble clic. El sistema de verd
 > **El front nunca habla con Supabase directamente.** Ni con la base, ni con Auth, ni con
 > Storage: todo pasa por `prisma_api`. Meter el cliente de Supabase dentro del código Flutter
 > también se rechaza en revisión.
+
+**Cada pieza vive en su propio repositorio** ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)):
+este repositorio guarda la documentación, el mockup y el contrato; `prisma_api` guarda la API;
+`prisma_db`, las migraciones y la semilla de la base; `prisma_front`, el front.
+
+| Repositorio | En disco |
+|---|---|
+| `prisma_api` | `repositories/backend-api` |
+| `prisma_db` | `repositories/backend-db` |
+| `prisma_front` | `repositories/frontend-flutter` |
+
+`repositories/` está en el `.gitignore` de este repositorio **a propósito**: cada carpeta de
+adentro es un repositorio git con su propia historia, y este no la versiona.
+
+Separar la base de la API tiene un precio: **una función que necesita una columna nueva son dos
+commits, en dos repositorios y en orden.** Primero la migración, compatible con la API que ya
+corre; después la API que la usa.
 
 Cada proyecto lleva su propia versión SemVer, y las tres piezas existen cuatro veces: en
 desarrollo, QA, aprobación y producción, cada ambiente con su propia base. El front muestra
@@ -130,8 +148,20 @@ siempre en pantalla qué versión es y contra qué ambiente está hablando. El d
 | Documentación y plan | ✅ Completo |
 | Mockup navegable | ✅ Completo |
 | Validación con la gerencia | ⬜ Pendiente |
-| Desarrollo MVP | ⬜ No iniciado |
+| **Sprint 0** · proyectos, ambientes y contrato | 🔄 **En curso** |
+| Desarrollo MVP (Sprints 1 a 9) | ⬜ No iniciado |
 | Implantación | ⬜ No iniciado |
+
+**Lo que ya existe del Sprint 0:** los cuatro repositorios, con el esqueleto de cada pieza, la
+integración continua de la API y del front, y los cimientos que tienen que estar **antes** del primer
+endpoint: el sobre en toda respuesta, el catálogo de códigos, `GET /version`, las dos fronteras
+verificadas, **el contrato v0.2.0** en [`contrato/`](contrato/), que era el camino crítico del
+sprint, y el descriptor de formulario. Todavía no hay ninguna funcionalidad de negocio.
+
+**Lo que falta para cerrarlo** son, sobre todo, cosas que no se pueden hacer desde el código: los
+cuatro proyectos de Supabase y dónde se aloja cada ambiente. Del lado del código solo quedan las
+dos tareas que necesitan una base de datos corriendo (0.5 y 0.10), bloqueadas mientras Docker no
+arranque en la máquina de desarrollo.
 
 ---
 

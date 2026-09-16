@@ -21,15 +21,17 @@ consideraron y qué consecuencias tiene.
 | [014](ADR-014-semver.md) | SemVer independiente por proyecto y contrato de compatibilidad | Aceptado |
 | [015](ADR-015-validacion-tres-capas.md) | Validación en tres capas, con la base como juez | Reemplazado por [018](ADR-018-front-sin-decisiones.md) |
 | [016](ADR-016-flutter-web-pwa.md) | Flutter Web instalable como PWA | Aceptado |
-| [017](ADR-017-api-en-java.md) | Stack: Flutter en el front, Java con Spring Boot en la API | Aceptado |
+| [017](ADR-017-api-en-java.md) | Stack: Flutter en el front, Java con Spring Boot en la API | Reemplazado por [024](ADR-024-java-25-y-gradle.md) |
 | [018](ADR-018-front-sin-decisiones.md) | Tres partes, y el front no toma decisiones | Aceptado |
 | [019](ADR-019-contrato-de-respuesta.md) | Contrato de respuesta y catálogo de códigos de cinco dígitos | Aceptado |
 | [020](ADR-020-idempotencia.md) | Idempotencia obligatoria en toda escritura | Aceptado |
 | [021](ADR-021-canal-firmado.md) | Canal firmado contra repetición y manipulación | Aceptado |
 | [022](ADR-022-openapi-generado.md) | OpenAPI generado del código y verificado en integración continua | Aceptado |
-| [023](ADR-023-tres-repositorios.md) | Tres repositorios y el contrato como artefacto versionado | Aceptado |
+| [023](ADR-023-tres-repositorios.md) | Tres repositorios y el contrato como artefacto versionado | Reemplazado por [025](ADR-025-cuatro-repositorios.md) |
+| [024](ADR-024-java-25-y-gradle.md) | Java 25, Gradle y Spring Boot 4 en la API | Aceptado |
+| [025](ADR-025-cuatro-repositorios.md) | Cuatro repositorios: la base de datos sale de la API | Aceptado |
 
-Son **23 decisiones** registradas: 19 aceptadas y 4 reemplazadas.
+Son **25 decisiones** registradas: 19 aceptadas y 6 reemplazadas.
 
 > **Sobre la numeración.** El cambio de stack se planeó como ADR-010 y ADR-011, pero el 010 ya
 > estaba ocupado por la decisión de contraseñas. Un número asignado no se reutiliza, así que el

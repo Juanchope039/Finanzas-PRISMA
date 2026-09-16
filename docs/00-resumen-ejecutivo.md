@@ -29,7 +29,7 @@ Una aplicación web instalable en el celular y usable desde el computador, que c
 administración y las finanzas del negocio.
 
 Por dentro son **tres partes**: un front hecho en Flutter —web por defecto, y el mismo código
-compila a celular y a escritorio—, una API propia en Java 21 con Spring Boot y una base de datos
+compila a celular y a escritorio—, una API propia en Java 25 con Spring Boot y una base de datos
 PostgreSQL siempre en línea. **El front solo pide, recibe y muestra**: no lleva dentro ni una
 regla de negocio, ni un permiso, ni un mensaje de error. La API toma todas las decisiones, hace
 todos los cálculos y le dicta al front qué mostrar y cuándo; la base, además, vuelve a aplicar
@@ -125,7 +125,7 @@ período.
 
 | | |
 |---|---|
-| **Tecnología** | Flutter multiplataforma, web por defecto (front) + Java 21 con Spring Boot (API propia) + Supabase (PostgreSQL) |
+| **Tecnología** | Flutter multiplataforma, web por defecto (front) + Java 25 con Spring Boot (API propia) + Supabase (PostgreSQL) |
 | **Dónde funciona** | Navegador del PC y app instalable en el celular, con el mismo código |
 | **Ambientes** | Cuatro: desarrollo, QA, aprobación y producción, cada uno con su propia base |
 | **Versión** | Cada proyecto la lleva por separado, y el front la muestra abajo a la izquierda junto al ambiente |

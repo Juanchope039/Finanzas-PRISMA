@@ -4,6 +4,21 @@
 > Convierte el esquema que describe [`04-modelo-de-datos.md`](04-modelo-de-datos.md) en una
 > base de datos real, reproducible en cualquier ambiente con un comando.
 
+> ### 📍 Estos archivos viven en `prisma_db`, no aquí
+>
+> Desde el [ADR-025](adr/ADR-025-cuatro-repositorios.md), `supabase/` y `scripts/db/` tienen
+> repositorio propio, `prisma_db`, que en disco va en `repositories/backend-db`. **Todas las rutas
+> de este documento son relativas a `prisma_db`.** Antes vivieron dentro de `prisma_api`
+> ([ADR-023](adr/ADR-023-tres-repositorios.md)).
+>
+> Separarlos de la API tiene un precio que vale la pena repetir: **una migración y el código que
+> depende de ella ya no entran en el mismo commit.** Por eso la migración se publica antes que la
+> API que la necesita, y compatible con la API que ya corre. Al revés se produce el fallo más caro
+> de todos: una versión desplegada esperando una columna que todavía no existe.
+>
+> Lo que sí se queda aquí es **este documento** y el [modelo de datos](04-modelo-de-datos.md):
+> decidir qué debe existir y ejecutar el cambio son dos cosas distintas.
+
 ---
 
 ## 1. Qué resuelve

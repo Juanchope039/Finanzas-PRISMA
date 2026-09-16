@@ -94,16 +94,19 @@ a una pregunta concreta. Ver el [índice de ADRs](adr/README.md).
 | [014](adr/ADR-014-semver.md) | Cada parte lleva su propio número de versión | ¿Cómo sabemos qué versión está corriendo? |
 | [015](adr/ADR-015-validacion-tres-capas.md) | Se valida tres veces y la base es la que manda · **Reemplazado por 018** | ¿Por qué se repite la misma regla? |
 | [016](adr/ADR-016-flutter-web-pwa.md) | Funciona como app sin tienda de apps, con Flutter Web | ¿Cómo se instala y se usa? |
-| [017](adr/ADR-017-api-en-java.md) | El front sigue en Flutter y la API pasa a Java con Spring Boot | ¿En qué está hecha cada parte? |
+| [017](adr/ADR-017-api-en-java.md) | El front sigue en Flutter y la API pasa a Java con Spring Boot · **Reemplazado por 024** | ¿En qué está hecha cada parte? |
 | [018](adr/ADR-018-front-sin-decisiones.md) | Tres partes, y la pantalla no decide nada por su cuenta | ¿Quién manda cuando hay una regla? |
 | [019](adr/ADR-019-contrato-de-respuesta.md) | La API responde siempre con la misma forma y un código de cinco dígitos | ¿Cómo sé qué me contestó el sistema? |
 | [020](adr/ADR-020-idempotencia.md) | Tocar Guardar dos veces no cobra dos veces | ¿Y si se me va la señal a mitad? |
 | [021](adr/ADR-021-canal-firmado.md) | Cada petición va sellada contra reenvíos y cambios en el camino | ¿Alguien puede copiar una petición y repetirla? |
 | [022](adr/ADR-022-openapi-generado.md) | La documentación de la API sale del código, no de la memoria de nadie | ¿Cómo sé que el manual dice la verdad? |
+| [023](adr/ADR-023-tres-repositorios.md) | El código vive en tres repositorios, y el contrato es un artefacto con versión propia · **Reemplazado por 025** | ¿Dónde vive cada parte y cómo no se desincronizan? |
+| [024](adr/ADR-024-java-25-y-gradle.md) | La API se construye con Gradle, sobre Java 25 y Spring Boot 4 | ¿Con qué se compila y hasta cuándo tiene soporte? |
+| [025](adr/ADR-025-cuatro-repositorios.md) | La base de datos tiene su propio repositorio, y los tres de código viven dentro de este | ¿Dónde vive cada parte, y qué se pierde al separar la base? |
 
-Del 017 al 022 están las decisiones del modelo de tres partes: el cambio de Dart a Java en la
-API, que el front no decide nada, el contrato de respuesta, la idempotencia, el canal firmado y
-la documentación generada del código.
+Del 017 al 025 están las decisiones del modelo de tres partes: el cambio de Dart a Java en la
+API, que el front no decide nada, el contrato de respuesta, la idempotencia, el canal firmado,
+la documentación generada del código, Java 25 y el reparto en cuatro repositorios.
 
 ---
 

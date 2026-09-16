@@ -33,8 +33,8 @@ Y una que lo haría imposible si se relajara:
 
 | | **Equipo API** | **Equipo Front** |
 |---|---|---|
-| **Posee** | `prisma_api` y las migraciones | `prisma_front` |
-| **Escribe** | Java 21, Spring Boot, SQL | Dart, Flutter |
+| **Posee** | `prisma_api` y `prisma_db`, donde viven las migraciones | `prisma_front` |
+| **Escribe** | Java 25, Spring Boot, SQL | Dart, Flutter |
 | **Responde por** | Que la regla se cumpla y el mensaje sea correcto | Que la pantalla sea la del mockup y pinte lo que le dictan |
 | **No toca** | Widgets, rutas del front | SQL, reglas de negocio, textos de error |
 
@@ -56,23 +56,29 @@ sea la única.
 
 ---
 
-## 3. Tres repositorios
+## 3. Cuatro repositorios
 
-| Repositorio | Qué vive ahí | Quién lo cambia |
-|---|---|---|
-| **`Finanzas-PRISMA`** | Documentación, ADR, mockup **y el contrato**: `openapi.json` y el catálogo de códigos | Los dos equipos, con revisión cruzada |
-| **`prisma_api`** | Java, Spring Boot y `supabase/migrations/` | Equipo API |
-| **`prisma_front`** | Flutter | Equipo Front |
+| Repositorio | En disco | Qué vive ahí | Quién lo cambia |
+|---|---|---|---|
+| **`Finanzas-PRISMA`** | — | Documentación, ADR, mockup **y el contrato**: `openapi.json` y el catálogo de códigos | Los dos equipos, con revisión cruzada |
+| **`prisma_api`** | `repositories/backend-api` | Java y Spring Boot | Equipo API |
+| **`prisma_db`** | `repositories/backend-db` | `supabase/migrations/`, la semilla y los scripts de la base | Equipo API |
+| **`prisma_front`** | `repositories/frontend-flutter` | Flutter | Equipo Front |
 
-Las migraciones van con la API y no con la especificación **porque una migración y el código que
-depende de ella tienen que entrar en el mismo commit.** Separarlas produce el fallo más caro de
-todos: una versión desplegada que espera una columna que todavía no existe.
+Los tres de código viven dentro de `Finanzas-PRISMA`, en `repositories/`, que la especificación
+ignora a propósito: cada uno conserva su propia historia
+([ADR-025](adr/ADR-025-cuatro-repositorios.md)).
+
+Las migraciones tienen repositorio propio, y eso tiene un precio que hay que tener presente
+**porque una migración y el código que depende de ella ya no entran en el mismo commit.** Si la
+API se publica antes que su migración, se produce el fallo más caro de todos: una versión
+desplegada que espera una columna que todavía no existe. Por eso el orden es una regla (§6.1).
 
 El modelo de datos escrito ([`04-modelo-de-datos.md`](04-modelo-de-datos.md)) se queda en la
 especificación. Es la diferencia entre **qué debe existir** y **cómo se llegó a eso**: lo primero
 se decide y se revisa, lo segundo se ejecuta.
 
-### 3.1 El punto débil de tener tres repositorios, y cómo se tapa
+### 3.1 El punto débil de tener repositorios separados, y cómo se tapa
 
 > **Con un solo repositorio, un cambio de contrato entra en un commit con sus dos lados. Con
 > tres, son tres cambios coordinados, y el día que se desincronizan alguien pierde media tarde
@@ -87,7 +93,7 @@ cada quien copia:
    Al fusionarse se etiqueta una versión.
 3. **Cada lado actualiza su dependencia cuando puede.** El front genera de esa versión su cliente
    y su servidor simulado; la API genera de ella sus modelos.
-4. La prueba `C-01` de [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) compara el OpenAPI que
+4. La prueba `C-04` de [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) compara el OpenAPI que
    la API genera contra la versión etiquetada del contrato. **Si difieren, la compilación falla.**
 
 Así los tres PR coordinados se vuelven uno solo más dos actualizaciones de dependencia, que
@@ -211,6 +217,10 @@ Seis reglas, y cada una evita un choque concreto que si no ocurrirá.
   principio del contra-asiento de `CU-04` y de [`ADR-004`](adr/ADR-004-base-solo-escritura.md).
 - **Dos equipos no alteran la misma tabla en el mismo sprint.** El reparto de tablas del §4.3
   está hecho para que no haga falta; cuando haga falta, se habla antes de escribir.
+- **Se publican antes que la API que las necesita, y compatibles con la API que ya corre.** Viven
+  en `prisma_db`, así que una columna nueva y el código que la usa son dos commits: primero se
+  agrega, y lo viejo se quita en una versión posterior, cuando ya ninguna API desplegada lo use
+  ([ADR-025](adr/ADR-025-cuatro-repositorios.md)).
 - Las revisa el equipo API, aunque las proponga el otro.
 
 ### 6.2 El mockup
@@ -237,9 +247,9 @@ sabe resolver solo.
 
 ### 6.4 Ambientes
 
-- **Cada persona levanta su propio PostgreSQL** con Docker (`reset-local.ps1`). Nadie desarrolla
-  contra una base compartida: una prueba que falla por lo que otro guardó hace diez minutos se
-  termina ignorando, y con ella se ignoran las de verdad.
+- **Cada persona levanta su propio PostgreSQL** con Docker (`reset-local.ps1` de `prisma_db`).
+  Nadie desarrolla contra una base compartida: una prueba que falla por lo que otro guardó hace
+  diez minutos se termina ignorando, y con ella se ignoran las de verdad.
 - **dev, qa, uat y prod siguen siendo los cuatro de siempre.** No hay ambiente por equipo.
 - **qa es la puerta**, y la comparten. La suite completa tiene que estar verde con el trabajo de
   los dos antes de promover a uat.
@@ -292,8 +302,9 @@ Nada de esto lo resuelve este documento y todo bloquea el primer día:
 
 1. **Quién está en cada equipo**, y si alguien sabe Flutter y Java a la vez —esa persona es la
    que debe revisar los cambios de contrato—.
-2. **Dónde se alojan los tres repositorios** y quién tiene permiso de escritura en cada uno.
-3. **Si el contrato se publica como paquete** (artefacto de Maven y paquete de Dart) o se consume
+2. **Dónde se alojan los cuatro repositorios** y quién tiene permiso de escritura en cada uno.
+3. **Si el contrato se publica como paquete** (artefacto en un repositorio Maven —que es el
+   formato, lo publique Gradle o quien sea— y paquete de Dart) o se consume
    por etiqueta de git. Lo segundo es más simple y alcanza para dos equipos.
 4. **Quién aprueba un cambio de contrato** cuando los dos equipos no se ponen de acuerdo.
 

@@ -1,0 +1,338 @@
+{
+  "components" : {
+    "schemas" : {
+      "DescriptorDeCampo" : {
+        "properties" : {
+          "ayuda" : {
+            "description" : "La línea gris debajo de la caja. Ausente si no hace falta",
+            "type" : "string"
+          },
+          "campo" : {
+            "description" : "El nombre con el que viaja el dato, y con el que vuelve un error en data.errores",
+            "type" : "string"
+          },
+          "etiqueta" : {
+            "description" : "Lo que se pinta encima de la caja",
+            "type" : "string"
+          },
+          "maximo" : {
+            "description" : "Límite superior: pesos en dinero, caracteres en texto. Ausente si no hay",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "mensajes" : {
+            "$ref" : "#/components/schemas/MensajesDeCampo"
+          },
+          "minimo" : {
+            "description" : "Límite inferior: pesos en dinero, caracteres en texto. Ausente si no hay",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "obligatorio" : {
+            "description" : "Si puede quedar vacío",
+            "type" : "boolean"
+          },
+          "teclado" : {
+            "description" : "Qué teclado abre el celular. Ausente en fecha y lista, que no abren teclado",
+            "enum" : [ "numerico", "texto" ],
+            "type" : "string"
+          },
+          "tipo" : {
+            "enum" : [ "dinero", "texto", "fecha", "lista" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "campo", "etiqueta", "mensajes", "obligatorio", "tipo" ],
+        "type" : "object"
+      },
+      "DescriptorDeFormulario" : {
+        "properties" : {
+          "campos" : {
+            "description" : "En el orden en que se pintan. El front no los reordena",
+            "items" : {
+              "$ref" : "#/components/schemas/DescriptorDeCampo"
+            },
+            "type" : "array"
+          },
+          "formulario" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "campos", "formulario" ],
+        "type" : "object"
+      },
+      "MensajesDeCampo" : {
+        "properties" : {
+          "maximo" : {
+            "type" : "string"
+          },
+          "minimo" : {
+            "type" : "string"
+          },
+          "obligatorio" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "SobreDescriptorDeFormulario" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/DescriptorDeFormulario",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreVersion" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Version",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "Version" : {
+        "properties" : {
+          "ambiente" : {
+            "description" : "dev, qa, uat o prod",
+            "enum" : [ "dev", "qa", "uat", "prod" ],
+            "type" : "string"
+          },
+          "api" : {
+            "description" : "Versión de prisma_api, SemVer. Antes del go-live siempre 0.y.z",
+            "type" : "string"
+          },
+          "esquema" : {
+            "description" : "Versión del esquema de base de datos",
+            "type" : "string"
+          }
+        },
+        "required" : [ "ambiente", "api", "esquema" ],
+        "type" : "object"
+      }
+    }
+  },
+  "info" : {
+    "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos.",
+    "title" : "PRISMA · prisma_api",
+    "version" : "0.2.0"
+  },
+  "openapi" : "3.1.0",
+  "paths" : {
+    "/formularios/{nombre}" : {
+      "get" : {
+        "description" : "Qué campos tiene, en qué orden, y las reglas de cada uno como datos: obligatorio, mínimo, máximo y el texto que se muestra cuando no se cumplen. Ese texto es el mismo que devuelve data.errores cuando la regla falla en el servidor.",
+        "operationId" : "descriptor",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "nombre",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreDescriptorDeFormulario"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "El descriptor de un formulario",
+        "tags" : [ "Formularios" ]
+      }
+    },
+    "/version" : {
+      "get" : {
+        "description" : "No lleva sesión ni firma: el front lo consulta al arrancar, antes de que nadie entre, y si el MAJOR de la API no es el que espera se planta.",
+        "operationId" : "version",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreVersion"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Versión de la API, del esquema y ambiente",
+        "tags" : [ "Versión" ]
+      }
+    }
+  },
+  "servers" : [ {
+    "description" : "El mismo servidor que sirve esta documentación",
+    "url" : "/"
+  } ],
+  "tags" : [ {
+    "description" : "Los campos de cada formulario y sus reglas, como datos",
+    "name" : "Formularios"
+  }, {
+    "description" : "Versión de la API, del esquema y ambiente en que corre",
+    "name" : "Versión"
+  } ],
+  "x-prisma-codigos" : [ {
+    "cuando" : "Cualquier consulta que devuelve datos",
+    "http" : 200,
+    "mensaje" : "Consulta correcta.",
+    "modulo" : "GENERICO",
+    "nombre" : "OK",
+    "status" : 20000
+  }, {
+    "cuando" : "Cualquier operación que crea un recurso",
+    "http" : 201,
+    "mensaje" : "Registro creado.",
+    "modulo" : "GENERICO",
+    "nombre" : "CREADO",
+    "pendienteDeEmitir" : {
+      "quien" : "El primer endpoint que crea algo: el alta de usuarios",
+      "sprint" : 2
+    },
+    "status" : 20100
+  }, {
+    "cuando" : "JSON inválido, método que la ruta no acepta, tipo de contenido o parámetro equivocado",
+    "http" : 400,
+    "mensaje" : "La petición no se entiende.",
+    "modulo" : "GENERICO",
+    "nombre" : "PETICION_MAL_FORMADA",
+    "status" : 40000
+  }, {
+    "cuando" : "No hay token, está vencido o no se puede verificar",
+    "http" : 401,
+    "mensaje" : "Inicia sesión para continuar.",
+    "modulo" : "GENERICO",
+    "nombre" : "NO_AUTENTICADO",
+    "status" : 40100
+  }, {
+    "cuando" : "El tipo de usuario de la sesión no alcanza para la operación",
+    "http" : 403,
+    "mensaje" : "No tienes permiso para hacer esto.",
+    "modulo" : "GENERICO",
+    "nombre" : "SIN_PERMISO",
+    "status" : 40300
+  }, {
+    "cuando" : "La ruta o el recurso pedido no existe, o fue anulado",
+    "http" : 404,
+    "mensaje" : "No se encontró lo que buscas.",
+    "modulo" : "GENERICO",
+    "nombre" : "NO_EXISTE",
+    "status" : 40400
+  }, {
+    "cuando" : "La operación choca con el estado en que está el recurso",
+    "http" : 409,
+    "mensaje" : "Eso no se puede hacer en el estado actual.",
+    "modulo" : "GENERICO",
+    "nombre" : "CONFLICTO_DE_ESTADO",
+    "status" : 40900
+  }, {
+    "cuando" : "Los datos llegaron bien formados pero no pasan las reglas; cada campo va en data.errores",
+    "http" : 422,
+    "mensaje" : "Revisa los datos.",
+    "modulo" : "GENERICO",
+    "nombre" : "DATOS_INVALIDOS",
+    "status" : 42200
+  }, {
+    "cuando" : "Cualquier fallo no contemplado. Nunca expone la traza ni el texto de la excepción",
+    "http" : 500,
+    "mensaje" : "Algo salió mal. Intenta de nuevo en un momento.",
+    "modulo" : "GENERICO",
+    "nombre" : "ERROR_NO_PREVISTO",
+    "status" : 50000
+  }, {
+    "cuando" : "Una petición que escribe llegó sin la cabecera Idempotency-Key",
+    "http" : 400,
+    "mensaje" : "No se pudo enviar la operación. Intenta de nuevo.",
+    "modulo" : "SESION_Y_TRANSPORTE",
+    "nombre" : "FALTA_CLAVE_DE_IDEMPOTENCIA",
+    "pendienteDeEmitir" : {
+      "quien" : "FiltroDeIdempotencia",
+      "sprint" : 1
+    },
+    "status" : 40002
+  }, {
+    "cuando" : "El HMAC de la petición no corresponde con la clave de firma de la sesión",
+    "http" : 401,
+    "mensaje" : "Inicia sesión para continuar.",
+    "modulo" : "SESION_Y_TRANSPORTE",
+    "nombre" : "FIRMA_INVALIDA",
+    "pendienteDeEmitir" : {
+      "quien" : "FiltroDeFirma",
+      "sprint" : 2
+    },
+    "status" : 40101
+  }, {
+    "cuando" : "La marca de tiempo de la petición cayó fuera de la ventana de ±5 minutos",
+    "http" : 401,
+    "mensaje" : "Revisa la hora de tu dispositivo e intenta de nuevo.",
+    "modulo" : "SESION_Y_TRANSPORTE",
+    "nombre" : "MARCA_DE_TIEMPO_FUERA_DE_VENTANA",
+    "pendienteDeEmitir" : {
+      "quien" : "FiltroDeFirma",
+      "sprint" : 2
+    },
+    "status" : 40102
+  }, {
+    "cuando" : "Llegó una petición con un nonce ya usado dentro de la ventana: es un reenvío",
+    "http" : 401,
+    "mensaje" : "Esa operación ya se envió.",
+    "modulo" : "SESION_Y_TRANSPORTE",
+    "nombre" : "NONCE_REPETIDO",
+    "pendienteDeEmitir" : {
+      "quien" : "FiltroDeFirma",
+      "sprint" : 2
+    },
+    "status" : 40103
+  }, {
+    "cuando" : "Misma Idempotency-Key con una huella de petición distinta",
+    "http" : 409,
+    "mensaje" : "Esa operación ya se registró con otros datos.",
+    "modulo" : "SESION_Y_TRANSPORTE",
+    "nombre" : "CLAVE_REPETIDA_OTROS_DATOS",
+    "pendienteDeEmitir" : {
+      "quien" : "FiltroDeIdempotencia",
+      "sprint" : 1
+    },
+    "status" : 40901
+  }, {
+    "cuando" : "Misma Idempotency-Key, y la primera petición todavía no termina",
+    "http" : 409,
+    "mensaje" : "Esa operación se está procesando. Espera un momento.",
+    "modulo" : "SESION_Y_TRANSPORTE",
+    "nombre" : "OPERACION_EN_CURSO",
+    "pendienteDeEmitir" : {
+      "quien" : "FiltroDeIdempotencia",
+      "sprint" : 1
+    },
+    "status" : 40902
+  } ]
+}

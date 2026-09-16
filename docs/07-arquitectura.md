@@ -1,6 +1,6 @@
 # 07 · Arquitectura técnica
 
-Tres partes —un front en Flutter multiplataforma, una API en Java 21 con Spring Boot y una capa
+Tres partes —un front en Flutter multiplataforma, una API en Java 25 con Spring Boot y una capa
 de datos PostgreSQL siempre en línea—. Arquitectura hexagonal (puertos y adaptadores) sobre Clean
 Architecture, con principios SOLID.
 
@@ -10,9 +10,9 @@ Architecture, con principios SOLID.
 
 | Capa | Elección | Razón |
 |---|---|---|
-| Lenguajes | **Dart en el front, Java 21 en la API** | Son dos, y es un costo que se asume a conciencia. El porqué está en §1.5 |
+| Lenguajes | **Dart en el front, Java 25 en la API** | Son dos, y es un costo que se asume a conciencia. El porqué está en §1.5 |
 | Front | **Flutter multiplataforma**, objetivo por defecto **web**, instalable como PWA (`prisma_front`) | Una sola base de código para el navegador del taller y, sin reescribir nada, para Android, iOS y escritorio |
-| API | **Java 21 con Spring Boot**, a la vez API y BFF (`prisma_api`) | Único punto que habla con la base. Ahí viven el dominio y los casos de uso |
+| API | **Java 25 con Spring Boot**, a la vez API y BFF (`prisma_api`) | Único punto que habla con la base. Ahí viven el dominio y los casos de uso |
 | Framework HTTP | **Spring Web** sobre el arranque de Spring Boot ([ADR-017](adr/ADR-017-api-en-java.md)) | Enrutado por anotaciones, inyección de dependencias y transacciones declarativas en la misma caja. Nada de esto hay que construirlo |
 | Acceso a datos | **JDBC con `JdbcTemplate`**, sin ORM | El SQL queda a la vista y la transacción con identidad (§7.2) se controla a mano. Un ORM que abre conexiones por su cuenta es justo lo que rompe esa transacción |
 | Base | **PostgreSQL gestionado por Supabase**, siempre en línea | Es la misma base de siempre: RLS, triggers y restricciones siguen siendo el corazón de la seguridad |
@@ -21,6 +21,7 @@ Architecture, con principios SOLID.
 | PDF | **Se genera en `prisma_api`** | Cotizaciones, remisiones y desprendibles salen idénticos para todo el mundo y el front no carga una librería de PDF |
 | Resiliencia | **Resilience4j** | Reintentos, cortacircuitos, tiempos de espera y límite de tasa como piezas probadas, no escritas a mano (§10) |
 | Documentación | **springdoc-openapi** | Swagger sale del ecosistema y se genera de los controladores (§9.4) |
+| Construcción | **Gradle** en la API, con Java 25 declarado como *toolchain* ([ADR-024](adr/ADR-024-java-25-y-gradle.md)); `flutter build` en el front | Gradle descarga el JDK por su cuenta: quien clone el proyecto compila sin instalar nada. El costo es un demonio más que puede fallar |
 | Pruebas | **JUnit 5 y AssertJ** en la API, `package:test` en el front | El dominio se prueba sin base de datos ni navegador, igual que antes |
 | Frontera verificada | **ArchUnit** en la API, lints de Dart en el front | La regla de dependencias falla la compilación, no la revisión (§3) |
 | Ambientes | **dev, qa, uat y prod**, un proyecto de Supabase por ambiente | El detalle está en [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
@@ -36,7 +37,7 @@ Architecture, con principios SOLID.
 
 ```mermaid
 graph LR
-    FRONT[prisma_front · Flutter multiplataforma · web por defecto] -->|HTTPS · JSON firmado| API[prisma_api · Java 21 · Spring Boot]
+    FRONT[prisma_front · Flutter multiplataforma · web por defecto] -->|HTTPS · JSON firmado| API[prisma_api · Java 25 · Spring Boot]
     API -->|JDBC| DB[(Capa de datos · PostgreSQL · Supabase · siempre en línea)]
     API -->|HTTPS| AUTH[Supabase Auth y Storage]
     FRONT -. nunca · prohibido .-> DB
@@ -46,7 +47,7 @@ graph LR
 | Parte | Qué es | Qué hace | Qué NO hace |
 |---|---|---|---|
 | **prisma_front** | Flutter, un solo código; objetivo por defecto **web**, y el mismo código compila a Android, iOS y escritorio | Pide, recibe y muestra. Pinta lo que la API le dicta | **No decide nada.** Ni reglas, ni permisos, ni mensajes, ni cálculos de negocio |
-| **prisma_api** | Java 21 con Spring Boot | Toda la lógica. Toma todas las decisiones. Dicta qué mensaje se muestra y cuándo | No confía en el front. No decide los permisos que le tocan a la base |
+| **prisma_api** | Java 25 con Spring Boot | Toda la lógica. Toma todas las decisiones. Dicta qué mensaje se muestra y cuándo | No confía en el front. No decide los permisos que le tocan a la base |
 | **Capa de datos** | PostgreSQL en Supabase, más migraciones, funciones de negocio, índices, particiones y el pool de conexiones | Garantiza lo que no se puede romper: restricciones, RLS, atomicidad, durabilidad | No es un servicio desplegable. La API le habla directo |
 
 > **Regla dura: el front NUNCA habla con Supabase directamente.** Ni con la base, ni con Auth,
@@ -125,13 +126,22 @@ plan de desarrollo tiene que reflejarlo.
 
 ## 2. Estructura de carpetas
 
-Dos proyectos, cada uno con su repositorio y su versión: la API con `pom.xml`, el front con
+Dos proyectos, cada uno con su repositorio y su versión: la API con `build.gradle.kts`, el front con
 `pubspec.yaml`. **Son dos árboles distintos y dos lenguajes distintos:** Java en `prisma_api`,
 Dart en `prisma_front`.
 
+La base de datos tiene un tercer repositorio, `prisma_db`, con las migraciones, la semilla y sus
+scripts. No es una aplicación sino la receta del esquema, y la escribe el equipo API
+([ADR-025](adr/ADR-025-cuatro-repositorios.md)). En disco, los tres van dentro de
+`Finanzas-PRISMA/repositories/`: `backend-api`, `backend-db` y `frontend-flutter`.
+
 ```
 prisma_api/
-├── pom.xml
+├── contrato/
+│   └── openapi.json               # Copia fijada del contrato de Finanzas-PRISMA. La vigila C-04 (§9.4)
+├── build.gradle.kts               # Java 25 como toolchain: Gradle lo descarga si no está
+├── settings.gradle.kts
+├── gradlew                        # Nadie necesita instalar Gradle
 └── src/
     ├── main/
     │   ├── java/co/prismamy/api/
@@ -207,8 +217,7 @@ prisma_api/
     │   │       └── error/
     │   │           └── TraduccionDeRestricciones.java # §8.5 — restricción → código + mensaje
     │   └── resources/
-    │       ├── application.yml
-    │       └── openapi.json                           # Versionado y verificado en CI (§9.4)
+    │       └── application.yml
     └── test/
         └── java/co/prismamy/api/
             ├── dominio/                   # Pruebas puras, sin base de datos ni red
@@ -403,7 +412,7 @@ Dos interfaces pequeñas en lugar de una grande: quien solo necesita leer no que
 implementar la escritura.
 
 Y son métodos **sincrónicos, sin `Future` ni `async`**, a propósito. JDBC bloquea, y con los hilos
-virtuales de Java 21 bloquear deja de ser caro. A cambio, la transacción es un bloque de código
+virtuales de Java 25 bloquear deja de ser caro. A cambio, la transacción es un bloque de código
 con principio y fin visibles, que es exactamente lo que necesita §7.2.
 
 ---
@@ -899,14 +908,17 @@ Flutter entra por `--dart-define` en el momento de compilar; en la API, por vari
 | [ADR-014](adr/ADR-014-semver.md) | SemVer independiente por proyecto y contrato de compatibilidad | Aceptado |
 | [ADR-015](adr/ADR-015-validacion-tres-capas.md) | Validación en tres capas, con la base como juez | Reemplazado por [ADR-018](adr/ADR-018-front-sin-decisiones.md) |
 | [ADR-016](adr/ADR-016-flutter-web-pwa.md) | Flutter Web instalable como PWA | Aceptado · web sigue siendo el objetivo por defecto |
-| [ADR-017](adr/ADR-017-api-en-java.md) | Stack: Flutter en el front, Java 21 con Spring Boot en la API | Aceptado (§1.5) |
+| [ADR-017](adr/ADR-017-api-en-java.md) | Stack: Flutter en el front, Java con Spring Boot en la API | Reemplazado por [ADR-024](adr/ADR-024-java-25-y-gradle.md) |
+| [ADR-024](adr/ADR-024-java-25-y-gradle.md) | Java 25, Gradle y Spring Boot 4 en la API | Aceptado (§1) |
 | [ADR-018](adr/ADR-018-front-sin-decisiones.md) | Tres partes, y el front no toma decisiones | Aceptado (§1.1, §8) |
 | [ADR-019](adr/ADR-019-contrato-de-respuesta.md) | Contrato de respuesta y catálogo de códigos de cinco dígitos | Aceptado (§9.1) |
 | [ADR-020](adr/ADR-020-idempotencia.md) | Idempotencia obligatoria en toda escritura | Aceptado (§9.2) |
 | [ADR-021](adr/ADR-021-canal-firmado.md) | Canal firmado contra repetición y manipulación | Aceptado (§9.3) |
 | [ADR-022](adr/ADR-022-openapi-generado.md) | OpenAPI generado del código y verificado en integración continua | Aceptado (§9.4) |
+| [ADR-023](adr/ADR-023-tres-repositorios.md) | Tres repositorios y el contrato como artefacto versionado | Reemplazado por [ADR-025](adr/ADR-025-cuatro-repositorios.md) |
+| [ADR-025](adr/ADR-025-cuatro-repositorios.md) | Cuatro repositorios: la base de datos sale de la API | Aceptado (§2) |
 
-Son **23 decisiones registradas**. El índice completo, con el estado de cada una, vive en
+Son **25 decisiones registradas**. El índice completo, con el estado de cada una, vive en
 [`adr/README.md`](adr/README.md).
 
 Un ADR no se modifica: si una decisión cambia, se escribe uno nuevo que reemplaza al anterior y

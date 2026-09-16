@@ -133,15 +133,16 @@ pasos cuestan plata y hay que decidirlos con tiempo.
 
 ### 3.2 Alojar la API de Java en los cuatro ambientes
 
-`prisma_api` es Java 21 con Spring Boot (ADR-017). Eso no cambia ni un caso de uso, pero sí cambia
-el alistamiento: ya no basta con publicar archivos estáticos, hay **un proceso encendido** en cada
-ambiente. Lo que hay que dejar listo antes del go-live:
+`prisma_api` es Java 25 con Spring Boot ([ADR-024](adr/ADR-024-java-25-y-gradle.md)). Eso no
+cambia ni un caso de uso, pero sí cambia el alistamiento: ya no basta con publicar archivos
+estáticos, hay **un proceso encendido** en cada ambiente. Lo que hay que dejar listo antes del
+go-live:
 
 **La imagen**
 
 | Qué | Cómo queda | Por qué |
 |---|---|---|
-| Base | Imagen con solo el **entorno de ejecución de Java 21**, sin JDK ni herramientas | Lo que no está en la imagen no se puede ejecutar por error, y pesa menos multiplicado por cuatro |
+| Base | Imagen con solo el **entorno de ejecución de Java 25**, sin JDK ni herramientas | Lo que no está en la imagen no se puede ejecutar por error, y pesa menos multiplicado por cuatro |
 | Contenido | El `jar` de Spring Boot y nada más | Ninguna consola, ningún script suelto |
 | Etiqueta | El número de versión exacto, **nunca `latest`** | Lo que se promueve de uat a prod es una etiqueta, no una compilación nueva ([ADR-013](adr/ADR-013-cuatro-ambientes.md), [ADR-014](adr/ADR-014-semver.md)) |
 | Verificación de salud | Recibe tráfico solo cuando `GET /version` responde | Un contenedor que arrancó todavía no es un contenedor listo |

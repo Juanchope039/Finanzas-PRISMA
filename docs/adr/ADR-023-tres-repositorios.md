@@ -1,6 +1,13 @@
 # ADR-023 · Tres repositorios y el contrato como artefacto versionado
 
-**Estado:** Aceptado · **Fecha:** 2026-09-16
+**Estado:** Reemplazado por ADR-025 · **Fecha:** 2026-09-16
+
+> **Lo reemplaza [ADR-025](ADR-025-cuatro-repositorios.md):** la separación del código en
+> repositorios y el contrato como artefacto con versión propia siguen en pie, tal como se
+> argumentan abajo. Cambian dos cosas: **la base de datos sale de `prisma_api`** a su propio
+> repositorio, `prisma_db`, y los repositorios de código pasan a vivir dentro de
+> `Finanzas-PRISMA/repositories/`. Y donde abajo dice «Java 21», la API ya es **Java 25**
+> ([ADR-024](ADR-024-java-25-y-gradle.md)). El cuerpo de abajo se conserva tal como se escribió.
 
 ## Contexto
 
@@ -54,7 +61,7 @@ ser entre iguales. Vive donde viven las decisiones del producto.
    Al fusionarse se etiqueta una versión.
 3. **Cada lado actualiza su dependencia cuando le conviene**, no el mismo día. El front genera de
    esa versión su cliente y su servidor simulado; la API genera sus modelos.
-4. La prueba `C-01` compara el OpenAPI que la API genera contra la versión etiquetada. Si
+4. La prueba `C-04` compara el OpenAPI que la API genera contra la versión etiquetada. Si
    difieren, **la compilación falla**.
 
 Los tres cambios coordinados se vuelven uno solo, más dos actualizaciones de dependencia que
@@ -94,7 +101,7 @@ algo distinto a lo acordado sin decirlo.
   cambio de contrato tarda más en llegar a los dos lados, y ese retraso es real aunque esté
   controlado: entre que se etiqueta y que el front actualiza su dependencia, los dos trabajan
   contra versiones distintas a propósito. Alguien tiene que llevar la cuenta de qué versión del
-  contrato usa cada lado, y ese alguien es la prueba `C-01`, no una persona. Y quien llegue nuevo
+  contrato usa cada lado, y ese alguien es la prueba `C-04`, no una persona. Y quien llegue nuevo
   al proyecto tiene que clonar tres cosas y entender por qué, en vez de una.
 
 - **A vigilar:** si en algún momento los dos equipos se funden en uno, esta decisión deja de

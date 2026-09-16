@@ -4,7 +4,8 @@
 
 > **La decisión sigue vigente; un dato del cuerpo dejó de serlo.** Cuando se escribió, la API
 > estaba en Dart y su versión vivía en un `pubspec.yaml`. [ADR-017](ADR-017-api-en-java.md) la
-> pasó a Java con Spring Boot, así que **la versión de `prisma_api` vive en su `pom.xml`**. El
+> pasó a Java con Spring Boot y [ADR-024](ADR-024-java-25-y-gradle.md) lo puso en Gradle, así
+> que **la versión de `prisma_api` vive en su `build.gradle.kts`**. El
 > front sigue en `pubspec.yaml` y el esquema sigue en sus migraciones. Lo que este ADR decide
 > —SemVer independiente por proyecto y un contrato de compatibilidad que impide que ser
 > independientes signifique romperse en silencio— no cambia en nada. La tabla vigente de dónde

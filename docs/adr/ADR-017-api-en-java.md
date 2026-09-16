@@ -1,6 +1,12 @@
 # ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API
 
-**Estado:** Aceptado · **Fecha:** 2026-09-15
+**Estado:** Reemplazado por ADR-024 · **Fecha:** 2026-09-15
+
+> **Lo reemplaza [ADR-024](ADR-024-java-25-y-gradle.md):** la API sigue siendo Java con Spring
+> Boot y todo lo que este ADR argumenta sigue en pie, pero las versiones cambiaron. Java 21
+> pasó a **Java 25**, la construcción pasó de Maven a **Gradle**, y Spring Boot 3.5 pasó a
+> **4.1** porque la línea 3.5 llegó al final de su vida en abierto. El cuerpo de abajo se
+> conserva tal como se escribió.
 
 ## Contexto
 

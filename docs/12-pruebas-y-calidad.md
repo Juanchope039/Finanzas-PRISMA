@@ -4,7 +4,7 @@
 
 ## 1. Estrategia
 
-Ahora hay **dos bases de código** —`prisma_front` en Flutter y `prisma_api` en Java 21 con Spring
+Ahora hay **dos bases de código** —`prisma_front` en Flutter y `prisma_api` en Java 25 con Spring
 Boot— y **cuatro ambientes** —dev, qa, uat y prod—. La estrategia cambia de forma, no de fondo: la
 arquitectura hexagonal sigue permitiendo invertir el esfuerzo donde más importa, **los cálculos de
 plata y los permisos**.

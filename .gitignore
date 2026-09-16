@@ -1,0 +1,16 @@
+.claude/
+
+# Snapshots de la base de datos (se generan a demanda, no se versionan)
+/snapshots/
+
+# Supabase (CLI local)
+supabase/.branches/
+supabase/.temp/
+.env
+.env.*
+!.env.example
+
+# Los repositorios de código: prisma_api en backend-api, prisma_db en backend-db y prisma_front
+# en frontend-flutter. Viven aquí adentro, pero cada uno es un repositorio git con su propia
+# historia, y este no los versiona (ADR-025).
+repositories/

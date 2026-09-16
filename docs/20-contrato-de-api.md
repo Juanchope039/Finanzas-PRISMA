@@ -243,6 +243,75 @@ mano dos veces: si se escribiera dos veces, se separarían, que es justo lo que 
 La decisión de que el front no contenga ninguna regla está en
 [ADR-018](adr/ADR-018-front-sin-decisiones.md).
 
+### 4.3 Cómo se pide y qué forma tiene
+
+> **Estado: construido** desde el contrato `v0.2.0`. El catálogo de formularios está vacío hasta
+> que llegue el primero de verdad, en el Sprint 2; el mecanismo y su forma ya están fijados para
+> que el equipo Front pueda construir el renderizador contra un servidor simulado.
+
+```http
+GET /formularios/gasto HTTP/1.1
+```
+
+```json
+{
+  "status": 20000,
+  "mensaje": "Consulta correcta.",
+  "data": {
+    "formulario": "gasto",
+    "campos": [
+      {
+        "campo": "valor",
+        "etiqueta": "Valor del gasto",
+        "tipo": "dinero",
+        "obligatorio": true,
+        "minimo": 1,
+        "maximo": 99999999,
+        "teclado": "numerico",
+        "ayuda": "En pesos, sin centavos",
+        "mensajes": {
+          "obligatorio": "Escribe cuánto fue el gasto.",
+          "minimo": "El gasto tiene que ser mayor que cero.",
+          "maximo": "Ese valor es demasiado alto para un gasto."
+        }
+      }
+    ]
+  }
+}
+```
+
+Un nombre que no existe responde `404` con `40400`.
+
+| Regla de la forma | Por qué |
+|---|---|
+| `campos` llega **en el orden en que se pinta** | El front no reordena. Qué va primero es una decisión de la pantalla aprobada, no del cliente |
+| **Una clave que no aplica no viaja**, ni siquiera en `null` | Un campo sin máximo no lleva `maximo`. El front no tiene que distinguir «no hay límite» de «el límite es nulo» |
+| `tipo` es uno de `dinero`, `texto`, `fecha`, `lista` | Cada uno exige un tipo concreto en la API: `dinero` solo acepta pesos enteros ([ADR-003](adr/ADR-003-dinero-entero.md)) |
+| `minimo` y `maximo` se leen según el tipo | En `dinero` son pesos; en `texto`, caracteres |
+| `teclado` es `numerico` o `texto` | Y no viaja en `fecha` ni en `lista`, que se eligen con un selector y no abren teclado |
+| `mensajes` trae un texto **por cada regla que el campo tiene** | Es el mismo texto que llega en `data.errores` cuando esa regla falla en el servidor (§8.2), y la prueba `DescriptorContraValidacionTest` lo compara palabra por palabra |
+
+### 4.4 Las reglas que caben, y por qué no caben más
+
+El descriptor expresa **tres reglas y ninguna más**: `obligatorio`, `minimo` y `maximo`.
+
+No es una limitación pendiente de resolver: es el borde que impide que el descriptor se convierta
+en un lenguaje de reglas disfrazado, que es justo lo que
+[ADR-018](adr/ADR-018-front-sin-decisiones.md) pide vigilar. Un formato de correo, una expresión
+regular o una regla que mira dos campos a la vez son **código**, y el día que el front los
+interpretara volvería a ser dueño de reglas.
+
+Por eso la API **no arranca** si un formulario usa una regla que el descriptor no sabe expresar,
+o si una regla no trae su mensaje redactado en español. El fallo dice qué campo y qué regla:
+
+> *El campo «correo» del formulario «contacto» no se puede describir: usa @Email, que el
+> descriptor no sabe expresar. Solo caben obligatorio, mínimo y máximo.*
+
+Una regla así sigue pudiendo existir: la comprueba la API cuando llega la petición, y su mensaje
+vuelve en `data.errores`. Lo que no puede es **anunciarse en el descriptor**, y quien diseña el
+formulario lo sabe al arrancar la API, no cuando una empleada ve un error que la pantalla nunca
+le avisó.
+
 ---
 
 ## 5. Idempotencia

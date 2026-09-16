@@ -17,8 +17,8 @@ Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada
 | **uat** | Aprobación de Gerencia antes de publicar | Gerencia y la empleada | Realistas, **anonimizados** |
 | **prod** | El negocio de verdad | El equipo del taller | Reales |
 
-La semilla reproducible de qa es la que ya existe (`supabase/seed.sql`), descrita en
-[`16-base-de-datos-y-snapshots.md`](16-base-de-datos-y-snapshots.md). No se inventa otra.
+La semilla reproducible de qa es la que ya existe (`supabase/seed.sql`, en `prisma_db`), descrita
+en [`16-base-de-datos-y-snapshots.md`](16-base-de-datos-y-snapshots.md). No se inventa otra.
 
 ### 1.1 Las seis reglas
 
@@ -52,6 +52,11 @@ dev ──▶ qa ──▶ uat ──▶ prod
 Una migración nace en dev, se aplica en qa cuando pasan las pruebas, llega a uat cuando Gerencia
 va a revisar, y solo entonces puede ir a prod. Saltarse un escalón deja prod con un esquema que
 nadie probó.
+
+**Y en cada ambiente, la migración llega antes que la API que la necesita.** Viven en repositorios
+distintos ([ADR-025](adr/ADR-025-cuatro-repositorios.md)), así que nada obliga a publicarlas
+juntas: la migración tiene que ser compatible con la API que ya está corriendo, la API nueva se
+publica después, y lo que quedó viejo se quita en una versión posterior.
 
 > **El esquema vive en migraciones, no en un volcado.** Un volcado es la foto de un momento; las
 > migraciones son la receta reproducible, y son lo único que puede aplicarse cuatro veces en el
@@ -89,13 +94,13 @@ destino, construido desde el mismo commit ya aprobado.
 
 ### 2.4 El artefacto de la API: una imagen de contenedor con una JVM adentro
 
-`prisma_api` es una aplicación Java 21 con Spring Boot, y eso decide cómo se construye, qué se
+`prisma_api` es una aplicación Java 25 con Spring Boot, y eso decide cómo se construye, qué se
 promueve y qué hace falta para alojarla:
 
 | Asunto | Cómo queda | Por qué |
 |---|---|---|
-| **Construcción** | **Maven** (`mvn package`) produce un **JAR ejecutable** de Spring Boot: un solo archivo con la aplicación y sus dependencias | Un JAR y nada más que copiar. Lo que corre en prod no depende de qué haya instalado en la máquina. Maven es lo que produce Spring Initializr por defecto y lo que más gente sabe leer |
-| **Artefacto** | Una **imagen de contenedor** en dos etapas: se compila con el JDK, se publica solo con el JRE 21 | La etiqueta de la imagen es la versión SemVer del §4. Esa imagen es la que se promueve tal cual por los cuatro ambientes |
+| **Construcción** | **Gradle** (`./gradlew bootJar`) produce un **JAR ejecutable** de Spring Boot: un solo archivo con la aplicación y sus dependencias | Un JAR y nada más que copiar. Lo que corre en prod no depende de qué haya instalado en la máquina, **ni siquiera del JDK**: Gradle descarga el 25 por su cuenta ([ADR-024](adr/ADR-024-java-25-y-gradle.md)) |
+| **Artefacto** | Una **imagen de contenedor** en dos etapas: se compila con el JDK, se publica solo con el JRE 25 | La etiqueta de la imagen es la versión SemVer del §4. Esa imagen es la que se promueve tal cual por los cuatro ambientes |
 | **Memoria** | **512 MB como mínimo** por instancia, y el contenedor arranca con `-XX:MaxRAMPercentage=75` | La JVM reserva su montón según lo que cree que tiene disponible |
 | **Arranque** | Segundos, no milisegundos. La comprobación de salud espera a que termine | Un orquestador impaciente reinicia en bucle una aplicación que solo estaba arrancando |
 | **Salud** | `/actuator/health`, con sondas separadas de vida y de disponibilidad | El tráfico no entra antes de que la base esté conectada y las migraciones verificadas |
@@ -167,8 +172,8 @@ saber qué hace falta, no para arrancar nada.
 | Proyecto | Dónde vive la versión | Formato |
 |---|---|---|
 | `prisma_front` | `pubspec.yaml` | `MAJOR.MINOR.PATCH+BUILD` |
-| `prisma_api` | El archivo de construcción del proyecto Java | `MAJOR.MINOR.PATCH`, y la misma cadena etiqueta la imagen de contenedor |
-| Esquema de base | Migraciones numeradas + tabla `schema_version` | `MAJOR.MINOR.PATCH` |
+| `prisma_api` | `build.gradle.kts` | `MAJOR.MINOR.PATCH`, y la misma cadena etiqueta la imagen de contenedor |
+| Esquema de base (`prisma_db`) | Migraciones numeradas + tabla `schema_version` | `MAJOR.MINOR.PATCH` |
 
 ### 4.2 Las reglas
 
