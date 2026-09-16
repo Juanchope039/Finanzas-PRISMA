@@ -917,8 +917,9 @@ Flutter entra por `--dart-define` en el momento de compilar; en la API, por vari
 | [ADR-022](adr/ADR-022-openapi-generado.md) | OpenAPI generado del código y verificado en integración continua | Aceptado (§9.4) |
 | [ADR-023](adr/ADR-023-tres-repositorios.md) | Tres repositorios y el contrato como artefacto versionado | Reemplazado por [ADR-025](adr/ADR-025-cuatro-repositorios.md) |
 | [ADR-025](adr/ADR-025-cuatro-repositorios.md) | Cuatro repositorios: la base de datos sale de la API | Aceptado (§2) |
+| [ADR-026](adr/ADR-026-railway-al-final.md) | Railway aloja la API y el front, y el despliegue va al final del desarrollo | Aceptado |
 
-Son **25 decisiones registradas**. El índice completo, con el estado de cada una, vive en
+Son **26 decisiones registradas**. El índice completo, con el estado de cada una, vive en
 [`adr/README.md`](adr/README.md).
 
 Un ADR no se modifica: si una decisión cambia, se escribe uno nuevo que reemplaza al anterior y

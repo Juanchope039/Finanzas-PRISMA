@@ -2,9 +2,11 @@
 
 Cómo se reparte PRISMA entre dos equipos que trabajan a la vez sin bloquearse ni pisarse.
 
-> **Estado: diseñado, no construido.** Todavía no hay equipos ni repositorios separados. Este
-> documento fija cómo deben quedar **antes** de que el segundo equipo escriba su primera línea:
-> después ya hay código que reorganizar y decisiones tomadas por omisión.
+> **Estado: los repositorios ya existen; los dos equipos, todavía no.** Los cuatro repositorios
+> están en GitHub ([ADR-025](adr/ADR-025-cuatro-repositorios.md),
+> [ADR-026](adr/ADR-026-railway-al-final.md)). Este documento fija cómo debe quedar el resto
+> **antes** de que el segundo equipo escriba su primera línea: después ya hay código que
+> reorganizar y decisiones tomadas por omisión.
 
 ---
 
@@ -303,6 +305,8 @@ Nada de esto lo resuelve este documento y todo bloquea el primer día:
 1. **Quién está en cada equipo**, y si alguien sabe Flutter y Java a la vez —esa persona es la
    que debe revisar los cambios de contrato—.
 2. **Dónde se alojan los cuatro repositorios** y quién tiene permiso de escritura en cada uno.
+   Lo primero ya está decidido: en GitHub ([ADR-026](adr/ADR-026-railway-al-final.md)). Los
+   permisos se reparten cuando existan los equipos.
 3. **Si el contrato se publica como paquete** (artefacto en un repositorio Maven —que es el
    formato, lo publique Gradle o quien sea— y paquete de Dart) o se consume
    por etiqueta de git. Lo segundo es más simple y alcanza para dos equipos.

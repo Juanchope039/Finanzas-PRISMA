@@ -116,7 +116,7 @@ pasos cuestan plata y hay que decidirlos con tiempo.
 | 1 | Crear los **cuatro proyectos de Supabase**: dev, qa, uat y prod. Cada uno con su propia base, sus claves y su almacenamiento | Apoyo técnico | Sprint 0 |
 | 2 | **Contratar lo que hay que pagar:** el plan de pago de Supabase en uat y prod, y el alojamiento de `prisma_api` en prod, que no se puede apagar. dev y qa se quedan en planes gratuitos o apagables | Gerencia | Antes de levantar uat |
 | 3 | Crear el rol **`prisma_api`** en cada ambiente: sin `BYPASSRLS`, sin `SUPERUSER` y sin ser dueño de las tablas | Apoyo técnico | Sprint 0 |
-| 4 | **Levantar el alojamiento de la API en los cuatro ambientes**: una imagen de contenedor por versión, con su memoria y sus variables (§3.2) | Apoyo técnico | Sprint 0 |
+| 4 | **Levantar el alojamiento de la API en los cuatro ambientes**: una imagen de contenedor por versión, con su memoria y sus variables (§3.2), en Railway ([ADR-026](adr/ADR-026-railway-al-final.md)) | Apoyo técnico | Sprint 9 |
 | 5 | Cargar los **secretos de cada ambiente** fuera del repositorio: variables de entorno en la API, `--dart-define` al compilar el front | Apoyo técnico | Sprint 0 |
 | 6 | Guardar la clave `service_role` de cada ambiente en un **secreto aparte**, reservado para migraciones y tareas administrativas | Apoyo técnico | Sprint 0 |
 | 7 | Promover el esquema dev → qa → uat → prod y verificar `schema_version` en cada base | Apoyo técnico | Antes de cada hito |

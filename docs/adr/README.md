@@ -30,8 +30,9 @@ consideraron y qué consecuencias tiene.
 | [023](ADR-023-tres-repositorios.md) | Tres repositorios y el contrato como artefacto versionado | Reemplazado por [025](ADR-025-cuatro-repositorios.md) |
 | [024](ADR-024-java-25-y-gradle.md) | Java 25, Gradle y Spring Boot 4 en la API | Aceptado |
 | [025](ADR-025-cuatro-repositorios.md) | Cuatro repositorios: la base de datos sale de la API | Aceptado |
+| [026](ADR-026-railway-al-final.md) | Railway aloja la API y el front, y el despliegue va al final del desarrollo | Aceptado |
 
-Son **25 decisiones** registradas: 19 aceptadas y 6 reemplazadas.
+Son **26 decisiones** registradas: 20 aceptadas y 6 reemplazadas.
 
 > **Sobre la numeración.** El cambio de stack se planeó como ADR-010 y ADR-011, pero el 010 ya
 > estaba ocupado por la decisión de contraseñas. Un número asignado no se reutiliza, así que el

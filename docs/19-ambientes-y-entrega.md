@@ -391,6 +391,10 @@ Son, como mínimo, **dos proyectos de Supabase de pago y dos instancias de la AP
 Pero es mayor de la que habría con un binario de unas decenas de megabytes, y decirlo es parte de
 haber elegido Java a conciencia y no por descuido.
 
+El alojamiento de la API y del front es **Railway**, y se contrata al final del desarrollo
+([ADR-026](adr/ADR-026-railway-al-final.md)). Hasta entonces, dev es la máquina de quien desarrolla
+contra el proyecto dev de Supabase, que es lo que la fila de dev ya permitía.
+
 > **Costo al mínimo no es costo cero, y confundirlos se paga en disponibilidad.** Lo que se ahorra
 > apagando uat o dejando dormir a prod se cobra el día que Gerencia no puede aprobar, o que la
 > empleada abre la aplicación y se queda esperando el arranque. El mínimo es el más barato **de los

@@ -140,6 +140,10 @@ gantt
 | **H10** | Sprint 9 | Gerencia aprueba en UAT exactamente el artefacto que irá a prod |
 | **H11** | Go-live | El Excel y el cuaderno dejan de usarse |
 
+> **H1 se cumple en dos partes** ([ADR-026](adr/ADR-026-railway-al-final.md)). La insignia de
+> versión y el sobre en toda respuesta, al cerrar el Sprint 0. Que un cambio fusionado se despliegue
+> solo hasta dev, en el Sprint 9, cuando llega el alojamiento.
+
 ---
 
 ## 3. Sprints
@@ -190,6 +194,11 @@ gantt
 | 0.16 | Prueba que falla si el código fuente emite un código que no está en el catálogo, o si un código del catálogo quedó sin usar | 0,5 |
 | 0.17 | **Descriptor de formulario** generado de la misma definición con la que el servidor valida: una sola fuente, nunca escrita dos veces (RF-102) | 2 |
 | 0.18 | `springdoc-openapi` sirviendo `/docs`, `openapi.json` versionado en el repositorio y **la integración continua falla si el generado difiere del versionado** (RNF-30) | 1,5 |
+
+> **0.8 y 0.9 se hacen en el Sprint 9.** El despliegue en Railway va al final del desarrollo
+> ([ADR-026](adr/ADR-026-railway-al-final.md)): hasta entonces no hay a dónde entregar, y dev es la
+> máquina de quien desarrolla contra el proyecto dev de Supabase. Lo demás del Sprint 0 se cierra
+> aquí, y su «terminado cuando» se lee sin el despliegue automático.
 
 **Terminado cuando** — un cambio fusionado llega solo hasta dev sin que nadie toque una consola,
 la versión y el ambiente se leen en el pie de la barra lateral, y un endpoint de prueba responde
@@ -436,6 +445,10 @@ pro-labore sí.
 | 9.9 | Prueba de verdad del contrato de compatibilidad: el front rechaza un MAJOR de API distinto | 0,5 |
 | 9.10 | Etiquetar `1.0.0` del front y de la API para el go-live | 0,5 |
 | 9.11 | Swagger abierto en `/docs` en dev, qa y uat, y **detrás de autenticación en prod**: el catálogo de endpoints es un mapa del sistema | 0,5 |
+
+> **Aquí llegan también las tareas 0.8 y 0.9** —la imagen de la API arrancando en los ambientes y
+> la entrega automática a dev—, movidas del Sprint 0 por [ADR-026](adr/ADR-026-railway-al-final.md).
+> Con ellas el sprint pasa de 11,5 a 14 días, la misma carga que el Sprint 3 lleva en dos semanas.
 
 **Terminado cuando** — Gerencia aprueba en UAT y ese mismo artefacto, sin reconstruir, queda
 listo para prod.

@@ -103,10 +103,12 @@ a una pregunta concreta. Ver el [índice de ADRs](adr/README.md).
 | [023](adr/ADR-023-tres-repositorios.md) | El código vive en tres repositorios, y el contrato es un artefacto con versión propia · **Reemplazado por 025** | ¿Dónde vive cada parte y cómo no se desincronizan? |
 | [024](adr/ADR-024-java-25-y-gradle.md) | La API se construye con Gradle, sobre Java 25 y Spring Boot 4 | ¿Con qué se compila y hasta cuándo tiene soporte? |
 | [025](adr/ADR-025-cuatro-repositorios.md) | La base de datos tiene su propio repositorio, y los tres de código viven dentro de este | ¿Dónde vive cada parte, y qué se pierde al separar la base? |
+| [026](adr/ADR-026-railway-al-final.md) | El código vive en GitHub y el sistema se publica en Railway, al final del desarrollo | ¿Dónde se publica el sistema, y desde cuándo? |
 
-Del 017 al 025 están las decisiones del modelo de tres partes: el cambio de Dart a Java en la
+Del 017 al 026 están las decisiones del modelo de tres partes: el cambio de Dart a Java en la
 API, que el front no decide nada, el contrato de respuesta, la idempotencia, el canal firmado,
-la documentación generada del código, Java 25 y el reparto en cuatro repositorios.
+la documentación generada del código, Java 25, el reparto en cuatro repositorios y dónde se
+despliega.
 
 ---
 
