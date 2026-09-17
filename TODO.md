@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -41,7 +41,7 @@ Lo que tiene su commit en `main` con la integración continua en verde, que es l
 | **Base** | **Nada aplicado todavía.** Las 22 tablas, la auditoría y las políticas RLS están escritas en la migración inicial y esperan al proyecto dev de Supabase | — |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | — |
 
-**330 pruebas en verde en la API** y 28 en el front. El dominio se prueba con las cifras de los
+**331 pruebas en verde en la API** y 28 en el front. El dominio se prueba con las cifras de los
 documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md): si una prueba falla, o se rompió el código o el documento dice
 otra cosa.
 
@@ -397,15 +397,33 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 
 ---
 
-## 10. Decisiones del Sprint 0 que conviene revisar
+## 10. Decisiones de construcción que conviene revisar
 
-Las tomó quien construyó el [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0), no quien dirige el proyecto:
+Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
+huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**Del [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0):**
 
 - [ ] Los errores 405, 406 y 415 responden 400 con el código `40000`
 - [ ] `@PendienteDeEmitir` marca en el catálogo los códigos que todavía nadie emite
 - [ ] El catálogo de códigos va dentro del OpenAPI, en `x-prisma-codigos`
 - [ ] La pantalla de versión incompatible tiene tres filas de versiones y no las dos del mockup
 - [ ] Se siguió el texto del mockup y no el literal del escenario [BDD-101-1](docs/03-requisitos-y-bdd.md#bdd-101-1)
+
+**Del dominio (tareas [3.1](docs/08-plan-de-desarrollo.md#tarea-3-1), [3.2](docs/08-plan-de-desarrollo.md#tarea-3-2), [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1) y [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1)):**
+
+- [ ] El dominio rechaza dos cosas que la base permite: un gasto con cuenta de destino, y una
+      transferencia de una cuenta a sí misma ([§9](#9-a-vigilar))
+- [ ] El margen por hora de un ítem que no consume tiempo de taller **no existe**, y viaja vacío en
+      vez de cero: pintarlo como cero lo dejaría de último en el cuadro comparativo de la tarea [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9),
+      como si fuera el peor negocio del taller
+- [ ] Un tiempo con más de dos decimales se rechaza en vez de redondearse, porque es lo que la
+      columna `NUMERIC(6,2)` puede guardar
+- [ ] Un pedido `cotizado` no se puede entregar sin confirmarse antes
+- [ ] El identificador de un movimiento lo genera la API y no la base, para que repetir una petición
+      que se cortó no cree dos ([ADR-020](docs/adr/ADR-020-idempotencia.md))
+- [ ] La zona `America/Bogota` vive en el dominio y no en la configuración, porque cambiarla
+      cambiaría a qué mes pertenece un movimiento ([RNF-08](docs/03-requisitos-y-bdd.md#rnf-08))
 
 ---
 
