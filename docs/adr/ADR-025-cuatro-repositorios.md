@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-025-cuatro-repositorios.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-16 | 2026-09-16 | [Proceso](../INDICE.md#etiqueta-proceso) · [Paralelo](../INDICE.md#etiqueta-paralelo) · [Base de datos](../INDICE.md#etiqueta-base-de-datos) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-025-cuatro-repositorios.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-16 | 2026-09-16 | [Proceso](../INDICE.md#etiqueta-proceso) · [Paralelo](../INDICE.md#etiqueta-paralelo) · [Base de datos](../INDICE.md#etiqueta-base-de-datos) |
 
 ## Contexto
 
@@ -99,10 +99,10 @@ este ADR cambia un fallo imposible por uno silencioso.
 
 - **Negativas:** **una función que necesita una columna nueva son dos commits, en dos
   repositorios y en orden**, y ese orden ya no lo garantiza git. Las pruebas de integración de la
-  API —la de `pg_constraint` de la tarea [1.8](../08-plan-de-desarrollo.md#tarea-1-8), las de RLS— van a necesitar el esquema de otro
-  repositorio, y **todavía no está decidido cómo lo consiguen**: una etiqueta de `prisma_db`, un
-  submódulo o una imagen de PostgreSQL con el esquema. Hay una tubería más que montar y un juego
-  más de secretos. Y quien llega nuevo clona cuatro cosas en vez de tres.
+  API —la de `pg_constraint` de la tarea [1.8](../08-plan-de-desarrollo.md#tarea-1-8), las de RLS— necesitan el esquema de otro
+  repositorio: **lo consiguen por etiqueta, y la integración continua lo levanta con el Supabase CLI**
+  ([ADR-029](ADR-029-esquema-por-etiqueta.md), tarea [1.20](../08-plan-de-desarrollo.md#tarea-1-20)). Hay una tubería más que montar y un juego más de secretos. Y quien
+  llega nuevo clona cuatro cosas en vez de tres.
 
 - **A vigilar:** si casi toda función termina en una migración y un cambio de API que tienen que
   publicarse juntos, y los errores de orden empiezan a aparecer en qa, la separación está cobrando
@@ -110,6 +110,7 @@ este ADR cambia un fallo imposible por uno silencioso.
 
 ## Referencias
 
+- [ADR-029](ADR-029-esquema-por-etiqueta.md) — cómo consiguen el esquema la API y su integración continua, que este ADR dejó abierto
 - [ADR-023](ADR-023-tres-repositorios.md) — la decisión que este reemplaza
 - [ADR-014](ADR-014-semver.md) — el esquema ya tenía versión propia
 - [ADR-013](ADR-013-cuatro-ambientes.md) — la promoción de migraciones por los cuatro ambientes
@@ -120,5 +121,5 @@ este ADR cambia un fallo imposible por uno silencioso.
 ---
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [16](../16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](../19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../../contrato/README.md "Contrato de la API · v0.3.0") · [ADR-023](ADR-023-tres-repositorios.md "ADR-023 · Tres repositorios y el contrato como artefacto versionado") · [ADR-026](ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [CLAUDE](../../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [16](../16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](../19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../../contrato/README.md "Contrato de la API · v0.3.0") · [ADR-023](ADR-023-tres-repositorios.md "ADR-023 · Tres repositorios y el contrato como artefacto versionado") · [ADR-026](ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-029](ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [CLAUDE](../../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
