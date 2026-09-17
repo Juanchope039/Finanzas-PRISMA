@@ -11,7 +11,7 @@ hacer, manda el plan.
 
 | Marca | Significa | Quién la pone |
 |---|---|---|
-| `[x]` | **Hecha** y verificada: pruebas en verde y commit en `main` | Quien la termina |
+| `[x]` | **Hecha** y verificada: pruebas en verde y commit en `develop` | Quien la termina |
 | 🚧 | **En progreso:** alguien la tiene en las manos ahora | Quien la toma |
 | ⚡ | **Puede empezar hoy:** todo lo que necesita ya está hecho | La herramienta, del plan |
 | 🔒 | Espera a otra tarea que todavía no está hecha | La herramienta, del plan |
@@ -49,7 +49,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 
 ### 1.2 ✅ Hecho
 
-Lo que tiene su commit en `main` con la integración continua en verde, que es lo que la
+Lo que tiene su commit en `develop` con la integración continua en verde, que es lo que la
 [definición de terminado](docs/08-plan-de-desarrollo.md#4-definición-de-terminado) exige mientras no exista el ambiente qa ([ADR-026](docs/adr/ADR-026-railway-al-final.md)).
 
 | Carril | Qué hay | Tareas |
@@ -488,7 +488,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
   descarga `prisma_db` por etiqueta y levanta Supabase se monta con la primera prueba que lo
   necesite ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) o [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)). Y `prisma_db` todavía no tiene ninguna etiqueta `esquema-v…`, aunque su
   esquema ya esté aplicado: etiquetarlo es parte de la promoción que tiene que escribir la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12).
-- **Sin qa hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9)** ([ADR-026](docs/adr/ADR-026-railway-al-final.md)): mientras tanto, «terminado» es fusionado a `main` con la
+- **Sin qa hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9)** ([ADR-026](docs/adr/ADR-026-railway-al-final.md)): mientras tanto, «terminado» es fusionado a `develop` con la
   integración continua en verde.
 - **Los íconos de la PWA siguen siendo los de la plantilla de Flutter.** El logo del taller es
   apaisado —760×253— y volverlo un ícono cuadrado de 192 y 512 píxeles es una decisión de diseño,
@@ -685,8 +685,10 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
   decidió y por qué, y cómo se verificó, incluido qué se rompió a propósito para ver fallar las
   pruebas. Dos tareas no van en un mismo commit aunque toquen la misma clase. Así `git log
   --oneline` es esta misma lista, en el orden en que se hizo.
-- Una tarea se marca `[x]` cuando su commit está en `main` con la integración continua en verde. Lo
-  escrito pero no probado lleva ✏️, no `[x]`; lo que alguien tiene en las manos lleva 🚧.
+- Una tarea se marca `[x]` cuando su commit está en `develop` con la integración continua en verde
+  ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)). La marca viaja en el PR de la especificación de esa misma tarea, que se
+  acepta junto con el del código. Lo escrito pero no probado lleva ✏️, no `[x]`; lo que alguien
+  tiene en las manos lleva 🚧.
 - Después de marcar algo, se corre `node scripts/docs/documentar.mjs enlazar`: rehace las marcas ⚡ y
   🔒, lo que puede empezar hoy y cuánto falta. **Las dependencias no se escriben aquí**: viven en el
   plan.
