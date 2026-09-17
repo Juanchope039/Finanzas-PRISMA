@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
 
 Tres partes —un front en Flutter multiplataforma, una API en Java 25 con Spring Boot y una capa
 de datos PostgreSQL siempre en línea—. Arquitectura hexagonal (puertos y adaptadores) sobre Clean
@@ -148,7 +148,7 @@ prisma_api/
 ├── gradlew                        # Nadie necesita instalar Gradle
 └── src/
     ├── main/
-    │   ├── java/co/prismamy/api/
+    │   ├── java/com/prismamy/api/
     │   │   ├── PrismaApiApplication.java
     │   │   │
     │   │   ├── dominio/                   # EL NÚCLEO — no conoce HTTP, ni SQL, ni Spring
@@ -223,7 +223,7 @@ prisma_api/
     │   └── resources/
     │       └── application.yml
     └── test/
-        └── java/co/prismamy/api/
+        └── java/com/prismamy/api/
             ├── dominio/                   # Pruebas puras, sin base de datos ni red
             ├── doble/                     # Repositorios en memoria para pruebas
             ├── arquitectura/              # ArchUnit: la regla de dependencias (§3)
@@ -279,8 +279,8 @@ En la API, la regla se verifica con **ArchUnit**, como una prueba más que corre
 compilación:
 
 ```java
-// src/test/java/co/prismamy/api/arquitectura/ReglaDeDependenciasTest.java
-@AnalyzeClasses(packages = "co.prismamy.api")
+// src/test/java/com/prismamy/api/arquitectura/ReglaDeDependenciasTest.java
+@AnalyzeClasses(packages = "com.prismamy.api")
 class ReglaDeDependenciasTest {
 
     @ArchTest

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -133,7 +133,7 @@ prisma_front  ──HTTP──▶  prisma_api  ──SQL──▶  prisma_db
 
 ### La API por dentro
 
-Arquitectura hexagonal con cuatro paquetes bajo `co.prismamy.api`, y **las flechas apuntan siempre
+Arquitectura hexagonal con cuatro paquetes bajo `com.prismamy.api`, y **las flechas apuntan siempre
 hacia adentro** ([ADR-002](docs/adr/ADR-002-arquitectura-hexagonal.md)):
 
 | Paquete | Qué vive ahí |
