@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [1.8.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -35,7 +35,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 17 | 14 | 0 | 3 | 3 |
-| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 4 | 0 | 16 | 19 |
+| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 5 | 0 | 15 | 17 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 19 | 1 | 0 | 18 | 21,5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 3 | 0 | 10 | 11,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 1 | 0 | 9 | 11 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 0 | 0 | 13 | 14 |
-| **Total** | **132** | **25** | **0** | **107** | **131,5** |
+| **Total** | **132** | **26** | **0** | **106** | **129,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -58,11 +58,12 @@ Lo que tiene su commit en `main` con la integración continua en verde, que es l
 | **API · dominio** | `Dinero`; `Movimiento` con los nueve tipos y su efecto sobre las tres cifras; `Pedido` con sus cinco estados; `Producto`, `Costeo` partido en materia y tiempo, la tarifa por hora y los tres márgenes; y `RegistrarMovimiento`, el primer caso de uso, con la marca de registro tardío | [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9) · [3.1](docs/08-plan-de-desarrollo.md#tarea-3-1) · [3.2](docs/08-plan-de-desarrollo.md#tarea-3-2) · [3.11](docs/08-plan-de-desarrollo.md#tarea-3-11) · [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1) · [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1) · [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3) |
 | **Front** | El proyecto Flutter con su integración continua, la insignia de versión y ambiente, el bloqueo por MAJOR incompatible y `Dinero` en Dart | [0.3](docs/08-plan-de-desarrollo.md#tarea-0-3) · [0.12](docs/08-plan-de-desarrollo.md#tarea-0-12) · [0.13](docs/08-plan-de-desarrollo.md#tarea-0-13) · [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9) |
 | **Front · sistema de diseño** | La tabla, el panel de confirmación en línea, la píldora de estado y los formatos colombianos de fecha y porcentaje; el cliente HTTP con clave de idempotencia; y el panel «Acerca de» | [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19) · [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19) · [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10) |
+| **Front · formularios** | El renderizador del descriptor: pinta los campos que manda la API con su teclado, sus límites, sus opciones y sus avisos, y no trae ninguna regla propia | [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18) |
 | **Contrato** | El contrato v0.3.0 en [`contrato/openapi.json`](contrato/openapi.json): el sobre, los 18 códigos, el descriptor con sus listas, y cuentas y categorías acordadas **antes** de implementarlas | [0.15](docs/08-plan-de-desarrollo.md#tarea-0-15) · [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) · [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) |
 | **Base** | **Nada aplicado todavía.** Las 22 tablas, la auditoría y las políticas RLS están escritas en la migración inicial y esperan al proyecto dev de Supabase | — |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
-**347 pruebas en verde en la API** y 71 en el front. El dominio se prueba con las cifras de los
+**347 pruebas en verde en la API** y 103 en el front. El dominio se prueba con las cifras de los
 documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md): si una prueba falla, o se rompió el código o el documento dice
 otra cosa.
 
@@ -70,9 +71,8 @@ otra cosa.
 
 Nada en las manos ahora mismo.
 
-**Lo siguiente, en cuanto alguien lo tome:** el carril Front tiene el renderizador del descriptor
-de formulario ([1.18](docs/08-plan-de-desarrollo.md#tarea-1-18)), que ya puede empezar porque el sistema de diseño está, y la PWA con su
-cola sin conexión ([9.1](docs/08-plan-de-desarrollo.md#tarea-9-1)), que la destrabó el cliente con clave de idempotencia. El carril Contrato ya
+**Lo siguiente, en cuanto alguien lo tome:** el carril Front tiene la PWA con su cola sin conexión
+([9.1](docs/08-plan-de-desarrollo.md#tarea-9-1)), que la destrabó el cliente con clave de idempotencia. El carril Contrato ya
 entregó el de cuentas y categorías ([1.17](docs/08-plan-de-desarrollo.md#tarea-1-17)), y el siguiente es el del [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) ([2.19](docs/08-plan-de-desarrollo.md#tarea-2-19)), que espera al
 acceso. En el carril API,
 la [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3) destrabó el bordado por tiempo de máquina ([5.4](docs/08-plan-de-desarrollo.md#tarea-5-4)) y el margen por hora ([5.6](docs/08-plan-de-desarrollo.md#tarea-5-6)); lo
@@ -93,7 +93,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
 | **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.6](docs/08-plan-de-desarrollo.md#tarea-5-6) |
-| **Front** | [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18) · [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) |
+| **Front** | [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) |
 | **Contrato** | [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
 <!-- /generado:plan-listas-ya -->
@@ -101,13 +101,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **107 tareas y 131,5 días de trabajo** de 132 tareas del plan.
+Quedan **106 tareas y 129,5 días de trabajo** de 132 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 19,8 semanas | **22,8 semanas** |
-| 2 | 12,3 semanas | **15,3 semanas** |
-| 3 | 10,5 semanas | **13,5 semanas** |
+| 1 | 19,5 semanas | **22,5 semanas** |
+| 2 | 12,0 semanas | **15,0 semanas** |
+| 3 | 10,4 semanas | **13,4 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -196,7 +196,11 @@ hasta aplicarlo y probarlo.
       códigos `42220` a `42222`. El descriptor suma `opciones`, `origen` y el tipo `casilla`, que es
       lo que una lista necesitaba para pintarse sin que el front decida nada. La copia fijada en
       `prisma_api` sube con la [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10)
-- [ ] ⚡ [**1.18**](docs/08-plan-de-desarrollo.md#tarea-1-18) Renderizador del descriptor de formulario en el front ([RF-102](docs/03-requisitos-y-bdd.md#rf-102)) · Front
+- [x] [**1.18**](docs/08-plan-de-desarrollo.md#tarea-1-18) Renderizador del descriptor de formulario en el front ([RF-102](docs/03-requisitos-y-bdd.md#rf-102)) · Front — pinta los cinco
+      tipos de campo con el teclado, los límites, las opciones y los avisos que manda la API, y
+      entrega los valores listos para una `Accion`. Un descriptor que no se puede pintar entero no se
+      pinta: la prueba que sostiene el requisito cambia el mensaje en el descriptor y exige que
+      cambie el de la pantalla
 - [x] [**1.19**](docs/08-plan-de-desarrollo.md#tarea-1-19) Cliente HTTP con `Idempotency-Key`, generada una vez por acción ([ADR-020](docs/adr/ADR-020-idempotencia.md)) · Front — la
       clave nace con la `Accion` y no con la petición: reenviar la misma acción es reintentar, y
       crear otra es hacer otra cosa
@@ -479,7 +483,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] Editar y anular cuentas y categorías no entran al contrato todavía, porque ningún requisito
       las pide
 
-**Del front (tareas [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19), [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19) y [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10)):**
+**Del front (tareas [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19), [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19), [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18) y [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10)):**
 
 - [ ] «Acerca de» se abre tocando la insignia de versión. El mockup lo pone en el menú de la
       sesión, que llega con el [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) ([2.2](docs/08-plan-de-desarrollo.md#tarea-2-2) y [2.14](docs/08-plan-de-desarrollo.md#tarea-2-14)); la insignia ya es el sitio donde se mira la versión
@@ -487,6 +491,13 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       Flutter es la señal de que la columna está mal medida
 - [ ] El panel de confirmación recibe el campo y el mensaje de error ya hechos, en vez de
       construirlos. Es lo que impide que el front se quede con una regla propia
+- [ ] Un descriptor al que le falte algo —un tipo desconocido, una regla sin mensaje, una lista sin
+      opciones ni origen— no se pinta a medias: no se pinta, y la pantalla lo dice
+- [ ] Los avisos de un formulario salen al enviar, no mientras se escribe, y se van en cuanto la
+      persona toca el campo; el error del servidor, igual
+- [ ] Un campo opcional vacío viaja como `null` y no como cadena vacía
+- [ ] El botón que envía lo pone la pantalla, no el renderizador, porque su texto es parte de la
+      acción
 
 ---
 
