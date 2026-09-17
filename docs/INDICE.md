@@ -158,7 +158,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 2.0.0 | ✅ Vigente | 2026-09-17 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
 | [20 · Contrato de la API](20-contrato-de-api.md) | 2.0.0 | ✅ Vigente | 2026-09-17 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) | 2.0.0 | ✅ Vigente | 2026-09-17 | [Paralelo](#etiqueta-paralelo) · [Proceso](#etiqueta-proceso) |
-| [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 1.3.0 | ✅ Vigente | 2026-09-16 | [Proceso](#etiqueta-proceso) |
+| [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 1.4.0 | ✅ Vigente | 2026-09-17 | [Proceso](#etiqueta-proceso) |
 | [Contrato de la API · v0.5.0](../contrato/README.md) | 2.0.0 | ✅ Vigente | 2026-09-17 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [Decisiones de arquitectura (ADR)](adr/README.md) | 1.3.0 | 🔄 Vivo | 2026-09-17 | [Arquitectura](#etiqueta-arquitectura) |
 | [ADR-001 · Stack tecnológico](adr/ADR-001-stack.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) |
@@ -191,8 +191,8 @@ Qué significa cada estado y cuándo sube una versión está en
 | [ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué](adr/ADR-028-un-commit-por-tarea.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Proceso](#etiqueta-proceso) · [Plan](#etiqueta-plan) |
 | [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Base de datos](#etiqueta-base-de-datos) · [API](#etiqueta-api) · [Entrega](#etiqueta-entrega) · [Calidad](#etiqueta-calidad) |
 | [ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0](adr/ADR-030-contrato-sin-get.md) | 1.0.0 | ✅ Aceptado | 2026-09-17 | [API](#etiqueta-api) · [Contrato](#etiqueta-contrato) · [Seguridad](#etiqueta-seguridad) |
-| [CLAUDE.md](../CLAUDE.md) | 3.0.0 | 🔄 Vivo | 2026-09-17 | [Proceso](#etiqueta-proceso) |
-| [Herramienta de documentación](../scripts/docs/README.md) | 1.1.0 | ✅ Vigente | 2026-09-16 | [Proceso](#etiqueta-proceso) |
+| [CLAUDE.md](../CLAUDE.md) | 3.1.0 | 🔄 Vivo | 2026-09-17 | [Proceso](#etiqueta-proceso) |
+| [Herramienta de documentación](../scripts/docs/README.md) | 1.2.0 | ✅ Vigente | 2026-09-17 | [Proceso](#etiqueta-proceso) |
 <!-- /generado:estado-de-la-documentacion -->
 
 ---
