@@ -2,10 +2,10 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [1.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 > **Construcción: construido y corriendo contra dev**, donde el esquema está aplicado y verificado
-> línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5) y [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5)). **qa va dos migraciones atrás**: promoverlas es
+> línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5), [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5) y [1.13](08-plan-de-desarrollo.md#tarea-1-13)). **qa va tres migraciones atrás**: promoverlas es
 > la [1.12](08-plan-de-desarrollo.md#tarea-1-12). Fue la primera pieza de código ejecutable del proyecto.
 > Convierte el esquema que describe [`04-modelo-de-datos.md`](04-modelo-de-datos.md) en una
 > base de datos real, reproducible en cualquier ambiente con un comando.
@@ -48,7 +48,7 @@ un momento; las migraciones son la receta reproducible. Los snapshots se usan pa
 ```
 supabase/
   config.toml                          Configuración de la pila local
-  migrations/                          Siete, en orden y ninguna editable una vez aplicada:
+  migrations/                          Ocho, en orden y ninguna editable una vez aplicada:
     …_esquema_inicial.sql              Todo el esquema (doc 04 + tabla exportaciones del doc 13)
     …_ajusta_rls_y_vistas_al_doc_04.sql Apaga la RLS que Supabase enciende sola; security_invoker
     …_rol_prisma_api.sql               El rol con el que se conecta la API (doc 04 §9)
@@ -56,6 +56,7 @@ supabase/
     …_force_row_level_security.sql     FORCE en catorce tablas (doc 04 §7.1)
     …_dominios_y_restricciones_con_nombre.sql  Los nueve dominios del §4.1 y los nombres del §11
     …_revoca_borrado_a_todos_los_roles.sql     Nadie borra salvo el dueño (doc 04 §5.1)
+    …_peticiones_idempotentes.sql      Las claves de idempotencia, cada una solo de quien la envió (doc 04 §4.9)
   seed.sql                             Datos de prueba fijos y deterministas
 
 scripts/db/
@@ -119,8 +120,7 @@ supabase db push                                  # aplica las migraciones al re
 ```
 
 `db push` aplica solo lo que falte, así que es seguro correrlo de nuevo tras cada migración
-nueva. **El seed NO se aplica a remoto** (crea usuarios con contraseñas conocidas): en
-producción los usuarios reales los crea Gerencia desde la app.
+nueva. La semilla no viaja con las migraciones y tiene su propia regla: [§5.2](#52-la-semilla-en-dev-y-en-qa).
 
 ### 5.1 Comprobar que quedó como dice el modelo
 
@@ -129,7 +129,8 @@ preguntas del [`04-modelo-de-datos.md`](04-modelo-de-datos.md) y contesta `OK` o
 cada una: los nueve dominios y sus 61 columnas, que ninguna restricción se haya quedado con el
 nombre que le puso PostgreSQL, que nadie salvo el dueño pueda borrar, que los catorce triggers de
 auditoría **escriban**, que RLS le conteste distinto a una sesión de Operación y a una de
-Gerencia, y que el catálogo de cargos lo lea todo el mundo y lo escriba solo Gerencia.
+Gerencia, que el catálogo de cargos lo lea todo el mundo y lo escriba solo Gerencia, y que cada
+persona alcance sus claves de idempotencia y ninguna otra.
 
 ```powershell
 supabase db query --linked -f scripts/db/verificar-base.sql                        # el proyecto vinculado
@@ -142,11 +143,36 @@ puede hacer cada uno, y para eso tiene que poder volver— y **contra una base c
 las pruebas de permisos necesitan una persona de Gerencia y otra de Operación de verdad.
 
 > **No deja rastro.** Lo poco que escribe —mover un cargo para ver si el trigger de auditoría se
-> dispara— va dentro de una transacción que termina en `ROLLBACK`. Se puede correr contra cualquier
-> ambiente, incluido uno con datos.
+> dispara, y sembrar una clave de idempotencia por persona para ver quién alcanza cuál— va dentro
+> de una transacción que termina en `ROLLBACK`. Se puede correr contra cualquier ambiente, incluido
+> uno con datos.
 
 Es también la forma de ver qué le falta a un ambiente contra otro: corrido contra qa hoy, el guion
-dice en qué se quedó atrás ([1.12](08-plan-de-desarrollo.md#tarea-1-12)).
+dice en qué se quedó atrás ([1.12](08-plan-de-desarrollo.md#tarea-1-12)). Si al ambiente le falta una tabla entera, el informe no
+se cae: las preguntas sobre ella salen en `>>> FALLA`.
+
+### 5.2 La semilla en dev y en qa
+
+**La semilla va a la base local, a dev y a qa. A uat y a prod no entra nunca.** Crea usuarios con
+contraseña conocida y cifras inventadas; en uat los datos son realistas y anonimizados, y en prod
+son los del negocio, donde los usuarios reales los crea Gerencia desde la aplicación ([19 §1](19-ambientes-y-entrega.md#1-los-cuatro-ambientes)). El
+corte no es «local contra remoto» —dev y qa también son remotos—, es **qué datos son de verdad**.
+
+```powershell
+./scripts/db/sembrar.ps1 -Ambiente dev -EnSeco   # la corre entera y la revierte: no cambia nada
+./scripts/db/sembrar.ps1 -Ambiente dev           # la deja puesta
+```
+
+El guion pide dos llaves: el **ambiente**, que solo admite `dev` y `qa`, y la **referencia del
+proyecto vinculado**, que hay que escribir entera. Sembrar no puede ser un descuido, y la
+salvaguarda va dentro del guion y no en este documento: un aviso escrito no detiene a nadie a la
+una de la mañana. En la base local no hace falta: `supabase db reset` ya la carga ([§4](#4-recrear-la-bd-localmente-el-caso-más-común)).
+
+La semilla es **re-ejecutable**: sobre una base ya sembrada completa lo que falte y pone los correos
+al día, sin borrar nada, así que correrla dos veces deja lo mismo que correrla una. Y es
+**determinista**: los ids están escritos y las fechas que alguien lee también, porque con `NOW()`
+todo movimiento con más de una semana se vería como registro tardío ([RN-14](03-requisitos-y-bdd.md#rn-14)) y la semilla dejaría de
+ser la misma cada vez.
 
 ---
 
@@ -232,16 +258,27 @@ Dos tablas del modelo se limpian solas. Van aquí y no solo en el doc [04](04-mo
 programada que nadie mira es una tarea que se cae en silencio**, y quien administra la base es
 quien tiene que saber que existen.
 
-| Tarea | Tabla | Cuándo corre | Retención |
-|---|---|---|---|
-| `purgar_peticiones_idempotentes` | `peticiones_idempotentes` | `20 3 * * *` — cada día a las 3:20 | 72 horas |
-| `purgar_nonces_vistos` | `nonces_vistos` | `*/10 * * * *` — cada diez minutos | 5 minutos |
+| Tarea | Tabla | Cuándo corre | Retención | Estado |
+|---|---|---|---|---|
+| `purgar_peticiones_idempotentes` | `peticiones_idempotentes` | `20 3 * * *` | 72 horas | **Agendada** ([1.16](08-plan-de-desarrollo.md#tarea-1-16)) |
+| `purgar_nonces_vistos` | `nonces_vistos` | `*/10 * * * *` — cada diez minutos | 5 minutos | Escrita, sin tabla todavía ([Sprint 2](08-plan-de-desarrollo.md#sprint-2)) |
+
+> **`20 3 * * *` no son las 3:20 de Bogotá.** `pg_cron` agenda en el huso de `cron.timezone`, que
+> en Supabase es `GMT` y **no admite un huso por tarea**, así que la purga corre a las **22:20**
+> hora local. Para una purga de higiene la hora da lo mismo, y se dejó el valor que ya estaba
+> escrito en el [04 §4.9](04-modelo-de-datos.md#49-claves-de-idempotencia) en vez de cambiarlo por la espalda. Está anotado en [`TODO.md`](../TODO.md) [§10](../TODO.md#10-decisiones-de-construcción-que-conviene-revisar) para
+> revisarlo: si se quiere que corra de madrugada de verdad, es `20 8 * * *` y hay que cambiar el
+> [04](04-modelo-de-datos.md) y esta tabla.
 
 ### 10.1 Qué hace falta en cada ambiente
 
 `pg_cron` es una extensión y **se habilita una sola vez por ambiente**, desde el panel de Supabase
 o con `CREATE EXTENSION IF NOT EXISTS pg_cron;` ejecutado por el rol de migraciones. Son los
 cuatro ambientes de [`ADR-013`](adr/ADR-013-cuatro-ambientes.md): dev, qa, uat y prod.
+
+Desde la [1.16](08-plan-de-desarrollo.md#tarea-1-16) lo hace la migración `…_purga_de_claves_vencidas.sql`, que habilita la extensión y
+agenda la tarea. Se puede volver a aplicar sin miedo: la extensión lleva `IF NOT EXISTS` y
+`cron.schedule` reemplaza el trabajo que ya tuviera ese nombre, así que no quedan dos.
 
 Las dos purgas corren como el **rol de migraciones**, no como la aplicación. Es dueño de las
 tablas y el único rol del proyecto con `BYPASSRLS`, así que atraviesa el `FORCE ROW LEVEL
@@ -323,7 +360,7 @@ el incremental propio es para **desarrollo** y para llevarse deltas de forma por
 | Esfuerzo | Mantener cursor + orden | Ninguno |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

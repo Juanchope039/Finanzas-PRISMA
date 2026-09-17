@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [3.1.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -88,6 +88,13 @@ escribe otra que corrige.
 ---
 
 ## 3. Reglas del proyecto
+
+**Antes de escribir código se escribe el plan, y el plan es un archivo** ([22 §10](docs/22-documentacion.md#planes)). Cada plan de
+trabajo queda en `plan/NN-titulo.md` —dos dígitos, un guion y el título en minúsculas—, numerado en
+el orden en que se fue decidiendo. El número que toca es el mayor que haya más uno: **arranca en 01,
+no salta y no se repite**, y `verificar` falla si se rompe. El plan dice qué se va a hacer, qué se
+decidió y por qué, y cómo se va a verificar: los tres títulos del commit, pero en futuro. No lleva
+encabezado ni versión, y no se corrige: si resultó equivocado, se escribe el siguiente.
 
 **Una tarea es una rama `feature/<id>` y un PR a `develop`** ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)). Se trae `develop`, se
 abre `feature/2.19` con el id del plan, se trabaja, **se deja la documentación al día antes de
@@ -226,7 +233,7 @@ resumen: el [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) está cerrado sal
 ya está construido y probado, y **la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) está aplicada y verificada en dev** ([1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) a
 [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5)): dominios, nombres, borrado revocado, auditoría por triggers y RLS juzgando a una sesión de
 verdad. Lo que más destraba ahora es llevar la identidad hasta PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)) y poner qa al día,
-que va dos migraciones atrás ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)).
+que va tres migraciones atrás ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)).
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-026](docs/adr/ADR-026-railway-al-final.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.
