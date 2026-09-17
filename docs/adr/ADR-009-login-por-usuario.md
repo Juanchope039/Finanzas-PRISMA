@@ -2,7 +2,13 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-009-login-por-usuario.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-13 | 2026-09-16 | [Seguridad](../INDICE.md#etiqueta-seguridad) · [API](../INDICE.md#etiqueta-api) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-009-login-por-usuario.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-13 | 2026-09-17 | [Seguridad](../INDICE.md#etiqueta-seguridad) · [API](../INDICE.md#etiqueta-api) |
+
+> **La decisión sigue vigente; el dominio ya está decidido.** El cuerpo hablaba de
+> `@usuarios.prismamy.co` cuando el dominio era todavía una decisión pendiente de Gerencia. Es
+> `@usuarios.prisma.com`, y el cuerpo ya lo dice. Se pudo cambiar sin migrar nada porque no
+> existe todavía ningún usuario real: después del primero, «fijo de por vida» quiere decir
+> exactamente eso.
 
 ## Contexto
 
@@ -26,8 +32,8 @@ pega un dominio interno fijo para armar un **correo sintético** con el que llam
 
 ```
 usuario escrito:  marcela
-dominio interno:  @usuarios.prismamy.co     (constante de configuración, fija de por vida)
-correo sintético: marcela@usuarios.prismamy.co
+dominio interno:  @usuarios.prisma.com     (constante de configuración, fija de por vida)
+correo sintético: marcela@usuarios.prisma.com
 ```
 
 - El dominio interno es un **subdominio del dominio del negocio**, no `.local`: `.local` está

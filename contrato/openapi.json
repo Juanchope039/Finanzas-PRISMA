@@ -15,7 +15,7 @@
         "type" : "object"
       },
       "CambioDeClave" : {
-        "description" : "El formulario «cambio-de-clave». Sus reglas y sus mensajes están en GET /formularios/cambio-de-clave",
+        "description" : "El formulario «cambio-de-clave». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"cambio-de-clave\"}",
         "properties" : {
           "claveNueva" : {
             "type" : "string"
@@ -102,13 +102,47 @@
         "type" : "object"
       },
       "ClaveTemporal" : {
-        "description" : "El formulario «clave-temporal». Sus reglas y sus mensajes están en GET /formularios/clave-temporal",
+        "description" : "El formulario «clave-temporal». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"clave-temporal\"}",
         "properties" : {
           "claveTemporal" : {
             "type" : "string"
           }
         },
         "required" : [ "claveTemporal" ],
+        "type" : "object"
+      },
+      "ConsultaDeBitacora" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/bitacora",
+        "properties" : {
+          "limite" : {
+            "description" : "Cuántas de las más recientes. Sin él, todas",
+            "format" : "int32",
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        },
+        "type" : "object"
+      },
+      "ConsultaDeFormulario" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/formularios",
+        "properties" : {
+          "nombre" : {
+            "description" : "El nombre del formulario: «gasto», «acceso», «usuario»…",
+            "type" : "string"
+          }
+        },
+        "required" : [ "nombre" ],
+        "type" : "object"
+      },
+      "ConsultaDeNavegacion" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/navegacion",
+        "properties" : {
+          "vista" : {
+            "description" : "Solo Gerencia: la navegación de Operación, para la vista previa",
+            "enum" : [ "operacion" ],
+            "type" : "string"
+          }
+        },
         "type" : "object"
       },
       "Cuenta" : {
@@ -199,7 +233,7 @@
             "type" : "array"
           },
           "origen" : {
-            "description" : "Solo en una lista que sale de datos: la ruta GET de este contrato que la llena. Su data es una lista de objetos con id y nombre; el valor es el id y la etiqueta, el nombre. Ausente si la lista trae opciones",
+            "description" : "Solo en una lista que sale de datos: la ruta de consulta de este contrato que la llena. Su data es una lista de objetos con id y nombre; el valor es el id y la etiqueta, el nombre. Ausente si la lista trae opciones",
             "type" : "string"
           },
           "teclado" : {
@@ -236,7 +270,7 @@
         "description" : "El formulario «edicion-de-usuario». El usuario no está: es la identidad con la que la persona entra, y no se edita",
         "properties" : {
           "cargoId" : {
-            "description" : "Uno de GET /cargos/asignables, o el que la persona ya tenía aunque esté inactivo",
+            "description" : "Uno de POST /api/v0/consultas/cargos-asignables, o el que la persona ya tenía aunque esté inactivo",
             "format" : "uuid",
             "type" : "string"
           },
@@ -383,7 +417,7 @@
         "type" : "object"
       },
       "NuevaCategoria" : {
-        "description" : "El formulario «categoria». Sus reglas y sus mensajes están en GET /formularios/categoria",
+        "description" : "El formulario «categoria». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"categoria\"}",
         "properties" : {
           "esFijo" : {
             "description" : "Solo una categoría de gasto puede ser fija",
@@ -406,7 +440,7 @@
         "type" : "object"
       },
       "NuevaCuenta" : {
-        "description" : "El formulario «cuenta». Sus reglas y sus mensajes están en GET /formularios/cuenta",
+        "description" : "El formulario «cuenta». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"cuenta\"}",
         "properties" : {
           "nombre" : {
             "description" : "Cómo se llama en el taller: Davivienda, Bancolombia ahorros, Bold",
@@ -427,7 +461,7 @@
         "type" : "object"
       },
       "NuevaSesion" : {
-        "description" : "El formulario «acceso». Sus reglas y sus mensajes están en GET /formularios/acceso",
+        "description" : "El formulario «acceso». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"acceso\"}",
         "properties" : {
           "clave" : {
             "description" : "Viaja solo en esta petición. No se guarda, no se registra y nunca llega a la auditoría",
@@ -442,10 +476,10 @@
         "type" : "object"
       },
       "NuevoUsuario" : {
-        "description" : "El formulario «usuario». Sus reglas y sus mensajes están en GET /formularios/usuario",
+        "description" : "El formulario «usuario». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"usuario\"}",
         "properties" : {
           "cargoId" : {
-            "description" : "Uno de GET /cargos/asignables",
+            "description" : "Uno de POST /api/v0/consultas/cargos-asignables",
             "format" : "uuid",
             "type" : "string"
           },
@@ -968,71 +1002,13 @@
     }
   },
   "info" : {
-    "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden GET /version, POST /sesiones, POST /sesiones/renovacion y el formulario «acceso».",
+    "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.4.0"
+    "version" : "0.5.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
-    "/bitacora" : {
-      "get" : {
-        "description" : "Los cambios de administración sobre usuarios y cargos, los más recientes primero, con cuándo, quién, sobre quién, qué pasó, el detalle y el motivo (RF-88, 10 §5.5). No trae los inicios de sesión. Cada entrada dice si hoy se puede revertir y, en palabras, qué pasaría o por qué no. Con limite trae solo las más recientes, y total dice cuántas hay. Es de Gerencia, y la base no le muestra la auditoría a nadie más (04 §7). Puede devolver 20000, 40100, 40101, 40102, 40103 y 40302.",
-        "operationId" : "bitacora",
-        "parameters" : [ {
-          "description" : "Cuántas de las más recientes. Sin él, todas",
-          "in" : "query",
-          "name" : "limite",
-          "required" : false,
-          "schema" : {
-            "format" : "int32",
-            "minimum" : 1,
-            "type" : "integer"
-          }
-        }, {
-          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
-          "in" : "header",
-          "name" : "X-Prisma-Firma",
-          "required" : true,
-          "schema" : {
-            "pattern" : "^[0-9a-f]{64}$",
-            "type" : "string"
-          }
-        }, {
-          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
-          "in" : "header",
-          "name" : "X-Prisma-Nonce",
-          "required" : true,
-          "schema" : {
-            "format" : "uuid",
-            "type" : "string"
-          }
-        }, {
-          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
-          "in" : "header",
-          "name" : "X-Prisma-Timestamp",
-          "required" : true,
-          "schema" : {
-            "format" : "date-time",
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/SobrePaginaDeBitacora"
-                }
-              }
-            },
-            "description" : "OK"
-          }
-        },
-        "summary" : "La bitácora de usuarios y cargos",
-        "tags" : [ "Bitácora" ]
-      }
-    },
-    "/bitacora/{id}/reversion" : {
+    "/api/v0/bitacora/{id}/reversion" : {
       "post" : {
         "description" : "Deshace un cambio con un cambio nuevo y motivo escrito: la entrada original no se borra ni se edita, queda marcada como revertida, y responde la entrada nueva, de tipo «Reversión» (RF-89, CU-35). Revertir una reversión se puede. No se revierte una clave restablecida (40912), la creación del propio usuario (40913), lo que dejaría el sistema sin Gerencia activa (40910, RF-91) ni lo que sacaría del catálogo un cargo que tienen personas activas (40911). Una entrada ya revertida responde 40900. Solo Gerencia. El formulario es «reversion». Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902, 40910, 40911, 40912, 40913 y 42200 con data.errores.",
         "operationId" : "revertirCambio",
@@ -1108,53 +1084,7 @@
         "tags" : [ "Bitácora" ]
       }
     },
-    "/cargos" : {
-      "get" : {
-        "description" : "Todos los cargos, activos e inactivos, en su orden, con cuántas personas activas tiene cada uno y, si está inactivo, cuándo, quién y por qué (RF-81, 10 §5.4). Es el catálogo de la pantalla de Gestión de usuarios: solo Gerencia. Puede devolver 20000, 40100, 40101, 40102, 40103, 40300 y 40302.",
-        "operationId" : "cargos",
-        "parameters" : [ {
-          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
-          "in" : "header",
-          "name" : "X-Prisma-Firma",
-          "required" : true,
-          "schema" : {
-            "pattern" : "^[0-9a-f]{64}$",
-            "type" : "string"
-          }
-        }, {
-          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
-          "in" : "header",
-          "name" : "X-Prisma-Nonce",
-          "required" : true,
-          "schema" : {
-            "format" : "uuid",
-            "type" : "string"
-          }
-        }, {
-          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
-          "in" : "header",
-          "name" : "X-Prisma-Timestamp",
-          "required" : true,
-          "schema" : {
-            "format" : "date-time",
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/SobreListCargo"
-                }
-              }
-            },
-            "description" : "OK"
-          }
-        },
-        "summary" : "El catálogo de cargos",
-        "tags" : [ "Cargos" ]
-      },
+    "/api/v0/cargos" : {
       "post" : {
         "description" : "Agrega un cargo al final del catálogo (RF-81, CU-33). El nombre no se repite, sin distinguir mayúsculas: 42214. El cargo describe el oficio y no da permisos; eso lo decide el tipo. Solo Gerencia, y lo rechaza la base (04 §7). El formulario es «cargo». Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902, 42200 y 42214; los dos últimos con data.errores.",
         "operationId" : "crearCargo",
@@ -1221,55 +1151,7 @@
         "tags" : [ "Cargos" ]
       }
     },
-    "/cargos/asignables" : {
-      "get" : {
-        "description" : "Solo los activos, en su orden, con id y nombre: es el origen de la lista cargoId de los formularios «usuario» y «edicion-de-usuario». Un cargo inactivo no se reparte más, y quien ya lo tenía lo conserva (BDD-33-1). Solo Gerencia. Puede devolver 20000, 40100, 40101, 40102, 40103, 40300 y 40302.",
-        "operationId" : "cargosAsignables",
-        "parameters" : [ {
-          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
-          "in" : "header",
-          "name" : "X-Prisma-Firma",
-          "required" : true,
-          "schema" : {
-            "pattern" : "^[0-9a-f]{64}$",
-            "type" : "string"
-          }
-        }, {
-          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
-          "in" : "header",
-          "name" : "X-Prisma-Nonce",
-          "required" : true,
-          "schema" : {
-            "format" : "uuid",
-            "type" : "string"
-          }
-        }, {
-          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
-          "in" : "header",
-          "name" : "X-Prisma-Timestamp",
-          "required" : true,
-          "schema" : {
-            "format" : "date-time",
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/SobreListCargoAsignable"
-                }
-              }
-            },
-            "description" : "OK"
-          }
-        },
-        "summary" : "Los cargos que se pueden asignar",
-        "tags" : [ "Cargos" ]
-      }
-    },
-    "/cargos/orden" : {
+    "/api/v0/cargos/orden" : {
       "put" : {
         "description" : "Recibe los ids de todos los cargos del catálogo en el orden nuevo y responde el catálogo reordenado (RF-81). Si la lista no trae exactamente los cargos que hay —porque alguien agregó uno mientras tanto— responde 40900 y no cambia nada. Solo Gerencia. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901 y 40902.",
         "operationId" : "reordenarCargos",
@@ -1336,7 +1218,7 @@
         "tags" : [ "Cargos" ]
       }
     },
-    "/cargos/{id}" : {
+    "/api/v0/cargos/{id}" : {
       "put" : {
         "description" : "Cambia el nombre y la descripción (RF-81). Quien tiene el cargo lo sigue teniendo con el nombre nuevo, y no se le abre ni se le cierra ninguna pantalla. Solo Gerencia. El formulario es «cargo». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40901, 40902, 42200 y 42214; los dos últimos con data.errores.",
         "operationId" : "renombrarCargo",
@@ -1412,7 +1294,7 @@
         "tags" : [ "Cargos" ]
       }
     },
-    "/cargos/{id}/desactivacion" : {
+    "/api/v0/cargos/{id}/desactivacion" : {
       "post" : {
         "description" : "Lo saca del catálogo con motivo escrito: deja de ofrecerse al crear usuarios y quien lo tuvo lo conserva (RF-81, BDD-33-1). Un cargo que todavía tienen personas activas no se desactiva: 40911. Uno ya inactivo responde 40900. Solo Gerencia. El formulario es «desactivacion-de-cargo». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902, 40911 y 42200 con data.errores.",
         "operationId" : "desactivarCargo",
@@ -1488,7 +1370,7 @@
         "tags" : [ "Cargos" ]
       }
     },
-    "/cargos/{id}/reactivacion" : {
+    "/api/v0/cargos/{id}/reactivacion" : {
       "post" : {
         "description" : "Lo devuelve al catálogo para volver a asignarlo, como el botón «Reactivar» del mockup, y deja la entrada «Cargo reactivado» en la bitácora. No pide motivo, igual que en el mockup. Uno activo responde 40900. Solo Gerencia. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901 y 40902.",
         "operationId" : "reactivarCargo",
@@ -1554,53 +1436,7 @@
         "tags" : [ "Cargos" ]
       }
     },
-    "/categorias" : {
-      "get" : {
-        "description" : "El árbol de categorías de ingreso y gasto sin anular (RF-17), en el orden en que se pintan: cada una dice su naturaleza, si es un gasto fijo y, si tiene, su categoría madre. Las piden los dos tipos de usuario, porque los dos registran movimientos. Puede devolver 20000, 40100, 40101, 40102, 40103 y 40302.",
-        "operationId" : "categorias",
-        "parameters" : [ {
-          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
-          "in" : "header",
-          "name" : "X-Prisma-Firma",
-          "required" : true,
-          "schema" : {
-            "pattern" : "^[0-9a-f]{64}$",
-            "type" : "string"
-          }
-        }, {
-          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
-          "in" : "header",
-          "name" : "X-Prisma-Nonce",
-          "required" : true,
-          "schema" : {
-            "format" : "uuid",
-            "type" : "string"
-          }
-        }, {
-          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
-          "in" : "header",
-          "name" : "X-Prisma-Timestamp",
-          "required" : true,
-          "schema" : {
-            "format" : "date-time",
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/SobreListCategoria"
-                }
-              }
-            },
-            "description" : "OK"
-          }
-        },
-        "summary" : "Las categorías de ingreso y gasto",
-        "tags" : [ "Categorías" ]
-      },
+    "/api/v0/categorias" : {
       "post" : {
         "description" : "Crea una categoría, principal o dentro de otra de la misma naturaleza (RF-17). Solo Gerencia. Solo un gasto puede ser fijo: es lo que la caja libre descuenta cada mes (05 §3.3). El formulario es «categoria». Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902, 42200, 42220, 42221 y 42222; los tres últimos, también con data.errores.",
         "operationId" : "crearCategoria",
@@ -1667,11 +1503,258 @@
         "tags" : [ "Categorías" ]
       }
     },
-    "/cuentas" : {
-      "get" : {
+    "/api/v0/consultas/bitacora" : {
+      "post" : {
+        "description" : "Los cambios de administración sobre usuarios y cargos, los más recientes primero, con cuándo, quién, sobre quién, qué pasó, el detalle y el motivo (RF-88, 10 §5.5). No trae los inicios de sesión. Cada entrada dice si hoy se puede revertir y, en palabras, qué pasaría o por qué no. Con limite trae solo las más recientes, y total dice cuántas hay. Es de Gerencia, y la base no le muestra la auditoría a nadie más (04 §7). Puede devolver 20000, 40100, 40101, 40102, 40103 y 40302.",
+        "operationId" : "bitacora",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeBitacora"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobrePaginaDeBitacora"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "La bitácora de usuarios y cargos",
+        "tags" : [ "Bitácora" ]
+      }
+    },
+    "/api/v0/consultas/cargos" : {
+      "post" : {
+        "description" : "Todos los cargos, activos e inactivos, en su orden, con cuántas personas activas tiene cada uno y, si está inactivo, cuándo, quién y por qué (RF-81, 10 §5.4). Es el catálogo de la pantalla de Gestión de usuarios: solo Gerencia. Puede devolver 20000, 40100, 40101, 40102, 40103, 40300 y 40302.",
+        "operationId" : "cargos",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreListCargo"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "El catálogo de cargos",
+        "tags" : [ "Cargos" ]
+      }
+    },
+    "/api/v0/consultas/cargos-asignables" : {
+      "post" : {
+        "description" : "Solo los activos, en su orden, con id y nombre: es el origen de la lista cargoId de los formularios «usuario» y «edicion-de-usuario». Un cargo inactivo no se reparte más, y quien ya lo tenía lo conserva (BDD-33-1). Solo Gerencia. Puede devolver 20000, 40100, 40101, 40102, 40103, 40300 y 40302.",
+        "operationId" : "cargosAsignables",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreListCargoAsignable"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Los cargos que se pueden asignar",
+        "tags" : [ "Cargos" ]
+      }
+    },
+    "/api/v0/consultas/categorias" : {
+      "post" : {
+        "description" : "El árbol de categorías de ingreso y gasto sin anular (RF-17), en el orden en que se pintan: cada una dice su naturaleza, si es un gasto fijo y, si tiene, su categoría madre. Las piden los dos tipos de usuario, porque los dos registran movimientos. Puede devolver 20000, 40100, 40101, 40102, 40103 y 40302.",
+        "operationId" : "categorias",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreListCategoria"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Las categorías de ingreso y gasto",
+        "tags" : [ "Categorías" ]
+      }
+    },
+    "/api/v0/consultas/cuentas" : {
+      "post" : {
         "description" : "Las cuentas de dinero sin anular, en el orden en que se pintan. Las piden los dos tipos de usuario: Operación elige por nombre la cuenta de un movimiento. Por eso no traen saldo: la caja es de Gerencia (01 §4) y los saldos tienen su propia consulta (tarea 3.12). Puede devolver 20000, 40100, 40101, 40102, 40103 y 40302.",
         "operationId" : "cuentas",
         "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
           "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
           "in" : "header",
           "name" : "X-Prisma-Firma",
@@ -1713,7 +1796,230 @@
         },
         "summary" : "Las cuentas de dinero, sin saldos",
         "tags" : [ "Cuentas" ]
-      },
+      }
+    },
+    "/api/v0/consultas/formularios" : {
+      "post" : {
+        "description" : "Qué campos tiene, en qué orden, y las reglas de cada uno como datos: obligatorio, mínimo, máximo y el texto que se muestra cuando no se cumplen. Ese texto es el mismo que devuelve data.errores cuando la regla falla en el servidor. Sin sesión solo responde el formulario «acceso»; los demás piden sesión y firma. Puede devolver 20000, 40100, 40101, 40102, 40103 y 40400.",
+        "operationId" : "descriptor",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101. Obligatoria con sesión; el formulario «acceso» se pide sin sesión y sin ella",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : false,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103. Obligatoria con sesión; el formulario «acceso» se pide sin sesión y sin ella",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : false,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102. Obligatoria con sesión; el formulario «acceso» se pide sin sesión y sin ella",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : false,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeFormulario"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreDescriptorDeFormulario"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "El descriptor de un formulario",
+        "tags" : [ "Formularios" ]
+      }
+    },
+    "/api/v0/consultas/navegacion" : {
+      "post" : {
+        "description" : "Las secciones del menú lateral, en el orden en que se pintan, y las dos entradas del menú de la sesión que dependen del tipo (RF-103, 10 §2.1 y §5.3). El front pinta lo que llega y no decide qué ocultar: una sección que no viene no existe. Con vista=operacion responde lo que vería Operación y el aviso fijo de la vista previa (RF-92 a RF-94); solo la pide Gerencia, y el tipo real de la sesión no cambia. Puede devolver 20000, 40100, 40101, 40102, 40103, 40300 y 40302.",
+        "operationId" : "navegacion",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeNavegacion"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreNavegacion"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Lo que la sesión puede ver",
+        "tags" : [ "Navegación" ]
+      }
+    },
+    "/api/v0/consultas/usuarios" : {
+      "post" : {
+        "description" : "La tabla de Gestión de usuarios (RF-84, RF-87): activas primero y desactivadas al final, cada grupo en el orden en que se crearon, con el estado, la desactivación vigente y el último acceso en cada fila. Es de Gerencia: a una sesión de Operación, Row Level Security solo le deja ver su propia fila (04 §7, BDD-02-6). Puede devolver 20000, 40100, 40101, 40102, 40103 y 40302.",
+        "operationId" : "usuarios",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreListUsuario"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Las personas con acceso",
+        "tags" : [ "Usuarios" ]
+      }
+    },
+    "/api/v0/consultas/version" : {
+      "post" : {
+        "description" : "No lleva sesión ni firma: el front lo consulta al arrancar, antes de que nadie entre, y si el MAJOR de la API no es el que espera se planta.",
+        "operationId" : "version",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreVersion"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Versión de la API, del esquema y ambiente",
+        "tags" : [ "Versión" ]
+      }
+    },
+    "/api/v0/cuentas" : {
       "post" : {
         "description" : "Crea una cuenta de dinero: efectivo, Nequi, Daviplata, un banco (RF-06). Solo Gerencia, y se crea desde Movimientos (RF-97, 10 §4.3). El saldo que se escribe entra como saldo inicial de la cuenta, no como ingreso, así que no afecta la utilidad del mes. El formulario es «cuenta». Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902 y 42200 con data.errores.",
         "operationId" : "crearCuenta",
@@ -1780,119 +2086,7 @@
         "tags" : [ "Cuentas" ]
       }
     },
-    "/formularios/{nombre}" : {
-      "get" : {
-        "description" : "Qué campos tiene, en qué orden, y las reglas de cada uno como datos: obligatorio, mínimo, máximo y el texto que se muestra cuando no se cumplen. Ese texto es el mismo que devuelve data.errores cuando la regla falla en el servidor. Sin sesión solo responde el formulario «acceso»; los demás piden sesión y firma. Puede devolver 20000, 40100, 40101, 40102, 40103 y 40400.",
-        "operationId" : "descriptor",
-        "parameters" : [ {
-          "in" : "path",
-          "name" : "nombre",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101. Obligatoria con sesión; el formulario «acceso» se pide sin sesión y sin ella",
-          "in" : "header",
-          "name" : "X-Prisma-Firma",
-          "required" : false,
-          "schema" : {
-            "pattern" : "^[0-9a-f]{64}$",
-            "type" : "string"
-          }
-        }, {
-          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103. Obligatoria con sesión; el formulario «acceso» se pide sin sesión y sin ella",
-          "in" : "header",
-          "name" : "X-Prisma-Nonce",
-          "required" : false,
-          "schema" : {
-            "format" : "uuid",
-            "type" : "string"
-          }
-        }, {
-          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102. Obligatoria con sesión; el formulario «acceso» se pide sin sesión y sin ella",
-          "in" : "header",
-          "name" : "X-Prisma-Timestamp",
-          "required" : false,
-          "schema" : {
-            "format" : "date-time",
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/SobreDescriptorDeFormulario"
-                }
-              }
-            },
-            "description" : "OK"
-          }
-        },
-        "summary" : "El descriptor de un formulario",
-        "tags" : [ "Formularios" ]
-      }
-    },
-    "/navegacion" : {
-      "get" : {
-        "description" : "Las secciones del menú lateral, en el orden en que se pintan, y las dos entradas del menú de la sesión que dependen del tipo (RF-103, 10 §2.1 y §5.3). El front pinta lo que llega y no decide qué ocultar: una sección que no viene no existe. Con vista=operacion responde lo que vería Operación y el aviso fijo de la vista previa (RF-92 a RF-94); solo la pide Gerencia, y el tipo real de la sesión no cambia. Puede devolver 20000, 40100, 40101, 40102, 40103, 40300 y 40302.",
-        "operationId" : "navegacion",
-        "parameters" : [ {
-          "description" : "Solo Gerencia: la navegación de Operación, para la vista previa",
-          "in" : "query",
-          "name" : "vista",
-          "required" : false,
-          "schema" : {
-            "enum" : [ "operacion" ],
-            "type" : "string"
-          }
-        }, {
-          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
-          "in" : "header",
-          "name" : "X-Prisma-Firma",
-          "required" : true,
-          "schema" : {
-            "pattern" : "^[0-9a-f]{64}$",
-            "type" : "string"
-          }
-        }, {
-          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
-          "in" : "header",
-          "name" : "X-Prisma-Nonce",
-          "required" : true,
-          "schema" : {
-            "format" : "uuid",
-            "type" : "string"
-          }
-        }, {
-          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
-          "in" : "header",
-          "name" : "X-Prisma-Timestamp",
-          "required" : true,
-          "schema" : {
-            "format" : "date-time",
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/SobreNavegacion"
-                }
-              }
-            },
-            "description" : "OK"
-          }
-        },
-        "summary" : "Lo que la sesión puede ver",
-        "tags" : [ "Navegación" ]
-      }
-    },
-    "/sesiones" : {
+    "/api/v0/sesiones" : {
       "post" : {
         "description" : "Entra con el nombre de usuario y la contraseña, sin correo (RF-01, CU-28). La API pasa el usuario a minúsculas, arma el correo sintético y llama al proveedor: el correo nunca viaja por aquí (ADR-009). No lleva sesión, firma ni Idempotency-Key: todavía no hay clave con qué firmar, y la respuesta trae secretos que no se guardan en la tabla de idempotencia. Responde el token, la clave de firma y quién entró; la renovación va aparte, en la cookie prisma_renovacion. Un usuario que no existe y una contraseña equivocada responden lo mismo, 40104, para no revelar quién trabaja en el taller; 40301 solo sale con la contraseña correcta. Escribe inicio_sesion o inicio_sesion_fallido en la auditoría, nunca con la contraseña tecleada. El formulario es «acceso». Puede devolver 20100, 40000, 40104, 40301 y 42200 con data.errores.",
         "operationId" : "iniciarSesion",
@@ -1930,7 +2124,7 @@
         "tags" : [ "Acceso" ]
       }
     },
-    "/sesiones/actual" : {
+    "/api/v0/sesiones/actual" : {
       "delete" : {
         "description" : "Cierra la sesión en el proveedor, vence la cookie prisma_renovacion y escribe cierre_sesion en la auditoría (CU-28, A5). La clave de firma de la sesión deja de servir. Responde aunque la sesión tenga pendiente el cambio de contraseña. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40901 y 40902.",
         "operationId" : "cerrarSesion",
@@ -1995,7 +2189,7 @@
         "tags" : [ "Acceso" ]
       }
     },
-    "/sesiones/actual/clave" : {
+    "/api/v0/sesiones/actual/clave" : {
       "put" : {
         "description" : "La persona de la sesión cambia su propia contraseña (RF-79, RF-80, CU-32). «Crea tu contraseña», la del primer ingreso, y «Cambiar mi contraseña», la del menú de la sesión, son la misma operación, y como en el mockup no piden la contraseña actual. Pone debeCambiarClave en false, escribe clave_cambiada en la auditoría y responde la identidad al día; el token y la clave de firma siguen siendo los de la sesión. El formulario es «cambio-de-clave», y que las dos contraseñas coincidan lo comprueba la API. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40901, 40902, 42200 y 42210; los dos últimos con data.errores.",
         "operationId" : "cambiarClave",
@@ -2062,7 +2256,7 @@
         "tags" : [ "Acceso" ]
       }
     },
-    "/sesiones/renovacion" : {
+    "/api/v0/sesiones/renovacion" : {
       "post" : {
         "description" : "Cambia la cookie prisma_renovacion por un token nuevo y una clave de firma nueva. Es lo que el front pide al recargar la página —la clave de firma vivía en memoria y se fue con ella— y antes de que venza el token. Tampoco lleva firma ni Idempotency-Key, por la misma razón que el inicio de sesión. Cada renovación entrega una cookie nueva y la anterior deja de servir. Una sesión cerrada, sin cookie o sin uso en 30 días responde 40100 (RF-04); la de un usuario que Gerencia desactivó mientras tanto, 40301. Puede devolver 20000, 40100 y 40301.",
         "operationId" : "renovarSesion",
@@ -2099,53 +2293,7 @@
         "tags" : [ "Acceso" ]
       }
     },
-    "/usuarios" : {
-      "get" : {
-        "description" : "La tabla de Gestión de usuarios (RF-84, RF-87): activas primero y desactivadas al final, cada grupo en el orden en que se crearon, con el estado, la desactivación vigente y el último acceso en cada fila. Es de Gerencia: a una sesión de Operación, Row Level Security solo le deja ver su propia fila (04 §7, BDD-02-6). Puede devolver 20000, 40100, 40101, 40102, 40103 y 40302.",
-        "operationId" : "usuarios",
-        "parameters" : [ {
-          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
-          "in" : "header",
-          "name" : "X-Prisma-Firma",
-          "required" : true,
-          "schema" : {
-            "pattern" : "^[0-9a-f]{64}$",
-            "type" : "string"
-          }
-        }, {
-          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
-          "in" : "header",
-          "name" : "X-Prisma-Nonce",
-          "required" : true,
-          "schema" : {
-            "format" : "uuid",
-            "type" : "string"
-          }
-        }, {
-          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
-          "in" : "header",
-          "name" : "X-Prisma-Timestamp",
-          "required" : true,
-          "schema" : {
-            "format" : "date-time",
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/SobreListUsuario"
-                }
-              }
-            },
-            "description" : "OK"
-          }
-        },
-        "summary" : "Las personas con acceso",
-        "tags" : [ "Usuarios" ]
-      },
+    "/api/v0/usuarios" : {
       "post" : {
         "description" : "Da acceso a una persona con una contraseña temporal que Gerencia le entrega en persona (RF-72 a RF-76, CU-29). El usuario queda activo y con debeCambiarClave en true. La API pasa el usuario a minúsculas antes de comprobarlo, así que si existe marcela, Marcela se rechaza con 42211 (BDD-29-2). Solo Gerencia, y lo rechaza la base (04 §7). El formulario es «usuario»; el formato del usuario, el usuario repetido y el cargo inactivo no caben en el descriptor y responden 42212, 42211 y 42213. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902, 42200, 42211, 42212 y 42213; los cuatro últimos con data.errores.",
         "operationId" : "crearUsuario",
@@ -2212,7 +2360,7 @@
         "tags" : [ "Usuarios" ]
       }
     },
-    "/usuarios/{id}" : {
+    "/api/v0/usuarios/{id}" : {
       "put" : {
         "description" : "Cambia el nombre completo, el cargo y el tipo de una persona activa (RF-76); a una desactivada responde 40900. El usuario no se edita. Cada campo que cambia deja su propia entrada en la bitácora, para poder revertirlo solo. Conservar un cargo inactivo que la persona ya tenía se permite; cambiarlo por uno inactivo responde 42213. Quitarle el tipo Gerencia a la última Gerencia activa responde 40910, y lo rechaza la base (RF-82). El formulario es «edicion-de-usuario». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902, 40910, 42200 y 42213; los dos últimos con data.errores.",
         "operationId" : "editarUsuario",
@@ -2288,7 +2436,7 @@
         "tags" : [ "Usuarios" ]
       }
     },
-    "/usuarios/{id}/clave-temporal" : {
+    "/api/v0/usuarios/{id}/clave-temporal" : {
       "put" : {
         "description" : "Gerencia le pone una contraseña temporal a una persona activa y se la entrega en persona: no hay correo de recuperación (RF-78, CU-31). Pone debeCambiarClave en true y escribe clave_restablecida, el único cambio que no se puede revertir. La respuesta no devuelve la contraseña. A una persona desactivada responde 40900. El formulario es «clave-temporal». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902 y 42200 con data.errores.",
         "operationId" : "restablecerClave",
@@ -2364,7 +2512,7 @@
         "tags" : [ "Usuarios" ]
       }
     },
-    "/usuarios/{id}/desactivacion" : {
+    "/api/v0/usuarios/{id}/desactivacion" : {
       "post" : {
         "description" : "Le quita el acceso con motivo escrito y no borra nada (RF-77, RF-86, CU-30): la ficha guarda cuándo, quién y por qué, y la bitácora guarda la historia. Desde ese momento no puede iniciar ni renovar su sesión (40301). La última Gerencia activa no se desactiva: 40910, y lo rechaza la base. Una persona ya desactivada responde 40900. El formulario es «desactivacion-de-usuario». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902, 40910 y 42200 con data.errores.",
         "operationId" : "desactivarUsuario",
@@ -2440,7 +2588,7 @@
         "tags" : [ "Usuarios" ]
       }
     },
-    "/usuarios/{id}/reactivacion" : {
+    "/api/v0/usuarios/{id}/reactivacion" : {
       "post" : {
         "description" : "Le devuelve el acceso con motivo escrito (RF-86, CU-34): limpia la desactivación, pone debeCambiarClave en true (RF-90) y deja la entrada «Reactivado» en la bitácora. Una persona activa responde 40900. El formulario es «reactivacion-de-usuario». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902 y 42200 con data.errores.",
         "operationId" : "reactivarUsuario",
@@ -2514,26 +2662,6 @@
         },
         "summary" : "Reactivar un usuario",
         "tags" : [ "Usuarios" ]
-      }
-    },
-    "/version" : {
-      "get" : {
-        "description" : "No lleva sesión ni firma: el front lo consulta al arrancar, antes de que nadie entre, y si el MAJOR de la API no es el que espera se planta.",
-        "operationId" : "version",
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/SobreVersion"
-                }
-              }
-            },
-            "description" : "OK"
-          }
-        },
-        "summary" : "Versión de la API, del esquema y ambiente",
-        "tags" : [ "Versión" ]
       }
     }
   },

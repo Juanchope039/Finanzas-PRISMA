@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/11-riesgos-y-proteccion-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Seguridad](INDICE.md#etiqueta-seguridad) · [Datos personales](INDICE.md#etiqueta-datos-personales) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/11-riesgos-y-proteccion-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Seguridad](INDICE.md#etiqueta-seguridad) · [Datos personales](INDICE.md#etiqueta-datos-personales) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 > Este documento **no trata temas tributarios ni de facturación electrónica**, que están fuera
 > del alcance de esta versión. Ver [`14-roadmap-e-ideas.md`](14-roadmap-e-ideas.md).
@@ -34,7 +34,7 @@ Escala: Probabilidad y Impacto de 1 (bajo) a 5 (alto). Exposición = P × I.
 | <a id="r-16"></a>R-16 | Se desactiva al último usuario de Gerencia y nadie puede administrar | 2 | 5 | **10** | El trigger `tg_proteger_ultima_gerencia` rechaza en la base desactivar o degradar al último usuario activo de Gerencia; el sistema avisa antes de intentarlo |
 | <a id="r-26"></a>R-26 | El plan gratuito de Supabase pausa la base por inactividad y el sistema aparece caído | 2 | 5 | **10** | Prod y uat van en plan de pago: «siempre en línea» no cabe en un plan que se duerme tras una semana quieto. Es la factura que `ADR-001` no contemplaba y queda escrita antes del go-live, no el día que el taller no pueda facturar. Dev y qa se quedan en el gratuito, donde la pausa no le molesta a nadie |
 | <a id="r-14"></a>R-14 | La clave temporal se anota en papel y nunca se cambia | 3 | 3 | 9 | `debe_cambiar_clave` obliga a cambiarla en el primer ingreso; sin cambiarla no se llega al tablero |
-| <a id="r-25"></a>R-25 | El front y la API se despliegan con versiones incompatibles | 3 | 3 | 9 | La API expone `GET /version`; el front declara en tiempo de compilación qué MAJOR necesita y lo comprueba al arrancar. Si no coincide se detiene con un mensaje claro y no deja seguir (`RF-101`): fallar ruidoso al entrar es mejor que fallar en la pantalla 7 con un campo nulo |
+| <a id="r-25"></a>R-25 | El front y la API se despliegan con versiones incompatibles | 3 | 3 | 9 | La API expone `POST /api/v0/consultas/version`; el front declara en tiempo de compilación qué MAJOR necesita y lo comprueba al arrancar. Si no coincide se detiene con un mensaje claro y no deja seguir (`RF-101`): fallar ruidoso al entrar es mejor que fallar en la pantalla 7 con un campo nulo |
 | <a id="r-09"></a>R-09 | Se pierde el acceso a la cuenta | 2 | 4 | 8 | Recuperación del proveedor; un segundo usuario de Gerencia |
 | <a id="r-10"></a>R-10 | El proveedor cambia condiciones o cierra | 2 | 4 | 8 | Arquitectura hexagonal: cambiar de proveedor toca adaptadores, no reglas |
 | <a id="r-15"></a>R-15 | Se activa por error la confirmación de correo en el proveedor | 2 | 4 | 8 | Queda desactivada por configuración y escrito el porqué: si se activa, ningún usuario nuevo entra y el mensaje de error no lo explica. El síntoma se reconoce rápido porque está documentado |

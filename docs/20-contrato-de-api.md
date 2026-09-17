@@ -2,20 +2,27 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
 
 > **Construcción: en parte.** En `prisma_api` ya están construidos el sobre de respuesta, el
-> catálogo de códigos, `GET /version` y el descriptor de formulario, con el contrato v0.2.0 (tareas
-> 0.11 y 0.14 a 0.18). La idempotencia y el canal firmado llegan en los Sprints 1 y 2. Este
+> catálogo de códigos, la consulta de versión y el descriptor de formulario, con el contrato v0.5.0
+> (tareas [0.11](08-plan-de-desarrollo.md#tarea-0-11) y [0.14](08-plan-de-desarrollo.md#tarea-0-14) a [0.18](08-plan-de-desarrollo.md#tarea-0-18)). La idempotencia y el canal firmado llegan en los Sprints 1 y 2. Este
 > documento fijó el contrato antes de escribir el primer controlador, porque un contrato acordado
 > después es un contrato que ya se rompió en tres sitios distintos.
 
 **Este documento no repite la arquitectura.** Cómo está construido el sistema por dentro —las
 capas, la regla de dependencias, cómo la identidad llega hasta PostgreSQL— está en
 [`07-arquitectura.md`](07-arquitectura.md). Aquí solo está **lo que viaja por el cable**.
+
+> **Ninguna operación usa `GET`** ([ADR-030](adr/ADR-030-contrato-sin-get.md)). Toda la API cuelga
+> de `/api/v0`; las nueve lecturas viajan por `POST` bajo `/api/v0/consultas/…`, con sus datos en el
+> cuerpo y no en la URL; las diecisiete escrituras se quedan en su recurso. El `v0` es el MAJOR de
+> la API y pasa a `v1` con la primera publicación en producción ([ADR-014](adr/ADR-014-semver.md)).
+> Fuera del prefijo y fuera de la regla quedan los estáticos del front, Swagger, `/error` y las
+> sondas de Actuator: no son operaciones del contrato.
 
 ---
 
@@ -234,7 +241,7 @@ La API entrega, junto a cada formulario, el descriptor de sus campos:
 | `ayuda` | La línea gris debajo de la caja |
 | `mensajes` | Qué decir cuando una regla no se cumple, ya redactado en español |
 | `opciones` | En una lista cerrada, las opciones en su orden: cada una con el `valor` que viaja y la `etiqueta` que se pinta |
-| `origen` | En una lista que sale de datos, la ruta `GET` del contrato que la llena |
+| `origen` | En una lista que sale de datos, la ruta de consulta del contrato que la llena |
 
 ### 4.2 Por qué esto no es devolverle las reglas al front
 
@@ -263,7 +270,12 @@ La decisión de que el front no contenga ninguna regla está en
 > lo pinta desde la [2.6](08-plan-de-desarrollo.md#tarea-2-6) y la API lo genera con la [2.1](08-plan-de-desarrollo.md#tarea-2-1).
 
 ```http
-GET /formularios/gasto HTTP/1.1
+POST /api/v0/consultas/formularios HTTP/1.1
+Host: api.prisma.com
+Content-Type: application/json
+Idempotency-Key: 0c8a5e21-4b73-4f16-9d40-7a1e5c2b9f63
+
+{ "nombre": "gasto" }
 ```
 
 ```json
@@ -302,7 +314,7 @@ Un nombre que no existe responde `404` con `40400`.
 | `tipo` es uno de `dinero`, `texto`, `fecha`, `lista`, `casilla`, `clave` | Cada uno exige un tipo concreto en la API: `dinero` solo acepta pesos enteros ([ADR-003](adr/ADR-003-dinero-entero.md)) y `casilla`, un sí o un no. Una `clave` es un texto que se pinta oculto, con un botón para mostrarlo |
 | `minimo` y `maximo` se leen según el tipo | En `dinero` son pesos; en `texto` y en `clave`, caracteres |
 | `teclado` es `numerico` o `texto` | Y no viaja en `fecha`, `lista` ni `casilla`, que se eligen y no abren teclado; una `clave` abre el de texto |
-| **Una `lista` trae `opciones` o `origen`, nunca los dos ni ninguno** | Las opciones fijas —el tipo de una cuenta— viajan en el descriptor. Las que salen de datos —la categoría madre— dicen de qué ruta salen: una `GET` del contrato cuya `data` es una lista de objetos con `id` y `nombre`, y el `id` es el valor. **El front no decide ni los valores ni a dónde pedirlos**, y la API vuelve a comprobar que lo elegido está entre ellos |
+| **Una `lista` trae `opciones` o `origen`, nunca los dos ni ninguno** | Las opciones fijas —el tipo de una cuenta— viajan en el descriptor. Las que salen de datos —la categoría madre— dicen de qué ruta salen: una consulta del contrato, bajo `/api/v0/consultas/…`, cuya `data` es una lista de objetos con `id` y `nombre`, y el `id` es el valor. **El front no decide ni los valores ni a dónde pedirlos**, y la API vuelve a comprobar que lo elegido está entre ellos |
 | `mensajes` trae un texto **por cada regla que el campo tiene** | Es el mismo texto que llega en `data.errores` cuando esa regla falla en el servidor ([§8.2](#82-los-datos-no-pasan-las-reglas--42200)), y la prueba `DescriptorContraValidacionTest` lo compara palabra por palabra |
 
 ### 4.4 Las reglas que caben, y por qué no caben más
@@ -332,15 +344,26 @@ le avisó.
 
 ### 5.1 La cabecera
 
-Toda petición que **escribe** —`POST`, `PUT`, `PATCH`, `DELETE`— lleva obligatoriamente la cabecera
-`Idempotency-Key` con un UUID v4. Sin ella, la API responde `40002` y no procesa nada.
+**Toda petición lleva obligatoriamente la cabecera `Idempotency-Key` con un UUID v4**, lea o
+escriba. Sin ella, la API responde `40002` y no procesa nada.
 
-`GET`, `HEAD` y `OPTIONS` son idempotentes por naturaleza y no la llevan.
+La regla ya no cuelga del verbo, porque desde [ADR-030](adr/ADR-030-contrato-sin-get.md) todo es
+`POST`. Lo que dice si una operación lee o escribe es **su ruta**: una lectura está bajo
+`/api/v0/consultas/…` y cualquier otra cosa escribe. Así la frontera se comprueba con una prueba
+en vez de recordarse en cuatro sitios distintos.
+
+Se eximen dos operaciones, y por una razón que no es comodidad: `POST /api/v0/sesiones` y
+`POST /api/v0/sesiones/renovacion`. Cuando se piden todavía no hay clave de firma con qué firmar,
+y su respuesta trae secretos que no deben quedar guardados en la tabla de idempotencia.
 
 > **La clave la genera el front en el momento en que la persona decide la acción**, no en cada
 > reintento. Es la diferencia entre «reintentar esta acción» y «hacer otra acción igual»: si la
 > empleada toca Guardar dos veces porque no vio la confirmación, es la misma intención y debe
 > cobrarse una vez.
+
+**En una lectura, cada consulta es una intención nueva** y estrena clave; solo el reintento de esa
+misma consulta reutiliza la suya. Reutilizarla entre dos consultas distintas haría que la segunda
+recibiera la respuesta guardada de la primera, hasta 72 horas después ([§5.4](#54-retención-72-horas)).
 
 La cola local del front guarda cada intención **con su clave ya puesta antes de intentar enviarla**
 ([`17-resiliencia-offline-y-cache.md`](17-resiliencia-offline-y-cache.md)). Así el reintento es
@@ -430,7 +453,7 @@ Cada pieza está por una razón concreta:
 
 | Pieza | Qué impide cambiar por el camino |
 |---|---|
-| Método | Convertir un `GET` en un `DELETE` |
+| Método | Convertir un `PUT` en un `DELETE` sobre el mismo recurso. Separa menos que antes, porque desde [ADR-030](adr/ADR-030-contrato-sin-get.md) casi todo es `POST`: lo que separa leer de escribir es la ruta, que también va firmada |
 | Ruta | Mover la misma operación a otro recurso |
 | Marca de tiempo | Guardar la petición para reenviarla mañana |
 | Nonce | Reenviarla dos veces dentro de la ventana |
@@ -520,14 +543,14 @@ acuerda nadie. La decisión está en [ADR-022](adr/ADR-022-openapi-generado.md).
 
 ## 8. El contrato funcionando
 
-Tres intercambios completos sobre la misma operación —registrar un gasto— para que el contrato se
-vea, no solo se lea. Las cabeceras van enteras; el sobre, entero.
+Cuatro intercambios completos —tres sobre la misma escritura, registrar un gasto, y uno de
+lectura— para que el contrato se vea, no solo se lea. Las cabeceras van enteras; el sobre, entero.
 
 ### 8.1 Éxito · `20100`
 
 ```http
-POST /gastos HTTP/1.1
-Host: api.prismamy.co
+POST /api/v0/gastos HTTP/1.1
+Host: api.prisma.com
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 Idempotency-Key: 6f1c2f3a-8f4b-4f9a-9a2e-1b7c5d3e0a11
@@ -559,8 +582,8 @@ Content-Type: application/json
 Mismo endpoint, un valor en cero y una clave de idempotencia nueva, porque es otra intención:
 
 ```http
-POST /gastos HTTP/1.1
-Host: api.prismamy.co
+POST /api/v0/gastos HTTP/1.1
+Host: api.prisma.com
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 Idempotency-Key: 0a4d9e17-5c82-4b31-8f06-7e2c1a9d4b55
@@ -595,8 +618,8 @@ llega dos veces por caminos distintos.
 La clave del [§8.1](#81-éxito--20100), reutilizada con un cuerpo distinto:
 
 ```http
-POST /gastos HTTP/1.1
-Host: api.prismamy.co
+POST /api/v0/gastos HTTP/1.1
+Host: api.prisma.com
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 Idempotency-Key: 6f1c2f3a-8f4b-4f9a-9a2e-1b7c5d3e0a11
@@ -622,6 +645,42 @@ Si el cuerpo hubiera sido **idéntico** al del [§8.1](#81-éxito--20100), la re
 palabra la del [§8.1](#81-éxito--20100), con su `201` y su `20100`, sin registrar un segundo gasto. Esa es la
 diferencia entre reintentar y repetir, y la huella del [§5.3](#53-la-huella-y-para-qué-sirve) es lo único que la distingue.
 
+### 8.4 Una lectura · `20000`
+
+La cuarta es una consulta, para que se vea que no se parece a lo que uno esperaría. No lleva cuerpo
+porque no tiene nada que filtrar todavía, pero **sí lleva su clave de idempotencia**, como cualquier
+otra petición ([§5.1](#51-la-cabecera)):
+
+```http
+POST /api/v0/consultas/cuentas HTTP/1.1
+Host: api.prisma.com
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Idempotency-Key: 4d0b7a92-1e65-4c38-b7f4-8c3a0d5e1b27
+X-Prisma-Nonce: a1f39c60-2d84-4e7b-9051-6b8c3e0f7a4d
+X-Prisma-Timestamp: 2026-09-17T14:02:11Z
+X-Prisma-Firma: 7c4e0a93b58d1f62e0a7c3d95b284fc6d1e0a73f29b5c8d4e6a01f3b7c9d5e28
+```
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "status": 20000,
+  "mensaje": "Consulta correcta.",
+  "data": [
+    { "id": "3f8c1a04-9d27-4e61-b350-7c2a9e4f1d86", "nombre": "Efectivo", "tipo": "efectivo" },
+    { "id": "b7e2d915-4a68-4c03-9f71-2e5b8a0c3d49", "nombre": "Nequi", "tipo": "billetera" }
+  ]
+}
+```
+
+Tres cosas que conviene mirar: el `status` es `20000` y no `20100`, porque **leer no crea nada**; la
+firma se arma igual que en una escritura, con `sha256` del cuerpo vacío; y esta petición dispara un
+`OPTIONS` de preflight antes, que el navegador manda solo. Ese viaje extra es el precio admitido de
+[ADR-030](adr/ADR-030-contrato-sin-get.md).
+
 ---
 
 ## 9. Lo que este documento no cubre
@@ -637,7 +696,7 @@ diferencia entre reintentar y repetir, y la huella del [§5.3](#53-la-huella-y-p
 | Con qué configuración corre cada ambiente y cómo se publica | [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [07](07-arquitectura.md "07 · Arquitectura técnica") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [Contrato](../contrato/README.md "Contrato de la API · v0.4.0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [07](07-arquitectura.md "07 · Arquitectura técnica") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

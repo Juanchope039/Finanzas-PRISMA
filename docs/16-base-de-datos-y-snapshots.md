@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 > **Construcción: construido y corriendo contra dev**, donde el esquema está aplicado y verificado
 > línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5) y [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5)). **qa va dos migraciones atrás**: promoverlas es
@@ -99,7 +99,7 @@ Al terminar tienes la base completa con datos de prueba y estos usuarios listos 
 | `camila` | `temporal01` | Operación | Clave temporal (obliga a cambiarla) |
 | `lorena` | `prisma2026` | Operación | **Desactivada** (prueba del rechazo) |
 
-> El login usa el **correo sintético** `usuario@usuarios.prismamy.co` por dentro
+> El login usa el **correo sintético** `usuario@usuarios.prisma.com` por dentro
 > ([ADR-009](adr/ADR-009-login-por-usuario.md)); nunca se teclea el correo.
 
 ---

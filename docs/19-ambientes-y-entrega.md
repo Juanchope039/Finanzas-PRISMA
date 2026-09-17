@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-16 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -131,7 +131,7 @@ dentro del artefacto.
 
 | Clave | Qué es | Ejemplo en dev | Ejemplo en prod |
 |---|---|---|---|
-| `PRISMA_API_URL` | Dónde vive `prisma_api` | `https://api-dev.prismamy.co` | `https://api.prismamy.co` |
+| `PRISMA_API_URL` | Dónde vive `prisma_api` | `https://api-dev.prisma.com` | `https://api.prisma.com` |
 | `PRISMA_AMBIENTE` | Cuál de los cuatro es | `dev` | `prod` |
 | `PRISMA_API_MAJOR` | Qué MAJOR de la API exige ([§4.3](#43-el-contrato-de-compatibilidad)) | `0` | `1` |
 | `PRISMA_COMMIT` | Referencia del commit compilado | `a3f19c4` | `a3f19c4` |
@@ -146,7 +146,7 @@ dentro del artefacto.
 
 | Variable | Para qué | Nota |
 |---|---|---|
-| `PRISMA_AMBIENTE` | Lo que responde `GET /version` y lo que pinta la franja | `dev`, `qa`, `uat` o `prod` |
+| `PRISMA_AMBIENTE` | Lo que responde `POST /api/v0/consultas/version` y lo que pinta la franja | `dev`, `qa`, `uat` o `prod` |
 | `DATABASE_URL` | Conexión a PostgreSQL | Con el rol `prisma_api`, **sin `BYPASSRLS`** y sin ser dueño de las tablas |
 | `SUPABASE_URL` | Proyecto de Supabase del ambiente | Uno distinto por ambiente |
 | `SUPABASE_ANON_KEY` | Iniciar sesión contra Supabase Auth | Solo la usa la API, no el front |
@@ -198,7 +198,7 @@ Para que ser independientes no signifique romperse en silencio:
 
 | Pieza | Qué hace |
 |---|---|
-| `GET /version` | La API publica su versión, la del esquema y el ambiente |
+| `POST /api/v0/consultas/version` | La API publica su versión, la del esquema y el ambiente |
 | `PRISMA_API_MAJOR` | El front declara al compilar qué MAJOR de la API necesita |
 | Comprobación al arrancar | El front consulta `/version`; si el MAJOR no coincide, muestra «Esta versión de la aplicación ya no sirve con el servidor. Actualiza.» y no deja seguir |
 | Ventana de soporte | Cada versión de la API declara hasta cuándo sostiene el MAJOR anterior |
@@ -300,7 +300,7 @@ Lo anterior más lo que solo se puede probar contra una base real del ambiente d
 |---|---|---|
 | Migraciones | Aplica las pendientes sobre la base del ambiente | Una migración solo se sabe buena cuando corre |
 | Pruebas de integración | Repositorios y transacciones contra la base real | El `if` de Java no prueba la restricción de PostgreSQL |
-| **Prueba de permisos** | Sesión **real** de tipo Operación a través de la API: `GET /nomina`, `GET /usuarios` y `GET /patrimonio` devuelven vacío o 403 | Es lo único que demuestra que RLS sigue juzgando con la API en medio |
+| **Prueba de permisos** | Sesión **real** de tipo Operación a través de la API: `POST /api/v0/consultas/nomina`, `/consultas/usuarios` y `/consultas/patrimonio` devuelven vacío o 403 | Es lo único que demuestra que RLS sigue juzgando con la API en medio |
 | Traducción de errores | Recorre `pg_constraint` y exige que cada restricción nombrada tenga mensaje en español | Una regla nueva en la base sin mensaje sale al usuario como un error del motor |
 
 La prueba de permisos es la que sostiene [ADR-006](adr/ADR-006-rls-por-rol.md) y
@@ -328,7 +328,7 @@ está actuando y la prueba falla, aunque en el ambiente de verdad nadie note nad
 | 4 | Gerencia revisa en uat lo que pidió y lo aprueba | Gerencia |
 | 5 | Se aplican las migraciones en prod | Desarrollo |
 | 6 | Se promueve **el mismo artefacto** a prod y se anota versión, commit, fecha y quién aprobó | Desarrollo |
-| 7 | Se comprueba `GET /version` en prod y se abre una pantalla real | Desarrollo |
+| 7 | Se comprueba `POST /api/v0/consultas/version` en prod y se abre una pantalla real | Desarrollo |
 
 El paso 5 va antes del 6 a propósito: el esquema nuevo tiene que estar listo cuando llegue el
 código que lo usa.

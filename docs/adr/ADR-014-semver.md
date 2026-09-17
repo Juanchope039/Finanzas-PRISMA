@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-014-semver.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-15 | 2026-09-16 | [Entrega](../INDICE.md#etiqueta-entrega) · [Proceso](../INDICE.md#etiqueta-proceso) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-014-semver.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-15 | 2026-09-17 | [Entrega](../INDICE.md#etiqueta-entrega) · [Proceso](../INDICE.md#etiqueta-proceso) |
 
 > **La decisión sigue vigente; un dato del cuerpo dejó de serlo.** Cuando se escribió, la API
 > estaba en Dart y su versión vivía en un `pubspec.yaml`. [ADR-017](ADR-017-api-en-java.md) la
@@ -12,6 +12,13 @@
 > —SemVer independiente por proyecto y un contrato de compatibilidad que impide que ser
 > independientes signifique romperse en silencio— no cambia en nada. La tabla vigente de dónde
 > vive cada versión está en [`19-ambientes-y-entrega.md`](../19-ambientes-y-entrega.md) [§4.1](../19-ambientes-y-entrega.md#41-tres-cosas-versionadas-por-separado).
+
+> **Y un segundo dato.** Donde el cuerpo dice `GET /version`, hoy hay que leer
+> `POST /api/v0/consultas/version`: desde [ADR-030](ADR-030-contrato-sin-get.md) ninguna operación
+> usa `GET`. **El contrato de compatibilidad no cambia** —el front sigue preguntando al arrancar y
+> plantándose si el MAJOR no coincide—, solo el verbo y la ruta. Y el `v0` del prefijo **es** este
+> MAJOR: pasa a `v1` con la primera publicación en producción, que es cuando el número deja de ser
+> `0.y.z`.
 
 ## Contexto
 
@@ -108,5 +115,5 @@ estabilidad del contrato, y hacerla antes de que el contrato exista obliga a rom
 ---
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [09](../09-plan-de-implantacion.md "09 · Plan de implantación") · [12](../12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [18](../18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../../contrato/README.md "Contrato de la API · v0.4.0") · [ADR-019](ADR-019-contrato-de-respuesta.md "ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos") · [ADR-022](ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-023](ADR-023-tres-repositorios.md "ADR-023 · Tres repositorios y el contrato como artefacto versionado") · [ADR-024](ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-029](ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase")
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [09](../09-plan-de-implantacion.md "09 · Plan de implantación") · [12](../12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [18](../18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [20](../20-contrato-de-api.md "20 · Contrato de la API") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-019](ADR-019-contrato-de-respuesta.md "ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos") · [ADR-022](ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-023](ADR-023-tres-repositorios.md "ADR-023 · Tres repositorios y el contrato como artefacto versionado") · [ADR-024](ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-029](ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-030](ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0")
 <!-- /generado:referenciado-desde -->

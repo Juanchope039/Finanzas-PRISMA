@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/02-casos-de-uso.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/02-casos-de-uso.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 Los 37 casos de uso del MVP. Cada uno indica el **rol autorizado**, y esa autorización se
 implementa en la base de datos, no en la pantalla.
@@ -348,7 +348,7 @@ capacidad o trabajo que no se está cobrando: ajustes, repeticiones, diseños re
 2. Escribe su nombre de usuario y su contraseña.
 3. Confirma con **Entrar** o con la tecla Enter desde cualquiera de los dos campos.
 4. El sistema normaliza el usuario a minúsculas y arma el correo sintético
-   `usuario@usuarios.prismamy.co`. Ese correo es un detalle interno: **nunca se muestra, nunca
+   `usuario@usuarios.prisma.com`. Ese correo es un detalle interno: **nunca se muestra, nunca
    se pide, nunca se imprime.**
 5. El proveedor de autenticación valida la contraseña contra su hash. El código propio nunca
    ve la contraseña.

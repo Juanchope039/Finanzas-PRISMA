@@ -3,7 +3,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/README.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Negocio](docs/INDICE.md#etiqueta-negocio) · [Plan](docs/INDICE.md#etiqueta-plan) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/README.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Negocio](docs/INDICE.md#etiqueta-negocio) · [Plan](docs/INDICE.md#etiqueta-plan) |
 
 > **PRISMA** = **P**lataforma de **R**egistro, **I**nversión, **S**eguimiento, **M**árgenes y **A**dministración.
 > Un solo lugar para saber cuánto entra, cuánto sale, cuánto queda y cuánto se puede pagar.
@@ -160,8 +160,8 @@ siempre en pantalla qué versión es y contra qué ambiente está hablando. El d
 
 **Lo que ya existe del [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0):** los cuatro repositorios, con el esqueleto de cada pieza, la
 integración continua de la API y del front, y los cimientos que tienen que estar **antes** del primer
-endpoint: el sobre en toda respuesta, el catálogo de códigos, `GET /version`, las dos fronteras
-verificadas, **el contrato v0.2.0** en [`contrato/`](contrato/), que era el camino crítico del
+endpoint: el sobre en toda respuesta, el catálogo de códigos, la consulta de versión, las dos fronteras
+verificadas, **el contrato v0.5.0** en [`contrato/`](contrato/), que era el camino crítico del
 sprint, y el descriptor de formulario. Todavía no hay ninguna funcionalidad de negocio.
 
 **Lo que falta para cerrarlo** son las dos tareas que necesitan una base de datos corriendo, 0.5 y

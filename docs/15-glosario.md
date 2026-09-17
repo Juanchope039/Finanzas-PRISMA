@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/15-glosario.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Negocio](INDICE.md#etiqueta-negocio) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/15-glosario.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Negocio](INDICE.md#etiqueta-negocio) |
 
 Vocabulario compartido entre el negocio, la contabilidad y el sistema. Cuando haya duda sobre
 qué significa algo, este documento manda.
@@ -153,7 +153,7 @@ no hay canal de correo para recuperar contraseñas.
 
 **Correo sintético**
 Dirección interna que el sistema arma a partir del nombre de usuario para autenticar contra
-el proveedor, que solo entiende correos: `marcela` → `marcela@usuarios.prismamy.co`. Es un
+el proveedor, que solo entiende correos: `marcela` → `marcela@usuarios.prisma.com`. Es un
 detalle técnico: **nunca se muestra, nunca se pide, nunca se imprime.**
 
 **Descarga del Inicio**

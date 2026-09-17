@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/09-plan-de-implantacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Plan](INDICE.md#etiqueta-plan) · [Entrega](INDICE.md#etiqueta-entrega) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/09-plan-de-implantacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Plan](INDICE.md#etiqueta-plan) · [Entrega](INDICE.md#etiqueta-entrega) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 Cómo se pasa de tener el software construido a que el negocio realmente lo use.
 
@@ -124,7 +124,7 @@ pasos cuestan plata y hay que decidirlos con tiempo.
 | 5 | Cargar los **secretos de cada ambiente** fuera del repositorio: variables de entorno en la API, `--dart-define` al compilar el front | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
 | 6 | Guardar la clave `service_role` de cada ambiente en un **secreto aparte**, reservado para migraciones y tareas administrativas | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
 | 7 | Promover el esquema dev → qa → uat → prod y verificar `schema_version` en cada base | Apoyo técnico | Antes de cada hito |
-| 8 | Comprobar en cada ambiente que `GET /version` responde el ambiente correcto y que la franja aparece donde debe | Apoyo técnico | Antes de cada hito |
+| 8 | Comprobar en cada ambiente que `POST /api/v0/consultas/version` responde el ambiente correcto y que la franja aparece donde debe | Apoyo técnico | Antes de cada hito |
 | 9 | Ejecutar la prueba de permisos con sesión real en los cuatro ambientes ([ADR-012](adr/ADR-012-identidad-a-postgres.md)) | Apoyo técnico | Antes del go-live |
 
 > **Esto no es un impedimento, es una factura.** «Siempre en línea» significa que prod y uat no
@@ -149,7 +149,7 @@ go-live:
 | Base | Imagen con solo el **entorno de ejecución de Java 25**, sin JDK ni herramientas | Lo que no está en la imagen no se puede ejecutar por error, y pesa menos multiplicado por cuatro |
 | Contenido | El `jar` de Spring Boot y nada más | Ninguna consola, ningún script suelto |
 | Etiqueta | El número de versión exacto, **nunca `latest`** | Lo que se promueve de uat a prod es una etiqueta, no una compilación nueva ([ADR-013](adr/ADR-013-cuatro-ambientes.md), [ADR-014](adr/ADR-014-semver.md)) |
-| Verificación de salud | Recibe tráfico solo cuando `GET /version` responde | Un contenedor que arrancó todavía no es un contenedor listo |
+| Verificación de salud | Recibe tráfico solo cuando `GET /actuator/health/readiness` responde | Un contenedor que arrancó todavía no es un contenedor listo. La sonda es la de Actuator ([19 §2.4](19-ambientes-y-entrega.md#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro)), no la consulta de versión: esa es el contrato de compatibilidad con el front |
 
 **La memoria y el arranque**
 
@@ -174,7 +174,7 @@ cargado, y cuatro veces, antes de promover nada:
 
 | Variable | Qué cambia entre ambientes |
 |---|---|
-| `PRISMA_AMBIENTE` | `dev`, `qa`, `uat` o `prod`. Es lo que responde `GET /version` y lo que pinta la franja |
+| `PRISMA_AMBIENTE` | `dev`, `qa`, `uat` o `prod`. Es lo que responde `POST /api/v0/consultas/version` y lo que pinta la franja |
 | Perfil de Spring | El mismo valor del ambiente, para que no se mezclen configuraciones |
 | Memoria de la JVM | La de la tabla anterior, como variable y no dentro de la imagen: así se ajusta sin recompilar |
 | `DATABASE_URL` | La base de ese ambiente, siempre con el rol `prisma_api` |
@@ -341,7 +341,7 @@ cuatro ambientes. Ninguno se salta.
 | # | Paso | Quién | Qué tiene que pasar para seguir |
 |---|---|---|---|
 | 1 | Las migraciones pendientes se aplican en qa y pasan las pruebas | Apoyo técnico | Las pruebas de extremo a extremo pasan en qa |
-| 2 | El artefacto se promueve a uat y se siembra con datos anonimizados | Apoyo técnico | `GET /version` en uat responde la versión candidata |
+| 2 | El artefacto se promueve a uat y se siembra con datos anonimizados | Apoyo técnico | `POST /api/v0/consultas/version` en uat responde la versión candidata |
 | 3 | Gerencia recorre el checklist de UAT ([§1.1](#11-la-segunda-firma-el-mismo-checklist-en-uat)) y firma la versión | Gerencia | La firma queda con número de versión y fecha |
 | 4 | **El mismo artefacto** se promueve a prod, sin recompilar: la misma etiqueta de la imagen de la API y el mismo paquete web del front | Apoyo técnico | La versión en prod es idéntica a la firmada |
 | 5 | Alistamiento de usuarios y migración de datos en prod ([§4](#4-migración-de-datos-históricos)) | Gerencia + apoyo técnico | Los saldos cuadran con el dinero real |
@@ -367,7 +367,7 @@ cuatro ambientes. Ninguno se salta.
 | 11 | Cada persona del equipo entró al menos una vez con su propio usuario | ⬜ |
 | 12 | La versión en prod es **exactamente** la firmada en UAT, con el mismo número | ⬜ |
 | 13 | El plan de pago de prod está activo y la base no se pausa por inactividad | ⬜ |
-| 14 | `GET /version` en prod responde la versión del front, la de la API, la del esquema y el ambiente | ⬜ |
+| 14 | `POST /api/v0/consultas/version` en prod responde la versión del front, la de la API, la del esquema y el ambiente | ⬜ |
 | 15 | En prod **no hay franja de ambiente** y la versión se ve en el pie de la barra lateral, en color neutro | ⬜ |
 | 16 | El rol `prisma_api` de prod no tiene `BYPASSRLS` ni es dueño de las tablas | ⬜ |
 | 17 | La prueba de permisos con sesión real se ejecutó **contra prod** y la base fue la que negó | ⬜ |

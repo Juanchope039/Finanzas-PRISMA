@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Calidad](INDICE.md#etiqueta-calidad) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Calidad](INDICE.md#etiqueta-calidad) |
 
 ---
 
@@ -60,7 +60,7 @@ el front y la API es el contrato de versiones, y eso está en la sección 9.
 
 > **Ninguna prueba automática escribe en prod.** Las de integración siembran filas y las borran;
 > en la base del negocio eso no es una prueba, es un daño. Contra prod solo corren lecturas después
-> de publicar: que `GET /version` devuelva la versión que se acaba de promover y que el Inicio
+> de publicar: que `POST /api/v0/consultas/version` devuelva la versión que se acaba de promover y que el Inicio
 > cargue. Nada más.
 
 Que qa sea la que bloquea la promoción es a propósito: es el único ambiente donde la suite completa
@@ -222,7 +222,7 @@ estaría sosteniendo. Eso es lo que [P-32](#p-32) rompe.
 | Paso | Qué se hace |
 |---|---|
 | 1 | Abrir sesión **a través de la API** como una usuaria de tipo Operación, con su usuario y su contraseña del ambiente de pruebas |
-| 2 | Pedir `GET /nomina`, `GET /usuarios` y `GET /patrimonio`. Deben devolver conjunto vacío o 403 |
+| 2 | Pedir `POST /api/v0/consultas/nomina`, `/consultas/usuarios` y `/consultas/patrimonio`. Deben devolver conjunto vacío o 403 |
 | 3 | **Desactivar la comprobación de la capa de aplicación** con la bandera de configuración que solo se acepta en dev y en qa, y repetir las tres peticiones |
 | 4 | Comparar. El resultado debe ser **exactamente el mismo** |
 
@@ -418,7 +418,7 @@ dejaron de entenderse. Estas cuatro pruebas son ese vigilante.
 | # | Prueba | Resultado esperado |
 |---|---|---|
 | [C-01](#c-01) | Recorrer `pg_constraint` y cruzar cada restricción nombrada con la tabla de traducción de `prisma_api` | Todas tienen entrada. Si falta una, la prueba falla y dice cuál |
-| [C-02](#c-02) | Arrancar el front declarando una MAJOR de API distinta a la que responde `GET /version` | El front se planta en la primera pantalla y no deja seguir |
+| [C-02](#c-02) | Arrancar el front declarando una MAJOR de API distinta a la que responde `POST /api/v0/consultas/version` | El front se planta en la primera pantalla y no deja seguir |
 | [C-03](#c-03) | Cruzar los códigos de cinco dígitos que emite el código fuente contra el catálogo | Ninguno emitido falta en el catálogo y ninguno del catálogo sobra. Falla nombrando el código |
 | [C-04](#c-04) | Regenerar el OpenAPI desde los controladores y compararlo con el `openapi.json` versionado | Idénticos. Cualquier diferencia rompe la compilación |
 
@@ -557,7 +557,7 @@ El procedimiento y las políticas de retención están en
 **restaurar es una prueba con fecha, no una buena intención.**
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.4.0") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

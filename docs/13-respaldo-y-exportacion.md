@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/13-respaldo-y-exportacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Datos personales](INDICE.md#etiqueta-datos-personales) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/13-respaldo-y-exportacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Datos personales](INDICE.md#etiqueta-datos-personales) |
 
 > **Construcción: diseñado, no construido.** La exportación se especifica aquí en detalle para que
 > el modelo de datos y la arquitectura la soporten desde el primer día, pero su construcción
@@ -141,7 +141,7 @@ Todo archivo de exportación incluye un `manifiesto.json`:
 ```json
 {
   "generado_en": "2026-09-30T18:42:11-05:00",
-  "generado_por": "gerencia@prismamyestampados.co",
+  "generado_por": "gerencia@prisma.com",
   "alcance": { "tipo": "mes", "anio": 2026, "mes": 9 },
   "version_esquema": "1.4.0",
   "version_api": "1.4.2",

@@ -2,7 +2,12 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-012-identidad-a-postgres.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-15 | 2026-09-16 | [Seguridad](../INDICE.md#etiqueta-seguridad) · [API](../INDICE.md#etiqueta-api) · [Base de datos](../INDICE.md#etiqueta-base-de-datos) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-012-identidad-a-postgres.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-15 | 2026-09-17 | [Seguridad](../INDICE.md#etiqueta-seguridad) · [API](../INDICE.md#etiqueta-api) · [Base de datos](../INDICE.md#etiqueta-base-de-datos) |
+
+> **La decisión sigue vigente; cambió cómo se piden esas rutas.** La prueba de RLS que el cuerpo
+> describe con `GET /nomina`, `GET /usuarios` y `GET /patrimonio` se pide hoy por `POST` bajo
+> `/api/v0/consultas/…` ([ADR-030](ADR-030-contrato-sin-get.md)). Lo que la prueba comprueba
+> —que el rechazo venga de la base y no de un `if` de la API— no cambia en nada.
 
 ## Contexto
 

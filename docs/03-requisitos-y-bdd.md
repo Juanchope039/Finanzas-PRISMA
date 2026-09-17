@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/03-requisitos-y-bdd.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/03-requisitos-y-bdd.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 ---
 
@@ -340,7 +340,7 @@ Formato Gherkin tabulado. Cada escenario se convierte en una prueba automática.
 | <a id="bdd-02-3"></a>BDD-02-3 | Simulador restringido | Sesión con rol Operación | Intento abrir el simulador por acceso directo | La base de datos rechaza la consulta |
 | <a id="bdd-02-4"></a>BDD-02-4 | Desprendible propio | Sesión con rol Operación | Consulto nómina | Veo únicamente mi propio desprendible |
 | <a id="bdd-02-5"></a>BDD-02-5 | Exportación restringida | Sesión con rol Operación | Intento exportar la base | Se rechaza en la base de datos |
-| <a id="bdd-02-6"></a>BDD-02-6 | La base manda aunque haya una API en medio | Sesión real de Operación contra la API, con la comprobación de permisos de la capa de aplicación desactivada a propósito | Pido `GET /nomina`, `GET /usuarios` y `GET /patrimonio` | Las tres responden vacío o 403 porque lo decidió Row Level Security, no un `if` de la API; si al quitar la comprobación aparecen datos, la prueba falla |
+| <a id="bdd-02-6"></a>BDD-02-6 | La base manda aunque haya una API en medio | Sesión real de Operación contra la API, con la comprobación de permisos de la capa de aplicación desactivada a propósito | Pido `POST /api/v0/consultas/nomina`, `/consultas/usuarios` y `/consultas/patrimonio` | Las tres responden vacío o 403 porque lo decidió Row Level Security, no un `if` de la API; si al quitar la comprobación aparecen datos, la prueba falla |
 
 ### 4.8 Importación
 
@@ -381,7 +381,7 @@ Formato Gherkin tabulado. Cada escenario se convierte en una prueba automática.
 | <a id="bdd-98-1"></a>BDD-98-1 | La insignia de versión y ambiente se ve | Una sesión abierta en el ambiente de QA | Miro el pie de la barra lateral, abajo a la izquierda | Veo `v0.4.2 · QA` en color de advertencia, y arriba sigue la franja fija que dice «Ambiente de QA · los datos no son reales» |
 | <a id="bdd-98-2"></a>BDD-98-2 | En producción no hay franja ni rótulo | Una sesión abierta en producción | Miro el pie de la barra lateral | Veo solo la versión, en color neutro, y no hay ninguna franja de ambiente: si no dice nada, es el de verdad |
 | <a id="bdd-100-1"></a>BDD-100-1 | «Acerca de» responde la primera pregunta de todo reporte de fallo | Una sesión abierta en QA | Abro «Acerca de» desde el menú de la sesión | Veo la versión del front, la de la API, la del esquema, el ambiente, la fecha de compilación y la referencia del commit |
-| <a id="bdd-101-1"></a>BDD-101-1 | El front rechaza una API con MAJOR incompatible | Un front compilado contra la MAJOR 1 de la API y un servidor que responde `2.0.0` en `GET /version` | Abro la aplicación | La sesión no abre: aparece «Esta versión de la aplicación ya no sirve con el servidor. Actualiza.» y no hay forma de seguir |
+| <a id="bdd-101-1"></a>BDD-101-1 | El front rechaza una API con MAJOR incompatible | Un front compilado contra la MAJOR 1 de la API y un servidor que responde `2.0.0` en `POST /api/v0/consultas/version` | Abro la aplicación | La sesión no abre: aparece «Esta versión de la aplicación ya no sirve con el servidor. Actualiza.» y no hay forma de seguir |
 
 > **El número del medio de `BDD-98-*`, `BDD-100-1` y `BDD-101-1` es el del requisito, no el de un
 > caso de uso.** Es la única excepción del documento y no admite ambigüedad: los casos de uso
@@ -433,7 +433,7 @@ Sin huérfanos en ninguna dirección.
 37 casos de uso · 67 escenarios BDD · 11 pantallas.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.4.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-016](adr/ADR-016-flutter-web-pwa.md "ADR-016 · Flutter Web instalable como PWA") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-016](adr/ADR-016-flutter-web-pwa.md "ADR-016 · Flutter Web instalable como PWA") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

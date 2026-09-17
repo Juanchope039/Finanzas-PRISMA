@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
+| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
 
 Tres partes —un front en Flutter multiplataforma, una API en Java 25 con Spring Boot y una capa
 de datos PostgreSQL siempre en línea—. Arquitectura hexagonal (puertos y adaptadores) sobre Clean
@@ -485,12 +485,12 @@ estampados no siempre tienen correo, y pedirles uno es una barrera real de adopc
 
 Entonces el sistema traduce, **y traduce en el servidor**. La persona escribe `marcela`, el front
 envía usuario y contraseña a `POST /sesiones`, y `prisma_api` arma
-`marcela@usuarios.prismamy.co` y llama al proveedor.
+`marcela@usuarios.prisma.com` y llama al proveedor.
 
 ```
 usuario escrito:  marcela                     (lo único que sale del front)
-dominio interno:  @usuarios.prismamy.co       (constante de la API, fija de por vida)
-correo sintético: marcela@usuarios.prismamy.co (nunca sale de la API)
+dominio interno:  @usuarios.prisma.com       (constante de la API, fija de por vida)
+correo sintético: marcela@usuarios.prisma.com (nunca sale de la API)
 ```
 
 El correo sintético es un detalle interno: **nunca se muestra, nunca se pide, nunca se imprime
@@ -600,8 +600,8 @@ Sin estas cuatro, lo anterior es teatro:
 ### 7.4 Cómo se prueba
 
 Prueba de integración obligatoria, en cada ambiente, contra la base real: autenticarse como una
-usuaria de tipo Operación a través de la API y comprobar que `GET /nomina`, `GET /usuarios` y
-`GET /patrimonio` devuelven vacío o 403 **por decisión de la base**, no por un `if` de Java.
+usuaria de tipo Operación a través de la API y comprobar que `POST /api/v0/consultas/nomina`,
+`/consultas/usuarios` y `/consultas/patrimonio` devuelven vacío o 403 **por decisión de la base**, no por un `if` de Java.
 
 Para demostrarlo: se desactiva temporalmente la comprobación de la capa de aplicación en el
 ambiente de pruebas y el resultado debe seguir siendo el mismo. Si al quitar el `if` los datos
