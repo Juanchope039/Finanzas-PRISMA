@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.19.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [1.20.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -35,7 +35,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 17 | 16 | 0 | 1 | 1 |
-| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 12 | 0 | 8 | 10 |
+| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 13 | 0 | 7 | 9,5 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 19 | 4 | 0 | 15 | 18 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 3 | 0 | 10 | 11,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 1 | 0 | 9 | 11 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 12 |
-| **Total** | **132** | **40** | **0** | **92** | **114** |
+| **Total** | **132** | **41** | **0** | **91** | **113,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -78,7 +78,7 @@ esperando. En el carril API se abren la transacción por petición que propaga l
 PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)) y la traducción de restricción a código del catálogo ([1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)), que ya tiene de
 dónde salir: cada restricción se llama como la llama el [04](docs/04-modelo-de-datos.md). En el carril Base, con `cargos` ([2.3](docs/08-plan-de-desarrollo.md#tarea-2-3)),
 la tabla de idempotencia ([1.13](docs/08-plan-de-desarrollo.md#tarea-1-13)) y la semilla reproducible ([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)) cerradas, siguen la tabla
-`usuarios` ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)), la primera promoción a qa ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) y la purga de las claves vencidas ([1.16](docs/08-plan-de-desarrollo.md#tarea-1-16)). El
+`usuarios` ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)) y la primera promoción a qa ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)). El
 carril Contrato, con los de los sprints 3 a 8. **El carril Front se queda sin nada que tomar**: con
 la pantalla de acceso ([2.6](docs/08-plan-de-desarrollo.md#tarea-2-6)) hecha, lo que sigue —usuarios, cargos, la navegación dictada y el
 canal firmado— espera a que la API tenga sesión, y eso empieza en la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6). La lista al día la calcula
@@ -99,7 +99,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) · [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) · [1.16](docs/08-plan-de-desarrollo.md#tarea-1-16) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
+| **API** | [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) · [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
 | **Base** | [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12) · [2.4](docs/08-plan-de-desarrollo.md#tarea-2-4) |
 | **Contrato** | [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
@@ -108,11 +108,11 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **92 tareas y 114 días de trabajo** de 132 tareas del plan.
+Quedan **91 tareas y 113,5 días de trabajo** de 132 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 17,2 semanas | **20,2 semanas** |
+| 1 | 17,1 semanas | **20,1 semanas** |
 | 2 | 10,8 semanas | **13,8 semanas** |
 | 3 | 9,5 semanas | **12,5 semanas** |
 <!-- /generado:plan-restante -->
@@ -225,7 +225,12 @@ hasta aplicarlo y probarlo.
       [P-37](docs/12-pruebas-y-calidad.md#p-37)) y lo vio fallar abriendo cada política. Sin trigger de auditoría ni purga, que es la [1.16](docs/08-plan-de-desarrollo.md#tarea-1-16)
 - [ ] 🔒 [**1.14**](docs/08-plan-de-desarrollo.md#tarea-1-14) Filtro de idempotencia · API
 - [ ] 🔒 [**1.15**](docs/08-plan-de-desarrollo.md#tarea-1-15) Prueba de corte entre el efecto y la clave · API
-- [ ] ⚡ [**1.16**](docs/08-plan-de-desarrollo.md#tarea-1-16) Purga de claves vencidas a las 72 horas · API, Base
+- [x] [**1.16**](docs/08-plan-de-desarrollo.md#tarea-1-16) Purga de claves vencidas a las 72 horas · API, Base — `pg_cron` agenda
+      `purgar_peticiones_idempotentes` con el horario y la sentencia del [04 §4.9](docs/04-modelo-de-datos.md#49-claves-de-idempotencia), corriendo como el
+      rol de migraciones y no como el de la aplicación, que sigue sin `DELETE`. `verificar-base.sql`
+      no mira el catálogo: siembra una clave vencida y una vigente, corre la purga y pregunta qué
+      quedó ([P-38](docs/12-pruebas-y-calidad.md#p-38)), y comprueba que la vigilancia del [16 §10.2](docs/16-base-de-datos-y-snapshots.md#102-cómo-se-vigila-que-siguen-corriendo) calla sana y habla con una fila
+      vieja ([P-39](docs/12-pruebas-y-calidad.md#p-39)). 83 comprobaciones en `OK` y cinco roturas a propósito vistas fallar
 - [x] [**1.17**](docs/08-plan-de-desarrollo.md#tarea-1-17) Contrato de cuentas y categorías · Contrato — `openapi.json` v0.3.0: leer y crear
       de `/cuentas` y `/categorias`, los formularios `cuenta` y `categoria` con sus mensajes, y los
       códigos `42220` a `42222`. El descriptor suma `opciones`, `origen` y el tipo `casilla`, que es
@@ -675,6 +680,20 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] Tres códigos nuevos para las reglas que no caben en el descriptor: `42220`, `42221` y `42222`
 - [ ] Editar y anular cuentas y categorías no entran al contrato todavía, porque ningún requisito
       las pide
+
+**De la purga de las claves vencidas (tarea [1.16](docs/08-plan-de-desarrollo.md#tarea-1-16)):**
+
+- [ ] **El horario quedó literal, y no corre de madrugada.** `pg_cron` agenda en el huso de
+      `cron.timezone`, que en Supabase es `GMT` y no admite un huso por tarea, así que el
+      `20 3 * * *` del [04 §4.9](docs/04-modelo-de-datos.md#49-claves-de-idempotencia) corre a las **22:20 de Bogotá**. Se dejó el valor escrito en vez de
+      cambiarlo por la espalda. Si se quiere de madrugada de verdad es `20 8 * * *`, y hay que
+      cambiar el [04](docs/04-modelo-de-datos.md) y el [16 §10](docs/16-base-de-datos-y-snapshots.md#10-tareas-programadas-dentro-de-la-base)
+- [ ] **No se tocó `prisma_api`, aunque el plan ponga el carril «API, Base».** Los documentos
+      movieron la purga dentro de la base: corre como el rol de migraciones, y [04 §4.9](docs/04-modelo-de-datos.md#49-claves-de-idempotencia) y
+      [16 §10.1](docs/16-base-de-datos-y-snapshots.md#101-qué-hace-falta-en-cada-ambiente) dicen que darle `DELETE` al rol de la API sería el error. Una prueba en la API que
+      solo leyera `cron.job` probaría la base desde el repositorio equivocado
+- [ ] **La purga de `nonces_vistos` no entra todavía:** su tabla es del [04 §4.10](docs/04-modelo-de-datos.md) y llega con el canal
+      firmado del [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2). La consulta de vigilancia pregunta por la tabla que existe
 
 **Del front (tareas [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19), [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19), [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18), [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10) y [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1)):**
 

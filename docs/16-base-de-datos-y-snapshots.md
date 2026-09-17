@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [1.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 > **Construcción: construido y corriendo contra dev**, donde el esquema está aplicado y verificado
 > línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5), [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5) y [1.13](08-plan-de-desarrollo.md#tarea-1-13)). **qa va tres migraciones atrás**: promoverlas es
@@ -258,16 +258,27 @@ Dos tablas del modelo se limpian solas. Van aquí y no solo en el doc [04](04-mo
 programada que nadie mira es una tarea que se cae en silencio**, y quien administra la base es
 quien tiene que saber que existen.
 
-| Tarea | Tabla | Cuándo corre | Retención |
-|---|---|---|---|
-| `purgar_peticiones_idempotentes` | `peticiones_idempotentes` | `20 3 * * *` — cada día a las 3:20 | 72 horas |
-| `purgar_nonces_vistos` | `nonces_vistos` | `*/10 * * * *` — cada diez minutos | 5 minutos |
+| Tarea | Tabla | Cuándo corre | Retención | Estado |
+|---|---|---|---|---|
+| `purgar_peticiones_idempotentes` | `peticiones_idempotentes` | `20 3 * * *` | 72 horas | **Agendada** ([1.16](08-plan-de-desarrollo.md#tarea-1-16)) |
+| `purgar_nonces_vistos` | `nonces_vistos` | `*/10 * * * *` — cada diez minutos | 5 minutos | Escrita, sin tabla todavía ([Sprint 2](08-plan-de-desarrollo.md#sprint-2)) |
+
+> **`20 3 * * *` no son las 3:20 de Bogotá.** `pg_cron` agenda en el huso de `cron.timezone`, que
+> en Supabase es `GMT` y **no admite un huso por tarea**, así que la purga corre a las **22:20**
+> hora local. Para una purga de higiene la hora da lo mismo, y se dejó el valor que ya estaba
+> escrito en el [04 §4.9](04-modelo-de-datos.md#49-claves-de-idempotencia) en vez de cambiarlo por la espalda. Está anotado en [`TODO.md`](../TODO.md) [§10](../TODO.md#10-decisiones-de-construcción-que-conviene-revisar) para
+> revisarlo: si se quiere que corra de madrugada de verdad, es `20 8 * * *` y hay que cambiar el
+> [04](04-modelo-de-datos.md) y esta tabla.
 
 ### 10.1 Qué hace falta en cada ambiente
 
 `pg_cron` es una extensión y **se habilita una sola vez por ambiente**, desde el panel de Supabase
 o con `CREATE EXTENSION IF NOT EXISTS pg_cron;` ejecutado por el rol de migraciones. Son los
 cuatro ambientes de [`ADR-013`](adr/ADR-013-cuatro-ambientes.md): dev, qa, uat y prod.
+
+Desde la [1.16](08-plan-de-desarrollo.md#tarea-1-16) lo hace la migración `…_purga_de_claves_vencidas.sql`, que habilita la extensión y
+agenda la tarea. Se puede volver a aplicar sin miedo: la extensión lleva `IF NOT EXISTS` y
+`cron.schedule` reemplaza el trabajo que ya tuviera ese nombre, así que no quedan dos.
 
 Las dos purgas corren como el **rol de migraciones**, no como la aplicación. Es dueño de las
 tablas y el único rol del proyecto con `BYPASSRLS`, así que atraviesa el `FORCE ROW LEVEL
