@@ -1,6 +1,50 @@
 {
   "components" : {
     "schemas" : {
+      "Categoria" : {
+        "properties" : {
+          "esFijo" : {
+            "description" : "Gasto fijo mensual —arriendo, servicios, internet—, el que cuenta para la caja libre",
+            "type" : "boolean"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "naturaleza" : {
+            "enum" : [ "ingreso", "gasto" ],
+            "type" : "string"
+          },
+          "nombre" : {
+            "type" : "string"
+          },
+          "padreId" : {
+            "description" : "La categoría madre. Ausente en una categoría principal",
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "esFijo", "id", "naturaleza", "nombre" ],
+        "type" : "object"
+      },
+      "Cuenta" : {
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "nombre" : {
+            "type" : "string"
+          },
+          "tipo" : {
+            "description" : "banco, billetera o efectivo",
+            "enum" : [ "banco", "billetera", "efectivo" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "id", "nombre", "tipo" ],
+        "type" : "object"
+      },
       "DescriptorDeCampo" : {
         "properties" : {
           "ayuda" : {
@@ -32,13 +76,24 @@
             "description" : "Si puede quedar vacío",
             "type" : "boolean"
           },
+          "opciones" : {
+            "description" : "Solo en una lista cerrada: las opciones en el orden en que se pintan. Ausente si la lista trae origen",
+            "items" : {
+              "$ref" : "#/components/schemas/OpcionDeCampo"
+            },
+            "type" : "array"
+          },
+          "origen" : {
+            "description" : "Solo en una lista que sale de datos: la ruta GET de este contrato que la llena. Su data es una lista de objetos con id y nombre; el valor es el id y la etiqueta, el nombre. Ausente si la lista trae opciones",
+            "type" : "string"
+          },
           "teclado" : {
-            "description" : "Qué teclado abre el celular. Ausente en fecha y lista, que no abren teclado",
+            "description" : "Qué teclado abre el celular. Ausente en fecha, lista y casilla, que no abren teclado",
             "enum" : [ "numerico", "texto" ],
             "type" : "string"
           },
           "tipo" : {
-            "enum" : [ "dinero", "texto", "fecha", "lista" ],
+            "enum" : [ "dinero", "texto", "fecha", "lista", "casilla" ],
             "type" : "string"
           }
         },
@@ -75,11 +130,151 @@
         },
         "type" : "object"
       },
+      "NuevaCategoria" : {
+        "description" : "El formulario «categoria». Sus reglas y sus mensajes están en GET /formularios/categoria",
+        "properties" : {
+          "esFijo" : {
+            "description" : "Solo una categoría de gasto puede ser fija",
+            "type" : "boolean"
+          },
+          "naturaleza" : {
+            "enum" : [ "ingreso", "gasto" ],
+            "type" : "string"
+          },
+          "nombre" : {
+            "type" : "string"
+          },
+          "padreId" : {
+            "description" : "La categoría madre, de la misma naturaleza. Ausente para una categoría principal",
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "naturaleza", "nombre" ],
+        "type" : "object"
+      },
+      "NuevaCuenta" : {
+        "description" : "El formulario «cuenta». Sus reglas y sus mensajes están en GET /formularios/cuenta",
+        "properties" : {
+          "nombre" : {
+            "description" : "Cómo se llama en el taller: Davivienda, Bancolombia ahorros, Bold",
+            "type" : "string"
+          },
+          "saldoInicial" : {
+            "description" : "Pesos enteros. Entra como saldo inicial de la cuenta, no como ingreso: no afecta la utilidad del mes",
+            "format" : "int64",
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "tipo" : {
+            "enum" : [ "banco", "billetera", "efectivo" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "nombre", "saldoInicial", "tipo" ],
+        "type" : "object"
+      },
+      "OpcionDeCampo" : {
+        "properties" : {
+          "etiqueta" : {
+            "description" : "Lo que se pinta en la lista",
+            "type" : "string"
+          },
+          "valor" : {
+            "description" : "Lo que viaja en el dato cuando se elige",
+            "type" : "string"
+          }
+        },
+        "required" : [ "etiqueta", "valor" ],
+        "type" : "object"
+      },
+      "SobreCategoria" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Categoria",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreCuenta" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Cuenta",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreDescriptorDeFormulario" : {
         "properties" : {
           "data" : {
             "$ref" : "#/components/schemas/DescriptorDeFormulario",
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreListCategoria" : {
+        "properties" : {
+          "data" : {
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver",
+            "items" : {
+              "$ref" : "#/components/schemas/Categoria"
+            },
+            "type" : "array"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreListCuenta" : {
+        "properties" : {
+          "data" : {
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver",
+            "items" : {
+              "$ref" : "#/components/schemas/Cuenta"
+            },
+            "type" : "array"
           },
           "mensaje" : {
             "description" : "Texto en español para mostrarle tal cual a la persona del taller",
@@ -137,10 +332,126 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos.",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.2.0"
+    "version" : "0.3.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
+    "/categorias" : {
+      "get" : {
+        "description" : "El árbol de categorías de ingreso y gasto sin anular (RF-17), en el orden en que se pintan: cada una dice su naturaleza, si es un gasto fijo y, si tiene, su categoría madre. Las piden los dos tipos de usuario, porque los dos registran movimientos. Puede devolver 20000 y 40100.",
+        "operationId" : "categorias",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreListCategoria"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Las categorías de ingreso y gasto",
+        "tags" : [ "Categorías" ]
+      },
+      "post" : {
+        "description" : "Crea una categoría, principal o dentro de otra de la misma naturaleza (RF-17). Solo Gerencia. Solo un gasto puede ser fijo: es lo que la caja libre descuenta cada mes (05 §3.3). El formulario es «categoria». Puede devolver 20100, 40002, 40100, 40300, 40901, 40902, 42200, 42220, 42221 y 42222; los tres últimos, también con data.errores.",
+        "operationId" : "crearCategoria",
+        "parameters" : [ {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevaCategoria"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreCategoria"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Crear una categoría",
+        "tags" : [ "Categorías" ]
+      }
+    },
+    "/cuentas" : {
+      "get" : {
+        "description" : "Las cuentas de dinero sin anular, en el orden en que se pintan. Las piden los dos tipos de usuario: Operación elige por nombre la cuenta de un movimiento. Por eso no traen saldo: la caja es de Gerencia (01 §4) y los saldos tienen su propia consulta (tarea 3.12). Puede devolver 20000 y 40100.",
+        "operationId" : "cuentas",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreListCuenta"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Las cuentas de dinero, sin saldos",
+        "tags" : [ "Cuentas" ]
+      },
+      "post" : {
+        "description" : "Crea una cuenta de dinero: efectivo, Nequi, Daviplata, un banco (RF-06). Solo Gerencia, y se crea desde Movimientos (RF-97, 10 §4.3). El saldo que se escribe entra como saldo inicial de la cuenta, no como ingreso, así que no afecta la utilidad del mes. El formulario es «cuenta». Puede devolver 20100, 40002, 40100, 40300, 40901, 40902 y 42200 con data.errores.",
+        "operationId" : "crearCuenta",
+        "parameters" : [ {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevaCuenta"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreCuenta"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Crear una cuenta de dinero",
+        "tags" : [ "Cuentas" ]
+      }
+    },
     "/formularios/{nombre}" : {
       "get" : {
         "description" : "Qué campos tiene, en qué orden, y las reglas de cada uno como datos: obligatorio, mínimo, máximo y el texto que se muestra cuando no se cumplen. Ese texto es el mismo que devuelve data.errores cuando la regla falla en el servidor.",
@@ -195,6 +506,12 @@
     "url" : "/"
   } ],
   "tags" : [ {
+    "description" : "El árbol de categorías de ingreso y gasto",
+    "name" : "Categorías"
+  }, {
+    "description" : "Las cuentas de dinero donde se registra cada movimiento",
+    "name" : "Cuentas"
+  }, {
     "description" : "Los campos de cada formulario y sus reglas, como datos",
     "name" : "Formularios"
   }, {
@@ -334,5 +651,38 @@
       "sprint" : 1
     },
     "status" : 40902
+  }, {
+    "cuando" : "Se crea una categoría dentro de otra que no existe o que fue anulada. El error va en data.errores, sobre padreId",
+    "http" : 422,
+    "mensaje" : "La categoría madre que elegiste no existe.",
+    "modulo" : "MOVIMIENTOS_Y_CUENTAS",
+    "nombre" : "CATEGORIA_MADRE_NO_EXISTE",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 1.10: alta de categorías",
+      "sprint" : 1
+    },
+    "status" : 42220
+  }, {
+    "cuando" : "Se crea una categoría de gasto dentro de una de ingreso, o al revés. El error va en data.errores, sobre padreId",
+    "http" : 422,
+    "mensaje" : "Una categoría tiene que ser de la misma naturaleza que su categoría madre.",
+    "modulo" : "MOVIMIENTOS_Y_CUENTAS",
+    "nombre" : "CATEGORIA_MADRE_DE_OTRA_NATURALEZA",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 1.10: alta de categorías",
+      "sprint" : 1
+    },
+    "status" : 42221
+  }, {
+    "cuando" : "Se marca como fija una categoría de ingreso. El error va en data.errores, sobre esFijo",
+    "http" : 422,
+    "mensaje" : "Solo una categoría de gasto puede ser fija.",
+    "modulo" : "MOVIMIENTOS_Y_CUENTAS",
+    "nombre" : "SOLO_UN_GASTO_ES_FIJO",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 1.10: alta de categorías",
+      "sprint" : 1
+    },
+    "status" : 42222
   } ]
 }
