@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [5.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -98,8 +98,10 @@ encabezado ni versión, y no se corrige: si resultó equivocado, se escribe el s
 
 **Una tarea es una rama `feature/<id>` y un PR a `develop`** ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)). Se trae `develop`, se
 abre `feature/2.19` con el id del plan, se trabaja, **se deja la documentación al día antes de
-abrir el PR** —versión subida, `enlazar` y `verificar`—, se empuja y se abre el PR contra
-`develop`. Y entonces **se espera a que lo acepten: no se empieza otra tarea hasta que el PR esté
+abrir el PR** —versión subida, `enlazar` y `verificar`— y se abre el PR contra `develop`. **La
+rama se empuja siempre, desde su primer commit y sin que haya que pedirlo**, también cuando el
+commit no es una tarea del plan: lo que solo vive en la máquina no está respaldado ni se puede
+revisar. `develop`, `main` y las ramas de ambiente no se mueven por cuenta propia. Y entonces **se espera a que lo acepten: no se empieza otra tarea hasta que el PR esté
 aceptado**, salvo que la siguiente esté marcada ⚡ en el tablero y no toque lo que está en revisión.
 `main` es la rama de publicación y solo recibe lo que se publica. **Este repositorio no tiene
 `develop`**: aquí la base es `main`.

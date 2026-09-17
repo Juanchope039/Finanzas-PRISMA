@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [3.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -872,6 +872,20 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **El ingreso responde `50000` contra una base real, y no lo rompió esta tarea:**
       `UsuariosEnPostgres` pide la conexión sin transacción abierta, y en `main` tampoco la abría
       nadie. La abre el filtro de sesión de la [2.2](docs/08-plan-de-desarrollo.md#tarea-2-2)
+
+**De la regla de empujar siempre ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)):**
+
+- [ ] **La regla se acota a la rama de trabajo, y las de ambiente siguen sin dueño escrito.**
+      `develop`, `main`, `qa`, `uat` y `prod` no se mueven por cuenta propia, pero ningún documento
+      dice quién las mueve ni cuándo; en `prisma_db`, promover a qa es un PR contra la rama `qa`
+- [ ] **Empujar una rama `feature/` en este repositorio no comprueba nada:** la acción corre solo en
+      `main` y en los PR contra `main`, aunque el [22 §8](docs/22-documentacion.md#herramienta) y el [19 §6.1](docs/19-ambientes-y-entrega.md#61-en-cada-empuje-en-paralelo) hablen de «cada
+      empuje». O se amplía el disparador a `feature/**` —y cada empuje gasta minutos de acción— o se
+      precisa la frase en los dos sitios. La regla da respaldo remoto y un sitio desde donde abrir el
+      PR, no verificación
+- [ ] **Los documentos no se ponen de acuerdo en cuál es la rama base:** el [21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración) y el
+      [08 §4](docs/08-plan-de-desarrollo.md#4-definición-de-terminado) dicen `develop`; el [ADR-026](docs/adr/ADR-026-railway-al-final.md) y el [ADR-028](docs/adr/ADR-028-un-commit-por-tarea.md), `main`. La regla de empujar esquiva la
+      contradicción nombrando la rama de trabajo, pero la contradicción sigue ahí
 
 ---
 

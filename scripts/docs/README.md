@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/scripts/docs/README.md "Historial de cambios") | [✅ Vigente](../../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](../../docs/INDICE.md#etiqueta-proceso) |
+| [1.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/scripts/docs/README.md "Historial de cambios") | [✅ Vigente](../../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](../../docs/INDICE.md#etiqueta-proceso) |
 
 Pone y verifica los encabezados, las anclas, los enlaces y los bloques generados de toda la
 documentación de PRISMA. Las reglas que hace cumplir están en [`docs/22-documentacion.md`](../../docs/22-documentacion.md), y la
@@ -43,5 +43,5 @@ contenido —los planes no se versionan— pero sí el nombre y la numeración (
 | «no enumera N tareas del plan» | El plan tiene una tarea que el tablero no lista: agregarla a su sprint en [`TODO.md`](../../TODO.md) |
 | «enumera tareas que el plan no tiene» | Al revés: una tarea del tablero no existe en el plan. Lo nuevo entra primero al plan ([08 §6](../../docs/08-plan-de-desarrollo.md#6-backlog-priorizado)) |
 | «un plan se llama NN-titulo-en-minusculas.md» | Un archivo de `plan/` no sigue el formato: renombrarlo ([22 §10](../../docs/22-documentacion.md#planes)) |
-| «el mensaje mide N caracteres y el tope son 256» | Un commit se pasó del tope ([ADR-031](../../docs/adr/ADR-031-commit-de-256-caracteres.md)): rehacerlo con `git rebase -i` y llevar lo que sobra al plan de `plan/` |
+| «el mensaje mide N caracteres y el tope son 256» | Un commit se pasó del tope ([ADR-031](../../docs/adr/ADR-031-commit-de-256-caracteres.md)): rehacerlo con `git rebase -i` y llevar lo que sobra al plan de `plan/`. La rama ya está empujada ([21 §6.5](../../docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)), así que el empuje siguiente va con `--force-with-lease` |
 | «falta el plan NN» o «dos planes no comparten número» | La numeración de `plan/` saltó o se repitió: renumerar el que llegó después |
