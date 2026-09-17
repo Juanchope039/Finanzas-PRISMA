@@ -45,7 +45,9 @@ function cargarArchivos() {
     for (const ruta of markdownDe(repo.carpeta)) archivos.push({ ruta, repo });
   }
   for (const a of archivos) {
-    a.original = fs.readFileSync(path.join(RAIZ, a.ruta), 'utf8');
+    // En Windows, con core.autocrlf, git deja los archivos con CRLF al sacarlos. Se trabaja en LF,
+    // que es lo que guarda el repositorio: si no, cada corrida mezclaría los dos finales de línea.
+    a.original = fs.readFileSync(path.join(RAIZ, a.ruta), 'utf8').replace(/\r\n/g, '\n');
     a.contenido = a.original;
     a.tipo = /^docs\/adr\/ADR-\d{3}-.*\.md$/.test(a.ruta) ? 'adr' : 'documento';
     a.enRepo = a.repo === ESPEC ? a.ruta : a.ruta.slice(a.repo.carpeta.length + 1);
