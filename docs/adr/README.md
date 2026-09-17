@@ -56,5 +56,5 @@ se marca el viejo como **Reemplazado**.
 ---
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [22](../22-documentacion.md "22 · Documentación: versiones, estados y referencias")
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [22](../22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [CLAUDE](../../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->

@@ -1,0 +1,222 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+
+**El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
+los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
+
+---
+
+## 1. Cuatro repositorios, uno dentro de otro
+
+Este repositorio es **la especificación**: documentación, ADR, mockup, contrato y la herramienta que
+verifica todo eso. Los tres repositorios de código viven dentro de `repositories/` y **cada uno es un
+repositorio git independiente**, ignorado por este ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)):
+
+| Carpeta | Proyecto | Qué es |
+|---|---|---|
+| `repositories/backend-api` | `prisma_api` | Java 25 · Spring Boot 4 · Gradle. Lo único que habla con la base |
+| `repositories/backend-db` | `prisma_db` | Migraciones de PostgreSQL, semilla y scripts. No es un servicio |
+| `repositories/frontend-flutter` | `prisma_front` | Flutter, web por defecto. No decide nada |
+
+> **Grep y Glob desde la raíz no entran a `repositories/`**, porque está en el `.gitignore` de este
+> repositorio. Hay que pasar `path` dentro de la carpeta del repositorio de código.
+
+**Este repositorio es público.** Nada de datos internos: cuentas, claves, URL privadas ni nombres de
+clientes.
+
+---
+
+## 2. Comandos
+
+### Documentación — se corre en **cada** cambio de un `.md`
+
+```bash
+node scripts/docs/documentar.mjs enlazar      # pone anclas, enlaces y bloques generados
+node scripts/docs/documentar.mjs verificar    # falla si algo quedó roto o sin enlazar
+```
+
+`verificar --base <SHA>` es lo que corre la integración continua: exige además que todo documento
+cuyo contenido cambió haya subido su versión. `enlazar --en-seco` muestra lo que cambiaría.
+
+### API (`repositories/backend-api`)
+
+```bash
+./gradlew build                                  # formato + análisis + pruebas + compilación
+./gradlew spotlessApply                          # formatea; sin esto, build falla
+./gradlew test --tests '*MovimientoTest'         # una sola clase de prueba
+./gradlew bootRun                                # queda en http://localhost:8081
+```
+
+`build` incluye `spotlessCheck`, y `-Werror` está activo: **un aviso del compilador rompe la
+compilación**. Las reglas de ArchUnit corren siempre, aunque se filtre por clase.
+
+> **Si Gradle falla con `Unable to establish loopback connection`** (Windows con los sockets AF_UNIX
+> rotos), anteponer a cada comando:
+> `JAVA_TOOL_OPTIONS='-Djdk.net.unixdomain.tmpdir=C:\no-existe\prisma-uds'`. Con una carpeta que no
+> existe, la JDK cae sola a TCP. Apuntar a una ruta válida **no** sirve.
+
+### Front (`repositories/frontend-flutter`)
+
+```bash
+flutter pub get
+dart format --set-exit-if-changed .
+dart analyze --fatal-infos
+flutter test                                     # incluye test/frontera_test.dart
+flutter test test/frontera_test.dart             # un solo archivo
+flutter run -d chrome --dart-define=PRISMA_API_URL=http://localhost:8081 --dart-define=PRISMA_AMBIENTE=dev --dart-define=PRISMA_API_MAJOR=0
+```
+
+Flutter Web no lee variables de entorno en el navegador: la configuración entra con `--dart-define`
+**al compilar** y queda dentro del artefacto, así que ahí no va ningún secreto.
+
+### Base (`repositories/backend-db`)
+
+```powershell
+supabase start                 # PostgreSQL, Auth y Studio en Docker
+./scripts/db/reset-local.ps1   # aplica las migraciones y carga la semilla
+```
+
+Queda en `postgresql://postgres:postgres@127.0.0.1:54322/postgres`, que es donde la busca la
+configuración por defecto de la API. **Una migración aplicada no se edita jamás:** si estaba mal, se
+escribe otra que corrige.
+
+---
+
+## 3. Reglas del proyecto
+
+**Una tarea del plan es un commit, y el commit explica por qué** ([ADR-028](docs/adr/ADR-028-un-commit-por-tarea.md)). El asunto lleva
+sprint y número —`Sprint 3 / 3.11: marca de registro tardio`— y el cuerpo tiene tres títulos: «Que
+hace», «Que se decidio, y por que» y «Como se verifico», este último con el conteo de pruebas y
+**qué se rompió a propósito para verlas fallar**. Dos tareas no van en un mismo commit aunque toquen
+la misma clase. Lo que no es tarea —documentación, herramientas— va aparte y sin número. Los mensajes
+van **en español sin tildes**, como el resto del historial.
+
+**Todo `.md` lleva encabezado con versión, estado y fechas** ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md), [`docs/22-documentacion.md`](docs/22-documentacion.md)). Al
+cambiar un documento: subir su versión (MAJOR si alguien actuaría mal con la anterior), poner la
+fecha de hoy, correr `enlazar` y luego `verificar`. **Los bloques `<!-- generado:… -->` no se editan
+a mano**, ni las marcas ⚡ 🔒 ⏭️ de [`TODO.md`](TODO.md); 🚧 y ✏️ sí las pone una persona.
+
+**El plan manda sobre el tablero.** [`docs/08-plan-de-desarrollo.md`](docs/08-plan-de-desarrollo.md) dice qué hay que hacer, en qué
+carril y de qué depende; [`TODO.md`](TODO.md) dice en qué va. Los dos tienen que enumerar las mismas 132 tareas y
+la verificación falla si no. **Una tarea nueva entra primero al plan**, nunca al tablero.
+
+**Nunca `git add -A` en este repositorio**: hay archivos sueltos en la raíz que no son del proyecto.
+Rutas explícitas y mirar `git status` antes.
+
+**No inventar reglas de negocio.** Si un documento no cubre un caso, se decide lo mínimo, se escribe
+el porqué en el commit y se anota en [`TODO.md`](TODO.md) [§10](TODO.md#10-decisiones-de-construcción-que-conviene-revisar), que es la lista de decisiones que quien dirige
+tiene que revisar.
+
+---
+
+## 4. Arquitectura
+
+### Quién decide qué
+
+```
+prisma_front  ──HTTP──▶  prisma_api  ──SQL──▶  prisma_db
+  pinta                   decide todo           impone lo que no se puede romper
+```
+
+- **El front no decide nada**: ni una regla, ni un permiso, ni un mensaje, ni una cifra, ni qué
+  opciones de menú existen. Tampoco habla con Supabase ([ADR-018](docs/adr/ADR-018-front-sin-decisiones.md)). `test/frontera_test.dart` lo
+  comprueba y rompe la compilación.
+- **La API es lo único que habla con la base** y donde vive toda la lógica.
+- **Los permisos viven en PostgreSQL, no en la pantalla** ([ADR-006](docs/adr/ADR-006-rls-por-rol.md)). Row Level Security evalúa el
+  **tipo** de usuario de la sesión —Gerencia u Operación—, y una prueba tiene que ver el rechazo
+  venir de la base, no de un `if` de la API.
+
+### La API por dentro
+
+Arquitectura hexagonal con cuatro paquetes bajo `co.prismamy.api`, y **las flechas apuntan siempre
+hacia adentro** ([ADR-002](docs/adr/ADR-002-arquitectura-hexagonal.md)):
+
+| Paquete | Qué vive ahí |
+|---|---|
+| `dominio/modelo`, `dominio/servicio`, `dominio/puerto` | El núcleo: objetos de valor, reglas puras y los puertos que declara |
+| `aplicacion` | Un caso de uso por clase. No conoce HTTP |
+| `infraestructura` | Adaptadores: PostgreSQL, Supabase, PDF. No conoce la interfaz |
+| `interfaz` | HTTP: controladores, el sobre, el catálogo de códigos, los formularios |
+
+`ReglaDeDependenciasTest` (ArchUnit) **falla la compilación** si alguien mete Spring en `dominio` o un
+cálculo de plata en un controlador. Una clase fuera de las cuatro capas también falla.
+
+### Las piezas que ya existen y que todo lo nuevo usa
+
+- **`Dinero`** — pesos enteros en un `long`, nunca decimales ([ADR-003](docs/adr/ADR-003-dinero-entero.md)). Sumar y restar fallan al
+  desbordar; las fracciones solo entran por `porcentaje`, `veces` y `dividido`, y las tres redondean
+  a peso entero con `HALF_UP`. El formato colombiano (`$1.350.784`, `−$1.255.000`) se arma a mano.
+- **`Movimiento` y `TipoDeMovimiento`** — los nueve tipos del ENUM `tipo_movimiento` con su efecto
+  sobre utilidad, caja y patrimonio, que es la tabla de [04 §4.3](docs/04-modelo-de-datos.md#43-movimientos--el-libro-único) convertida en tipo. **Los cálculos
+  suman, no vuelven a clasificar:** `aporteAUtilidad()`, `aporteACaja(cuenta)` y
+  `aporteAPatrimonio()` devuelven lo que un movimiento le suma a cada cifra, con signo. Lo anulado
+  aporta cero a todo.
+- **`Pedido` y `EstadoDePedido`** — cinco estados y los siete pasos que existen entre ellos.
+  Entregado y cancelado son finales: lo que haya que corregir después va por contra-asiento.
+- **`Costeo` y `CalcularMargenes`** — los tres márgenes de [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes). El margen por hora viaja
+  vacío, no en cero, cuando el ítem no consume tiempo.
+- **`Duracion`** — el único sitio donde se divide entre 60, con la precisión suficiente para que el
+  redondeo a peso ocurra una sola vez y al final.
+- **`ZonaDelNegocio`** — `America/Bogota` vive en el dominio y no en la configuración: decide a qué
+  día pertenece un registro, y con eso a qué mes ([RNF-08](docs/03-requisitos-y-bdd.md#rnf-08)).
+
+### El contrato con el front
+
+- **Toda respuesta lleva el sobre `{status, mensaje, data}`**, también los errores, dentro y fuera de
+  los controladores. El `status` es de cinco dígitos, `HTTP(3) + caso(2)`, así que el código del
+  sobre y el HTTP nunca pueden contradecirse.
+- **`CatalogoDeCodigos` es la fuente única** de los códigos y de sus mensajes en español. De ahí
+  salen la respuesta, Swagger y la traducción de restricciones de la base; copiar esa lista sería
+  tenerla tres veces. La prueba [C-03](docs/12-pruebas-y-calidad.md#c-03) la cruza con el código fuente en los dos sentidos.
+- **Las reglas de un formulario las dicta la API**, generadas del propio validador ([RF-102](docs/03-requisitos-y-bdd.md#rf-102)): el
+  front no trae ningún umbral ni mensaje propio.
+- **`contrato/openapi.json` es el contrato acordado**, y `prisma_api` guarda una copia fijada que la
+  prueba [C-04](docs/12-pruebas-y-calidad.md#c-04) compara con el OpenAPI generado ([ADR-022](docs/adr/ADR-022-openapi-generado.md)). Un cambio de contrato se acuerda antes de
+  implementarse, y el archivo va en LF byte a byte.
+- **Toda operación que escribe exige `Idempotency-Key`**, generada cuando la persona decide la acción
+  y reutilizada en cada reintento ([ADR-020](docs/adr/ADR-020-idempotencia.md)).
+
+### La base
+
+Solo escritura ([ADR-004](docs/adr/ADR-004-base-solo-escritura.md)): `DELETE` y `TRUNCATE` revocados, nada se borra. Se anula con motivo,
+autor, fecha y dispositivo, y la auditoría la escriben triggers, no la API ([ADR-005](docs/adr/ADR-005-auditoria-por-triggers.md)). Toda
+restricción lleva **nombre explícito**, porque de ese nombre cuelga su mensaje en español.
+
+---
+
+## 5. Dónde está la respuesta
+
+Antes de escribir código, el documento manda. Si el código contradice a un documento, el código está
+mal.
+
+| Pregunta | Documento |
+|---|---|
+| ¿Qué fórmula es? ¿Sube la utilidad, la caja o el patrimonio? | [`05-reglas-financieras.md`](docs/05-reglas-financieras.md) — **el más importante** |
+| ¿Qué columna, qué restricción, qué política RLS? | [`04-modelo-de-datos.md`](docs/04-modelo-de-datos.md) |
+| ¿Qué tarea es esto y de qué depende? | [`08-plan-de-desarrollo.md`](docs/08-plan-de-desarrollo.md) y [`TODO.md`](TODO.md) |
+| ¿Qué tiene que pasar para decir que está terminado? | [08 §4](docs/08-plan-de-desarrollo.md#4-definición-de-terminado) |
+| ¿Qué requisito o qué escenario BDD cubre? | [`03-requisitos-y-bdd.md`](docs/03-requisitos-y-bdd.md) |
+| ¿Cómo se comporta la pantalla? | [`10-ux-y-mockups.md`](docs/10-ux-y-mockups.md) y el mockup de `mockup/` |
+| ¿Cómo responde la API, con qué código? | [`20-contrato-de-api.md`](docs/20-contrato-de-api.md) |
+| ¿Qué prueba hay que escribir? | [`12-pruebas-y-calidad.md`](docs/12-pruebas-y-calidad.md) |
+| ¿Cómo se versiona y se promueve? | [`19-ambientes-y-entrega.md`](docs/19-ambientes-y-entrega.md) |
+| ¿Por qué se decidió así? | [`docs/adr/`](docs/adr/README.md) |
+
+El índice navegable de los 61 documentos está en [`docs/INDICE.md`](docs/INDICE.md).
+
+---
+
+## 6. Dónde va el proyecto hoy
+
+El estado al día vive en [`TODO.md`](TODO.md) [§1](TODO.md#1-hecho-en-progreso-y-pendiente), con una tabla por sprint que calcula la herramienta. En
+resumen: el [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) está casi cerrado, el dominio que no necesita base de datos ya está construido y
+probado, y **todo el carril Base espera a que se configure el proyecto dev de Supabase** (tarea
+[0.4](docs/08-plan-de-desarrollo.md#tarea-0-4)), que es lo que más destraba del plan entero.
+
+Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-026](docs/adr/ADR-026-railway-al-final.md)—, «terminado» quiere decir
+fusionado a `main` con la integración continua en verde.
