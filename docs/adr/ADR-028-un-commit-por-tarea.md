@@ -2,7 +2,13 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-028-un-commit-por-tarea.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-16 | 2026-09-16 | [Proceso](../INDICE.md#etiqueta-proceso) · [Plan](../INDICE.md#etiqueta-plan) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-028-un-commit-por-tarea.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-16 | 2026-09-17 | [Proceso](../INDICE.md#etiqueta-proceso) · [Plan](../INDICE.md#etiqueta-plan) |
+
+> **El cuerpo tiene ahora un tope, y una de sus líneas se fue.** El [ADR-031](ADR-031-commit-de-256-caracteres.md) limita el mensaje
+> completo a 256 caracteres: los tres títulos siguen, en una línea cada uno y abreviados a `Hace:`,
+> `Decide:` y `Verifica:`, y la línea `Tarea: N.M del Sprint S` del punto 3 desaparece porque repite
+> lo que ya dice el asunto. Todo lo demás de este ADR sigue vigente, y el porqué largo que aquí se
+> pedía vive ahora en el plan de `plan/`.
 
 ## Contexto
 
@@ -96,5 +102,5 @@ lo será—, revertirla es `git revert` de un commit, no una cirugía sobre un l
 ---
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](../22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [CLAUDE](../../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](../22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-031](ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [CLAUDE](../../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->

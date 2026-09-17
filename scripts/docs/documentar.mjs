@@ -3,7 +3,8 @@
 //
 //   node scripts/docs/documentar.mjs enlazar              escribe anclas, enlaces y bloques generados
 //   node scripts/docs/documentar.mjs verificar            falla si algo está roto o sin enlazar
-//   node scripts/docs/documentar.mjs verificar --base SHA además exige subir la versión de lo que cambió
+//   node scripts/docs/documentar.mjs verificar --base SHA además exige subir la versión de lo que
+//                                                        cambió y que ningún commit pase de 256
 //
 // Las reglas están en docs/22-documentacion.md.
 
@@ -893,6 +894,38 @@ function revisarPlanes(errores) {
   }
 }
 
+/**
+ * El tope del mensaje de commit: 256 caracteres contando asunto, cuerpo y trailers (ADR-031). Se
+ * mide sobre `%B` sin los saltos de línea del final, que es lo mismo que cuenta
+ * `printf '%s' "$(git log -1 --pretty=%B)" | wc -c`.
+ *
+ * Solo corre cuando hay base contra la cual comparar —la integración continua y el PR—, igual que
+ * la revisión de versiones: en local, sin `--base`, no hay rango que mirar. Y se salta los commits
+ * de fusión: no los escribe una persona, y el de la PR #8 mide 443 caracteres.
+ */
+function revisarMensajesDeCommit(base, errores) {
+  const CAMPO = '\x1f';
+  const REGISTRO = '\x1e';
+  let salida;
+  try {
+    salida = execFileSync('git', ['log', '--no-merges', `--format=%H${CAMPO}%s${CAMPO}%B${REGISTRO}`, `${base}..HEAD`], { cwd: RAIZ, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+  } catch {
+    errores.push({ ruta: '(git)', texto: `no se pudieron leer los commits desde ${base}` });
+    return;
+  }
+  for (const registro of salida.split(REGISTRO)) {
+    const [sha, asunto, mensaje] = registro.trimStart().split(CAMPO);
+    if (!sha || mensaje === undefined) continue;
+    const largo = mensaje.trimEnd().length;
+    if (largo <= cfg.TOPE_DE_COMMIT) continue;
+    errores.push({
+      ruta: `(commit ${sha.slice(0, 7)})`,
+      texto: `el mensaje mide ${largo} caracteres y el tope son ${cfg.TOPE_DE_COMMIT}: «${asunto}»`,
+      motivo: 'lo que no cabe va al plan de plan/',
+    });
+  }
+}
+
 function imprimir(lista, simbolo) {
   for (const e of lista) console.log(`${simbolo} ${e.ruta}${e.linea ? `:${e.linea}` : ''} · ${e.texto}${e.motivo ? ` (${e.motivo})` : ''}`);
 }
@@ -944,7 +977,10 @@ function main() {
     const reemplazado = archivo?.tipo === 'adr' && md.leerEncabezado(archivo.contenido)?.estado === 'Reemplazado';
     if (!reemplazado) errores.push({ ruta: n.ruta, linea: n.linea, texto: `«${n.texto}» no lleva a ningún sitio`, motivo: n.motivo });
   }
-  if (base && !/^0+$/.test(base)) revisarVersionesSubidas(archivos, base, errores);
+  if (base && !/^0+$/.test(base)) {
+    revisarVersionesSubidas(archivos, base, errores);
+    revisarMensajesDeCommit(base, errores);
+  }
   if (errores.length) {
     imprimir(errores, '✗');
     console.log(`\n${errores.length} problemas en la documentación.`);

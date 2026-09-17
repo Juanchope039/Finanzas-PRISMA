@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/22-documentacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](INDICE.md#etiqueta-proceso) |
+| [1.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/22-documentacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se escribe, se versiona y se enlaza la documentación de PRISMA: la de este repositorio y los
 README de los tres repositorios de código. La decisión y su porqué están en [ADR-027](adr/ADR-027-documentacion-versionada.md); aquí están las
@@ -258,12 +258,17 @@ alternativas que se descartaron— y **cómo se va a verificar**. Son los mismos
 mensaje de commit ([ADR-028](adr/ADR-028-un-commit-por-tarea.md)), pero en futuro: el commit cuenta lo que pasó y el plan contaba lo
 que se iba a hacer. Cuál de los dos mintió se ve comparándolos.
 
+**El plan no tiene tope; el commit sí, y son 256 caracteres** ([ADR-031](adr/ADR-031-commit-de-256-caracteres.md)). Lo que no cabe en
+el commit —las alternativas descartadas, el razonamiento entero, las cuentas que llevaron al
+número— es exactamente lo que el plan existe para guardar. Por eso el plan se escribe antes y no se
+corrige: el commit lo resume en tres líneas, y para ver el resto se abre el plan.
+
 **Un plan no es un documento versionado:** no lleva encabezado, no sube de versión y no entra al
 [índice](INDICE.md). Si resultó equivocado no se corrige, se escribe otro con el número siguiente, igual
 que una migración de la base ([16 §2](16-base-de-datos-y-snapshots.md)). Lo que sí se corrige es el documento al que el plan
 afectó.
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
+**🔗 Referenciado desde:** [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
 <!-- /generado:referenciado-desde -->
 
 ---

@@ -63,6 +63,12 @@ export const CARPETAS_EXCLUIDAS = ['.claude', '.agents', 'plan'];
 export const CARPETA_DE_PLANES = 'plan';
 export const NOMBRE_DE_PLAN = /^(\d{2,})-[a-z0-9]+(?:-[a-z0-9]+)*\.md$/;
 
+// El tope del mensaje de commit, entero: asunto, cuerpo y trailers (ADR-031). Sale de restar: el
+// asunto se lleva unos 46, el trailer Co-Authored-By exactamente 53 y los saltos de línea 4, así
+// que quedan unos 152 para las tres líneas del cuerpo, unos 50 cada una. Lo que no cabe va al plan
+// de `plan/`, que no tiene tope. `verificar --base` lo comprueba.
+export const TOPE_DE_COMMIT = 256;
+
 export const ZONA_HORARIA = 'America/Bogota';
 
 // Documento donde viven las reglas: los enlaces de estado y etiqueta apuntan aquí.
