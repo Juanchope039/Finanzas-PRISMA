@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -24,7 +24,13 @@ Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada
 | **prod** | El negocio de verdad | El equipo del taller | Reales |
 
 La semilla reproducible de qa es la que ya existe (`supabase/seed.sql`, en `prisma_db`), descrita
-en [`16-base-de-datos-y-snapshots.md`](16-base-de-datos-y-snapshots.md). No se inventa otra.
+en [`16-base-de-datos-y-snapshots.md`](16-base-de-datos-y-snapshots.md). No se inventa otra: es la misma de la base local y la de dev,
+y se aplica a un ambiente remoto con `scripts/db/sembrar.ps1` ([16 §5.2](16-base-de-datos-y-snapshots.md#52-la-semilla-en-dev-y-en-qa)).
+
+**A uat y a prod no entra nunca.** La semilla crea usuarios con contraseña conocida y cifras
+inventadas, y ahí los datos son realistas anonimizados y reales. El guion solo admite `dev` y `qa`,
+así que la regla no depende de que alguien se acuerde: uat se puebla con su propia semilla
+anonimizada ([9.2](08-plan-de-desarrollo.md#tarea-9-2)) y en prod los usuarios los crea Gerencia desde la aplicación.
 
 ### 1.1 Las seis reglas
 
