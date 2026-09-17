@@ -2,10 +2,10 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [1.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 > **Construcción: construido y corriendo contra dev**, donde el esquema está aplicado y verificado
-> línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5) y [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5)). **qa va dos migraciones atrás**: promoverlas es
+> línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5), [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5) y [1.13](08-plan-de-desarrollo.md#tarea-1-13)). **qa va tres migraciones atrás**: promoverlas es
 > la [1.12](08-plan-de-desarrollo.md#tarea-1-12). Fue la primera pieza de código ejecutable del proyecto.
 > Convierte el esquema que describe [`04-modelo-de-datos.md`](04-modelo-de-datos.md) en una
 > base de datos real, reproducible en cualquier ambiente con un comando.
@@ -48,7 +48,7 @@ un momento; las migraciones son la receta reproducible. Los snapshots se usan pa
 ```
 supabase/
   config.toml                          Configuración de la pila local
-  migrations/                          Siete, en orden y ninguna editable una vez aplicada:
+  migrations/                          Ocho, en orden y ninguna editable una vez aplicada:
     …_esquema_inicial.sql              Todo el esquema (doc 04 + tabla exportaciones del doc 13)
     …_ajusta_rls_y_vistas_al_doc_04.sql Apaga la RLS que Supabase enciende sola; security_invoker
     …_rol_prisma_api.sql               El rol con el que se conecta la API (doc 04 §9)
@@ -56,6 +56,7 @@ supabase/
     …_force_row_level_security.sql     FORCE en catorce tablas (doc 04 §7.1)
     …_dominios_y_restricciones_con_nombre.sql  Los nueve dominios del §4.1 y los nombres del §11
     …_revoca_borrado_a_todos_los_roles.sql     Nadie borra salvo el dueño (doc 04 §5.1)
+    …_peticiones_idempotentes.sql      Las claves de idempotencia, cada una solo de quien la envió (doc 04 §4.9)
   seed.sql                             Datos de prueba fijos y deterministas
 
 scripts/db/
@@ -129,7 +130,8 @@ preguntas del [`04-modelo-de-datos.md`](04-modelo-de-datos.md) y contesta `OK` o
 cada una: los nueve dominios y sus 61 columnas, que ninguna restricción se haya quedado con el
 nombre que le puso PostgreSQL, que nadie salvo el dueño pueda borrar, que los catorce triggers de
 auditoría **escriban**, que RLS le conteste distinto a una sesión de Operación y a una de
-Gerencia, y que el catálogo de cargos lo lea todo el mundo y lo escriba solo Gerencia.
+Gerencia, que el catálogo de cargos lo lea todo el mundo y lo escriba solo Gerencia, y que cada
+persona alcance sus claves de idempotencia y ninguna otra.
 
 ```powershell
 supabase db query --linked -f scripts/db/verificar-base.sql                        # el proyecto vinculado
@@ -142,11 +144,13 @@ puede hacer cada uno, y para eso tiene que poder volver— y **contra una base c
 las pruebas de permisos necesitan una persona de Gerencia y otra de Operación de verdad.
 
 > **No deja rastro.** Lo poco que escribe —mover un cargo para ver si el trigger de auditoría se
-> dispara— va dentro de una transacción que termina en `ROLLBACK`. Se puede correr contra cualquier
-> ambiente, incluido uno con datos.
+> dispara, y sembrar una clave de idempotencia por persona para ver quién alcanza cuál— va dentro
+> de una transacción que termina en `ROLLBACK`. Se puede correr contra cualquier ambiente, incluido
+> uno con datos.
 
 Es también la forma de ver qué le falta a un ambiente contra otro: corrido contra qa hoy, el guion
-dice en qué se quedó atrás ([1.12](08-plan-de-desarrollo.md#tarea-1-12)).
+dice en qué se quedó atrás ([1.12](08-plan-de-desarrollo.md#tarea-1-12)). Si al ambiente le falta una tabla entera, el informe no
+se cae: las preguntas sobre ella salen en `>>> FALLA`.
 
 ---
 

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [3.0.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -226,7 +226,7 @@ resumen: el [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) está cerrado sal
 ya está construido y probado, y **la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) está aplicada y verificada en dev** ([1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) a
 [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5)): dominios, nombres, borrado revocado, auditoría por triggers y RLS juzgando a una sesión de
 verdad. Lo que más destraba ahora es llevar la identidad hasta PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)) y poner qa al día,
-que va dos migraciones atrás ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)).
+que va tres migraciones atrás ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)).
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-026](docs/adr/ADR-026-railway-al-final.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.
