@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [1.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -39,12 +39,12 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 19 | 1 | 0 | 18 | 21,5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 3 | 0 | 10 | 11,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 1 | 0 | 9 | 11 |
-| [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 1 | 1 | 8 | 10 |
+| [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 2 | 0 | 8 | 8 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 0 | 0 | 10 | 15 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 0 | 0 | 13 | 14 |
-| **Total** | **132** | **22** | **1** | **109** | **134,5** |
+| **Total** | **132** | **23** | **0** | **109** | **132,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -55,27 +55,26 @@ Lo que tiene su commit en `main` con la integración continua en verde, que es l
 | Carril | Qué hay | Tareas |
 |---|---|---|
 | **API · cimientos** | Esqueleto hexagonal con su regla de dependencias verificada, el sobre `{status, mensaje, data}` en toda respuesta, el catálogo de códigos de cinco dígitos, `GET /version`, el descriptor de formulario, el contrato v0.2.0 fijado y los hilos virtuales de Java 25 | [0.1](docs/08-plan-de-desarrollo.md#tarea-0-1) · [0.2](docs/08-plan-de-desarrollo.md#tarea-0-2) · [0.6](docs/08-plan-de-desarrollo.md#tarea-0-6) · [0.7](docs/08-plan-de-desarrollo.md#tarea-0-7) · [0.11](docs/08-plan-de-desarrollo.md#tarea-0-11) · [0.14](docs/08-plan-de-desarrollo.md#tarea-0-14) … [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) |
-| **API · dominio** | `Dinero`; `Movimiento` con los nueve tipos y su efecto sobre las tres cifras; `Pedido` con sus cinco estados; `Producto`, `Costeo` y los tres márgenes; y `RegistrarMovimiento`, el primer caso de uso, con la marca de registro tardío | [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9) · [3.1](docs/08-plan-de-desarrollo.md#tarea-3-1) · [3.2](docs/08-plan-de-desarrollo.md#tarea-3-2) · [3.11](docs/08-plan-de-desarrollo.md#tarea-3-11) · [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1) · [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1) |
+| **API · dominio** | `Dinero`; `Movimiento` con los nueve tipos y su efecto sobre las tres cifras; `Pedido` con sus cinco estados; `Producto`, `Costeo` partido en materia y tiempo, la tarifa por hora y los tres márgenes; y `RegistrarMovimiento`, el primer caso de uso, con la marca de registro tardío | [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9) · [3.1](docs/08-plan-de-desarrollo.md#tarea-3-1) · [3.2](docs/08-plan-de-desarrollo.md#tarea-3-2) · [3.11](docs/08-plan-de-desarrollo.md#tarea-3-11) · [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1) · [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1) · [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3) |
 | **Front** | El proyecto Flutter con su integración continua, la insignia de versión y ambiente, el bloqueo por MAJOR incompatible y `Dinero` en Dart | [0.3](docs/08-plan-de-desarrollo.md#tarea-0-3) · [0.12](docs/08-plan-de-desarrollo.md#tarea-0-12) · [0.13](docs/08-plan-de-desarrollo.md#tarea-0-13) · [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9) |
 | **Front · sistema de diseño** | La tabla, el panel de confirmación en línea, la píldora de estado y los formatos colombianos de fecha y porcentaje; el cliente HTTP con clave de idempotencia; y el panel «Acerca de» | [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19) · [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19) · [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10) |
 | **Base** | **Nada aplicado todavía.** Las 22 tablas, la auditoría y las políticas RLS están escritas en la migración inicial y esperan al proyecto dev de Supabase | — |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | — |
 
-**331 pruebas en verde en la API** y 71 en el front. El dominio se prueba con las cifras de los
+**347 pruebas en verde en la API** y 71 en el front. El dominio se prueba con las cifras de los
 documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md): si una prueba falla, o se rompió el código o el documento dice
 otra cosa.
 
 ### 1.3 🚧 En progreso
 
-| Tarea | Carril | Qué hay y qué falta |
-|---|---|---|
-| [**5.3**](docs/08-plan-de-desarrollo.md#tarea-5-3) · Costeo unitario | API | La fórmula de [05 §7.1](docs/05-reglas-financieras.md#71-costo-unitario) y su prueba llegaron con la tarea [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1). Falta atarla a cada producto con su historial de costos ([5.5](docs/08-plan-de-desarrollo.md#tarea-5-5)) y el tiempo de máquina del bordado ([5.4](docs/08-plan-de-desarrollo.md#tarea-5-4)) |
+Nada en las manos ahora mismo.
 
 **Lo siguiente, en cuanto alguien lo tome:** el carril Front tiene el renderizador del descriptor
 de formulario ([1.18](docs/08-plan-de-desarrollo.md#tarea-1-18)), que ya puede empezar porque el sistema de diseño está, y la PWA con su
 cola sin conexión ([9.1](docs/08-plan-de-desarrollo.md#tarea-9-1)), que la destrabó el cliente con clave de idempotencia. El carril Contrato
 tiene el de cuentas y categorías ([1.17](docs/08-plan-de-desarrollo.md#tarea-1-17)), que destraba la [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) en los dos lados. En el carril API,
-fuera de la [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3), lo que sigue espera a la base. La lista al día la calcula la herramienta, y
+la [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3) destrabó el bordado por tiempo de máquina ([5.4](docs/08-plan-de-desarrollo.md#tarea-5-4)) y el margen por hora ([5.6](docs/08-plan-de-desarrollo.md#tarea-5-6)); lo
+demás espera a la base. La lista al día la calcula la herramienta, y
 está justo abajo.
 
 > **El carril API no llega más lejos en el [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) sin base de datos.** El repositorio de
@@ -91,7 +90,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3) |
+| **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.6](docs/08-plan-de-desarrollo.md#tarea-5-6) |
 | **Front** | [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18) · [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) |
 | **Contrato** | [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
@@ -100,13 +99,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **110 tareas y 134,5 días de trabajo** de 132 tareas del plan.
+Quedan **109 tareas y 132,5 días de trabajo** de 132 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 20,2 semanas | **23,2 semanas** |
-| 2 | 12,3 semanas | **15,3 semanas** |
-| 3 | 10,7 semanas | **13,7 semanas** |
+| 1 | 19,9 semanas | **22,9 semanas** |
+| 2 | 12,1 semanas | **15,1 semanas** |
+| 3 | 10,5 semanas | **13,5 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -292,12 +291,13 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes) reproducidos producto por producto, con el margen por hora vacío —no en cero—
       cuando el ítem no consume tiempo
 - [ ] 🔒 [**5.2**](docs/08-plan-de-desarrollo.md#tarea-5-2) Catálogo de productos y servicios · API, Front
-- [ ] 🚧⚡ [**5.3**](docs/08-plan-de-desarrollo.md#tarea-5-3) Costeo unitario: insumo, consumibles y minutos de trabajo · API — la fórmula de
-      [05 §7.1](docs/05-reglas-financieras.md#71-costo-unitario) y su prueba llegaron con la tarea [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1); falta atarla a cada producto con su
-      historial de costos ([5.5](docs/08-plan-de-desarrollo.md#tarea-5-5)) y el tiempo de máquina del bordado ([5.4](docs/08-plan-de-desarrollo.md#tarea-5-4))
-- [ ] 🔒 [**5.4**](docs/08-plan-de-desarrollo.md#tarea-5-4) Costeo de bordado por tiempo de máquina · API
+- [x] [**5.3**](docs/08-plan-de-desarrollo.md#tarea-5-3) Costeo unitario: insumo, consumibles y minutos de trabajo · API — las dos fórmulas
+      de [05 §7.1](docs/05-reglas-financieras.md#71-costo-unitario): el costo partido en materia y tiempo, y la tarifa por hora que sale del
+      pro-labore o del salario. Reproduce la tabla de [06 §4.1](docs/06-nomina-y-capacidad-de-pago.md#41-el-margen-de-contribución-correcto). Atar el costeo al historial de cada producto es
+      la [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5), y el tiempo de máquina del bordado, la [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4)
+- [ ] ⚡ [**5.4**](docs/08-plan-de-desarrollo.md#tarea-5-4) Costeo de bordado por tiempo de máquina · API
 - [ ] 🔒 [**5.5**](docs/08-plan-de-desarrollo.md#tarea-5-5) Historial de costos con fecha de vigencia · Base, API
-- [ ] 🔒 [**5.6**](docs/08-plan-de-desarrollo.md#tarea-5-6) Margen por hora · API
+- [ ] ⚡ [**5.6**](docs/08-plan-de-desarrollo.md#tarea-5-6) Margen por hora · API
 - [ ] 🔒 [**5.7**](docs/08-plan-de-desarrollo.md#tarea-5-7) Sugerencia de precio por margen objetivo · API
 - [ ] 🔒 [**5.8**](docs/08-plan-de-desarrollo.md#tarea-5-8) Costos y márgenes ocultos al tipo Operación: la API no los envía · API
 - [ ] 🔒 [**5.9**](docs/08-plan-de-desarrollo.md#tarea-5-9) Cuadro comparativo ordenable por margen por hora · Front
@@ -436,7 +436,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] La pantalla de versión incompatible tiene tres filas de versiones y no las dos del mockup
 - [ ] Se siguió el texto del mockup y no el literal del escenario [BDD-101-1](docs/03-requisitos-y-bdd.md#bdd-101-1)
 
-**Del dominio (tareas [3.1](docs/08-plan-de-desarrollo.md#tarea-3-1), [3.2](docs/08-plan-de-desarrollo.md#tarea-3-2), [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1) y [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1)):**
+**Del dominio (tareas [3.1](docs/08-plan-de-desarrollo.md#tarea-3-1), [3.2](docs/08-plan-de-desarrollo.md#tarea-3-2), [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1), [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1) y [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3)):**
 
 - [ ] El dominio rechaza dos cosas que la base permite: un gasto con cuenta de destino, y una
       transferencia de una cuenta a sí misma ([§9](#9-a-vigilar))
@@ -450,6 +450,10 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       que se cortó no cree dos ([ADR-020](docs/adr/ADR-020-idempotencia.md))
 - [ ] La zona `America/Bogota` vive en el dominio y no en la configuración, porque cambiarla
       cambiaría a qué mes pertenece un movimiento ([RNF-08](docs/03-requisitos-y-bdd.md#rnf-08))
+- [ ] La tarifa por hora se calcula aparte y el costeo guarda la que tenía cuando se produjo:
+      recalcularla desde el pro-labore de hoy cambiaría los costos de los pedidos viejos
+- [ ] Un mes sin horas productivas no tiene tarifa y se rechaza; un costo mensual en cero sí da
+      tarifa cero
 
 **Del front (tareas [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19), [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19) y [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10)):**
 
