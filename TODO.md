@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [3.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -125,6 +125,30 @@ Quedan **87 tareas y 107,5 días de trabajo** de 132 tareas del plan.
 El orden sale de las dependencias del [plan](docs/08-plan-de-desarrollo.md): cuántas tareas pendientes cuelgan de cada una, directa
 o indirectamente. No es el orden en que se descubrieron.
 
+- [ ] ⚡ **La clave de firma de sesión** ([2.12](docs/08-plan-de-desarrollo.md#tarea-2-12)) — **lo que más libera ahora: 41 tareas
+      penden de ella**, y ya no espera a nada desde que la [2.1](docs/08-plan-de-desarrollo.md#tarea-2-1) entrega sesión. Detrás va el
+      filtro de firma ([2.13](docs/08-plan-de-desarrollo.md#tarea-2-13)) y, con él, el canal firmado del que cuelga casi todo lo que
+      viene después. Está en el camino crítico, que pasa por la [2.1](docs/08-plan-de-desarrollo.md#tarea-2-1), esta y la [2.13](docs/08-plan-de-desarrollo.md#tarea-2-13).
+- [ ] ⚡ **El repositorio de movimientos** ([3.3](docs/08-plan-de-desarrollo.md#tarea-3-3)) — **36 tareas detrás**, y ya tiene sus dos
+      piezas: la puerta a la base de la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) y el `Movimiento` del dominio ([3.1](docs/08-plan-de-desarrollo.md#tarea-3-1)). Es lo que
+      abre el [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) entero, porque hasta que exista, lo que el dominio calcula no llega a
+      PostgreSQL.
+- [ ] ⚡ **El contrato de movimientos** ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13)) — **32 tareas detrás** por medio día de trabajo,
+      y sin nada pendiente que lo detenga. Un contrato se acuerda **antes** de implementarlo
+      ([21 §3.2](docs/21-trabajo-en-paralelo.md#32-contrato-acordado-y-contrato-generado-no-se-contradicen)): escribirlo tarde deja al carril Front esperando al API, que es justo lo que
+      el paralelismo quiere evitar.
+- [ ] ⚡ **Poner qa al día** ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) — destraba una sola tarea, la [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11), pero mientras tanto **dev y qa
+      dejaron de ser iguales**: las cuatro migraciones de las tareas [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1), [1.2](docs/08-plan-de-desarrollo.md#tarea-1-2), [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) y [1.16](docs/08-plan-de-desarrollo.md#tarea-1-16) solo están en
+      dev. Correr `scripts/db/verificar-base.sql` contra qa lo dice línea por línea: ahí la base
+      todavía acepta un saldo negativo, un sobre del 120 % y una anulación cuyo motivo es un espacio
+      en blanco, no tiene dónde guardar una clave de idempotencia y no purga ninguna. El
+      procedimiento ya está escrito y probado contra la base local ([16 §5.3](docs/16-base-de-datos-y-snapshots.md#53-promover-a-qa-paso-a-paso)); falta correrlo
+      contra qa, y eso **es** la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12). La semilla que va con ellas ya está lista ([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)).
+- [ ] ⚡ **uat y prod** · Decisión — son los dos proyectos de Supabase que faltan para cerrar [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4), y
+      los dos son **de pago** ([19 §8.1](docs/19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no)). Los decide Gerencia, y hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) no hay nada que
+      promover a ellos.
+- [ ] **Una sola licencia** · Decisión — este repositorio y el front están con AGPL-3.0; la API y la
+      base, con GPL-3.0.
 - [x] **La sesión contra Supabase Auth** ([2.1](docs/08-plan-de-desarrollo.md#tarea-2-1)) — hecha: era lo que más liberaba, con 51 tareas
       detrás, y con ella arranca el [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) entero. El carril Front deja de estar parado, y la
       puerta a la base de la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) pasa de estar probada a estar usada.
@@ -135,21 +159,9 @@ o indirectamente. No es el orden en que se descubrieron.
       ingreso y la renovación, y **el filtro abre la única transacción de la petición**, que es lo
       que hace que la clave y el efecto caigan juntos. Registrar la clave espera al filtro de sesión
       ([2.2](docs/08-plan-de-desarrollo.md#tarea-2-2)): hasta ese día ninguna petición trae identidad.
-- [ ] ⚡ **Poner qa al día** ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) — destraba una sola tarea, la [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11), pero mientras tanto **dev y qa
-      dejaron de ser iguales**: las cuatro migraciones de las tareas [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1), [1.2](docs/08-plan-de-desarrollo.md#tarea-1-2), [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) y [1.16](docs/08-plan-de-desarrollo.md#tarea-1-16) solo están en
-      dev. Correr `scripts/db/verificar-base.sql` contra qa lo dice línea por línea: ahí la base
-      todavía acepta un saldo negativo, un sobre del 120 % y una anulación cuyo motivo es un espacio
-      en blanco, no tiene dónde guardar una clave de idempotencia y no purga ninguna. El
-      procedimiento ya está escrito y probado contra la base local ([16 §5.3](docs/16-base-de-datos-y-snapshots.md#53-promover-a-qa-paso-a-paso)); falta correrlo
-      contra qa, y eso **es** la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12). La semilla que va con ellas ya está lista ([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)).
 - [x] **La identidad hasta PostgreSQL** ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)) — hecha: RLS ya juzga a la persona y no a
       `prisma_api`. Destrabó la prueba de permisos ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)) y, con la tabla de la [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13), la idempotencia
       ([1.14](docs/08-plan-de-desarrollo.md#tarea-1-14)); el acceso del [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) espera ahora a la tabla `usuarios` ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)).
-- [ ] ⚡ **uat y prod** · Decisión — son los dos proyectos de Supabase que faltan para cerrar [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4), y
-      los dos son **de pago** ([19 §8.1](docs/19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no)). Los decide Gerencia, y hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) no hay nada que
-      promover a ellos.
-- [ ] **Una sola licencia** · Decisión — este repositorio y el front están con AGPL-3.0; la API y la
-      base, con GPL-3.0.
 
 ---
 
@@ -860,6 +872,20 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **El ingreso responde `50000` contra una base real, y no lo rompió esta tarea:**
       `UsuariosEnPostgres` pide la conexión sin transacción abierta, y en `main` tampoco la abría
       nadie. La abre el filtro de sesión de la [2.2](docs/08-plan-de-desarrollo.md#tarea-2-2)
+
+**De la regla de empujar siempre ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)):**
+
+- [ ] **La regla se acota a la rama de trabajo, y las de ambiente siguen sin dueño escrito.**
+      `develop`, `main`, `qa`, `uat` y `prod` no se mueven por cuenta propia, pero ningún documento
+      dice quién las mueve ni cuándo; en `prisma_db`, promover a qa es un PR contra la rama `qa`
+- [ ] **Empujar una rama `feature/` en este repositorio no comprueba nada:** la acción corre solo en
+      `main` y en los PR contra `main`, aunque el [22 §8](docs/22-documentacion.md#herramienta) y el [19 §6.1](docs/19-ambientes-y-entrega.md#61-en-cada-empuje-en-paralelo) hablen de «cada
+      empuje». O se amplía el disparador a `feature/**` —y cada empuje gasta minutos de acción— o se
+      precisa la frase en los dos sitios. La regla da respaldo remoto y un sitio desde donde abrir el
+      PR, no verificación
+- [ ] **Los documentos no se ponen de acuerdo en cuál es la rama base:** el [21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración) y el
+      [08 §4](docs/08-plan-de-desarrollo.md#4-definición-de-terminado) dicen `develop`; el [ADR-026](docs/adr/ADR-026-railway-al-final.md) y el [ADR-028](docs/adr/ADR-028-un-commit-por-tarea.md), `main`. La regla de empujar esquiva la
+      contradicción nombrando la rama de trabajo, pero la contradicción sigue ahí
 
 ---
 

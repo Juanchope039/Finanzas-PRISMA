@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [5.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -98,8 +98,10 @@ encabezado ni versión, y no se corrige: si resultó equivocado, se escribe el s
 
 **Una tarea es una rama `feature/<id>` y un PR a `develop`** ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)). Se trae `develop`, se
 abre `feature/2.19` con el id del plan, se trabaja, **se deja la documentación al día antes de
-abrir el PR** —versión subida, `enlazar` y `verificar`—, se empuja y se abre el PR contra
-`develop`. Y entonces **se espera a que lo acepten: no se empieza otra tarea hasta que el PR esté
+abrir el PR** —versión subida, `enlazar` y `verificar`— y se abre el PR contra `develop`. **La
+rama se empuja siempre, desde su primer commit y sin que haya que pedirlo**, también cuando el
+commit no es una tarea del plan: lo que solo vive en la máquina no está respaldado ni se puede
+revisar. `develop`, `main` y las ramas de ambiente no se mueven por cuenta propia. Y entonces **se espera a que lo acepten: no se empieza otra tarea hasta que el PR esté
 aceptado**, salvo que la siguiente esté marcada ⚡ en el tablero y no toque lo que está en revisión.
 `main` es la rama de publicación y solo recibe lo que se publica. **Este repositorio no tiene
 `develop`**: aquí la base es `main`.
@@ -199,8 +201,11 @@ cálculo de plata en un controlador. Una clase fuera de las cuatro capas tambié
 - **`contrato/openapi.json` es el contrato acordado**, y `prisma_api` guarda una copia fijada que la
   prueba [C-04](docs/12-pruebas-y-calidad.md#c-04) compara con el OpenAPI generado ([ADR-022](docs/adr/ADR-022-openapi-generado.md)). Un cambio de contrato se acuerda antes de
   implementarse, y el archivo va en LF byte a byte.
-- **Toda operación que escribe exige `Idempotency-Key`**, generada cuando la persona decide la acción
-  y reutilizada en cada reintento ([ADR-020](docs/adr/ADR-020-idempotencia.md)).
+- **Toda petición exige `Idempotency-Key`**, lea o escriba ([20 §5.1](docs/20-contrato-de-api.md#51-la-cabecera)): desde el [ADR-030](docs/adr/ADR-030-contrato-sin-get.md) todo
+  viaja por `POST`, así que la regla no cuelga del verbo. Se eximen dos rutas exactas, el ingreso y
+  la renovación de sesión. La clave la genera el front cuando la persona decide la acción y la
+  reutiliza en cada reintento ([ADR-020](docs/adr/ADR-020-idempotencia.md)), y el filtro que la exige **abre la única transacción
+  de la petición**, para que la fila de la clave y el efecto caigan en la misma.
 
 ### La base
 
@@ -238,8 +243,11 @@ El estado al día vive en [`TODO.md`](TODO.md) [§1](TODO.md#1-hecho-en-progreso
 resumen: el [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) está cerrado salvo lo que cuesta dinero, el dominio que no necesita base de datos
 ya está construido y probado, y **la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) está aplicada y verificada en dev** ([1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) a
 [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5)): dominios, nombres, borrado revocado, auditoría por triggers y RLS juzgando a una sesión de
-verdad. Lo que más destraba ahora es llevar la identidad hasta PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)) y poner qa al día,
-que va cuatro migraciones atrás ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)).
+verdad. La identidad ya llega hasta PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)), la sesión contra Supabase Auth ya entrega
+sesión ([2.1](docs/08-plan-de-desarrollo.md#tarea-2-1)) y **toda petición pasa por el filtro de idempotencia** ([1.14](docs/08-plan-de-desarrollo.md#tarea-1-14)), que exige la cabecera
+y abre esa única transacción; registrar la clave espera al filtro de sesión ([2.2](docs/08-plan-de-desarrollo.md#tarea-2-2)), porque hasta
+ese día ninguna petición trae identidad. Van 45 de las 132 tareas, y lo que más destraba ahora es
+poner qa al día, que va cuatro migraciones atrás ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)).
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-026](docs/adr/ADR-026-railway-al-final.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.

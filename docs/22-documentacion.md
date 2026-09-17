@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/22-documentacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](INDICE.md#etiqueta-proceso) |
+| [1.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/22-documentacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se escribe, se versiona y se enlaza la documentación de PRISMA: la de este repositorio y los
 README de los tres repositorios de código. La decisión y su porqué están en [ADR-027](adr/ADR-027-documentacion-versionada.md); aquí están las
@@ -227,7 +227,9 @@ Necesita Node 20 o más y no tiene dependencias. Si los repositorios de código 
 1. Se cambia el texto.
 2. Se sube la versión según el [§3](#3-versiones), y **Actualizado** pasa a la fecha de hoy.
 3. Se corre `node scripts/docs/documentar.mjs enlazar`.
-4. Commit y PR. Si el documento es compartido entre carriles, lo revisa el otro ([21 §2.1](21-trabajo-en-paralelo.md#21-lo-que-se-posee-en-conjunto)).
+4. Commit, empuje y PR. La rama se empuja desde su primer commit ([21 §6.5](21-trabajo-en-paralelo.md#65-ramas-e-integración)), también cuando lo
+   único que cambia es un documento. Si el documento es compartido entre carriles, lo revisa el otro
+   ([21 §2.1](21-trabajo-en-paralelo.md#21-lo-que-se-posee-en-conjunto)).
 
 ### En paralelo, sin pisarse
 
