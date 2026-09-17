@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [1.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -35,7 +35,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 17 | 14 | 0 | 3 | 3 |
-| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 3 | 0 | 17 | 19,5 |
+| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 4 | 0 | 16 | 19 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 19 | 1 | 0 | 18 | 21,5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 3 | 0 | 10 | 11,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 1 | 0 | 9 | 11 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 0 | 0 | 13 | 14 |
-| **Total** | **132** | **24** | **0** | **108** | **132** |
+| **Total** | **132** | **25** | **0** | **107** | **131,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -60,7 +60,7 @@ Lo que tiene su commit en `main` con la integración continua en verde, que es l
 | **Front · sistema de diseño** | La tabla, el panel de confirmación en línea, la píldora de estado y los formatos colombianos de fecha y porcentaje; el cliente HTTP con clave de idempotencia; y el panel «Acerca de» | [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19) · [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19) · [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10) |
 | **Contrato** | El contrato v0.3.0 en [`contrato/openapi.json`](contrato/openapi.json): el sobre, los 18 códigos, el descriptor con sus listas, y cuentas y categorías acordadas **antes** de implementarlas | [0.15](docs/08-plan-de-desarrollo.md#tarea-0-15) · [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) · [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) |
 | **Base** | **Nada aplicado todavía.** Las 22 tablas, la auditoría y las políticas RLS están escritas en la migración inicial y esperan al proyecto dev de Supabase | — |
-| **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | — |
+| **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
 **347 pruebas en verde en la API** y 71 en el front. El dominio se prueba con las cifras de los
 documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md): si una prueba falla, o se rompió el código o el documento dice
@@ -95,13 +95,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 | **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.6](docs/08-plan-de-desarrollo.md#tarea-5-6) |
 | **Front** | [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18) · [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) |
 | **Contrato** | [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) |
-| **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
+| **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **108 tareas y 132 días de trabajo** de 132 tareas del plan.
+Quedan **107 tareas y 131,5 días de trabajo** de 132 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
@@ -117,10 +117,6 @@ Quedan **108 tareas y 132 días de trabajo** de 132 tareas del plan.
       sesión con `npx supabase login` y enlazar `prisma_db` con `npx supabase link` (el CLI se
       descarga la primera vez); y llenar `backend-api/.env` a partir de `.env.ejemplo`, que nunca se
       sube.
-- [ ] ⚡ [**1.20**](docs/08-plan-de-desarrollo.md#tarea-1-20) · **Decidir cómo consiguen la API y su CI el esquema de `prisma_db`**: una etiqueta,
-      un submódulo o una imagen de PostgreSQL con el esquema. Destraba las tareas [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7), [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) y [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15).
-      Dato útil: los ejecutores de GitHub Actions sí tienen Docker, aunque la máquina de desarrollo
-      no.
 - [ ] **Una sola licencia** · Decisión — este repositorio y el front están con AGPL-3.0; la API y la
       base, con GPL-3.0.
 
@@ -204,7 +200,11 @@ hasta aplicarlo y probarlo.
 - [x] [**1.19**](docs/08-plan-de-desarrollo.md#tarea-1-19) Cliente HTTP con `Idempotency-Key`, generada una vez por acción ([ADR-020](docs/adr/ADR-020-idempotencia.md)) · Front — la
       clave nace con la `Accion` y no con la petición: reenviar la misma acción es reintentar, y
       crear otra es hacer otra cosa
-- [ ] ⚡ [**1.20**](docs/08-plan-de-desarrollo.md#tarea-1-20) Decidir cómo consiguen la API y su CI el esquema de `prisma_db` · Decisión
+- [x] [**1.20**](docs/08-plan-de-desarrollo.md#tarea-1-20) Decidir cómo consiguen la API y su CI el esquema de `prisma_db` · Decisión — por
+      **etiqueta** ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)): `prisma_db` etiqueta cada versión del esquema, la API declara la que
+      necesita en `prisma.esquema` y su integración continua descarga ese repositorio en esa etiqueta
+      y levanta la base con el Supabase CLI. Las pruebas de integración llevan etiqueta de JUnit y no
+      corren en la compilación normal, que es la única forma de trabajar sin Docker
 
 ---
 
@@ -369,7 +369,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 | 3 | Los cuatro proyectos de Supabase y el pago de uat y prod | Quien dirige crea; Gerencia paga | Tarea [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) | 🟡 dev creado; faltan qa, uat y prod |
 | 4 | PostgreSQL para desarrollar sin Docker | Quien dirige | Tareas [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) y [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) | ✅ El proyecto dev de Supabase, mientras Docker no arranque |
 | 5 | Remotos de los repositorios | Quien dirige | Integración continua | ✅ Los cuatro en GitHub |
-| 6 | Cómo consiguen la API y su CI el esquema de `prisma_db` | Carril API | Tareas [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7), [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) y [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) | ⬜ Es la tarea [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
+| 6 | Cómo consiguen la API y su CI el esquema de `prisma_db` | Carril API | Tareas [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7), [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) y [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) | ✅ Por etiqueta, con el Supabase CLI en la tubería ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) |
 | 7 | Quién trabaja cada carril, y quién sabe Flutter y Java para revisar el contrato | Quien dirige | Trabajar con más de un carril | ⬜ |
 | 8 | Contrato por etiqueta de git o como paquete publicado | Los dos lados | El primer cambio de contrato | ⬜ El documento [21](docs/21-trabajo-en-paralelo.md) se inclina por la etiqueta |
 | 9 | Quién desempata un cambio de contrato | Quien dirige | El primer desacuerdo | ⬜ |
@@ -423,6 +423,10 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 - **La base de desarrollo es compartida.** Mientras dev sea el proyecto de Supabase en la nube, todos
   los carriles desarrollan contra la misma base, que es lo que [21 §6.4](docs/21-trabajo-en-paralelo.md#64-ambientes) pide evitar. Con un carril no
   estorba; con varios, cada uno necesita su PostgreSQL local.
+- **La tubería de [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) todavía no existe**, solo la decisión: el trabajo de integración continua que
+  descarga `prisma_db` por etiqueta y levanta Supabase se monta con la primera prueba que lo
+  necesite ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) o [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)). Y `prisma_db` todavía no tiene ninguna etiqueta `esquema-v…`, porque su
+  migración inicial no se ha aplicado a ninguna base.
 - **Sin qa hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9)** ([ADR-026](docs/adr/ADR-026-railway-al-final.md)): mientras tanto, «terminado» es fusionado a `main` con la
   integración continua en verde.
 - **El servicio de Railway conectado a `prisma_front`** intenta construir en cada push y falla,
