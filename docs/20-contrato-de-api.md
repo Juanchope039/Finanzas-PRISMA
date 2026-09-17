@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-16 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
@@ -227,7 +227,7 @@ La API entrega, junto a cada formulario, el descriptor de sus campos:
 |---|---|
 | `campo` | El nombre con el que viaja el dato, y con el que vuelve un error de [§1.2](#12-los-errores-de-campo-van-dentro-de-data) |
 | `etiqueta` | Lo que se pinta encima de la caja |
-| `tipo` | Cómo se presenta y se formatea: `dinero`, `texto`, `fecha`, `lista`, `casilla` |
+| `tipo` | Cómo se presenta y se formatea: `dinero`, `texto`, `fecha`, `lista`, `casilla`, `clave` |
 | `obligatorio` | Si puede quedar vacío |
 | `minimo` · `maximo` | Los límites, como valores, no como condición programada |
 | `teclado` | Qué teclado abre el celular. Es presentación pura |
@@ -258,7 +258,9 @@ La decisión de que el front no contenga ninguna regla está en
 > tarea [1.10](08-plan-de-desarrollo.md#tarea-1-10); el mecanismo y su forma ya están fijados para que el carril Front construya el
 > renderizador (tarea [1.18](08-plan-de-desarrollo.md#tarea-1-18)) contra un servidor simulado. **`opciones`, `origen` y `casilla` están
 > acordados desde el contrato `v0.3.0`** (tarea [1.17](08-plan-de-desarrollo.md#tarea-1-17)) y la API los construye con la 1.10, junto con los
-> formularios `cuenta` y `categoria` que los usan.
+> formularios `cuenta` y `categoria` que los usan. **El tipo `clave` entró con el contrato
+> `v0.4.0`** (tarea [2.19](08-plan-de-desarrollo.md#tarea-2-19)), porque lo necesitan los formularios `acceso` y `cambio-de-clave`: el front
+> lo pinta desde la [2.6](08-plan-de-desarrollo.md#tarea-2-6) y la API lo genera con la [2.1](08-plan-de-desarrollo.md#tarea-2-1).
 
 ```http
 GET /formularios/gasto HTTP/1.1
@@ -297,9 +299,9 @@ Un nombre que no existe responde `404` con `40400`.
 |---|---|
 | `campos` llega **en el orden en que se pinta** | El front no reordena. Qué va primero es una decisión de la pantalla aprobada, no del cliente |
 | **Una clave que no aplica no viaja**, ni siquiera en `null` | Un campo sin máximo no lleva `maximo`. El front no tiene que distinguir «no hay límite» de «el límite es nulo» |
-| `tipo` es uno de `dinero`, `texto`, `fecha`, `lista`, `casilla` | Cada uno exige un tipo concreto en la API: `dinero` solo acepta pesos enteros ([ADR-003](adr/ADR-003-dinero-entero.md)) y `casilla`, un sí o un no |
-| `minimo` y `maximo` se leen según el tipo | En `dinero` son pesos; en `texto`, caracteres |
-| `teclado` es `numerico` o `texto` | Y no viaja en `fecha`, `lista` ni `casilla`, que se eligen y no abren teclado |
+| `tipo` es uno de `dinero`, `texto`, `fecha`, `lista`, `casilla`, `clave` | Cada uno exige un tipo concreto en la API: `dinero` solo acepta pesos enteros ([ADR-003](adr/ADR-003-dinero-entero.md)) y `casilla`, un sí o un no. Una `clave` es un texto que se pinta oculto, con un botón para mostrarlo |
+| `minimo` y `maximo` se leen según el tipo | En `dinero` son pesos; en `texto` y en `clave`, caracteres |
+| `teclado` es `numerico` o `texto` | Y no viaja en `fecha`, `lista` ni `casilla`, que se eligen y no abren teclado; una `clave` abre el de texto |
 | **Una `lista` trae `opciones` o `origen`, nunca los dos ni ninguno** | Las opciones fijas —el tipo de una cuenta— viajan en el descriptor. Las que salen de datos —la categoría madre— dicen de qué ruta salen: una `GET` del contrato cuya `data` es una lista de objetos con `id` y `nombre`, y el `id` es el valor. **El front no decide ni los valores ni a dónde pedirlos**, y la API vuelve a comprobar que lo elegido está entre ellos |
 | `mensajes` trae un texto **por cada regla que el campo tiene** | Es el mismo texto que llega en `data.errores` cuando esa regla falla en el servidor ([§8.2](#82-los-datos-no-pasan-las-reglas--42200)), y la prueba `DescriptorContraValidacionTest` lo compara palabra por palabra |
 
