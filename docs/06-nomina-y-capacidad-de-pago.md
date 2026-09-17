@@ -1,5 +1,9 @@
 # 06 · Nómina y capacidad de pago
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/06-nomina-y-capacidad-de-pago.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Nómina](INDICE.md#etiqueta-nomina) · [Finanzas](INDICE.md#etiqueta-finanzas) · [Negocio](INDICE.md#etiqueta-negocio) |
+
 > **Módulo exclusivo del tipo Gerencia.** El tipo Operación solo puede ver su propio desprendible.
 
 ---
@@ -38,7 +42,7 @@ la gerencia no: el negocio opera idéntico si no se hace.
 | **Retiro de utilidades** | Distribución | — **no baja** | ▼ | ▼ | Retiro |
 | Aporte de capital | Capital | — | ▲ | ▲ | — |
 
-**Ejemplo (RN-10).** Ventas $8.000.000, otros gastos $5.000.000, salario de la empleada
+**Ejemplo ([RN-10](03-requisitos-y-bdd.md#rn-10)).** Ventas $8.000.000, otros gastos $5.000.000, salario de la empleada
 $1.300.000 → **utilidad $1.700.000**. El salario sí la reduce, a diferencia del retiro.
 
 ---
@@ -91,7 +95,7 @@ Saber que "faltan $556.000" no orienta. Saber cuántos mugs hay que vender sí.
 ### 4.1 El margen de contribución correcto
 
 Para este cálculo **no se incluye el tiempo de trabajo en el costo**: precisamente el trabajo
-es el gasto fijo que se está tratando de cubrir. Incluirlo sería contarlo dos veces (RN-17).
+es el gasto fijo que se está tratando de cubrir. Incluirlo sería contarlo dos veces ([RN-17](03-requisitos-y-bdd.md#rn-17)).
 
 ```
 Margen de contribución unitario = Precio − (Insumo + Consumibles)
@@ -216,7 +220,7 @@ día 12.
 | Se liquida la nómina | Descuenta el adelanto del neto · Cancela la cuenta por cobrar |
 
 El índice parcial `idx_adelantos_pendientes` de la base de datos garantiza que un adelanto
-**no pueda descontarse dos veces** (ver [`04-modelo-de-datos.md`](04-modelo-de-datos.md) §4.7).
+**no pueda descontarse dos veces** (ver [`04-modelo-de-datos.md`](04-modelo-de-datos.md) [§4.7](04-modelo-de-datos.md#47-personal-y-nómina)).
 
 Si al cerrar el mes queda un adelanto sin descontar, aparece en el panel como cuenta por cobrar
 viva, con su antigüedad en días.
@@ -265,11 +269,11 @@ las que ya se pagan.**
 
 | Regla | Enunciado |
 |---|---|
-| **RN-08** | El pro-labore es gasto de personal y reduce la utilidad |
-| **RN-09** | El simulador usa obligatoriamente la utilidad con pro-labore descontado |
-| **RN-10** | El salario de la empleada es gasto y reduce la utilidad |
-| **RN-11** | El adelanto es cuenta por cobrar; el gasto se reconoce en la liquidación |
-| **RN-17** | El margen de contribución para el simulador excluye el costo del tiempo |
+| **[RN-08](03-requisitos-y-bdd.md#rn-08)** | El pro-labore es gasto de personal y reduce la utilidad |
+| **[RN-09](03-requisitos-y-bdd.md#rn-09)** | El simulador usa obligatoriamente la utilidad con pro-labore descontado |
+| **[RN-10](03-requisitos-y-bdd.md#rn-10)** | El salario de la empleada es gasto y reduce la utilidad |
+| **[RN-11](03-requisitos-y-bdd.md#rn-11)** | El adelanto es cuenta por cobrar; el gasto se reconoce en la liquidación |
+| **[RN-17](03-requisitos-y-bdd.md#rn-17)** | El margen de contribución para el simulador excluye el costo del tiempo |
 
 ---
 
@@ -283,6 +287,10 @@ conforme a la normativa colombiana.
 y el costo real del empleador será **mayor** que el salario acordado que aquí se maneja. El
 simulador, por tanto, entrega una cota **optimista**: si con estos números no alcanza, con los
 números completos tampoco.
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos")
+<!-- /generado:referenciado-desde -->
 
 ---
 

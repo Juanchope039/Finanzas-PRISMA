@@ -1,5 +1,9 @@
 # 07 · Arquitectura técnica
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
+
 Tres partes —un front en Flutter multiplataforma, una API en Java 25 con Spring Boot y una capa
 de datos PostgreSQL siempre en línea—. Arquitectura hexagonal (puertos y adaptadores) sobre Clean
 Architecture, con principios SOLID.
@@ -10,20 +14,20 @@ Architecture, con principios SOLID.
 
 | Capa | Elección | Razón |
 |---|---|---|
-| Lenguajes | **Dart en el front, Java 25 en la API** | Son dos, y es un costo que se asume a conciencia. El porqué está en §1.5 |
+| Lenguajes | **Dart en el front, Java 25 en la API** | Son dos, y es un costo que se asume a conciencia. El porqué está en [§1.5](#15-qué-se-pierde-y-qué-se-gana-al-pasar-la-api-a-java) |
 | Front | **Flutter multiplataforma**, objetivo por defecto **web**, instalable como PWA (`prisma_front`) | Una sola base de código para el navegador del taller y, sin reescribir nada, para Android, iOS y escritorio |
 | API | **Java 25 con Spring Boot**, a la vez API y BFF (`prisma_api`) | Único punto que habla con la base. Ahí viven el dominio y los casos de uso |
 | Framework HTTP | **Spring Web** sobre el arranque de Spring Boot ([ADR-017](adr/ADR-017-api-en-java.md)) | Enrutado por anotaciones, inyección de dependencias y transacciones declarativas en la misma caja. Nada de esto hay que construirlo |
-| Acceso a datos | **JDBC con `JdbcTemplate`**, sin ORM | El SQL queda a la vista y la transacción con identidad (§7.2) se controla a mano. Un ORM que abre conexiones por su cuenta es justo lo que rompe esa transacción |
+| Acceso a datos | **JDBC con `JdbcTemplate`**, sin ORM | El SQL queda a la vista y la transacción con identidad ([§7.2](#72-la-solución-obligatoria)) se controla a mano. Un ORM que abre conexiones por su cuenta es justo lo que rompe esa transacción |
 | Base | **PostgreSQL gestionado por Supabase**, siempre en línea | Es la misma base de siempre: RLS, triggers y restricciones siguen siendo el corazón de la seguridad |
-| Autenticación | **Supabase Auth, llamado desde la API** | El front manda usuario y contraseña; nunca ve al proveedor ni el correo sintético (§6.1) |
+| Autenticación | **Supabase Auth, llamado desde la API** | El front manda usuario y contraseña; nunca ve al proveedor ni el correo sintético ([§6.1](#61-acceso-con-nombre-de-usuario--el-correo-sintético)) |
 | Archivos | **Supabase Storage, llamado desde la API** | El front sube a `prisma_api` y la API al Storage. Las políticas por rol no se mueven |
 | PDF | **Se genera en `prisma_api`** | Cotizaciones, remisiones y desprendibles salen idénticos para todo el mundo y el front no carga una librería de PDF |
-| Resiliencia | **Resilience4j** | Reintentos, cortacircuitos, tiempos de espera y límite de tasa como piezas probadas, no escritas a mano (§10) |
-| Documentación | **springdoc-openapi** | Swagger sale del ecosistema y se genera de los controladores (§9.4) |
+| Resiliencia | **Resilience4j** | Reintentos, cortacircuitos, tiempos de espera y límite de tasa como piezas probadas, no escritas a mano ([§10](#10-resiliencia-y-comportamiento-sin-conexión)) |
+| Documentación | **springdoc-openapi** | Swagger sale del ecosistema y se genera de los controladores ([§9.4](#94-swagger-generado-del-código)) |
 | Construcción | **Gradle** en la API, con Java 25 declarado como *toolchain* ([ADR-024](adr/ADR-024-java-25-y-gradle.md)); `flutter build` en el front | Gradle descarga el JDK por su cuenta: quien clone el proyecto compila sin instalar nada. El costo es un demonio más que puede fallar |
 | Pruebas | **JUnit 5 y AssertJ** en la API, `package:test` en el front | El dominio se prueba sin base de datos ni navegador, igual que antes |
-| Frontera verificada | **ArchUnit** en la API, lints de Dart en el front | La regla de dependencias falla la compilación, no la revisión (§3) |
+| Frontera verificada | **ArchUnit** en la API, lints de Dart en el front | La regla de dependencias falla la compilación, no la revisión ([§3](#3-regla-de-dependencias)) |
 | Ambientes | **dev, qa, uat y prod**, un proyecto de Supabase por ambiente | El detalle está en [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
 
 > **El costo de operación deja de ser cero.** «Siempre en línea» significa que prod y uat no
@@ -55,7 +59,7 @@ graph LR
 
 Si alguien mete el cliente de Supabase en el código Flutter, está saltándose la arquitectura y
 **hay que rechazarlo en revisión de código**. No es una preferencia de estilo: es lo que sostiene
-la propagación de identidad (§7) y lo que hace que el front no lleve ninguna clave dentro.
+la propagación de identidad ([§7](#7-la-identidad-tiene-que-llegar-hasta-postgresql)) y lo que hace que el front no lleve ninguna clave dentro.
 
 ### 1.2 Por qué la capa de datos no es un servicio desplegable aparte
 
@@ -89,7 +93,7 @@ en lugar de sostenerla dentro de un navegador.
 | Paquete | Qué vive ahí | Qué NO puede hacer |
 |---|---|---|
 | `dominio` | Entidades, reglas de negocio, valores (Dinero, Usuario, Pedido) | Importar Spring, JDBC, SQL o HTTP. Ni una anotación |
-| `aplicacion` | Casos de uso, uno por CU del documento 02 | Conocer el framework HTTP |
+| `aplicacion` | Casos de uso, uno por CU del documento [02](02-casos-de-uso.md) | Conocer el framework HTTP |
 | `infraestructura` | Repositorios JDBC contra PostgreSQL, cliente de Supabase Auth, Storage | Contener reglas de negocio |
 | `interfaz` | Controladores REST, el sobre de respuesta, el filtro de firma, el de idempotencia | Contener reglas de negocio |
 
@@ -110,11 +114,11 @@ Lo que se gana, y por lo que la decisión se sostiene:
   un negocio durante años, la disponibilidad de quien pueda retomarlo pesa más que ahorrar unas
   semanas. En Colombia hay muchísimo más Java de servidor que Dart de servidor.
 - **Swagger sale del ecosistema.** `springdoc-openapi` genera el OpenAPI desde los controladores.
-  No hay que construirlo ni mantenerlo a mano (§9.4).
+  No hay que construirlo ni mantenerlo a mano ([§9.4](#94-swagger-generado-del-código)).
 - **Resiliencia con piezas probadas.** `Resilience4j` trae reintentos, cortacircuitos y límite de
-  tasa ya escritos y ya depurados por mucha gente (§10).
+  tasa ya escritos y ya depurados por mucha gente ([§10](#10-resiliencia-y-comportamiento-sin-conexión)).
 - **Transacciones declarativas.** Es justo lo que exigen la propagación de identidad de
-  [ADR-012](adr/ADR-012-identidad-a-postgres.md) (§7.2) y la atomicidad de la idempotencia (§9.2).
+  [ADR-012](adr/ADR-012-identidad-a-postgres.md) ([§7.2](#72-la-solución-obligatoria)) y la atomicidad de la idempotencia ([§9.2](#92-idempotencia)).
 
 Lo que cuesta, además del lenguaje extra: **el backend sigue siendo trabajo nuevo** —construirlo,
 probarlo, desplegarlo, versionarlo y asegurarlo, multiplicado por cuatro ambientes— y **la JVM
@@ -131,7 +135,7 @@ Dos proyectos, cada uno con su repositorio y su versión: la API con `build.grad
 Dart en `prisma_front`.
 
 La base de datos tiene un tercer repositorio, `prisma_db`, con las migraciones, la semilla y sus
-scripts. No es una aplicación sino la receta del esquema, y la escribe el equipo API
+scripts. No es una aplicación sino la receta del esquema, y la escribe el carril API
 ([ADR-025](adr/ADR-025-cuatro-repositorios.md)). En disco, los tres van dentro de
 `Finanzas-PRISMA/repositories/`: `backend-api`, `backend-db` y `frontend-flutter`.
 
@@ -247,7 +251,7 @@ prisma_front/
 ```
 
 **No hay carpeta `supabase/` en el front, y no puede haberla.** Si aparece, es la señal de que
-alguien se saltó §1.1.
+alguien se saltó [§1.1](#11-las-tres-partes).
 
 ---
 
@@ -357,7 +361,7 @@ qué. Con enteros, el problema no existe. En Java, `long` es siempre un entero d
 > **Y hay una razón más para que el dinero se calcule en la API.** En la JVM —donde corre
 > `prisma_api`— un `long` es un entero de 64 bits de verdad. En el front compilado a JavaScript
 > para el navegador, un `int` de Dart pasa a ser un número de coma flotante. El sitio correcto
-> para sumar plata es el servidor, y con el front sin reglas de negocio (§8) ni siquiera hay
+> para sumar plata es el servidor, y con el front sin reglas de negocio ([§8](#8-validación-dos-capas-deciden-una-pinta)) ni siquiera hay
 > tentación de hacerlo en otro lado.
 
 ### 4.2 Un servicio de dominio típico
@@ -417,7 +421,7 @@ implementar la escritura.
 
 Y son métodos **sincrónicos, sin `Future` ni `async`**, a propósito. JDBC bloquea, y con los hilos
 virtuales de Java 25 bloquear deja de ser caro. A cambio, la transacción es un bloque de código
-con principio y fin visibles, que es exactamente lo que necesita §7.2.
+con principio y fin visibles, que es exactamente lo que necesita [§7.2](#72-la-solución-obligatoria).
 
 ---
 
@@ -438,7 +442,7 @@ Eso significa que:
 
 - Cada fórmula financiera tiene pruebas automáticas que corren en cada cambio.
 - Un error de cálculo se detecta antes de llegar a un reporte del que dependan decisiones reales.
-- El ejemplo de septiembre del documento 05 se convierte en una prueba ejecutable: si alguien
+- El ejemplo de septiembre del documento [05](05-reglas-financieras.md) se convierte en una prueba ejecutable: si alguien
   rompe la fórmula de caja libre, la prueba falla y el cambio no llega a producción.
 
 ---
@@ -448,16 +452,16 @@ Eso significa que:
 | Capa | Medida |
 |---|---|
 | Transporte | HTTPS obligatorio en el front y en la API, gestionado por el despliegue |
-| Canal firmado | Sobre HTTPS, **no en vez de HTTPS**: cada petición lleva nonce, marca de tiempo y firma HMAC contra repetición y manipulación (§9.3) |
+| Canal firmado | Sobre HTTPS, **no en vez de HTTPS**: cada petición lleva nonce, marca de tiempo y firma HMAC contra repetición y manipulación ([§9.3](#93-el-canal-firmado)) |
 | Autenticación | **Nombre de usuario y contraseña, no correo.** La traducción a correo sintético ocurre **dentro de `prisma_api`**: el front manda usuario y contraseña y nunca ve un correo. Las contraseñas nunca tocan código propio |
 | Contraseñas | Mínimo 8 caracteres, sin composición obligatoria y sin caducidad periódica. Hash bcrypt del proveedor |
 | Primer ingreso | Cambio de contraseña obligatorio. `usuarios.debe_cambiar_clave` arranca en `TRUE` al crear y al restablecer, y solo baja cuando la persona la cambia |
 | Restablecimiento | **Presencial.** Solo Gerencia genera una clave temporal desde la pantalla de Gestión de usuarios. No hay recuperación por correo |
 | Intentos fallidos | La API los registra en `auditoria` como `inicio_sesion_fallido` con usuario intentado, fecha, dispositivo e IP. **Nunca se guarda la contraseña tecleada**, ni completa ni parcial |
-| Autorización | **Row Level Security por rol dentro de PostgreSQL**, con la identidad de la persona propagada por la API (§7) |
+| Autorización | **Row Level Security por rol dentro de PostgreSQL**, con la identidad de la persona propagada por la API ([§7](#7-la-identidad-tiene-que-llegar-hasta-postgresql)) |
 | Integridad | `DELETE` y `TRUNCATE` revocados en el motor |
 | Trazabilidad | Triggers de auditoría que ni el front ni la API pueden evitar |
-| Validación | **Dos capas deciden —base y API— y el front pinta** (§8) |
+| Validación | **Dos capas deciden —base y API— y el front pinta** ([§8](#8-validación-dos-capas-deciden-una-pinta)) |
 | Archivos | Storage con políticas de acceso por rol. El front sube a la API y la API al Storage |
 | Secretos | **Solo la API los tiene.** Viven en variables de entorno del servidor, distintas por ambiente. El front se compila con `--dart-define` y solo lleva la dirección de la API y el nombre del ambiente. Ninguna llave en el repositorio |
 
@@ -591,7 +595,7 @@ Sin estas cuatro, lo anterior es teatro:
 > corta si el dueño no pasa por RLS; la segunda porque la bitácora la escribe una función
 > `SECURITY DEFINER` que con `FORCE` dejaría de poder escribir. En esas dos manda la condición 2:
 > el rol de la API no es dueño de nada. El detalle y el SQL están en
-> [`04-modelo-de-datos.md`](04-modelo-de-datos.md) §7.1.
+> [`04-modelo-de-datos.md`](04-modelo-de-datos.md) [§7.1](04-modelo-de-datos.md#71-force-row-level-security-por-qué-ahora-sí-hace-falta).
 
 ### 7.4 Cómo se prueba
 
@@ -603,7 +607,7 @@ Para demostrarlo: se desactiva temporalmente la comprobación de la capa de apli
 ambiente de pruebas y el resultado debe seguir siendo el mismo. Si al quitar el `if` los datos
 aparecen, RLS no está actuando y la prueba falla.
 
-Y una segunda prueba, hermana del aviso de §7.2: recorrer los repositorios y comprobar que
+Y una segunda prueba, hermana del aviso de [§7.2](#72-la-solución-obligatoria): recorrer los repositorios y comprobar que
 ninguno se invoca fuera de una transacción. Una consulta suelta es una consulta sin identidad.
 
 ---
@@ -635,9 +639,9 @@ Lo que sí hace el front: rutas, estado de pantalla, animaciones, formato de pre
 
 | Capa | Qué hace | Qué pasa si falla | Se puede saltar |
 |---|---|---|---|
-| **PostgreSQL** | **Decide.** `NOT NULL`, `CHECK`, `FOREIGN KEY`, `UNIQUE`, `EXCLUDE`, dominios, triggers, RLS, `REVOKE DELETE` | Error del motor con nombre de restricción, que la API traduce (§8.5) | **No** |
-| **`prisma_api`** | **Decide.** Las reglas que la base no puede expresar, los permisos que sí puede adelantar, los cálculos y **el mensaje exacto que se va a mostrar** | Sobre de respuesta con su código de cinco dígitos y su mensaje en español (§9.1) | Sí, si alguien llamara a la base por fuera. Por eso la base sigue siendo el juez |
-| **`prisma_front`** | **Pinta.** Aplica el descriptor que la API le envió (§8.4) y muestra los mensajes que la API redactó | Aviso inmediato en pantalla, con el texto que vino de la API, sin viaje a la red | Sí, con las herramientas del navegador. **Y no importa**: no autoriza nada |
+| **PostgreSQL** | **Decide.** `NOT NULL`, `CHECK`, `FOREIGN KEY`, `UNIQUE`, `EXCLUDE`, dominios, triggers, RLS, `REVOKE DELETE` | Error del motor con nombre de restricción, que la API traduce ([§8.5](#85-el-contrato-de-errores-lo-que-mantiene-honesta-la-redundancia)) | **No** |
+| **`prisma_api`** | **Decide.** Las reglas que la base no puede expresar, los permisos que sí puede adelantar, los cálculos y **el mensaje exacto que se va a mostrar** | Sobre de respuesta con su código de cinco dígitos y su mensaje en español ([§9.1](#91-el-sobre-de-respuesta)) | Sí, si alguien llamara a la base por fuera. Por eso la base sigue siendo el juez |
+| **`prisma_front`** | **Pinta.** Aplica el descriptor que la API le envió ([§8.4](#84-el-descriptor-de-formulario)) y muestra los mensajes que la API redactó | Aviso inmediato en pantalla, con el texto que vino de la API, sin viaje a la red | Sí, con las herramientas del navegador. **Y no importa**: no autoriza nada |
 
 La diferencia con el modelo anterior es de fondo. Antes el front tenía su copia de las reglas
 para poder responder rápido, y esa copia se separaba de la original con el tiempo. Ahora el front
@@ -649,7 +653,7 @@ sigue respondiendo rápido, pero con **datos que vienen de la única regla que e
 |---|---|
 | `data-ger` decide qué se muestra según el tipo de usuario | **La API devuelve el menú** que esa sesión puede ver. El front lo pinta |
 | Mensajes de error escritos en el cliente | **La API dicta el mensaje**, ya redactado en español y listo para mostrar |
-| Reglas de validación escritas en el formulario | **La API envía el descriptor** del formulario (§8.4) |
+| Reglas de validación escritas en el formulario | **La API envía el descriptor** del formulario ([§8.4](#84-el-descriptor-de-formulario)) |
 | Cálculo de totales en pantalla | **La API los calcula** y los manda listos |
 
 > **Esto no reemplaza a RLS: es defensa en profundidad.** Que la API no mande una opción de menú
@@ -697,7 +701,7 @@ se separen con el tiempo y digan cosas distintas. Se ataca así:
    PostgreSQL. `CONSTRAINT movimientos_valor_positivo CHECK (valor > 0)`.
 2. **Existe una tabla única de traducción** en `prisma_api`: nombre de restricción → código de
    cinco dígitos + mensaje en español + campo del formulario al que señala. Un solo archivo,
-   revisable de un vistazo, alimentado por el mismo catálogo de códigos de §9.1.
+   revisable de un vistazo, alimentado por el mismo catálogo de códigos de [§9.1](#91-el-sobre-de-respuesta).
 3. **Si la API recibe un error de la base que no está en esa tabla, responde `50000` y lo registra
    como defecto.** Significa que hay una regla en la base que la API no conocía: eso es
    exactamente lo que hay que descubrir, no esconder.
@@ -721,9 +725,9 @@ Sobre lo que ya tiene el modelo de [`04-modelo-de-datos.md`](04-modelo-de-datos.
 - **Funciones de negocio en la base** para las operaciones que deben ser atómicas y no pueden
   quedar a medias: entregar un pedido y causar la venta, liquidar la nómina descontando
   adelantos, revertir un cambio de usuario. La API las llama; no rehace sus pasos por su cuenta.
-- **La tabla de peticiones idempotentes** (§9.2), que vive en la capa de datos porque su escritura
+- **La tabla de peticiones idempotentes** ([§9.2](#92-idempotencia)), que vive en la capa de datos porque su escritura
   tiene que ocurrir dentro de la misma transacción que el efecto de la operación.
-- `FORCE ROW LEVEL SECURITY` en todas las tablas (§7.3).
+- `FORCE ROW LEVEL SECURITY` en todas las tablas ([§7.3](#73-las-cuatro-condiciones-que-lo-hacen-real)).
 
 Las tablas del negocio no cambian. Lo que cambia es cuánto de la regla vive escrita en el motor.
 
@@ -754,9 +758,9 @@ Aquí va **la arquitectura**: por qué cada pieza existe y qué obliga en el dis
 Lo que esto obliga en la arquitectura:
 
 - **`mensaje` es para una persona del taller**, siempre en español, nunca jerga técnica, nunca un
-  nombre de restricción, nunca una traza. Es la API la que redacta, no el front (§8.3).
+  nombre de restricción, nunca una traza. Es la API la que redacta, no el front ([§8.3](#83-qué-desaparece-del-front)).
 - **Existe un catálogo único de códigos** en `prisma_api`, y de él salen las respuestas, la
-  documentación de Swagger y la tabla de traducción de restricciones de §8.5. Generados, nunca
+  documentación de Swagger y la tabla de traducción de restricciones de [§8.5](#85-el-contrato-de-errores-lo-que-mantiene-honesta-la-redundancia). Generados, nunca
   copiados a mano.
 - Una prueba automática comprueba que **ningún código emitido por el código fuente falta en el
   catálogo, y que ningún código del catálogo quedó sin usar.**
@@ -776,7 +780,7 @@ porque no vio la confirmación, es la misma intención y debe cobrarse una vez.
 > deja el sistema exactamente en el estado que la idempotencia prometía evitar.
 
 Eso es lo que la vuelve una decisión de arquitectura y no de contrato: la tabla vive en la capa de
-datos (§8.6), la transacción es la misma que la de identidad de §7.2, y por eso la API usa
+datos ([§8.6](#86-qué-se-refuerza-en-la-base)), la transacción es la misma que la de identidad de [§7.2](#72-la-solución-obligatoria), y por eso la API usa
 transacciones declarativas y no un ORM que abra conexiones por su cuenta.
 
 Con una excepción que hay que decir en voz alta: **la tabla de peticiones idempotentes es la
@@ -799,7 +803,7 @@ Va **sobre HTTPS, no en vez de HTTPS**. Lo que agrega es anti-repetición e inte
 > de firma vive en memoria de JavaScript, y quien controla la página controla la clave.
 
 Creer que esto sustituye a la autenticación, a los permisos o a RLS sería peligroso. Es una capa
-más, y la única que de verdad decide sigue siendo la base de datos (§8.1).
+más, y la única que de verdad decide sigue siendo la base de datos ([§8.1](#81-el-principio)).
 
 La higiene de base no es alternativa a esto, es el suelo mínimo y va igual: HSTS, CSP estricta,
 tokens de vida corta con rotación del token de refresco, cookies `HttpOnly` y `SameSite`, y
@@ -841,7 +845,7 @@ Quién sostiene cada parte:
 | **Front** | Cola local persistente. Cada intención se guarda **con su clave de idempotencia antes** de intentar enviarse, así el reintento es seguro por construcción |
 | **Front** | Reintentos con espera exponencial y variación aleatoria. La cola sobrevive a cerrar la aplicación |
 | **Front** | La persona ve qué hay pendiente y desde cuándo. Nunca se descarta algo sin decirlo |
-| **API** | Idempotencia (§9.2) y transacciones: o todo el efecto o nada |
+| **API** | Idempotencia ([§9.2](#92-idempotencia)) y transacciones: o todo el efecto o nada |
 | **API** | `Resilience4j`: tiempos de espera y cortacircuitos hacia la base, para degradar en vez de colapsar |
 | **Datos** | [ADR-004](adr/ADR-004-base-solo-escritura.md): nada se borra. Auditoría por triggers ([ADR-005](adr/ADR-005-auditoria-por-triggers.md)) |
 | **Datos** | WAL y recuperación a un punto en el tiempo en producción. Respaldos verificados, no solo programados |
@@ -855,7 +859,7 @@ La estrategia de trabajo sin conexión, por nivel de esfuerzo:
 | 3 | Al reconectar, la cola se envía a `prisma_api` conservando la **fecha del movimiento** original | 9 |
 | 4 | Si un registro encolado falla, se avisa y no se pierde | 9 |
 
-La doble fecha del modelo (RN-01) es lo que hace posible el nivel 3: el movimiento se digita
+La doble fecha del modelo ([RN-01](03-requisitos-y-bdd.md#rn-01)) es lo que hace posible el nivel 3: el movimiento se digita
 cuando vuelve la señal, pero se contabiliza el día en que realmente ocurrió.
 
 El diseño completo está en
@@ -868,7 +872,7 @@ El diseño completo está en
 | Nivel | Qué | Frecuencia | Responsable |
 |---|---|---|---|
 | Automático del proveedor | Toda la base de datos | Diario | Supabase |
-| Exportación manual | Base completa o un mes | Cuando se decida | Gerencia (CU-22) |
+| Exportación manual | Base completa o un mes | Cuando se decida | Gerencia ([CU-22](02-casos-de-uso.md#cu-22)) |
 | Repositorio de código | Todo el proyecto | Cada cambio | Control de versiones |
 
 Un respaldo que nunca se restauró no es un respaldo: en UAT, una vez por trimestre, se restaura el
@@ -897,38 +901,43 @@ Flutter entra por `--dart-define` en el momento de compilar; en la API, por vari
 | ADR | Decisión | Estado |
 |---|---|---|
 | [ADR-001](adr/ADR-001-stack.md) | React + Vite + TypeScript + Supabase | Reemplazado por [ADR-011](adr/ADR-011-stack-flutter-dart.md) |
-| [ADR-002](adr/ADR-002-arquitectura-hexagonal.md) | Arquitectura hexagonal con regla de dependencias verificada | Aceptado · **se refuerza** (§1.4) |
+| [ADR-002](adr/ADR-002-arquitectura-hexagonal.md) | Arquitectura hexagonal con regla de dependencias verificada | Aceptado · **se refuerza** ([§1.4](#14-por-dentro-de-prisma_api)) |
 | [ADR-003](adr/ADR-003-dinero-entero.md) | Dinero como entero de pesos | Aceptado |
-| [ADR-004](adr/ADR-004-base-solo-escritura.md) | Base de datos de solo escritura | Aceptado · con la excepción declarada de §9.2 |
+| [ADR-004](adr/ADR-004-base-solo-escritura.md) | Base de datos de solo escritura | Aceptado · con la excepción declarada de [§9.2](#92-idempotencia) |
 | [ADR-005](adr/ADR-005-auditoria-por-triggers.md) | Auditoría por triggers, no por aplicación | Aceptado |
-| [ADR-006](adr/ADR-006-rls-por-rol.md) | Permisos con Row Level Security | Aceptado · **solo sobrevive si se cumple §7** |
+| [ADR-006](adr/ADR-006-rls-por-rol.md) | Permisos con Row Level Security | Aceptado · **solo sobrevive si se cumple [§7](#7-la-identidad-tiene-que-llegar-hasta-postgresql)** |
 | [ADR-007](adr/ADR-007-pwa.md) | PWA en lugar de aplicación nativa | Reemplazado por [ADR-016](adr/ADR-016-flutter-web-pwa.md) |
 | [ADR-008](adr/ADR-008-exportacion.md) | Exportación con descarga manual | Aceptado |
-| [ADR-009](adr/ADR-009-login-por-usuario.md) | Acceso con nombre de usuario, no con correo | Aceptado · mejorado (§6.1) |
+| [ADR-009](adr/ADR-009-login-por-usuario.md) | Acceso con nombre de usuario, no con correo | Aceptado · mejorado ([§6.1](#61-acceso-con-nombre-de-usuario--el-correo-sintético)) |
 | [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md) | Contraseñas: hashing delegado con salt por usuario | Aceptado |
 | [ADR-011](adr/ADR-011-stack-flutter-dart.md) | Stack: Flutter y Dart con API propia | Reemplazado por [ADR-017](adr/ADR-017-api-en-java.md) |
-| [ADR-012](adr/ADR-012-identidad-a-postgres.md) | La API propaga la identidad a PostgreSQL para que RLS siga juzgando | Aceptado · el ejemplo en Java está en §7.2 |
+| [ADR-012](adr/ADR-012-identidad-a-postgres.md) | La API propaga la identidad a PostgreSQL para que RLS siga juzgando | Aceptado · el ejemplo en Java está en [§7.2](#72-la-solución-obligatoria) |
 | [ADR-013](adr/ADR-013-cuatro-ambientes.md) | Cuatro ambientes y promoción de migraciones | Aceptado |
 | [ADR-014](adr/ADR-014-semver.md) | SemVer independiente por proyecto y contrato de compatibilidad | Aceptado |
 | [ADR-015](adr/ADR-015-validacion-tres-capas.md) | Validación en tres capas, con la base como juez | Reemplazado por [ADR-018](adr/ADR-018-front-sin-decisiones.md) |
 | [ADR-016](adr/ADR-016-flutter-web-pwa.md) | Flutter Web instalable como PWA | Aceptado · web sigue siendo el objetivo por defecto |
 | [ADR-017](adr/ADR-017-api-en-java.md) | Stack: Flutter en el front, Java con Spring Boot en la API | Reemplazado por [ADR-024](adr/ADR-024-java-25-y-gradle.md) |
-| [ADR-024](adr/ADR-024-java-25-y-gradle.md) | Java 25, Gradle y Spring Boot 4 en la API | Aceptado (§1) |
-| [ADR-018](adr/ADR-018-front-sin-decisiones.md) | Tres partes, y el front no toma decisiones | Aceptado (§1.1, §8) |
-| [ADR-019](adr/ADR-019-contrato-de-respuesta.md) | Contrato de respuesta y catálogo de códigos de cinco dígitos | Aceptado (§9.1) |
-| [ADR-020](adr/ADR-020-idempotencia.md) | Idempotencia obligatoria en toda escritura | Aceptado (§9.2) |
-| [ADR-021](adr/ADR-021-canal-firmado.md) | Canal firmado contra repetición y manipulación | Aceptado (§9.3) |
-| [ADR-022](adr/ADR-022-openapi-generado.md) | OpenAPI generado del código y verificado en integración continua | Aceptado (§9.4) |
+| [ADR-024](adr/ADR-024-java-25-y-gradle.md) | Java 25, Gradle y Spring Boot 4 en la API | Aceptado ([§1](#1-stack)) |
+| [ADR-018](adr/ADR-018-front-sin-decisiones.md) | Tres partes, y el front no toma decisiones | Aceptado ([§1.1](#11-las-tres-partes), [§8](#8-validación-dos-capas-deciden-una-pinta)) |
+| [ADR-019](adr/ADR-019-contrato-de-respuesta.md) | Contrato de respuesta y catálogo de códigos de cinco dígitos | Aceptado ([§9.1](#91-el-sobre-de-respuesta)) |
+| [ADR-020](adr/ADR-020-idempotencia.md) | Idempotencia obligatoria en toda escritura | Aceptado ([§9.2](#92-idempotencia)) |
+| [ADR-021](adr/ADR-021-canal-firmado.md) | Canal firmado contra repetición y manipulación | Aceptado ([§9.3](#93-el-canal-firmado)) |
+| [ADR-022](adr/ADR-022-openapi-generado.md) | OpenAPI generado del código y verificado en integración continua | Aceptado ([§9.4](#94-swagger-generado-del-código)) |
 | [ADR-023](adr/ADR-023-tres-repositorios.md) | Tres repositorios y el contrato como artefacto versionado | Reemplazado por [ADR-025](adr/ADR-025-cuatro-repositorios.md) |
-| [ADR-025](adr/ADR-025-cuatro-repositorios.md) | Cuatro repositorios: la base de datos sale de la API | Aceptado (§2) |
+| [ADR-025](adr/ADR-025-cuatro-repositorios.md) | Cuatro repositorios: la base de datos sale de la API | Aceptado ([§2](#2-estructura-de-carpetas)) |
 | [ADR-026](adr/ADR-026-railway-al-final.md) | Railway aloja la API y el front, y el despliegue va al final del desarrollo | Aceptado |
+| [ADR-027](adr/ADR-027-documentacion-versionada.md) | La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica | Aceptado |
 
-Son **26 decisiones registradas**. El índice completo, con el estado de cada una, vive en
+Son **27 decisiones registradas**. El índice completo, con el estado de cada una, vive en
 [`adr/README.md`](adr/README.md).
 
 Un ADR no se modifica: si una decisión cambia, se escribe uno nuevo que reemplaza al anterior y
 el viejo se marca **Reemplazado**, con su cuerpo intacto. El valor de un ADR reemplazado es dejar
 constancia de lo que se pensó entonces y por qué.
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [01](01-vision-y-alcance.md "01 · Visión y alcance") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-002](adr/ADR-002-arquitectura-hexagonal.md "ADR-002 · Arquitectura hexagonal con regla de dependencias verificada") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-019](adr/ADR-019-contrato-de-respuesta.md "ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos") · [ADR-021](adr/ADR-021-canal-firmado.md "ADR-021 · Canal firmado contra repetición y manipulación")
+<!-- /generado:referenciado-desde -->
 
 ---
 

@@ -1,11 +1,17 @@
 # 20 · Contrato de la API
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-16 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
 
-> **Estado: diseñado, no construido.** `prisma_api` todavía no existe. Este documento fija el
-> contrato antes de escribir el primer controlador, porque un contrato acordado después es un
-> contrato que ya se rompió en tres sitios distintos.
+> **Construcción: en parte.** En `prisma_api` ya están construidos el sobre de respuesta, el
+> catálogo de códigos, `GET /version` y el descriptor de formulario, con el contrato v0.2.0 (tareas
+> 0.11 y 0.14 a 0.18). La idempotencia y el canal firmado llegan en los Sprints 1 y 2. Este
+> documento fijó el contrato antes de escribir el primer controlador, porque un contrato acordado
+> después es un contrato que ya se rompió en tres sitios distintos.
 
 **Este documento no repite la arquitectura.** Cómo está construido el sistema por dentro —las
 capas, la regla de dependencias, cómo la identidad llega hasta PostgreSQL— está en
@@ -30,7 +36,7 @@ más, ni una menos, ni en un orden distinto:
 
 | Clave | Tipo | Regla |
 |---|---|---|
-| `status` | Entero de cinco dígitos | Siempre presente. Ver §2 |
+| `status` | Entero de cinco dígitos | Siempre presente. Ver [§2](#2-el-código-de-cinco-dígitos) |
 | `mensaje` | Texto | Siempre presente. **En español, listo para mostrarle a una persona del taller.** Nunca jerga técnica, nunca un nombre de restricción, nunca una traza |
 | `data` | Cualquiera | El contrato propio de cada operación. `null` cuando no hay datos que devolver |
 
@@ -65,7 +71,7 @@ cuarta clave al sobre**: viaja dentro de `data`, en una lista llamada `errores`.
 
 | Clave dentro de `errores[]` | Qué es |
 |---|---|
-| `campo` | El mismo nombre que la API usó en el descriptor del formulario (§4). Así el front sabe junto a qué caja pintar el aviso |
+| `campo` | El mismo nombre que la API usó en el descriptor del formulario ([§4](#4-el-descriptor-de-formulario)). Así el front sabe junto a qué caja pintar el aviso |
 | `mensaje` | El texto en español que se muestra debajo de esa caja |
 
 El `mensaje` de arriba —el del sobre— resume; los de `errores` señalan. Los dos vienen de la API y
@@ -107,7 +113,7 @@ que es el caso reservado al genérico de cada estado HTTP:
 | `42200` | 422 | Los datos no pasan las reglas |
 | `50000` | 500 | Error no previsto |
 
-La idempotencia (§5) y el canal firmado (§6) agregan los suyos, y están listados en esas secciones.
+La idempotencia ([§5](#5-idempotencia)) y el canal firmado ([§6](#6-el-canal-firmado)) agregan los suyos, y están listados en esas secciones.
 
 ### 2.3 El límite del formato, dicho con honestidad
 
@@ -168,7 +174,7 @@ De ese catálogo salen tres cosas, **generadas, nunca copiadas a mano**:
 | # | Qué se genera | Por qué de ahí y no aparte |
 |---|---|---|
 | 1 | Las respuestas de la API | El `status` y el `mensaje` que viajan en el sobre son los del catálogo, sin intermediario |
-| 2 | La documentación de Swagger (§7) | Documentar a mano qué códigos devuelve una operación se desactualiza el primer día en que alguien tiene prisa |
+| 2 | La documentación de Swagger ([§7](#7-swagger)) | Documentar a mano qué códigos devuelve una operación se desactualiza el primer día en que alguien tiene prisa |
 | 3 | La tabla de traducción de restricciones de base de datos que fijó [ADR-015](adr/ADR-015-validacion-tres-capas.md) —reemplazado por [ADR-018](adr/ADR-018-front-sin-decisiones.md), que conserva intacto ese contrato de errores— | Un `23514 check_violation` tiene que salir como mensaje en español, y ese mensaje es el mismo del catálogo |
 
 Copiar sería tenerlo tres veces, y tres copias de una lista se separan siempre: la pregunta no es
@@ -219,7 +225,7 @@ La API entrega, junto a cada formulario, el descriptor de sus campos:
 
 | Clave | Para qué sirve |
 |---|---|
-| `campo` | El nombre con el que viaja el dato, y con el que vuelve un error de §1.2 |
+| `campo` | El nombre con el que viaja el dato, y con el que vuelve un error de [§1.2](#12-los-errores-de-campo-van-dentro-de-data) |
 | `etiqueta` | Lo que se pinta encima de la caja |
 | `tipo` | Cómo se presenta y se formatea: `dinero`, `texto`, `fecha`, `lista` |
 | `obligatorio` | Si puede quedar vacío |
@@ -245,9 +251,10 @@ La decisión de que el front no contenga ninguna regla está en
 
 ### 4.3 Cómo se pide y qué forma tiene
 
-> **Estado: construido** desde el contrato `v0.2.0`. El catálogo de formularios está vacío hasta
-> que llegue el primero de verdad, en el Sprint 2; el mecanismo y su forma ya están fijados para
-> que el equipo Front pueda construir el renderizador contra un servidor simulado.
+> **Construcción: construido** desde el contrato `v0.2.0` (tarea [0.17](08-plan-de-desarrollo.md#tarea-0-17)). El catálogo de
+> formularios está vacío hasta que llegue el primero de verdad, con las cuentas y categorías de la
+> tarea [1.10](08-plan-de-desarrollo.md#tarea-1-10); el mecanismo y su forma ya están fijados para que el carril Front construya el
+> renderizador (tarea [1.18](08-plan-de-desarrollo.md#tarea-1-18)) contra un servidor simulado.
 
 ```http
 GET /formularios/gasto HTTP/1.1
@@ -289,7 +296,7 @@ Un nombre que no existe responde `404` con `40400`.
 | `tipo` es uno de `dinero`, `texto`, `fecha`, `lista` | Cada uno exige un tipo concreto en la API: `dinero` solo acepta pesos enteros ([ADR-003](adr/ADR-003-dinero-entero.md)) |
 | `minimo` y `maximo` se leen según el tipo | En `dinero` son pesos; en `texto`, caracteres |
 | `teclado` es `numerico` o `texto` | Y no viaja en `fecha` ni en `lista`, que se eligen con un selector y no abren teclado |
-| `mensajes` trae un texto **por cada regla que el campo tiene** | Es el mismo texto que llega en `data.errores` cuando esa regla falla en el servidor (§8.2), y la prueba `DescriptorContraValidacionTest` lo compara palabra por palabra |
+| `mensajes` trae un texto **por cada regla que el campo tiene** | Es el mismo texto que llega en `data.errores` cuando esa regla falla en el servidor ([§8.2](#82-los-datos-no-pasan-las-reglas--42200)), y la prueba `DescriptorContraValidacionTest` lo compara palabra por palabra |
 
 ### 4.4 Las reglas que caben, y por qué no caben más
 
@@ -402,7 +409,7 @@ Al iniciar sesión, la API entrega —además del token— una **clave de firma 
 |---|---|
 | `X-Prisma-Nonce` | UUID v4 único por petición |
 | `X-Prisma-Timestamp` | ISO 8601 en UTC |
-| `X-Prisma-Firma` | El HMAC del §6.2 |
+| `X-Prisma-Firma` | El HMAC del [§6.2](#62-cómo-se-arma-la-firma) |
 
 ### 6.2 Cómo se arma la firma
 
@@ -486,10 +493,10 @@ son las que la vuelven **documentación funcional** y no una lista de campos:
 
 | Qué | De dónde sale |
 |---|---|
-| Qué caso de uso implementa | Enlazado a [`02-casos-de-uso.md`](02-casos-de-uso.md), de CU-01 a CU-37 |
+| Qué caso de uso implementa | Enlazado a [`02-casos-de-uso.md`](02-casos-de-uso.md), de [CU-01](02-casos-de-uso.md#cu-01) a [CU-37](02-casos-de-uso.md#cu-37) |
 | La regla de negocio que aplica | En español y sin jerga, como en [`05-reglas-financieras.md`](05-reglas-financieras.md) |
-| Qué códigos de `status` puede devolver, con su mensaje | Del catálogo del §3, generado |
-| Un ejemplo real de petición y respuesta | Como los del §8 |
+| Qué códigos de `status` puede devolver, con su mensaje | Del catálogo del [§3](#3-el-catálogo), generado |
+| Un ejemplo real de petición y respuesta | Como los del [§8](#8-el-contrato-funcionando) |
 | Qué tipo de usuario puede llamarla | Y que **el permiso lo aplica la base**, no la anotación |
 
 ### 7.4 Cómo se verifica que está al día
@@ -572,13 +579,13 @@ Content-Type: application/json
 }
 ```
 
-El texto de `errores[0].mensaje` es **el mismo** que el descriptor del §4 ya le había entregado al
+El texto de `errores[0].mensaje` es **el mismo** que el descriptor del [§4](#4-el-descriptor-de-formulario) ya le había entregado al
 front bajo `mensajes.minimo`. No son dos redacciones parecidas: es una sola, la del catálogo, que
 llega dos veces por caminos distintos.
 
 ### 8.3 Clave de idempotencia repetida con otros datos · `40901`
 
-La clave del §8.1, reutilizada con un cuerpo distinto:
+La clave del [§8.1](#81-éxito--20100), reutilizada con un cuerpo distinto:
 
 ```http
 POST /gastos HTTP/1.1
@@ -604,9 +611,9 @@ Content-Type: application/json
 }
 ```
 
-Si el cuerpo hubiera sido **idéntico** al del §8.1, la respuesta no sería esta: sería palabra por
-palabra la del §8.1, con su `201` y su `20100`, sin registrar un segundo gasto. Esa es la
-diferencia entre reintentar y repetir, y la huella del §5.3 es lo único que la distingue.
+Si el cuerpo hubiera sido **idéntico** al del [§8.1](#81-éxito--20100), la respuesta no sería esta: sería palabra por
+palabra la del [§8.1](#81-éxito--20100), con su `201` y su `20100`, sin registrar un segundo gasto. Esa es la
+diferencia entre reintentar y repetir, y la huella del [§5.3](#53-la-huella-y-para-qué-sirve) es lo único que la distingue.
 
 ---
 
@@ -622,8 +629,12 @@ diferencia entre reintentar y repetir, y la huella del §5.3 es lo único que la
 | Qué pasa cuando no hay señal y cómo espera la cola local | [`17-resiliencia-offline-y-cache.md`](17-resiliencia-offline-y-cache.md) |
 | Con qué configuración corre cada ambiente y cómo se publica | [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
 
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [07](07-arquitectura.md "07 · Arquitectura técnica") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [Contrato](../contrato/README.md "Contrato de la API · v0.2.0")
+<!-- /generado:referenciado-desde -->
+
 ---
 
 ### 🧭 Navegación
 
-**⬅️ Anterior:** [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [21 · Trabajo en paralelo con dos equipos](21-trabajo-en-paralelo.md)
+**⬅️ Anterior:** [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md)  ·  **🗂️ [Índice general](INDICE.md)**  ·  **Siguiente ➡️:** [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md)

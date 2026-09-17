@@ -1,6 +1,8 @@
 # ADR-005 · Auditoría por triggers, no por la aplicación
 
-**Estado:** Aceptado · **Fecha:** 2026-09-13
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-005-auditoria-por-triggers.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-13 | 2026-09-16 | [Base de datos](../INDICE.md#etiqueta-base-de-datos) · [Seguridad](../INDICE.md#etiqueta-seguridad) |
 
 ## Contexto
 
@@ -32,3 +34,9 @@ la transición de `anulado_en` de nulo a no nulo.
 - **Negativas:** la tabla de auditoría crece más rápido que las de negocio, y la lógica vive en
   SQL en vez de en TypeScript. Ambos costos son aceptables: el volumen es pequeño y la garantía
   de cobertura es lo que se está comprando.
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [02](../02-casos-de-uso.md "02 · Casos de uso") · [07](../07-arquitectura.md "07 · Arquitectura técnica") · [17](../17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [ADR-012](ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando")
+<!-- /generado:referenciado-desde -->

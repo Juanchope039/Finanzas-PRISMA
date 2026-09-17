@@ -1,6 +1,8 @@
 # ADR-021 · Canal firmado contra repetición y manipulación
 
-**Estado:** Aceptado · **Fecha:** 2026-09-15
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-021-canal-firmado.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-15 | 2026-09-16 | [Seguridad](../INDICE.md#etiqueta-seguridad) · [API](../INDICE.md#etiqueta-api) · [Contrato](../INDICE.md#etiqueta-contrato) |
 
 ## Contexto
 
@@ -151,3 +153,9 @@ más, y la única que de verdad decide sigue siendo la base de datos
   problema distinto y complementario al de este ADR.
 - [`11-riesgos-y-proteccion-de-datos.md`](../11-riesgos-y-proteccion-de-datos.md)
 - [`07-arquitectura.md`](../07-arquitectura.md)
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [04](../04-modelo-de-datos.md "04 · Modelo de datos") · [07](../07-arquitectura.md "07 · Arquitectura técnica") · [20](../20-contrato-de-api.md "20 · Contrato de la API") · [ADR-020](ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura")
+<!-- /generado:referenciado-desde -->

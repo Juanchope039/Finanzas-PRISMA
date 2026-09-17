@@ -1,5 +1,9 @@
 # 09 · Plan de implantación
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/09-plan-de-implantacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Plan](INDICE.md#etiqueta-plan) · [Entrega](INDICE.md#etiqueta-entrega) · [Negocio](INDICE.md#etiqueta-negocio) |
+
 Cómo se pasa de tener el software construido a que el negocio realmente lo use.
 
 > **La mayoría de estos proyectos no fracasan por el código. Fracasan porque el registro diario
@@ -99,7 +103,7 @@ toca a la implantación.
 |---|---|---|
 | **dev** | Se prueba la importación con archivos inventados y se corrigen los mapeos de columnas | Ficticios |
 | **qa** | **Se ensaya la migración completa de punta a punta** y se cronometra la jornada de digitación | Ficticios, semilla reproducible |
-| **uat** | Gerencia recorre el checklist (§1.1) contra el sistema real y firma la versión | Realistas, **anonimizados** |
+| **uat** | Gerencia recorre el checklist ([§1.1](#11-la-segunda-firma-el-mismo-checklist-en-uat)) contra el sistema real y firma la versión | Realistas, **anonimizados** |
 | **prod** | Recibe únicamente la versión firmada en uat, sin recompilar. Aquí entra el alistamiento de usuarios y la migración de verdad | Reales |
 
 > **Ensayo general antes del estreno.** La migración se ensaya completa en qa antes de hacerla
@@ -113,12 +117,12 @@ pasos cuestan plata y hay que decidirlos con tiempo.
 
 | # | Paso | Responsable | Cuándo |
 |---|---|---|---|
-| 1 | Crear los **cuatro proyectos de Supabase**: dev, qa, uat y prod. Cada uno con su propia base, sus claves y su almacenamiento | Apoyo técnico | Sprint 0 |
+| 1 | Crear los **cuatro proyectos de Supabase**: dev, qa, uat y prod. Cada uno con su propia base, sus claves y su almacenamiento | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
 | 2 | **Contratar lo que hay que pagar:** el plan de pago de Supabase en uat y prod, y el alojamiento de `prisma_api` en prod, que no se puede apagar. dev y qa se quedan en planes gratuitos o apagables | Gerencia | Antes de levantar uat |
-| 3 | Crear el rol **`prisma_api`** en cada ambiente: sin `BYPASSRLS`, sin `SUPERUSER` y sin ser dueño de las tablas | Apoyo técnico | Sprint 0 |
-| 4 | **Levantar el alojamiento de la API en los cuatro ambientes**: una imagen de contenedor por versión, con su memoria y sus variables (§3.2), en Railway ([ADR-026](adr/ADR-026-railway-al-final.md)) | Apoyo técnico | Sprint 9 |
-| 5 | Cargar los **secretos de cada ambiente** fuera del repositorio: variables de entorno en la API, `--dart-define` al compilar el front | Apoyo técnico | Sprint 0 |
-| 6 | Guardar la clave `service_role` de cada ambiente en un **secreto aparte**, reservado para migraciones y tareas administrativas | Apoyo técnico | Sprint 0 |
+| 3 | Crear el rol **`prisma_api`** en cada ambiente: sin `BYPASSRLS`, sin `SUPERUSER` y sin ser dueño de las tablas | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
+| 4 | **Levantar el alojamiento de la API en los cuatro ambientes**: una imagen de contenedor por versión, con su memoria y sus variables ([§3.2](#32-alojar-la-api-de-java-en-los-cuatro-ambientes)), en Railway ([ADR-026](adr/ADR-026-railway-al-final.md)) | Apoyo técnico | [Sprint 9](08-plan-de-desarrollo.md#sprint-9) |
+| 5 | Cargar los **secretos de cada ambiente** fuera del repositorio: variables de entorno en la API, `--dart-define` al compilar el front | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
+| 6 | Guardar la clave `service_role` de cada ambiente en un **secreto aparte**, reservado para migraciones y tareas administrativas | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
 | 7 | Promover el esquema dev → qa → uat → prod y verificar `schema_version` en cada base | Apoyo técnico | Antes de cada hito |
 | 8 | Comprobar en cada ambiente que `GET /version` responde el ambiente correcto y que la franja aparece donde debe | Apoyo técnico | Antes de cada hito |
 | 9 | Ejecutar la prueba de permisos con sesión real en los cuatro ambientes ([ADR-012](adr/ADR-012-identidad-a-postgres.md)) | Apoyo técnico | Antes del go-live |
@@ -127,8 +131,8 @@ pasos cuestan plata y hay que decidirlos con tiempo.
 > pueden estar en el plan gratuito de Supabase: ese plan pausa el proyecto tras una semana de
 > inactividad y un taller que factura los lunes encontraría el sistema dormido. Y la API en Java
 > necesita un contenedor encendido en prod, que también se paga. Son **dos proyectos de Supabase
-> de pago y un alojamiento de API**. Por eso **RNF-14 ya no exige costo cero sino costo mensual al
-> mínimo sostenible**: el costo cero era incompatible con RNF-20, y sostener la contradicción en
+> de pago y un alojamiento de API**. Por eso **[RNF-14](03-requisitos-y-bdd.md#rnf-14) ya no exige costo cero sino costo mensual al
+> mínimo sostenible**: el costo cero era incompatible con [RNF-20](03-requisitos-y-bdd.md#rnf-20), y sostener la contradicción en
 > el papel no la habría hecho desaparecer el día del go-live.
 
 ### 3.2 Alojar la API de Java en los cuatro ambientes
@@ -154,7 +158,7 @@ go-live:
 | dev | 512 MB | Sí. Se puede apagar fuera de horario |
 | qa | 512 MB | Sí. Se enciende para la tanda de pruebas |
 | uat | 768 MB | Sí, avisándole a Gerencia: el primer clic de la sesión de aprobación puede tardar unos segundos |
-| **prod** | **1 GB** | **No.** RNF-20 exige estar siempre en línea; prod no baja a cero |
+| **prod** | **1 GB** | **No.** [RNF-20](03-requisitos-y-bdd.md#rnf-20) exige estar siempre en línea; prod no baja a cero |
 
 > **La JVM pide memoria y eso no se negocia, se presupuesta.** Por debajo de 512 MB, Spring Boot
 > arranca al límite y el primer pico de trabajo lo tumba. Estas cifras son el punto de partida:
@@ -165,7 +169,7 @@ go-live:
 **Las variables de entorno, una tanda por ambiente**
 
 La lista completa con sus valores de ejemplo vive en
-[`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) §3.2. Aquí importa qué hay que tener
+[`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) [§3.2](19-ambientes-y-entrega.md#32-la-api-variables-de-entorno). Aquí importa qué hay que tener
 cargado, y cuatro veces, antes de promover nada:
 
 | Variable | Qué cambia entre ambientes |
@@ -180,7 +184,7 @@ cargado, y cuatro veces, antes de promover nada:
 
 > **La misma imagen en los cuatro ambientes; lo único distinto son las variables.** Si para que
 > uat funcione hubo que compilar algo aparte, entonces lo que Gerencia firma en uat no es lo que
-> va a correr en prod, y la firma de §1.1 deja de significar lo que dice.
+> va a correr en prod, y la firma de [§1.1](#11-la-segunda-firma-el-mismo-checklist-en-uat) deja de significar lo que dice.
 
 ---
 
@@ -212,7 +216,7 @@ Hay dos fuentes: **Excel/Sheets** y **cuaderno físico con fotos**.
 qa. Sirve para dos cosas: descubrir los errores de mapeo sin tocar prod y saber cuánto se demora
 de verdad la jornada. Solo cuando el ensayo sale limpio se repite en prod.
 
-**Del Excel — importación asistida (CU-21)**
+**Del Excel — importación asistida ([CU-21](02-casos-de-uso.md#cu-21))**
 
 | Paso | Acción | Responsable |
 |---|---|---|
@@ -338,9 +342,9 @@ cuatro ambientes. Ninguno se salta.
 |---|---|---|---|
 | 1 | Las migraciones pendientes se aplican en qa y pasan las pruebas | Apoyo técnico | Las pruebas de extremo a extremo pasan en qa |
 | 2 | El artefacto se promueve a uat y se siembra con datos anonimizados | Apoyo técnico | `GET /version` en uat responde la versión candidata |
-| 3 | Gerencia recorre el checklist de UAT (§1.1) y firma la versión | Gerencia | La firma queda con número de versión y fecha |
+| 3 | Gerencia recorre el checklist de UAT ([§1.1](#11-la-segunda-firma-el-mismo-checklist-en-uat)) y firma la versión | Gerencia | La firma queda con número de versión y fecha |
 | 4 | **El mismo artefacto** se promueve a prod, sin recompilar: la misma etiqueta de la imagen de la API y el mismo paquete web del front | Apoyo técnico | La versión en prod es idéntica a la firmada |
-| 5 | Alistamiento de usuarios y migración de datos en prod (§4) | Gerencia + apoyo técnico | Los saldos cuadran con el dinero real |
+| 5 | Alistamiento de usuarios y migración de datos en prod ([§4](#4-migración-de-datos-históricos)) | Gerencia + apoyo técnico | Los saldos cuadran con el dinero real |
 
 > **Recompilar para prod sería aprobar una cosa y publicar otra.** Si hace falta un cambio
 > después de la firma, se vuelve a empezar en el paso 1 con una versión nueva. No hay atajo, y
@@ -367,7 +371,7 @@ cuatro ambientes. Ninguno se salta.
 | 15 | En prod **no hay franja de ambiente** y la versión se ve en el pie de la barra lateral, en color neutro | ⬜ |
 | 16 | El rol `prisma_api` de prod no tiene `BYPASSRLS` ni es dueño de las tablas | ⬜ |
 | 17 | La prueba de permisos con sesión real se ejecutó **contra prod** y la base fue la que negó | ⬜ |
-| 18 | La reversión está ensayada y se sabe a qué versión anterior se vuelve (§7) | ⬜ |
+| 18 | La reversión está ensayada y se sabe a qué versión anterior se vuelve ([§7](#7-qué-se-hace-si-una-versión-rompe-prod)) | ⬜ |
 | 19 | La memoria de la JVM de prod está fijada por variable y **medida en qa**, no copiada de un ejemplo | ⬜ |
 | 20 | El alojamiento de la API de prod **no escala a cero** y no se pausa por inactividad | ⬜ |
 | 21 | Swagger está **detrás de autenticación en prod**; en dev, qa y uat queda abierto en `/docs` | ⬜ |
@@ -408,7 +412,7 @@ artefactos y quién tiene acceso a qué— vive en
 | El front nuevo falla y la API responde bien | Se republica el front anterior, que sigue siendo compatible con el mismo MAJOR de la API |
 | El front bloquea con «Esta versión de la aplicación ya no sirve con el servidor. Actualiza.» | Las dos versiones quedaron descuadradas: se vuelve la que se haya movido de último ([ADR-014](adr/ADR-014-semver.md)) |
 | Una migración dejó el esquema mal | **El esquema no se devuelve.** Se escribe otra migración que corrige y se promueve por los cuatro ambientes ([ADR-004](adr/ADR-004-base-solo-escritura.md), [ADR-013](adr/ADR-013-cuatro-ambientes.md)) |
-| Se dañaron o se perdieron datos | Restauración desde el respaldo más reciente y comparación con la última exportación (CU-22) |
+| Se dañaron o se perdieron datos | Restauración desde el respaldo más reciente y comparación con la última exportación ([CU-22](02-casos-de-uso.md#cu-22)) |
 
 | Quién | Qué decide |
 |---|---|
@@ -505,9 +509,13 @@ sin retorno.
 | Los saldos no cuadran y no se sabe por qué | Revisar la bitácora de auditoría movimiento por movimiento |
 | Se descubre un error en una fórmula | Corregir, agregar prueba automática, recalcular períodos afectados |
 | El sistema no está disponible | Si la aplicación abre, lo registrado queda en la cola local y se envía solo cuando vuelve la señal, una sola vez. Si no abre, se registra en papel con la fecha real y se digita después; la doble fecha lo respeta |
-| Se pierde el acceso a la cuenta | Gerencia restablece la clave en persona (§8.2). No hay recuperación por correo |
-| Se necesita volver a los datos anteriores | Exportación de respaldo (CU-22) |
-| Una versión nueva rompe prod | Se revierte primero y se investiga después (§7) |
+| Se pierde el acceso a la cuenta | Gerencia restablece la clave en persona ([§8.2](#82-manejo-de-usuarios-en-la-operación-diaria)). No hay recuperación por correo |
+| Se necesita volver a los datos anteriores | Exportación de respaldo ([CU-22](02-casos-de-uso.md#cu-22)) |
+| Una versión nueva rompe prod | Se revierte primero y se investiga después ([§7](#7-qué-se-hace-si-una-versión-rompe-prod)) |
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo")
+<!-- /generado:referenciado-desde -->
 
 ---
 

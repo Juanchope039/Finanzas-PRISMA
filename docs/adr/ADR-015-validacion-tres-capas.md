@@ -1,6 +1,8 @@
 # ADR-015 · Validación en tres capas, con la base como juez
 
-**Estado:** Reemplazado por ADR-018 · **Fecha:** 2026-09-15
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-015-validacion-tres-capas.md "Historial de cambios") | [⛔ Reemplazado](../22-documentacion.md#estados-de-un-adr) por [ADR-018](ADR-018-front-sin-decisiones.md) | 2026-09-15 | 2026-09-16 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) · [Front](../INDICE.md#etiqueta-front) · [API](../INDICE.md#etiqueta-api) |
 
 > **Lo reemplaza [ADR-018](ADR-018-front-sin-decisiones.md):** la base y la API siguen decidiendo
 > y el contrato de errores se conserva, pero el front deja de tener su copia de las reglas y pasa
@@ -104,3 +106,9 @@ desde dónde venga.** Un `if` de Dart, como un botón oculto, es comodidad, no g
   es una de las validaciones que nadie puede saltarse.
 - [ADR-003 · Dinero como entero de pesos](ADR-003-dinero-entero.md) — el dominio `dinero` lleva
   esa regla a la base para que viva en un solo sitio.
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [04](../04-modelo-de-datos.md "04 · Modelo de datos") · [07](../07-arquitectura.md "07 · Arquitectura técnica") · [12](../12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [20](../20-contrato-de-api.md "20 · Contrato de la API") · [ADR-018](ADR-018-front-sin-decisiones.md "ADR-018 · Tres partes, y el front no toma decisiones") · [ADR-019](ADR-019-contrato-de-respuesta.md "ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos") · [ADR-020](ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura")
+<!-- /generado:referenciado-desde -->

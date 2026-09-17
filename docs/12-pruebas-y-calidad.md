@@ -1,5 +1,9 @@
 # 12 · Pruebas y calidad
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Calidad](INDICE.md#etiqueta-calidad) |
+
 ---
 
 ## 1. Estrategia
@@ -37,7 +41,7 @@ plata y los permisos**.
 
 Un remedo con objetos falsos no sirve aquí: lo que se está probando son **restricciones, triggers y
 políticas RLS**, y eso solo lo sabe PostgreSQL de verdad. Contra la base del ambiente corre otra
-cosa distinta, la de la promoción ([`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) §6.2):
+cosa distinta, la de la promoción ([`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) [§6.2](19-ambientes-y-entrega.md#62-en-cada-promoción)):
 comprobar que las migraciones aplican sobre lo que ese ambiente ya tiene escrito.
 
 **Las pruebas de widget no levantan la API.** Hablan con un cliente HTTP falso. Si para probar una
@@ -51,7 +55,7 @@ el front y la API es el contrato de versiones, y eso está en la sección 9.
 |---|---|---|
 | **dev** | Unidad y widget en cada guardado; integración sobre su propio contenedor de PostgreSQL | Ficticios, se pueden borrar |
 | **qa** | Todo, en cada integración a la rama principal. **Es la que bloquea la promoción** | Ficticios, con semilla reproducible |
-| **uat** | P-01 a P-39 —P-32 sin su paso 3, ver 3.1— y los recorridos manuales, antes de la aprobación de Gerencia. Además, RE-01 una vez por trimestre (§10.3) | Realistas y anonimizados |
+| **uat** | [P-01](#p-01) a [P-39](#p-39) —[P-32](#p-32) sin su paso 3, ver 3.1— y los recorridos manuales, antes de la aprobación de Gerencia. Además, [RE-01](#re-01) una vez por trimestre ([§10.3](#103-re-01--un-respaldo-que-nunca-se-restauró-no-es-un-respaldo)) | Realistas y anonimizados |
 | **prod** | Pruebas de humo de solo lectura, después de publicar | Reales |
 
 > **Ninguna prueba automática escribe en prod.** Las de integración siembran filas y las borran;
@@ -67,18 +71,18 @@ que falla ahí no siempre significa que el código esté mal.
 
 | Grupo | Identificadores | Cuántas |
 |---|---|---:|
-| Reglas de negocio (§2) | RN-02 a RN-19 | 18 |
-| Permisos (§3) | P-01 a P-39 | 39 |
-| Invariantes financieros (§4.2) | Las cinco igualdades | 5 |
-| Casos límite (§5) | Sin identificador | 10 |
-| Recorridos manuales (§6) | M-01 a M-10 | 10 |
-| Acceso y administración de usuarios (§7) | A-01 a A-16 | 16 |
-| Vista previa de Operación (§7.1) | A-17 a A-19 | 3 |
-| Contrato entre las tres partes (§9) | C-01 a C-04 | 4 |
-| Idempotencia, canal firmado y durabilidad (§10) | I-01, I-02, F-01, F-02, T-01, RE-01 | 6 |
+| Reglas de negocio ([§2](#2-lo-que-se-prueba-obligatoriamente)) | [RN-02](03-requisitos-y-bdd.md#rn-02) a [RN-19](03-requisitos-y-bdd.md#rn-19) | 18 |
+| Permisos ([§3](#3-pruebas-de-permisos)) | [P-01](#p-01) a [P-39](#p-39) | 39 |
+| Invariantes financieros ([§4.2](#42-invariantes-que-deben-cumplirse-siempre)) | Las cinco igualdades | 5 |
+| Casos límite ([§5](#5-casos-límite-que-deben-probarse)) | Sin identificador | 10 |
+| Recorridos manuales ([§6](#6-recorridos-manuales)) | [M-01](#m-01) a [M-10](#m-10) | 10 |
+| Acceso y administración de usuarios ([§7](#7-pruebas-de-acceso-y-administración-de-usuarios)) | [A-01](#a-01) a [A-16](#a-16) | 16 |
+| Vista previa de Operación ([§7.1](#71-la-vista-previa-de-operación)) | [A-17](#a-17) a [A-19](#a-19) | 3 |
+| Contrato entre las tres partes ([§9](#9-pruebas-del-contrato-entre-las-tres-partes)) | [C-01](#c-01) a [C-04](#c-04) | 4 |
+| Idempotencia, canal firmado y durabilidad ([§10](#10-idempotencia-canal-firmado-y-durabilidad)) | [I-01](#i-01), [I-02](#i-02), [F-01](#f-01), [F-02](#f-02), [T-01](#t-01), [RE-01](#re-01) | 6 |
 | **Total** | | **111** |
 
-Son **100 automáticas, 10 manuales y 1 de operación trimestral** —RE-01, la restauración del
+Son **100 automáticas, 10 manuales y 1 de operación trimestral** —[RE-01](#re-01), la restauración del
 respaldo—. No son todas las que habrá: las unitarias del dominio serán muchas más y se miden por
 cobertura, no por lista. Estas 111 están escritas aquí una por una porque ninguna puede quedar al
 criterio de quien programe ese día.
@@ -92,24 +96,24 @@ llega a producción.**
 
 | Regla | Prueba |
 |---|---|
-| RN-02 · Dinero entero | `Dinero.de(1500.5)` lanza error |
-| RN-03 · Transferencia neutra | Una transferencia no altera la utilidad |
-| RN-04 · Inversión no es gasto | Comprar un activo no reduce la utilidad |
-| RN-05 · Anticipo es pasivo | Un anticipo cobrado no aparece en la utilidad |
-| RN-06 · Venta al entregar | La venta se causa en la fecha de entrega, completa |
-| RN-07 · Retiro no es gasto | Un retiro de distribución no reduce la utilidad |
-| RN-08 · Pro-labore es gasto | Definir pro-labore reduce la utilidad |
-| RN-09 · Simulador con pro-labore | El simulador parte de la utilidad ajustada |
-| RN-10 · Salario es gasto | El salario reduce la utilidad |
-| RN-11 · Adelanto una sola vez | Adelanto + liquidación no duplican el gasto |
-| RN-12 · Caja libre | Saldo − anticipos − gastos fijos comprometidos |
-| RN-13 · No se borra | Anular no elimina la fila |
-| RN-14 · Registro tardío | 8 días de diferencia marca el registro |
-| RN-15 · Anticipo mínimo | 35% de margen sugiere anticipo del 70% |
-| RN-16 · Mes cerrado | Un movimiento con fecha anterior no altera el cierre |
-| RN-17 · Sin doble conteo | El margen de contribución del simulador excluye el tiempo |
-| RN-18 · Un usuario no se borra | Desactivar no elimina la fila; la ficha conserva su historia |
-| RN-19 · Siempre queda una Gerencia | Desactivar al último usuario activo de tipo Gerencia falla |
+| [RN-02](03-requisitos-y-bdd.md#rn-02) · Dinero entero | `Dinero.de(1500.5)` lanza error |
+| [RN-03](03-requisitos-y-bdd.md#rn-03) · Transferencia neutra | Una transferencia no altera la utilidad |
+| [RN-04](03-requisitos-y-bdd.md#rn-04) · Inversión no es gasto | Comprar un activo no reduce la utilidad |
+| [RN-05](03-requisitos-y-bdd.md#rn-05) · Anticipo es pasivo | Un anticipo cobrado no aparece en la utilidad |
+| [RN-06](03-requisitos-y-bdd.md#rn-06) · Venta al entregar | La venta se causa en la fecha de entrega, completa |
+| [RN-07](03-requisitos-y-bdd.md#rn-07) · Retiro no es gasto | Un retiro de distribución no reduce la utilidad |
+| [RN-08](03-requisitos-y-bdd.md#rn-08) · Pro-labore es gasto | Definir pro-labore reduce la utilidad |
+| [RN-09](03-requisitos-y-bdd.md#rn-09) · Simulador con pro-labore | El simulador parte de la utilidad ajustada |
+| [RN-10](03-requisitos-y-bdd.md#rn-10) · Salario es gasto | El salario reduce la utilidad |
+| [RN-11](03-requisitos-y-bdd.md#rn-11) · Adelanto una sola vez | Adelanto + liquidación no duplican el gasto |
+| [RN-12](03-requisitos-y-bdd.md#rn-12) · Caja libre | Saldo − anticipos − gastos fijos comprometidos |
+| [RN-13](03-requisitos-y-bdd.md#rn-13) · No se borra | Anular no elimina la fila |
+| [RN-14](03-requisitos-y-bdd.md#rn-14) · Registro tardío | 8 días de diferencia marca el registro |
+| [RN-15](03-requisitos-y-bdd.md#rn-15) · Anticipo mínimo | 35% de margen sugiere anticipo del 70% |
+| [RN-16](03-requisitos-y-bdd.md#rn-16) · Mes cerrado | Un movimiento con fecha anterior no altera el cierre |
+| [RN-17](03-requisitos-y-bdd.md#rn-17) · Sin doble conteo | El margen de contribución del simulador excluye el tiempo |
+| [RN-18](03-requisitos-y-bdd.md#rn-18) · Un usuario no se borra | Desactivar no elimina la fila; la ficha conserva su historia |
+| [RN-19](03-requisitos-y-bdd.md#rn-19) · Siempre queda una Gerencia | Desactivar al último usuario activo de tipo Gerencia falla |
 
 ---
 
@@ -122,65 +126,65 @@ siendo RLS.
 
 | # | Prueba | Resultado esperado |
 |---|---|---|
-| P-01 | Leer `aportes_retiros` | Conjunto vacío o error de la base de datos |
-| P-02 | Leer `costos_producto` | Rechazado |
-| P-03 | Leer `nomina_detalle` de otra persona | Conjunto vacío |
-| P-04 | Leer el propio `nomina_detalle` | Permitido |
-| P-05 | Anular un movimiento | Rechazado por la base de datos |
-| P-06 | Leer `auditoria` | Rechazado |
-| P-07 | Insertar en `sobres_config` | Rechazado |
-| P-08 | Registrar un movimiento | Permitido |
-| P-09 | Registrar un pedido y su anticipo | Permitido |
-| P-10 | Leer la ficha de otra persona en `usuarios` | Conjunto vacío |
-| P-11 | Leer la propia ficha en `usuarios` | Permitido |
-| P-12 | Crear un usuario | Rechazado |
-| P-13 | Cambiarse el `tipo` a `gerencia` | Rechazado |
-| P-14 | Leer el catálogo `cargos` | Permitido |
-| P-15 | Crear o desactivar un cargo | Rechazado |
-| P-16 | Leer `clientes` | Permitido: sin cliente no hay pedido |
-| P-17 | Crear un cliente | Permitido |
-| P-18 | Corregir el teléfono de un cliente | Rechazado |
-| P-19 | Anular un cliente | Rechazado |
-| P-20 | Leer `activos` | Conjunto vacío |
-| P-21 | Leer `prolabore_config` | Conjunto vacío |
-| P-22 | Leer `sobres_config` | Conjunto vacío |
-| P-23 | Leer `cierres_mensuales` | Conjunto vacío |
-| P-24 | Leer la propia ficha en `empleados` | Permitido |
-| P-25 | Leer la ficha de otra persona en `empleados` | Conjunto vacío |
-| P-26 | Cambiarse el `salario_acordado` en `empleados` | Rechazado |
-| P-27 | Leer el `nomina_periodos` del propio desprendible | Permitido |
-| P-28 | Leer un `nomina_periodos` sin desprendible propio | Conjunto vacío |
-| P-29 | Leer los propios `adelantos` y los de otra persona | Solo los propios; los ajenos, conjunto vacío |
-| P-30 | Registrarse un adelanto | Rechazado |
-| P-31 | Cargar el desprendible propio completo en una sola consulta | Permitido: llegan las cuatro tablas |
-| P-32 | Leer nómina, usuarios y patrimonio **con la guarda de la capa de aplicación desactivada** | El mismo resultado que con la guarda puesta: vacío o 403. Ver 3.1 |
-| P-33 | Leer las claves de `peticiones_idempotentes` de otra persona | Conjunto vacío |
-| P-34 | Escribir una clave de idempotencia con el `usuario_id` de otra persona | Rechazado |
-| P-35 | Leer los `nonces_vistos` de otra persona | Conjunto vacío |
-| P-36 | Reenviar una petición con un nonce ya usado | Rechazado con `40103`, **por la llave primaria**, no por una consulta previa |
-| P-37 | Borrar una fila de `peticiones_idempotentes` o de `nonces_vistos` con el rol de la aplicación | Rechazado: el `REVOKE DELETE` del doc 04 §5.1 también las cubre |
-| P-38 | Ejecutar la purga y comprobar qué borró | Solo filas con `expira_en` vencido. Ninguna fila vigente, y ninguna fila de ninguna otra tabla |
-| P-39 | Detener la tarea programada y esperar más de la ventana de retención | La consulta de vigilancia del doc 16 §10.2 devuelve filas, que es la señal de que algo dejó de correr |
+| <a id="p-01"></a>P-01 | Leer `aportes_retiros` | Conjunto vacío o error de la base de datos |
+| <a id="p-02"></a>P-02 | Leer `costos_producto` | Rechazado |
+| <a id="p-03"></a>P-03 | Leer `nomina_detalle` de otra persona | Conjunto vacío |
+| <a id="p-04"></a>P-04 | Leer el propio `nomina_detalle` | Permitido |
+| <a id="p-05"></a>P-05 | Anular un movimiento | Rechazado por la base de datos |
+| <a id="p-06"></a>P-06 | Leer `auditoria` | Rechazado |
+| <a id="p-07"></a>P-07 | Insertar en `sobres_config` | Rechazado |
+| <a id="p-08"></a>P-08 | Registrar un movimiento | Permitido |
+| <a id="p-09"></a>P-09 | Registrar un pedido y su anticipo | Permitido |
+| <a id="p-10"></a>P-10 | Leer la ficha de otra persona en `usuarios` | Conjunto vacío |
+| <a id="p-11"></a>P-11 | Leer la propia ficha en `usuarios` | Permitido |
+| <a id="p-12"></a>P-12 | Crear un usuario | Rechazado |
+| <a id="p-13"></a>P-13 | Cambiarse el `tipo` a `gerencia` | Rechazado |
+| <a id="p-14"></a>P-14 | Leer el catálogo `cargos` | Permitido |
+| <a id="p-15"></a>P-15 | Crear o desactivar un cargo | Rechazado |
+| <a id="p-16"></a>P-16 | Leer `clientes` | Permitido: sin cliente no hay pedido |
+| <a id="p-17"></a>P-17 | Crear un cliente | Permitido |
+| <a id="p-18"></a>P-18 | Corregir el teléfono de un cliente | Rechazado |
+| <a id="p-19"></a>P-19 | Anular un cliente | Rechazado |
+| <a id="p-20"></a>P-20 | Leer `activos` | Conjunto vacío |
+| <a id="p-21"></a>P-21 | Leer `prolabore_config` | Conjunto vacío |
+| <a id="p-22"></a>P-22 | Leer `sobres_config` | Conjunto vacío |
+| <a id="p-23"></a>P-23 | Leer `cierres_mensuales` | Conjunto vacío |
+| <a id="p-24"></a>P-24 | Leer la propia ficha en `empleados` | Permitido |
+| <a id="p-25"></a>P-25 | Leer la ficha de otra persona en `empleados` | Conjunto vacío |
+| <a id="p-26"></a>P-26 | Cambiarse el `salario_acordado` en `empleados` | Rechazado |
+| <a id="p-27"></a>P-27 | Leer el `nomina_periodos` del propio desprendible | Permitido |
+| <a id="p-28"></a>P-28 | Leer un `nomina_periodos` sin desprendible propio | Conjunto vacío |
+| <a id="p-29"></a>P-29 | Leer los propios `adelantos` y los de otra persona | Solo los propios; los ajenos, conjunto vacío |
+| <a id="p-30"></a>P-30 | Registrarse un adelanto | Rechazado |
+| <a id="p-31"></a>P-31 | Cargar el desprendible propio completo en una sola consulta | Permitido: llegan las cuatro tablas |
+| [P-32](#p-32) | Leer nómina, usuarios y patrimonio **con la guarda de la capa de aplicación desactivada** | El mismo resultado que con la guarda puesta: vacío o 403. Ver 3.1 |
+| <a id="p-33"></a>P-33 | Leer las claves de `peticiones_idempotentes` de otra persona | Conjunto vacío |
+| <a id="p-34"></a>P-34 | Escribir una clave de idempotencia con el `usuario_id` de otra persona | Rechazado |
+| <a id="p-35"></a>P-35 | Leer los `nonces_vistos` de otra persona | Conjunto vacío |
+| <a id="p-36"></a>P-36 | Reenviar una petición con un nonce ya usado | Rechazado con `40103`, **por la llave primaria**, no por una consulta previa |
+| <a id="p-37"></a>P-37 | Borrar una fila de `peticiones_idempotentes` o de `nonces_vistos` con el rol de la aplicación | Rechazado: el `REVOKE DELETE` del doc [04](04-modelo-de-datos.md) [§5.1](04-modelo-de-datos.md#51-revocación-real-del-borrado) también las cubre |
+| <a id="p-38"></a>P-38 | Ejecutar la purga y comprobar qué borró | Solo filas con `expira_en` vencido. Ninguna fila vigente, y ninguna fila de ninguna otra tabla |
+| <a id="p-39"></a>P-39 | Detener la tarea programada y esperar más de la ventana de retención | La consulta de vigilancia del doc [16](16-base-de-datos-y-snapshots.md) [§10.2](16-base-de-datos-y-snapshots.md#102-cómo-se-vigila-que-siguen-corriendo) devuelve filas, que es la señal de que algo dejó de correr |
 
 > **Criterio clave:** el rechazo debe venir de PostgreSQL, no de un `if` de Java ni de una pantalla
 > que no dibuja el botón. La prueba se hace llamando a la API con un token real, sin pasar por las
-> pantallas. Y quien demuestra que el juez fue la base y no la API es P-32.
+> pantallas. Y quien demuestra que el juez fue la base y no la API es [P-32](#p-32).
 
 Esto vale doble para las pantallas de acceso y de Gestión de usuarios. Que la interfaz esconda
 la entrada de Gestión de usuarios no prueba nada: prueba que el menú está escondido. La prueba
 válida abre una sesión real de tipo Operación con su usuario y su contraseña, y le pide los datos
-a la API, nunca a la pantalla. P-10 a P-15 ejercen las políticas `usuarios_lectura`, `usuarios_insercion`
+a la API, nunca a la pantalla. [P-10](#p-10) a [P-15](#p-15) ejercen las políticas `usuarios_lectura`, `usuarios_insercion`
 y `usuarios_actualizacion` sobre `usuarios`, y `cargos_lectura` y `cargos_escritura` sobre
 `cargos`. Es exactamente lo que decidió [`ADR-006`](adr/ADR-006-rls-por-rol.md):
 **los permisos viven en la base, no en la pantalla.**
 
-**P-33 a P-39 cubren las dos tablas de transporte** —`peticiones_idempotentes` y
+**[P-33](#p-33) a [P-39](#p-39) cubren las dos tablas de transporte** —`peticiones_idempotentes` y
 `nonces_vistos`— y su purga. Van aparte porque se rompen distinto: las demás fallan dejando
 ver lo que no debía verse; estas fallan dejando **crecer sin freno** una tabla que nadie mira.
-P-38 y P-39 no prueban permisos: prueban que el mantenimiento automático hace lo que dice y
+[P-38](#p-38) y [P-39](#p-39) no prueban permisos: prueban que el mantenimiento automático hace lo que dice y
 que se nota cuando deja de hacerlo.
 
-**P-16 a P-31 ejercen las ocho tablas sensibles del §7 de
+**[P-16](#p-16) a [P-31](#p-31) ejercen las ocho tablas sensibles del [§7](#7-pruebas-de-acceso-y-administración-de-usuarios) de
 [`04-modelo-de-datos.md`](04-modelo-de-datos.md):** `clientes`, `activos`, `prolabore_config`,
 `empleados`, `nomina_periodos`, `adelantos`, `sobres_config` y `cierres_mensuales`. Hay que
 leerlas con tres cosas en mente:
@@ -188,32 +192,32 @@ leerlas con tres cosas en mente:
 - **«Conjunto vacío» y «Rechazado» no son lo mismo, y confundirlos hace pasar una prueba que
   debería fallar.** Leer una tabla que RLS filtra devuelve **cero filas sin error**: la consulta
   es un éxito y el resultado está vacío. Escribir donde la política no deja devuelve un **error**
-  de PostgreSQL. Una prueba que solo verifique «no explotó» da verde en P-20 aunque la política
+  de PostgreSQL. Una prueba que solo verifique «no explotó» da verde en [P-20](#p-20) aunque la política
   no exista, porque una tabla sin RLS tampoco explota: devuelve todo. Hay que afirmar sobre el
   **número de filas**, y para eso la base de pruebas debe tener datos sembrados en cada una de
   las ocho tablas. Una tabla vacía da conjunto vacío por razones equivocadas.
-- **P-16 a P-19 son las de `clientes` y van en sentidos distintos a propósito.** Operación lee y
-  crea —CU-05 dice «cliente existente o nuevo»—, pero no corrige ni anula. Si P-16 o P-17 salen
-  rechazadas, el registro de pedidos quedó roto; si P-18 o P-19 salen permitidas, cualquiera
+- **[P-16](#p-16) a [P-19](#p-19) son las de `clientes` y van en sentidos distintos a propósito.** Operación lee y
+  crea —[CU-05](02-casos-de-uso.md#cu-05) dice «cliente existente o nuevo»—, pero no corrige ni anula. Si [P-16](#p-16) o [P-17](#p-17) salen
+  rechazadas, el registro de pedidos quedó roto; si [P-18](#p-18) o [P-19](#p-19) salen permitidas, cualquiera
   puede anonimizar a un cliente de paso.
-- **P-31 es la prueba de regresión de todo el conjunto.** Carga el desprendible propio como lo
+- **[P-31](#p-31) es la prueba de regresión de todo el conjunto.** Carga el desprendible propio como lo
   arma la aplicación —`nomina_detalle` con su `nomina_periodos`, su fila de `empleados` y sus
   `adelantos`, en una sola consulta— y verifica que llegue completo. Es la que atrapa el error
   silencioso de encender RLS en `empleados` con una política demasiado estrecha: `nom_lectura`
   mira `empleados` en una subconsulta, y si esa subconsulta deja de ver la fila propia el
-  desprendible **se vacía sin dar ningún error**. P-24 sola no lo detecta: la ficha se lee bien
+  desprendible **se vacía sin dar ningún error**. [P-24](#p-24) sola no lo detecta: la ficha se lee bien
   y el desprendible igual sale en blanco.
 
-### 3.1 P-32 · La prueba que distingue «protegido» de «parece protegido»
+### <a id="p-32"></a>3.1 P-32 · La prueba que distingue «protegido» de «parece protegido»
 
 Es la prueba que hay que escribir primero y la única que no puede faltar: es la que verifica
-[`ADR-012`](adr/ADR-012-identidad-a-postgres.md) y la que hace exigible el **RNF-22**. Se escribe en
+[`ADR-012`](adr/ADR-012-identidad-a-postgres.md) y la que hace exigible el **[RNF-22](03-requisitos-y-bdd.md#rnf-22)**. Se escribe en
 Java, con JUnit 5, igual que el resto de la integración de `prisma_api`. Con
 `prisma_api` en medio, la base ya no ve a la empleada: ve a la API. Si la API se conectara con la
 clave de servicio, RLS dejaría de aplicar,
 todas las políticas de [`ADR-006`](adr/ADR-006-rls-por-rol.md) se volverían decorado **y ninguna
-prueba existente se pondría roja**: P-01 a P-31 seguirían en verde porque el `if` de Java las
-estaría sosteniendo. Eso es lo que P-32 rompe.
+prueba existente se pondría roja**: [P-01](#p-01) a [P-31](#p-31) seguirían en verde porque el `if` de Java las
+estaría sosteniendo. Eso es lo que [P-32](#p-32) rompe.
 
 | Paso | Qué se hace |
 |---|---|
@@ -226,16 +230,16 @@ estaría sosteniendo. Eso es lo que P-32 rompe.
 > punto entero: sin el paso 3 no se prueba la base, se prueba el `if`. Y un `if` lo borra
 > cualquiera en una limpieza de código un martes por la tarde.
 
-Lo que P-32 atrapa, y que ninguna otra prueba ve:
+Lo que [P-32](#p-32) atrapa, y que ninguna otra prueba ve:
 
-| Fallo real | ¿Lo atrapa P-32? |
+| Fallo real | ¿Lo atrapa [P-32](#p-32)? |
 |---|---|
 | La API se conecta con la clave `service_role` en el camino de una petición de usuaria | **Sí.** Con esa clave RLS no aplica y los datos aparecen |
 | El rol de base de datos de la API tiene `BYPASSRLS` | **Sí.** Mismo síntoma |
 | El rol de la API es dueño de las tablas y falta `FORCE ROW LEVEL SECURITY` | **Sí.** El dueño se salta RLS por defecto |
-| La API olvida propagar los claims a la sesión de PostgreSQL | No hace falta: sin identidad no se lee nada y P-04, P-11 y P-24 ya fallan por venir vacías |
+| La API olvida propagar los claims a la sesión de PostgreSQL | No hace falta: sin identidad no se lee nada y [P-04](#p-04), [P-11](#p-11) y [P-24](#p-24) ya fallan por venir vacías |
 
-Esa última fila es lo que hace que el conjunto funcione. P-32 vigila el lado permisivo —que la API
+Esa última fila es lo que hace que el conjunto funcione. [P-32](#p-32) vigila el lado permisivo —que la API
 no sea más poderosa de la cuenta— y las pruebas de «Permitido» vigilan el restrictivo —que la
 identidad sí esté llegando—. Ninguna de las dos sirve sola.
 
@@ -247,7 +251,7 @@ nada. En prod no corre.
 
 ## 4. Juego de datos de prueba oficial
 
-El ejemplo de septiembre de [`05-reglas-financieras.md`](05-reglas-financieras.md) §12 es el
+El ejemplo de septiembre de [`05-reglas-financieras.md`](05-reglas-financieras.md) [§12](05-reglas-financieras.md#12-ejemplo-integral--septiembre-completo) es el
 juego de datos autoritativo. Se convierte en una prueba ejecutable.
 
 ### 4.1 Valores esperados
@@ -321,64 +325,64 @@ Antes de cada entrega, en **celular real**, no en el simulador del navegador.
 
 | # | Recorrido | Criterio |
 |---|---|---|
-| M-01 | Registrar un gasto con foto | Menos de 30 segundos |
-| M-02 | Registrar un pedido y cobrar el anticipo | El anticipo no aparece como ingreso |
-| M-03 | Entregar el pedido y cobrar el saldo | La venta se causa completa |
-| M-04 | Consultar el dashboard | Las tres cifras se entienden sin explicación |
-| M-05 | Anular un movimiento | Exige motivo, el original permanece |
-| M-06 | Generar una cotización | El PDF se abre y se puede compartir |
-| M-07 | Ejecutar el simulador | El veredicto es claro y accionable |
-| M-08 | Entrar con una usuaria de tipo Operación | No se ve nada restringido |
-| M-09 | Registrar sin conexión | Se encola y sincroniza con la fecha correcta |
-| M-10 | Instalar la aplicación en el celular | Se abre desde el escritorio del teléfono |
+| <a id="m-01"></a>M-01 | Registrar un gasto con foto | Menos de 30 segundos |
+| <a id="m-02"></a>M-02 | Registrar un pedido y cobrar el anticipo | El anticipo no aparece como ingreso |
+| <a id="m-03"></a>M-03 | Entregar el pedido y cobrar el saldo | La venta se causa completa |
+| <a id="m-04"></a>M-04 | Consultar el dashboard | Las tres cifras se entienden sin explicación |
+| <a id="m-05"></a>M-05 | Anular un movimiento | Exige motivo, el original permanece |
+| <a id="m-06"></a>M-06 | Generar una cotización | El PDF se abre y se puede compartir |
+| <a id="m-07"></a>M-07 | Ejecutar el simulador | El veredicto es claro y accionable |
+| <a id="m-08"></a>M-08 | Entrar con una usuaria de tipo Operación | No se ve nada restringido |
+| <a id="m-09"></a>M-09 | Registrar sin conexión | Se encola y sincroniza con la fecha correcta |
+| <a id="m-10"></a>M-10 | Instalar la aplicación en el celular | Se abre desde el escritorio del teléfono |
 
 ---
 
 ## 7. Pruebas de acceso y administración de usuarios
 
-Cubren CU-28 a CU-35. Se ejecutan contra la base de datos, igual que las de la sección 3: lo
+Cubren [CU-28](02-casos-de-uso.md#cu-28) a [CU-35](02-casos-de-uso.md#cu-35). Se ejecutan contra la base de datos, igual que las de la sección 3: lo
 que importa no es qué muestra la pantalla, sino qué deja hacer el sistema.
 
 | # | Prueba | Resultado esperado |
 |---|---|---|
-| A-01 | Ingreso correcto de una usuaria de Gerencia | Sesión abierta; se cargan nombre completo, cargo y tipo; queda `inicio_sesion` en la auditoría |
-| A-02 | Ingreso correcto de una usuaria de Operación | Sesión abierta con tipo Operación; las pantallas de Gerencia no aparecen en el nav **ni responden si se piden directo** |
-| A-03 | Contraseña incorrecta | «Usuario o contraseña incorrectos»; queda `inicio_sesion_fallido` en la auditoría **sin la contraseña tecleada** |
-| A-04 | Usuario que no existe | El mismo mensaje de A-03, palabra por palabra. Si el mensaje difiere, revela qué usuarios existen |
-| A-05 | Usuario desactivado con la contraseña correcta | No entra. «Este usuario está desactivado. Habla con Gerencia.» |
-| A-06 | Primer ingreso con `debe_cambiar_clave = TRUE` | No llega al tablero: pantalla de cambio obligatorio. Al guardar, `debe_cambiar_clave` queda en falso |
-| A-07 | Crear un usuario con un nombre de usuario ya existente | Rechazado por el `UNIQUE` de `usuarios.usuario`, no solo por el aviso de la pantalla. `Marcela` y `marcela` son el mismo usuario |
-| A-08 | Desactivar al último usuario activo de tipo Gerencia | Rechazado por el trigger `tg_proteger_ultima_gerencia`: «No se puede desactivar ni degradar al último usuario de Gerencia» |
-| A-09 | Desactivar un cargo que tiene personas activas asignadas | Rechazado con aviso claro; el cargo sigue activo y nadie se queda sin cargo |
-| A-10 | Desactivar un usuario dejando el motivo vacío | Rechazado por el `CHECK desactivacion_con_motivo`: el usuario sigue activo. Sin motivo no se desactiva, y el rechazo viene de la base, no solo del aviso de la pantalla |
-| A-11 | Desactivar un usuario con motivo escrito | `activo` en falso y `desactivado_en`, `desactivado_por` y `desactivado_motivo` escritos. La fila de la tabla queda atenuada y muestra **la fecha y la hora** de la desactivación con `fmtFechaHora`: `14 sep 2026, 3:42 p. m.` |
-| A-12 | Reactivar un usuario dejando el motivo vacío | Rechazado. Reactivar exige motivo igual que desactivar: devolverle el acceso a alguien también es un cambio que hay que justificar |
-| A-13 | Reactivar un usuario con motivo escrito | `activo` en verdadero, las tres columnas de desactivación limpias y `debe_cambiar_clave` en verdadero. En el siguiente ingreso el sistema **obliga** a cambiar la clave antes de llegar al tablero |
-| A-14 | Cualquier cambio sobre `usuarios` o `cargos` | Queda una entrada en `auditoria` con quién lo hizo, cuándo, sobre quién y por qué. La bitácora de la pantalla es una vista sobre esas filas, no una tabla aparte |
-| A-15 | Revertir un cambio desde la bitácora | Quedan **dos** entradas: la original marcada como `Revertida` y la `Reversión` que la deshace, enlazadas entre sí. La original conserva su texto: nunca se borra ni se edita. Se verifica contando las filas de `auditoria` antes y después |
-| A-16 | Revertir un `Tipo cambiado` que dejaría cero usuarios activos de tipo Gerencia | Rechazado con aviso claro. Ni el usuario ni la bitácora cambian; el trigger `tg_proteger_ultima_gerencia` es el último filtro |
+| <a id="a-01"></a>A-01 | Ingreso correcto de una usuaria de Gerencia | Sesión abierta; se cargan nombre completo, cargo y tipo; queda `inicio_sesion` en la auditoría |
+| <a id="a-02"></a>A-02 | Ingreso correcto de una usuaria de Operación | Sesión abierta con tipo Operación; las pantallas de Gerencia no aparecen en el nav **ni responden si se piden directo** |
+| <a id="a-03"></a>A-03 | Contraseña incorrecta | «Usuario o contraseña incorrectos»; queda `inicio_sesion_fallido` en la auditoría **sin la contraseña tecleada** |
+| <a id="a-04"></a>A-04 | Usuario que no existe | El mismo mensaje de [A-03](#a-03), palabra por palabra. Si el mensaje difiere, revela qué usuarios existen |
+| <a id="a-05"></a>A-05 | Usuario desactivado con la contraseña correcta | No entra. «Este usuario está desactivado. Habla con Gerencia.» |
+| <a id="a-06"></a>A-06 | Primer ingreso con `debe_cambiar_clave = TRUE` | No llega al tablero: pantalla de cambio obligatorio. Al guardar, `debe_cambiar_clave` queda en falso |
+| <a id="a-07"></a>A-07 | Crear un usuario con un nombre de usuario ya existente | Rechazado por el `UNIQUE` de `usuarios.usuario`, no solo por el aviso de la pantalla. `Marcela` y `marcela` son el mismo usuario |
+| <a id="a-08"></a>A-08 | Desactivar al último usuario activo de tipo Gerencia | Rechazado por el trigger `tg_proteger_ultima_gerencia`: «No se puede desactivar ni degradar al último usuario de Gerencia» |
+| <a id="a-09"></a>A-09 | Desactivar un cargo que tiene personas activas asignadas | Rechazado con aviso claro; el cargo sigue activo y nadie se queda sin cargo |
+| <a id="a-10"></a>A-10 | Desactivar un usuario dejando el motivo vacío | Rechazado por el `CHECK desactivacion_con_motivo`: el usuario sigue activo. Sin motivo no se desactiva, y el rechazo viene de la base, no solo del aviso de la pantalla |
+| <a id="a-11"></a>A-11 | Desactivar un usuario con motivo escrito | `activo` en falso y `desactivado_en`, `desactivado_por` y `desactivado_motivo` escritos. La fila de la tabla queda atenuada y muestra **la fecha y la hora** de la desactivación con `fmtFechaHora`: `14 sep 2026, 3:42 p. m.` |
+| <a id="a-12"></a>A-12 | Reactivar un usuario dejando el motivo vacío | Rechazado. Reactivar exige motivo igual que desactivar: devolverle el acceso a alguien también es un cambio que hay que justificar |
+| <a id="a-13"></a>A-13 | Reactivar un usuario con motivo escrito | `activo` en verdadero, las tres columnas de desactivación limpias y `debe_cambiar_clave` en verdadero. En el siguiente ingreso el sistema **obliga** a cambiar la clave antes de llegar al tablero |
+| <a id="a-14"></a>A-14 | Cualquier cambio sobre `usuarios` o `cargos` | Queda una entrada en `auditoria` con quién lo hizo, cuándo, sobre quién y por qué. La bitácora de la pantalla es una vista sobre esas filas, no una tabla aparte |
+| <a id="a-15"></a>A-15 | Revertir un cambio desde la bitácora | Quedan **dos** entradas: la original marcada como `Revertida` y la `Reversión` que la deshace, enlazadas entre sí. La original conserva su texto: nunca se borra ni se edita. Se verifica contando las filas de `auditoria` antes y después |
+| <a id="a-16"></a>A-16 | Revertir un `Tipo cambiado` que dejaría cero usuarios activos de tipo Gerencia | Rechazado con aviso claro. Ni el usuario ni la bitácora cambian; el trigger `tg_proteger_ultima_gerencia` es el último filtro |
 
-> **A-04 es la prueba que más se olvida.** Un mensaje distinto para «usuario no existe» convierte
+> **[A-04](#a-04) es la prueba que más se olvida.** Un mensaje distinto para «usuario no existe» convierte
 > la pantalla de acceso en una lista de quién trabaja aquí. Se compara el texto exacto, no que
 > «salga un error».
 
 ### 7.1 La vista previa de Operación
 
-CU-36 es la excepción de esta sección: se prueba **en la pantalla**, porque lo único que hace es
+[CU-36](02-casos-de-uso.md#cu-36) es la excepción de esta sección: se prueba **en la pantalla**, porque lo único que hace es
 cambiar lo que el navegador pinta. Estas tres pruebas verifican que pinte lo correcto y que
 Gerencia pueda salir; ninguna verifica un permiso.
 
 | # | Prueba | Resultado esperado |
 |---|---|---|
-| A-17 | Activar «Ver como Operación» desde una sesión de Gerencia | El menú lateral pierde Inversiones, Reportes y Nómina; los costos y márgenes de Productos no se pintan; **Gestión de usuarios desaparece del menú de la sesión**, porque también es exclusiva de Gerencia |
-| A-18 | El interruptor con la vista previa ya activa | **Sigue visible en el menú de la sesión.** Depende de `sesion.tipo`, no de `rol`: si dependiera de `rol` se ocultaría a sí mismo y Gerencia quedaría atrapada sin forma de volver |
-| A-19 | La franja de advertencia con la vista previa activa | Fija arriba del contenido, no se puede cerrar, dice `Estás viendo el sistema como lo ve Operación` y su botón `Volver a mi vista` devuelve todo con un clic |
+| <a id="a-17"></a>A-17 | Activar «Ver como Operación» desde una sesión de Gerencia | El menú lateral pierde Inversiones, Reportes y Nómina; los costos y márgenes de Productos no se pintan; **Gestión de usuarios desaparece del menú de la sesión**, porque también es exclusiva de Gerencia |
+| <a id="a-18"></a>A-18 | El interruptor con la vista previa ya activa | **Sigue visible en el menú de la sesión.** Depende de `sesion.tipo`, no de `rol`: si dependiera de `rol` se ocultaría a sí mismo y Gerencia quedaría atrapada sin forma de volver |
+| <a id="a-19"></a>A-19 | La franja de advertencia con la vista previa activa | Fija arriba del contenido, no se puede cerrar, dice `Estás viendo el sistema como lo ve Operación` y su botón `Volver a mi vista` devuelve todo con un clic |
 
 > **La vista previa NO sustituye la prueba de permisos, y confundirla con una es el error grave
-> de esta función.** Ninguna de las pruebas A-17 a A-19 demuestra que una persona de Operación no
+> de esta función.** Ninguna de las pruebas [A-17](#a-17) a [A-19](#a-19) demuestra que una persona de Operación no
 > pueda llegar a los datos ocultos: solo demuestran que la pantalla no los dibuja. Eso lo prueban
-> P-01 a P-39 de la sección 3, con una **sesión real de tipo Operación llamando a la API**, y muy
-> especialmente P-32. Es exactamente lo que decidió [`ADR-006`](adr/ADR-006-rls-por-rol.md): **ocultar un
+> [P-01](#p-01) a [P-39](#p-39) de la sección 3, con una **sesión real de tipo Operación llamando a la API**, y muy
+> especialmente [P-32](#p-32). Es exactamente lo que decidió [`ADR-006`](adr/ADR-006-rls-por-rol.md): **ocultar un
 > menú no es seguridad.** Una pantalla revisada con la vista previa sigue teniendo sus permisos
 > sin probar mientras no se ejecuten esas pruebas.
 
@@ -390,7 +394,7 @@ Gerencia pueda salir; ninguna verifica un permiso.
 |---|---|---|---|
 | Formato consistente | `dart format` | `Spotless` | Al guardar |
 | Tipado estricto y avisos | `dart analyze` con `strict-casts` y `strict-raw-types` | Compilación con `-Xlint:all -Werror` | Cada compilación |
-| Estilo y malas prácticas | Reglas de Flutter en `analysis_options.yaml` | `Checkstyle` | Cada compilación |
+| Estilo y malas prácticas | Reglas de Flutter en `analysis_options.yaml` | Spotless para el formato y compilación con `-Xlint:all -Werror` | Cada compilación |
 | Regla de frontera de arquitectura | Lint de importaciones: `dominio` no importa `infraestructura` ni `interfaz` | `ArchUnit`: `dominio` no conoce Spring, ni JDBC, ni HTTP | Cada compilación |
 | Cobertura del dominio | `flutter test --coverage` | `JaCoCo`, **≥ 90%** | Cada cambio |
 
@@ -413,19 +417,19 @@ dejaron de entenderse. Estas cuatro pruebas son ese vigilante.
 
 | # | Prueba | Resultado esperado |
 |---|---|---|
-| C-01 | Recorrer `pg_constraint` y cruzar cada restricción nombrada con la tabla de traducción de `prisma_api` | Todas tienen entrada. Si falta una, la prueba falla y dice cuál |
-| C-02 | Arrancar el front declarando una MAJOR de API distinta a la que responde `GET /version` | El front se planta en la primera pantalla y no deja seguir |
-| C-03 | Cruzar los códigos de cinco dígitos que emite el código fuente contra el catálogo | Ninguno emitido falta en el catálogo y ninguno del catálogo sobra. Falla nombrando el código |
-| C-04 | Regenerar el OpenAPI desde los controladores y compararlo con el `openapi.json` versionado | Idénticos. Cualquier diferencia rompe la compilación |
+| [C-01](#c-01) | Recorrer `pg_constraint` y cruzar cada restricción nombrada con la tabla de traducción de `prisma_api` | Todas tienen entrada. Si falta una, la prueba falla y dice cuál |
+| [C-02](#c-02) | Arrancar el front declarando una MAJOR de API distinta a la que responde `GET /version` | El front se planta en la primera pantalla y no deja seguir |
+| [C-03](#c-03) | Cruzar los códigos de cinco dígitos que emite el código fuente contra el catálogo | Ninguno emitido falta en el catálogo y ninguno del catálogo sobra. Falla nombrando el código |
+| [C-04](#c-04) | Regenerar el OpenAPI desde los controladores y compararlo con el `openapi.json` versionado | Idénticos. Cualquier diferencia rompe la compilación |
 
-### 9.1 C-01 · Ninguna restricción sin mensaje
+### <a id="c-01"></a>9.1 C-01 · Ninguna restricción sin mensaje
 
 La base no sabe hablar: rechaza con `23514 check_violation` sobre `movimientos_valor_positivo`, y
 eso no se le muestra a la dueña del taller. La API traduce **nombre de restricción → código HTTP +
-mensaje en español + campo del formulario**. C-01 recorre `pg_constraint` del ambiente y comprueba
+mensaje en español + campo del formulario**. [C-01](#c-01) recorre `pg_constraint` del ambiente y comprueba
 que cada restricción nombrada tenga su entrada en esa tabla. Es la prueba que sostiene la
 traducción de restricciones —de [`ADR-015`](adr/ADR-015-validacion-tres-capas.md), recogida después
-por [`ADR-018`](adr/ADR-018-front-sin-decisiones.md)— y la que verifica el **RNF-25**.
+por [`ADR-018`](adr/ADR-018-front-sin-decisiones.md)— y la que verifica el **[RNF-25](03-requisitos-y-bdd.md#rnf-25)**.
 
 Tres detalles deciden si la prueba sirve de algo:
 
@@ -437,14 +441,14 @@ Tres detalles deciden si la prueba sirve de algo:
   restricción es un mensaje muerto, y peor: esconde que la regla desapareció de la base.
 
 En ejecución, la contraparte es la regla de `prisma_api`: un error de la base que no esté en la
-tabla se devuelve como 500 y se registra como defecto. C-01 existe para que eso nunca ocurra
+tabla se devuelve como 500 y se registra como defecto. [C-01](#c-01) existe para que eso nunca ocurra
 por primera vez en prod.
 
-### 9.2 C-02 · Un front viejo se planta, no se arrastra
+### <a id="c-02"></a>9.2 C-02 · Un front viejo se planta, no se arrastra
 
 El front y la API se versionan por separado ([`ADR-014`](adr/ADR-014-semver.md)), así que puede
 haber un navegador con la aplicación de hace tres semanas pidiéndole cosas a una API que ya cambió
-el contrato. Es **BDD-101-1** convertido en prueba automática, y cubre los tres casos:
+el contrato. Es **[BDD-101-1](03-requisitos-y-bdd.md#bdd-101-1)** convertido en prueba automática, y cubre los tres casos:
 
 | Caso | Qué debe pasar |
 |---|---|
@@ -456,13 +460,13 @@ el contrato. Es **BDD-101-1** convertido en prueba automática, y cubre los tres
 > que sigue andando contra una API incompatible no da un error: da cifras raras. Y una cifra rara
 > en un sistema de plata se cree, se anota y se usa para decidir.
 
-### 9.3 C-03 · El catálogo de códigos, completo y sin sobras
+### <a id="c-03"></a>9.3 C-03 · El catálogo de códigos, completo y sin sobras
 
 Hay **un solo catálogo** de códigos de cinco dígitos en `prisma_api`: código, HTTP, módulo, mensaje
 en español y cuándo se emite. De él salen las respuestas, la documentación de Swagger y la tabla de
-traducción de restricciones. C-03 lo compara con la realidad del código fuente, en los dos sentidos:
+traducción de restricciones. [C-03](#c-03) lo compara con la realidad del código fuente, en los dos sentidos:
 
-| Fallo | Qué pasaría sin C-03 |
+| Fallo | Qué pasaría sin [C-03](#c-03) |
 |---|---|
 | Un código emitido que **no está** en el catálogo | La API le devuelve al front un número sin mensaje redactado. La empleada ve una pantalla que no sabe explicar qué pasó |
 | Un código del catálogo que **ya nadie emite** | Un mensaje muerto que nadie borra, y la falsa idea de que ese caso sigue cubierto |
@@ -470,13 +474,13 @@ traducción de restricciones. C-03 lo compara con la realidad del código fuente
 > **La prueba falla nombrando el código, no diciendo «hay diferencias».** Un error que obliga a
 > buscar a ciegas se termina silenciando.
 
-### 9.4 C-04 · El OpenAPI versionado es el que sale del código
+### <a id="c-04"></a>9.4 C-04 · El OpenAPI versionado es el que sale del código
 
 El `openapi.json` está versionado en el repositorio y se genera de los controladores, nunca se
-escribe a mano. C-04 lo regenera y lo compara con el versionado; si difiere, la compilación falla.
+escribe a mano. [C-04](#c-04) lo regenera y lo compara con el versionado; si difiere, la compilación falla.
 La comparación se hace sobre el documento normalizado —mismo orden de claves, mismo formato—,
 porque un falso rojo por cómo quedaron ordenadas las llaves enseña a ignorar la prueba. Es la que
-hace exigible el **RNF-30** y la que sostiene [`ADR-022`](adr/ADR-022-openapi-generado.md).
+hace exigible el **[RNF-30](03-requisitos-y-bdd.md#rnf-30)** y la que sostiene [`ADR-022`](adr/ADR-022-openapi-generado.md).
 
 > **Actualizar la documentación deja de ser disciplina y pasa a ser un requisito para poder mezclar
 > el cambio.** Un documento que depende de que alguien se acuerde se desactualiza el primer día en
@@ -492,16 +496,16 @@ PostgreSQL y que el respaldo de verdad se puede restaurar.
 
 | # | Prueba | Resultado esperado |
 |---|---|---|
-| I-01 | Enviar dos veces la misma petición de escritura con la **misma** `Idempotency-Key` | Un solo efecto en la base. La segunda respuesta es la guardada, con el mismo `status` y el mismo `mensaje` |
-| I-02 | Inyectar un fallo **dentro** de la transacción, entre el registro de la clave y el efecto, y reintentar | Nada quedó escrito a medias: ni la clave sin efecto ni el efecto sin clave. El reintento se procesa como si fuera el primero |
-| F-01 | Reenviar una petición válida, tal cual, con el mismo `X-Prisma-Nonce` | Rechazada con `40103`. El efecto ocurre una sola vez |
-| F-02 | Enviar una petición con `X-Prisma-Timestamp` fuera de la ventana de ±5 minutos | Rechazada con `40102`, aunque la firma cuadre |
-| T-01 | Recorrer las llamadas a repositorios y ejecutarlas sin transacción abierta | La llamada falla de inmediato. Ninguna consulta sale sin identidad |
-| RE-01 | Restaurar en uat el respaldo de prod anonimizado y arrancar el sistema contra él | El sistema arranca, el Inicio carga y los cinco invariantes del §4.2 se cumplen sobre lo restaurado. **Una vez por trimestre** |
+| <a id="i-01"></a>I-01 | Enviar dos veces la misma petición de escritura con la **misma** `Idempotency-Key` | Un solo efecto en la base. La segunda respuesta es la guardada, con el mismo `status` y el mismo `mensaje` |
+| [I-02](#i-02) | Inyectar un fallo **dentro** de la transacción, entre el registro de la clave y el efecto, y reintentar | Nada quedó escrito a medias: ni la clave sin efecto ni el efecto sin clave. El reintento se procesa como si fuera el primero |
+| <a id="f-01"></a>F-01 | Reenviar una petición válida, tal cual, con el mismo `X-Prisma-Nonce` | Rechazada con `40103`. El efecto ocurre una sola vez |
+| <a id="f-02"></a>F-02 | Enviar una petición con `X-Prisma-Timestamp` fuera de la ventana de ±5 minutos | Rechazada con `40102`, aunque la firma cuadre |
+| [T-01](#t-01) | Recorrer las llamadas a repositorios y ejecutarlas sin transacción abierta | La llamada falla de inmediato. Ninguna consulta sale sin identidad |
+| [RE-01](#re-01) | Restaurar en uat el respaldo de prod anonimizado y arrancar el sistema contra él | El sistema arranca, el Inicio carga y los cinco invariantes del [§4.2](#42-invariantes-que-deben-cumplirse-siempre) se cumplen sobre lo restaurado. **Una vez por trimestre** |
 
-### 10.1 I-02 · El corte es lo que hace real la idempotencia
+### <a id="i-02"></a>10.1 I-02 · El corte es lo que hace real la idempotencia
 
-I-01 sola da una falsa sensación de seguridad: pasa igual aunque la clave y el efecto se guarden en
+[I-01](#i-01) sola da una falsa sensación de seguridad: pasa igual aunque la clave y el efecto se guarden en
 dos escrituras separadas, porque en una prueba feliz nunca se corta nada en la mitad.
 
 > **El registro de la clave y el efecto de la operación tienen que ocurrir en la MISMA transacción
@@ -510,18 +514,18 @@ dos escrituras separadas, porque en una prueba feliz nunca se corta nada en la m
 > que se hiciera nada —y el reintento no vuelve a intentarlo—, o un gasto registrado sin clave —y
 > el reintento lo cobra otra vez—.
 
-Por eso I-02 no espera a que ocurra un corte: lo provoca. Se inyecta la falla después de escribir
+Por eso [I-02](#i-02) no espera a que ocurra un corte: lo provoca. Se inyecta la falla después de escribir
 la clave y antes de confirmar la transacción, y se afirma sobre el **número de filas** de las dos
 tablas: quedan exactamente como estaban antes del intento, o la prueba falla.
 
-### 10.2 T-01 · Sin transacción no hay identidad
+### <a id="t-01"></a>10.2 T-01 · Sin transacción no hay identidad
 
-Es la compañera de P-32 y sale del mismo sitio: la identidad se fija con `SET LOCAL` al abrir la
+Es la compañera de [P-32](#p-32) y sale del mismo sitio: la identidad se fija con `SET LOCAL` al abrir la
 transacción, y `SET LOCAL` solo dura lo que dure esa transacción. Con un pool de conexiones, una
 consulta que se ejecute **fuera** de una transacción viaja sin identidad, y ahí RLS no protege,
 pero tampoco avisa: devuelve lo que le corresponda a la sesión de turno.
 
-> **P-32 demuestra que la base juzga; T-01 demuestra que la base siempre sabe a quién está
+> **[P-32](#p-32) demuestra que la base juzga; [T-01](#t-01) demuestra que la base siempre sabe a quién está
 > juzgando.** Un repositorio llamado fuera de transacción no rompe nada visible el día que se
 > escribe. Rompe el día que alguien lee lo que no debía, y sin dejar rastro.
 
@@ -529,7 +533,7 @@ Regla que verifica: **ningún repositorio se llama fuera de una transacción.** 
 en ejecución, comprobando que no hay transacción activa y exigiendo que la llamada falle en vez de
 seguir.
 
-### 10.3 RE-01 · Un respaldo que nunca se restauró no es un respaldo
+### <a id="re-01"></a>10.3 RE-01 · Un respaldo que nunca se restauró no es un respaldo
 
 Es la única prueba de esta lista que no corre en cada cambio: corre **una vez por trimestre, en
 uat**, y la ejecuta quien desarrolle con Gerencia avisada. Se restaura el respaldo de prod
@@ -551,6 +555,10 @@ El procedimiento y las políticas de retención están en
 [`13-respaldo-y-exportacion.md`](13-respaldo-y-exportacion.md) y en
 [`16-base-de-datos-y-snapshots.md`](16-base-de-datos-y-snapshots.md). Aquí solo queda fijado que
 **restaurar es una prueba con fecha, no una buena intención.**
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.2.0") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica")
+<!-- /generado:referenciado-desde -->
 
 ---
 

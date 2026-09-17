@@ -1,6 +1,8 @@
 # ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos
 
-**Estado:** Aceptado · **Fecha:** 2026-09-15
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-019-contrato-de-respuesta.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-15 | 2026-09-16 | [Contrato](../INDICE.md#etiqueta-contrato) · [API](../INDICE.md#etiqueta-api) |
 
 ## Contexto
 
@@ -196,3 +198,9 @@ tiempo a quien lo lea.
   Swagger es una de las tres cosas que se generan de este catálogo.
 - [`../07-arquitectura.md`](../07-arquitectura.md) — dónde vive el sobre dentro de la capa de
   interfaz de `prisma_api`.
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [20](../20-contrato-de-api.md "20 · Contrato de la API") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [ADR-020](ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura") · [ADR-021](ADR-021-canal-firmado.md "ADR-021 · Canal firmado contra repetición y manipulación") · [ADR-022](ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua")
+<!-- /generado:referenciado-desde -->

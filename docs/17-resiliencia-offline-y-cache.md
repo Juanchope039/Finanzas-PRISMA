@@ -1,6 +1,10 @@
 # 17 · Resiliencia, trabajo sin conexión y caché
 
-> **Estado: diseñado, no construido.** Este documento define cómo la aplicación tolerará los
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/17-resiliencia-offline-y-cache.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-16 | [Front](INDICE.md#etiqueta-front) · [API](INDICE.md#etiqueta-api) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+
+> **Construcción: diseñado, no construido.** Este documento define cómo la aplicación tolerará los
 > cortes de red y trabajará sin conexión. Se escribe antes de programar para que la arquitectura
 > ([`07-arquitectura.md`](07-arquitectura.md)) y la PWA ([ADR-016](adr/ADR-016-flutter-web-pwa.md))
 > lo soporten desde el primer día. La implementación llega con la aplicación.
@@ -11,10 +15,10 @@
 
 | Requisito (lo que pediste) | Cómo lo cubre este diseño |
 |---|---|
-| Resiliente a la reconexión | Cola de operaciones que se reintenta sola al volver la señal (§5, §6) |
-| Caché para **todos** los datos | Copia local de los datos que la persona ya vio, en el dispositivo (§4) |
-| Que se active en la desconexión | Al detectar que no hay red, la app lee de la caché y encola las escrituras (§4, §5) |
-| Caché purgable por el usuario | Apartado en **Configuración → Datos sin conexión** para vaciarla (§7) |
+| Resiliente a la reconexión | Cola de operaciones que se reintenta sola al volver la señal ([§5](#5-escrituras-sin-conexión-la-cola), [§6](#6-detección-de-conexión-y-reconexión)) |
+| Caché para **todos** los datos | Copia local de los datos que la persona ya vio, en el dispositivo ([§4](#4-lecturas-sin-conexión)) |
+| Que se active en la desconexión | Al detectar que no hay red, la app lee de la caché y encola las escrituras ([§4](#4-lecturas-sin-conexión), [§5](#5-escrituras-sin-conexión-la-cola)) |
+| Caché purgable por el usuario | Apartado en **Configuración → Datos sin conexión** para vaciarla ([§7](#7-purga-de-la-caché-por-el-usuario)) |
 
 El objetivo de fondo: **en el taller la señal va y viene, y el trabajo no puede parar por eso.**
 Registrar una venta o un gasto debe funcionar aunque en ese instante no haya internet.
@@ -39,9 +43,9 @@ y la capa de datos. Si una sola de las tres falla en su parte, la promesa de arr
 
 | Capa | Mecanismo |
 |---|---|
-| **Front** | Cola local persistente. Cada intención se guarda **con su clave de idempotencia antes** de intentar enviarse, así el reintento es seguro por construcción (§5) |
-| **Front** | Reintentos con espera exponencial y variación aleatoria. La cola sobrevive a cerrar la aplicación (§5.2) |
-| **Front** | La persona ve qué hay pendiente y desde cuándo. Nunca se descarta algo sin decirlo (§7) |
+| **Front** | Cola local persistente. Cada intención se guarda **con su clave de idempotencia antes** de intentar enviarse, así el reintento es seguro por construcción ([§5](#5-escrituras-sin-conexión-la-cola)) |
+| **Front** | Reintentos con espera exponencial y variación aleatoria. La cola sobrevive a cerrar la aplicación ([§5.2](#52-cuánto-se-espera-entre-reintentos)) |
+| **Front** | La persona ve qué hay pendiente y desde cuándo. Nunca se descarta algo sin decirlo ([§7](#7-purga-de-la-caché-por-el-usuario)) |
 | **API** | Idempotencia y transacciones: o todo el efecto de la operación, o nada |
 | **API** | Cortacircuitos y tiempos de espera hacia la base, para degradar en vez de colapsar |
 | **Datos** | Nada se borra ([ADR-004](adr/ADR-004-base-solo-escritura.md)). Auditoría por triggers ([ADR-005](adr/ADR-005-auditoria-por-triggers.md)) |
@@ -62,14 +66,14 @@ encola y reintenta después. El sistema se degrada, que es recuperable; no se ca
 
 Dos decisiones ya tomadas hacen que el trabajo sin conexión sea **seguro**, no un parche:
 
-- **Doble fecha** ([`04-modelo-de-datos.md`](04-modelo-de-datos.md) §1): `fecha_movimiento` es
+- **Doble fecha** ([`04-modelo-de-datos.md`](04-modelo-de-datos.md) [§1](04-modelo-de-datos.md#1-principios-del-modelo)): `fecha_movimiento` es
   cuándo ocurrió; `creado_en` es cuándo se digitó. Un movimiento hecho sin señal se **sincroniza**
   cuando vuelve la conexión, pero se **contabiliza** el día en que realmente pasó. La cola sin
   conexión no distorsiona la contabilidad. Es exactamente lo que anticipó
   [ADR-007](adr/ADR-007-pwa.md) y lo que sostiene [ADR-016](adr/ADR-016-flutter-web-pwa.md).
 - **Solo escritura** ([ADR-004](adr/ADR-004-base-solo-escritura.md)): nada se edita ni se borra;
   se agrega. Reproducir la cola en orden nunca "pisa" un dato anterior, así que los conflictos de
-  sincronización se reducen al mínimo (§8).
+  sincronización se reducen al mínimo ([§8](#8-conflictos-y-su-resolución)).
 
 ---
 
@@ -123,7 +127,7 @@ cambian**: lo que cambia es dónde se guarda, no qué se garantiza.
 3. Cuando vuelve la red, la cola se **envía en orden**, una operación a la vez, cada una con su
    clave en la cabecera `Idempotency-Key`.
 4. Cada operación confirmada por la API se retira de la cola. Si falla, se reintenta con espera
-   exponencial y variación aleatoria (§5.2).
+   exponencial y variación aleatoria ([§5.2](#52-cuánto-se-espera-entre-reintentos)).
 
 La app **no valida con reglas propias**: comprueba el descriptor de campos que la API le entregó
 con el formulario, y la API vuelve a comprobarlo todo cuando la petición llega. Lo que se encola
@@ -166,8 +170,8 @@ taller tiene pocos dispositivos, así que el riesgo no es una avalancha; es golp
 sincronizado a algo que ya está frágil.
 
 **No hay número máximo de reintentos.** Una operación no se descarta por cansancio: se queda en
-la cola hasta que la API la acepte, hasta que la rechace con un motivo (§8), o hasta que la
-persona la descarte a propósito (§7). Es la promesa del §1.1, escrita en el comportamiento.
+la cola hasta que la API la acepte, hasta que la rechace con un motivo ([§8](#8-conflictos-y-su-resolución)), o hasta que la
+persona la descarte a propósito ([§7](#7-purga-de-la-caché-por-el-usuario)). Es la promesa del [§1.1](#11-la-promesa-sin-letra-pequeña), escrita en el comportamiento.
 
 ---
 
@@ -177,7 +181,7 @@ persona la descarte a propósito (§7). Es la promesa del §1.1, escrita en el c
 |---|---|---|
 | **En línea** | `navigator.onLine` + un *ping* liviano a `prisma_api` | Lee en vivo; vacía la cola pendiente |
 | **Sin conexión** | Falla el *ping* o `offline` | Lee de la caché; encola escrituras; muestra el aviso |
-| **Reconectando** | Vuelve `online` | Reintenta la cola con espera exponencial y variación (§5.2); al terminar, quita el aviso |
+| **Reconectando** | Vuelve `online` | Reintenta la cola con espera exponencial y variación ([§5.2](#52-cuánto-se-espera-entre-reintentos)); al terminar, quita el aviso |
 
 `navigator.onLine` por sí solo miente a veces (dice "en línea" con wifi sin salida). Por eso la
 señal real es un *ping* corto al servidor, no solo el estado del navegador.
@@ -192,7 +196,7 @@ En **Configuración → Datos sin conexión**, la persona ve y controla su cach�
 |---|---|
 | Espacio usado | Cuánto ocupa la caché de datos en el dispositivo |
 | Última sincronización | Cuándo se actualizó por última vez con el servidor |
-| Operaciones pendientes | Cuántas escrituras esperan subir, **cuál es cada una y desde cuándo espera** la más antigua (§5) |
+| Operaciones pendientes | Cuántas escrituras esperan subir, **cuál es cada una y desde cuándo espera** la más antigua ([§5](#5-escrituras-sin-conexión-la-cola)) |
 | **Vaciar caché de datos** | Borra la copia local de lecturas. Se vuelve a llenar al reconectar |
 | **Forzar re-sincronización** | Descarta lo cacheado y baja todo de nuevo |
 
@@ -202,7 +206,7 @@ En **Configuración → Datos sin conexión**, la persona ve y controla su cach�
 
 Descartar una operación pendiente es la única forma de que algo no enviado desaparezca, y por eso
 la app dice **qué** se va a descartar y **desde cuándo** llevaba esperando, antes de pedir la
-confirmación. Es la otra mitad del §1.1: la persona puede decidir tirar algo; el sistema no.
+confirmación. Es la otra mitad del [§1.1](#11-la-promesa-sin-letra-pequeña): la persona puede decidir tirar algo; el sistema no.
 
 ---
 
@@ -213,7 +217,7 @@ Gracias al diseño de solo escritura, los conflictos son raros y su manejo es si
 | Situación | Resolución |
 |---|---|
 | Dos dispositivos registran movimientos distintos sin red | Ambos entran al subir; son filas nuevas, no se pisan |
-| Se corrige un dato hecho sin conexión | Contra-asiento (§5.3 del doc 04), nunca edición |
+| Se corrige un dato hecho sin conexión | Contra-asiento ([§5.3 del doc 04](04-modelo-de-datos.md#53-corrección-por-contra-asiento)), nunca edición |
 | La API rechaza una operación de la cola (regla de negocio, permiso) | Queda marcada como **"No sincronizada"** con el mensaje que la API dictó; la persona la revisa, no se pierde en silencio |
 
 No hay "última escritura gana" que borre trabajo: **nada se sobrescribe**, así que no hay nada que
@@ -227,7 +231,7 @@ Trabajar sin conexión implica guardar datos en el equipo, y eso tiene un costo 
 
 - **RLS protege el servidor, no el dispositivo.** Lo que la caché guarda ya pasó por RLS, pero una
   vez en el equipo, quien tenga acceso al equipo desbloqueado puede verlo. Por eso solo se cachea
-  lo que ese rol ya podía ver, y la caché se puede purgar (§7).
+  lo que ese rol ya podía ver, y la caché se puede purgar ([§7](#7-purga-de-la-caché-por-el-usuario)).
 - **Cerrar sesión limpia la caché de datos y la cola confirmada.** No debe quedar información del
   negocio en un dispositivo compartido tras salir.
 - **Nada de secretos en la caché.** Contraseñas y tokens de larga vida no se cachean; la sesión se
@@ -242,7 +246,7 @@ y debe revisarse allí cuando se implemente.
 
 | Tema | Estado |
 |---|---|
-| Cifrado en reposo de la caché local | A evaluar en la fase de construcción (§9) |
+| Cifrado en reposo de la caché local | A evaluar en la fase de construcción ([§9](#9-seguridad-de-los-datos-en-el-dispositivo)) |
 | Sincronización en segundo plano (*Background Sync API*) | Deseable; soporte desigual en iOS |
 | Trabajo colaborativo en tiempo real | Fuera de alcance; el negocio es de pocas personas |
 | Límite de tamaño de la caché y expiración por antigüedad | Se define con datos reales de uso |
@@ -257,7 +261,11 @@ por defecto, ver [ADR-016](adr/ADR-016-flutter-web-pwa.md) y
 traduce en: el service worker que genera Flutter Web para el cascarón, una capa de caché y cola
 sobre `cliente_api.dart` —el único punto de salida a la red del front, coherente con la
 arquitectura hexagonal, [ADR-002](adr/ADR-002-arquitectura-hexagonal.md)— y la pantalla de
-Configuración del §7.
+Configuración del [§7](#7-purga-de-la-caché-por-el-usuario).
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [07](07-arquitectura.md "07 · Arquitectura técnica") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API")
+<!-- /generado:referenciado-desde -->
 
 ---
 

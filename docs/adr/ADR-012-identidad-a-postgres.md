@@ -1,6 +1,8 @@
 # ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando
 
-**Estado:** Aceptado · **Fecha:** 2026-09-15
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-012-identidad-a-postgres.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-15 | 2026-09-16 | [Seguridad](../INDICE.md#etiqueta-seguridad) · [API](../INDICE.md#etiqueta-api) · [Base de datos](../INDICE.md#etiqueta-base-de-datos) |
 
 ## Contexto
 
@@ -72,7 +74,7 @@ Sin estas cuatro condiciones, lo anterior es teatro:
 
 > **Dos tablas no admiten `FORCE` y el modelo lo deja escrito.** `usuarios` y `auditoria` se
 > quedan sin él por razones técnicas documentadas en
-> [`04-modelo-de-datos.md`](../04-modelo-de-datos.md) §7.1 —la recursión de `fn_es_gerencia()` y
+> [`04-modelo-de-datos.md`](../04-modelo-de-datos.md) [§7.1](../04-modelo-de-datos.md#71-force-row-level-security-por-qué-ahora-sí-hace-falta) —la recursión de `fn_es_gerencia()` y
 > la función `SECURITY DEFINER` que escribe la bitácora—. En esas dos, lo que sostiene la
 > seguridad es la condición 2: el rol de la API no es dueño de nada. Son trece de quince tablas
 > con `FORCE`, no quince, y esa diferencia es una decisión, no un olvido.
@@ -123,3 +125,9 @@ la decisión y no en una guía aparte.
 - [ADR-005 · Auditoría por triggers, no por la aplicación](ADR-005-auditoria-por-triggers.md)
 - [ADR-002 · Arquitectura hexagonal](ADR-002-arquitectura-hexagonal.md)
 - [`04-modelo-de-datos.md`](../04-modelo-de-datos.md)
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [04](../04-modelo-de-datos.md "04 · Modelo de datos") · [07](../07-arquitectura.md "07 · Arquitectura técnica") · [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](../09-plan-de-implantacion.md "09 · Plan de implantación") · [12](../12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](../13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [17](../17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](../19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](../20-contrato-de-api.md "20 · Contrato de la API") · [ADR-011](ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-017](ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-018](ADR-018-front-sin-decisiones.md "ADR-018 · Tres partes, y el front no toma decisiones") · [ADR-020](ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura") · [ADR-021](ADR-021-canal-firmado.md "ADR-021 · Canal firmado contra repetición y manipulación") · [ADR-025](ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica")
+<!-- /generado:referenciado-desde -->

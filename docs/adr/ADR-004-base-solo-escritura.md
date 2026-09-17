@@ -1,6 +1,8 @@
 # ADR-004 · Base de datos de solo escritura
 
-**Estado:** Aceptado · **Fecha:** 2026-09-13
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-004-base-solo-escritura.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-13 | 2026-09-16 | [Base de datos](../INDICE.md#etiqueta-base-de-datos) |
 
 ## Contexto
 
@@ -39,4 +41,10 @@ anular.
   volumen de este negocio, el crecimiento es irrelevante.
 - **Tensión conocida:** entra en conflicto con el derecho de supresión de datos personales. Se
   resuelve con anonimización en lugar de borrado. Ver
-  [`../11-riesgos-y-proteccion-de-datos.md`](../11-riesgos-y-proteccion-de-datos.md) §3.4.
+  [`../11-riesgos-y-proteccion-de-datos.md`](../11-riesgos-y-proteccion-de-datos.md) [§3.4](../11-riesgos-y-proteccion-de-datos.md#34-la-tensión-entre-no-borrar-nunca-y-el-derecho-de-supresión).
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [02](../02-casos-de-uso.md "02 · Casos de uso") · [04](../04-modelo-de-datos.md "04 · Modelo de datos") · [07](../07-arquitectura.md "07 · Arquitectura técnica") · [09](../09-plan-de-implantacion.md "09 · Plan de implantación") · [16](../16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](../17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](../19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](../20-contrato-de-api.md "20 · Contrato de la API") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [ADR-013](ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-014](ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-015](ADR-015-validacion-tres-capas.md "ADR-015 · Validación en tres capas, con la base como juez") · [ADR-020](ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura")
+<!-- /generado:referenciado-desde -->

@@ -1,6 +1,8 @@
 # ADR-007 · PWA en lugar de aplicación nativa
 
-**Estado:** Reemplazado por ADR-016 · **Fecha:** 2026-09-13
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-007-pwa.md "Historial de cambios") | [⛔ Reemplazado](../22-documentacion.md#estados-de-un-adr) por [ADR-016](ADR-016-flutter-web-pwa.md) | 2026-09-13 | 2026-09-16 | [Front](../INDICE.md#etiqueta-front) |
 
 > **Lo reemplaza [ADR-016](ADR-016-flutter-web-pwa.md):** sigue siendo una PWA, pero construida
 > con Flutter Web y no con `vite-plugin-pwa`, que ya no aplica sin Vite. El cuerpo de abajo
@@ -40,3 +42,9 @@ cuando vuelve la señal, pero se contabiliza el día en que realmente ocurrió.
 - **Negativas:** la instalación en iOS requiere un paso manual desde Safari, que se cubre en la
   capacitación. Si en el futuro la PWA resultara insuficiente, la app nativa queda en el roadmap
   como idea 30.
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [17](../17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [ADR-016](ADR-016-flutter-web-pwa.md "ADR-016 · Flutter Web instalable como PWA")
+<!-- /generado:referenciado-desde -->

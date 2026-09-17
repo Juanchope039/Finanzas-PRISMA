@@ -1,5 +1,9 @@
 # 04 · Modelo de datos
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
 ---
@@ -87,21 +91,21 @@ erDiagram
 | 25 | `peticiones_idempotentes` | Claves de idempotencia y la respuesta que devolvió cada una | ✅ |
 | 26 | `nonces_vistos` | Nonce ya usados por el canal firmado, dentro de su ventana | ✅ |
 
-*Sensible = el acceso a la tabla está restringido por Row Level Security (§7). En la mayoría eso
+*Sensible = el acceso a la tabla está restringido por Row Level Security ([§7](#7-seguridad-por-tipo-de-usuario-rls)). En la mayoría eso
 significa «solo Gerencia», pero no en todas: en `usuarios`, `empleados`, `nomina_periodos`,
 `nomina_detalle`, `adelantos`, `peticiones_idempotentes` y `nonces_vistos` cada persona alcanza **su propia fila y
-nada más**; `clientes` lo lee y lo crea cualquiera, porque sin cliente no hay pedido (CU-05); y
+nada más**; `clientes` lo lee y lo crea cualquiera, porque sin cliente no hay pedido ([CU-05](02-casos-de-uso.md#cu-05)); y
 `movimientos` lo lee todo el mundo, porque los dos tipos registran el día a día. La regla de cada
-tabla está en el §7.*
+tabla está en el [§7](#7-seguridad-por-tipo-de-usuario-rls).*
 
 `cargos` va al final de la lista para no renumerar las 23 entidades anteriores. En el esquema
 SQL sí aparece antes de `usuarios`, porque `usuarios` la referencia.
 
 Las entidades **25** y **26** —`peticiones_idempotentes` y `nonces_vistos`— son las dos únicas
 que no son del negocio: no guardan plata, ni personas, ni pedidos. Una guarda el rastro de qué
-peticiones ya se atendieron, para no cobrar dos veces lo mismo (§4.9); la otra, qué nonce ya se
-usaron, para que nadie reenvíe una petición capturada (§4.10). Están en el catálogo porque son
-tablas más del esquema y hay que poder contarlas, y no están en el diagrama del §2 por la misma
+peticiones ya se atendieron, para no cobrar dos veces lo mismo ([§4.9](#49-claves-de-idempotencia)); la otra, qué nonce ya se
+usaron, para que nadie reenvíe una petición capturada ([§4.10](#410-los-nonce-vistos)). Están en el catálogo porque son
+tablas más del esquema y hay que poder contarlas, y no están en el diagrama del [§2](#2-diagrama-entidadrelación) por la misma
 razón por la que sí pueden borrarse: no son entidades del taller, son mecanismos de transporte.
 
 ---
@@ -214,7 +218,7 @@ cerrar un mes, que es lo único que un `SMALLINT` pelado no sabía rechazar.
 **Toda restricción lleva nombre explícito.** No es estética: a la restricción que no trae nombre
 se lo pone PostgreSQL, y las de tabla las numera por posición —`pedidos_check`, `pedidos_check1`—
 así que basta agregar otra restricción para que las siguientes cambien de nombre. Sobre nombres
-que se mueven no se puede construir la tabla de traducción a mensajes en español del §11: el
+que se mueven no se puede construir la tabla de traducción a mensajes en español del [§11](#11-el-contrato-de-errores): el
 mensaje quedaría colgado del nombre equivocado sin que nada lo avise.
 
 | Clase | Patrón | Ejemplo |
@@ -318,7 +322,7 @@ cruzar con la bitácora.
 > está inactiva **hoy**?». Al reactivar a alguien, las tres columnas se limpian y
 > `debe_cambiar_clave` vuelve a `TRUE`. A primera vista parece que se pierde información, y no se
 > pierde nada: la desactivación, con su fecha, su autor y su motivo, quedó escrita en `auditoria`,
-> y de ahí no la borra nadie (§5.4). La ficha dice **cómo está** la persona; la bitácora dice
+> y de ahí no la borra nadie ([§5.4](#54-auditoría-por-triggers)). La ficha dice **cómo está** la persona; la bitácora dice
 > **qué le ha pasado**. Quien mezcle las dos preguntas termina duplicando la historia en `usuarios`.
 
 > **`CITEXT` y el `CHECK` no hacen lo mismo, y conviene saberlo.** `CITEXT` vuelve insensible a
@@ -330,8 +334,8 @@ cruzar con la bitácora.
 > corregirse sola.
 
 El orden de creación importa en dos sitios más del esquema, por cómo están escritas las tablas:
-`movimientos.pedido_id → pedidos` (§4.3, pero `pedidos` se crea en §4.4) y
-`pedido_lineas.producto_id → productos` (§4.4, pero `productos` se crea en §4.5). En el script
+`movimientos.pedido_id → pedidos` ([§4.3](#43-movimientos--el-libro-único), pero `pedidos` se crea en [§4.4](#44-pedidos-líneas-y-anticipos)) y
+`pedido_lineas.producto_id → productos` ([§4.4](#44-pedidos-líneas-y-anticipos), pero `productos` se crea en [§4.5](#45-productos-costeo-y-cotizaciones)). En el script
 real esas dos llaves también se agregan con `ALTER TABLE` al final.
 
 Qué cambió frente a la versión anterior y por qué:
@@ -452,7 +456,7 @@ la utilidad, la caja, el patrimonio o ninguno:
 | `anticipo_recibido` | ❌ | ✅ sube | ❌ crea pasivo |
 | `adelanto_empleada` | ❌ | ✅ baja | ❌ crea por cobrar |
 
-> Esta tabla es la traducción exacta de las reglas RN-03 a RN-11. Cualquier duda sobre cómo
+> Esta tabla es la traducción exacta de las reglas [RN-03](03-requisitos-y-bdd.md#rn-03) a [RN-11](03-requisitos-y-bdd.md#rn-11). Cualquier duda sobre cómo
 > registrar algo se responde aquí.
 
 ### 4.4 Pedidos, líneas y anticipos
@@ -668,12 +672,12 @@ CREATE INDEX idx_adelantos_pendientes ON adelantos (empleado_id)
   WHERE descontado_en IS NULL AND anulado_en IS NULL;
 ```
 
-`empleados.usuario_id` es `UNIQUE`. El diagrama del §2 dibuja `USUARIOS ||--o| EMPLEADOS`, o sea
+`empleados.usuario_id` es `UNIQUE`. El diagrama del [§2](#2-diagrama-entidadrelación) dibuja `USUARIOS ||--o| EMPLEADOS`, o sea
 «cero o una»; sin el `UNIQUE` el SQL permitía dos empleados colgados del mismo usuario y el
 desprendible de nómina se le mostraba a la persona equivocada.
 
 `descontado_en IS NULL` identifica los adelantos aún no descontados: la cuenta por cobrar viva.
-El índice parcial garantiza que **un adelanto se descuente una sola vez** (RN-11).
+El índice parcial garantiza que **un adelanto se descuente una sola vez** ([RN-11](03-requisitos-y-bdd.md#rn-11)).
 
 ### 4.8 Sobres y cierres
 
@@ -712,7 +716,7 @@ CREATE TABLE cierres_mensuales (
 
 La restricción `suma_cien` impide guardar una configuración de sobres que no reparta
 exactamente el 100%. Los porcentajes son **parametrizables** y cada cambio crea una fila nueva
-con su fecha de vigencia: el historial queda completo. El dominio `porcentaje` (§4.1) cubre el
+con su fecha de vigencia: el historial queda completo. El dominio `porcentaje` ([§4.1](#41-tipos-y-convenciones-comunes)) cubre el
 otro lado de la misma regla: `suma_cien` vigila el total, el dominio vigila cada sobre por
 separado, y hacen falta los dos.
 
@@ -720,12 +724,12 @@ Las tres columnas de `cierres_mensuales` que llevan `dinero_con_signo` —utilid
 de caja y caja libre— son las únicas del modelo que pueden dar negativo. Un mes en pérdida es un
 resultado, no un error de digitación, y la base no tiene por qué impedir guardarlo.
 
-`cierres_mensuales` es el **snapshot inmutable** que garantiza RN-16: un movimiento registrado
+`cierres_mensuales` es el **snapshot inmutable** que garantiza [RN-16](03-requisitos-y-bdd.md#rn-16): un movimiento registrado
 tarde con fecha de un mes ya cerrado no altera el reporte histórico de ese mes.
 
 ### 4.9 Claves de idempotencia
 
-Toda petición que escribe llega con una clave de idempotencia (RNF-27). La base la guarda junto
+Toda petición que escribe llega con una clave de idempotencia ([RNF-27](03-requisitos-y-bdd.md#rnf-27)). La base la guarda junto
 con la huella de esa petición y con la respuesta que se devolvió, para que un reintento devuelva
 lo mismo en vez de volver a registrar el gasto.
 
@@ -760,7 +764,7 @@ simultáneas con la misma clave no compiten, porque la segunda se queda esperand
 `estado = 'en_curso'`, que es exactamente lo que significa ese estado: todavía no hay nada que
 repetir.
 
-La tabla **no lleva columnas de anulación ni trigger de auditoría** (§5.4), y no es un olvido:
+La tabla **no lleva columnas de anulación ni trigger de auditoría** ([§5.4](#54-auditoría-por-triggers)), y no es un olvido:
 auditar quién reintentó una petición no le dice nada a nadie, y el cambio que esa petición
 provocó ya quedó auditado en su propia tabla.
 
@@ -773,7 +777,7 @@ real del taller. Pasadas, la fila se borra.
 > caducidad. El gasto, el pedido o la nómina que esa clave hizo posibles se quedan donde
 > siempre, intactos y auditados; lo que se va es el comprobante de que el mensaje llegó.
 
-Hay que decirlo con todas las letras porque el §5.1 revoca `DELETE` en el motor, y quien lea esa
+Hay que decirlo con todas las letras porque el [§5.1](#51-revocación-real-del-borrado) revoca `DELETE` en el motor, y quien lea esa
 revocación junto a esta purga va a pensar que una de las dos está mal. No lo está: la purga no
 pasa por ahí.
 
@@ -793,8 +797,8 @@ SELECT cron.schedule(
 ```
 
 **Qué permisos hacen falta, y cuáles no.** Ninguno nuevo. `authenticated` y `prisma_api` siguen
-sin `DELETE` sobre ninguna tabla del esquema, esta incluida: el `REVOKE` global del §5.1 y el
-del §9 se quedan exactamente como están, y el `ALTER DEFAULT PRIVILEGES` de los dos sigue
+sin `DELETE` sobre ninguna tabla del esquema, esta incluida: el `REVOKE` global del [§5.1](#51-revocación-real-del-borrado) y el
+del [§9](#9-el-rol-con-el-que-se-conecta-la-api) se quedan exactamente como están, y el `ALTER DEFAULT PRIVILEGES` de los dos sigue
 cubriendo la tabla nueva sin tocar nada. Conceder `DELETE` sobre esta tabla al rol de la API
 sería el error: le abriría el borrado a quien atiende peticiones de usuario para resolver una
 tarea de mantenimiento que ocurre de madrugada y sin nadie conectado.
@@ -831,7 +835,7 @@ choca contra el índice único y se rechaza con `40103`, sin necesidad de consul
 peticiones simultáneas con el mismo nonce no compiten: una entra y la otra falla, que es
 exactamente lo que se quiere.
 
-Como la de idempotencia, **no lleva columnas de anulación ni trigger de auditoría** (§5.4):
+Como la de idempotencia, **no lleva columnas de anulación ni trigger de auditoría** ([§5.4](#54-auditoría-por-triggers)):
 auditar qué nonce se vio no le dice nada a nadie.
 
 **Retención: la ventana de la firma, cinco minutos**, con margen. Fuera de ella la marca de
@@ -875,8 +879,8 @@ Aunque alguien escriba un `DELETE` por error, o intente ejecutarlo desde fuera d
 aplicación, PostgreSQL lo rechaza.
 
 > **Una sola excepción en todo el modelo, y no está en este bloque.** Las claves de idempotencia
-> vencidas de `peticiones_idempotentes` sí se borran, a las 72 horas (§4.9), y las de
-> `nonces_vistos` a los cinco minutos (§4.10). Este `REVOKE` no se toca para lograrlo: las purgas
+> vencidas de `peticiones_idempotentes` sí se borran, a las 72 horas ([§4.9](#49-claves-de-idempotencia)), y las de
+> `nonces_vistos` a los cinco minutos ([§4.10](#410-los-nonce-vistos)). Este `REVOKE` no se toca para lograrlo: las purgas
 > las ejecuta el rol de migraciones, que es dueño de las tablas y no atiende peticiones de
 > usuario. La aplicación sigue sin poder borrar nada, ahí incluido.
 
@@ -891,7 +895,7 @@ aplicación, PostgreSQL lo rechaza.
 | `anulado_ip` | Dirección de origen | ✅ |
 
 La restricción `anulacion_con_motivo` de cada tabla hace imposible anular sin explicar por qué, y
-el dominio `motivo` (§4.1) hace imposible que esa explicación sea un espacio en blanco. Una
+el dominio `motivo` ([§4.1](#41-tipos-y-convenciones-comunes)) hace imposible que esa explicación sea un espacio en blanco. Una
 exige que el texto esté; el otro, que diga algo.
 
 ### 5.3 Corrección por contra-asiento
@@ -1015,16 +1019,16 @@ Estos diez eventos **no los escribe un trigger de fila**. Un trigger de fila sol
 reactivación o un restablecimiento de clave, y en un intento fallido no hay fila que mirar. Los
 escribe una función `SECURITY DEFINER` que llama la aplicación, dentro de la misma transacción del
 cambio. Tiene que ser así: en un intento fallido todavía no hay sesión abierta, y `auditoria`
-tiene RLS sin política de `INSERT` (§7), de modo que un `INSERT` directo se rechaza.
+tiene RLS sin política de `INSERT` ([§7](#7-seguridad-por-tipo-de-usuario-rls)), de modo que un `INSERT` directo se rechaza.
 
 `usuario_desactivado` y `usuario_reactivado` recorren el mismo camino y llenan las mismas
-columnas. El porqué está en §5.7.
+columnas. El porqué está en [§5.7](#57-reactivar-y-revertir-escrituras-compensatorias).
 
 El valor restante de `accion`, `cambio_revertido`, también lo escribe esa función y se explica en
-§5.7, junto con la reversión.
+[§5.7](#57-reactivar-y-revertir-escrituras-compensatorias), junto con la reversión.
 
 > **Un intento fallido jamás guarda la contraseña tecleada**, ni completa ni parcial. Guarda el
-> usuario intentado, la fecha, el dispositivo y la IP, y nada más. Es RNF-18 y no admite
+> usuario intentado, la fecha, el dispositivo y la IP, y nada más. Es [RNF-18](03-requisitos-y-bdd.md#rnf-18) y no admite
 > excepciones: una bitácora con contraseñas adentro es peor que no tener bitácora.
 
 ### 5.5 Vistas limpias por defecto
@@ -1045,7 +1049,7 @@ confunda con la vista normal.
 
 La pantalla **Gestión de usuarios** muestra una bitácora de cambios: quién cambió qué, cuándo y
 por qué. **No hay tabla nueva.** Todo eso ya está en `auditoria`, escrita por triggers y por la
-función del §5.4. Una segunda tabla con lo mismo crearía dos verdades, y dos verdades terminan
+función del [§5.4](#54-auditoría-por-triggers). Una segunda tabla con lo mismo crearía dos verdades, y dos verdades terminan
 contradiciéndose.
 
 La bitácora es una **vista sobre `auditoria` filtrada por las tablas `usuarios` y `cargos`**:
@@ -1076,13 +1080,13 @@ ORDER BY a.fecha_hora DESC;
 
 > **`WITH (security_invoker = true)` no es adorno.** Una vista normal se ejecuta con los permisos
 > de su dueño, y el dueño de `auditoria` no pasa por RLS: la vista le entregaría la bitácora
-> completa a cualquier sesión autenticada, Operación incluida, saltándose `aud_lectura` (§7). Con
+> completa a cualquier sesión autenticada, Operación incluida, saltándose `aud_lectura` ([§7](#7-seguridad-por-tipo-de-usuario-rls)). Con
 > `security_invoker` la vista se evalúa con los permisos de quien pregunta y la política vuelve a
 > mandar. Requiere PostgreSQL 15 o superior, que es lo que corre Supabase.
 
 El `LEFT JOIN` contra `auditoria rev` es lo que marca una entrada como **Revertida**: está
 revertida si existe otra entrada que la apunte con `revierte_a`. La marca **se deduce, no se
-escribe**: la fila original no se toca ni para eso. El índice único del §5.4 garantiza que ese
+escribe**: la fila original no se toca ni para eso. El índice único del [§5.4](#54-auditoría-por-triggers) garantiza que ese
 `LEFT JOIN` no pueda duplicar la entrada, porque una entrada se reversa una sola vez.
 
 Los eventos de acceso (`inicio_sesion`, `cierre_sesion`, `inicio_sesion_fallido`) se escriben con
@@ -1091,18 +1095,18 @@ enseña solo los cambios de administración; para revisar ingresos y fallos se c
 vista sin ese filtro.
 
 `datos_antes` y `datos_despues` de `usuarios` no traen contraseñas: la tabla no tiene ninguna
-columna de clave, el hash vive en `auth.users` (§4.2). La bitácora se puede mostrar completa sin
-exponer un secreto, que es lo que exige RNF-18.
+columna de clave, el hash vive en `auth.users` ([§4.2](#42-cargos-usuarios-y-cuentas)). La bitácora se puede mostrar completa sin
+exponer un secreto, que es lo que exige [RNF-18](03-requisitos-y-bdd.md#rnf-18).
 
 La vista no necesita `ENABLE ROW LEVEL SECURITY` —una vista no tiene RLS propia— y `auditoria`
-sigue con la suya encendida desde el §7. El §3 tampoco cambia: `v_bitacora_usuarios` no es una
+sigue con la suya encendida desde el [§7](#7-seguridad-por-tipo-de-usuario-rls). El [§3](#3-catálogo-de-entidades) tampoco cambia: `v_bitacora_usuarios` no es una
 entidad nueva, es una forma de leer `auditoria`, la entidad 23.
 
 ### 5.7 Reactivar y revertir: escrituras compensatorias
 
 Una persona desactivada se puede reactivar, y un cambio registrado se puede revertir. Ninguna de
 las dos cosas borra ni edita nada. Son **escrituras compensatorias**: hermanas del contra-asiento
-del §5.3 —el de CU-04 y RF-15—, aplicado a las personas en vez de a la plata.
+del [§5.3](#53-corrección-por-contra-asiento) —el de [CU-04](02-casos-de-uso.md#cu-04) y [RF-15](03-requisitos-y-bdd.md#rf-15)—, aplicado a las personas en vez de a la plata.
 
 > **Revertir es escribir un cambio nuevo que deshace el anterior, nunca borrar el registro del
 > error.** Si se desactivó a la persona equivocada, la bitácora tiene que mostrar las dos cosas:
@@ -1141,7 +1145,7 @@ UPDATE usuarios
 
 `debe_cambiar_clave = TRUE` no es un detalle: quien vuelve después de meses no debe entrar con la
 clave vieja, porque nadie sabe quién la conoció mientras tanto. La clave temporal se entrega en
-persona, como en CU-31.
+persona, como en [CU-31](02-casos-de-uso.md#cu-31).
 
 ```sql
 -- Revertir. Lo escribe la misma función SECURITY DEFINER del §5.4: `auditoria` no tiene
@@ -1158,8 +1162,8 @@ La restricción `reversion_con_origen` amarra las dos mitades: una fila `cambio_
 reversión huérfana, que es una entrada que dice «se deshizo algo» sin decir qué.
 
 **Que la entrada original no se pueda editar ni borrar no depende de la aplicación.** `auditoria`
-tiene una sola política y es de `SELECT` (§7), así que un `UPDATE` sobre la bitácora se rechaza; y
-`DELETE` está revocado en el motor (§5.1). La promesa de «nada se borra» la sostiene PostgreSQL.
+tiene una sola política y es de `SELECT` ([§7](#7-seguridad-por-tipo-de-usuario-rls)), así que un `UPDATE` sobre la bitácora se rechaza; y
+`DELETE` está revocado en el motor ([§5.1](#51-revocación-real-del-borrado)). La promesa de «nada se borra» la sostiene PostgreSQL.
 
 Revertir una reversión es legal: la fila nueva apunta con `revierte_a` a la fila
 `cambio_revertido` anterior y la cadena queda completa. El índice único impide revertir dos veces
@@ -1171,11 +1175,11 @@ que no se guardó.
 
 **Una reversión no puede dejar el sistema sin Gerencia, y no hace falta un guardián nuevo.** Toda
 reversión sobre una persona aterriza como un `UPDATE` sobre `usuarios`, así que la atajan los dos
-que ya existen (§7): `tg_proteger_ultima_gerencia` fila por fila y `tg_verificar_gerencia_restante`
+que ya existen ([§7](#7-seguridad-por-tipo-de-usuario-rls)): `tg_proteger_ultima_gerencia` fila por fila y `tg_verificar_gerencia_restante`
 al final de la sentencia. Revertir un `Tipo cambiado` que degradaría a la última Gerencia, o
 revertir un `Usuario creado` desactivando a la última Gerencia, fallan con la misma excepción que
 el botón de desactivar. Escribir la regla por segunda vez solo serviría para que las dos copias se
-desincronizaran (RF-91).
+desincronizaran ([RF-91](03-requisitos-y-bdd.md#rf-91)).
 
 El `UPDATE` sobre `usuarios` y el `INSERT` en `auditoria` van en **la misma transacción**. Si el
 guardián dispara, se caen los dos: nunca queda anotada en la bitácora una reversión que no ocurrió.
@@ -1215,7 +1219,7 @@ WHERE a.devengado_en IS NULL
 
 > Estas vistas existen para consulta y verificación. **El cálculo autoritativo vive en el
 > dominio de `prisma_api`, en Java**, probado unitariamente (ver
-> [`07-arquitectura.md`](07-arquitectura.md) §4). Tener dos implementaciones permite
+> [`07-arquitectura.md`](07-arquitectura.md) [§4](07-arquitectura.md#4-el-dominio-en-detalle)). Tener dos implementaciones permite
 > contrastarlas: si difieren, hay un error en alguna.
 
 ---
@@ -1336,7 +1340,7 @@ columna nueva nacería desprotegida y nadie se acordaría de agregarla a la list
 
 Sin esta pareja de política y trigger, `usuarios` quedaba en un punto muerto. La única política
 de `UPDATE` era la de Gerencia, así que **una usuaria de Operación no podía apagar su propio
-`debe_cambiar_clave` ni sellar su `ultimo_acceso`**: CU-32, RF-79 y RF-80 no tenían por dónde
+`debe_cambiar_clave` ni sellar su `ultimo_acceso`**: [CU-32](02-casos-de-uso.md#cu-32), [RF-79](03-requisitos-y-bdd.md#rf-79) y [RF-80](03-requisitos-y-bdd.md#rf-80) no tenían por dónde
 cumplirse, y la pantalla de «Crea tu contraseña» se volvía un callejón sin salida.
 
 Y un guardián que no se puede dejar por fuera:
@@ -1391,19 +1395,19 @@ Dos detalles del primer trigger que no se ven a simple vista:
   contaría solo las filas que quien actualiza alcanza a ver. Daría cero por falta de permiso, no
   por falta de gerentes, y el guardián bloquearía cambios perfectamente legítimos.
 
-`DELETE` no necesita guardián propio: está revocado en el motor (§5.1).
+`DELETE` no necesita guardián propio: está revocado en el motor ([§5.1](#51-revocación-real-del-borrado)).
 
 **Por qué importa que esté aquí y no en la pantalla.** Si los permisos vivieran en el código de
 la interfaz, bastaría con abrir las herramientas del navegador para pedir los datos
 directamente y verlos. Con RLS, PostgreSQL **no devuelve esas filas** a una sesión de tipo
 Operación, sin importar cómo se construya la petición.
 
-**Las ocho tablas sensibles que faltaban.** El §3 marca como sensibles ocho tablas que el bloque
+**Las ocho tablas sensibles que faltaban.** El [§3](#3-catálogo-de-entidades) marca como sensibles ocho tablas que el bloque
 de arriba no nombraba: `clientes`, `activos`, `prolabore_config`, `empleados`,
 `nomina_periodos`, `adelantos`, `sobres_config` y `cierres_mensuales`. Sin RLS, **cualquier
 sesión autenticada las lee enteras** —salarios acordados, pro-labore y utilidad del mes
 incluidos—, que es exactamente lo que niega la matriz de permisos de
-[`01-vision-y-alcance.md`](01-vision-y-alcance.md) §4 y lo que
+[`01-vision-y-alcance.md`](01-vision-y-alcance.md) [§4](01-vision-y-alcance.md#4-matriz-de-tipos-de-usuario-y-permisos) y lo que
 [`ADR-006`](adr/ADR-006-rls-por-rol.md) decidió impedir dentro de PostgreSQL.
 
 Encenderlas a secas tampoco sirve: una tabla con RLS y sin política no devuelve nada. Primero
@@ -1427,14 +1431,14 @@ Operación, y `cierres_mensuales` guarda la utilidad causada y la caja libre de 
 Las otras cuatro necesitan explicación, porque no son un simple «sí» o «no»:
 
 - **`clientes` es un dato personal de terceros, no un secreto del negocio.** Lo protege la Ley
-  1581 —ver [`11-riesgos-y-proteccion-de-datos.md`](11-riesgos-y-proteccion-de-datos.md) §3—,
-  no la separación entre Gerencia y Operación. CU-05 dice «cliente existente o nuevo»: quien
-  registra un pedido tiene que poder buscarlo y crearlo, y CU-08 le muestra el nombre en el
+  1581 —ver [`11-riesgos-y-proteccion-de-datos.md`](11-riesgos-y-proteccion-de-datos.md) [§3](11-riesgos-y-proteccion-de-datos.md#3-protección-de-datos-personales)—,
+  no la separación entre Gerencia y Operación. [CU-05](02-casos-de-uso.md#cu-05) dice «cliente existente o nuevo»: quien
+  registra un pedido tiene que poder buscarlo y crearlo, y [CU-08](02-casos-de-uso.md#cu-08) le muestra el nombre en el
   listado. Lo que sí es de Gerencia es corregirlo y anularlo, porque anular un cliente es
-  anonimizarlo (§3.4 del doc 11) y eso no se hace de paso.
+  anonimizarlo ([§3.4 del doc 11](11-riesgos-y-proteccion-de-datos.md#34-la-tensión-entre-no-borrar-nunca-y-el-derecho-de-supresión)) y eso no se hace de paso.
 - **`empleados` guarda `salario_acordado`.** Cada quien llega a su propia ficha y a ninguna
   otra, igual que en `usuarios`. No es una concesión: el desprendible de pago lleva nombre,
-  documento, cargo y fecha de ingreso —§8 de
+  documento, cargo y fecha de ingreso —[§8](#8-datos-iniciales) de
   [`06-nomina-y-capacidad-de-pago.md`](06-nomina-y-capacidad-de-pago.md)— y todo eso vive en
   esa fila.
 - **`nomina_periodos` no guarda plata, pero sí el calendario de nómina del negocio.** Abrirla
@@ -1442,7 +1446,7 @@ Las otras cuatro necesitan explicación, porque no son un simple «sí» o «no�
   únicamente los períodos en los que tiene desprendible, que es lo único que necesita para
   ponerle un encabezado al suyo.
 - **`adelantos` es plata que se le descuenta a la persona de su propio desprendible.** Verlos es
-  parte de ver su liquidación. Registrarlos es CU-26 y es de Gerencia.
+  parte de ver su liquidación. Registrarlos es [CU-26](02-casos-de-uso.md#cu-26) y es de Gerencia.
 
 ```sql
 -- Clientes: dato personal de terceros, no secreto comercial. Operación los lee y los crea
@@ -1532,7 +1536,7 @@ y solo la ve Gerencia. La lógica de tres valores juega a favor aquí y no hace 
 
 Una advertencia sobre `clientes_insercion`: se abre sin amarrar al autor, como sí hace
 `mov_insercion` con `creado_por = auth.uid()`. No es descuido, es que `clientes` no tiene
-columna `creado_por` y **tampoco está entre las tablas con trigger `fn_auditar()`** (§5.4).
+columna `creado_por` y **tampoco está entre las tablas con trigger `fn_auditar()`** ([§5.4](#54-auditoría-por-triggers)).
 Quién creó o corrigió un cliente hoy no queda escrito en ninguna parte. Abrirle el `INSERT` a
 Operación no empeora eso, pero lo deja a la vista: es el candidato obvio para el próximo
 trigger de auditoría.
@@ -1545,7 +1549,7 @@ trigger de auditoría.
 > decisión aparte, con su propio costo sobre lo que Operación necesita ver del día a día, y no
 > se toma aquí.
 
-**Y la decimoquinta sensible: `peticiones_idempotentes`.** Es la entidad 25 del §3 y llega con la
+**Y la decimoquinta sensible: `peticiones_idempotentes`.** Es la entidad 25 del [§3](#3-catálogo-de-entidades) y llega con la
 regla más simple de todo el documento: cada persona alcanza las claves que ella misma generó, y
 ninguna más.
 
@@ -1561,7 +1565,7 @@ CREATE POLICY idem_actualizacion ON peticiones_idempotentes FOR UPDATE
 ALTER TABLE peticiones_idempotentes ENABLE ROW LEVEL SECURITY;
 ```
 
-**Y la decimosexta: `nonces_vistos`.** Entidad 26 del §3, misma regla y por la misma razón. No
+**Y la decimosexta: `nonces_vistos`.** Entidad 26 del [§3](#3-catálogo-de-entidades), misma regla y por la misma razón. No
 lleva política de `UPDATE`: un nonce se escribe una vez y no se toca nunca más.
 
 ```sql
@@ -1587,20 +1591,20 @@ el cuerpo de una respuesta ajena, guardado en `respuesta`. Lo que Gerencia sí n
 hizo qué y cuándo— vive en `auditoria`, que para eso está.
 
 La política de `UPDATE` no sobra: la fila nace `en_curso` y se sella `terminada` con su `status` y
-su `respuesta` en la misma transacción (§4.9). Sin ella, el segundo paso se quedaría sin permiso y
+su `respuesta` en la misma transacción ([§4.9](#49-claves-de-idempotencia)). Sin ella, el segundo paso se quedaría sin permiso y
 ninguna clave llegaría nunca a servir para un reintento.
 
-`DELETE` no lleva política, y por eso la purga del §4.9 no corre como la aplicación: corre como el
+`DELETE` no lleva política, y por eso la purga del [§4.9](#49-claves-de-idempotencia) no corre como la aplicación: corre como el
 rol de migraciones, que es dueño de la tabla y tiene `BYPASSRLS`.
 
-Con esto, las quince tablas que el §3 marca como sensibles tienen política, y con `cargos` son
+Con esto, las quince tablas que el [§3](#3-catálogo-de-entidades) marca como sensibles tienen política, y con `cargos` son
 dieciséis las que llevan RLS encendida. Las nueve restantes —`cuentas`, `categorias`, `adjuntos`,
 `pedidos`, `pedido_lineas`, `anticipos`, `productos`, `cotizaciones` y `cotizacion_lineas`—
 siguen sin RLS a propósito: los dos tipos trabajan con ellas todo el día y no hay nada que
-separar. El principio 6 del §1 se lee así: **en cada tabla donde haya algo que proteger.**
+separar. El principio 6 del [§1](#1-principios-del-modelo) se lee así: **en cada tabla donde haya algo que proteger.**
 
-Las pruebas que ejercen estas políticas con una sesión real de tipo Operación son P-16 a P-31
-de [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) §3.
+Las pruebas que ejercen estas políticas con una sesión real de tipo Operación son [P-16](12-pruebas-y-calidad.md#p-16) a [P-31](12-pruebas-y-calidad.md#p-31)
+de [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) [§3](12-pruebas-y-calidad.md#3-pruebas-de-permisos).
 
 ### 7.1 `FORCE ROW LEVEL SECURITY`: por qué ahora sí hace falta
 
@@ -1616,7 +1620,7 @@ se apagarían en silencio. No fallaría nada. Simplemente se vería todo.
 `FORCE ROW LEVEL SECURITY` quita esa excepción: ni el dueño se libra. Es la tercera de las cuatro
 condiciones de **[ADR-012](adr/ADR-012-identidad-a-postgres.md)**, y es cinturón y tirantes a
 propósito: la segunda condición ya dice que
-`prisma_api` no debe ser dueño (§9), y esta la vuelve inofensiva si alguien la incumple.
+`prisma_api` no debe ser dueño ([§9](#9-el-rol-con-el-que-se-conecta-la-api)), y esta la vuelve inofensiva si alguien la incumple.
 
 ```sql
 -- Ni el dueño de la tabla se salta las políticas.
@@ -1642,24 +1646,24 @@ tal como está escrito, deja de funcionar si se les pone.
 
 | Tabla | Por qué no lleva `FORCE` | Qué la protege en su lugar |
 |---|---|---|
-| `usuarios` | `fn_es_gerencia()` consulta `usuarios` y las políticas de `usuarios` la llaman. Lo que corta el ciclo es que la función corre como el dueño y el dueño no pasa por RLS. Con `FORCE` vuelve el `infinite recursion detected in policy for relation "usuarios"` que ya advierte el §7 | `prisma_api` **no es dueño**, así que sus políticas sí lo juzgan |
-| `auditoria` | Solo tiene política de `SELECT`. La función `SECURITY DEFINER` del §5.4 escribe la bitácora amparada en que el dueño se salta RLS; con `FORCE`, **toda la auditoría deja de escribirse** | Igual: `prisma_api` no es dueño, y `UPDATE` y `DELETE` le están cerrados por política y por motor (§5.1) |
+| `usuarios` | `fn_es_gerencia()` consulta `usuarios` y las políticas de `usuarios` la llaman. Lo que corta el ciclo es que la función corre como el dueño y el dueño no pasa por RLS. Con `FORCE` vuelve el `infinite recursion detected in policy for relation "usuarios"` que ya advierte el [§7](#7-seguridad-por-tipo-de-usuario-rls) | `prisma_api` **no es dueño**, así que sus políticas sí lo juzgan |
+| `auditoria` | Solo tiene política de `SELECT`. La función `SECURITY DEFINER` del [§5.4](#54-auditoría-por-triggers) escribe la bitácora amparada en que el dueño se salta RLS; con `FORCE`, **toda la auditoría deja de escribirse** | Igual: `prisma_api` no es dueño, y `UPDATE` y `DELETE` le están cerrados por política y por motor ([§5.1](#51-revocación-real-del-borrado)) |
 
 > **La excepción del dueño no es un hueco mientras el dueño no sea la API.** `FORCE` protege del
-> descuido; lo que de verdad sostiene la seguridad es la segunda condición de ADR-012: el rol con
-> el que `prisma_api` se conecta no crea, no posee y no hereda nada. Eso es el §9, y no es
+> descuido; lo que de verdad sostiene la seguridad es la segunda condición de [ADR-012](adr/ADR-012-identidad-a-postgres.md): el rol con
+> el que `prisma_api` se conecta no crea, no posee y no hereda nada. Eso es el [§9](#9-el-rol-con-el-que-se-conecta-la-api), y no es
 > opcional.
 
 **El orden importa, como en el bloque anterior.** Este `ALTER TABLE` va después de las semillas,
-nunca antes: con `FORCE` ya puesto, el `INSERT` de los seis cargos del §4.2 chocaría con
+nunca antes: con `FORCE` ya puesto, el `INSERT` de los seis cargos del [§4.2](#42-cargos-usuarios-y-cuentas) chocaría con
 `cargos_escritura`, que exige `fn_es_gerencia()`, y durante una migración no hay `auth.uid()` a
 quien preguntarle. Lo mismo vale para las semillas de `sobres_config`. En el script real este
 bloque es **lo último**: corre cuando ya están creadas las tablas, escritas las políticas,
-encendida la RLS y sembrados los datos iniciales del §8.
+encendida la RLS y sembrados los datos iniciales del [§8](#8-datos-iniciales).
 
 Para lo que venga después —una migración que corrija una fila de una tabla con `FORCE`— el rol de
 migraciones conserva `BYPASSRLS`, que gana incluso sobre `FORCE`. Es el único rol del proyecto que
-lo tiene, no atiende peticiones de usuario y su clave vive en un secreto aparte (§9). El script
+lo tiene, no atiende peticiones de usuario y su clave vive en un secreto aparte ([§9](#9-el-rol-con-el-que-se-conecta-la-api)). El script
 inicial, aun así, no depende de ese atributo: se ordena bien y listo.
 
 ---
@@ -1685,7 +1689,7 @@ se ajustan desde la configuración y cada cambio queda registrado con su fecha d
 
 `prisma_api` se conecta a PostgreSQL con un rol dedicado, que también se llama `prisma_api`. No
 es el rol de las migraciones, no es `service_role` y no es dueño de nada. Son la primera y la
-segunda de las cuatro condiciones de **ADR-012**, y sin ellas el §7.1 no sirve de mucho.
+segunda de las cuatro condiciones de **[ADR-012](adr/ADR-012-identidad-a-postgres.md)**, y sin ellas el [§7.1](#71-force-row-level-security-por-qué-ahora-sí-hace-falta) no sirve de mucho.
 
 | Atributo | Valor | Por qué |
 |---|---|---|
@@ -1694,7 +1698,7 @@ segunda de las cuatro condiciones de **ADR-012**, y sin ellas el §7.1 no sirve 
 | `CREATEDB` / `CREATEROLE` | ❌ | La API no crea bases ni reparte permisos |
 | Dueño de las tablas | ❌ | El dueño se salta RLS salvo `FORCE`, y no queremos depender solo de eso |
 | `INHERIT` | ❌ | Los permisos de `authenticated` solo llegan cuando la API los pide con `SET LOCAL ROLE` |
-| Permisos sobre tablas | `SELECT`, `INSERT`, `UPDATE` | Lo mínimo para operar. `DELETE` y `TRUNCATE` revocados, igual que para `authenticated` (§5.1) |
+| Permisos sobre tablas | `SELECT`, `INSERT`, `UPDATE` | Lo mínimo para operar. `DELETE` y `TRUNCATE` revocados, igual que para `authenticated` ([§5.1](#51-revocación-real-del-borrado)) |
 
 ```sql
 -- El rol con el que prisma_api abre cada conexión. La clave llega del gestor de secretos
@@ -1725,12 +1729,12 @@ GRANT authenticated TO prisma_api;
 
 `NOINHERIT` es el detalle que más se subestima. Con `INHERIT`, `prisma_api` tendría desde el
 primer instante todo lo que tiene `authenticated`, lo pida o no. Con `NOINHERIT`, la única forma
-de operar como `authenticated` es el `SET LOCAL ROLE authenticated` que ADR-012 exige dentro de
+de operar como `authenticated` es el `SET LOCAL ROLE authenticated` que [ADR-012](adr/ADR-012-identidad-a-postgres.md) exige dentro de
 la transacción, junto al `set_config('request.jwt.claims', …)` que alimenta a `auth.uid()`. Si
 alguien escribe una consulta olvidando abrir esa transacción, no obtiene privilegios de más:
 se queda con los suyos, que no incluyen nada que `authenticated` no tenga.
 
-> **Y si el `SET LOCAL ROLE` se olvida, tampoco se cae la seguridad.** Ninguna política del §7
+> **Y si el `SET LOCAL ROLE` se olvida, tampoco se cae la seguridad.** Ninguna política del [§7](#7-seguridad-por-tipo-de-usuario-rls)
 > lleva cláusula `TO`, así que todas rigen para cualquier rol, `prisma_api` incluido. Sin claims
 > propagados `auth.uid()` es nulo, `fn_es_gerencia()` da falso y las consultas devuelven vacío.
 > **Falla cerrado.** El error se nota rápido y no filtra nada mientras tanto.
@@ -1746,7 +1750,7 @@ es un rol que no puede borrar, no puede crear y no se salta RLS.
 
 La prueba que demuestra que esto funciona —entrar como Operación por la API y comprobar que la
 nómina, los usuarios y el patrimonio ajenos llegan vacíos **por decisión de la base**— vive en
-ADR-012 y se ejecuta en los cuatro ambientes.
+[ADR-012](adr/ADR-012-identidad-a-postgres.md) y se ejecuta en los cuatro ambientes.
 
 ---
 
@@ -1764,10 +1768,10 @@ pagada sin descontar el adelanto.
 | Función | Qué hace, en una sola transacción | Qué impide |
 |---|---|---|
 | `fn_entregar_pedido(p_pedido UUID, p_fecha DATE, p_cuenta UUID)` | Marca el pedido `entregado` con su `fecha_entrega_real`, devenga sus anticipos (`devengado_en`) y escribe el movimiento que causa la venta | Un pedido entregado cuyo anticipo sigue contando como pasivo en la caja libre |
-| `fn_liquidar_nomina(p_periodo UUID, p_empleado UUID, …)` | Escribe la fila de `nomina_detalle`, marca con `descontado_en` los adelantos pendientes de esa persona y escribe el movimiento del pago | Que un adelanto se descuente dos veces, o ninguna (RN-11) |
-| La función `SECURITY DEFINER` del §5.4, usada en el §5.7 | Aplica el `UPDATE` que deshace un cambio y escribe la fila `cambio_revertido` con su `revierte_a` | Una bitácora que anota una reversión que no ocurrió, o al revés |
+| `fn_liquidar_nomina(p_periodo UUID, p_empleado UUID, …)` | Escribe la fila de `nomina_detalle`, marca con `descontado_en` los adelantos pendientes de esa persona y escribe el movimiento del pago | Que un adelanto se descuente dos veces, o ninguna ([RN-11](03-requisitos-y-bdd.md#rn-11)) |
+| La función `SECURITY DEFINER` del [§5.4](#54-auditoría-por-triggers), usada en el [§5.7](#57-reactivar-y-revertir-escrituras-compensatorias) | Aplica el `UPDATE` que deshace un cambio y escribe la fila `cambio_revertido` con su `revierte_a` | Una bitácora que anota una reversión que no ocurrió, o al revés |
 
-La tercera **ya está en este documento**: es la misma función del §5.4 que escribe los eventos de
+La tercera **ya está en este documento**: es la misma función del [§5.4](#54-auditoría-por-triggers) que escribe los eventos de
 acceso y administración. No se duplica aquí; se nombra para dejar claro que pertenece a esta
 lista y obedece las mismas reglas.
 
@@ -1777,10 +1781,10 @@ Tres reglas que valen para las tres:
    `UPDATE` de una entrega, ya hay dos versiones del procedimiento y solo una se prueba.
 2. **Son `SECURITY INVOKER`**, que es el valor por omisión y aquí es la decisión correcta: corren
    con los permisos de quien llama, así que **RLS sigue juzgando** cada fila que tocan. La única
-   excepción es la del §5.4, que es `SECURITY DEFINER` porque `auditoria` no tiene política de
+   excepción es la del [§5.4](#54-auditoría-por-triggers), que es `SECURITY DEFINER` porque `auditoria` no tiene política de
    `INSERT` a propósito.
 3. **Llevan `SET search_path = public, pg_temp`**, igual que todas las demás funciones del
-   documento y por la misma razón (§7).
+   documento y por la misma razón ([§7](#7-seguridad-por-tipo-de-usuario-rls)).
 
 Los pasos financieros de cada una salen tal cual de
 [`05-reglas-financieras.md`](05-reglas-financieras.md) y de
@@ -1793,7 +1797,7 @@ dos copias de una regla financiera es exactamente el problema que estas funcione
 
 La base no sabe hablar. Cuando rechaza algo devuelve `23514 check_violation` en la restricción
 `transferencia_con_destino`, y eso no se le puede mostrar a la dueña del taller. La API traduce.
-Para que pueda traducir, cada restricción de este documento tiene **nombre explícito** (§4.1) y
+Para que pueda traducir, cada restricción de este documento tiene **nombre explícito** ([§4.1](#41-tipos-y-convenciones-comunes)) y
 cada nombre tiene su entrada en la tabla de traducción de `prisma_api`: código HTTP, mensaje en
 español y campo del formulario al que señala.
 
@@ -1845,6 +1849,10 @@ una que pinta**, que [ADR-018](adr/ADR-018-front-sin-decisiones.md) fijó al ree
 [ADR-015](adr/ADR-015-validacion-tres-capas.md). La otra mitad —que la API repita en su idioma las
 mismas reglas que la base— solo aguanta si esta prueba corre en cada despliegue. Sin ella, las dos
 capas que deciden se separan y ninguna avisa.
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-020](adr/ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura")
+<!-- /generado:referenciado-desde -->
 
 ---
 

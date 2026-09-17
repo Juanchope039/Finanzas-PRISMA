@@ -1,5 +1,9 @@
 # 02 · Casos de uso
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/02-casos-de-uso.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) |
+
 Los 37 casos de uso del MVP. Cada uno indica el **rol autorizado**, y esa autorización se
 implementa en la base de datos, no en la pantalla.
 
@@ -17,43 +21,43 @@ implementa en la base de datos, no en la pantalla.
 
 | ID | Caso de uso | Rol | Precondición | Postcondición |
 |---|---|:---:|---|---|
-| CU-01 | Registrar ingreso | GER · OPE | Sesión activa, cuenta creada | Movimiento con doble fecha, saldo actualizado, auditoría escrita |
-| CU-02 | Registrar gasto con recibo | GER · OPE | Sesión activa | Movimiento y adjunto almacenados |
-| CU-03 | Anular movimiento errado | GER | Movimiento no anulado | Marcado anulado con motivo; **nunca borrado** |
-| CU-04 | Corregir por contra-asiento | GER | Movimiento existente | Movimiento nuevo que reversa el original; ambos visibles |
-| CU-05 | Registrar pedido de venta | GER · OPE | Cliente existente o nuevo | Pedido en estado `en_proceso` |
-| CU-06 | Cobrar anticipo | GER · OPE | Pedido creado | Anticipo registrado **como pasivo**, no como ingreso |
-| CU-07 | Entregar y cobrar saldo | GER · OPE | Pedido `en_proceso` | Venta causada, anticipo liberado, estado `entregado` |
-| CU-08 | Consultar pedidos por fecha | GER · OPE | — | Listado filtrable con pendientes resaltados |
-| CU-09 | Costear un producto | GER | Producto existente | Costo, margen y margen por hora recalculados |
-| CU-10 | Costear servicio de bordado | GER | — | Costo por tiempo de máquina y puntadas registrado |
-| CU-11 | Generar cotización PDF | GER · OPE | Productos costeados | PDF con logo listo para WhatsApp |
-| CU-12 | Validar anticipo mínimo | SIS | Cotización con costo directo | Advertencia si el anticipo no cubre el material |
-| CU-13 | Ver utilidad, caja y caja libre | GER | Movimientos del mes | Las tres cifras conciliadas |
-| CU-14 | Ver promedio de ganancias | GER | ≥1 mes cerrado | Promedio mensual y proyección anual |
-| CU-15 | Registrar inversión en activo | GER | — | Activo registrado; **no reduce la utilidad** |
-| CU-16 | Registrar retiro | GER | Caja libre suficiente | Retiro registrado; **no afecta utilidad**, sí caja y patrimonio |
-| CU-17 | Configurar los 4 sobres | GER | — | Porcentajes guardados con historial de cambios |
-| CU-18 | Simular capacidad de pago | GER | ≥6 meses de historia | Salario máximo sostenible y ventas necesarias |
-| CU-19 | Liquidar nómina del mes | GER | Empleada activa | Liquidación y desprendible PDF; adelantos descontados |
-| CU-20 | Ver el propio desprendible | GER · OPE | Nómina liquidada | Ve **solo** su desprendible |
-| CU-21 | Importar histórico de Excel | GER | Archivo CSV | Movimientos cargados con reporte de errores por fila |
-| CU-22 | Exportar respaldo | GER | — | Archivo con manifiesto; **descarga manual** |
-| CU-23 | Consultar auditoría | GER | — | Quién, cuándo, desde dónde y qué cambió |
-| CU-24 | Alertar descapitalización | SIS | 12 meses de historia | Aviso si los retiros superan las utilidades |
-| CU-25 | Definir el pro-labore | GER | — | Sueldo propio como **gasto**; el resto como distribución |
-| CU-26 | Registrar adelanto a empleada | GER | Empleada activa | Cuenta por cobrar; **no es gasto** hasta descontarse |
-| CU-27 | Ver horas pagadas vs. facturadas | GER | Pedidos con tiempo cargado | Tiempo ocioso del mes y su costo |
-| CU-28 | Iniciar sesión con usuario y contraseña | GER · OPE | Usuario activo | Sesión abierta con nombre, cargo y tipo cargados |
-| CU-29 | Crear un usuario | GER | Cargo existente en el catálogo | Usuario activo con clave temporal y cambio obligatorio |
-| CU-30 | Desactivar un usuario | GER | Usuario activo que no sea la última Gerencia | Marcado inactivo con motivo; **nunca borrado** |
-| CU-31 | Restablecer la contraseña de un usuario | GER | Usuario existente | Clave temporal entregada en persona; cambio obligatorio al entrar |
-| CU-32 | Cambiar la propia contraseña | GER · OPE | Sesión activa | Contraseña actualizada; `debe_cambiar_clave` en falso |
-| CU-33 | Administrar el catálogo de cargos | GER | — | Cargo creado, renombrado o desactivado con motivo |
-| CU-34 | Reactivar un usuario desactivado | GER | Usuario desactivado | Acceso devuelto con motivo escrito y cambio de clave obligatorio |
-| CU-35 | Revertir un cambio desde la bitácora | GER | Entrada reversible y aún no revertida | Entrada nueva que deshace el cambio; la original queda marcada, **nunca borrada** |
-| CU-36 | Previsualizar el sistema como lo ve Operación | GER | Sesión de tipo Gerencia | Interfaz pintada como para Operación, con aviso permanente y salida a un clic |
-| CU-37 | Descargar lo que muestra una pantalla | GER | Pantalla con datos a la vista | Archivo CSV o PDF **sin manifiesto**; la descarga queda registrada |
+| [CU-01](#cu-01) | Registrar ingreso | GER · OPE | Sesión activa, cuenta creada | Movimiento con doble fecha, saldo actualizado, auditoría escrita |
+| <a id="cu-02"></a>CU-02 | Registrar gasto con recibo | GER · OPE | Sesión activa | Movimiento y adjunto almacenados |
+| [CU-03](#cu-03) | Anular movimiento errado | GER | Movimiento no anulado | Marcado anulado con motivo; **nunca borrado** |
+| <a id="cu-04"></a>CU-04 | Corregir por contra-asiento | GER | Movimiento existente | Movimiento nuevo que reversa el original; ambos visibles |
+| <a id="cu-05"></a>CU-05 | Registrar pedido de venta | GER · OPE | Cliente existente o nuevo | Pedido en estado `en_proceso` |
+| [CU-06](#cu-06) | Cobrar anticipo | GER · OPE | Pedido creado | Anticipo registrado **como pasivo**, no como ingreso |
+| [CU-07](#cu-07) | Entregar y cobrar saldo | GER · OPE | Pedido `en_proceso` | Venta causada, anticipo liberado, estado `entregado` |
+| <a id="cu-08"></a>CU-08 | Consultar pedidos por fecha | GER · OPE | — | Listado filtrable con pendientes resaltados |
+| <a id="cu-09"></a>CU-09 | Costear un producto | GER | Producto existente | Costo, margen y margen por hora recalculados |
+| <a id="cu-10"></a>CU-10 | Costear servicio de bordado | GER | — | Costo por tiempo de máquina y puntadas registrado |
+| <a id="cu-11"></a>CU-11 | Generar cotización PDF | GER · OPE | Productos costeados | PDF con logo listo para WhatsApp |
+| [CU-12](#cu-12) | Validar anticipo mínimo | SIS | Cotización con costo directo | Advertencia si el anticipo no cubre el material |
+| <a id="cu-13"></a>CU-13 | Ver utilidad, caja y caja libre | GER | Movimientos del mes | Las tres cifras conciliadas |
+| <a id="cu-14"></a>CU-14 | Ver promedio de ganancias | GER | ≥1 mes cerrado | Promedio mensual y proyección anual |
+| <a id="cu-15"></a>CU-15 | Registrar inversión en activo | GER | — | Activo registrado; **no reduce la utilidad** |
+| [CU-16](#cu-16) | Registrar retiro | GER | Caja libre suficiente | Retiro registrado; **no afecta utilidad**, sí caja y patrimonio |
+| <a id="cu-17"></a>CU-17 | Configurar los 4 sobres | GER | — | Porcentajes guardados con historial de cambios |
+| [CU-18](#cu-18) | Simular capacidad de pago | GER | ≥6 meses de historia | Salario máximo sostenible y ventas necesarias |
+| <a id="cu-19"></a>CU-19 | Liquidar nómina del mes | GER | Empleada activa | Liquidación y desprendible PDF; adelantos descontados |
+| <a id="cu-20"></a>CU-20 | Ver el propio desprendible | GER · OPE | Nómina liquidada | Ve **solo** su desprendible |
+| <a id="cu-21"></a>CU-21 | Importar histórico de Excel | GER | Archivo CSV | Movimientos cargados con reporte de errores por fila |
+| <a id="cu-22"></a>CU-22 | Exportar respaldo | GER | — | Archivo con manifiesto; **descarga manual** |
+| <a id="cu-23"></a>CU-23 | Consultar auditoría | GER | — | Quién, cuándo, desde dónde y qué cambió |
+| <a id="cu-24"></a>CU-24 | Alertar descapitalización | SIS | 12 meses de historia | Aviso si los retiros superan las utilidades |
+| <a id="cu-25"></a>CU-25 | Definir el pro-labore | GER | — | Sueldo propio como **gasto**; el resto como distribución |
+| [CU-26](#cu-26) | Registrar adelanto a empleada | GER | Empleada activa | Cuenta por cobrar; **no es gasto** hasta descontarse |
+| [CU-27](#cu-27) | Ver horas pagadas vs. facturadas | GER | Pedidos con tiempo cargado | Tiempo ocioso del mes y su costo |
+| [CU-28](#cu-28) | Iniciar sesión con usuario y contraseña | GER · OPE | Usuario activo | Sesión abierta con nombre, cargo y tipo cargados |
+| [CU-29](#cu-29) | Crear un usuario | GER | Cargo existente en el catálogo | Usuario activo con clave temporal y cambio obligatorio |
+| [CU-30](#cu-30) | Desactivar un usuario | GER | Usuario activo que no sea la última Gerencia | Marcado inactivo con motivo; **nunca borrado** |
+| <a id="cu-31"></a>CU-31 | Restablecer la contraseña de un usuario | GER | Usuario existente | Clave temporal entregada en persona; cambio obligatorio al entrar |
+| <a id="cu-32"></a>CU-32 | Cambiar la propia contraseña | GER · OPE | Sesión activa | Contraseña actualizada; `debe_cambiar_clave` en falso |
+| <a id="cu-33"></a>CU-33 | Administrar el catálogo de cargos | GER | — | Cargo creado, renombrado o desactivado con motivo |
+| [CU-34](#cu-34) | Reactivar un usuario desactivado | GER | Usuario desactivado | Acceso devuelto con motivo escrito y cambio de clave obligatorio |
+| [CU-35](#cu-35) | Revertir un cambio desde la bitácora | GER | Entrada reversible y aún no revertida | Entrada nueva que deshace el cambio; la original queda marcada, **nunca borrada** |
+| [CU-36](#cu-36) | Previsualizar el sistema como lo ve Operación | GER | Sesión de tipo Gerencia | Interfaz pintada como para Operación, con aviso permanente y salida a un clic |
+| [CU-37](#cu-37) | Descargar lo que muestra una pantalla | GER | Pantalla con datos a la vista | Archivo CSV o PDF **sin manifiesto**; la descarga queda registrada |
 
 ---
 
@@ -64,7 +68,7 @@ de alta, consulta y modificación descrito en la tabla maestra.
 
 ---
 
-### CU-01 · Registrar ingreso
+### <a id="cu-01"></a>CU-01 · Registrar ingreso
 
 | | |
 |---|---|
@@ -96,11 +100,11 @@ de alta, consulta y modificación descrito en la tabla maestra.
 
 **Postcondición** — Movimiento persistido, saldo actualizado, auditoría escrita.
 
-**Reglas de negocio** — RN-01 (doble fecha), RN-02 (pesos enteros), RN-14 (registro tardío).
+**Reglas de negocio** — [RN-01](03-requisitos-y-bdd.md#rn-01) (doble fecha), [RN-02](03-requisitos-y-bdd.md#rn-02) (pesos enteros), [RN-14](03-requisitos-y-bdd.md#rn-14) (registro tardío).
 
 ---
 
-### CU-03 · Anular movimiento errado
+### <a id="cu-03"></a>CU-03 · Anular movimiento errado
 
 | | |
 |---|---|
@@ -123,14 +127,14 @@ de alta, consulta y modificación descrito en la tabla maestra.
 |---|---|---|
 | A1 | Quien intenta anular es de tipo Operación | La base de datos rechaza la operación, no solo la pantalla |
 | A2 | El movimiento ya está anulado | Se informa y no se hace nada |
-| A3 | El movimiento pertenece a un mes cerrado | Se exige contra-asiento (CU-04) en lugar de anulación |
+| A3 | El movimiento pertenece a un mes cerrado | Se exige contra-asiento ([CU-04](#cu-04)) en lugar de anulación |
 
 **Postcondición** — Movimiento invisible en reportes, visible en el modo *ver anulados*,
 íntegro en la base de datos.
 
 ---
 
-### CU-06 · Cobrar anticipo
+### <a id="cu-06"></a>CU-06 · Cobrar anticipo
 
 | | |
 |---|---|
@@ -147,22 +151,22 @@ de alta, consulta y modificación descrito en la tabla maestra.
    - **No registra ingreso** ni utilidad.
 4. El pedido queda con anticipo cobrado y su saldo pendiente calculado.
 
-**Regla de negocio central (RN-05)**
+**Regla de negocio central ([RN-05](03-requisitos-y-bdd.md#rn-05))**
 
 > Un anticipo **no es un ingreso**. Es una deuda con el cliente hasta que se entrega el pedido.
-> Solo al entregar (CU-07) se causa la venta y el pasivo se libera.
+> Solo al entregar ([CU-07](#cu-07)) se causa la venta y el pasivo se libera.
 
 **Flujos alternativos**
 
 | # | Situación | Comportamiento |
 |---|---|---|
 | A1 | El anticipo supera el valor del pedido | Se rechaza |
-| A2 | El anticipo no cubre el costo directo | Se muestra la advertencia de CU-12 |
+| A2 | El anticipo no cubre el costo directo | Se muestra la advertencia de [CU-12](#cu-12) |
 | A3 | El cliente paga todo por adelantado | Se registra el 100% como pasivo hasta la entrega |
 
 ---
 
-### CU-07 · Entregar pedido y cobrar saldo
+### <a id="cu-07"></a>CU-07 · Entregar pedido y cobrar saldo
 
 | | |
 |---|---|
@@ -192,7 +196,7 @@ de alta, consulta y modificación descrito en la tabla maestra.
 
 ---
 
-### CU-12 · Validar anticipo mínimo *(automático)*
+### <a id="cu-12"></a>CU-12 · Validar anticipo mínimo *(automático)*
 
 | | |
 |---|---|
@@ -215,7 +219,7 @@ de alta, consulta y modificación descrito en la tabla maestra.
 
 ---
 
-### CU-16 · Registrar retiro
+### <a id="cu-16"></a>CU-16 · Registrar retiro
 
 | | |
 |---|---|
@@ -228,12 +232,12 @@ de alta, consulta y modificación descrito en la tabla maestra.
 2. El sistema pregunta cómo se clasifica:
    - **Pro-labore** — pago por el trabajo propio en el taller → **es gasto**.
    - **Distribución de utilidades** — retiro por ser propietario → **no es gasto**.
-3. Si hay un pro-labore mensual configurado (CU-25), el sistema **propone la división
+3. Si hay un pro-labore mensual configurado ([CU-25](#cu-25)), el sistema **propone la división
    automáticamente**.
 4. Registra ambos componentes con su naturaleza correspondiente.
 5. Reduce la caja por el total y el patrimonio por el componente de distribución.
 
-**Regla de negocio central (RN-07)**
+**Regla de negocio central ([RN-07](03-requisitos-y-bdd.md#rn-07))**
 
 > El retiro de utilidades **no reduce la utilidad del período**. Un gasto es lo que el negocio
 > consume para operar; el retiro es reparto de una ganancia ya generada. Registrarlo como gasto
@@ -244,11 +248,11 @@ de alta, consulta y modificación descrito en la tabla maestra.
 | # | Situación | Comportamiento |
 |---|---|---|
 | A1 | La caja libre no alcanza | Se advierte que se estaría usando plata de anticipos; requiere confirmación explícita |
-| A2 | Los retiros del año superan las utilidades | Se dispara la alerta de CU-24 |
+| A2 | Los retiros del año superan las utilidades | Se dispara la alerta de [CU-24](#cu-24) |
 
 ---
 
-### CU-18 · Simular capacidad de pago
+### <a id="cu-18"></a>CU-18 · Simular capacidad de pago
 
 | | |
 |---|---|
@@ -266,7 +270,7 @@ de alta, consulta y modificación descrito en la tabla maestra.
    de cada producto.
 6. Permite mover los controles de reserva, salario tentativo y horas para ver el efecto en vivo.
 
-**Regla de negocio central (RN-09)**
+**Regla de negocio central ([RN-09](03-requisitos-y-bdd.md#rn-09))**
 
 > El simulador usa **obligatoriamente** la utilidad con pro-labore descontado. Usar la utilidad
 > inflada por no contar el trabajo propio es el error que lleva a contratar y quebrar.
@@ -277,11 +281,11 @@ de alta, consulta y modificación descrito en la tabla maestra.
 |---|---|---|
 | A1 | Menos de 6 meses de historia | Se usa el promedio disponible y se advierte que la proyección es menos confiable |
 | A2 | El presupuesto disponible es negativo o muy bajo | El sistema lo declara **no viable** y sugiere alternativas: medio tiempo, por obra, o crecer primero |
-| A3 | No hay pro-labore definido | Se bloquea el simulador y se pide definirlo (CU-25) |
+| A3 | No hay pro-labore definido | Se bloquea el simulador y se pide definirlo ([CU-25](#cu-25)) |
 
 ---
 
-### CU-26 · Registrar adelanto a la empleada
+### <a id="cu-26"></a>CU-26 · Registrar adelanto a la empleada
 
 | | |
 |---|---|
@@ -295,17 +299,17 @@ de alta, consulta y modificación descrito en la tabla maestra.
    - **Reduce la caja.**
    - **Crea una cuenta por cobrar** a nombre de la empleada.
    - **No registra gasto.**
-3. Al liquidar la nómina (CU-19), el adelanto se descuenta del neto a pagar y la cuenta por
+3. Al liquidar la nómina ([CU-19](#cu-19)), el adelanto se descuenta del neto a pagar y la cuenta por
    cobrar se cancela.
 
-**Regla de negocio (RN-11)**
+**Regla de negocio ([RN-11](03-requisitos-y-bdd.md#rn-11))**
 
 > Registrar el adelanto como gasto y después pagar el salario completo cuenta el mismo dinero
 > dos veces. El gasto se reconoce una sola vez, en la liquidación.
 
 ---
 
-### CU-27 · Horas pagadas vs. horas facturadas
+### <a id="cu-27"></a>CU-27 · Horas pagadas vs. horas facturadas
 
 | | |
 |---|---|
@@ -328,7 +332,7 @@ capacidad o trabajo que no se está cobrando: ajustes, repeticiones, diseños re
 
 ---
 
-### CU-28 · Iniciar sesión con usuario y contraseña
+### <a id="cu-28"></a>CU-28 · Iniciar sesión con usuario y contraseña
 
 | | |
 |---|---|
@@ -369,17 +373,17 @@ capacidad o trabajo que no se está cobrando: ajustes, repeticiones, diseños re
 | A1 | El usuario no existe | **«Usuario o contraseña incorrectos»** |
 | A2 | La contraseña es incorrecta | El **mismo** mensaje de A1 |
 | A3 | El usuario está desactivado | **«Este usuario está desactivado. Habla con Gerencia.»**, aunque la contraseña sea correcta |
-| A4 | `debe_cambiar_clave` está en verdadero | En lugar del tablero aparece la pantalla de crear contraseña (CU-32). No hay forma de saltarla salvo cerrar sesión |
+| A4 | `debe_cambiar_clave` está en verdadero | En lugar del tablero aparece la pantalla de crear contraseña ([CU-32](#cu-32)). No hay forma de saltarla salvo cerrar sesión |
 | A5 | El actor cierra la sesión | Se borra la sesión, se escribe `cierre_sesion` en auditoría y se vuelve a la pantalla de acceso |
 | A6 | Intentos fallidos repetidos | El proveedor los limita. Cada intento se registra con usuario intentado, fecha, dispositivo e IP; **nunca la contraseña tecleada**, ni completa ni parcial |
-| A7 | La persona olvidó su contraseña | No hay recuperación por correo porque no hay correo real: Gerencia la restablece en persona (CU-31) |
+| A7 | La persona olvidó su contraseña | No hay recuperación por correo porque no hay correo real: Gerencia la restablece en persona ([CU-31](#cu-31)) |
 
 **Postcondición** — Sesión abierta con nombre, cargo y tipo cargados, `ultimo_acceso`
 actualizado y `inicio_sesion` escrito en auditoría.
 
 ---
 
-### CU-29 · Crear un usuario
+### <a id="cu-29"></a>CU-29 · Crear un usuario
 
 | | |
 |---|---|
@@ -422,7 +426,7 @@ primer ingreso.
 
 ---
 
-### CU-30 · Desactivar un usuario
+### <a id="cu-30"></a>CU-30 · Desactivar un usuario
 
 | | |
 |---|---|
@@ -436,13 +440,13 @@ primer ingreso.
 3. Gerencia escribe el motivo y confirma.
 4. El sistema marca `activo` en falso y guarda `desactivado_en`, `desactivado_por` y
    `desactivado_motivo`. **La ficha no se borra.**
-5. El siguiente intento de ingreso de esa persona se rechaza (CU-28, A3).
+5. El siguiente intento de ingreso de esa persona se rechaza ([CU-28](#cu-28), A3).
 6. Se escribe `usuario_desactivado` en auditoría.
 7. La fila baja al grupo de desactivadas, al final de la misma tabla y detrás del separador
    `Desactivadas · nada se borra, queda el motivo`, con la fecha y la hora a la vista. Sus
    movimientos históricos siguen mostrando su nombre.
 
-**Regla de negocio central (RN-19)**
+**Regla de negocio central ([RN-19](03-requisitos-y-bdd.md#rn-19))**
 
 > Siempre debe quedar **al menos un usuario activo de tipo Gerencia**. El sistema rechaza
 > desactivar o degradar al último: sin Gerencia activa nadie podría crear usuarios ni
@@ -462,7 +466,7 @@ primer ingreso.
 
 ---
 
-### CU-34 · Reactivar un usuario desactivado
+### <a id="cu-34"></a>CU-34 · Reactivar un usuario desactivado
 
 | | |
 |---|---|
@@ -484,7 +488,7 @@ primer ingreso.
 6. Se escribe `usuario_reactivado` en auditoría. La entrada aparece en la **Bitácora de cambios**
    como `Reactivado`, con quién, cuándo y el motivo.
 7. La fila vuelve al grupo de activas. En el siguiente ingreso, la persona no ve el tablero sino
-   la pantalla de crear contraseña (CU-28, A4): quien vuelve después de meses no debe entrar con
+   la pantalla de crear contraseña ([CU-28](#cu-28), A4): quien vuelve después de meses no debe entrar con
    la clave vieja.
 
 **Regla de negocio central**
@@ -510,11 +514,11 @@ primer ingreso.
 
 **Postcondición** — Usuario activo con cambio de contraseña obligatorio, las tres columnas de
 desactivación limpias y la entrada `Reactivado` escrita en la bitácora. Es la contraparte exacta
-de CU-30, y por eso revertir una desactivación desde la bitácora (CU-35) equivale a reactivar.
+de [CU-30](#cu-30), y por eso revertir una desactivación desde la bitácora ([CU-35](#cu-35)) equivale a reactivar.
 
 ---
 
-### CU-35 · Revertir un cambio desde la bitácora
+### <a id="cu-35"></a>CU-35 · Revertir un cambio desde la bitácora
 
 | | |
 |---|---|
@@ -539,7 +543,7 @@ de CU-30, y por eso revertir una desactivación desde la bitácora (CU-35) equiv
 **Regla de negocio central**
 
 > **Revertir es escribir un cambio nuevo que deshace el anterior, nunca borrar el registro del
-> error.** Es el mismo mecanismo del contra-asiento de CU-04: el movimiento errado no se edita,
+> error.** Es el mismo mecanismo del contra-asiento de [CU-04](#cu-04): el movimiento errado no se edita,
 > se reversa, y los dos quedan visibles. Si alguien desactivó a la persona equivocada, la
 > bitácora tiene que mostrar las dos cosas: que se desactivó y que se corrigió. Borrar la
 > primera entrada convertiría la bitácora en un relato editable, y una bitácora editable no
@@ -549,8 +553,8 @@ de CU-30, y por eso revertir una desactivación desde la bitácora (CU-35) equiv
 
 | # | Situación | Comportamiento |
 |---|---|---|
-| A1 | La entrada es `Clave restablecida` | No es reversible. El sistema solo guarda el hash, nunca la contraseña anterior: no se puede deshacer lo que no se guardó. Para volver atrás hay que restablecerla otra vez (CU-31) |
-| A2 | Revertir un `Tipo cambiado` dejaría cero usuarios activos de Gerencia | Se rechaza con aviso claro. Es el guardián de RN-19, que vive en un trigger de la base de datos |
+| A1 | La entrada es `Clave restablecida` | No es reversible. El sistema solo guarda el hash, nunca la contraseña anterior: no se puede deshacer lo que no se guardó. Para volver atrás hay que restablecerla otra vez ([CU-31](#cu-31)) |
+| A2 | Revertir un `Tipo cambiado` dejaría cero usuarios activos de Gerencia | Se rechaza con aviso claro. Es el guardián de [RN-19](03-requisitos-y-bdd.md#rn-19), que vive en un trigger de la base de datos |
 | A3 | Se intenta revertir el `Usuario creado` de quien tiene la sesión abierta | Se rechaza: Gerencia se dejaría a sí misma por fuera del sistema |
 | A4 | El usuario afectado ya no existe | Se rechaza. No debería ocurrir, porque nada se borra |
 | A5 | La entrada ya está revertida | El botón está apagado; se informa y no se hace nada |
@@ -560,7 +564,7 @@ de CU-30, y por eso revertir una desactivación desde la bitácora (CU-35) equiv
 
 **Postcondición** — Valor anterior restablecido, entrada original marcada como revertida y
 entrada de `Reversión` escrita. La reversión es una **escritura compensatoria**, hermana del
-contra-asiento de CU-04.
+contra-asiento de [CU-04](#cu-04).
 
 **Nota sobre el modelo** — La bitácora no es una tabla nueva: es una vista sobre `auditoria`
 —escrita por triggers, [`ADR-005`](adr/ADR-005-auditoria-por-triggers.md)— filtrada por las
@@ -569,7 +573,7 @@ tablas `usuarios` y `cargos`. Ninguna de sus filas se edita ni se elimina, que e
 
 ---
 
-### CU-36 · Previsualizar el sistema como lo ve Operación
+### <a id="cu-36"></a>CU-36 · Previsualizar el sistema como lo ve Operación
 
 | | |
 |---|---|
@@ -612,7 +616,7 @@ y es lo que evalúa la base de datos.
 
 ---
 
-### CU-37 · Descargar lo que muestra una pantalla
+### <a id="cu-37"></a>CU-37 · Descargar lo que muestra una pantalla
 
 | | |
 |---|---|
@@ -623,7 +627,7 @@ y es lo que evalúa la base de datos.
 
 **Flujo principal**
 
-1. Gerencia pulsa **Descargar** en el encabezado de la pantalla. Hoy existe en el Inicio (RF-96).
+1. Gerencia pulsa **Descargar** en el encabezado de la pantalla. Hoy existe en el Inicio ([RF-96](03-requisitos-y-bdd.md#rf-96)).
 2. El sistema abre un panel con lo que esa pantalla puede bajar y el formato de cada cosa:
    CSV, PDF o ambos.
 3. Gerencia marca qué incluir y confirma.
@@ -635,7 +639,7 @@ y es lo que evalúa la base de datos.
 **Regla de negocio central**
 
 > **Esto no es un respaldo y no lo reemplaza.** Un respaldo tiene que ser completo y verificable
-> —manifiesto, `sha256`, totales de control (CU-22)—; una descarga de pantalla tiene que ser
+> —manifiesto, `sha256`, totales de control ([CU-22](#cu-22))—; una descarga de pantalla tiene que ser
 > legible, aunque esté incompleta. La regla que las separa es corta: si el archivo puede
 > reconstruir el estado del sistema, es respaldo; si solo responde una pregunta del momento, es
 > descarga de pantalla. Está desarrollada en
@@ -648,7 +652,7 @@ y es lo que evalúa la base de datos.
 | A1 | Quien intenta descargar es de tipo Operación | No hay botón, y la base de datos rechaza la operación igual: lo que baja el Inicio incluye utilidad, caja y patrimonio |
 | A2 | No se marca nada en el panel | No se genera archivo; se pide elegir al menos una cosa |
 | A3 | La pantalla está filtrada | Baja lo filtrado, y el archivo dice en su encabezado qué filtro estaba puesto |
-| A4 | Se pide con esto restaurar el sistema | No sirve: sin manifiesto no hay nada que verificar. Para eso está CU-22 |
+| A4 | Se pide con esto restaurar el sistema | No sirve: sin manifiesto no hay nada que verificar. Para eso está [CU-22](#cu-22) |
 
 **Postcondición** — Archivo CSV o PDF en poder de Gerencia, sin manifiesto, y una fila nueva en
 `exportaciones` que deja constancia de qué salió del sistema y cuándo.
@@ -660,21 +664,25 @@ y es lo que evalúa la base de datos.
 La matriz que conecta cada caso de uso con su requisito, su escenario BDD, su pantalla del
 mockup y sus tablas está en [`03-requisitos-y-bdd.md`](03-requisitos-y-bdd.md), sección 5.
 
-CU-28 a CU-33 entran en esa matriz con los requisitos **RF-71 a RF-83**, los escenarios
-**BDD-28-\*, BDD-29-\*, BDD-30-1, BDD-32-1 y BDD-33-1**, las pantallas **0 · Acceso** y
+[CU-28](#cu-28) a [CU-33](#cu-33) entran en esa matriz con los requisitos **[RF-71](03-requisitos-y-bdd.md#rf-71) a [RF-83](03-requisitos-y-bdd.md#rf-83)**, los escenarios
+**[BDD-28-\*](03-requisitos-y-bdd.md#bdd-28-1), [BDD-29-\*](03-requisitos-y-bdd.md#bdd-29-1), [BDD-30-1](03-requisitos-y-bdd.md#bdd-30-1), [BDD-32-1](03-requisitos-y-bdd.md#bdd-32-1) y [BDD-33-1](03-requisitos-y-bdd.md#bdd-33-1)**, las pantallas **0 · Acceso** y
 **9 · Gestión de usuarios**, y las tablas `usuarios`, `cargos` y `auditoria`.
 
-CU-34 a CU-36 entran con los requisitos **RF-84 a RF-94**, los escenarios
-**BDD-34-\*, BDD-35-\* y BDD-36-1**, la pantalla **9 · Gestión de usuarios** y las mismas tres
+[CU-34](#cu-34) a [CU-36](#cu-36) entran con los requisitos **[RF-84](03-requisitos-y-bdd.md#rf-84) a [RF-94](03-requisitos-y-bdd.md#rf-94)**, los escenarios
+**[BDD-34-\*](03-requisitos-y-bdd.md#bdd-34-1), [BDD-35-\*](03-requisitos-y-bdd.md#bdd-35-1) y [BDD-36-1](03-requisitos-y-bdd.md#bdd-36-1)**, la pantalla **9 · Gestión de usuarios** y las mismas tres
 tablas. Ninguno agrega tablas nuevas: la bitácora es una vista sobre `auditoria`, y la vista
-previa de CU-36 no toca la base de datos.
+previa de [CU-36](#cu-36) no toca la base de datos.
 
-CU-37 entra con el requisito **RF-96**, el escenario **BDD-13-4**, la pantalla **1 · Dashboard**
-y la tabla `exportaciones`. **RF-96 cuelga de CU-37, no de CU-22:** el respaldo de CU-22 lleva
+[CU-37](#cu-37) entra con el requisito **[RF-96](03-requisitos-y-bdd.md#rf-96)**, el escenario **[BDD-13-4](03-requisitos-y-bdd.md#bdd-13-4)**, la pantalla **1 · Dashboard**
+y la tabla `exportaciones`. **[RF-96](03-requisitos-y-bdd.md#rf-96) cuelga de [CU-37](#cu-37), no de [CU-22](#cu-22):** el respaldo de [CU-22](#cu-22) lleva
 manifiesto y la descarga de pantalla no, así que no pueden ser el mismo caso de uso sin que uno
 de los dos quede mal descrito. Tampoco agrega tablas: reutiliza `exportaciones` con
 `alcance_tipo = 'pantalla'` ([`13-respaldo-y-exportacion.md`](13-respaldo-y-exportacion.md),
 puntos 2.1 y 8).
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [15](15-glosario.md "15 · Glosario") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica")
+<!-- /generado:referenciado-desde -->
 
 ---
 

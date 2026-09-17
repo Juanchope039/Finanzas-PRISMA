@@ -1,10 +1,16 @@
 # 19 · Ambientes, versionado y entrega
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-16 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
-> **Estado: diseñado, no construido.** Los cuatro ambientes, la integración continua y los
-> canales de publicación todavía no existen. Este documento fija cómo deben quedar antes del
-> go-live, para que la decisión se tome ahora y no la noche de la primera publicación.
+> **Construcción: la integración continua ya corre; los ambientes y la publicación, todavía no.**
+> La API, el front y esta especificación se verifican en cada push y cada PR ([§6.1](#61-en-cada-empuje-en-paralelo)). Los cuatro
+> ambientes y los canales de publicación llegan en el [Sprint 9](08-plan-de-desarrollo.md#sprint-9), con el despliegue en Railway
+> ([ADR-026](adr/ADR-026-railway-al-final.md)). Este documento fija cómo deben quedar antes del go-live, para que la decisión se tome
+> ahora y no la noche de la primera publicación.
 
 ---
 
@@ -36,8 +42,8 @@ en [`16-base-de-datos-y-snapshots.md`](16-base-de-datos-y-snapshots.md). No se i
 6. **La configuración no vive en el código.** En Flutter entra por `--dart-define` al compilar;
    en la API, por variables de entorno. Ningún secreto queda en el repositorio.
 
-Las reglas 2, 3 y 4 son el resto de este documento: la promoción está en el §2 y la
-configuración de la regla 6, en el §3.
+Las reglas 2, 3 y 4 son el resto de este documento: la promoción está en el [§2](#2-la-promoción) y la
+configuración de la regla 6, en el [§3](#3-la-configuración-de-cada-ambiente).
 
 ---
 
@@ -81,7 +87,7 @@ no hay forma de saber cuál dice la verdad.
 
 Se compila **una vez**, en el paso a qa. Ese mismo archivo —el mismo `build/web` del front, la
 misma imagen de contenedor de `prisma_api`— es el que se aprueba en uat y el que se publica en
-prod. Lo único que cambia entre ambientes es la configuración del §3.
+prod. Lo único que cambia entre ambientes es la configuración del [§3](#3-la-configuración-de-cada-ambiente).
 
 > **Recompilar para prod sería aprobar una cosa y publicar otra.** Entre dos compilaciones cambia
 > la versión de una dependencia, la fecha, el compilador. Lo que Gerencia firmó en UAT dejaría de
@@ -100,7 +106,7 @@ promueve y qué hace falta para alojarla:
 | Asunto | Cómo queda | Por qué |
 |---|---|---|
 | **Construcción** | **Gradle** (`./gradlew bootJar`) produce un **JAR ejecutable** de Spring Boot: un solo archivo con la aplicación y sus dependencias | Un JAR y nada más que copiar. Lo que corre en prod no depende de qué haya instalado en la máquina, **ni siquiera del JDK**: Gradle descarga el 25 por su cuenta ([ADR-024](adr/ADR-024-java-25-y-gradle.md)) |
-| **Artefacto** | Una **imagen de contenedor** en dos etapas: se compila con el JDK, se publica solo con el JRE 25 | La etiqueta de la imagen es la versión SemVer del §4. Esa imagen es la que se promueve tal cual por los cuatro ambientes |
+| **Artefacto** | Una **imagen de contenedor** en dos etapas: se compila con el JDK, se publica solo con el JRE 25 | La etiqueta de la imagen es la versión SemVer del [§4](#4-versionado). Esa imagen es la que se promueve tal cual por los cuatro ambientes |
 | **Memoria** | **512 MB como mínimo** por instancia, y el contenedor arranca con `-XX:MaxRAMPercentage=75` | La JVM reserva su montón según lo que cree que tiene disponible |
 | **Arranque** | Segundos, no milisegundos. La comprobación de salud espera a que termine | Un orquestador impaciente reinicia en bucle una aplicación que solo estaba arrancando |
 | **Salud** | `/actuator/health`, con sondas separadas de vida y de disponibilidad | El tráfico no entra antes de que la base esté conectada y las migraciones verificadas |
@@ -111,7 +117,7 @@ promueve y qué hace falta para alojarla:
 
 Esto tiene dos consecuencias que hay que asumir, no esconder: un binario pequeño arrancaría más
 rápido y pediría menos memoria, y **alojar una JVM en cuatro ambientes cuesta más**. El costo está
-en el §8; el arranque en frío decide que uat y prod no pueden vivir en un plan que duerme el
+en el [§8](#8-el-costo-dicho-sin-adornos); el arranque en frío decide que uat y prod no pueden vivir en un plan que duerme el
 servicio por inactividad, porque la primera petición después de la siesta paga el arranque entero.
 
 ---
@@ -127,7 +133,7 @@ dentro del artefacto.
 |---|---|---|---|
 | `PRISMA_API_URL` | Dónde vive `prisma_api` | `https://api-dev.prismamy.co` | `https://api.prismamy.co` |
 | `PRISMA_AMBIENTE` | Cuál de los cuatro es | `dev` | `prod` |
-| `PRISMA_API_MAJOR` | Qué MAJOR de la API exige (§4.3) | `0` | `1` |
+| `PRISMA_API_MAJOR` | Qué MAJOR de la API exige ([§4.3](#43-el-contrato-de-compatibilidad)) | `0` | `1` |
 | `PRISMA_COMMIT` | Referencia del commit compilado | `a3f19c4` | `a3f19c4` |
 | `PRISMA_FECHA_COMPILACION` | Cuándo se compiló, ISO 8601 | `2026-09-15T09:40:00-05:00` | `2026-09-15T09:40:00-05:00` |
 
@@ -150,7 +156,7 @@ dentro del artefacto.
 | `ORIGENES_PERMITIDOS` | CORS: el dominio del front de ese ambiente, y solo ese | prod no acepta al front de qa |
 | `SERVER_PORT` | Dónde escucha | Spring Boot la lee tal cual, sin código de por medio |
 | `SPRING_PROFILES_ACTIVE` | Qué perfil de configuración carga | Uno por ambiente. El perfil no trae secretos: trae qué se activa y qué no |
-| `JAVA_TOOL_OPTIONS` | Ajustes de la JVM, empezando por `-XX:MaxRAMPercentage=75` | Ver §2.4. Sin esto la JVM reserva según la máquina anfitriona |
+| `JAVA_TOOL_OPTIONS` | Ajustes de la JVM, empezando por `-XX:MaxRAMPercentage=75` | Ver [§2.4](#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro). Sin esto la JVM reserva según la máquina anfitriona |
 
 ### 3.3 Dónde viven los secretos
 
@@ -256,22 +262,35 @@ es qué versión estaba usando y contra qué servidor.
 
 ## 6. Integración continua
 
-### 6.1 En cada empuje
+### 6.1 En cada empuje, en paralelo
+
+**Los trabajos que no dependen uno del otro corren a la vez.** Esperar a que termine el formato para
+empezar las pruebas, o a que terminen las pruebas para construir la imagen, no evita ningún error:
+solo hace esperar. La puerta para fusionar es que **todos** terminen en verde, no que corran en fila.
+
+| Repositorio | Trabajos que corren a la vez |
+|---|---|
+| `prisma_api` | **Compilar y probar** —formato, compilación, regla de dependencias y todas las pruebas— y **construir la imagen**, este solo en `main` |
+| `prisma_front` | **Formato y análisis**, **pruebas** —incluida la regla de frontera— y **compilación web** |
+| `Finanzas-PRISMA` | **Verificar la documentación**: encabezados, enlaces, referencias, plan y versiones ([`22-documentacion.md`](22-documentacion.md)) |
+
+Lo que comprueba cada etapa:
 
 | Etapa | Qué hace | Bloquea si… |
 |---|---|---|
 | Formato | `dart format --set-exit-if-changed` en el front; `Spotless` en la API | El código no está formateado |
-| Análisis estático | `dart analyze --fatal-infos` en el front; compilación con `-Xlint:all -Werror` y `Checkstyle` en la API | Hay un aviso sin resolver |
+| Análisis estático | `dart analyze --fatal-infos` en el front; compilación con `-Xlint:all -Werror` en la API | Hay un aviso sin resolver |
 | Regla de dependencias | El dominio no importa nada de infraestructura ni de HTTP. En la API lo verifica `ArchUnit` | Alguien la cruzó |
 | Pruebas unitarias | Las fórmulas financieras, sin base ni red ([`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md)) | Falla una |
 | **OpenAPI** | Regenera el documento desde los controladores y lo compara con el `openapi.json` versionado ([ADR-022](adr/ADR-022-openapi-generado.md)) | El regenerado difiere del versionado |
 | Compilación | `flutter build web` y la imagen de contenedor de `prisma_api` | No compila |
+| Documentación | `node scripts/docs/documentar.mjs verificar --base <commit>` en la especificación | Un encabezado está mal, algo quedó sin enlazar o un documento cambió sin subir su versión |
 
 > **La documentación desactualizada deja de ser un descuido y pasa a ser una compilación roja.** El
 > OpenAPI se genera del código, así que la única forma de que difiera del versionado es que alguien
 > cambiara el contrato sin volver a generarlo. Actualizarlo cuesta un comando; descubrir en prod
-> que Swagger describe una API que ya no existe cuesta mucho más. Es la prueba C-04 de
-> [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) y lo que hace exigible el **RNF-30**.
+> que Swagger describe una API que ya no existe cuesta mucho más. Es la prueba [C-04](12-pruebas-y-calidad.md#c-04) de
+> [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) y lo que hace exigible el **[RNF-30](03-requisitos-y-bdd.md#rnf-30)**.
 
 ### 6.2 En cada promoción
 
@@ -289,7 +308,7 @@ La prueba de permisos es la que sostiene [ADR-006](adr/ADR-006-rls-por-rol.md) y
 **se desactiva temporalmente la comprobación de la capa de
 aplicación y el resultado debe ser el mismo.** Si al quitar el `if` los datos aparecen, RLS no
 está actuando y la prueba falla, aunque en el ambiente de verdad nadie note nada. Las pruebas
-`P-01` a `P-32` de [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) son el catálogo concreto.
+`P-01` a `P-39` de [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) son el catálogo concreto.
 
 > **Una prueba de permisos que pasa por el `if` de Java no prueba permisos: prueba el `if`.**
 > El único juez válido es PostgreSQL, y la única forma de comprobarlo es quitándole al juez de
@@ -303,8 +322,8 @@ está actuando y la prueba falla, aunque en el ambiente de verdad nadie note nad
 
 | # | Paso | Quién |
 |---|---|---|
-| 1 | Las pruebas del §6.1 pasan en verde en la rama | Automático |
-| 2 | Se compila el artefacto y se promueve a qa; corren las pruebas del §6.2 | Automático |
+| 1 | Las pruebas del [§6.1](#61-en-cada-empuje-en-paralelo) pasan en verde en la rama | Automático |
+| 2 | Se compila el artefacto y se promueve a qa; corren las pruebas del [§6.2](#62-en-cada-promoción) | Automático |
 | 3 | Se promueve a uat con las migraciones y se avisa a Gerencia | Desarrollo |
 | 4 | Gerencia revisa en uat lo que pidió y lo aprueba | Gerencia |
 | 5 | Se aplican las migraciones en prod | Desarrollo |
@@ -330,9 +349,9 @@ El procedimiento:
 
 | # | Paso | Detalle |
 |---|---|---|
-| 1 | Publicar de nuevo la versión anterior | Está guardada: el artefacto se promovió, no se reconstruyó (§2.3), así que existe tal cual |
-| 2 | Revertir front y API por separado | Sus versiones son independientes (§4.2). Se devuelve solo el que rompió |
-| 3 | Comprobar el MAJOR | Tras revertir, el front y la API tienen que seguir cumpliendo el contrato del §4.3 |
+| 1 | Publicar de nuevo la versión anterior | Está guardada: el artefacto se promovió, no se reconstruyó ([§2.3](#23-el-artefacto-se-promueve-no-se-reconstruye)), así que existe tal cual |
+| 2 | Revertir front y API por separado | Sus versiones son independientes ([§4.2](#42-las-reglas)). Se devuelve solo el que rompió |
+| 3 | Comprobar el MAJOR | Tras revertir, el front y la API tienen que seguir cumpliendo el contrato del [§4.3](#43-el-contrato-de-compatibilidad) |
 | 4 | **No tocar la base** | Ver abajo |
 | 5 | Anotar qué se revirtió, cuándo y por qué | Y qué versión quedó corriendo |
 
@@ -367,15 +386,15 @@ Para el caso extremo —datos mal escritos que hay que recuperar— el respaldo 
 ## 8. El costo, dicho sin adornos
 
 [ADR-001](adr/ADR-001-stack.md) declaró **presupuesto de operación cero**. Ese objetivo ya no se
-sostiene, y por eso el **RNF-14 se reescribió**: lo que se exige es **costo mensual de operación al
+sostiene, y por eso el **[RNF-14](03-requisitos-y-bdd.md#rnf-14) se reescribió**: lo que se exige es **costo mensual de operación al
 mínimo sostenible**, no cero. Hay que saberlo antes del go-live, no el día del go-live.
 
 Dos cosas lo rompen, cada una por su lado:
 
 | Qué rompe el costo cero | Por qué |
 |---|---|
-| **RNF-20 · siempre en línea** | El plan gratuito de Supabase pausa el proyecto tras una semana de inactividad. Un taller que factura los lunes encontraría el sistema dormido |
-| **La API en Java** ([ADR-017](adr/ADR-017-api-en-java.md)) | Una JVM pide memoria y tarda segundos en arrancar (§2.4). **Alojar una JVM en cuatro ambientes cuesta más que alojar un binario pequeño**, y eso fue parte del precio de elegir Java |
+| **[RNF-20](03-requisitos-y-bdd.md#rnf-20) · siempre en línea** | El plan gratuito de Supabase pausa el proyecto tras una semana de inactividad. Un taller que factura los lunes encontraría el sistema dormido |
+| **La API en Java** ([ADR-017](adr/ADR-017-api-en-java.md)) | Una JVM pide memoria y tarda segundos en arrancar ([§2.4](#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro)). **Alojar una JVM en cuatro ambientes cuesta más que alojar un binario pequeño**, y eso fue parte del precio de elegir Java |
 
 ### 8.1 Qué se paga y qué no
 
@@ -387,7 +406,7 @@ Dos cosas lo rompen, cada una por su lado:
 | prod | **De pago** | **De pago, sin dormirse** | «Siempre en línea» es el requisito |
 
 Son, como mínimo, **dos proyectos de Supabase de pago y dos instancias de la API encendidas**, con
-512 MB de memoria cada una como piso (§2.4). No es un impedimento: es una factura, y es pequeña.
+512 MB de memoria cada una como piso ([§2.4](#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro)). No es un impedimento: es una factura, y es pequeña.
 Pero es mayor de la que habría con un binario de unas decenas de megabytes, y decirlo es parte de
 haber elegido Java a conciencia y no por descuido.
 
@@ -398,7 +417,7 @@ contra el proyecto dev de Supabase, que es lo que la fila de dev ya permitía.
 > **Costo al mínimo no es costo cero, y confundirlos se paga en disponibilidad.** Lo que se ahorra
 > apagando uat o dejando dormir a prod se cobra el día que Gerencia no puede aprobar, o que la
 > empleada abre la aplicación y se queda esperando el arranque. El mínimo es el más barato **de los
-> que cumplen RNF-20**, no el más barato de todos.
+> que cumplen [RNF-20](03-requisitos-y-bdd.md#rnf-20)**, no el más barato de todos.
 
 Queda escrito aquí, en [ADR-013](adr/ADR-013-cuatro-ambientes.md) y en
 [`09-plan-de-implantacion.md`](09-plan-de-implantacion.md) para que nadie lo descubra tarde.
@@ -420,6 +439,10 @@ solo está **con qué configuración corre cada ambiente y cómo se mueve una ve
 | Qué pasa cuando no hay señal | [`17-resiliencia-offline-y-cache.md`](17-resiliencia-offline-y-cache.md) |
 | Qué objetivos de compilación se publican y cuándo | [`18-distribucion-y-pipelines.md`](18-distribucion-y-pipelines.md) |
 | Qué forma tiene cada respuesta de la API y qué cabeceras lleva | [`20-contrato-de-api.md`](20-contrato-de-api.md) |
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo")
+<!-- /generado:referenciado-desde -->
 
 ---
 

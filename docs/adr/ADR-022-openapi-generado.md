@@ -1,6 +1,8 @@
 # ADR-022 · OpenAPI generado del código y verificado en integración continua
 
-**Estado:** Aceptado · **Fecha:** 2026-09-15
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-022-openapi-generado.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-15 | 2026-09-16 | [Contrato](../INDICE.md#etiqueta-contrato) · [Calidad](../INDICE.md#etiqueta-calidad) |
 
 ## Contexto
 
@@ -47,7 +49,7 @@ existe. Cada operación documenta, además de su forma:
 
 | Qué documenta | Por qué |
 |---|---|
-| **Qué caso de uso implementa**, enlazado a [`02-casos-de-uso.md`](../02-casos-de-uso.md) (CU-01 a CU-37) | Para poder ir del endpoint a lo que el negocio pidió, y al revés |
+| **Qué caso de uso implementa**, enlazado a [`02-casos-de-uso.md`](../02-casos-de-uso.md) ([CU-01](../02-casos-de-uso.md#cu-01) a [CU-37](../02-casos-de-uso.md#cu-37)) | Para poder ir del endpoint a lo que el negocio pidió, y al revés |
 | **La regla de negocio** que aplica, en español y sin jerga | Quien retome la API dentro de dos años necesita saber por qué la operación rechaza lo que rechaza |
 | **Qué códigos de `status` puede devolver**, con su mensaje, sacados del catálogo de [ADR-019](ADR-019-contrato-de-respuesta.md) | El front debe poder tratar cada caso sin adivinarlo ni inventarse mensajes |
 | **Un ejemplo real** de petición y de respuesta | Un ejemplo copiable ahorra más tiempo que tres párrafos de descripción |
@@ -110,6 +112,12 @@ la documentación no sirvió para nada.
   contrato es un MAJOR de la API.
 - [ADR-006 · Permisos con Row Level Security](ADR-006-rls-por-rol.md) — quien aplica de verdad el
   permiso que documenta cada operación.
-- [`02-casos-de-uso.md`](../02-casos-de-uso.md) — CU-01 a CU-37, a los que enlaza cada operación.
+- [`02-casos-de-uso.md`](../02-casos-de-uso.md) — [CU-01](../02-casos-de-uso.md#cu-01) a [CU-37](../02-casos-de-uso.md#cu-37), a los que enlaza cada operación.
 - [`12-pruebas-y-calidad.md`](../12-pruebas-y-calidad.md)
 - [`19-ambientes-y-entrega.md`](../19-ambientes-y-entrega.md)
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [12](../12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [19](../19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](../20-contrato-de-api.md "20 · Contrato de la API") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [ADR-019](ADR-019-contrato-de-respuesta.md "ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos") · [ADR-023](ADR-023-tres-repositorios.md "ADR-023 · Tres repositorios y el contrato como artefacto versionado") · [ADR-027](ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica")
+<!-- /generado:referenciado-desde -->

@@ -1,6 +1,8 @@
 # ADR-018 · Tres partes, y el front no toma decisiones
 
-**Estado:** Aceptado · **Fecha:** 2026-09-15
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-018-front-sin-decisiones.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-15 | 2026-09-16 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) · [Front](../INDICE.md#etiqueta-front) |
 
 > **La decisión sigue vigente; un dato del cuerpo dejó de serlo.** Donde abajo dice «Java 21», la
 > API ya es **Java 25**: lo cambió [ADR-024](ADR-024-java-25-y-gradle.md), que reemplazó a
@@ -18,8 +20,8 @@ puso las mismas reglas de negocio en tres sitios: la base, la API y el formulari
 tercera capa —el front con su propia copia de las reglas— es exactamente lo que ahora no puede
 existir.
 
-La convención del proyecto dice que un ADR no se modifica. Así que ADR-015 queda **reemplazado** y
-este recoge el modelo correcto. Lo que ADR-015 acertó —la base como único juez, el contrato de
+La convención del proyecto dice que un ADR no se modifica. Así que [ADR-015](ADR-015-validacion-tres-capas.md) queda **reemplazado** y
+este recoge el modelo correcto. Lo que [ADR-015](ADR-015-validacion-tres-capas.md) acertó —la base como único juez, el contrato de
 errores, la prueba que recorre `pg_constraint`— **se conserva palabra por palabra**. Lo que cambia
 es únicamente qué hace el front.
 
@@ -30,7 +32,7 @@ mal sin gastar un viaje por datos móviles en un taller con señal intermitente?
 
 | Opción | A favor | En contra |
 |---|---|---|
-| El front valida con su copia de las reglas (lo de ADR-015) | Respuesta instantánea, cero costo de red | Es una regla de negocio viviendo en el cliente: se separa de la de la API con el tiempo y contradice el pedido explícito de que el front no decida |
+| El front valida con su copia de las reglas (lo de [ADR-015](ADR-015-validacion-tres-capas.md)) | Respuesta instantánea, cero costo de red | Es una regla de negocio viviendo en el cliente: se separa de la de la API con el tiempo y contradice el pedido explícito de que el front no decida |
 | El front no valida nada y todo va por petición | Una sola fuente de verdad, imposible de que se separe; el front queda trivial | Cada error de dedo cuesta un viaje de ida y vuelta por datos móviles; con señal intermitente el formulario se vuelve inusable |
 | **La API envía el descriptor del formulario y el front lo pinta** | Respuesta inmediata sin que el front sea dueño de ninguna regla; las reglas viajan como datos desde donde ya viven | Hay que definir y versionar el formato del descriptor, y generarlo del mismo sitio que las validaciones del servidor |
 
@@ -75,7 +77,7 @@ Esto **reemplaza el modelo de tres capas de [ADR-015](ADR-015-validacion-tres-ca
 | **`prisma_api`** | **Decide.** Las mismas reglas, otra vez, antes de ir a la base; traduce el error de la base a mensaje en español | Sí, si alguien llama a la base por fuera |
 | **`prisma_front`** | **Pinta.** Aplica el descriptor que la API le mandó y muestra el mensaje que la API redactó | Sí, y no importa: no autoriza nada |
 
-Sigue siendo cierto lo que decía ADR-015 y no se toca: si las capas discrepan, **gana la base**;
+Sigue siendo cierto lo que decía [ADR-015](ADR-015-validacion-tres-capas.md) y no se toca: si las capas discrepan, **gana la base**;
 toda restricción lleva nombre explícito; existe una tabla única de traducción de restricción a
 mensaje; un error de la base que no esté en esa tabla devuelve 500 y se registra como defecto; y
 la prueba automática recorre `pg_constraint` para que ninguna restricción quede sin mensaje.
@@ -132,8 +134,8 @@ datos, así que hay aviso instantáneo **sin que el front sea dueño de ninguna 
 front ejecuta es un intérprete genérico —obligatorio, mínimo, máximo, tipo—, no el conocimiento
 del negocio.
 
-**Una regla nueva deja de costar tres ediciones.** Con ADR-015 había tres sitios que podían
-separarse. Ahora hay dos que deciden, y el tercero recibe lo que le dicten. El riesgo que ADR-015
+**Una regla nueva deja de costar tres ediciones.** Con [ADR-015](ADR-015-validacion-tres-capas.md) había tres sitios que podían
+separarse. Ahora hay dos que deciden, y el tercero recibe lo que le dicten. El riesgo que [ADR-015](ADR-015-validacion-tres-capas.md)
 declaraba como su consecuencia negativa se reduce a la mitad sin perder el aviso rápido.
 
 **Cambiar un mensaje deja de exigir publicar el front.** El texto que ve la empleada vive en el
@@ -171,3 +173,9 @@ botón oculto, es comodidad y nunca garantía.
   por la que la capa de datos no es un servicio aparte.
 - [ADR-006 · Permisos con Row Level Security](ADR-006-rls-por-rol.md)
 - [ADR-002 · Arquitectura hexagonal con regla de dependencias verificada](ADR-002-arquitectura-hexagonal.md)
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [04](../04-modelo-de-datos.md "04 · Modelo de datos") · [07](../07-arquitectura.md "07 · Arquitectura técnica") · [12](../12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](../13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [20](../20-contrato-de-api.md "20 · Contrato de la API") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [ADR-015](ADR-015-validacion-tres-capas.md "ADR-015 · Validación en tres capas, con la base como juez") · [ADR-019](ADR-019-contrato-de-respuesta.md "ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos") · [ADR-022](ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-023](ADR-023-tres-repositorios.md "ADR-023 · Tres repositorios y el contrato como artefacto versionado")
+<!-- /generado:referenciado-desde -->

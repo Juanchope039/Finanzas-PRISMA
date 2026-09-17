@@ -1,6 +1,8 @@
 # ADR-003 · Dinero como entero de pesos
 
-**Estado:** Aceptado · **Fecha:** 2026-09-13
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-003-dinero-entero.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-13 | 2026-09-16 | [Finanzas](../INDICE.md#etiqueta-finanzas) · [API](../INDICE.md#etiqueta-api) · [Base de datos](../INDICE.md#etiqueta-base-de-datos) |
 
 ## Contexto
 
@@ -28,3 +30,9 @@ un número suelto por descuido: el sistema de tipos lo impide.
 - **Positivas:** cero errores de redondeo acumulado; los reportes siempre cuadran.
 - **Negativas:** hay que ser explícito al calcular porcentajes. Es deseable: obliga a decidir
   conscientemente cómo se redondea, en lugar de que lo decida el azar del punto flotante.
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [20](../20-contrato-de-api.md "20 · Contrato de la API") · [ADR-015](ADR-015-validacion-tres-capas.md "ADR-015 · Validación en tres capas, con la base como juez")
+<!-- /generado:referenciado-desde -->

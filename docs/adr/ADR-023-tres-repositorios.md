@@ -1,6 +1,8 @@
 # ADR-023 · Tres repositorios y el contrato como artefacto versionado
 
-**Estado:** Reemplazado por ADR-025 · **Fecha:** 2026-09-16
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-023-tres-repositorios.md "Historial de cambios") | [⛔ Reemplazado](../22-documentacion.md#estados-de-un-adr) por [ADR-025](ADR-025-cuatro-repositorios.md) | 2026-09-16 | 2026-09-16 | [Proceso](../INDICE.md#etiqueta-proceso) · [Paralelo](../INDICE.md#etiqueta-paralelo) |
 
 > **Lo reemplaza [ADR-025](ADR-025-cuatro-repositorios.md):** la separación del código en
 > repositorios y el contrato como artefacto con versión propia siguen en pie, tal como se
@@ -114,3 +116,9 @@ algo distinto a lo acordado sin decirlo.
 - [ADR-014](ADR-014-semver.md) — SemVer independiente por proyecto
 - [ADR-018](ADR-018-front-sin-decisiones.md) — el front no decide, por eso puede construirse aparte
 - [ADR-022](ADR-022-openapi-generado.md) — OpenAPI generado del código y verificado en CI
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [16](../16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [Contrato](../../contrato/README.md "Contrato de la API · v0.2.0") · [ADR-025](ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API")
+<!-- /generado:referenciado-desde -->

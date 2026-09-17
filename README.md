@@ -1,6 +1,10 @@
 # PRISMA — Sistema de Gestión Administrativa y Financiera
 ### Prisma M&Y Estampados · Cali, Valle del Cauca, Colombia
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/README.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Negocio](docs/INDICE.md#etiqueta-negocio) · [Plan](docs/INDICE.md#etiqueta-plan) |
+
 > **PRISMA** = **P**lataforma de **R**egistro, **I**nversión, **S**eguimiento, **M**árgenes y **A**dministración.
 > Un solo lugar para saber cuánto entra, cuánto sale, cuánto queda y cuánto se puede pagar.
 
@@ -36,7 +40,7 @@ PRISMA existe para responder esas tres preguntas con números, no con intuición
 | 05 | [Reglas financieras](docs/05-reglas-financieras.md) | **Las fórmulas exactas. El corazón del sistema.** |
 | 06 | [Nómina y capacidad de pago](docs/06-nomina-y-capacidad-de-pago.md) | Cuánto se puede pagar y cómo se liquida |
 | 07 | [Arquitectura](docs/07-arquitectura.md) | Hexagonal, SOLID, stack, seguridad |
-| 08 | [Plan de desarrollo](docs/08-plan-de-desarrollo.md) | 10 sprints en 26 semanas, backlog, cronograma |
+| 08 | [Plan de desarrollo](docs/08-plan-de-desarrollo.md) | 10 sprints por carriles paralelos, con su calendario calculado para 1, 2 y 3 carriles |
 | 09 | [Plan de implantación](docs/09-plan-de-implantacion.md) | Migración, capacitación, go-live, soporte |
 | 10 | [UX y mockups](docs/10-ux-y-mockups.md) | Pantallas, navegación, sistema de diseño |
 | 11 | [Riesgos y protección de datos](docs/11-riesgos-y-proteccion-de-datos.md) | Matriz de riesgos, respaldos, Ley 1581 |
@@ -49,8 +53,9 @@ PRISMA existe para responder esas tres preguntas con números, no con intuición
 | 18 | [Distribución y pipelines](docs/18-distribucion-y-pipelines.md) | Descargas web/Android/iPhone/Windows y automatización (idea) |
 | 19 | [Ambientes, versionado y entrega](docs/19-ambientes-y-entrega.md) | Los 4 ambientes, promoción de migraciones, SemVer y publicación |
 | 20 | [Contrato de API](docs/20-contrato-de-api.md) | El sobre `{status, mensaje, data}`, los códigos de 5 dígitos, la idempotencia y el canal firmado |
-| 21 | [Trabajo en paralelo](docs/21-trabajo-en-paralelo.md) | Cómo avanzan dos equipos a la vez sin bloquearse: repartos, repositorios y reglas de convivencia |
-| — | [ADRs](docs/adr/) | Las 26 decisiones de arquitectura registradas |
+| 21 | [Trabajo en paralelo](docs/21-trabajo-en-paralelo.md) | Cómo avanzan varios carriles a la vez sin bloquearse: repartos, repositorios y reglas de convivencia |
+| 22 | [Documentación](docs/22-documentacion.md) | Versiones, estados, fechas, etiquetas y referencias enlazadas de todos los documentos |
+| — | [ADRs](docs/adr/) | Las 27 decisiones de arquitectura registradas |
 | — | [Contrato de la API](contrato/) | El `openapi.json` acordado entre front y API, con el catálogo de códigos dentro |
 | — | [Tareas](TODO.md) | Lo hecho y lo pendiente, tarea por tarea, y qué se puede avanzar en paralelo |
 
@@ -149,11 +154,11 @@ siempre en pantalla qué versión es y contra qué ambiente está hablando. El d
 | Documentación y plan | ✅ Completo |
 | Mockup navegable | ✅ Completo |
 | Validación del mockup con la gerencia | ✅ Confirmado en reunión el 16/09/2026 |
-| **Sprint 0** · proyectos, ambientes y contrato | 🔄 **En curso** |
-| Desarrollo MVP (Sprints 1 a 9) | 🔄 **Iniciado**: la tarea 1.9, `Dinero`, está hecha |
+| **[Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0)** · proyectos, ambientes y contrato | 🔄 **En curso** |
+| Desarrollo MVP (Sprints 1 a 9) | 🔄 **Iniciado**: la tarea [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9), `Dinero`, está hecha |
 | Implantación | ⬜ No iniciado |
 
-**Lo que ya existe del Sprint 0:** los cuatro repositorios, con el esqueleto de cada pieza, la
+**Lo que ya existe del [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0):** los cuatro repositorios, con el esqueleto de cada pieza, la
 integración continua de la API y del front, y los cimientos que tienen que estar **antes** del primer
 endpoint: el sobre en toda respuesta, el catálogo de códigos, `GET /version`, las dos fronteras
 verificadas, **el contrato v0.2.0** en [`contrato/`](contrato/), que era el camino crítico del
@@ -162,7 +167,7 @@ sprint, y el descriptor de formulario. Todavía no hay ninguna funcionalidad de 
 **Lo que falta para cerrarlo** son las dos tareas que necesitan una base de datos corriendo, 0.5 y
 0.10. Se hacen contra el proyecto dev de Supabase, que ya existe y falta configurar, porque Docker
 sigue sin arrancar en la máquina de desarrollo. Los otros tres proyectos de Supabase (0.4) se crean
-antes de promover. La imagen de la API y la entrega automática a dev (0.8 y 0.9) pasan al Sprint 9:
+antes de promover. La imagen de la API y la entrega automática a dev (0.8 y 0.9) pasan al [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9):
 el sistema se despliega en Railway al final del desarrollo
 ([ADR-026](docs/adr/ADR-026-railway-al-final.md)).
 
@@ -173,7 +178,7 @@ paralelo— está en [`TODO.md`](TODO.md).
 
 ## 7. Cómo usar esta documentación
 
-- **Si diriges el negocio:** lee `00-resumen-ejecutivo.md`, abre el mockup, y luego `05-reglas-financieras.md`.
+- **Si diriges el negocio:** lee [`00-resumen-ejecutivo.md`](docs/00-resumen-ejecutivo.md), abre el mockup, y luego [`05-reglas-financieras.md`](docs/05-reglas-financieras.md).
 - **Si vas a programar:** lee `01`, `02`, `03`, `04`, `07`, `19` y `20` en ese orden.
 - **Si eres el contador:** lee `05`, `06` y `11`.
 

@@ -1,148 +1,112 @@
 # Tareas de PRISMA
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+
 Lo hecho y lo pendiente, con los números de tarea del
-[plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer y **por
-qué**; este archivo dice **en qué va**. Si discrepan sobre qué hay que hacer, manda el plan.
+[plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
+carril** y **de qué depende**; este archivo dice **en qué va**. Si discrepan sobre qué hay que
+hacer, manda el plan.
 
-**Actualizado:** 16/09/2026 · **En curso:** cierre del Sprint 0 y arranque del Sprint 1
-
-| Marca | Significa |
-|---|---|
-| `[x]` | Hecha y verificada: pruebas en verde y commit en `main` |
-| `[ ]` | Pendiente |
-| ⚡ | **Paralelizable ya:** no espera a nada que esté pendiente |
-| 🔒 | Bloqueada por lo que dice al lado |
-| ✏️ | Escrita pero sin verificar: SQL que todavía no corrió contra ninguna base |
-| ⏭️ | Movida a otro sprint |
-
-Cada tarea lleva su **carril**, que dice dónde se hace:
-
-| Carril | Dónde | Quién |
+| Marca | Significa | Quién la pone |
 |---|---|---|
-| **API** | `prisma_api`, en `repositories/backend-api` | Equipo API |
-| **Base** | `prisma_db`, en `repositories/backend-db` | Equipo API |
-| **Front** | `prisma_front`, en `repositories/frontend-flutter` | Equipo Front |
-| **Contrato** | `contrato/` de este repositorio | Los dos equipos, con revisión cruzada |
-| **Decisión** | Sin código | Quien dirige el proyecto, o Gerencia |
+| `[x]` | Hecha y verificada: pruebas en verde y commit en `main` | Quien la termina |
+| ⚡ | **Puede empezar hoy:** todo lo que necesita ya está hecho | La herramienta, del plan |
+| 🔒 | Espera a otra tarea que todavía no está hecha | La herramienta, del plan |
+| ✏️ | Escrita pero sin verificar: SQL que todavía no corrió contra ninguna base | Quien la escribe |
+| ⏭️ | Movida a otro sprint | La herramienta, del plan |
+
+Cada tarea dice su **carril**: **API** (`prisma_api`), **Base** (`prisma_db`), **Front**
+(`prisma_front`), **Contrato** (`contrato/`, los dos lados) o **Decisión** (sin código).
 
 ---
 
-## 1. Qué se puede hacer en paralelo ahora mismo
+## 1. Qué se puede hacer ahora
 
-**Cuatro carriles pueden avanzar a la vez sin esperarse.** Solo el de la base está detenido, y lo
-destraba una configuración, no una línea de código.
+### 1.1 Lo que puede empezar hoy, en paralelo
 
-```mermaid
-graph LR
-  subgraph DEC["Decisión · sin código"]
-    SB["Configurar Supabase dev"]
-    D6["Decisión 6: esquema para las pruebas de integración"]
-  end
-  subgraph BASE["Base · prisma_db"]
-    B05["0.5 Rol prisma_api"]
-    B010["0.10 schema_version"]
-    B11["1.1 a 1.5 Esquema, auditoría y RLS"]
-    B113["1.13 peticiones_idempotentes"]
-  end
-  subgraph API["API · prisma_api"]
-    A18["⚡ 1.8 Traductor de restricciones"]
-    A114["⚡ 1.14 Filtro de idempotencia"]
-    A16["1.6 Transacción con identidad"]
-    A17["1.7 y 1.15 Pruebas contra la base"]
-    A110["1.10 Endpoints de cuentas y categorías"]
-  end
-  subgraph CON["Contrato · los dos equipos"]
-    C1["⚡ v0.3.0: cuentas, categorías y acceso"]
-  end
-  subgraph FRONT["Front · prisma_front"]
-    F1["⚡ Renderizador del descriptor"]
-    F2["⚡ Fechas, tablas y paneles del mockup"]
-    F3["⚡ Idempotency-Key y cola de pendientes"]
-    F4["1.10 Pantalla de cuentas y categorías"]
-  end
-  SB --> B05
-  SB --> B010
-  SB --> B11
-  B11 --> B113
-  B05 --> A16
-  B11 --> A16
-  A16 --> A17
-  D6 --> A17
-  B113 -.->|adaptador| A114
-  D6 -.->|prueba de pg_constraint| A18
-  A16 --> A110
-  A18 --> A110
-  A114 --> A110
-  C1 --> A110
-  C1 --> F4
-  F1 --> F4
-```
+Calculado de las dependencias del plan con lo marcado como hecho. Cada fila es un carril: **todo lo
+de una misma fila se puede trabajar a la vez que lo de las demás.**
 
-| Carril | Puede arrancar ya ⚡ | Espera a | Destraba |
-|---|---|---|---|
-| **Front** | El renderizador del descriptor contra `GET /formularios/{nombre}`, que ya existe. Fechas («14 sep 2026, 3:42 p. m.») y porcentajes como los arma el mockup. Tablas y paneles de confirmación en línea. `Idempotency-Key` en `cliente_api.dart` y la cola de pendientes | Nada: todo va contra el contrato v0.2.0 y la API simulada | La pantalla de 1.10 y las del Sprint 3 |
-| **API** | El traductor restricción → código de 1.8. La parte HTTP del filtro de idempotencia de 1.14 —cabecera obligatoria, huella, `40901` y `40902`— contra un puerto con un doble en memoria | La base, para el adaptador de 1.14 y la prueba de `pg_constraint` de 1.8. **La transacción que comparten la clave y el efecto se diseña con 1.13, no antes** | 1.10 y 1.15 |
-| **Contrato** | Acordar en `openapi.json` los endpoints de cuentas y categorías (1.10) y los de acceso (Sprint 2), y etiquetar v0.3.0. Hoy el contrato solo tiene `/formularios/{nombre}` y `/version` | La revisión de los dos equipos (21 §6.3) | La API y el front de 1.10 y del Sprint 2 |
-| **Base** 🔒 | — | Supabase dev configurado | 0.5, 0.10 y casi todo el Sprint 1 |
-| **Decisión** | Configurar Supabase dev, la decisión 6 y las licencias | — | La base y las pruebas de integración |
+<!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+| Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
+|---|---|
+| **API** | [3.1](docs/08-plan-de-desarrollo.md#tarea-3-1) · [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1) · [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1) |
+| **Front** | [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19) · [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19) · [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10) |
+| **Contrato** | [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) |
+| **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
+<!-- /generado:plan-listas-ya -->
 
-### Para destrabar, en orden de lo que más libera
+### 1.2 Cuánto falta
 
-- [ ] **Configurar el proyecto dev de Supabase** · Decisión — guardar la contraseña de la base;
-      iniciar sesión con `npx supabase login` y enlazar `prisma_db` con `npx supabase link` (el CLI
-      se descarga la primera vez); y llenar `backend-api/.env` a partir de `.env.ejemplo` con la
-      conexión, que nunca se sube. Destraba 0.5, 0.10 y el carril de la base.
-- [ ] **Decisión 6** · Decisión — cómo consiguen la API y su integración continua el esquema de
-      `prisma_db` para las pruebas de integración: una etiqueta de `prisma_db`, un submódulo o una
-      imagen de PostgreSQL con el esquema. Destraba 1.7, la prueba de 1.8 y 1.15. Dato útil: los
-      ejecutores de GitHub Actions sí tienen Docker, aunque la máquina de desarrollo no.
-- [ ] **Contrato v0.3.0** · Contrato — destraba 1.10 y el Sprint 2 en los dos lados.
-- [ ] **Una sola licencia** · Decisión — este repositorio y el front están con AGPL-3.0; la API y
-      la base, con GPL-3.0.
+<!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+Quedan **118 tareas y 144,5 días de trabajo** de 132 tareas del plan.
+
+| Carriles activos | Desarrollo que falta | Con la estabilización |
+|:---:|---:|---:|
+| 1 | 21,7 semanas | **24,7 semanas** |
+| 2 | 13,2 semanas | **16,2 semanas** |
+| 3 | 11,3 semanas | **14,3 semanas** |
+<!-- /generado:plan-restante -->
+
+### 1.3 Para destrabar, en orden de lo que más libera
+
+- [ ] ⚡ [**0.4**](docs/08-plan-de-desarrollo.md#tarea-0-4) · **Configurar el proyecto dev de Supabase.** Es la primera tarea de la cadena más
+      larga del plan: todo el carril Base espera por ella. Guardar la contraseña de la base; iniciar
+      sesión con `npx supabase login` y enlazar `prisma_db` con `npx supabase link` (el CLI se
+      descarga la primera vez); y llenar `backend-api/.env` a partir de `.env.ejemplo`, que nunca se
+      sube.
+- [ ] ⚡ [**1.20**](docs/08-plan-de-desarrollo.md#tarea-1-20) · **Decidir cómo consiguen la API y su CI el esquema de `prisma_db`**: una etiqueta,
+      un submódulo o una imagen de PostgreSQL con el esquema. Destraba las tareas [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7), [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) y [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15).
+      Dato útil: los ejecutores de GitHub Actions sí tienen Docker, aunque la máquina de desarrollo
+      no.
+- [ ] ⚡ [**1.17**](docs/08-plan-de-desarrollo.md#tarea-1-17) · **Contrato de cuentas y categorías.** Destraba la tarea [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) en los dos lados, y
+      el contrato del [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) depende de él.
+- [ ] **Una sola licencia** · Decisión — este repositorio y el front están con AGPL-3.0; la API y la
+      base, con GPL-3.0.
 
 ---
 
 ## 2. Sprint 0 · proyectos, ambientes y contrato
 
-- [x] **0.1** Proyecto `prisma_api`: Java 25, Spring Boot 4 y Gradle, con el esqueleto hexagonal · API
-- [x] **0.2** Regla de frontera con ArchUnit en la integración continua · API
-- [x] **0.3** Proyecto `prisma_front` en Flutter, web por defecto · Front
-- [ ] **0.4** Los cuatro proyectos de Supabase · Decisión — dev ya existe y falta configurarlo; qa,
+- [x] [**0.1**](docs/08-plan-de-desarrollo.md#tarea-0-1) Proyecto `prisma_api`: Java 25, Spring Boot 4 y Gradle, con el esqueleto hexagonal · API
+- [x] [**0.2**](docs/08-plan-de-desarrollo.md#tarea-0-2) Regla de frontera con ArchUnit en la integración continua · API
+- [x] [**0.3**](docs/08-plan-de-desarrollo.md#tarea-0-3) Proyecto `prisma_front` en Flutter, web por defecto · Front
+- [ ] ⚡ [**0.4**](docs/08-plan-de-desarrollo.md#tarea-0-4) Los cuatro proyectos de Supabase · Decisión — dev ya existe y falta configurarlo; qa,
       uat y prod se crean antes de promover, y uat y prod son de pago
-- [ ] 🔒 **0.5** Rol `prisma_api` sin `BYPASSRLS`, sin `SUPERUSER` y sin ser dueño de las tablas ·
-      Base — espera a Supabase dev
-- [x] **0.6** Secretos fuera del repositorio: variables de entorno en la API y `--dart-define` en el
+- [ ] 🔒 [**0.5**](docs/08-plan-de-desarrollo.md#tarea-0-5) Rol `prisma_api` sin `BYPASSRLS`, sin `SUPERUSER` y sin ser dueño de las tablas · Base
+- [x] [**0.6**](docs/08-plan-de-desarrollo.md#tarea-0-6) Secretos fuera del repositorio: variables de entorno en la API y `--dart-define` en el
       front · API, Front
-- [x] **0.7** Integración continua por proyecto: formato, análisis, pruebas y compilación · API, Front
-- [ ] ⏭️ **0.8** Imagen de la API arrancando en los ambientes → Sprint 9
-      ([ADR-026](docs/adr/ADR-026-railway-al-final.md)). El `Dockerfile` ya existe y la integración
-      continua lo construye en cada push a `main` · API
-- [ ] ⏭️ **0.9** Entrega a dev al fusionar → Sprint 9 ([ADR-026](docs/adr/ADR-026-railway-al-final.md)) ·
-      API, Front
-- [ ] 🔒 **0.10** SemVer y migraciones con `schema_version` · Base — el SemVer ya está en
-      `build.gradle.kts` y en `pubspec.yaml`; falta la tabla `schema_version`, que espera a Supabase dev
-- [x] **0.11** `GET /version`: versión de la API, del esquema y ambiente · API
-- [x] **0.12** Insignia `v0.1.0 · Desarrollo` en el pie de la barra lateral y franja de ambiente · Front
-- [x] **0.13** El front comprueba el MAJOR de la API y bloquea con la pantalla del mockup · Front
-- [x] **0.14** Sobre `{status, mensaje, data}` en toda respuesta, también en los errores · API
-- [x] **0.15** Catálogo único de códigos de cinco dígitos · API, Contrato
-- [x] **0.16** Prueba C-03: el catálogo contra el código fuente, en los dos sentidos · API
-- [x] **0.17** Descriptor de formulario generado del propio validador (RF-102) · API
-- [x] **0.18** Swagger en `/docs` y prueba C-04 contra la copia fijada del contrato · API, Contrato
+- [x] [**0.7**](docs/08-plan-de-desarrollo.md#tarea-0-7) Integración continua por proyecto: formato, análisis, pruebas y compilación · API, Front
+- [ ] ⏭️ [**0.8**](docs/08-plan-de-desarrollo.md#tarea-0-8) Imagen de la API arrancando en los ambientes, en Railway ([ADR-026](docs/adr/ADR-026-railway-al-final.md)). El `Dockerfile` ya
+      existe y la integración continua lo construye en cada push a `main` · API
+- [ ] ⏭️ [**0.9**](docs/08-plan-de-desarrollo.md#tarea-0-9) Entrega a dev al fusionar ([ADR-026](docs/adr/ADR-026-railway-al-final.md)) · API, Front
+- [ ] 🔒 [**0.10**](docs/08-plan-de-desarrollo.md#tarea-0-10) SemVer y migraciones con `schema_version` · Base — el SemVer ya está en
+      `build.gradle.kts` y en `pubspec.yaml`; falta la tabla `schema_version`
+- [x] [**0.11**](docs/08-plan-de-desarrollo.md#tarea-0-11) `GET /version`: versión de la API, del esquema y ambiente · API
+- [x] [**0.12**](docs/08-plan-de-desarrollo.md#tarea-0-12) Insignia `v0.1.0 · Desarrollo` en el pie de la barra lateral y franja de ambiente · Front
+- [x] [**0.13**](docs/08-plan-de-desarrollo.md#tarea-0-13) El front comprueba el MAJOR de la API y bloquea con la pantalla del mockup · Front
+- [x] [**0.14**](docs/08-plan-de-desarrollo.md#tarea-0-14) Sobre `{status, mensaje, data}` en toda respuesta, también en los errores · API
+- [x] [**0.15**](docs/08-plan-de-desarrollo.md#tarea-0-15) Catálogo único de códigos de cinco dígitos · API, Contrato
+- [x] [**0.16**](docs/08-plan-de-desarrollo.md#tarea-0-16) Prueba [C-03](docs/12-pruebas-y-calidad.md#c-03): el catálogo contra el código fuente, en los dos sentidos · API
+- [x] [**0.17**](docs/08-plan-de-desarrollo.md#tarea-0-17) Descriptor de formulario generado del propio validador ([RF-102](docs/03-requisitos-y-bdd.md#rf-102)) · API
+- [x] [**0.18**](docs/08-plan-de-desarrollo.md#tarea-0-18) Swagger en `/docs` y prueba [C-04](docs/12-pruebas-y-calidad.md#c-04) contra la copia fijada del contrato · API, Contrato
+- [ ] ⚡ [**0.19**](docs/08-plan-de-desarrollo.md#tarea-0-19) Sistema de diseño del mockup en widgets: tablas, paneles de confirmación en línea, y
+      fechas y porcentajes con el formato colombiano · Front
 
 **Hecho fuera de la numeración:**
 
 - [x] CORS con un origen por ambiente · API
 - [x] Hilos virtuales de Java 25 en cada petición, vigilados por `HilosVirtualesTest` · API
 - [x] Java 25, Gradle y Spring Boot 4 ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)) · API
-- [x] Cuatro repositorios en GitHub, cada uno con su remoto
-      ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)); este, desde el 16/09/2026 · Decisión
+- [x] Cuatro repositorios en GitHub, cada uno con su remoto ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)); este, desde el 16/09/2026 · Decisión
 - [x] Contrato v0.2.0 en `contrato/`, con su copia fijada en la API · Contrato
 - [x] Alojamiento: Railway, al final del desarrollo ([ADR-026](docs/adr/ADR-026-railway-al-final.md)) · Decisión
-- [x] **H0**: mockup confirmado por Gerencia el 16/09/2026 · Decisión
+- [x] Hito [H0](docs/08-plan-de-desarrollo.md#h0): mockup confirmado por Gerencia el 16/09/2026 · Decisión
 
-**H1:** la insignia y el sobre en toda respuesta ya se cumplen; el despliegue automático a dev
-llega con el Sprint 9.
+**Hito [H1](docs/08-plan-de-desarrollo.md#h1):** la insignia y el sobre en toda respuesta ya se cumplen; el despliegue automático a dev
+llega con el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9).
 
 ---
 
@@ -152,185 +116,169 @@ llega con el Sprint 9.
 (`20260915120000_esquema_inicial.sql`) pero nunca corrió contra una base: no cuenta como hecho
 hasta aplicarlo y probarlo.
 
-- [ ] ✏️🔒 **1.1** Esquema completo con restricciones con nombre explícito · Base — las 22 tablas
-      están escritas; falta aplicarlas y revisar que toda restricción tenga nombre · espera a Supabase dev
-- [ ] ✏️🔒 **1.2** Revocar `DELETE` y `TRUNCATE` · Base · espera a 1.1
-- [ ] ✏️🔒 **1.3** Triggers de auditoría sobre las tablas de negocio · Base · espera a 1.1
-- [ ] ✏️🔒 **1.4** `fn_es_gerencia` y políticas RLS · Base · espera a 1.1
-- [ ] 🔒 **1.5** `FORCE ROW LEVEL SECURITY` en todas las tablas · Base — no está en la migración ·
-      espera a 1.4
-- [ ] 🔒 **1.6** Transacción por petición con `request.jwt.claims` y `SET LOCAL ROLE authenticated` ·
-      API · espera a 0.5 y 1.4
-- [ ] 🔒 **1.7** Prueba de permisos con sesión real, con y sin la comprobación de la API · API ·
-      espera a 1.6 y a la decisión 6
-- [ ] ⚡ **1.8** Traducción restricción → código del catálogo · API — el traductor puede empezar ya;
-      su prueba de `pg_constraint` espera a 1.1 y a la decisión 6
-- [x] **1.9** `Dinero` en Java y en Dart · API, Front — `Dinero.java` con sumas que fallan al
-      desbordar, porcentaje `HALF_UP` y formato colombiano; en el front, un tipo sin operadores y su
-      formato en `ui/formato/moneda.dart`. Pruebas con las cifras de los documentos 05 y 06,
-      verificadas en negativo
-- [ ] 🔒 **1.10** Cuentas y categorías: endpoints y pantalla (RF-97) · API, Front, Contrato ·
-      espera al contrato v0.3.0, 1.6, 1.8 y 1.14
-- [ ] ✏️🔒 **1.11** Semilla reproducible para dev y qa · Base — `seed.sql` ya existe · espera a 1.1
-- [ ] 🔒 **1.12** Primera promoción de migraciones dev → qa · Base · espera al proyecto qa de Supabase
-- [ ] 🔒 **1.13** Tabla `peticiones_idempotentes` · Base — no está en la migración · espera a Supabase dev
-- [ ] ⚡ **1.14** Filtro de idempotencia · API — la parte HTTP puede empezar contra un puerto; la
-      transacción con el efecto espera a 1.13
-- [ ] 🔒 **1.15** Prueba de corte entre el efecto y la clave · API · espera a 1.14 y a la decisión 6
-- [ ] 🔒 **1.16** Purga de claves vencidas a las 72 horas · API, Base · espera a 1.13
-
-**El front del Sprint 1** ([21 §4.2](docs/21-trabajo-en-paralelo.md)). El plan no lo numera, pero
-es lo que evita que el equipo Front se quede esperando:
-
-- [ ] ⚡ Renderizador del descriptor de formulario (RF-102), contra `GET /formularios/{nombre}` · Front
-- [ ] ⚡ `Idempotency-Key` en cada escritura: la genera el front cuando la persona decide la acción,
-      no en cada reintento ([ADR-020](docs/adr/ADR-020-idempotencia.md)) · Front
-- [ ] ⚡ Cola de pendientes con la clave guardada antes de enviar; es la base de 9.1 · Front
-- [ ] ⚡ Sistema de diseño del mockup: tablas, paneles de confirmación en línea, fechas y
-      porcentajes con formato colombiano · Front
-- [x] Formato de dinero, `$1.350.784` y `−$1.255.000`, con la 1.9 · Front
+- [ ] ✏️🔒 [**1.1**](docs/08-plan-de-desarrollo.md#tarea-1-1) Esquema completo con restricciones con nombre explícito · Base — las 22 tablas están
+      escritas; falta aplicarlas y revisar que toda restricción tenga nombre
+- [ ] ✏️🔒 [**1.2**](docs/08-plan-de-desarrollo.md#tarea-1-2) Revocar `DELETE` y `TRUNCATE` · Base
+- [ ] ✏️🔒 [**1.3**](docs/08-plan-de-desarrollo.md#tarea-1-3) Triggers de auditoría sobre las tablas de negocio · Base
+- [ ] ✏️🔒 [**1.4**](docs/08-plan-de-desarrollo.md#tarea-1-4) `fn_es_gerencia` y políticas RLS · Base
+- [ ] 🔒 [**1.5**](docs/08-plan-de-desarrollo.md#tarea-1-5) `FORCE ROW LEVEL SECURITY` en todas las tablas · Base — no está en la migración
+- [ ] 🔒 [**1.6**](docs/08-plan-de-desarrollo.md#tarea-1-6) Transacción por petición con `request.jwt.claims` y `SET LOCAL ROLE authenticated` · API
+- [ ] 🔒 [**1.7**](docs/08-plan-de-desarrollo.md#tarea-1-7) Prueba de permisos con sesión real, con y sin la comprobación de la API · API
+- [ ] 🔒 [**1.8**](docs/08-plan-de-desarrollo.md#tarea-1-8) Traducción restricción → código del catálogo · API
+- [x] [**1.9**](docs/08-plan-de-desarrollo.md#tarea-1-9) `Dinero` en Java y en Dart · API, Front — en la API, sumas que fallan al desbordar,
+      porcentaje `HALF_UP` y formato colombiano; en el front, un tipo sin operadores y su formato en
+      `ui/formato/moneda.dart`. Pruebas con las cifras de los documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md), verificadas en negativo
+- [ ] 🔒 [**1.10**](docs/08-plan-de-desarrollo.md#tarea-1-10) Cuentas y categorías: endpoints y pantalla ([RF-97](docs/03-requisitos-y-bdd.md#rf-97)) · API, Front
+- [ ] ✏️🔒 [**1.11**](docs/08-plan-de-desarrollo.md#tarea-1-11) Semilla reproducible para dev y qa · Base — `seed.sql` ya existe
+- [ ] 🔒 [**1.12**](docs/08-plan-de-desarrollo.md#tarea-1-12) Primera promoción de migraciones dev → qa · Base
+- [ ] 🔒 [**1.13**](docs/08-plan-de-desarrollo.md#tarea-1-13) Tabla `peticiones_idempotentes` · Base — no está en la migración
+- [ ] 🔒 [**1.14**](docs/08-plan-de-desarrollo.md#tarea-1-14) Filtro de idempotencia · API
+- [ ] 🔒 [**1.15**](docs/08-plan-de-desarrollo.md#tarea-1-15) Prueba de corte entre el efecto y la clave · API
+- [ ] 🔒 [**1.16**](docs/08-plan-de-desarrollo.md#tarea-1-16) Purga de claves vencidas a las 72 horas · API, Base
+- [ ] ⚡ [**1.17**](docs/08-plan-de-desarrollo.md#tarea-1-17) Contrato de cuentas y categorías · Contrato
+- [ ] 🔒 [**1.18**](docs/08-plan-de-desarrollo.md#tarea-1-18) Renderizador del descriptor de formulario en el front ([RF-102](docs/03-requisitos-y-bdd.md#rf-102)) · Front
+- [ ] ⚡ [**1.19**](docs/08-plan-de-desarrollo.md#tarea-1-19) Cliente HTTP con `Idempotency-Key`, generada una vez por acción ([ADR-020](docs/adr/ADR-020-idempotencia.md)) · Front
+- [ ] ⚡ [**1.20**](docs/08-plan-de-desarrollo.md#tarea-1-20) Decidir cómo consiguen la API y su CI el esquema de `prisma_db` · Decisión
 
 ---
 
 ## 4. Sprint 2 · acceso, usuarios, cargos y canal firmado
 
-Empieza por el contrato de acceso (v0.3.0). Con eso firmado, los dos carriles corren a la vez: la
-API contra la base y el front contra la API simulada.
-
-- [ ] **2.1** Autenticación contra Supabase Auth desde la API, con el correo sintético en el servidor · API
-- [ ] **2.2** Sesión de 30 días y enrutamiento según la navegación que dicta la API · API, Front
-- [ ] ✏️ **2.3** Tabla `cargos` con semilla y RLS · Base — escrita en la migración inicial
-- [ ] ✏️ **2.4** Tabla `usuarios` con `usuario`, `nombre_completo`, `cargo_id` y `tipo` · Base — escrita
+- [ ] 🔒 [**2.1**](docs/08-plan-de-desarrollo.md#tarea-2-1) Autenticación contra Supabase Auth desde la API, con el correo sintético en el servidor · API
+- [ ] 🔒 [**2.2**](docs/08-plan-de-desarrollo.md#tarea-2-2) Sesión de 30 días y enrutamiento según la navegación que dicta la API · API, Front
+- [ ] ✏️🔒 [**2.3**](docs/08-plan-de-desarrollo.md#tarea-2-3) Tabla `cargos` con semilla y RLS · Base — escrita en la migración inicial
+- [ ] ✏️🔒 [**2.4**](docs/08-plan-de-desarrollo.md#tarea-2-4) Tabla `usuarios` con `usuario`, `nombre_completo`, `cargo_id` y `tipo` · Base — escrita
       en la migración inicial
-- [ ] ✏️ **2.5** Trigger `tg_proteger_ultima_gerencia` · Base — escrito en la migración inicial
-- [ ] ⚡ **2.6** Pantalla de acceso y cambio obligatorio de contraseña · Front — contra el mockup y la
-      API simulada, una vez firmado el contrato
-- [ ] **2.7** Gestión de usuarios: crear, editar, desactivar con motivo y restablecer clave · API, Front
-- [ ] **2.8** Catálogo de cargos · API, Front
-- [ ] **2.9** Registro de cada inicio de sesión con fecha, dispositivo e IP · API, Base
-- [ ] ⚡ **2.10** Panel «Acerca de» (RF-100) · Front, API
-- [ ] 🔒 **2.11** La prueba de permisos del Sprint 1, también contra la base de qa · API · espera al
-      proyecto qa de Supabase
-- [ ] **2.12** Clave de firma de sesión, solo en memoria en el front · API, Front
-- [ ] **2.13** Filtro de firma: HMAC, nonce y marca de tiempo (`40101` a `40103`) · API
-- [ ] **2.14** Navegación dictada por la API (RF-103) · API, Front
-- [ ] **2.15** Tabla única de usuarios activos y desactivados (RF-84 a RF-87) · API, Front
-- [ ] **2.16** Bitácora de cambios y reversión sin borrar (RF-88, RF-89, RF-91) · Base, API, Front
-- [ ] **2.17** Cambio de clave obligatorio al reactivar (RF-90) · API, Front
-- [ ] **2.18** Vista previa de Operación para Gerencia (RF-92 a RF-94) · Front, API
+- [ ] ✏️🔒 [**2.5**](docs/08-plan-de-desarrollo.md#tarea-2-5) Trigger `tg_proteger_ultima_gerencia` · Base — escrito en la migración inicial
+- [ ] 🔒 [**2.6**](docs/08-plan-de-desarrollo.md#tarea-2-6) Pantalla de acceso y cambio obligatorio de contraseña · Front
+- [ ] 🔒 [**2.7**](docs/08-plan-de-desarrollo.md#tarea-2-7) Gestión de usuarios: crear, editar, desactivar con motivo y restablecer clave · API, Front
+- [ ] 🔒 [**2.8**](docs/08-plan-de-desarrollo.md#tarea-2-8) Catálogo de cargos · API, Front
+- [ ] 🔒 [**2.9**](docs/08-plan-de-desarrollo.md#tarea-2-9) Registro de cada inicio de sesión con fecha, dispositivo e IP · API, Base
+- [ ] ⚡ [**2.10**](docs/08-plan-de-desarrollo.md#tarea-2-10) Panel «Acerca de» ([RF-100](docs/03-requisitos-y-bdd.md#rf-100)) · Front, API
+- [ ] 🔒 [**2.11**](docs/08-plan-de-desarrollo.md#tarea-2-11) La prueba de permisos del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1), también contra la base de qa · API
+- [ ] 🔒 [**2.12**](docs/08-plan-de-desarrollo.md#tarea-2-12) Clave de firma de sesión, solo en memoria en el front · API, Front
+- [ ] 🔒 [**2.13**](docs/08-plan-de-desarrollo.md#tarea-2-13) Filtro de firma: HMAC, nonce y marca de tiempo (`40101` a `40103`) · API
+- [ ] 🔒 [**2.14**](docs/08-plan-de-desarrollo.md#tarea-2-14) Navegación dictada por la API ([RF-103](docs/03-requisitos-y-bdd.md#rf-103)) · API, Front
+- [ ] 🔒 [**2.15**](docs/08-plan-de-desarrollo.md#tarea-2-15) Tabla única de usuarios activos y desactivados ([RF-84](docs/03-requisitos-y-bdd.md#rf-84) a [RF-87](docs/03-requisitos-y-bdd.md#rf-87)) · API, Front
+- [ ] 🔒 [**2.16**](docs/08-plan-de-desarrollo.md#tarea-2-16) Bitácora de cambios y reversión sin borrar ([RF-88](docs/03-requisitos-y-bdd.md#rf-88), [RF-89](docs/03-requisitos-y-bdd.md#rf-89), [RF-91](docs/03-requisitos-y-bdd.md#rf-91)) · Base, API, Front
+- [ ] 🔒 [**2.17**](docs/08-plan-de-desarrollo.md#tarea-2-17) Cambio de clave obligatorio al reactivar ([RF-90](docs/03-requisitos-y-bdd.md#rf-90)) · API, Front
+- [ ] 🔒 [**2.18**](docs/08-plan-de-desarrollo.md#tarea-2-18) Vista previa de Operación para Gerencia ([RF-92](docs/03-requisitos-y-bdd.md#rf-92) a [RF-94](docs/03-requisitos-y-bdd.md#rf-94)) · Front, API
+- [ ] 🔒 [**2.19**](docs/08-plan-de-desarrollo.md#tarea-2-19) Contrato de acceso, usuarios, cargos y canal firmado · Contrato
 
 ---
 
-## 5. Sprints 3 a 8 · funcionalidades en dos cadenas paralelas
+## 5. Sprints 3 a 8 · funcionalidades en cadenas paralelas
 
-**Con dos equipos, las dos cadenas corren a la vez y comparten lo mínimo**: cada una tiene sus
-tablas y su rango de códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md)). Con un solo equipo, el
-orden es el de [08 §7](docs/08-plan-de-desarrollo.md).
+**Las cadenas avanzan a la vez y comparten lo mínimo**: cada una tiene sus tablas y su rango de
+códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-verticales-sprints-3-a-8)). El orden exacto dentro de cada una lo dan las dependencias del plan.
 
 ### Cadena A · el dinero
 
-**Sprint 3 · Movimientos**
+**[Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos**
 
-- [ ] **3.1** Dominio `Movimiento`, tipos y su efecto sobre utilidad, caja y patrimonio
-- [ ] **3.2** Caso de uso `RegistrarMovimiento` con doble fecha
-- [ ] **3.3** Repositorio de movimientos contra PostgreSQL
-- [ ] **3.4** Endpoints de movimientos con sus códigos del catálogo
-- [ ] **3.5** Formulario de registro rápido para celular, pintado del descriptor
-- [ ] **3.6** Foto del recibo comprimida, subida a través de la API
-- [ ] **3.7** Transferencias entre cuentas
-- [ ] **3.8** Listado con filtros
-- [ ] **3.9** Anulación con motivo obligatorio
-- [ ] **3.10** Corrección por contra-asiento
-- [ ] **3.11** Marca de registro tardío
-- [ ] **3.12** Saldos por cuenta
+- [ ] ⚡ [**3.1**](docs/08-plan-de-desarrollo.md#tarea-3-1) Dominio `Movimiento`, tipos y su efecto sobre utilidad, caja y patrimonio · API
+- [ ] 🔒 [**3.2**](docs/08-plan-de-desarrollo.md#tarea-3-2) Caso de uso `RegistrarMovimiento` con doble fecha · API
+- [ ] 🔒 [**3.3**](docs/08-plan-de-desarrollo.md#tarea-3-3) Repositorio de movimientos contra PostgreSQL · API
+- [ ] 🔒 [**3.4**](docs/08-plan-de-desarrollo.md#tarea-3-4) Endpoints de movimientos con sus códigos del catálogo · API
+- [ ] 🔒 [**3.5**](docs/08-plan-de-desarrollo.md#tarea-3-5) Formulario de registro rápido para celular, pintado del descriptor · Front
+- [ ] 🔒 [**3.6**](docs/08-plan-de-desarrollo.md#tarea-3-6) Foto del recibo comprimida, subida a través de la API · Front, API
+- [ ] 🔒 [**3.7**](docs/08-plan-de-desarrollo.md#tarea-3-7) Transferencias entre cuentas · API
+- [ ] 🔒 [**3.8**](docs/08-plan-de-desarrollo.md#tarea-3-8) Listado con filtros · API, Front
+- [ ] 🔒 [**3.9**](docs/08-plan-de-desarrollo.md#tarea-3-9) Anulación con motivo obligatorio · API, Front
+- [ ] 🔒 [**3.10**](docs/08-plan-de-desarrollo.md#tarea-3-10) Corrección por contra-asiento · API
+- [ ] 🔒 [**3.11**](docs/08-plan-de-desarrollo.md#tarea-3-11) Marca de registro tardío · API
+- [ ] 🔒 [**3.12**](docs/08-plan-de-desarrollo.md#tarea-3-12) Saldos por cuenta · API
+- [ ] 🔒 [**3.13**](docs/08-plan-de-desarrollo.md#tarea-3-13) Contrato de movimientos · Contrato
 
-**Sprint 6 · Reportes y KPIs** — espera a que las dos cadenas tengan su primera versión en `main`
-([21 §4.4](docs/21-trabajo-en-paralelo.md)); sin qa hasta el Sprint 9 por ADR-026
+**[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
 
-- [ ] **6.1** Utilidad causada, flujo de caja y caja libre
-- [ ] **6.2** Pruebas con el ejemplo de septiembre completo
-- [ ] **6.3** Dashboard con las tres cifras
-- [ ] **6.4** Gráfico de 12 meses
-- [ ] **6.5** Reporte mensual y anual con promedio de ganancias
-- [ ] **6.6** Punto de equilibrio
-- [ ] **6.7** Alertas: caja libre negativa, anticipos y pedidos estancados
-- [ ] **6.8** Cierre mensual con snapshot inmutable
-- [ ] **6.9** Inicio de solo consulta y su descarga en CSV o PDF (RF-95, RF-96)
+- [ ] 🔒 [**6.1**](docs/08-plan-de-desarrollo.md#tarea-6-1) Utilidad causada, flujo de caja y caja libre · API
+- [ ] 🔒 [**6.2**](docs/08-plan-de-desarrollo.md#tarea-6-2) Pruebas con el ejemplo de septiembre completo · API
+- [ ] 🔒 [**6.3**](docs/08-plan-de-desarrollo.md#tarea-6-3) Dashboard con las tres cifras · Front
+- [ ] 🔒 [**6.4**](docs/08-plan-de-desarrollo.md#tarea-6-4) Gráfico de 12 meses · Front
+- [ ] 🔒 [**6.5**](docs/08-plan-de-desarrollo.md#tarea-6-5) Reporte mensual y anual con promedio de ganancias · API, Front
+- [ ] 🔒 [**6.6**](docs/08-plan-de-desarrollo.md#tarea-6-6) Punto de equilibrio · API
+- [ ] 🔒 [**6.7**](docs/08-plan-de-desarrollo.md#tarea-6-7) Alertas: caja libre negativa, anticipos y pedidos estancados · API, Front
+- [ ] 🔒 [**6.8**](docs/08-plan-de-desarrollo.md#tarea-6-8) Cierre mensual con snapshot inmutable · Base, API
+- [ ] 🔒 [**6.9**](docs/08-plan-de-desarrollo.md#tarea-6-9) Inicio de solo consulta y su descarga en CSV o PDF ([RF-95](docs/03-requisitos-y-bdd.md#rf-95), [RF-96](docs/03-requisitos-y-bdd.md#rf-96)) · Front, API
+- [ ] 🔒 [**6.10**](docs/08-plan-de-desarrollo.md#tarea-6-10) Contrato de reportes, indicadores, alertas y cierre mensual · Contrato
 
-**Sprint 7 · Capital, retiros y patrimonio**
+**[Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio**
 
-- [ ] **7.1** Inversiones en activos
-- [ ] **7.2** Aportes de capital
-- [ ] **7.3** Pro-labore con justificación
-- [ ] **7.4** Retiro con división automática en pro-labore y distribución
-- [ ] **7.5** Cálculo de patrimonio
-- [ ] **7.6** Alerta de descapitalización a 12 meses
-- [ ] **7.7** Los cuatro sobres con historial
-- [ ] **7.8** Panel de sobres: asignado contra usado
+- [ ] 🔒 [**7.1**](docs/08-plan-de-desarrollo.md#tarea-7-1) Inversiones en activos · API, Front
+- [ ] 🔒 [**7.2**](docs/08-plan-de-desarrollo.md#tarea-7-2) Aportes de capital · API, Front
+- [ ] 🔒 [**7.3**](docs/08-plan-de-desarrollo.md#tarea-7-3) Pro-labore con justificación · API, Front
+- [ ] 🔒 [**7.4**](docs/08-plan-de-desarrollo.md#tarea-7-4) Retiro con división automática en pro-labore y distribución · API
+- [ ] 🔒 [**7.5**](docs/08-plan-de-desarrollo.md#tarea-7-5) Cálculo de patrimonio · API
+- [ ] 🔒 [**7.6**](docs/08-plan-de-desarrollo.md#tarea-7-6) Alerta de descapitalización a 12 meses · API
+- [ ] 🔒 [**7.7**](docs/08-plan-de-desarrollo.md#tarea-7-7) Los cuatro sobres con historial · API, Front
+- [ ] 🔒 [**7.8**](docs/08-plan-de-desarrollo.md#tarea-7-8) Panel de sobres: asignado contra usado · Front
+- [ ] 🔒 [**7.9**](docs/08-plan-de-desarrollo.md#tarea-7-9) Contrato de inversiones, aportes, retiros, pro-labore y sobres · Contrato
 
 ### Cadena B · el pedido
 
-**Sprint 5 · Productos y costeo**
+**[Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo**
 
-- [ ] **5.1** Dominio `Producto` y servicio `calcularMargenes`
-- [ ] **5.2** Catálogo de productos y servicios
-- [ ] **5.3** Costeo unitario: insumo, consumibles y minutos de trabajo
-- [ ] **5.4** Costeo de bordado por tiempo de máquina
-- [ ] **5.5** Historial de costos con fecha de vigencia
-- [ ] **5.6** Margen por hora
-- [ ] **5.7** Sugerencia de precio por margen objetivo
-- [ ] **5.8** Costos y márgenes ocultos al tipo Operación: la API no los envía
-- [ ] **5.9** Cuadro comparativo ordenable por margen por hora
+- [ ] ⚡ [**5.1**](docs/08-plan-de-desarrollo.md#tarea-5-1) Dominio `Producto` y servicio `calcularMargenes` · API
+- [ ] 🔒 [**5.2**](docs/08-plan-de-desarrollo.md#tarea-5-2) Catálogo de productos y servicios · API, Front
+- [ ] 🔒 [**5.3**](docs/08-plan-de-desarrollo.md#tarea-5-3) Costeo unitario: insumo, consumibles y minutos de trabajo · API
+- [ ] 🔒 [**5.4**](docs/08-plan-de-desarrollo.md#tarea-5-4) Costeo de bordado por tiempo de máquina · API
+- [ ] 🔒 [**5.5**](docs/08-plan-de-desarrollo.md#tarea-5-5) Historial de costos con fecha de vigencia · Base, API
+- [ ] 🔒 [**5.6**](docs/08-plan-de-desarrollo.md#tarea-5-6) Margen por hora · API
+- [ ] 🔒 [**5.7**](docs/08-plan-de-desarrollo.md#tarea-5-7) Sugerencia de precio por margen objetivo · API
+- [ ] 🔒 [**5.8**](docs/08-plan-de-desarrollo.md#tarea-5-8) Costos y márgenes ocultos al tipo Operación: la API no los envía · API
+- [ ] 🔒 [**5.9**](docs/08-plan-de-desarrollo.md#tarea-5-9) Cuadro comparativo ordenable por margen por hora · Front
+- [ ] 🔒 [**5.10**](docs/08-plan-de-desarrollo.md#tarea-5-10) Contrato de productos, servicios y costeo · Contrato
 
-**Sprint 4 · Pedidos y anticipos**
+**[Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos**
 
-- [ ] **4.1** Dominio `Pedido`, estados y transiciones
-- [ ] **4.2** Gestión de clientes
-- [ ] **4.3** Pedido con líneas de producto
-- [ ] **4.4** `CobrarAnticipo`: crea pasivo, no ingreso
-- [ ] **4.5** Función en la base que entrega el pedido y causa la venta en una transacción
-- [ ] **4.6** Listado ordenado por fecha con filtros
-- [ ] **4.7** Resaltado de pedidos estancados
-- [ ] **4.8** Factura adjunta al pedido
-- [ ] **4.9** Cancelación con destino del anticipo
+- [ ] ⚡ [**4.1**](docs/08-plan-de-desarrollo.md#tarea-4-1) Dominio `Pedido`, estados y transiciones · API
+- [ ] 🔒 [**4.2**](docs/08-plan-de-desarrollo.md#tarea-4-2) Gestión de clientes · API, Front
+- [ ] 🔒 [**4.3**](docs/08-plan-de-desarrollo.md#tarea-4-3) Pedido con líneas de producto · API, Front
+- [ ] 🔒 [**4.4**](docs/08-plan-de-desarrollo.md#tarea-4-4) `CobrarAnticipo`: crea pasivo, no ingreso · API
+- [ ] 🔒 [**4.5**](docs/08-plan-de-desarrollo.md#tarea-4-5) Función en la base que entrega el pedido y causa la venta en una transacción · Base
+- [ ] 🔒 [**4.6**](docs/08-plan-de-desarrollo.md#tarea-4-6) Listado ordenado por fecha con filtros · API, Front
+- [ ] 🔒 [**4.7**](docs/08-plan-de-desarrollo.md#tarea-4-7) Resaltado de pedidos estancados · API, Front
+- [ ] 🔒 [**4.8**](docs/08-plan-de-desarrollo.md#tarea-4-8) Factura adjunta al pedido · API, Front
+- [ ] 🔒 [**4.9**](docs/08-plan-de-desarrollo.md#tarea-4-9) Cancelación con destino del anticipo · API
+- [ ] 🔒 [**4.10**](docs/08-plan-de-desarrollo.md#tarea-4-10) Contrato de clientes, pedidos y anticipos · Contrato
 
-**Sprint 8 · Cotizador**
+**[Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Cotizador**
 
-- [ ] **8.8** Cotizaciones y remisiones en PDF con logo
-- [ ] **8.9** Validador de anticipo mínimo
+- [ ] 🔒 [**8.8**](docs/08-plan-de-desarrollo.md#tarea-8-8) Cotizaciones y remisiones en PDF con logo · API, Front
+- [ ] 🔒 [**8.9**](docs/08-plan-de-desarrollo.md#tarea-8-9) Validador de anticipo mínimo · API
+- [ ] 🔒 [**8.11**](docs/08-plan-de-desarrollo.md#tarea-8-11) Contrato de nómina, simulador, cotizaciones e importación · Contrato
 
 ### Amortiguador · Nómina
 
-La toma el equipo que termine primero su cadena: es la funcionalidad más independiente del sistema.
+La toma el carril que termine primero su cadena: es la funcionalidad más independiente del sistema.
 
-- [ ] **8.1** Registro de empleadas
-- [ ] **8.2** Liquidación de nómina en la base, descontando adelantos
-- [ ] **8.3** Adelantos como cuenta por cobrar
-- [ ] **8.4** Desprendible PDF con acceso restringido al propio
-- [ ] **8.5** Simulador de capacidad de pago
-- [ ] **8.6** Traducción a unidades de producto por vender
-- [ ] **8.7** Horas pagadas contra horas facturadas
-- [ ] **8.10** Importador de CSV con mapeo y reporte de errores — sin cadena asignada
+- [ ] 🔒 [**8.1**](docs/08-plan-de-desarrollo.md#tarea-8-1) Registro de empleadas · API, Front
+- [ ] 🔒 [**8.2**](docs/08-plan-de-desarrollo.md#tarea-8-2) Liquidación de nómina en la base, descontando adelantos · Base
+- [ ] 🔒 [**8.3**](docs/08-plan-de-desarrollo.md#tarea-8-3) Adelantos como cuenta por cobrar · API
+- [ ] 🔒 [**8.4**](docs/08-plan-de-desarrollo.md#tarea-8-4) Desprendible PDF con acceso restringido al propio · API
+- [ ] 🔒 [**8.5**](docs/08-plan-de-desarrollo.md#tarea-8-5) Simulador de capacidad de pago · API, Front
+- [ ] 🔒 [**8.6**](docs/08-plan-de-desarrollo.md#tarea-8-6) Traducción a unidades de producto por vender · API
+- [ ] 🔒 [**8.7**](docs/08-plan-de-desarrollo.md#tarea-8-7) Horas pagadas contra horas facturadas · API, Front
+- [ ] 🔒 [**8.10**](docs/08-plan-de-desarrollo.md#tarea-8-10) Importador de CSV con mapeo y reporte de errores · API, Front — sin cadena asignada
 
 ---
 
 ## 6. Sprint 9 · promoción, PWA y endurecimiento
 
-**No se parte: lo hacen los dos equipos juntos**, porque consiste en integrar y probar lo de todos.
+**No se parte: lo hacen todos los carriles juntos**, porque consiste en integrar y probar lo de todos.
 
-- [ ] ⏭️ **0.8** Imagen de la API arrancando en los ambientes, en Railway
-- [ ] ⏭️ **0.9** Entrega a dev al fusionar
-- [ ] **9.1** PWA instalable y cola persistente con la clave guardada antes de enviar
-- [ ] **9.2** Ambiente uat con datos anonimizados y su semilla
-- [ ] **9.3** Promoción de uat a prod sin recompilar
-- [ ] **9.4** Reversión ensayada en qa, con el tiempo medido
-- [ ] **9.5** Prueba de permisos con sesión real en los cuatro ambientes
-- [ ] **9.6** Pruebas de extremo a extremo de los flujos críticos en qa
-- [ ] **9.7** Rendimiento en celular real con 4G
-- [ ] **9.8** Repaso de secretos: nada en los repositorios y `service_role` solo en migraciones
-- [ ] **9.9** El front rechaza de verdad un MAJOR de API distinto
-- [ ] **9.10** Etiquetar `1.0.0` del front y de la API
-- [ ] **9.11** Swagger detrás de autenticación en prod
+- [ ] 🔒 [**9.1**](docs/08-plan-de-desarrollo.md#tarea-9-1) PWA instalable y cola persistente con la clave guardada antes de enviar · Front
+- [ ] 🔒 [**9.2**](docs/08-plan-de-desarrollo.md#tarea-9-2) Ambiente uat con datos anonimizados y su semilla · Base, API
+- [ ] 🔒 [**9.3**](docs/08-plan-de-desarrollo.md#tarea-9-3) Promoción de uat a prod sin recompilar · API, Front
+- [ ] 🔒 [**9.4**](docs/08-plan-de-desarrollo.md#tarea-9-4) Reversión ensayada en qa, con el tiempo medido · API, Front
+- [ ] 🔒 [**9.5**](docs/08-plan-de-desarrollo.md#tarea-9-5) Prueba de permisos con sesión real en los cuatro ambientes · API
+- [ ] 🔒 [**9.6**](docs/08-plan-de-desarrollo.md#tarea-9-6) Pruebas de extremo a extremo de los flujos críticos en qa · API, Front
+- [ ] 🔒 [**9.7**](docs/08-plan-de-desarrollo.md#tarea-9-7) Rendimiento en celular real con 4G · Front
+- [ ] 🔒 [**9.8**](docs/08-plan-de-desarrollo.md#tarea-9-8) Repaso de secretos: nada en los repositorios y `service_role` solo en migraciones · API
+- [ ] 🔒 [**9.9**](docs/08-plan-de-desarrollo.md#tarea-9-9) El front rechaza de verdad un MAJOR de API distinto · Front
+- [ ] 🔒 [**9.10**](docs/08-plan-de-desarrollo.md#tarea-9-10) Etiquetar `1.0.0` del front y de la API · API, Front
+- [ ] 🔒 [**9.11**](docs/08-plan-de-desarrollo.md#tarea-9-11) Swagger detrás de autenticación en prod · API
 
 ---
 
@@ -338,54 +286,67 @@ La toma el equipo que termine primero su cadena: es la funcionalidad más indepe
 
 | # | Decisión | Quién | Bloquea | Estado |
 |---|---|---|---|---|
-| 1 | Dónde se aloja la API | Quien dirige | 0.8 | ✅ Railway, al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)) |
-| 2 | Dónde se publica el front web | Quien dirige | 0.9 | ✅ Railway, al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)) |
-| 3 | Los cuatro proyectos de Supabase y el pago de uat y prod | Quien dirige crea; Gerencia paga | 0.4 | 🟡 dev creado; faltan qa, uat y prod |
-| 4 | PostgreSQL para desarrollar sin Docker | Quien dirige | 0.5, 0.10 y Sprint 1 | ✅ El proyecto dev de Supabase, mientras Docker no arranque |
+| 1 | Dónde se aloja la API | Quien dirige | Tarea [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) | ✅ Railway, al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)) |
+| 2 | Dónde se publica el front web | Quien dirige | Tarea [0.9](docs/08-plan-de-desarrollo.md#tarea-0-9) | ✅ Railway, al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)) |
+| 3 | Los cuatro proyectos de Supabase y el pago de uat y prod | Quien dirige crea; Gerencia paga | Tarea [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) | 🟡 dev creado; faltan qa, uat y prod |
+| 4 | PostgreSQL para desarrollar sin Docker | Quien dirige | Tareas [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) y [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) | ✅ El proyecto dev de Supabase, mientras Docker no arranque |
 | 5 | Remotos de los repositorios | Quien dirige | Integración continua | ✅ Los cuatro en GitHub |
-| 6 | Cómo consiguen la API y su CI el esquema de `prisma_db` para las pruebas de integración | Equipo API | 1.7, 1.8 y 1.15 | ⬜ |
-| 7 | Quién está en cada equipo, y quién sabe Flutter y Java para revisar el contrato | Quien dirige | Trabajar con dos equipos | ⬜ |
-| 8 | Contrato por etiqueta de git o como paquete publicado | Los dos equipos | El primer cambio de contrato | ⬜ El documento se inclina por la etiqueta |
+| 6 | Cómo consiguen la API y su CI el esquema de `prisma_db` | Carril API | Tareas [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7), [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) y [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) | ⬜ Es la tarea [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
+| 7 | Quién trabaja cada carril, y quién sabe Flutter y Java para revisar el contrato | Quien dirige | Trabajar con más de un carril | ⬜ |
+| 8 | Contrato por etiqueta de git o como paquete publicado | Los dos lados | El primer cambio de contrato | ⬜ El documento [21](docs/21-trabajo-en-paralelo.md) se inclina por la etiqueta |
 | 9 | Quién desempata un cambio de contrato | Quien dirige | El primer desacuerdo | ⬜ |
-| 10 | Supuestos S1 a S5 de [01 §6](docs/01-vision-y-alcance.md) | Gerencia | Sprint 1 | ⬜ Por confirmar; el mockup ya está confirmado |
+| 10 | Supuestos [S1](docs/01-vision-y-alcance.md#s1) a [S5](docs/01-vision-y-alcance.md#s5) de [01 §6](docs/01-vision-y-alcance.md#6-supuestos) | Gerencia | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) | ⬜ Por confirmar; el mockup ya está confirmado |
 | 11 | El dominio `prismamy.co`, del que dependen el correo sintético, `api.prismamy.co` y CORS | Gerencia | El primer usuario real, porque el correo sintético es fijo de por vida ([ADR-009](docs/adr/ADR-009-login-por-usuario.md)) | ⬜ |
 | 12 | Plazos de conservación y registro de bases de datos personales (Ley 1581) | Un abogado | Go-live | ⬜ |
 | 13 | Qué objetivos nativos se publican | Gerencia | Nada hoy: no hay disparador | ⬜ |
 | 14 | Una sola licencia para los cuatro repositorios | Quien dirige | Nada técnico | ⬜ AGPL-3.0 en este y en el front; GPL-3.0 en la API y la base |
 
-**Lo que el modelo de datos todavía no define** ([04](docs/04-modelo-de-datos.md)):
+**Lo que el modelo de datos todavía no define** ([`04-modelo-de-datos.md`](docs/04-modelo-de-datos.md)):
 
-- [ ] La variante del trigger de auditoría para `usuarios`, que detecta `desactivado_en` · Sprint 2
-- [ ] El `CREATE TABLE` de `adjuntos` · Sprint 3, tarea 3.6
-- [ ] El `CREATE TABLE` de `cotizaciones` y `cotizacion_lineas` · Sprint 8, tarea 8.8
+- [ ] La variante del trigger de auditoría para `usuarios`, que detecta `desactivado_en` · [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2)
+- [ ] 🔒 El `CREATE TABLE` de `adjuntos` · [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3), tarea [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6)
+- [ ] 🔒 El `CREATE TABLE` de `cotizaciones` y `cotizacion_lineas` · [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8), tarea [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8)
 
 ---
 
-## 8. A vigilar
+## 8. Documentación
 
-- **Dinero con decimales en la frontera.** Cuando llegue el primer endpoint que recibe plata (1.10),
-  comprobar con una prueba que un JSON con `1500.5` en un campo de dinero se rechaza y no se trunca
-  a `1500` en silencio. ADR-003 exige rechazarlo, y la conversión de Jackson hay que verla, no
-  suponerla.
-- **La base de desarrollo es compartida.** Mientras dev sea el proyecto de Supabase en la nube,
-  todos desarrollan contra la misma base, que es lo que [21 §6.4](docs/21-trabajo-en-paralelo.md)
-  pide evitar. Con una persona no estorba; con dos equipos, cada quien necesita su PostgreSQL local.
-- **Sin qa hasta el Sprint 9** ([ADR-026](docs/adr/ADR-026-railway-al-final.md)): mientras tanto,
-  «terminado» es fusionado a `main` con la integración continua en verde.
+- [x] Encabezado con versión, estado, fechas y etiquetas en los 57 documentos de los cuatro
+      repositorios ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md))
+- [x] Toda referencia enlazada a su sitio exacto, con anclas propias y «Referenciado desde»
+- [x] Las reglas escritas en [`22-documentacion.md`](docs/22-documentacion.md), y la herramienta en `scripts/docs/`
+- [x] El plan organizado por carriles, con dependencias, oleadas, camino crítico y calendario calculado
+- [x] La integración continua de este repositorio verifica la documentación en cada push y cada PR
+
+---
+
+## 9. A vigilar
+
+- **Dinero con decimales en la frontera.** Cuando llegue el primer endpoint que recibe plata (tarea
+  1.10), comprobar con una prueba que un JSON con `1500.5` en un campo de dinero se rechaza y no se
+  trunca a `1500` en silencio. [ADR-003](docs/adr/ADR-003-dinero-entero.md) exige rechazarlo, y la conversión de Jackson hay que verla,
+  no suponerla.
+- **La base de desarrollo es compartida.** Mientras dev sea el proyecto de Supabase en la nube, todos
+  los carriles desarrollan contra la misma base, que es lo que [21 §6.4](docs/21-trabajo-en-paralelo.md#64-ambientes) pide evitar. Con un carril no
+  estorba; con varios, cada uno necesita su PostgreSQL local.
+- **Sin qa hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9)** ([ADR-026](docs/adr/ADR-026-railway-al-final.md)): mientras tanto, «terminado» es fusionado a `main` con la
+  integración continua en verde.
 - **El servicio de Railway conectado a `prisma_front`** intenta construir en cada push y falla,
-  porque todavía no hay receta de construcción para Flutter. Conviene desconectarlo hasta el Sprint 9.
+  porque todavía no hay receta de construcción para Flutter. Conviene desconectarlo hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9).
 - **`dart.yml` del front** es la plantilla de GitHub y falla con Flutter. Se dejó a propósito; la
   integración continua de verdad es `ci.yml`.
 
-## 9. Decisiones del Sprint 0 que conviene revisar
+---
 
-Las tomó quien construyó el Sprint 0, no quien dirige el proyecto:
+## 10. Decisiones del Sprint 0 que conviene revisar
+
+Las tomó quien construyó el [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0), no quien dirige el proyecto:
 
 - [ ] Los errores 405, 406 y 415 responden 400 con el código `40000`
 - [ ] `@PendienteDeEmitir` marca en el catálogo los códigos que todavía nadie emite
 - [ ] El catálogo de códigos va dentro del OpenAPI, en `x-prisma-codigos`
 - [ ] La pantalla de versión incompatible tiene tres filas de versiones y no las dos del mockup
-- [ ] Se siguió el texto del mockup y no el literal del escenario BDD-101-1
+- [ ] Se siguió el texto del mockup y no el literal del escenario [BDD-101-1](docs/03-requisitos-y-bdd.md#bdd-101-1)
 
 ---
 
@@ -393,6 +354,10 @@ Las tomó quien construyó el Sprint 0, no quien dirige el proyecto:
 
 - Una tarea se marca `[x]` cuando su commit está en `main` con la integración continua en verde. Lo
   escrito pero no probado lleva ✏️, no `[x]`.
+- Después de marcar algo, se corre `node scripts/docs/documentar.mjs enlazar`: rehace las marcas ⚡ y
+  🔒, lo que puede empezar hoy y cuánto falta. **Las dependencias no se escriben aquí**: viven en el
+  plan.
 - **Lo nuevo no entra aquí primero.** Una tarea que no está en el plan va al plan o, si es una idea
-  para después, al [roadmap](docs/14-roadmap-e-ideas.md) (08 §6).
-- Es un documento compartido, como todo `docs/`: lo actualizan los dos equipos.
+  para después, al roadmap ([08 §6](docs/08-plan-de-desarrollo.md#6-backlog-priorizado)).
+- Es un documento compartido, como todo `docs/`: lo actualizan todos los carriles. Cada cambio sube
+  su versión ([`22-documentacion.md`](docs/22-documentacion.md)).

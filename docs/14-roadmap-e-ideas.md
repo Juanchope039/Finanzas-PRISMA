@@ -1,5 +1,9 @@
 # 14 · Roadmap e ideas de valor
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/14-roadmap-e-ideas.md "Historial de cambios") | [🔄 Vivo](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Negocio](INDICE.md#etiqueta-negocio) · [Plan](INDICE.md#etiqueta-plan) |
+
 Todo lo que quedó fuera del MVP, más 30 ideas para después. Priorizado por **impacto sobre
 esfuerzo**, no por qué tan llamativo suena.
 
@@ -9,14 +13,14 @@ esfuerzo**, no por qué tan llamativo suena.
 
 | # | Tema | Por qué se difirió | Cuándo conviene |
 |---|---|---|---|
-| D-01 | Facturación electrónica DIAN | Decisión del negocio | Cuando se formalice y lo exija un cliente |
-| D-02 | Parafiscales y seguridad social | Requiere formalización previa | Antes de contratar formalmente |
-| D-03 | Escenarios jurídicos y factor prestacional | Diferido | Al decidir la figura jurídica |
-| D-04 | Parámetros legales versionados por año | Diferido | Junto con D-02 |
-| D-05 | Construcción del exportador de respaldos | Se diseñó, no se construyó | Mes 2 post go-live |
-| D-06 | Procedimiento y simulacro de restauración | Fase posterior | Junto con D-05 |
+| <a id="d-01"></a>D-01 | Facturación electrónica DIAN | Decisión del negocio | Cuando se formalice y lo exija un cliente |
+| <a id="d-02"></a>D-02 | Parafiscales y seguridad social | Requiere formalización previa | Antes de contratar formalmente |
+| <a id="d-03"></a>D-03 | Escenarios jurídicos y factor prestacional | Diferido | Al decidir la figura jurídica |
+| <a id="d-04"></a>D-04 | Parámetros legales versionados por año | Diferido | Junto con [D-02](#d-02) |
+| <a id="d-05"></a>D-05 | Construcción del exportador de respaldos | Se diseñó, no se construyó | Mes 2 post go-live |
+| <a id="d-06"></a>D-06 | Procedimiento y simulacro de restauración | Fase posterior | Junto con [D-05](#d-05) |
 
-> **Sobre D-03.** La figura jurídica tiene un efecto económico directo y considerable sobre el
+> **Sobre [D-03](#d-03).** La figura jurídica tiene un efecto económico directo y considerable sobre el
 > costo de emplear a alguien en Colombia. Cuando se retome el tema de la contratación formal,
 > ese análisis debería hacerse **antes** de contratar, no después, y con un contador. No es un
 > detalle administrativo: cambia la respuesta a la pregunta de si se puede contratar.
@@ -31,7 +35,7 @@ Alto impacto, esfuerzo bajo o medio. Son las que más rápido devuelven el traba
 
 | # | Idea | Qué resuelve | Esfuerzo |
 |---|---|---|:---:|
-| 01 | **Exportación de respaldos** (D-05) | Independencia del proveedor | M |
+| 01 | **Exportación de respaldos** ([D-05](#d-05)) | Independencia del proveedor | M |
 | 02 | **Recordatorio diario de registro** | El riesgo número uno: que se deje de registrar | S |
 | 03 | **Inventario de insumos con alerta de mínimos** | Quedarse sin DTF a mitad de un pedido | M |
 | 04 | **Plantillas de gasto recurrente** | Arriendo y servicios en un toque | S |
@@ -63,8 +67,8 @@ Impacto alto, esfuerzo mayor. Requieren que el sistema ya tenga historia acumula
 
 | # | Idea | Qué resuelve | Esfuerzo |
 |---|---|---|:---:|
-| 21 | **Facturación electrónica DIAN** (D-01) | Obligación legal al formalizarse | XL |
-| 22 | **Nómina completa con prestaciones** (D-02, D-03, D-04) | Contratación formal | XL |
+| 21 | **Facturación electrónica DIAN** ([D-01](#d-01)) | Obligación legal al formalizarse | XL |
+| 22 | **Nómina completa con prestaciones** ([D-02](#d-02), [D-03](#d-03), [D-04](#d-04)) | Contratación formal | XL |
 | 23 | **Módulo de producción con estados** | Seguimiento de pedidos en el taller | L |
 | 24 | **Multi-sucursal** | Si se abre un segundo punto | L |
 | 25 | **Portal del cliente** | Que el cliente consulte su pedido | L |
@@ -160,10 +164,14 @@ Vale la pena dejar constancia de lo que se pensó y se decidió no hacer.
 
 Durante el desarrollo del MVP, **toda idea nueva se anota aquí, no se agrega al sprint en
 curso.** Esa es la única defensa efectiva contra el crecimiento descontrolado del alcance, que
-es la forma más común de que un proyecto de 26 semanas se convierta en uno de 45.
+es la forma más común de que un proyecto de seis meses se convierta en uno de un año.
 
 Al final de cada sprint se revisa esta lista y se decide si algo merece entrar al siguiente.
 **La respuesta por defecto es no.**
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias")
+<!-- /generado:referenciado-desde -->
 
 ---
 

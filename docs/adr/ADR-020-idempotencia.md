@@ -1,6 +1,8 @@
 # ADR-020 · Idempotencia obligatoria en toda escritura
 
-**Estado:** Aceptado · **Fecha:** 2026-09-15
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-020-idempotencia.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-15 | 2026-09-16 | [API](../INDICE.md#etiqueta-api) · [Contrato](../INDICE.md#etiqueta-contrato) |
 
 ## Contexto
 
@@ -169,3 +171,9 @@ suerte.
   conserva intacto ese contrato de errores.
 - [`../04-modelo-de-datos.md`](../04-modelo-de-datos.md) — dónde queda la tabla dentro del
   modelo.
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [20](../20-contrato-de-api.md "20 · Contrato de la API") · [ADR-019](ADR-019-contrato-de-respuesta.md "ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos") · [ADR-021](ADR-021-canal-firmado.md "ADR-021 · Canal firmado contra repetición y manipulación")
+<!-- /generado:referenciado-desde -->

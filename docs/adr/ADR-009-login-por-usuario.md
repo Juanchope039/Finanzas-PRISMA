@@ -1,6 +1,8 @@
 # ADR-009 · Acceso con nombre de usuario, no con correo
 
-**Estado:** Aceptado · **Fecha:** 2026-09-13
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-009-login-por-usuario.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-13 | 2026-09-16 | [Seguridad](../INDICE.md#etiqueta-seguridad) · [API](../INDICE.md#etiqueta-api) |
 
 ## Contexto
 
@@ -67,3 +69,9 @@ campo editable invita a editarlo, y editarlo rompe todas las identidades ya crea
   persona y el sistema obliga a cambiarla al entrar. Además, el dominio interno queda congelado
   de por vida, y si alguien activa la confirmación de correo en el proveedor el sistema deja de
   admitir usuarios nuevos con un error que no explica la causa.
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [16](../16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](../17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](../19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [ADR-010](ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-021](ADR-021-canal-firmado.md "ADR-021 · Canal firmado contra repetición y manipulación")
+<!-- /generado:referenciado-desde -->

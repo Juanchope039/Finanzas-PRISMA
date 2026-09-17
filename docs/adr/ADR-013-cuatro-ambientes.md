@@ -1,6 +1,8 @@
 # ADR-013 · Cuatro ambientes y promoción de migraciones
 
-**Estado:** Aceptado · **Fecha:** 2026-09-15
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-013-cuatro-ambientes.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-15 | 2026-09-16 | [Entrega](../INDICE.md#etiqueta-entrega) |
 
 ## Contexto
 
@@ -41,7 +43,7 @@ Las reglas que hacen que eso signifique algo:
 2. **Las migraciones se promueven en orden**: dev → qa → uat → prod. Nunca se aplica una
    migración en prod que no haya pasado por los tres anteriores.
 3. **Una migración ya aplicada no se edita jamás.** Si estaba mal, se escribe otra que corrige.
-   Es el mismo principio del contra-asiento de CU-04 ([`02-casos-de-uso.md`](../02-casos-de-uso.md))
+   Es el mismo principio del contra-asiento de [CU-04](../02-casos-de-uso.md#cu-04) ([`02-casos-de-uso.md`](../02-casos-de-uso.md))
    y de la base de solo escritura de [ADR-004](ADR-004-base-solo-escritura.md).
 4. **El artefacto se promueve, no se reconstruye.** Lo que se aprobó en UAT es exactamente lo
    que llega a prod, con la misma versión. Recompilar para prod sería aprobar una cosa y
@@ -96,3 +98,9 @@ tener el mismo esquema y no lo tienen.
 - [`11-riesgos-y-proteccion-de-datos.md`](../11-riesgos-y-proteccion-de-datos.md)
 - [`16-base-de-datos-y-snapshots.md`](../16-base-de-datos-y-snapshots.md)
 - [`09-plan-de-implantacion.md`](../09-plan-de-implantacion.md)
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [09](../09-plan-de-implantacion.md "09 · Plan de implantación") · [13](../13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [16](../16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](../19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [ADR-011](ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-017](ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-025](ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo")
+<!-- /generado:referenciado-desde -->

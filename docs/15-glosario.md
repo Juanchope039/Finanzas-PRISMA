@@ -1,5 +1,9 @@
 # 15 · Glosario
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/15-glosario.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Negocio](INDICE.md#etiqueta-negocio) |
+
 Vocabulario compartido entre el negocio, la contabilidad y el sistema. Cuando haya duda sobre
 qué significa algo, este documento manda.
 
@@ -240,7 +244,7 @@ los datos ya armados como los necesita. En PRISMA no es un proyecto aparte: `pri
 API y de BFF al mismo tiempo, porque hoy hay un solo cliente.
 
 **Caso de uso**
-Una acción completa del sistema, en un archivo propio. Corresponde a un `CU-xx` del documento 02.
+Una acción completa del sistema, en un archivo propio. Corresponde a un `CU-xx` del documento [02](02-casos-de-uso.md).
 
 **Clave de idempotencia**
 Un número irrepetible que la aplicación le pega a cada acción que va a guardar algo, como el
@@ -363,6 +367,10 @@ auditoría, para que sea imposible evitarla desde la aplicación.
 | Los 4 sobres | Presupuesto por destinación |
 | Anulación | Reverso |
 | Contra-asiento | Asiento de reversión |
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [09](09-plan-de-implantacion.md "09 · Plan de implantación")
+<!-- /generado:referenciado-desde -->
 
 ---
 

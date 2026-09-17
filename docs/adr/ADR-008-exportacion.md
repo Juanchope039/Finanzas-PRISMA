@@ -1,6 +1,8 @@
 # ADR-008 · Exportación con descarga manual
 
-**Estado:** Aceptado · **Fecha:** 2026-09-13
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-008-exportacion.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-13 | 2026-09-16 | [Base de datos](../INDICE.md#etiqueta-base-de-datos) · [Datos personales](../INDICE.md#etiqueta-datos-personales) |
 
 ## Contexto
 
@@ -38,4 +40,10 @@ confiable, sin necesidad de abrirlo.
   automático del proveedor y con el recordatorio al cerrar cada mes.
 - **Limitación reconocida:** el procedimiento de restauración queda diferido a una fase
   posterior. Un respaldo que nunca se ha restaurado es una suposición, no una garantía. Está
-  documentado como tal en [`../13-respaldo-y-exportacion.md`](../13-respaldo-y-exportacion.md) §9.
+  documentado como tal en [`../13-respaldo-y-exportacion.md`](../13-respaldo-y-exportacion.md) [§9](../13-respaldo-y-exportacion.md#9-fuera-de-alcance-de-esta-versión).
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica")
+<!-- /generado:referenciado-desde -->

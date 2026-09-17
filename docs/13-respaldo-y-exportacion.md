@@ -1,6 +1,10 @@
 # 13 · Respaldo y exportación
 
-> **Estado: diseñado, no construido.** La exportación se especifica aquí en detalle para que
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/13-respaldo-y-exportacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Datos personales](INDICE.md#etiqueta-datos-personales) |
+
+> **Construcción: diseñado, no construido.** La exportación se especifica aquí en detalle para que
 > el modelo de datos y la arquitectura la soporten desde el primer día, pero su construcción
 > queda programada para después del go-live. Ver [`14-roadmap-e-ideas.md`](14-roadmap-e-ideas.md).
 
@@ -42,7 +46,7 @@ se puede ejecutar —hay que probar que funciona— pero no se programa ni se co
 
 Copiar datos de prod hacia uat es la forma más rápida de tener datos realistas, y también la más
 rápida de sacar datos personales del único sitio donde tienen tratamiento declarado. Por eso
-[`11-riesgos-y-proteccion-de-datos.md`](11-riesgos-y-proteccion-de-datos.md) (R-23) deja escrito
+[`11-riesgos-y-proteccion-de-datos.md`](11-riesgos-y-proteccion-de-datos.md) ([R-23](11-riesgos-y-proteccion-de-datos.md#r-23)) deja escrito
 que **copiar de prod a otro ambiente no existe como procedimiento**: el camino normal para uat es
 sembrar datos anonimizados. Esta sección no abre esa puerta; fija qué pasa si alguna vez hay que
 cruzarla.
@@ -61,7 +65,7 @@ cruzarla.
 | Cifras del negocio: ventas, costos, movimientos | Se conservan. Son lo que hace útil al ambiente |
 
 Nombres completos, documentos y salarios son datos personales bajo la **Ley 1581 de 2012**, y su
-tratamiento ya está fijado en [`11-riesgos-y-proteccion-de-datos.md`](11-riesgos-y-proteccion-de-datos.md) §3.
+tratamiento ya está fijado en [`11-riesgos-y-proteccion-de-datos.md`](11-riesgos-y-proteccion-de-datos.md) [§3](11-riesgos-y-proteccion-de-datos.md#3-protección-de-datos-personales).
 El archivo anonimizado también lleva manifiesto, y su `ambiente` dice de dónde salió (4.1): un
 respaldo que no dice eso puede terminar restaurado en el sitio equivocado.
 
@@ -78,14 +82,14 @@ respaldo que no dice eso puede terminar restaurado en el sitio equivocado.
 
 ### 2.1 La descarga del Inicio es una exportación parcial
 
-El Inicio tiene su propio botón **Descargar** (RF-96): baja en CSV o PDF lo que esa pantalla ya
+El Inicio tiene su propio botón **Descargar** ([RF-96](03-requisitos-y-bdd.md#rf-96)): baja en CSV o PDF lo que esa pantalla ya
 está mostrando — las tres cifras del mes, los saldos de cuentas al corte, los últimos doce meses,
 las alertas activas y los pedidos por entregar. Es la misma maquinaria de exportación que
 describe este documento, con un alcance mucho más estrecho.
 
 | Aspecto | Respaldo (nivel 2) | Descarga del Inicio |
 |---|---|---|
-| Caso de uso | CU-22 · Exportar respaldo | CU-37 · Descargar lo que muestra una pantalla |
+| Caso de uso | [CU-22](02-casos-de-uso.md#cu-22) · Exportar respaldo | [CU-37](02-casos-de-uso.md#cu-37) · Descargar lo que muestra una pantalla |
 | Qué baja | Tablas completas, fila por fila | Cifras ya calculadas de una pantalla |
 | Para qué | Que la información siga siendo del negocio | Llevarse un dato a una reunión o a una hoja de cálculo |
 | Alcance | Total, por mes, por rango o una tabla | Lo que el Inicio muestra en ese momento |
@@ -190,7 +194,7 @@ que nunca fue real.
 | **Retención** | Los últimos 12 archivos generados quedan disponibles; los anteriores se descartan |
 | **Auditoría** | Cada generación y cada descarga queda registrada en la bitácora |
 
-Este punto describe el **respaldo** (CU-22). La descarga de pantalla (2.1, CU-37) se genera y se
+Este punto describe el **respaldo** ([CU-22](02-casos-de-uso.md#cu-22)). La descarga de pantalla (2.1, [CU-37](02-casos-de-uso.md#cu-37)) se genera y se
 baja en el mismo acto, no se guarda para después y no entra en la retención de 12 archivos; de
 este punto solo hereda la última fila, la auditoría.
 
@@ -313,6 +317,10 @@ de cifras del Inicio lleva `0`, y eso ya distingue un reporte de un respaldo vac
 > El procedimiento de restauración y su prueba quedan explícitamente diferidos, y eso es una
 > limitación real de esta versión, no un olvido. Mientras tanto, el respaldo diario automático
 > del proveedor es la protección efectiva contra pérdida de datos.
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [01](01-vision-y-alcance.md "01 · Visión y alcance") · [02](02-casos-de-uso.md "02 · Casos de uso") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [ADR-008](adr/ADR-008-exportacion.md "ADR-008 · Exportación con descarga manual")
+<!-- /generado:referenciado-desde -->
 
 ---
 

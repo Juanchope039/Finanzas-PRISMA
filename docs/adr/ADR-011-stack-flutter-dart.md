@@ -1,6 +1,8 @@
 # ADR-011 · Stack: Flutter y Dart con API propia
 
-**Estado:** Reemplazado por ADR-017 · **Fecha:** 2026-09-15
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-011-stack-flutter-dart.md "Historial de cambios") | [⛔ Reemplazado](../22-documentacion.md#estados-de-un-adr) por [ADR-017](ADR-017-api-en-java.md) | 2026-09-15 | 2026-09-16 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) · [Front](../INDICE.md#etiqueta-front) · [API](../INDICE.md#etiqueta-api) |
 
 > **Lo reemplaza [ADR-017](ADR-017-api-en-java.md):** el front sigue en Flutter, pero `prisma_api`
 > pasa de Dart a Java 21 con Spring Boot, así que el argumento del lenguaje único ya no aplica.
@@ -22,7 +24,7 @@ dibuja un botón, sino de dónde vive la lógica y quién puede hablar con la ba
 | Opción | A favor | En contra |
 |---|---|---|
 | **Flutter Web + API en Dart + PostgreSQL en Supabase** | Un solo lenguaje en todo el proyecto; el front deja de llevar credenciales de base; hay un sitio para las reglas que la base no puede expresar; admite un segundo cliente mañana | Devuelve el backend al proyecto, y multiplicado por cuatro ambientes |
-| Mantener React + Vite + Supabase sin backend (lo de ADR-001) | Ya estaba decidido y documentado; lo más rápido de construir; operación en $0 | Dos lenguajes; el cliente conserva la llave de la base; sin punto único donde poner reglas ni donde componer respuestas |
+| Mantener React + Vite + Supabase sin backend (lo de [ADR-001](ADR-001-stack.md)) | Ya estaba decidido y documentado; lo más rápido de construir; operación en $0 | Dos lenguajes; el cliente conserva la llave de la base; sin punto único donde poner reglas ni donde componer respuestas |
 | Flutter con Supabase directo, sin API propia | Gana el lenguaje único en el front y evita construir el backend | No resuelve el problema real: el dispositivo sigue hablando con la base y sigue cargando credenciales. Cambia la herramienta, no la arquitectura |
 | Flutter con la API en otro lenguaje (TypeScript, Python, Go) | Ecosistemas de backend más grandes y con más gente disponible | Dos lenguajes, dos cadenas de herramientas y dos formas de modelar el mismo dominio, para un equipo de una persona |
 
@@ -84,7 +86,13 @@ hasta PostgreSQL en cada petición. Sin eso, este cambio destruye la seguridad d
   [`08-plan-de-desarrollo.md`](../08-plan-de-desarrollo.md) **ya no alcanza** y hay que rehacerlo
   con honestidad, no apretando las mismas tareas en el mismo tiempo. Se suma el costo de operación:
   «siempre en línea» saca a prod y uat del plan gratuito de Supabase, contra el presupuesto cero
-  que declaró ADR-001; la factura está en [ADR-013](ADR-013-cuatro-ambientes.md). Y Flutter Web
+  que declaró [ADR-001](ADR-001-stack.md); la factura está en [ADR-013](ADR-013-cuatro-ambientes.md). Y Flutter Web
   tiene menos gente disponible que React y un ecosistema de paquetes para web más pequeño; se
   acepta porque el lenguaje único pesa más en un equipo de una persona. A cambio se gana lo que
   está arriba, y por eso la decisión es defendible.
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [ADR-001](ADR-001-stack.md "ADR-001 · Stack tecnológico") · [ADR-016](ADR-016-flutter-web-pwa.md "ADR-016 · Flutter Web instalable como PWA") · [ADR-017](ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API")
+<!-- /generado:referenciado-desde -->

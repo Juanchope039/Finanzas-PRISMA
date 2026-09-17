@@ -1,5 +1,9 @@
 # Decisiones de arquitectura (ADR)
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
+
 Registro de las decisiones técnicas importantes: qué se decidió, por qué, qué alternativas se
 consideraron y qué consecuencias tiene.
 
@@ -31,10 +35,11 @@ consideraron y qué consecuencias tiene.
 | [024](ADR-024-java-25-y-gradle.md) | Java 25, Gradle y Spring Boot 4 en la API | Aceptado |
 | [025](ADR-025-cuatro-repositorios.md) | Cuatro repositorios: la base de datos sale de la API | Aceptado |
 | [026](ADR-026-railway-al-final.md) | Railway aloja la API y el front, y el despliegue va al final del desarrollo | Aceptado |
+| [027](ADR-027-documentacion-versionada.md) | La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica | Aceptado |
 
-Son **26 decisiones** registradas: 20 aceptadas y 6 reemplazadas.
+Son **27 decisiones** registradas: 21 aceptadas y 6 reemplazadas.
 
-> **Sobre la numeración.** El cambio de stack se planeó como ADR-010 y ADR-011, pero el 010 ya
+> **Sobre la numeración.** El cambio de stack se planeó como [ADR-010](ADR-010-almacenamiento-contrasenas.md) y [ADR-011](ADR-011-stack-flutter-dart.md), pero el 010 ya
 > estaba ocupado por la decisión de contraseñas. Un número asignado no se reutiliza, así que el
 > stack quedó en 011 y la PWA en 016.
 
@@ -46,3 +51,9 @@ decisión se revierte sin conocer su razón.
 
 Un ADR no se modifica: si una decisión cambia, se escribe uno nuevo que reemplaza al anterior y
 se marca el viejo como **Reemplazado**.
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [22](../22-documentacion.md "22 · Documentación: versiones, estados y referencias")
+<!-- /generado:referenciado-desde -->

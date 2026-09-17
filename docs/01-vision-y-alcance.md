@@ -1,5 +1,9 @@
 # 01 · Visión y alcance
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/01-vision-y-alcance.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Negocio](INDICE.md#etiqueta-negocio) · [Requisitos](INDICE.md#etiqueta-requisitos) |
+
 ---
 
 ## 1. Visión del producto
@@ -172,7 +176,7 @@ solo tiene dos columnas porque solo hay dos tipos.
 | Cálculo de parafiscales y seguridad social | Requiere formalización previa | Roadmap #2 |
 | Escenarios jurídicos y factor prestacional | Diferido | Roadmap #3 |
 | Parámetros legales versionados por año | Diferido | Roadmap #4 |
-| Construcción del exportador de respaldos | Se diseña ahora, se construye después | Roadmap #5 + doc 13 |
+| Construcción del exportador de respaldos | Se diseña ahora, se construye después | Roadmap #5 + doc [13](13-respaldo-y-exportacion.md) |
 | Procedimiento de restauración | Fase posterior | Roadmap #6 |
 | Inventario de insumos con control de existencias | No prioritario para el MVP | Roadmap #9 |
 | Integración con pasarelas de pago | No requerido | Roadmap #18 |
@@ -184,11 +188,11 @@ solo tiene dos columnas porque solo hay dos tipos.
 
 | # | Supuesto | Si resulta falso |
 |---|---|---|
-| S1 | Hay conexión a internet la mayor parte del tiempo en el taller | La PWA guarda en cola y sincroniza al reconectar |
-| S2 | El negocio opera con una sola ubicación | Habría que agregar dimensión de sucursal al modelo |
-| S3 | La política comercial es 50% anticipo y 50% contra entrega | El porcentaje es parametrizable por pedido |
-| S4 | Habrá máximo una empleada en el horizonte del MVP | El modelo soporta varias sin cambios |
-| S5 | Existe un Excel con histórico parcial | Si no, se arranca desde el saldo inicial |
+| <a id="s1"></a>S1 | Hay conexión a internet la mayor parte del tiempo en el taller | La PWA guarda en cola y sincroniza al reconectar |
+| <a id="s2"></a>S2 | El negocio opera con una sola ubicación | Habría que agregar dimensión de sucursal al modelo |
+| <a id="s3"></a>S3 | La política comercial es 50% anticipo y 50% contra entrega | El porcentaje es parametrizable por pedido |
+| <a id="s4"></a>S4 | Habrá máximo una empleada en el horizonte del MVP | El modelo soporta varias sin cambios |
+| <a id="s5"></a>S5 | Existe un Excel con histórico parcial | Si no, se arranca desde el saldo inicial |
 
 ---
 
@@ -215,6 +219,10 @@ El proyecto se considera exitoso si, a los 90 días del go-live:
    de un minuto cada una.
 4. El Excel y el cuaderno dejaron de usarse.
 5. Cero registros perdidos y cero anulaciones sin motivo.
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias")
+<!-- /generado:referenciado-desde -->
 
 ---
 

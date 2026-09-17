@@ -1,11 +1,13 @@
 # ADR-024 · Java 25, Gradle y Spring Boot 4 en la API
 
-**Estado:** Aceptado · **Fecha:** 2026-09-16
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-024-java-25-y-gradle.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-16 | 2026-09-16 | [API](../INDICE.md#etiqueta-api) · [Entrega](../INDICE.md#etiqueta-entrega) |
 
 ## Contexto
 
 [ADR-017](ADR-017-api-en-java.md) decidió `prisma_api` en **Java 21 con Spring Boot**, y
-[`19-ambientes-y-entrega.md`](../19-ambientes-y-entrega.md) §2.4 eligió **Maven** para
+[`19-ambientes-y-entrega.md`](../19-ambientes-y-entrega.md) [§2.4](../19-ambientes-y-entrega.md#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro) eligió **Maven** para
 construirlo, con un argumento explícito: *«es lo que produce Spring Initializr por defecto y lo
 que más gente sabe leer»*.
 
@@ -16,7 +18,7 @@ la petición y que obliga igual:
 > parche gratuito fue el 3.5.16. Todas las ramas 3.x están sin soporte, y eso significa que un
 > CVE nuevo en cualquiera de sus dependencias no va a tener arreglo publicado.
 
-El esqueleto del Sprint 0 se había escrito contra Spring Boot 3.5.6. Seguir ahí era arrancar un
+El esqueleto del [Sprint 0](../08-plan-de-desarrollo.md#sprint-0) se había escrito contra Spring Boot 3.5.6. Seguir ahí era arrancar un
 proyecto nuevo sobre una base que ya no recibe parches de seguridad, en un sistema que va a
 guardar los salarios de las empleadas y los movimientos de plata del taller.
 
@@ -114,6 +116,12 @@ correr sobre una base sin soporte de seguridad.
 
 - [ADR-017](ADR-017-api-en-java.md) — la decisión que este reemplaza
 - [ADR-014](ADR-014-semver.md) — SemVer por proyecto: sigue vigente, cambia el archivo
-- [`19-ambientes-y-entrega.md`](../19-ambientes-y-entrega.md) §2.4 — cómo se construye y se promueve
+- [`19-ambientes-y-entrega.md`](../19-ambientes-y-entrega.md) [§2.4](../19-ambientes-y-entrega.md#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro) — cómo se construye y se promueve
 - [Spring Boot · System Requirements](https://docs.spring.io/spring-boot/system-requirements.html)
 - [Gradle · Compatibility Matrix](https://docs.gradle.org/current/userguide/compatibility.html)
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [09](../09-plan-de-implantacion.md "09 · Plan de implantación") · [18](../18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [19](../19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [ADR-014](ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-017](ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-018](ADR-018-front-sin-decisiones.md "ADR-018 · Tres partes, y el front no toma decisiones") · [ADR-023](ADR-023-tres-repositorios.md "ADR-023 · Tres repositorios y el contrato como artefacto versionado")
+<!-- /generado:referenciado-desde -->

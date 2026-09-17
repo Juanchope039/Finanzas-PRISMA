@@ -1,9 +1,13 @@
 # 18 · Distribución multiplataforma y automatización (pipelines)
 
-> **Estado: idea, no decidida.** Este documento recoge la intención de distribuir la aplicación
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [0.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/18-distribucion-y-pipelines.md "Historial de cambios") | [💡 Propuesta](22-documentacion.md#estados) | 2026-09-15 | 2026-09-16 | [Entrega](INDICE.md#etiqueta-entrega) · [Front](INDICE.md#etiqueta-front) |
+
+> **Todavía es una idea, no una decisión.** Este documento recoge la intención de distribuir la aplicación
 > en **web, Android, iPhone y escritorio Windows**, y de automatizar pruebas y publicación.
 > Con Flutter multiplataforma no hay nada que empaquetar: el mismo código compila a cada
-> objetivo. Lo que **queda por decidir** es **qué objetivos se publican y cuándo** (§5), con sus
+> objetivo. Lo que **queda por decidir** es **qué objetivos se publican y cuándo** ([§5](#5-qué-objetivos-de-compilación-se-publican-y-cuándo)), con sus
 > costos a la vista. Hoy la decisión vigente sigue siendo la PWA
 > ([ADR-016](adr/ADR-016-flutter-web-pwa.md)); las apps de tienda amplían la **idea 30** del
 > [roadmap](14-roadmap-e-ideas.md).
@@ -28,7 +32,7 @@ básica en Android, iOS y Windows **sin** tiendas de aplicaciones.
 
 El mismo código fuente compila además a Android, iOS y escritorio sin envolver nada ni reescribir
 pantallas. Eso abarata el **salto técnico**, pero no el salto de alcance: publicar en una tienda
-sigue costando cuentas, revisiones y mantenimiento permanente (§5.2 y §6). Por eso los objetivos
+sigue costando cuentas, revisiones y mantenimiento permanente ([§5.2](#52-cuándo-se-agrega-un-objetivo) y [§6](#6-realidades-de-publicar-costos-que-hay-que-nombrar)). Por eso los objetivos
 nativos se documentan aquí como idea, no como compromiso.
 
 ---
@@ -56,7 +60,7 @@ el JDK por su cuenta y quien clone el proyecto compila sin instalar nada. Las et
 no dependen de esa elección.
 
 > **La versión definitiva de este pipeline vive en
-> [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) §6.** Allí está lo que aquí no cabe:
+> [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) [§6](19-ambientes-y-entrega.md#6-integración-continua).** Allí está lo que aquí no cabe:
 > lo que corre en cada empuje, lo que corre en cada promoción contra una base real y las dos
 > pruebas que no se pueden saltar. Esta tabla es el resumen; si las dos discrepan, manda el 19.
 
@@ -66,7 +70,7 @@ no dependen de esa elección.
 
 | Objetivo | Artefacto | Cómo se genera (previsto) | Publicación |
 |---|---|---|---|
-| **Web / PWA** | Sitio desplegado | `flutter build web` y promoción del artefacto ([`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) §2.3) | Por promoción, no por *push* |
+| **Web / PWA** | Sitio desplegado | `flutter build web` y promoción del artefacto ([`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) [§2.3](19-ambientes-y-entrega.md#23-el-artefacto-se-promueve-no-se-reconstruye)) | Por promoción, no por *push* |
 | **Android** | `.aab` (y `.apk` para pruebas) | `flutter build appbundle` | Google Play (cuenta de desarrollador) |
 | **iPhone (iOS)** | `.ipa` | `flutter build ipa`, **solo en un Mac** | App Store (cuenta Apple Developer) |
 | **Windows** | `.exe` / `.msi` | `flutter build windows` más el armado del instalador | Descarga directa + firma de código |
@@ -94,7 +98,7 @@ publica, cuándo y a cambio de qué». La decisión dejó de ser técnica y pas�
 | **Escritorio Windows** | `flutter build windows` | Disponible sin código extra; no se publica | Certificado de firma de código anual |
 
 Los cuatro salen del **mismo código**, sin capas intermedias ni pantallas duplicadas. Lo que
-diferencia a uno de otro ya no es el esfuerzo de programación, sino lo del §6: cuentas, firmas,
+diferencia a uno de otro ya no es el esfuerzo de programación, sino lo del [§6](#6-realidades-de-publicar-costos-que-hay-que-nombrar): cuentas, firmas,
 revisiones y máquinas.
 
 ### 5.2 Cuándo se agrega un objetivo
@@ -131,7 +135,7 @@ porque la decisión de no usarlas tiene que poder rastrearse:
 
 La comparación no estaba equivocada: estaba resuelta **para otro stack**. Con Flutter
 multiplataforma desaparecieron a la vez sus costos (una cadena de herramientas extra por
-plataforma) y su ventaja (reusar la web tal cual). Lo que queda es §5.1: elegir objetivos, no
+plataforma) y su ventaja (reusar la web tal cual). Lo que queda es [§5.1](#51-los-objetivos-disponibles): elegir objetivos, no
 envoltorios.
 
 ---
@@ -147,7 +151,7 @@ envoltorios.
 
 Estos costos son la razón por la que la PWA fue la decisión inicial: **cero tiendas, cero cuotas,
 actualización inmediata**. Un objetivo nativo se justifica solo si aparece una necesidad que la
-PWA no cubra (§5.2); el costo de compilarlo es cero, el de publicarlo no.
+PWA no cubra ([§5.2](#52-cuándo-se-agrega-un-objetivo)); el costo de compilarlo es cero, el de publicarlo no.
 
 ---
 
@@ -156,9 +160,9 @@ PWA no cubra (§5.2); el costo de compilarlo es cero, el de publicarlo no.
 | | Pipeline de pruebas | Pipeline de descarga | Depende de |
 |---|:---:|:---:|---|
 | Web / PWA | ✅ | ✅ (promoción) | `pubspec.yaml` del front |
-| Android | ✅ | ⬜ | Decidir el objetivo (§5.2) + cuenta Play + firma |
-| iOS | ✅ | ⬜ | Decidir el objetivo (§5.2) + cuenta Apple + Mac |
-| Windows | ✅ | ⬜ | Decidir el objetivo (§5.2) + certificado de firma |
+| Android | ✅ | ⬜ | Decidir el objetivo ([§5.2](#52-cuándo-se-agrega-un-objetivo)) + cuenta Play + firma |
+| iOS | ✅ | ⬜ | Decidir el objetivo ([§5.2](#52-cuándo-se-agrega-un-objetivo)) + cuenta Apple + Mac |
+| Windows | ✅ | ⬜ | Decidir el objetivo ([§5.2](#52-cuándo-se-agrega-un-objetivo)) + certificado de firma |
 | API (`prisma_api`) | ✅ | ➖ (se promueve, no se descarga) | Proyecto Java andamiado |
 
 ---
@@ -168,11 +172,15 @@ PWA no cubra (§5.2); el costo de compilarlo es cero, el de publicarlo no.
 - **Decidido hoy:** nada nuevo. La PWA sigue vigente y web sigue siendo el objetivo por defecto
   ([ADR-016](adr/ADR-016-flutter-web-pwa.md)).
 - **Resuelto:** ya no hay que elegir tecnología de empaquetado. Flutter compila nativo y la
-  comparación de envoltorios quedó registrada como histórica en §5.3.
-- **Primer paso barato cuando existan los dos proyectos:** el pipeline de pruebas del §3, con sus
+  comparación de envoltorios quedó registrada como histórica en [§5.3](#53-registro-la-comparación-que-dejó-de-aplicar).
+- **Primer paso barato cuando existan los dos proyectos:** el pipeline de pruebas del [§3](#3-integración-continua--el-pipeline-de-pruebas), con sus
   dos trabajos, el de Flutter y el de Java.
-- **Pendiente de decisión:** qué objetivos nativos se publican y cuándo (§5.2), que se registrará
-  en un ADR propio, y la apertura de cuentas de tienda del §6.
+- **Pendiente de decisión:** qué objetivos nativos se publican y cuándo ([§5.2](#52-cuándo-se-agrega-un-objetivo)), que se registrará
+  en un ADR propio, y la apertura de cuentas de tienda del [§6](#6-realidades-de-publicar-costos-que-hay-que-nombrar).
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega")
+<!-- /generado:referenciado-desde -->
 
 ---
 

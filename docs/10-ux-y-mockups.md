@@ -1,5 +1,9 @@
 # 10 · Diseño de experiencia y mockups
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
 > **El mockup HTML es el contrato de diseño, y lo sigue siendo.** El front se construye en
@@ -15,21 +19,21 @@ Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.ht
 
 | # | Principio | Consecuencia concreta |
 |---|---|---|
-| 1 | **El celular es el dispositivo principal** | Todo se diseña primero para una pantalla de 375 px y una sola mano |
-| 2 | **Registrar debe costar menos que no registrar** | El botón de registro rápido flota sobre todas las pantallas menos el Inicio; máximo 4 campos obligatorios |
-| 3 | **Las tres cifras nunca van solas** | Utilidad, caja y caja libre siempre juntas, nunca una sin las otras |
-| 4 | **Nada de jerga contable** | "Lo que ganaste" en vez de "utilidad neta del ejercicio" |
-| 5 | **Las alertas dicen qué hacer** | No "caja libre negativa" sino "estás usando plata de anticipos" |
-| 6 | **Lo restringido no se ve, no se atenúa** | El rol Operación no ve menús deshabilitados: simplemente no existen. El menú llega armado desde el ingreso —lo manda la API según el tipo de la sesión (principio 9, RF-103)—, no se recorta después |
-| 7 | **El dinero siempre con formato colombiano** | `$1.350.784` — punto de miles, sin decimales |
-| 8 | **El Inicio es un espejo, no un formulario** | Ninguna acción que escriba en la base vive en el Inicio: cada cosa se registra en la pantalla de su asunto —el dinero en Movimientos, los pedidos en Pedidos, el catálogo en Productos, la gente en Gestión de usuarios |
-| 9 | **El front no decide nada** | Los mensajes de error, las reglas de los formularios y qué opciones de menú existen los dicta la API; el front los pinta |
+| <a id="principio-1"></a>1 | **El celular es el dispositivo principal** | Todo se diseña primero para una pantalla de 375 px y una sola mano |
+| <a id="principio-2"></a>2 | **Registrar debe costar menos que no registrar** | El botón de registro rápido flota sobre todas las pantallas menos el Inicio; máximo 4 campos obligatorios |
+| <a id="principio-3"></a>3 | **Las tres cifras nunca van solas** | Utilidad, caja y caja libre siempre juntas, nunca una sin las otras |
+| <a id="principio-4"></a>4 | **Nada de jerga contable** | "Lo que ganaste" en vez de "utilidad neta del ejercicio" |
+| <a id="principio-5"></a>5 | **Las alertas dicen qué hacer** | No "caja libre negativa" sino "estás usando plata de anticipos" |
+| <a id="principio-6"></a>6 | **Lo restringido no se ve, no se atenúa** | El rol Operación no ve menús deshabilitados: simplemente no existen. El menú llega armado desde el ingreso —lo manda la API según el tipo de la sesión ([principio 9](#principio-9), [RF-103](03-requisitos-y-bdd.md#rf-103))—, no se recorta después |
+| <a id="principio-7"></a>7 | **El dinero siempre con formato colombiano** | `$1.350.784` — punto de miles, sin decimales |
+| <a id="principio-8"></a>8 | **El Inicio es un espejo, no un formulario** | Ninguna acción que escriba en la base vive en el Inicio: cada cosa se registra en la pantalla de su asunto —el dinero en Movimientos, los pedidos en Pedidos, el catálogo en Productos, la gente en Gestión de usuarios |
+| <a id="principio-9"></a>9 | **El front no decide nada** | Los mensajes de error, las reglas de los formularios y qué opciones de menú existen los dicta la API; el front los pinta |
 
 > **Por qué el Inicio no escribe.** Un tablero que además crea datos compite consigo mismo: la
 > cifra que acabas de mirar cambia por algo que hiciste dos centímetros más abajo, y ya no sabes
 > si el número que recuerdas era de antes o de después. Y un Inicio que no escribe se puede
 > exportar entero sin ambigüedad: lo que ves es lo que descargas, porque nada de lo que hay ahí
-> está a medio hacer. Por eso el botón flotante de registro rápido del principio 2 flota sobre
+> está a medio hacer. Por eso el botón flotante de registro rápido del [principio 2](#principio-2) flota sobre
 > todas las pantallas menos esta: un botón que escribe plata volvería formulario justo a la
 > pantalla que se definió como espejo.
 
@@ -38,7 +42,7 @@ Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.ht
 > que la API después rechaza, o avisa de algo que la API ya permitía. Quien queda mal es la
 > pantalla, y quien pierde el trabajo escrito es la empleada. Con una sola fuente —la API— el
 > aviso y la decisión no pueden divergir. Esto no le quita agilidad al diseño: la pantalla sigue
-> avisando al instante, pero lo que avisa se lo dictaron (§3.4).
+> avisando al instante, pero lo que avisa se lo dictaron ([§3.4](#34-el-descriptor-de-formulario)).
 
 ---
 
@@ -115,7 +119,7 @@ sino a **Crea tu contraseña**, y de ahí no sale sin cambiarla.
 **Gestión de usuarios no aparece en ninguna de las dos listas**, porque ya no es una entrada del
 menú lateral: se alcanza desde el menú de la sesión y allí solo existe para Gerencia. En el
 prototipo el menú lateral de Gerencia baja por eso de nueve entradas a ocho. Para Operación la
-entrada no está en ninguna parte: no se atenúa, no se deshabilita, no existe (principio 6).
+entrada no está en ninguna parte: no se atenúa, no se deshabilita, no existe ([principio 6](#principio-6)).
 
 ---
 
@@ -159,7 +163,7 @@ Todas las cifras usan **numeración tabular** para que las columnas se alineen.
 
 Un formulario que solo avisa cuando el servidor contesta se siente lento y gasta datos móviles en
 cada equivocación. Un formulario que decide por su cuenta vuelve a poner la regla en dos sitios,
-que es justo lo que prohíbe el principio 9. El diseño no escoge entre las dos cosas: **la pantalla
+que es justo lo que prohíbe el [principio 9](#principio-9). El diseño no escoge entre las dos cosas: **la pantalla
 sigue avisando al instante, pero lo que avisa se lo dictaron.**
 
 Junto con cada formulario, la API entrega el **descriptor** de sus campos: etiqueta, tipo, si es
@@ -192,7 +196,7 @@ petición, siempre. Cubre `RF-102`.
 Capa a pantalla completa, sin menú y sin topbar: mientras no haya sesión no hay nada más que
 ver. Logo, campo **Usuario**, campo **Contraseña** con botón de mostrar u ocultar, y el botón
 **Entrar**. El foco arranca en Usuario y Enter envía desde cualquiera de los dos campos.
-El detalle de sus decisiones está en §5.
+El detalle de sus decisiones está en [§5](#5-la-sesión-acceso-y-gestión-de-usuarios).
 
 ### 4.1 Dashboard
 
@@ -209,11 +213,11 @@ El detalle de sus decisiones está en §5.
 | Gráfico | 12 meses de utilidad y caja superpuestas |
 | Pendientes | Pedidos por entregar, cuentas por cobrar |
 
-**Solo consulta.** Aquí no se crea, no se edita y no se anula nada (principio 8). Lo único que
+**Solo consulta.** Aquí no se crea, no se edita y no se anula nada ([principio 8](#principio-8)). Lo único que
 hace el botón **Descargar** es sacar en CSV o PDF lo que la pantalla ya muestra: las tres cifras
 del mes, los saldos de cuentas al corte, los 12 meses de utilidad y caja, las alertas activas y
 los pedidos por entregar. Se elige con casillas qué incluir. Crear cuentas de dinero se hace en
-Movimientos (§4.3).
+Movimientos ([§4.3](#43-movimientos)).
 
 > **En el prototipo el botón Descargar no descarga.** Al pulsarlo aparece un aviso que dice qué
 > archivo se generaría y con qué contenido, y nada más. Prometer una descarga que no ocurre es
@@ -233,7 +237,7 @@ valor total, anticipo y saldo.
 
 Registro rápido en un panel que se abre con el botón flotante, y ese botón flota sobre todas las
 pantallas menos el Inicio: valor, tipo, categoría, cuenta, fecha (hoy por defecto), foto. El
-Inicio queda fuera porque no escribe (principio 8). Lista con filtros, marca de registro tardío
+Inicio queda fuera porque no escribe ([principio 8](#principio-8)). Lista con filtros, marca de registro tardío
 y acción de anular con motivo obligatorio.
 
 Aloja además el panel **«Cuentas de dinero»**, exclusivo de Gerencia, que es donde se crean las
@@ -288,7 +292,7 @@ Tres bloques en una sola pantalla: la **tabla de personas con acceso** —activa
 juntas— arriba, la **bitácora de cambios** en medio y el **catálogo de cargos** abajo. Se
 administran juntos porque no se puede crear a alguien sin el cargo que le toca, y porque cada
 cambio del primer bloque queda explicado en el segundo. Es la única pantalla que no se abre
-desde el menú lateral sino desde el menú de la sesión. El detalle de sus decisiones está en §5.
+desde el menú lateral sino desde el menú de la sesión. El detalle de sus decisiones está en [§5](#5-la-sesión-acceso-y-gestión-de-usuarios).
 
 ### 4.10 Versión incompatible
 
@@ -330,7 +334,7 @@ de correo —se entra con nombre de usuario— y no hay enlace de recuperación.
 | El usuario desactivado **sí** recibe un mensaje propio: **«Este usuario está desactivado. Habla con Gerencia.»** | Para alguien que ya trabajó en el taller eso no es un secreto: sabe que existía y sabe que se fue. Y es lo único que evita que siga intentando, creyendo que olvidó la clave |
 | No hay «olvidé mi contraseña» | No hay correo real a donde mandar nada. La clave la restablece Gerencia en persona; decirlo en la pantalla ahorra la búsqueda del enlace que no existe |
 | El campo Usuario no autocapitaliza ni autocorrige | En el celular, `Marcela` con mayúscula inicial sería el primer intento fallido de todas |
-| Enter envía desde los dos campos y el foco arranca en Usuario | Se entra sin soltar el teclado ni mover el pulgar. RNF-19 pide menos de 10 segundos con una sola mano |
+| Enter envía desde los dos campos y el foco arranca en Usuario | Se entra sin soltar el teclado ni mover el pulgar. [RNF-19](03-requisitos-y-bdd.md#rnf-19) pide menos de 10 segundos con una sola mano |
 
 **Vista previa · entra con un clic.** Debajo del formulario hay un botón por cada usuario de
 ejemplo que rellena y envía. Existe **solo en el mockup**, y por dos razones. La primera es que
@@ -377,7 +381,7 @@ negocio. Queda así, en este orden:
 pantalla; las demás se resuelven donde estás, sin moverte. Si el tipo no es Gerencia, la
 entrada no está: no se atenúa, no se deshabilita, no existe. Al elegirla se cierra el menú y el
 foco pasa al encabezado de la pantalla. En la sesión de Gerencia el menú lleva además el
-interruptor **Ver como Operación**, que se explica en §5.6.
+interruptor **Ver como Operación**, que se explica en [§5.6](#56-vista-previa-de-operación).
 
 ### 5.4 Gestión de usuarios
 
@@ -502,7 +506,7 @@ navegación, pequeña y sin competir con nada:
 | La insignia va en el pie de la barra lateral, no en el topbar | La barra superior es donde viven la identidad y las acciones de la sesión. La versión no es ninguna de las dos cosas: es un dato de soporte. Abajo a la izquierda está siempre visible, no compite con nada y es donde la gente la busca por costumbre |
 | En pantallas angostas el pie pasa al final del contenido | Cuando la barra lateral se vuelve pestañas horizontales ya no hay pie donde vivir. La insignia baja al final del contenido conservando la esquina inferior izquierda: cambia el sitio en el árbol, no el sitio donde la mira quien la busca |
 | Sigue siendo pulsable y abre el panel «Acerca de» | Cambió de lugar, no de trabajo. Es el atajo al detalle que se dicta por teléfono cuando alguien reporta un fallo |
-| En dev, qa y uat la insignia va en color de advertencia | Es el mismo ámbar que ya significa «ojo con esto» en todo el sistema (§3.1). No hay que aprender un código nuevo |
+| En dev, qa y uat la insignia va en color de advertencia | Es el mismo ámbar que ya significa «ojo con esto» en todo el sistema ([§3.1](#31-color)). No hay que aprender un código nuevo |
 | En **prod** la insignia muestra solo la versión, en color neutro, y **no rotula «PROD»** | Si no dice nada, es el de verdad. Rotular el sistema real es ruido: un aviso que se lee todos los días deja de leerse, y el día que aparezca uno que sí importa tampoco se va a notar. La advertencia solo funciona si es la excepción |
 | El nombre del ambiente va completo y en español: `Desarrollo`, `QA`, `Aprobación` | Una sigla que hay que traducir no advierte: la lee quien ya sabe lo que significa, que es justo quien no la necesita |
 | La versión va siempre, también en prod | Es la mitad de la respuesta cuando alguien reporta un fallo, y no molesta a nadie |
@@ -516,7 +520,7 @@ En prod no hay franja. La ausencia es el mensaje.
 
 | Decisión | Por qué |
 |---|---|
-| Reutiliza el patrón visual de la franja de «Ver como Operación» (§5.6) | Es exactamente el mismo propósito: avisar de que **lo que ves no es lo que crees**. El patrón ya está construido, aprobado y probado en celular; inventar un segundo aviso para el mismo trabajo solo agregaría una cosa más que mantener y una forma más que aprender |
+| Reutiliza el patrón visual de la franja de «Ver como Operación» ([§5.6](#56-vista-previa-de-operación)) | Es exactamente el mismo propósito: avisar de que **lo que ves no es lo que crees**. El patrón ya está construido, aprobado y probado en celular; inventar un segundo aviso para el mismo trabajo solo agregaría una cosa más que mantener y una forma más que aprender |
 | Tampoco se puede cerrar | Una franja que se cierra es una franja que se olvida, y esta existe justo para el momento en que ya se olvidó |
 | No lleva botón de salida, a diferencia de la de vista previa | De la vista previa se sale con un clic porque es un modo; de un ambiente no se sale apagándolo. Ofrecer un botón que no puede cumplir sería peor que no ofrecer ninguno |
 | **La franja no se movió con la insignia**: sigue arriba del contenido | Las dos dicen el ambiente, pero no hacen el mismo trabajo. La insignia está para que la encuentres cuando la buscas, y por eso vive tranquila en el pie. La franja está para interrumpir a quien no está buscando nada, y solo interrumpe desde arriba, en el camino de la mirada |
@@ -525,7 +529,7 @@ En prod no hay franja. La ausencia es el mensaje.
 > guardada.** Ese error no avisa en el momento, se descubre en el cierre, y para entonces ya no
 > se sabe qué se registró dónde.
 
-**El panel «Acerca de».** Se abre desde el menú de la sesión (§5.3) y muestra:
+**El panel «Acerca de».** Se abre desde el menú de la sesión ([§5.3](#53-la-sesión-en-el-topbar)) y muestra:
 
 | Dato | Ejemplo |
 |---|---|
@@ -552,7 +556,7 @@ ejemplo, igual que todo lo demás. Sin eso no estarían aprobadas, y sin aprobar
 | Decisión | Por qué |
 |---|---|
 | La fecha del movimiento por defecto es hoy, pero siempre visible y editable | El 90% de los registros son del día; el 10% restante no debe quedar mal por descuido |
-| El botón de registro rápido flota sobre todas las pantallas menos el Inicio | Si hay que navegar para registrar, no se registra. El Inicio queda fuera porque no escribe (principio 8) |
+| El botón de registro rápido flota sobre todas las pantallas menos el Inicio | Si hay que navegar para registrar, no se registra. El Inicio queda fuera porque no escribe ([principio 8](#principio-8)) |
 | Anular pide el motivo **antes** de confirmar, no después | Obliga a pensar, y el texto queda mejor escrito |
 | Los anticipos tienen su propio color en todas las pantallas | Es el concepto que más se confunde |
 | El simulador se bloquea sin pro-labore definido, con explicación | Un resultado inflado es peor que ningún resultado |
@@ -563,7 +567,11 @@ ejemplo, igual que todo lo demás. Sin eso no estarían aprobadas, y sin aprobar
 ## 7. Verificación del diseño
 
 El checklist de aprobación pantalla por pantalla está en
-[`09-plan-de-implantacion.md`](09-plan-de-implantacion.md) §1.
+[`09-plan-de-implantacion.md`](09-plan-de-implantacion.md) [§1](09-plan-de-implantacion.md#1-checklist-de-aprobación-del-mockup).
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias")
+<!-- /generado:referenciado-desde -->
 
 ---
 

@@ -1,6 +1,8 @@
 # ADR-001 · Stack tecnológico
 
-**Estado:** Reemplazado por ADR-011 · **Fecha:** 2026-09-13
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-001-stack.md "Historial de cambios") | [⛔ Reemplazado](../22-documentacion.md#estados-de-un-adr) por [ADR-011](ADR-011-stack-flutter-dart.md) | 2026-09-13 | 2026-09-16 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
 
 > **Lo reemplaza [ADR-011](ADR-011-stack-flutter-dart.md):** el front pasa a Flutter Web y se
 > agrega `prisma_api` en Dart, porque el navegador no debe hablar directo con la base ni cargar
@@ -48,3 +50,9 @@ ahorrar unas semanas de desarrollo. Ese fue el factor que descartó Svelte pese 
 - **Negativas:** dependencia de dos proveedores externos. Mitigada por la arquitectura
   hexagonal ([ADR-002](ADR-002-arquitectura-hexagonal.md)): cambiar de proveedor toca
   adaptadores, no reglas de negocio.
+
+---
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](../19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [ADR-010](ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-011](ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-013](ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-017](ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API")
+<!-- /generado:referenciado-desde -->

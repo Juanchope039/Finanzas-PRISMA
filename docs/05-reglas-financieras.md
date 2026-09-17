@@ -1,5 +1,9 @@
 # 05 · Reglas financieras y KPIs
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/05-reglas-financieras.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Finanzas](INDICE.md#etiqueta-finanzas) · [Negocio](INDICE.md#etiqueta-negocio) |
+
 > **El documento más importante del proyecto.** Aquí viven las fórmulas exactas que el sistema
 > debe implementar. Si algo en el código contradice este documento, el código está mal.
 
@@ -51,7 +55,7 @@ La política del negocio es **50% al confirmar el pedido y 50% contra entrega**.
 flujo de caja, pero introduce una confusión peligrosa: la plata del anticipo está en la cuenta
 y **parece** ganancia.
 
-> **RN-05.** Un anticipo es un **pasivo**: una deuda con el cliente, porque el negocio se
+> **[RN-05](03-requisitos-y-bdd.md#rn-05).** Un anticipo es un **pasivo**: una deuda con el cliente, porque el negocio se
 > comprometió a entregar algo que todavía no ha hecho. Solo al entregar se convierte en venta.
 
 ### 3.2 El caso que rompe la intuición: el pedido que cruza de mes
@@ -118,7 +122,7 @@ Si se vende un sábado y se registra el lunes, el reporte debe contarlo el **sá
 auditoría debe saber que se digitó el lunes. Guardar una sola fecha obliga a escoger entre
 reportes que mienten y auditoría que miente.
 
-**Alerta de registro tardío (RN-14).** Cuando `creado_en − fecha_movimiento > 7 días`, el
+**Alerta de registro tardío ([RN-14](03-requisitos-y-bdd.md#rn-14)).** Cuando `creado_en − fecha_movimiento > 7 días`, el
 movimiento se marca. No es un error: es la señal temprana de que el hábito de registro se está
 aflojando, que es la forma número uno en que estos sistemas mueren.
 
@@ -243,7 +247,7 @@ Patrimonio = Aportes − Retiros de distribución + Utilidades acumuladas
 Eso es lo que se ha construido. Si se hubieran retirado $20.000.000, el patrimonio quedaría en
 $1.000.000: **descapitalización, aunque cada mes haya sido rentable**.
 
-**Alerta automática (RN, CU-24):**
+**Alerta automática (RN, [CU-24](02-casos-de-uso.md#cu-24)):**
 
 ```
 SI  Retiros de distribución de los últimos 12 meses  >  Utilidades de los últimos 12 meses
@@ -329,7 +333,7 @@ Costo del tiempo ocioso  = Tiempo ocioso × Tarifa por hora
 
 ## 8. Cierre mensual
 
-> **RN-16.** Un mes cerrado no cambia retroactivamente.
+> **[RN-16](03-requisitos-y-bdd.md#rn-16).** Un mes cerrado no cambia retroactivamente.
 
 Al cerrar un mes se congela un snapshot con: ingresos causados, costos directos, gastos
 operativos, pro-labore, nómina, utilidad causada, flujo de caja, caja libre y anticipos
@@ -536,7 +540,7 @@ Ninguna de las dos es obvia sin este cuadro. Ese es el punto de tenerlo.
 
 Cada fórmula de este documento tiene su prueba automática en el dominio de `prisma_api`, en Java.
 Los valores del ejemplo de la sección 12 se usan como **juego de datos de prueba oficial**
-(ver [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) §4).
+(ver [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) [§4](12-pruebas-y-calidad.md#4-juego-de-datos-de-prueba-oficial)).
 
 Comprobación de consistencia que debe cumplirse siempre:
 
@@ -548,6 +552,10 @@ Caja libre  = Saldo total − Anticipos por devengar − Gastos fijos comprometi
 ```
 
 Si alguna de estas igualdades falla, hay un error de registro o de cálculo.
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [20](20-contrato-de-api.md "20 · Contrato de la API")
+<!-- /generado:referenciado-desde -->
 
 ---
 

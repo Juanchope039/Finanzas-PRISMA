@@ -1,5 +1,9 @@
 # 00 · Resumen ejecutivo
 
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/00-resumen-ejecutivo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Negocio](INDICE.md#etiqueta-negocio) · [Finanzas](INDICE.md#etiqueta-finanzas) · [Plan](INDICE.md#etiqueta-plan) |
+
 > Documento de 5 minutos. Si solo vas a leer uno, que sea este.
 
 ---
@@ -129,7 +133,7 @@ período.
 | **Dónde funciona** | Navegador del PC y app instalable en el celular, con el mismo código |
 | **Ambientes** | Cuatro: desarrollo, QA, aprobación y producción, cada uno con su propia base |
 | **Versión** | Cada proyecto la lleva por separado, y el front la muestra abajo a la izquierda junto al ambiente |
-| **Duración** | 26 semanas: 10 sprints —siete de 2 semanas y tres de 3— más 3 de estabilización y puesta en marcha |
+| **Duración** | 10 sprints más 3 semanas de estabilización y puesta en marcha. Cuántas semanas en total depende de cuántos frentes de trabajo avancen a la vez ([§6](#6-cronograma-resumido)) |
 | **Costo mensual de operación** | Ya no es $0: producción y aprobación necesitan plan de pago para no pausarse; desarrollo y QA siguen en el gratuito |
 | **Seguridad** | Permisos dentro de la base de datos; borrado imposible por diseño |
 | **Tipos de usuario** | Gerencia (todo) y Operación (registro, sin ver utilidad ni nómina) |
@@ -142,25 +146,58 @@ ver, el cargo dice qué hace en el negocio.
 
 ## 6. Cronograma resumido
 
-| Sprint | Semanas | Entrega |
-|---|---|---|
-| 0 | 1–3 | Los dos proyectos, los cuatro ambientes, la tubería que despliega sola y el contrato de respuesta |
-| 1 | 4–6 | Base de datos, permisos en la base, identidad propagada hasta PostgreSQL e idempotencia |
-| 2 | 7–9 | Acceso, usuarios, cargos y canal firmado |
-| 3 | 10–11 | Ingresos, gastos, cuentas, saldos |
-| 4 | 12–13 | Pedidos, anticipos, entregas |
-| 5 | 14–15 | Productos, costeo y márgenes |
-| 6 | 16–17 | Reportes y las tres cifras |
-| 7 | 18–19 | Inversiones, retiros, pro-labore, patrimonio |
-| 8 | 20–21 | Nómina, simulador, cotizador y cierre |
-| 9 | 22–23 | Promoción hasta producción, PWA y endurecimiento |
-| — | 24–26 | Estabilización, aprobación en UAT, migración, capacitación y go-live |
+El trabajo se reparte en **carriles**: frentes que avanzan a la vez sin esperarse, como la API, la
+base de datos y las pantallas. Con más carriles se termina antes, pero no en la mitad: hay partes
+que van en cadena y la puesta en marcha no se parte.
 
-> **Son 26 semanas y no 16 porque el backend volvió al proyecto.** Construir, probar y
-> desplegar la API en cuatro ambientes es trabajo nuevo, no las mismas horas repartidas en más
-> casillas. Los tres primeros sprints duran tres semanas en lugar de dos porque ahí se construye
-> el contrato entre las tres partes: el sobre de respuesta, la idempotencia y el canal firmado.
-> El detalle, sprint por sprint, está en
+<!-- generado:plan-resumen · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**27,4 semanas con 1 carril**, **17,7 semanas con 2 carriles** y **15,3 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](08-plan-de-desarrollo.md#1-cronograma-por-carriles).
+<!-- /generado:plan-resumen -->
+
+| Sprint | Entrega |
+|---|---|
+| 0 | Los dos proyectos, los cuatro ambientes y el contrato de respuesta |
+| 1 | Base de datos, permisos en la base, identidad propagada hasta PostgreSQL e idempotencia |
+| 2 | Acceso, usuarios, cargos y canal firmado |
+| 3 | Ingresos, gastos, cuentas, saldos |
+| 4 | Pedidos, anticipos, entregas |
+| 5 | Productos, costeo y márgenes |
+| 6 | Reportes y las tres cifras |
+| 7 | Inversiones, retiros, pro-labore, patrimonio |
+| 8 | Nómina, simulador, cotizador y cierre |
+| 9 | Promoción hasta producción, PWA, endurecimiento y la publicación automática |
+| — | Estabilización, aprobación en UAT, migración, capacitación y go-live |
+
+**En qué semana llega cada hito**, según cuántos carriles avancen a la vez:
+
+<!-- generado:plan-calendario · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**162 días de trabajo en 132 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
+
+| Carriles activos | Desarrollo | Estabilización | Total | Frente a 1 carril |
+|:---:|---:|---:|---:|---:|
+| 1 | 24,4 semanas | 3 semanas | **27,4 semanas** | — |
+| 2 | 14,7 semanas | 3 semanas | **17,7 semanas** | −9,7 semanas |
+| 3 | 12,3 semanas | 3 semanas | **15,3 semanas** | −12,0 semanas |
+
+| Hito | 1 carril | 2 carriles | 3 carriles |
+|---|:---:|:---:|:---:|
+| [H1](08-plan-de-desarrollo.md#h1) · Sprint 0 | semana 4 | semana 3 | semana 3 |
+| [H2](08-plan-de-desarrollo.md#h2) · Sprint 1 | semana 7 | semana 4 | semana 4 |
+| [H3](08-plan-de-desarrollo.md#h3) · Sprint 2 | semana 10 | semana 6 | semana 6 |
+| [H4](08-plan-de-desarrollo.md#h4) · Sprint 3 | semana 12 | semana 7 | semana 6 |
+| [H5](08-plan-de-desarrollo.md#h5) · Sprint 4 | semana 15 | semana 9 | semana 8 |
+| [H6](08-plan-de-desarrollo.md#h6) · Sprint 5 | semana 16 | semana 9 | semana 8 |
+| [H7](08-plan-de-desarrollo.md#h7) · Sprint 6 | semana 19 | semana 11 | semana 9 |
+| [H8](08-plan-de-desarrollo.md#h8) · Sprint 7 | semana 20 | semana 12 | semana 9 |
+| [H9](08-plan-de-desarrollo.md#h9) · Sprint 8 | semana 23 | semana 14 | semana 11 |
+| [H10](08-plan-de-desarrollo.md#h10) · Sprint 9 | semana 25 | semana 15 | semana 13 |
+| [H11](08-plan-de-desarrollo.md#h11) · go-live | semana 28 | semana 18 | semana 16 |
+<!-- /generado:plan-calendario -->
+
+> **Son más de 16 semanas porque el backend volvió al proyecto.** Construir, probar y desplegar la
+> API en cuatro ambientes es trabajo nuevo, no las mismas horas repartidas en más casillas. Y el
+> calendario es el del trabajo descrito: no incluye vacaciones ni imprevistos, así que es una
+> estimación y no una fecha prometida. El detalle, tarea por tarea, está en
 > [`08-plan-de-desarrollo.md`](08-plan-de-desarrollo.md).
 
 ---
@@ -184,6 +221,10 @@ documento [`09-plan-de-implantacion.md`](09-plan-de-implantacion.md).
 
 **Nada se programa hasta que ese checklist esté firmado.** Corregir una pantalla en el mockup
 cuesta minutos; corregirla después de construida cuesta días.
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** ningún otro documento lo cita todavía.
+<!-- /generado:referenciado-desde -->
 
 ---
 

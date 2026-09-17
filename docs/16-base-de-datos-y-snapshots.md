@@ -1,6 +1,11 @@
 # 16 · Base de datos: snapshots y datos de prueba
 
-> **Estado: construido.** Esta es la primera pieza de código ejecutable del proyecto.
+| Versión | Estado | Creado | Actualizado | Etiquetas |
+|---|---|---|---|---|
+| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-16 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
+
+> **Construcción: construido, pero todavía no corrió contra ninguna base** (tareas [0.5](08-plan-de-desarrollo.md#tarea-0-5) y [1.1](08-plan-de-desarrollo.md#tarea-1-1)).
+> Fue la primera pieza de código ejecutable del proyecto.
 > Convierte el esquema que describe [`04-modelo-de-datos.md`](04-modelo-de-datos.md) en una
 > base de datos real, reproducible en cualquier ambiente con un comando.
 
@@ -76,7 +81,7 @@ supabase start                 # levanta PostgreSQL + Auth + Studio en Docker
 ```
 
 Al terminar tienes la base completa con datos de prueba y estos usuarios listos para entrar
-(los mismos del [mockup](../mockup/prisma-mockup.html), ver README §3):
+(los mismos del [mockup](../mockup/prisma-mockup.html), ver README [§3](#3-requisitos)):
 
 | Usuario | Contraseña | Tipo | Estado |
 |---|---|---|---|
@@ -97,7 +102,7 @@ El esquema se aplica con migraciones, no con un dump:
 
 > **Las migraciones se promueven en orden: dev → qa → uat → prod, y una ya aplicada no se
 > edita.** Los cuatro ambientes y el procedimiento completo están en
-> [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) §2 y en
+> [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) [§2](19-ambientes-y-entrega.md#2-la-promoción) y en
 > [ADR-013](adr/ADR-013-cuatro-ambientes.md). Aquí va solo el comando.
 
 ```powershell
@@ -172,12 +177,12 @@ que sea limpio y rápido; los reactiva al final.
 ## 9. Límites conocidos (heredados del doc 04)
 
 - **Tablas sin `CREATE TABLE` en la doc:** `adjuntos`, `cotizaciones` y `cotizacion_lineas`
-  aparecen en el catálogo y el diagrama del doc 04 pero no tienen definición escrita. **No se
+  aparecen en el catálogo y el diagrama del doc [04](04-modelo-de-datos.md) pero no tienen definición escrita. **No se
   inventaron**: quedan pendientes de especificar antes de agregarlas a una migración.
-- **Auditoría de `usuarios`:** el doc 04 §5.4 dice que necesita una variante propia del trigger
+- **Auditoría de `usuarios`:** el doc [04](04-modelo-de-datos.md) [§5.4](04-modelo-de-datos.md#54-auditoría-por-triggers) dice que necesita una variante propia del trigger
   (detecta `desactivado_en`, no `anulado_en`) y no la especifica. Por eso `usuarios` aún no
   tiene trigger de auditoría de fila.
-- **Política RLS de `exportaciones`:** el doc 13 §7 dice "acceso exclusivo de Gerencia" pero no
+- **Política RLS de `exportaciones`:** el doc [13](13-respaldo-y-exportacion.md) [§7](13-respaldo-y-exportacion.md#7-alcance-por-rol) dice "acceso exclusivo de Gerencia" pero no
   escribe la política; en la migración se creó una coherente con el patrón, marcada como tal.
 
 Cada uno de estos puntos está comentado en el propio SQL para que no pase desapercibido.
@@ -186,7 +191,7 @@ Cada uno de estos puntos está comentado en el propio SQL para que no pase desap
 
 ## 10. Tareas programadas dentro de la base
 
-Dos tablas del modelo se limpian solas. Van aquí y no solo en el doc 04 porque **una tarea
+Dos tablas del modelo se limpian solas. Van aquí y no solo en el doc [04](04-modelo-de-datos.md) porque **una tarea
 programada que nadie mira es una tarea que se cae en silencio**, y quien administra la base es
 quien tiene que saber que existen.
 
@@ -235,7 +240,7 @@ sin levantar una alarma falsa, y sigue detectando que la tarea lleva días muert
 
 ## 11. Snapshots incrementales (diseño)
 
-> **Estado: diseñado, no construido.** El `snapshot.ps1` actual es **completo** (vuelca todo).
+> **Construcción: diseñado, no construido.** El `snapshot.ps1` actual es **completo** (vuelca todo).
 > Aquí se especifica cómo hacerlo **incremental** cuando el volumen lo justifique.
 
 El diseño de solo escritura ([ADR-004](adr/ADR-004-base-solo-escritura.md)) hace el snapshot
@@ -279,6 +284,10 @@ el incremental propio es para **desarrollo** y para llevarse deltas de forma por
 | Costo | Gratis (scripts) | Plan de pago de Supabase |
 | Granularidad | Por corte de `creado_en` | Al segundo |
 | Esfuerzo | Mantener cursor + orden | Ninguno |
+
+<!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**🔗 Referenciado desde:** [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API")
+<!-- /generado:referenciado-desde -->
 
 ---
 
