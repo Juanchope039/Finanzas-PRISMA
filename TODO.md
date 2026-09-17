@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.22.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -121,12 +121,24 @@ Quedan **90 tareas y 112 días de trabajo** de 132 tareas del plan.
 
 ### 1.6 Para destrabar, en orden de lo que más libera
 
-- [ ] ⚡ **Poner qa al día** ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) — **dev y qa dejaron de ser iguales**: las cuatro migraciones
-      de las tareas [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1), [1.2](docs/08-plan-de-desarrollo.md#tarea-1-2), [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) y [1.16](docs/08-plan-de-desarrollo.md#tarea-1-16) solo están en dev. Correr
-      `scripts/db/verificar-base.sql` contra qa lo dice línea por línea: ahí la base todavía acepta un
-      saldo negativo, un sobre del 120 % y una anulación cuyo motivo es un espacio en blanco, no tiene
-      dónde guardar una clave de idempotencia y no purga ninguna. Promoverlas **es** la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12), que para eso existe: escribir el
-      procedimiento y usarlo por primera vez. La semilla que va con ellas ya está lista ([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)).
+El orden sale de las dependencias del [plan](docs/08-plan-de-desarrollo.md): cuántas tareas pendientes cuelgan de cada una, directa
+o indirectamente. No es el orden en que se descubrieron.
+
+- [ ] ⚡ **La tabla `usuarios`** ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)) — **lo que más libera del plan entero: 53 tareas penden de
+      ella**, y no espera a nada, porque `cargos` ([2.3](docs/08-plan-de-desarrollo.md#tarea-2-3)) ya está cerrada. Sin `usuarios` no hay sesión
+      ([2.1](docs/08-plan-de-desarrollo.md#tarea-2-1)), y sin sesión no hay acceso, ni las pantallas de usuarios y cargos, ni navegación dictada,
+      ni canal firmado: el carril Front lleva parado desde la pantalla de acceso esperando esto.
+- [ ] ⚡ **El filtro de idempotencia** ([1.14](docs/08-plan-de-desarrollo.md#tarea-1-14)) — **46 tareas detrás**, y ya tiene las dos piezas que
+      esperaba: la transacción con identidad de la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) y la tabla de la [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13). Toda operación que escribe
+      exige `Idempotency-Key` ([ADR-020](docs/adr/ADR-020-idempotencia.md)), así que cada endpoint que se escriba antes que este
+      filtro habrá que volver a tocarlo después.
+- [ ] ⚡ **Poner qa al día** ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) — destraba una sola tarea, la [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11), pero mientras tanto **dev y qa
+      dejaron de ser iguales**: las cuatro migraciones de las tareas [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1), [1.2](docs/08-plan-de-desarrollo.md#tarea-1-2), [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) y [1.16](docs/08-plan-de-desarrollo.md#tarea-1-16) solo están en
+      dev. Correr `scripts/db/verificar-base.sql` contra qa lo dice línea por línea: ahí la base
+      todavía acepta un saldo negativo, un sobre del 120 % y una anulación cuyo motivo es un espacio
+      en blanco, no tiene dónde guardar una clave de idempotencia y no purga ninguna. El
+      procedimiento ya está escrito y probado contra la base local ([16 §5.3](docs/16-base-de-datos-y-snapshots.md#53-promover-a-qa-paso-a-paso)); falta correrlo
+      contra qa, y eso **es** la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12). La semilla que va con ellas ya está lista ([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)).
 - [x] **La identidad hasta PostgreSQL** ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)) — hecha: RLS ya juzga a la persona y no a
       `prisma_api`. Destrabó la prueba de permisos ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)) y, con la tabla de la [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13), la idempotencia
       ([1.14](docs/08-plan-de-desarrollo.md#tarea-1-14)); el acceso del [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) espera ahora a la tabla `usuarios` ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)).
