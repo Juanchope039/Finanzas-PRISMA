@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/scripts/docs/README.md "Historial de cambios") | [✅ Vigente](../../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Proceso](../../docs/INDICE.md#etiqueta-proceso) |
+| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/scripts/docs/README.md "Historial de cambios") | [✅ Vigente](../../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](../../docs/INDICE.md#etiqueta-proceso) |
 
 Pone y verifica los encabezados, las anclas, los enlaces y los bloques generados de toda la
 documentación de PRISMA. Las reglas que hace cumplir están en [`docs/22-documentacion.md`](../../docs/22-documentacion.md), y la
@@ -18,7 +18,8 @@ node scripts/docs/documentar.mjs verificar --base <commit>   # y exige subir la 
 ```
 
 Necesita Node 20 o más y no tiene dependencias. Se corre desde la raíz de `Finanzas-PRISMA`. Si los
-repositorios de código están en `repositories/`, también revisa sus README.
+repositorios de código están en `repositories/`, también revisa sus README. De `plan/` no revisa el
+contenido —los planes no se versionan— pero sí el nombre y la numeración ([22 §10](../../docs/22-documentacion.md#planes)).
 
 ## Archivos
 
@@ -40,3 +41,5 @@ repositorios de código están en `repositories/`, también revisa sus README.
 | «el plan se bloquea» o «hay un ciclo de dependencias» | Revisar la columna «Depende de» de las tablas del plan |
 | «no enumera N tareas del plan» | El plan tiene una tarea que el tablero no lista: agregarla a su sprint en [`TODO.md`](../../TODO.md) |
 | «enumera tareas que el plan no tiene» | Al revés: una tarea del tablero no existe en el plan. Lo nuevo entra primero al plan ([08 §6](../../docs/08-plan-de-desarrollo.md#6-backlog-priorizado)) |
+| «un plan se llama NN-titulo-en-minusculas.md» | Un archivo de `plan/` no sigue el formato: renombrarlo ([22 §10](../../docs/22-documentacion.md#planes)) |
+| «falta el plan NN» o «dos planes no comparten número» | La numeración de `plan/` saltó o se repitió: renumerar el que llegó después |

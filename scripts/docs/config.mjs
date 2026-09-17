@@ -50,10 +50,18 @@ export const EXCLUIDOS = new Set([
   'repositories/frontend-flutter/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md',
 ]);
 
-// Carpetas de herramientas que traen su propio Markdown: habilidades y configuración de agentes.
-// No son documentación del proyecto, no se versionan con ADR-027 y quien las instala no las escribe,
-// así que pedirles encabezado sería pedirle a la herramienta que edite algo de otro.
-export const CARPETAS_EXCLUIDAS = ['.claude', '.agents'];
+// Carpetas cuyo Markdown no es documentación del proyecto y no se versiona con ADR-027:
+// `.claude` y `.agents` traen habilidades y configuración de agentes que quien las instala no
+// escribe, así que pedirles encabezado sería pedirle a la herramienta que edite algo de otro; y
+// `plan` guarda planes de trabajo, que son el registro de lo que se decidió antes de escribir el
+// código y no se corrigen después. De `plan` sí se verifica el nombre, aquí abajo.
+export const CARPETAS_EXCLUIDAS = ['.claude', '.agents', 'plan'];
+
+// Los planes de trabajo: uno por cada plan que se escribe antes de tocar código, numerado en el
+// orden en que se decidieron. La numeración arranca en 01, no salta y no se repite, porque de ella
+// sale ese orden; `verificar` lo comprueba. Las reglas están en docs/22-documentacion.md §10.
+export const CARPETA_DE_PLANES = 'plan';
+export const NOMBRE_DE_PLAN = /^(\d{2,})-[a-z0-9]+(?:-[a-z0-9]+)*\.md$/;
 
 export const ZONA_HORARIA = 'America/Bogota';
 

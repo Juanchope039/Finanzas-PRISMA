@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [1.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 > **Construcción: construido y corriendo contra dev**, donde el esquema está aplicado y verificado
 > línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5), [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5) y [1.13](08-plan-de-desarrollo.md#tarea-1-13)). **qa va tres migraciones atrás**: promoverlas es
@@ -120,8 +120,7 @@ supabase db push                                  # aplica las migraciones al re
 ```
 
 `db push` aplica solo lo que falte, así que es seguro correrlo de nuevo tras cada migración
-nueva. **El seed NO se aplica a remoto** (crea usuarios con contraseñas conocidas): en
-producción los usuarios reales los crea Gerencia desde la app.
+nueva. La semilla no viaja con las migraciones y tiene su propia regla: [§5.2](#52-la-semilla-en-dev-y-en-qa).
 
 ### 5.1 Comprobar que quedó como dice el modelo
 
@@ -151,6 +150,29 @@ las pruebas de permisos necesitan una persona de Gerencia y otra de Operación d
 Es también la forma de ver qué le falta a un ambiente contra otro: corrido contra qa hoy, el guion
 dice en qué se quedó atrás ([1.12](08-plan-de-desarrollo.md#tarea-1-12)). Si al ambiente le falta una tabla entera, el informe no
 se cae: las preguntas sobre ella salen en `>>> FALLA`.
+
+### 5.2 La semilla en dev y en qa
+
+**La semilla va a la base local, a dev y a qa. A uat y a prod no entra nunca.** Crea usuarios con
+contraseña conocida y cifras inventadas; en uat los datos son realistas y anonimizados, y en prod
+son los del negocio, donde los usuarios reales los crea Gerencia desde la aplicación ([19 §1](19-ambientes-y-entrega.md#1-los-cuatro-ambientes)). El
+corte no es «local contra remoto» —dev y qa también son remotos—, es **qué datos son de verdad**.
+
+```powershell
+./scripts/db/sembrar.ps1 -Ambiente dev -EnSeco   # la corre entera y la revierte: no cambia nada
+./scripts/db/sembrar.ps1 -Ambiente dev           # la deja puesta
+```
+
+El guion pide dos llaves: el **ambiente**, que solo admite `dev` y `qa`, y la **referencia del
+proyecto vinculado**, que hay que escribir entera. Sembrar no puede ser un descuido, y la
+salvaguarda va dentro del guion y no en este documento: un aviso escrito no detiene a nadie a la
+una de la mañana. En la base local no hace falta: `supabase db reset` ya la carga ([§4](#4-recrear-la-bd-localmente-el-caso-más-común)).
+
+La semilla es **re-ejecutable**: sobre una base ya sembrada completa lo que falte y pone los correos
+al día, sin borrar nada, así que correrla dos veces deja lo mismo que correrla una. Y es
+**determinista**: los ids están escritos y las fechas que alguien lee también, porque con `NOW()`
+todo movimiento con más de una semana se vería como registro tardío ([RN-14](03-requisitos-y-bdd.md#rn-14)) y la semilla dejaría de
+ser la misma cada vez.
 
 ---
 
@@ -327,7 +349,7 @@ el incremental propio es para **desarrollo** y para llevarse deltas de forma por
 | Esfuerzo | Mantener cursor + orden | Ninguno |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

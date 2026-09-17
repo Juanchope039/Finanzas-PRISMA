@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/22-documentacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Proceso](INDICE.md#etiqueta-proceso) |
+| [1.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/22-documentacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se escribe, se versiona y se enlaza la documentación de PRISMA: la de este repositorio y los
 README de los tres repositorios de código. La decisión y su porqué están en [ADR-027](adr/ADR-027-documentacion-versionada.md); aquí están las
@@ -26,6 +26,8 @@ reglas.
 - **Fuera quedan también las carpetas de herramientas** —`.claude/` y `.agents/`, con las
   habilidades que alguien instale en cualquiera de los cuatro repositorios—. Traen su propio
   Markdown, no lo escribe el proyecto y actualizarlo sería editar algo de otro.
+- **Fuera queda `plan/`**, con los planes de trabajo: son el registro de lo que se decidió antes de
+  escribir el código y no se corrigen después, así que no se versionan. Lo suyo es el [§10](#planes).
 
 ---
 
@@ -209,7 +211,8 @@ node scripts/docs/documentar.mjs verificar
 
 Falla si un documento no tiene encabezado o lo tiene mal; si un estado no corresponde a su versión;
 si un enlace apunta a un archivo o a un ancla que no existe; si una referencia no lleva a ningún
-sitio; si el plan tiene dependencias rotas o en ciclo; o si falta correr `enlazar`. Con
+sitio; si el plan tiene dependencias rotas o en ciclo; si un plan de trabajo de `plan/` está mal
+nombrado o se saltó un número; o si falta correr `enlazar`. Con
 `--base <commit>` exige además que todo documento cuyo contenido cambió desde ese commit haya subido
 su versión y no haya retrocedido su fecha. Es lo que corre la integración continua en cada push y en
 cada PR.
@@ -235,6 +238,30 @@ Necesita Node 20 o más y no tiene dependencias. Si los repositorios de código 
 - **Si dos PR suben el mismo documento a la misma versión**, el que se fusiona segundo la vuelve a
   subir al rebasar. La verificación con `--base` lo detecta.
 
+---
+
+## 10. <a id="planes"></a>Los planes de trabajo
+
+**Todo plan que se escriba antes de tocar código queda en `plan/`**, un archivo por plan y numerado
+en el orden en que se fue decidiendo: `plan/01-titulo-del-plan.md`, `plan/02-el-siguiente.md`. Dos
+dígitos, un guion y el título en minúsculas separado por guiones. El número que toca es el mayor que
+haya, más uno: **la numeración arranca en 01, no salta y no se repite**, y `verificar` falla si
+alguna de las tres cosas se rompe.
+
+Vale para cualquier plan de trabajo: el de una tarea del [08](08-plan-de-desarrollo.md), el de un cambio en las
+herramientas o el de un arreglo que no estaba previsto. Lo que no vale es implementar primero y
+escribir el plan después: el archivo existe para dejar **por qué se hizo así**, y eso solo se sabe
+antes.
+
+Un plan dice, en este orden, **qué se va a hacer**, **qué se decidió y por qué** —con las
+alternativas que se descartaron— y **cómo se va a verificar**. Son los mismos tres títulos del
+mensaje de commit ([ADR-028](adr/ADR-028-un-commit-por-tarea.md)), pero en futuro: el commit cuenta lo que pasó y el plan contaba lo
+que se iba a hacer. Cuál de los dos mintió se ve comparándolos.
+
+**Un plan no es un documento versionado:** no lleva encabezado, no sube de versión y no entra al
+[índice](INDICE.md). Si resultó equivocado no se corrige, se escribe otro con el número siguiente, igual
+que una migración de la base ([16 §2](16-base-de-datos-y-snapshots.md)). Lo que sí se corrige es el documento al que el plan
+afectó.
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **🔗 Referenciado desde:** [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
 <!-- /generado:referenciado-desde -->

@@ -859,6 +859,40 @@ function revisarVersionesSubidas(archivos, base, errores) {
   }
 }
 
+/**
+ * Los planes de trabajo de `plan/`. No son documentación versionada —viven en una carpeta
+ * excluida—, así que lo único que se les exige es el nombre: dos dígitos, un guion y un título en
+ * minúsculas. La numeración arranca en 01, no salta y no se repite, porque es la que dice en qué
+ * orden se fueron decidiendo las cosas; si se pudiera saltar, dos planes a la vez se pisarían el
+ * número sin que nadie se enterara.
+ */
+function revisarPlanes(errores) {
+  const carpeta = path.join(RAIZ, cfg.CARPETA_DE_PLANES);
+  if (!fs.existsSync(carpeta)) return;
+  const duenos = new Map();
+  for (const nombre of fs.readdirSync(carpeta).filter((n) => !n.startsWith('.')).sort()) {
+    const ruta = `${cfg.CARPETA_DE_PLANES}/${nombre}`;
+    const coincide = cfg.NOMBRE_DE_PLAN.exec(nombre);
+    if (!coincide) {
+      errores.push({ ruta, texto: 'un plan se llama NN-titulo-en-minusculas.md: dos dígitos, un guion y el título' });
+      continue;
+    }
+    const numero = Number(coincide[1]);
+    if (duenos.has(numero)) {
+      errores.push({ ruta, texto: `el número ${coincide[1]} ya es de ${duenos.get(numero)}: dos planes no comparten número` });
+      continue;
+    }
+    duenos.set(numero, ruta);
+  }
+  const numeros = [...duenos.keys()].sort((a, b) => a - b);
+  for (let i = 0; i < numeros.length; i += 1) {
+    if (numeros[i] === i + 1) continue;
+    const falta = String(i + 1).padStart(2, '0');
+    errores.push({ ruta: duenos.get(numeros[i]), texto: `falta el plan ${falta}: la numeración arranca en 01 y no salta` });
+    break;
+  }
+}
+
 function imprimir(lista, simbolo) {
   for (const e of lista) console.log(`${simbolo} ${e.ruta}${e.linea ? `:${e.linea}` : ''} · ${e.texto}${e.motivo ? ` (${e.motivo})` : ''}`);
 }
@@ -901,6 +935,7 @@ function main() {
 
   revisarEncabezados(archivos, errores);
   revisarEnlaces(archivos, ctx, errores);
+  revisarPlanes(errores);
   for (const a of cambiados) {
     errores.push({ ruta: a.ruta, texto: 'faltan anclas, enlaces o bloques generados: corre `node scripts/docs/documentar.mjs enlazar`' });
   }

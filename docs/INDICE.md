@@ -134,7 +134,11 @@ Qué significa cada estado y cuándo sube una versión está en
 | Documento | Versión | Estado | Actualizado | Etiquetas |
 |---|:---:|---|:---:|---|
 | [PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
-| [Tareas de PRISMA](../TODO.md) | 1.18.0 | 🔄 Vivo | 2026-09-17 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
+| [Tareas de PRISMA](../TODO.md) | 1.19.0 | 🔄 Vivo | 2026-09-17 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
+| [Tareas de PRISMA](../TODO.md) | 1.19.0 | 🔄 Vivo | 2026-09-17 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
+| [Tareas de PRISMA](../TODO.md) | 1.19.0 | 🔄 Vivo | 2026-09-17 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
+| [Índice navegable de la documentación](INDICE.md) | 1.1.0 | 🔄 Vivo | 2026-09-17 | — |
+| [Índice navegable de la documentación](INDICE.md) | 1.1.0 | 🔄 Vivo | 2026-09-17 | — |
 | [Índice navegable de la documentación](INDICE.md) | 1.1.0 | 🔄 Vivo | 2026-09-17 | — |
 | [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Finanzas](#etiqueta-finanzas) · [Plan](#etiqueta-plan) |
 | [01 · Visión y alcance](01-vision-y-alcance.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Requisitos](#etiqueta-requisitos) |
@@ -152,13 +156,15 @@ Qué significa cada estado y cuándo sube una versión está en
 | [13 · Respaldo y exportación](13-respaldo-y-exportacion.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Base de datos](#etiqueta-base-de-datos) · [Datos personales](#etiqueta-datos-personales) |
 | [14 · Roadmap e ideas de valor](14-roadmap-e-ideas.md) | 1.0.0 | 🔄 Vivo | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
 | [15 · Glosario](15-glosario.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Negocio](#etiqueta-negocio) |
-| [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) | 1.4.0 | ✅ Vigente | 2026-09-17 | [Base de datos](#etiqueta-base-de-datos) · [Calidad](#etiqueta-calidad) |
+| [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) | 1.5.0 | ✅ Vigente | 2026-09-17 | [Base de datos](#etiqueta-base-de-datos) · [Calidad](#etiqueta-calidad) |
+| [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) | 1.5.0 | ✅ Vigente | 2026-09-17 | [Base de datos](#etiqueta-base-de-datos) · [Calidad](#etiqueta-calidad) |
+| [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) | 1.5.0 | ✅ Vigente | 2026-09-17 | [Base de datos](#etiqueta-base-de-datos) · [Calidad](#etiqueta-calidad) |
 | [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Front](#etiqueta-front) · [API](#etiqueta-api) · [Arquitectura](#etiqueta-arquitectura) |
 | [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) | 0.1.0 | 💡 Propuesta | 2026-09-16 | [Entrega](#etiqueta-entrega) · [Front](#etiqueta-front) |
-| [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 2.0.0 | ✅ Vigente | 2026-09-17 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
+| [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 2.1.0 | ✅ Vigente | 2026-09-17 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
 | [20 · Contrato de la API](20-contrato-de-api.md) | 2.0.0 | ✅ Vigente | 2026-09-17 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) | 2.0.0 | ✅ Vigente | 2026-09-17 | [Paralelo](#etiqueta-paralelo) · [Proceso](#etiqueta-proceso) |
-| [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 1.3.0 | ✅ Vigente | 2026-09-16 | [Proceso](#etiqueta-proceso) |
+| [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 1.4.0 | ✅ Vigente | 2026-09-17 | [Proceso](#etiqueta-proceso) |
 | [Contrato de la API · v0.5.0](../contrato/README.md) | 2.0.0 | ✅ Vigente | 2026-09-17 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [Decisiones de arquitectura (ADR)](adr/README.md) | 1.3.0 | 🔄 Vivo | 2026-09-17 | [Arquitectura](#etiqueta-arquitectura) |
 | [ADR-001 · Stack tecnológico](adr/ADR-001-stack.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) |
@@ -191,8 +197,10 @@ Qué significa cada estado y cuándo sube una versión está en
 | [ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué](adr/ADR-028-un-commit-por-tarea.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Proceso](#etiqueta-proceso) · [Plan](#etiqueta-plan) |
 | [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Base de datos](#etiqueta-base-de-datos) · [API](#etiqueta-api) · [Entrega](#etiqueta-entrega) · [Calidad](#etiqueta-calidad) |
 | [ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0](adr/ADR-030-contrato-sin-get.md) | 1.0.0 | ✅ Aceptado | 2026-09-17 | [API](#etiqueta-api) · [Contrato](#etiqueta-contrato) · [Seguridad](#etiqueta-seguridad) |
-| [CLAUDE.md](../CLAUDE.md) | 3.0.1 | 🔄 Vivo | 2026-09-17 | [Proceso](#etiqueta-proceso) |
-| [Herramienta de documentación](../scripts/docs/README.md) | 1.1.0 | ✅ Vigente | 2026-09-16 | [Proceso](#etiqueta-proceso) |
+| [CLAUDE.md](../CLAUDE.md) | 3.1.1 | 🔄 Vivo | 2026-09-17 | [Proceso](#etiqueta-proceso) |
+| [CLAUDE.md](../CLAUDE.md) | 3.1.1 | 🔄 Vivo | 2026-09-17 | [Proceso](#etiqueta-proceso) |
+| [CLAUDE.md](../CLAUDE.md) | 3.1.1 | 🔄 Vivo | 2026-09-17 | [Proceso](#etiqueta-proceso) |
+| [Herramienta de documentación](../scripts/docs/README.md) | 1.2.0 | ✅ Vigente | 2026-09-17 | [Proceso](#etiqueta-proceso) |
 <!-- /generado:estado-de-la-documentacion -->
 
 ---
@@ -236,7 +244,7 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-base-de-datos"></a>Base de datos
 
-[04 · Modelo de datos](04-modelo-de-datos.md) · [07 · Arquitectura técnica](07-arquitectura.md) · [13 · Respaldo y exportación](13-respaldo-y-exportacion.md) · [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) · [ADR-003 · Dinero como entero de pesos](adr/ADR-003-dinero-entero.md) · [ADR-004 · Base de datos de solo escritura](adr/ADR-004-base-solo-escritura.md) · [ADR-005 · Auditoría por triggers, no por la aplicación](adr/ADR-005-auditoria-por-triggers.md) · [ADR-006 · Permisos con Row Level Security](adr/ADR-006-rls-por-rol.md) · [ADR-008 · Exportación con descarga manual](adr/ADR-008-exportacion.md) · [ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando](adr/ADR-012-identidad-a-postgres.md) · [ADR-025 · Cuatro repositorios: la base de datos sale de la API](adr/ADR-025-cuatro-repositorios.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md)
+[04 · Modelo de datos](04-modelo-de-datos.md) · [07 · Arquitectura técnica](07-arquitectura.md) · [13 · Respaldo y exportación](13-respaldo-y-exportacion.md) · [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) · [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) · [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) · [ADR-003 · Dinero como entero de pesos](adr/ADR-003-dinero-entero.md) · [ADR-004 · Base de datos de solo escritura](adr/ADR-004-base-solo-escritura.md) · [ADR-005 · Auditoría por triggers, no por la aplicación](adr/ADR-005-auditoria-por-triggers.md) · [ADR-006 · Permisos con Row Level Security](adr/ADR-006-rls-por-rol.md) · [ADR-008 · Exportación con descarga manual](adr/ADR-008-exportacion.md) · [ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando](adr/ADR-012-identidad-a-postgres.md) · [ADR-025 · Cuatro repositorios: la base de datos sale de la API](adr/ADR-025-cuatro-repositorios.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md)
 
 ### <a id="etiqueta-seguridad"></a>Seguridad
 
@@ -248,7 +256,7 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-calidad"></a>Calidad
 
-[03 · Requisitos, reglas de negocio y escenarios BDD](03-requisitos-y-bdd.md) · [12 · Pruebas y calidad](12-pruebas-y-calidad.md) · [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) · [ADR-022 · OpenAPI generado del código y verificado en integración continua](adr/ADR-022-openapi-generado.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md)
+[03 · Requisitos, reglas de negocio y escenarios BDD](03-requisitos-y-bdd.md) · [12 · Pruebas y calidad](12-pruebas-y-calidad.md) · [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) · [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) · [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) · [ADR-022 · OpenAPI generado del código y verificado en integración continua](adr/ADR-022-openapi-generado.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md)
 
 ### <a id="etiqueta-entrega"></a>Entrega
 
@@ -256,11 +264,11 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-plan"></a>Plan
 
-[PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) · [Tareas de PRISMA](../TODO.md) · [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) · [08 · Plan de desarrollo](08-plan-de-desarrollo.md) · [09 · Plan de implantación](09-plan-de-implantacion.md) · [14 · Roadmap e ideas de valor](14-roadmap-e-ideas.md) · [ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo](adr/ADR-026-railway-al-final.md) · [ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué](adr/ADR-028-un-commit-por-tarea.md)
+[PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) · [Tareas de PRISMA](../TODO.md) · [Tareas de PRISMA](../TODO.md) · [Tareas de PRISMA](../TODO.md) · [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) · [08 · Plan de desarrollo](08-plan-de-desarrollo.md) · [09 · Plan de implantación](09-plan-de-implantacion.md) · [14 · Roadmap e ideas de valor](14-roadmap-e-ideas.md) · [ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo](adr/ADR-026-railway-al-final.md) · [ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué](adr/ADR-028-un-commit-por-tarea.md)
 
 ### <a id="etiqueta-paralelo"></a>Paralelo
 
-[Tareas de PRISMA](../TODO.md) · [08 · Plan de desarrollo](08-plan-de-desarrollo.md) · [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) · [ADR-023 · Tres repositorios y el contrato como artefacto versionado](adr/ADR-023-tres-repositorios.md) · [ADR-025 · Cuatro repositorios: la base de datos sale de la API](adr/ADR-025-cuatro-repositorios.md)
+[Tareas de PRISMA](../TODO.md) · [Tareas de PRISMA](../TODO.md) · [Tareas de PRISMA](../TODO.md) · [08 · Plan de desarrollo](08-plan-de-desarrollo.md) · [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) · [ADR-023 · Tres repositorios y el contrato como artefacto versionado](adr/ADR-023-tres-repositorios.md) · [ADR-025 · Cuatro repositorios: la base de datos sale de la API](adr/ADR-025-cuatro-repositorios.md)
 
 ### <a id="etiqueta-contrato"></a>Contrato
 
@@ -268,7 +276,7 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-proceso"></a>Proceso
 
-[19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) · [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) · [22 · Documentación: versiones, estados y referencias](22-documentacion.md) · [ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad](adr/ADR-014-semver.md) · [ADR-023 · Tres repositorios y el contrato como artefacto versionado](adr/ADR-023-tres-repositorios.md) · [ADR-025 · Cuatro repositorios: la base de datos sale de la API](adr/ADR-025-cuatro-repositorios.md) · [ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica](adr/ADR-027-documentacion-versionada.md) · [ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué](adr/ADR-028-un-commit-por-tarea.md) · [CLAUDE.md](../CLAUDE.md) · [Herramienta de documentación](../scripts/docs/README.md)
+[19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) · [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) · [22 · Documentación: versiones, estados y referencias](22-documentacion.md) · [ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad](adr/ADR-014-semver.md) · [ADR-023 · Tres repositorios y el contrato como artefacto versionado](adr/ADR-023-tres-repositorios.md) · [ADR-025 · Cuatro repositorios: la base de datos sale de la API](adr/ADR-025-cuatro-repositorios.md) · [ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica](adr/ADR-027-documentacion-versionada.md) · [ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué](adr/ADR-028-un-commit-por-tarea.md) · [CLAUDE.md](../CLAUDE.md) · [CLAUDE.md](../CLAUDE.md) · [CLAUDE.md](../CLAUDE.md) · [Herramienta de documentación](../scripts/docs/README.md)
 <!-- /generado:etiquetas -->
 
 ---

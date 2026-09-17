@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.18.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [1.19.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -35,7 +35,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 17 | 16 | 0 | 1 | 1 |
-| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 11 | 0 | 9 | 10,5 |
+| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 12 | 0 | 8 | 10 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 19 | 4 | 0 | 15 | 18 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 3 | 0 | 10 | 11,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 1 | 0 | 9 | 11 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 12 |
-| **Total** | **132** | **39** | **0** | **93** | **114,5** |
+| **Total** | **132** | **40** | **0** | **92** | **114** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -62,7 +62,7 @@ Lo que tiene su commit en `develop` con la integración continua en verde, que e
 | **Front · la sesión** | **La puerta**: sin sesión se ve «Entra con tu usuario», y quien entra con una clave temporal va a «Crea tu contraseña» en vez de al tablero —que ni siquiera se construye hasta que la cambie—. Los dos formularios los manda la API, y los rechazos también: el «Usuario o contraseña incorrectos» que se lee en pantalla no está escrito en ninguna parte del front | [2.6](docs/08-plan-de-desarrollo.md#tarea-2-6) |
 | **Front · sin conexión** | La PWA con su manifiesto en español y la cola local en IndexedDB: cada intención se guarda con su clave **antes** de intentar enviarse, y se reintenta con la espera de [17 §5.2](docs/17-resiliencia-offline-y-cache.md#52-cuánto-se-espera-entre-reintentos) hasta que la API la acepte o la rechace con motivo | [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) |
 | **Contrato** | El contrato v0.4.0 en [`contrato/openapi.json`](contrato/openapi.json): el sobre, el descriptor con sus listas, cuentas y categorías, y **el [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) entero acordado antes de implementarlo** —`/sesiones`, `/usuarios`, `/cargos`, `/bitacora`, `/navegacion` y las tres cabeceras del canal firmado— | [0.15](docs/08-plan-de-desarrollo.md#tarea-0-15) · [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) · [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) · [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) |
-| **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 24 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 61 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los catorce triggers de auditoría escribiendo y las 34 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` en `0.1.0` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. Todo esto **en dev**: qa se quedó tres migraciones atrás, hasta la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12) | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) |
+| **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 24 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 61 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los catorce triggers de auditoría escribiendo y las 34 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` en `0.1.0` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. La semilla es fija, re-ejecutable y con filas en toda tabla que preguntan las pruebas de permisos, y `sembrar.ps1` la lleva a dev y a qa sin dejarla acercarse a uat ni a prod. Todo esto **en dev**: qa se quedó tres migraciones atrás, hasta la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12) | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
 **367 pruebas en verde en la API** y 165 en el front. El dominio se prueba con las cifras de los
@@ -76,9 +76,9 @@ Nada en las manos ahora mismo.
 **Lo siguiente, en cuanto alguien lo tome:** cerrar la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) destrabó lo que la estaba
 esperando. En el carril API se abren la transacción por petición que propaga la identidad a
 PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)) y la traducción de restricción a código del catálogo ([1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)), que ya tiene de
-dónde salir: cada restricción se llama como la llama el [04](docs/04-modelo-de-datos.md). En el carril Base, con `cargos` ([2.3](docs/08-plan-de-desarrollo.md#tarea-2-3)) y la
-tabla de idempotencia ([1.13](docs/08-plan-de-desarrollo.md#tarea-1-13)) cerradas, siguen la semilla reproducible ([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)), la tabla `usuarios` ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)) y la
-purga de las claves vencidas ([1.16](docs/08-plan-de-desarrollo.md#tarea-1-16)). El
+dónde salir: cada restricción se llama como la llama el [04](docs/04-modelo-de-datos.md). En el carril Base, con `cargos` ([2.3](docs/08-plan-de-desarrollo.md#tarea-2-3)),
+la tabla de idempotencia ([1.13](docs/08-plan-de-desarrollo.md#tarea-1-13)) y la semilla reproducible ([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)) cerradas, siguen la tabla
+`usuarios` ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)), la primera promoción a qa ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) y la purga de las claves vencidas ([1.16](docs/08-plan-de-desarrollo.md#tarea-1-16)). El
 carril Contrato, con los de los sprints 3 a 8. **El carril Front se queda sin nada que tomar**: con
 la pantalla de acceso ([2.6](docs/08-plan-de-desarrollo.md#tarea-2-6)) hecha, lo que sigue —usuarios, cargos, la navegación dictada y el
 canal firmado— espera a que la API tenga sesión, y eso empieza en la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6). La lista al día la calcula
@@ -100,7 +100,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
 | **API** | [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) · [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) · [1.16](docs/08-plan-de-desarrollo.md#tarea-1-16) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
-| **Base** | [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [2.4](docs/08-plan-de-desarrollo.md#tarea-2-4) |
+| **Base** | [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12) · [2.4](docs/08-plan-de-desarrollo.md#tarea-2-4) |
 | **Contrato** | [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
 <!-- /generado:plan-listas-ya -->
@@ -108,22 +108,23 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **93 tareas y 114,5 días de trabajo** de 132 tareas del plan.
+Quedan **92 tareas y 114 días de trabajo** de 132 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
 | 1 | 17,2 semanas | **20,2 semanas** |
-| 2 | 10,9 semanas | **13,9 semanas** |
+| 2 | 10,8 semanas | **13,8 semanas** |
 | 3 | 9,5 semanas | **12,5 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
 
-- [ ] ⚡ **Poner qa al día** ([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) y [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) — **dev y qa dejaron de ser iguales**: las tres migraciones
-      de las tareas [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1), [1.2](docs/08-plan-de-desarrollo.md#tarea-1-2) y [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) solo están en dev. Correr `scripts/db/verificar-base.sql` contra qa lo
-      dice línea por línea: ahí la base todavía acepta un saldo negativo, un sobre del 120 % y una
-      anulación cuyo motivo es un espacio en blanco, y no tiene dónde guardar una clave de idempotencia. Promoverlas **es** la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12), que para eso
-      existe: escribir el procedimiento y usarlo por primera vez.
+- [ ] ⚡ **Poner qa al día** ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) — **dev y qa dejaron de ser iguales**: las tres migraciones
+      de las tareas [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1), [1.2](docs/08-plan-de-desarrollo.md#tarea-1-2) y [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) solo están en dev. Correr `scripts/db/verificar-base.sql`
+      contra qa lo dice línea por línea: ahí la base todavía acepta un saldo negativo, un sobre del
+      120 % y una anulación cuyo motivo es un espacio en blanco, y no tiene dónde guardar una clave
+      de idempotencia. Promoverlas **es** la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12), que para eso existe: escribir el
+      procedimiento y usarlo por primera vez. La semilla que va con ellas ya está lista ([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)).
 - [ ] ⚡ **La identidad hasta PostgreSQL** ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)) — es lo que más destraba ahora: sin ella, RLS
       juzga a `prisma_api` y no a la persona, y detrás esperan la prueba de permisos ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)), la
       idempotencia ([1.14](docs/08-plan-de-desarrollo.md#tarea-1-14)) y el acceso entero del [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2).
@@ -211,8 +212,12 @@ hasta aplicarlo y probarlo.
       porcentaje `HALF_UP` y formato colombiano; en el front, un tipo sin operadores y su formato en
       `ui/formato/moneda.dart`. Pruebas con las cifras de los documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md), verificadas en negativo
 - [ ] 🔒 [**1.10**](docs/08-plan-de-desarrollo.md#tarea-1-10) Cuentas y categorías: endpoints y pantalla ([RF-97](docs/03-requisitos-y-bdd.md#rf-97)) · API, Front
-- [ ] ✏️⚡ [**1.11**](docs/08-plan-de-desarrollo.md#tarea-1-11) Semilla reproducible para dev y qa · Base — `seed.sql` ya existe
-- [ ] 🔒 [**1.12**](docs/08-plan-de-desarrollo.md#tarea-1-12) Primera promoción de migraciones dev → qa · Base
+- [x] [**1.11**](docs/08-plan-de-desarrollo.md#tarea-1-11) Semilla reproducible para dev y qa · Base — ids y fechas escritos,
+      re-ejecutable sin borrar nada, y con filas en toda tabla que leen [P-01](docs/12-pruebas-y-calidad.md#p-01) a [P-31](docs/12-pruebas-y-calidad.md#p-31), porque una tabla
+      vacía hace pasar «no ve lo ajeno» por la razón equivocada. `scripts/db/sembrar.ps1` la lleva a
+      dev y a qa, y se niega con uat y prod. 78 comprobaciones en `OK` contra la base local, y la
+      semilla corrida entera contra dev dentro de una transacción revertida
+- [ ] ⚡ [**1.12**](docs/08-plan-de-desarrollo.md#tarea-1-12) Primera promoción de migraciones dev → qa · Base
 - [x] [**1.13**](docs/08-plan-de-desarrollo.md#tarea-1-13) Tabla `peticiones_idempotentes` · Base — transcrita del [04 §4.9](docs/04-modelo-de-datos.md#49-claves-de-idempotencia) en
       una migración nueva, con su índice por vencimiento, las tres políticas `idem_*` y `FORCE`. Cada
       persona lee, escribe y sella solo sus claves, **y Gerencia no es excepción**; nadie que atienda
