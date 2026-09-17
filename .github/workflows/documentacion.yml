@@ -1,0 +1,35 @@
+# Verificación de la documentación de PRISMA.
+#
+# Encabezados, enlaces, referencias, plan y versiones: las reglas de docs/22-documentacion.md,
+# comprobadas en cada push y en cada PR. Una regla que depende de que alguien se acuerde no se
+# cumple (ADR-027).
+
+name: Documentación
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verificar:
+    name: Verificar la documentación
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Para exigir que suba la versión de lo que cambió hay que poder leer el contenido anterior.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Verificar
+        # En un PR se compara contra la rama base; en un push, contra lo que había antes. En el primer
+        # push de una rama no hay «antes» —el SHA llega en ceros— y solo se omite esa comparación.
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: node scripts/docs/documentar.mjs verificar --base "$BASE"
