@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -258,7 +258,7 @@ gantt
 > **Cada sprint entrega las dos mitades.** Una función no está hecha cuando el endpoint responde
 > en una herramienta de pruebas: está hecha cuando la pantalla de Flutter la usa, sus códigos
 > están en el catálogo con su mensaje en español y el cambio llegó por lo menos hasta qa —o a
-> `main` con la integración continua en verde, mientras qa no exista—.
+> `develop` con la integración continua en verde, mientras qa no exista—.
 
 ### Cómo se leen las tablas
 
@@ -725,8 +725,8 @@ Una tarea no está terminada hasta que cumple **todo** lo siguiente:
 - [ ] Los textos están en español y el dinero con formato colombiano.
 - [ ] Ninguna cifra monetaria usa decimales.
 - [ ] La versión del proyecto tocado subió según SemVer y el cambio llegó al menos hasta qa.
-      Mientras qa no exista —hasta el [Sprint 9](#sprint-9), por [ADR-026](adr/ADR-026-railway-al-final.md)—, basta con fusionarlo a `main` con la
-      integración continua en verde.
+      Mientras qa no exista —hasta el [Sprint 9](#sprint-9), por [ADR-026](adr/ADR-026-railway-al-final.md)—, basta con fusionarlo a `develop` con la
+      integración continua en verde, por el PR de su rama `feature/` ([21 §6.5](21-trabajo-en-paralelo.md#65-ramas-e-integración)).
 - [ ] **La tarea es un commit, y el commit explica por qué** ([ADR-028](adr/ADR-028-un-commit-por-tarea.md)). El asunto lleva el sprint y
       el número de la tarea; el cuerpo dice qué hace, qué se decidió y por qué, y cómo se verificó,
       incluido qué se rompió a propósito para ver fallar las pruebas. Dos tareas no van en un mismo

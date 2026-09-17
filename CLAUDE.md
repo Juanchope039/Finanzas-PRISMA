@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -88,6 +88,14 @@ escribe otra que corrige.
 ---
 
 ## 3. Reglas del proyecto
+
+**Una tarea es una rama `feature/<id>` y un PR a `develop`** ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)). Se trae `develop`, se
+abre `feature/2.19` con el id del plan, se trabaja, **se deja la documentación al día antes de
+abrir el PR** —versión subida, `enlazar` y `verificar`—, se empuja y se abre el PR contra
+`develop`. Y entonces **se espera a que lo acepten: no se empieza otra tarea hasta que el PR esté
+aceptado**, salvo que la siguiente esté marcada ⚡ en el tablero y no toque lo que está en revisión.
+`main` es la rama de publicación y solo recibe lo que se publica. **Este repositorio no tiene
+`develop`**: aquí la base es `main`.
 
 **Una tarea del plan es un commit, y el commit explica por qué** ([ADR-028](docs/adr/ADR-028-un-commit-por-tarea.md)). El asunto lleva
 sprint y número —`Sprint 3 / 3.11: marca de registro tardio`— y el cuerpo tiene tres títulos: «Que
@@ -221,7 +229,7 @@ verdad. Lo que más destraba ahora es llevar la identidad hasta PostgreSQL ([1.6
 que va dos migraciones atrás ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)).
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-026](docs/adr/ADR-026-railway-al-final.md)—, «terminado» quiere decir
-fusionado a `main` con la integración continua en verde.
+fusionado a `develop` con la integración continua en verde.
 
 Para la base hay además una forma de preguntarle si cumple el modelo, en vez de suponerlo:
 `scripts/db/verificar-base.sql` de `prisma_db` contesta `OK` o `>>> FALLA` por cada promesa del

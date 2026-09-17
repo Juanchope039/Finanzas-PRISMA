@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/21-trabajo-en-paralelo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Paralelo](INDICE.md#etiqueta-paralelo) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/21-trabajo-en-paralelo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Paralelo](INDICE.md#etiqueta-paralelo) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo avanza PRISMA en varios carriles a la vez sin que se bloqueen ni se pisen. **Un carril no es
 una persona:** es un frente de trabajo, y puede llevarlo una persona, un equipo o una sesión de
@@ -195,8 +195,8 @@ Las cadenas no son del todo independientes, y el plan lo dice tarea por tarea en
 - **Capital necesita Movimientos**, porque un aporte o un retiro es un movimiento de plata.
 
 Se resuelve por orden, no por coordinación: cada tarea arranca cuando lo que necesita está
-**fusionado a `main` con la integración continua en verde**. Hasta el [Sprint 9](08-plan-de-desarrollo.md#sprint-9) no hay qa donde
-integrar ([ADR-026](adr/ADR-026-railway-al-final.md)), así que `main` hace de puerta.
+**fusionado a `develop` con la integración continua en verde**. Hasta el [Sprint 9](08-plan-de-desarrollo.md#sprint-9) no hay qa donde
+integrar ([ADR-026](adr/ADR-026-railway-al-final.md)), así que `develop` hace de puerta.
 
 ---
 
@@ -266,16 +266,38 @@ sabe resolver solo.
   proyecto de Supabase en la nube ([ADR-026](adr/ADR-026-railway-al-final.md)). Con un carril no estorba. **Con dos o más, cada carril
   que toque la base usa su propio proyecto gratuito de Supabase**, hasta que Docker vuelva.
 - **dev, qa, uat y prod siguen siendo los cuatro de siempre.** No hay ambiente por carril.
-- **La puerta es `main` con la integración continua en verde** hasta el [Sprint 9](08-plan-de-desarrollo.md#sprint-9), y **qa** desde
+- **La puerta es `develop` con la integración continua en verde** hasta el [Sprint 9](08-plan-de-desarrollo.md#sprint-9), y **qa** desde
   entonces. Lo de todos los carriles tiene que estar verde junto antes de promover.
 
 ### 6.5 Ramas e integración
+
+**La rama base es `develop`.** De ahí sale y ahí vuelve todo el trabajo de los tres repositorios de
+código; `main` es la rama de publicación y solo recibe lo que se publica, desde `develop`. **Este
+repositorio, el de la especificación, no tiene `develop`:** su base es `main`, porque lo que se
+integra aquí son documentos y el contrato, no código que se despliegue.
+
+El ciclo de una tarea, entero:
+
+| # | Paso | Qué es exactamente |
+|---|---|---|
+| 1 | Traer la base | `git switch develop && git pull`. Se arranca desde lo último integrado, no desde lo que había ayer |
+| 2 | Abrir la rama | `git switch -c feature/2.19`, con **el id de la tarea del plan** en el nombre: `feature/1.10`, `feature/0.11`. Es el mismo número que llevan el asunto del commit ([ADR-028](adr/ADR-028-un-commit-por-tarea.md)) y la fila del tablero, así que una rama abierta dice sola qué tarea es y contra qué fila se revisa |
+| 3 | El trabajo, con su commit | Una tarea es un commit ([ADR-028](adr/ADR-028-un-commit-por-tarea.md)). La rama puede llevar más de uno si hace falta, pero la tarea no se parte en dos |
+| 4 | **La documentación al día** | Antes de abrir el PR: subir la versión de cada `.md` tocado, poner la fecha, correr `enlazar` y luego `verificar` ([§6.7](#67-la-documentación)). Un PR con la documentación desfasada lo rechaza la integración continua igual, y descubrirlo ahí es descubrirlo tarde |
+| 5 | Empujar y abrir el PR | `git push -u origin feature/2.19`, y el PR contra `develop` |
+| 6 | **Esperar a que lo acepten** | No se empieza otra tarea hasta que el PR esté aceptado |
+
+**La espera del paso 6 tiene una excepción, y solo una: que la siguiente tarea sea paralelizable.**
+Lo es cuando el tablero la marca ⚡ —todo lo que necesita ya está hecho—, no depende de lo que está
+en revisión y no toca los mismos archivos. Entonces su rama sale de `develop` sin esperar. En
+cualquier otro caso, empezar antes es construir sobre algo que la revisión todavía puede cambiar, y
+rehacerlo cuesta más de lo que ahorró no esperar.
 
 - **Ramas cortas.** Una rama que vive más de dos o tres días deja de ser una rama y empieza a ser
   otra versión del producto.
 - **Dos carriles en el mismo repositorio nunca comparten copia de trabajo:** cada uno en su rama y,
   si están en la misma máquina, en su propio `git worktree`.
-- Se integra a la principal al menos una vez al día por carril. El paralelismo se paga integrando
+- Se integra a `develop` al menos una vez al día por carril. El paralelismo se paga integrando
   seguido, no integrando al final.
 
 ### 6.6 El ritual mínimo
@@ -286,7 +308,7 @@ Con varios carriles hace falta coordinación, y conviene que sea **la mínima y 
 |---|---|---|
 | Diario | Cada carril mira en [`TODO.md`](../TODO.md) qué puede empezar hoy | 10 minutos |
 | Lunes | **Acuerdo de contrato**: qué cambia esta semana en `openapi.json` | 30 minutos, todos los carriles |
-| Viernes | **Integración en `main`** —en qa desde el [Sprint 9](08-plan-de-desarrollo.md#sprint-9)— y revisión de lo que quedó verde | 30 minutos, todos los carriles |
+| Viernes | **Integración en `develop`** —y en qa desde el [Sprint 9](08-plan-de-desarrollo.md#sprint-9)— y revisión de lo que quedó verde | 30 minutos, todos los carriles |
 | Fin de sprint | Aprobación de Gerencia | Según el plan |
 
 Una hora a la semana de coordinación obligatoria. Si hace falta más, es señal de que la frontera
@@ -333,7 +355,7 @@ conflicto en un bloque generado no se resuelve a mano sino volviendo a correr la
 4. **Quién aprueba un cambio de contrato** cuando los carriles no se ponen de acuerdo.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-023](adr/ADR-023-tres-repositorios.md "ADR-023 · Tres repositorios y el contrato como artefacto versionado") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase")
+**🔗 Referenciado desde:** [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-023](adr/ADR-023-tres-repositorios.md "ADR-023 · Tres repositorios y el contrato como artefacto versionado") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
