@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
+| [3.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
 
 Tres partes —un front en Flutter multiplataforma, una API en Java 25 con Spring Boot y una capa
 de datos PostgreSQL siempre en línea—. Arquitectura hexagonal (puertos y adaptadores) sobre Clean
@@ -559,24 +559,38 @@ claims del token del usuario a la sesión de PostgreSQL:
 
 ```java
 // infraestructura/postgres/ConIdentidad.java
-@Transactional
 public <T> T conIdentidad(Claims claims, Supplier<T> cuerpo) {
-    // 'true' = local a la transacción: se descarta al terminar y no contamina la conexión
-    jdbc.update("SELECT set_config('request.jwt.claims', ?, true)",
-                objectMapper.writeValueAsString(claims));
-    jdbc.execute("SET LOCAL ROLE authenticated");
-    return cuerpo.get();
+    return transacciones.execute(estado -> {
+        // 'true' = local a la transacción: se descarta al terminar y no contamina la conexión
+        jdbc.sql("SELECT set_config('request.jwt.claims', ?, true)")
+                .param(claims.comoJson())
+                .query(String.class)
+                .single();
+        jdbc.sql("SET LOCAL ROLE authenticated").update();
+        return ScopedValue.where(EN_CURSO, claims).call(cuerpo::get);
+    });
 }
 ```
 
 `auth.uid()` de Supabase lee `request.jwt.claims ->> 'sub'`. Al fijarlo así, **todas las
 políticas ya escritas funcionan sin tocar una sola línea de SQL.** RLS sigue siendo el juez.
 
+> **`set_config` se lee, no se ejecuta como actualización.** Es un `SELECT` y devuelve una fila, y
+> el controlador de PostgreSQL rechaza un `executeUpdate` que devuelve filas: con `jdbc.update(…)`,
+> que es como lo escribía la primera versión de este ejemplo, ninguna petición llegaría a la base.
+> La prueba de integración de la tarea [1.6](08-plan-de-desarrollo.md#tarea-1-6) lo comprobó rompiéndolo a propósito.
+
 > **Aviso concreto de Spring.** Con un pool de conexiones, `SET LOCAL` solo dura la transacción,
 > que es justo lo que se quiere: la siguiente petición que reciba esa misma conexión no hereda la
 > identidad de la anterior. Pero la otra cara es dura: **cualquier consulta que se ejecute fuera
 > de la transacción irá sin identidad**, y no fallará de forma ruidosa. La regla es
 > **ningún repositorio se llama fuera de una transacción**, y una prueba lo verifica.
+>
+> Por eso un repositorio no recibe la conexión: se la pide a `ConIdentidad.jdbc()`, que fuera de
+> la transacción lanza `ConsultaSinIdentidad` en vez de dejar salir la consulta. Y como la
+> transacción la abre `ConIdentidad` y no un `@Transactional`, ArchUnit impide que otra clase traiga
+> un `DataSource`, un `JdbcTemplate`, un gestor de transacciones o esa anotación: serían puertas
+> laterales por donde una consulta saldría sin decir quién pregunta.
 
 ### 7.3 Las cuatro condiciones que lo hacen real
 
