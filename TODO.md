@@ -32,6 +32,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 ### 1.1 Sprint por sprint
 
 <!-- generado:plan-tablero · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+
+
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 17 | 16 | 0 | 1 | 1 |
@@ -45,6 +47,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 12 |
 | **Total** | **132** | **39** | **0** | **93** | **114,5** |
+
+
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
