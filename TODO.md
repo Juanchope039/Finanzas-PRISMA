@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.14.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [1.15.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -36,7 +36,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 17 | 16 | 0 | 1 | 1 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 10 | 0 | 10 | 11 |
-| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 19 | 2 | 0 | 17 | 20,5 |
+| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 19 | 3 | 0 | 16 | 19 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 3 | 0 | 10 | 11,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 1 | 0 | 9 | 11 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 3 | 0 | 7 | 7 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 12 |
-| **Total** | **132** | **36** | **0** | **96** | **117,5** |
+| **Total** | **132** | **37** | **0** | **95** | **116** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -59,12 +59,13 @@ Lo que tiene su commit en `main` con la integración continua en verde, que es l
 | **Front** | El proyecto Flutter con su integración continua, la insignia de versión y ambiente, el bloqueo por MAJOR incompatible y `Dinero` en Dart | [0.3](docs/08-plan-de-desarrollo.md#tarea-0-3) · [0.12](docs/08-plan-de-desarrollo.md#tarea-0-12) · [0.13](docs/08-plan-de-desarrollo.md#tarea-0-13) · [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9) |
 | **Front · sistema de diseño** | La tabla, el panel de confirmación en línea, la píldora de estado y los formatos colombianos de fecha y porcentaje; el cliente HTTP con clave de idempotencia; y el panel «Acerca de» | [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19) · [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19) · [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10) |
 | **Front · formularios** | El renderizador del descriptor: pinta los campos que manda la API con su teclado, sus límites, sus opciones y sus avisos, y no trae ninguna regla propia | [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18) |
+| **Front · la sesión** | **La puerta**: sin sesión se ve «Entra con tu usuario», y quien entra con una clave temporal va a «Crea tu contraseña» en vez de al tablero —que ni siquiera se construye hasta que la cambie—. Los dos formularios los manda la API, y los rechazos también: el «Usuario o contraseña incorrectos» que se lee en pantalla no está escrito en ninguna parte del front | [2.6](docs/08-plan-de-desarrollo.md#tarea-2-6) |
 | **Front · sin conexión** | La PWA con su manifiesto en español y la cola local en IndexedDB: cada intención se guarda con su clave **antes** de intentar enviarse, y se reintenta con la espera de [17 §5.2](docs/17-resiliencia-offline-y-cache.md#52-cuánto-se-espera-entre-reintentos) hasta que la API la acepte o la rechace con motivo | [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) |
 | **Contrato** | El contrato v0.4.0 en [`contrato/openapi.json`](contrato/openapi.json): el sobre, el descriptor con sus listas, cuentas y categorías, y **el [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) entero acordado antes de implementarlo** —`/sesiones`, `/usuarios`, `/cargos`, `/bitacora`, `/navegacion` y las tres cabeceras del canal firmado— | [0.15](docs/08-plan-de-desarrollo.md#tarea-0-15) · [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) · [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) · [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) |
 | **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 23 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 61 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los catorce triggers de auditoría escribiendo y las 31 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—. `schema_version` en `0.1.0` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. Todo esto **en dev**: qa se quedó dos migraciones atrás, hasta la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12) | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
-**367 pruebas en verde en la API** y 119 en el front. El dominio se prueba con las cifras de los
+**367 pruebas en verde en la API** y 165 en el front. El dominio se prueba con las cifras de los
 documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md): si una prueba falla, o se rompió el código o el documento dice
 otra cosa.
 
@@ -77,8 +78,10 @@ esperando. En el carril API se abren la transacción por petición que propaga l
 PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)) y la traducción de restricción a código del catálogo ([1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)), que ya tiene de
 dónde salir: cada restricción se llama como la llama el [04](docs/04-modelo-de-datos.md). En el carril Base siguen la semilla
 reproducible ([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)), la tabla de idempotencia ([1.13](docs/08-plan-de-desarrollo.md#tarea-1-13)) y `cargos` con su semilla y su RLS ([2.3](docs/08-plan-de-desarrollo.md#tarea-2-3)). El
-carril Front sigue con la pantalla de acceso ([2.6](docs/08-plan-de-desarrollo.md#tarea-2-6)) y el Contrato, con los de los sprints 3 a 8. La
-lista al día la calcula la herramienta, y está justo abajo.
+carril Contrato, con los de los sprints 3 a 8. **El carril Front se queda sin nada que tomar**: con
+la pantalla de acceso ([2.6](docs/08-plan-de-desarrollo.md#tarea-2-6)) hecha, lo que sigue —usuarios, cargos, la navegación dictada y el
+canal firmado— espera a que la API tenga sesión, y eso empieza en la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6). La lista al día la calcula
+la herramienta, y está justo abajo.
 
 > **El [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) está cerrado salvo lo que cuesta dinero.** La base existe, tiene dueño distinto del
 > de la API y **RLS ya juzga**: conectada como `prisma_api`, la misma consulta devuelve cero filas de
@@ -97,7 +100,6 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 |---|---|
 | **API** | [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) · [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
 | **Base** | [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) |
-| **Front** | [2.6](docs/08-plan-de-desarrollo.md#tarea-2-6) |
 | **Contrato** | [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
 <!-- /generado:plan-listas-ya -->
@@ -105,13 +107,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **96 tareas y 117,5 días de trabajo** de 132 tareas del plan.
+Quedan **95 tareas y 116 días de trabajo** de 132 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 17,7 semanas | **20,7 semanas** |
-| 2 | 11,1 semanas | **14,1 semanas** |
-| 3 | 9,9 semanas | **12,9 semanas** |
+| 1 | 17,5 semanas | **20,5 semanas** |
+| 2 | 11,0 semanas | **14,0 semanas** |
+| 3 | 9,6 semanas | **12,6 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -243,7 +245,12 @@ hasta aplicarlo y probarlo.
 - [ ] ✏️🔒 [**2.4**](docs/08-plan-de-desarrollo.md#tarea-2-4) Tabla `usuarios` con `usuario`, `nombre_completo`, `cargo_id` y `tipo` · Base — escrita
       en la migración inicial
 - [ ] ✏️🔒 [**2.5**](docs/08-plan-de-desarrollo.md#tarea-2-5) Trigger `tg_proteger_ultima_gerencia` · Base — escrito en la migración inicial
-- [ ] ⚡ [**2.6**](docs/08-plan-de-desarrollo.md#tarea-2-6) Pantalla de acceso y cambio obligatorio de contraseña · Front
+- [x] [**2.6**](docs/08-plan-de-desarrollo.md#tarea-2-6) Pantalla de acceso y cambio obligatorio de contraseña · Front — las dos capas del
+      mockup, con sus campos pedidos a `GET /formularios/acceso` y `GET /formularios/cambio-de-clave`.
+      «Crea tu contraseña» no se puede saltar porque el tablero **no está en el árbol** hasta que la
+      cambie ([BDD-32-1](docs/03-requisitos-y-bdd.md#bdd-32-1)), y ningún mensaje de la API vive en el front: una prueba de frontera
+      falla si aparece. Trae el sexto tipo de campo del descriptor, `clave`, que el contrato v0.4.0
+      agregó y el renderizador de la [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18) todavía no conocía
 - [ ] 🔒 [**2.7**](docs/08-plan-de-desarrollo.md#tarea-2-7) Gestión de usuarios: crear, editar, desactivar con motivo y restablecer clave · API, Front
 - [ ] 🔒 [**2.8**](docs/08-plan-de-desarrollo.md#tarea-2-8) Catálogo de cargos · API, Front
 - [ ] 🔒 [**2.9**](docs/08-plan-de-desarrollo.md#tarea-2-9) Registro de cada inicio de sesión con fecha, dispositivo e IP · API, Base
@@ -464,6 +471,14 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 - **La base de desarrollo es compartida.** Mientras dev sea el proyecto de Supabase en la nube, todos
   los carriles desarrollan contra la misma base, que es lo que [21 §6.4](docs/21-trabajo-en-paralelo.md#64-ambientes) pide evitar. Con un carril no
   estorba; con varios, cada uno necesita su PostgreSQL local.
+- **La cookie `prisma_renovacion` todavía no se guardaría.** Es `HttpOnly` y el front nunca la lee,
+  pero en la web `package:http` sale con `withCredentials` en falso y el navegador descarta un
+  `Set-Cookie` de otro origen. Encenderlo es de la [2.2](docs/08-plan-de-desarrollo.md#tarea-2-2), que es la que renueva la sesión al
+  recargar; hasta entonces la sesión vive solo mientras la pestaña esté abierta.
+- **Las dos llamadas que el contrato manda firmar salen sin firma.** El cambio de contraseña y
+  `GET /formularios/cambio-de-clave` exigen las tres cabeceras `X-Prisma-`, y el front todavía no
+  sabe firmar: eso es la [2.12](docs/08-plan-de-desarrollo.md#tarea-2-12). Contra una API que ya filtre responderían `40101`; hoy no existe
+  ninguna, porque la [2.1](docs/08-plan-de-desarrollo.md#tarea-2-1) tampoco está. La firma entrará en `ClienteApi`, en un solo sitio.
 - **La tubería de [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) todavía no existe**, solo la decisión: el trabajo de integración continua que
   descarga `prisma_db` por etiqueta y levanta Supabase se monta con la primera prueba que lo
   necesite ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) o [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)). Y `prisma_db` todavía no tiene ninguna etiqueta `esquema-v…`, aunque su
@@ -546,6 +561,21 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       de la lista y no por decisión
 - [ ] `schema_version` se queda **sin** `FORCE`: es tabla técnica, no la describe el [04](docs/04-modelo-de-datos.md), su lectura
       es abierta y quien la escribe es el rol de migraciones
+
+**De la tarea [2.6](docs/08-plan-de-desarrollo.md#tarea-2-6):**
+
+- [ ] **El botón de mostrar va en los dos campos de clave**, y no solo en el primero como el mockup:
+      el descriptor dice `clave` en `claveNueva` y en `repeticion`, y el renderizador no puede
+      distinguirlos sin traerse una regla propia
+- [ ] **Una contraseña no se recorta:** los espacios del principio y del final viajan tal cual. Un
+      campo de texto sí se recorta, como hasta ahora
+- [ ] `ClienteApi.enviarSinClave` existe solo para las dos rutas que el contrato exime de
+      `Idempotency-Key`. El inicio de sesión tampoco pasa por la cola de pendientes: reintentar un
+      ingreso sin red no significa nada
+- [ ] **Tres avisos los escribe la pantalla**, porque no hay sobre del que sacarlos: no se pudo
+      conectar, el servidor respondió algo que no se entiende y no se pudo cargar el formulario.
+      Ninguno habla de una regla de negocio
+- [ ] Un rechazo con errores por campo se pinta bajo su campo y no se repite arriba
 
 **De las tareas [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) a [1.4](docs/08-plan-de-desarrollo.md#tarea-1-4):**
 
