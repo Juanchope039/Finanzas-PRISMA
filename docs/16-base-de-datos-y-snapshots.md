@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [1.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 > **Construcción: construido y corriendo contra dev**, donde el esquema está aplicado y verificado
 > línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5) y [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5)). **qa va dos migraciones atrás**: promoverlas es
@@ -128,8 +128,8 @@ Aplicar no es lo mismo que quedar bien. `scripts/db/verificar-base.sql` le hace 
 preguntas del [`04-modelo-de-datos.md`](04-modelo-de-datos.md) y contesta `OK` o `>>> FALLA` por
 cada una: los nueve dominios y sus 61 columnas, que ninguna restricción se haya quedado con el
 nombre que le puso PostgreSQL, que nadie salvo el dueño pueda borrar, que los catorce triggers de
-auditoría **escriban**, y que RLS le conteste distinto a una sesión de Operación y a una de
-Gerencia.
+auditoría **escriban**, que RLS le conteste distinto a una sesión de Operación y a una de
+Gerencia, y que el catálogo de cargos lo lea todo el mundo y lo escriba solo Gerencia.
 
 ```powershell
 supabase db query --linked -f scripts/db/verificar-base.sql                        # el proyecto vinculado
