@@ -192,7 +192,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Base de datos](#etiqueta-base-de-datos) · [API](#etiqueta-api) · [Entrega](#etiqueta-entrega) · [Calidad](#etiqueta-calidad) |
 | [ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0](adr/ADR-030-contrato-sin-get.md) | 1.0.0 | ✅ Aceptado | 2026-09-17 | [API](#etiqueta-api) · [Contrato](#etiqueta-contrato) · [Seguridad](#etiqueta-seguridad) |
 | [ADR-031 · El mensaje de commit cabe en 256 caracteres](adr/ADR-031-commit-de-256-caracteres.md) | 1.0.0 | ✅ Aceptado | 2026-09-17 | — |
-| [CLAUDE.md](../CLAUDE.md) | 4.0.0 | 🔄 Vivo | 2026-09-17 | [Proceso](#etiqueta-proceso) |
+| [CLAUDE.md](../CLAUDE.md) | 5.0.0 | 🔄 Vivo | 2026-09-17 | [Proceso](#etiqueta-proceso) |
 | [Herramienta de documentación](../scripts/docs/README.md) | 1.3.0 | ✅ Vigente | 2026-09-17 | [Proceso](#etiqueta-proceso) |
 <!-- /generado:estado-de-la-documentacion -->
 
