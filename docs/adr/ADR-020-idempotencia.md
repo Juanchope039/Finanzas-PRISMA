@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-020-idempotencia.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-15 | 2026-09-17 | [API](../INDICE.md#etiqueta-api) · [Contrato](../INDICE.md#etiqueta-contrato) |
+| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-020-idempotencia.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-15 | 2026-09-17 | [API](../INDICE.md#etiqueta-api) · [Contrato](../INDICE.md#etiqueta-contrato) |
 
 > **La decisión sigue vigente; su enunciado ya no cuelga del verbo.** Cuando se escribió, las
 > lecturas iban por `GET` y la regla se decía «toda escritura». Desde
@@ -58,6 +58,17 @@ intenciones y dos claves.
 | Clave repetida, **misma** huella | Devuelve la respuesta guardada. No vuelve a ejecutar nada |
 | Clave repetida, **distinta** huella | `40901`: «Esa operación ya se registró con otros datos.» |
 | Clave repetida, la primera sigue en curso | `40902`: «Esa operación se está procesando. Espera un momento.» |
+
+**El `40902` sale de un tiempo límite de espera, y no de leer el estado.** Mientras la primera
+petición corre, su fila está **sin confirmar**: ninguna otra sesión la ve, y preguntar por
+`estado = 'en_curso'` no devolvería nada. Lo que ocurre de verdad es que el segundo `INSERT` se
+queda esperando en la llave primaria; si la primera confirma a tiempo, la segunda lee su respuesta,
+y si no, el tope de espera convierte esa espera en `40902`. El corolario conviene decirlo: **no
+existe una fila «en curso» colgada**, porque si el proceso muere la transacción se revierte y la
+fila desaparece sola.
+
+**Una clave presente que no es un UUID v4 vale lo mismo que ninguna**, `40002`: es el mismo defecto
+del cliente y se arregla igual.
 
 La **huella** es el hash del método, la ruta, el cuerpo y el usuario. No sirve para detectar
 repeticiones —para eso está la clave—; sirve para detectar que alguien reutilizó una clave para

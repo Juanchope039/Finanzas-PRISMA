@@ -134,7 +134,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | Documento | Versión | Estado | Actualizado | Etiquetas |
 |---|:---:|---|:---:|---|
 | [PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
-| [Tareas de PRISMA](../TODO.md) | 3.1.0 | 🔄 Vivo | 2026-09-17 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
+| [Tareas de PRISMA](../TODO.md) | 3.2.0 | 🔄 Vivo | 2026-09-17 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
 | [Índice navegable de la documentación](INDICE.md) | 1.1.0 | 🔄 Vivo | 2026-09-17 | — |
 | [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Finanzas](#etiqueta-finanzas) · [Plan](#etiqueta-plan) |
 | [01 · Visión y alcance](01-vision-y-alcance.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Requisitos](#etiqueta-requisitos) |
@@ -156,7 +156,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Front](#etiqueta-front) · [API](#etiqueta-api) · [Arquitectura](#etiqueta-arquitectura) |
 | [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) | 0.1.0 | 💡 Propuesta | 2026-09-16 | [Entrega](#etiqueta-entrega) · [Front](#etiqueta-front) |
 | [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 2.1.0 | ✅ Vigente | 2026-09-17 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
-| [20 · Contrato de la API](20-contrato-de-api.md) | 2.0.0 | ✅ Vigente | 2026-09-17 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
+| [20 · Contrato de la API](20-contrato-de-api.md) | 2.1.0 | ✅ Vigente | 2026-09-17 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) | 2.1.0 | ✅ Vigente | 2026-09-17 | [Paralelo](#etiqueta-paralelo) · [Proceso](#etiqueta-proceso) |
 | [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 1.5.0 | ✅ Vigente | 2026-09-17 | [Proceso](#etiqueta-proceso) |
 | [Contrato de la API · v0.5.0](../contrato/README.md) | 2.0.0 | ✅ Vigente | 2026-09-17 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
@@ -180,7 +180,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API](adr/ADR-017-api-en-java.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) · [API](#etiqueta-api) |
 | [ADR-018 · Tres partes, y el front no toma decisiones](adr/ADR-018-front-sin-decisiones.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) · [Front](#etiqueta-front) |
 | [ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos](adr/ADR-019-contrato-de-respuesta.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) |
-| [ADR-020 · Idempotencia obligatoria en toda escritura](adr/ADR-020-idempotencia.md) | 1.1.0 | ✅ Aceptado | 2026-09-17 | [API](#etiqueta-api) · [Contrato](#etiqueta-contrato) |
+| [ADR-020 · Idempotencia obligatoria en toda escritura](adr/ADR-020-idempotencia.md) | 1.2.0 | ✅ Aceptado | 2026-09-17 | [API](#etiqueta-api) · [Contrato](#etiqueta-contrato) |
 | [ADR-021 · Canal firmado contra repetición y manipulación](adr/ADR-021-canal-firmado.md) | 1.1.0 | ✅ Aceptado | 2026-09-17 | [Seguridad](#etiqueta-seguridad) · [API](#etiqueta-api) · [Contrato](#etiqueta-contrato) |
 | [ADR-022 · OpenAPI generado del código y verificado en integración continua](adr/ADR-022-openapi-generado.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Contrato](#etiqueta-contrato) · [Calidad](#etiqueta-calidad) |
 | [ADR-023 · Tres repositorios y el contrato como artefacto versionado](adr/ADR-023-tres-repositorios.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Proceso](#etiqueta-proceso) · [Paralelo](#etiqueta-paralelo) |
