@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [1.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -25,10 +25,29 @@ Cada tarea dice su **carril**: **API** (`prisma_api`), **Base** (`prisma_db`), *
 
 ## 1. Hecho, en progreso y pendiente
 
-Las tres preguntas de siempre. El detalle tarea por tarea está en las secciones 2 a 6, con la misma
-marca al lado de cada una; aquí está el resumen.
+Las tres preguntas de siempre. Las secciones 2 a 6 enumeran **las 132 tareas del plan**, una por una
+y con su marca; aquí está el resumen. Que no falte ninguna no depende de la memoria de nadie: la
+herramienta compara el tablero con el plan y la verificación falla si alguna no está.
 
-### 1.1 ✅ Hecho
+### 1.1 Sprint por sprint
+
+<!-- generado:plan-tablero · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+| Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
+|---|---:|---:|---:|---:|---:|
+| [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 17 | 13 | 0 | 4 | 5,5 |
+| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 1 | 0 | 19 | 21 |
+| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 19 | 0 | 0 | 19 | 22 |
+| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 3 | 0 | 10 | 11,5 |
+| [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 1 | 0 | 9 | 11 |
+| [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 1 | 1 | 8 | 10 |
+| [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 0 | 0 | 10 | 15 |
+| [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
+| [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
+| [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 0 | 0 | 13 | 14 |
+| **Total** | **132** | **19** | **1** | **112** | **138,5** |
+<!-- /generado:plan-tablero -->
+
+### 1.2 ✅ Hecho
 
 Lo que tiene su commit en `main` con la integración continua en verde, que es lo que la
 [definición de terminado](docs/08-plan-de-desarrollo.md#4-definición-de-terminado) exige mientras no exista el ambiente qa ([ADR-026](docs/adr/ADR-026-railway-al-final.md)).
@@ -45,7 +64,7 @@ Lo que tiene su commit en `main` con la integración continua en verde, que es l
 documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md): si una prueba falla, o se rompió el código o el documento dice
 otra cosa.
 
-### 1.2 🚧 En progreso
+### 1.3 🚧 En progreso
 
 | Tarea | Carril | Qué hay y qué falta |
 |---|---|---|
@@ -62,7 +81,7 @@ La lista al día la calcula la herramienta, y está justo abajo.
 > de Supabase ([0.4](docs/08-plan-de-desarrollo.md#tarea-0-4)). Por eso lo hecho hoy es todo dominio y casos de uso: es exactamente la
 > parte que se puede construir y probar sin ella.
 
-### 1.3 ⬜ Pendiente: lo que puede empezar hoy, en paralelo
+### 1.4 ⬜ Pendiente: lo que puede empezar hoy, en paralelo
 
 Calculado de las dependencias del plan con lo marcado como hecho. Cada fila es un carril: **todo lo
 de una misma fila se puede trabajar a la vez que lo de las demás.**
@@ -76,7 +95,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 <!-- /generado:plan-listas-ya -->
 
-### 1.4 Cuánto falta
+### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 Quedan **113 tareas y 138,5 días de trabajo** de 132 tareas del plan.
@@ -88,7 +107,7 @@ Quedan **113 tareas y 138,5 días de trabajo** de 132 tareas del plan.
 | 3 | 10,8 semanas | **13,8 semanas** |
 <!-- /generado:plan-restante -->
 
-### 1.5 Para destrabar, en orden de lo que más libera
+### 1.6 Para destrabar, en orden de lo que más libera
 
 - [ ] ⚡ [**0.4**](docs/08-plan-de-desarrollo.md#tarea-0-4) · **Configurar el proyecto dev de Supabase.** Es la primera tarea de la cadena más
       larga del plan: todo el carril Base espera por ella. Guardar la contraseña de la base; iniciar
@@ -429,8 +448,13 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 
 ## Cómo se mantiene este archivo
 
+- **Una tarea hecha es un commit, y el commit explica por qué** ([ADR-028](docs/adr/ADR-028-un-commit-por-tarea.md)). El asunto lleva el
+  sprint y el número —`Sprint 3 / 3.11: marca de registro tardio`— y el cuerpo dice qué hace, qué se
+  decidió y por qué, y cómo se verificó, incluido qué se rompió a propósito para ver fallar las
+  pruebas. Dos tareas no van en un mismo commit aunque toquen la misma clase. Así `git log
+  --oneline` es esta misma lista, en el orden en que se hizo.
 - Una tarea se marca `[x]` cuando su commit está en `main` con la integración continua en verde. Lo
-  escrito pero no probado lleva ✏️, no `[x]`.
+  escrito pero no probado lleva ✏️, no `[x]`; lo que alguien tiene en las manos lleva 🚧.
 - Después de marcar algo, se corre `node scripts/docs/documentar.mjs enlazar`: rehace las marcas ⚡ y
   🔒, lo que puede empezar hoy y cuánto falta. **Las dependencias no se escriben aquí**: viven en el
   plan.

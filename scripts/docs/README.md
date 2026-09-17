@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/scripts/docs/README.md "Historial de cambios") | [✅ Vigente](../../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Proceso](../../docs/INDICE.md#etiqueta-proceso) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/scripts/docs/README.md "Historial de cambios") | [✅ Vigente](../../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Proceso](../../docs/INDICE.md#etiqueta-proceso) |
 
 Pone y verifica los encabezados, las anclas, los enlaces y los bloques generados de toda la
 documentación de PRISMA. Las reglas que hace cumplir están en [`docs/22-documentacion.md`](../../docs/22-documentacion.md), y la
@@ -26,7 +26,7 @@ repositorios de código están en `repositories/`, también revisa sus README.
 |---|---|
 | `config.mjs` | Repositorios, estados, etiquetas, familias de identificadores y parámetros del calendario. Si cambia algo aquí, cambia [`docs/22-documentacion.md`](../../docs/22-documentacion.md) en el mismo commit |
 | `markdown.mjs` | Anclas con el mismo algoritmo de GitHub, separación de código y enlaces, encabezados y bloques generados |
-| `plan.mjs` | El plan como grafo de dependencias: oleadas, camino crítico y calendario con 1, 2 y 3 carriles |
+| `plan.mjs` | El plan como grafo de dependencias: oleadas, camino crítico, calendario con 1, 2 y 3 carriles, y el tablero por sprint |
 | `documentar.mjs` | La orden: junta todo, escribe o verifica |
 
 ## Cuando la verificación falla
@@ -38,3 +38,5 @@ repositorios de código están en `repositories/`, también revisa sus README.
 | «apunta a un ancla que no existe» | Un encabezado cambió de nombre o de número: corregir el enlace o el encabezado |
 | «cambió el contenido y la versión sigue en…» | Subir la versión según [`docs/22-documentacion.md`](../../docs/22-documentacion.md) [§3](../../docs/22-documentacion.md#3-versiones) y poner la fecha de hoy |
 | «el plan se bloquea» o «hay un ciclo de dependencias» | Revisar la columna «Depende de» de las tablas del plan |
+| «no enumera N tareas del plan» | El plan tiene una tarea que el tablero no lista: agregarla a su sprint en [`TODO.md`](../../TODO.md) |
+| «enumera tareas que el plan no tiene» | Al revés: una tarea del tablero no existe en el plan. Lo nuevo entra primero al plan ([08 §6](../../docs/08-plan-de-desarrollo.md#6-backlog-priorizado)) |

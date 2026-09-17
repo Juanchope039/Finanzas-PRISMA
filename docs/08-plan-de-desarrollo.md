@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -727,6 +727,13 @@ Una tarea no está terminada hasta que cumple **todo** lo siguiente:
 - [ ] La versión del proyecto tocado subió según SemVer y el cambio llegó al menos hasta qa.
       Mientras qa no exista —hasta el [Sprint 9](#sprint-9), por [ADR-026](adr/ADR-026-railway-al-final.md)—, basta con fusionarlo a `main` con la
       integración continua en verde.
+- [ ] **La tarea es un commit, y el commit explica por qué** ([ADR-028](adr/ADR-028-un-commit-por-tarea.md)). El asunto lleva el sprint y
+      el número de la tarea; el cuerpo dice qué hace, qué se decidió y por qué, y cómo se verificó,
+      incluido qué se rompió a propósito para ver fallar las pruebas. Dos tareas no van en un mismo
+      commit aunque toquen la misma clase.
+- [ ] **El tablero quedó al día en el mismo empuje:** la tarea marcada `[x]` en [`TODO.md`](../TODO.md) y
+      `node scripts/docs/documentar.mjs enlazar` corrido, que rehace las marcas ⚡ y 🔒, lo que puede
+      empezar hoy y cuánto falta.
 - [ ] Si el cambio toca documentación, el documento subió su versión y
       `node scripts/docs/documentar.mjs verificar` pasa ([`22-documentacion.md`](22-documentacion.md)).
 
@@ -857,7 +864,7 @@ El [Sprint 9](#sprint-9) va de último porque endurece lo que ya existe. No es r
 «funciona en mi computador» de «Gerencia lo aprobó y el taller lo tiene».
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.2.0") · [ADR-011](adr/ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica")
+**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.2.0") · [ADR-011](adr/ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [README](../scripts/docs/README.md "Herramienta de documentación")
 <!-- /generado:referenciado-desde -->
 
 ---

@@ -600,14 +600,30 @@ function bloquesDelIndice(archivos, ctx) {
   ponerBloque(indice, 'etiquetas', secciones.join('\n\n'));
 }
 
-function tareasHechas(todo) {
-  const hechas = new Set();
+// El número de tarea de una línea del tablero: el del enlace al plan, o el que va en negrita.
+function tareaDeLinea(linea) {
+  const m = linea.match(/#tarea-(\d)-(\d{1,2})\)/) || linea.match(/\*\*(\d)\.(\d{1,2})\*\*/);
+  return m ? `${m[1]}.${m[2]}` : null;
+}
+
+// Recorre las líneas de tarea del tablero -«- [ ]» y «- [x]»- y devuelve qué tarea es cada una.
+// Con `filtro` se queda solo con las que cumplen algo: estar hechas, llevar 🚧, las que sean.
+function tareasDelTablero(todo, filtro = () => true) {
+  const ids = new Set();
   for (const l of todo.contenido.split('\n')) {
-    if (!/^\s*- \[x\]/.test(l)) continue;
-    const m = l.match(/#tarea-(\d)-(\d{1,2})\)/) || l.match(/\*\*(\d)\.(\d{1,2})\*\*/);
-    if (m) hechas.add(`${m[1]}.${m[2]}`);
+    if (!/^\s*- \[( |x)\]/.test(l) || !filtro(l)) continue;
+    const id = tareaDeLinea(l);
+    if (id) ids.add(id);
   }
-  return hechas;
+  return ids;
+}
+
+function tareasHechas(todo) {
+  return tareasDelTablero(todo, (l) => /^\s*- \[x\]/.test(l));
+}
+
+function tareasEnProgreso(todo) {
+  return tareasDelTablero(todo, (l) => l.includes('🚧'));
 }
 
 // 🚧 y ✏️ las pone una persona y la herramienta las respeta: dicen en qué va una tarea, y eso no
@@ -675,7 +691,31 @@ function bloquesDelPlan(ctx, errores) {
   const todo = ctx.porRuta.get(cfg.DOC_TAREAS);
   if (!todo) return;
   const hechas = tareasHechas(todo);
+  const enProgreso = tareasEnProgreso(todo);
   marcasDeTareas(todo, tareas, hechas);
+
+  // El tablero enumera TODAS las tareas del plan, y ninguna que el plan no tenga. Sin esto, una
+  // tarea nueva en el plan puede quedarse fuera del tablero para siempre: nadie la echa de menos,
+  // porque el tablero es justo el sitio donde uno iría a buscarla.
+  const enElTablero = tareasDelTablero(todo);
+  const delPlan = new Set(tareas.map((t) => t.id));
+  const faltan = tareas.filter((t) => !enElTablero.has(t.id)).map((t) => t.id);
+  const sobran = [...enElTablero].filter((id) => !delPlan.has(id)).sort((a, b) => plan.ordenDeTarea(a) - plan.ordenDeTarea(b));
+  if (faltan.length) {
+    errores.push({
+      ruta: cfg.DOC_TAREAS,
+      texto: `no enumera ${faltan.length === 1 ? 'una tarea del plan' : `${faltan.length} tareas del plan`}: ${faltan.join(' · ')}`,
+    });
+  }
+  if (sobran.length) {
+    errores.push({
+      ruta: cfg.DOC_TAREAS,
+      texto: `enumera tareas que el plan no tiene: ${sobran.join(' · ')}. Lo nuevo entra primero al plan`,
+    });
+  }
+
+  const enlaceSprint = (n) => `[Sprint ${n}](${ctx.url(todo, cfg.DOC_PLAN, `sprint-${n}`)})`;
+  ponerBloque(todo, 'plan-tablero', plan.bloqueTablero(tareas, hechas, enProgreso, titulos, enlaceSprint));
   ponerBloque(todo, 'plan-restante', plan.bloqueRestante(tareas, hechas));
   ponerBloque(todo, 'plan-listas-ya', plan.bloqueListasYa(tareas, hechas, enlaceEn(todo)));
 }

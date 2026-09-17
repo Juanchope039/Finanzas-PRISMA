@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
 
 Registro de las decisiones técnicas importantes: qué se decidió, por qué, qué alternativas se
 consideraron y qué consecuencias tiene.
@@ -36,6 +36,7 @@ consideraron y qué consecuencias tiene.
 | [025](ADR-025-cuatro-repositorios.md) | Cuatro repositorios: la base de datos sale de la API | Aceptado |
 | [026](ADR-026-railway-al-final.md) | Railway aloja la API y el front, y el despliegue va al final del desarrollo | Aceptado |
 | [027](ADR-027-documentacion-versionada.md) | La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica | Aceptado |
+| [028](ADR-028-un-commit-por-tarea.md) | Cada tarea hecha es un commit, y el commit explica por qué | Aceptado |
 
 Son **27 decisiones** registradas: 21 aceptadas y 6 reemplazadas.
 

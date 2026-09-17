@@ -499,6 +499,39 @@ export function bloqueRestante(tareas, hechas) {
   ].join('\n');
 }
 
+// El tablero por sprint: cuántas tareas tiene, cuántas están hechas, cuántas en progreso y cuánto
+// falta. Sale de las mismas marcas del TODO, así que no puede contradecir a la lista de abajo.
+//
+// Una tarea movida a otro sprint (⏭️) cuenta en el sprint al que se movió, que es donde de verdad se
+// va a hacer: contarla en el viejo diría que ese sprint no termina nunca.
+export function bloqueTablero(tareas, hechas, enProgreso, titulos, enlaceSprint) {
+  const sprints = [...new Set(tareas.map((t) => t.sprintEfectivo))].sort((a, b) => a - b);
+  const filas = [];
+  const total = { tareas: 0, hechas: 0, progreso: 0, pendientes: 0, dias: 0 };
+  for (const s of sprints) {
+    const delSprint = tareas.filter((t) => t.sprintEfectivo === s);
+    const hech = delSprint.filter((t) => hechas.has(t.id)).length;
+    const prog = delSprint.filter((t) => !hechas.has(t.id) && enProgreso.has(t.id)).length;
+    const pend = delSprint.length - hech - prog;
+    const dias = delSprint.filter((t) => !hechas.has(t.id)).reduce((suma, t) => suma + t.dias, 0);
+    total.tareas += delSprint.length;
+    total.hechas += hech;
+    total.progreso += prog;
+    total.pendientes += pend;
+    total.dias += dias;
+    const titulo = titulos.get(s) ? ` · ${titulos.get(s)}` : '';
+    filas.push(
+      `| ${enlaceSprint(s)}${titulo} | ${delSprint.length} | ${hech} | ${prog} | ${pend} | ${numero(dias)} |`,
+    );
+  }
+  return [
+    '| Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |',
+    '|---|---:|---:|---:|---:|---:|',
+    ...filas,
+    `| **Total** | **${total.tareas}** | **${total.hechas}** | **${total.progreso}** | **${total.pendientes}** | **${numero(total.dias)}** |`,
+  ].join('\n');
+}
+
 export function bloqueListasYa(tareas, hechas, enlaceTarea) {
   const listas = listasYa(tareas, hechas);
   if (!listas.length) return 'Nada: todo lo pendiente espera a algo.';
