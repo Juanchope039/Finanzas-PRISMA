@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -11,7 +11,8 @@ hacer, manda el plan.
 
 | Marca | Significa | Quién la pone |
 |---|---|---|
-| `[x]` | Hecha y verificada: pruebas en verde y commit en `main` | Quien la termina |
+| `[x]` | **Hecha** y verificada: pruebas en verde y commit en `main` | Quien la termina |
+| 🚧 | **En progreso:** alguien la tiene en las manos ahora | Quien la toma |
 | ⚡ | **Puede empezar hoy:** todo lo que necesita ya está hecho | La herramienta, del plan |
 | 🔒 | Espera a otra tarea que todavía no está hecha | La herramienta, del plan |
 | ✏️ | Escrita pero sin verificar: SQL que todavía no corrió contra ninguna base | Quien la escribe |
@@ -22,9 +23,46 @@ Cada tarea dice su **carril**: **API** (`prisma_api`), **Base** (`prisma_db`), *
 
 ---
 
-## 1. Qué se puede hacer ahora
+## 1. Hecho, en progreso y pendiente
 
-### 1.1 Lo que puede empezar hoy, en paralelo
+Las tres preguntas de siempre. El detalle tarea por tarea está en las secciones 2 a 6, con la misma
+marca al lado de cada una; aquí está el resumen.
+
+### 1.1 ✅ Hecho
+
+Lo que tiene su commit en `main` con la integración continua en verde, que es lo que la
+[definición de terminado](docs/08-plan-de-desarrollo.md#4-definición-de-terminado) exige mientras no exista el ambiente qa ([ADR-026](docs/adr/ADR-026-railway-al-final.md)).
+
+| Carril | Qué hay | Tareas |
+|---|---|---|
+| **API · cimientos** | Esqueleto hexagonal con su regla de dependencias verificada, el sobre `{status, mensaje, data}` en toda respuesta, el catálogo de códigos de cinco dígitos, `GET /version`, el descriptor de formulario, el contrato v0.2.0 fijado y los hilos virtuales de Java 25 | [0.1](docs/08-plan-de-desarrollo.md#tarea-0-1) · [0.2](docs/08-plan-de-desarrollo.md#tarea-0-2) · [0.6](docs/08-plan-de-desarrollo.md#tarea-0-6) · [0.7](docs/08-plan-de-desarrollo.md#tarea-0-7) · [0.11](docs/08-plan-de-desarrollo.md#tarea-0-11) · [0.14](docs/08-plan-de-desarrollo.md#tarea-0-14) … [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) |
+| **API · dominio** | `Dinero`; `Movimiento` con los nueve tipos y su efecto sobre las tres cifras; `Pedido` con sus cinco estados; `Producto`, `Costeo` y los tres márgenes; y `RegistrarMovimiento`, el primer caso de uso, con la marca de registro tardío | [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9) · [3.1](docs/08-plan-de-desarrollo.md#tarea-3-1) · [3.2](docs/08-plan-de-desarrollo.md#tarea-3-2) · [3.11](docs/08-plan-de-desarrollo.md#tarea-3-11) · [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1) · [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1) |
+| **Front** | El proyecto Flutter con su integración continua, la insignia de versión y ambiente, el bloqueo por MAJOR incompatible y `Dinero` en Dart | [0.3](docs/08-plan-de-desarrollo.md#tarea-0-3) · [0.12](docs/08-plan-de-desarrollo.md#tarea-0-12) · [0.13](docs/08-plan-de-desarrollo.md#tarea-0-13) · [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9) |
+| **Base** | **Nada aplicado todavía.** Las 22 tablas, la auditoría y las políticas RLS están escritas en la migración inicial y esperan al proyecto dev de Supabase | — |
+| **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | — |
+
+**330 pruebas en verde en la API** y 28 en el front. El dominio se prueba con las cifras de los
+documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md): si una prueba falla, o se rompió el código o el documento dice
+otra cosa.
+
+### 1.2 🚧 En progreso
+
+| Tarea | Carril | Qué hay y qué falta |
+|---|---|---|
+| [**5.3**](docs/08-plan-de-desarrollo.md#tarea-5-3) · Costeo unitario | API | La fórmula de [05 §7.1](docs/05-reglas-financieras.md#71-costo-unitario) y su prueba llegaron con la tarea [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1). Falta atarla a cada producto con su historial de costos ([5.5](docs/08-plan-de-desarrollo.md#tarea-5-5)) y el tiempo de máquina del bordado ([5.4](docs/08-plan-de-desarrollo.md#tarea-5-4)) |
+
+**Lo siguiente, en cuanto alguien lo tome:** el carril Front puede arrancar los tres que tiene
+listos —el sistema de diseño ([0.19](docs/08-plan-de-desarrollo.md#tarea-0-19)), el cliente HTTP con clave de idempotencia ([1.19](docs/08-plan-de-desarrollo.md#tarea-1-19)) y el
+panel «Acerca de» ([2.10](docs/08-plan-de-desarrollo.md#tarea-2-10))—, y el carril Contrato, el de cuentas y categorías ([1.17](docs/08-plan-de-desarrollo.md#tarea-1-17)), que
+destraba la [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) en los dos lados. En el carril API, fuera de la [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3), lo que sigue espera a la base.
+La lista al día la calcula la herramienta, y está justo abajo.
+
+> **El carril API no llega más lejos en el [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) sin base de datos.** El repositorio de
+> movimientos ([3.3](docs/08-plan-de-desarrollo.md#tarea-3-3)) necesita la transacción con identidad ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)), y esa espera al proyecto dev
+> de Supabase ([0.4](docs/08-plan-de-desarrollo.md#tarea-0-4)). Por eso lo hecho hoy es todo dominio y casos de uso: es exactamente la
+> parte que se puede construir y probar sin ella.
+
+### 1.3 ⬜ Pendiente: lo que puede empezar hoy, en paralelo
 
 Calculado de las dependencias del plan con lo marcado como hecho. Cada fila es un carril: **todo lo
 de una misma fila se puede trabajar a la vez que lo de las demás.**
@@ -32,25 +70,25 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [3.1](docs/08-plan-de-desarrollo.md#tarea-3-1) · [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1) · [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1) |
+| **API** | [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3) |
 | **Front** | [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19) · [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19) · [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10) |
 | **Contrato** | [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 <!-- /generado:plan-listas-ya -->
 
-### 1.2 Cuánto falta
+### 1.4 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **118 tareas y 144,5 días de trabajo** de 132 tareas del plan.
+Quedan **113 tareas y 138,5 días de trabajo** de 132 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 21,7 semanas | **24,7 semanas** |
-| 2 | 13,2 semanas | **16,2 semanas** |
-| 3 | 11,3 semanas | **14,3 semanas** |
+| 1 | 20,8 semanas | **23,8 semanas** |
+| 2 | 12,7 semanas | **15,7 semanas** |
+| 3 | 10,8 semanas | **13,8 semanas** |
 <!-- /generado:plan-restante -->
 
-### 1.3 Para destrabar, en orden de lo que más libera
+### 1.5 Para destrabar, en orden de lo que más libera
 
 - [ ] ⚡ [**0.4**](docs/08-plan-de-desarrollo.md#tarea-0-4) · **Configurar el proyecto dev de Supabase.** Es la primera tarea de la cadena más
       larga del plan: todo el carril Base espera por ella. Guardar la contraseña de la base; iniciar
@@ -176,8 +214,12 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 **[Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos**
 
-- [ ] ⚡ [**3.1**](docs/08-plan-de-desarrollo.md#tarea-3-1) Dominio `Movimiento`, tipos y su efecto sobre utilidad, caja y patrimonio · API
-- [ ] 🔒 [**3.2**](docs/08-plan-de-desarrollo.md#tarea-3-2) Caso de uso `RegistrarMovimiento` con doble fecha · API
+- [x] [**3.1**](docs/08-plan-de-desarrollo.md#tarea-3-1) Dominio `Movimiento`, tipos y su efecto sobre utilidad, caja y patrimonio · API —
+      los nueve tipos con su efecto sobre las tres cifras, y `aporteAUtilidad`, `aporteACaja` y
+      `aporteAPatrimonio`, que devuelven lo que un movimiento le suma a cada una. Lo anulado aporta cero
+- [x] [**3.2**](docs/08-plan-de-desarrollo.md#tarea-3-2) Caso de uso `RegistrarMovimiento` con doble fecha · API — la del movimiento la trae
+      quien registra y la de digitación la pone el reloj del servidor; el futuro se rechaza y «hoy» es
+      el día en `America/Bogota`
 - [ ] 🔒 [**3.3**](docs/08-plan-de-desarrollo.md#tarea-3-3) Repositorio de movimientos contra PostgreSQL · API
 - [ ] 🔒 [**3.4**](docs/08-plan-de-desarrollo.md#tarea-3-4) Endpoints de movimientos con sus códigos del catálogo · API
 - [ ] 🔒 [**3.5**](docs/08-plan-de-desarrollo.md#tarea-3-5) Formulario de registro rápido para celular, pintado del descriptor · Front
@@ -186,7 +228,8 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [ ] 🔒 [**3.8**](docs/08-plan-de-desarrollo.md#tarea-3-8) Listado con filtros · API, Front
 - [ ] 🔒 [**3.9**](docs/08-plan-de-desarrollo.md#tarea-3-9) Anulación con motivo obligatorio · API, Front
 - [ ] 🔒 [**3.10**](docs/08-plan-de-desarrollo.md#tarea-3-10) Corrección por contra-asiento · API
-- [ ] 🔒 [**3.11**](docs/08-plan-de-desarrollo.md#tarea-3-11) Marca de registro tardío · API
+- [x] [**3.11**](docs/08-plan-de-desarrollo.md#tarea-3-11) Marca de registro tardío · API — más de 7 días entre lo que ocurrió y lo que se
+      digitó, contados en días de Bogotá
 - [ ] 🔒 [**3.12**](docs/08-plan-de-desarrollo.md#tarea-3-12) Saldos por cuenta · API
 - [ ] 🔒 [**3.13**](docs/08-plan-de-desarrollo.md#tarea-3-13) Contrato de movimientos · Contrato
 
@@ -219,9 +262,13 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 **[Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo**
 
-- [ ] ⚡ [**5.1**](docs/08-plan-de-desarrollo.md#tarea-5-1) Dominio `Producto` y servicio `calcularMargenes` · API
+- [x] [**5.1**](docs/08-plan-de-desarrollo.md#tarea-5-1) Dominio `Producto` y servicio `calcularMargenes` · API — los tres márgenes de
+      [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes) reproducidos producto por producto, con el margen por hora vacío —no en cero—
+      cuando el ítem no consume tiempo
 - [ ] 🔒 [**5.2**](docs/08-plan-de-desarrollo.md#tarea-5-2) Catálogo de productos y servicios · API, Front
-- [ ] 🔒 [**5.3**](docs/08-plan-de-desarrollo.md#tarea-5-3) Costeo unitario: insumo, consumibles y minutos de trabajo · API
+- [ ] 🚧⚡ [**5.3**](docs/08-plan-de-desarrollo.md#tarea-5-3) Costeo unitario: insumo, consumibles y minutos de trabajo · API — la fórmula de
+      [05 §7.1](docs/05-reglas-financieras.md#71-costo-unitario) y su prueba llegaron con la tarea [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1); falta atarla a cada producto con su
+      historial de costos ([5.5](docs/08-plan-de-desarrollo.md#tarea-5-5)) y el tiempo de máquina del bordado ([5.4](docs/08-plan-de-desarrollo.md#tarea-5-4))
 - [ ] 🔒 [**5.4**](docs/08-plan-de-desarrollo.md#tarea-5-4) Costeo de bordado por tiempo de máquina · API
 - [ ] 🔒 [**5.5**](docs/08-plan-de-desarrollo.md#tarea-5-5) Historial de costos con fecha de vigencia · Base, API
 - [ ] 🔒 [**5.6**](docs/08-plan-de-desarrollo.md#tarea-5-6) Margen por hora · API
@@ -232,7 +279,8 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 **[Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos**
 
-- [ ] ⚡ [**4.1**](docs/08-plan-de-desarrollo.md#tarea-4-1) Dominio `Pedido`, estados y transiciones · API
+- [x] [**4.1**](docs/08-plan-de-desarrollo.md#tarea-4-1) Dominio `Pedido`, estados y transiciones · API — los cinco estados y los siete pasos
+      que existen entre ellos; entregado y cancelado son finales, y anular no es cancelar
 - [ ] 🔒 [**4.2**](docs/08-plan-de-desarrollo.md#tarea-4-2) Gestión de clientes · API, Front
 - [ ] 🔒 [**4.3**](docs/08-plan-de-desarrollo.md#tarea-4-3) Pedido con líneas de producto · API, Front
 - [ ] 🔒 [**4.4**](docs/08-plan-de-desarrollo.md#tarea-4-4) `CobrarAnticipo`: crea pasivo, no ingreso · API
@@ -322,6 +370,17 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 
 ## 9. A vigilar
 
+- **A `movimientos` le faltan dos restricciones con nombre.** La base exige cuenta de destino en una
+  transferencia (`transferencia_con_destino`), pero no prohíbe que la traiga un gasto, ni que una
+  transferencia vaya de una cuenta a sí misma: las dos cosas entrarían sin que nada avisara y
+  dejarían un registro que no significa nada. El dominio de la API ya las rechaza (tarea [3.1](docs/08-plan-de-desarrollo.md#tarea-3-1)), y
+  conviene que la migración inicial las sume **antes** de aplicarse a ninguna base, con su nombre
+  explícito como pide [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes).
+- **Las reglas del dominio todavía no tienen código del catálogo.** `Movimiento`, `Pedido` y
+  `Costeo` rechazan lo que no se puede registrar con excepciones de Java, y hoy eso saldría como
+  `50000`, «algo salió mal». La traducción a códigos de cinco dígitos con su mensaje en español
+  llega con los endpoints y con los contratos que los acuerdan (tareas [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8), [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) y [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13)): hasta
+  entonces, ninguno de esos mensajes es el que verá el taller.
 - **Dinero con decimales en la frontera.** Cuando llegue el primer endpoint que recibe plata (tarea
   1.10), comprobar con una prueba que un JSON con `1500.5` en un campo de dinero se rechaza y no se
   trunca a `1500` en silencio. [ADR-003](docs/adr/ADR-003-dinero-entero.md) exige rechazarlo, y la conversión de Jackson hay que verla,

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/22-documentacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Proceso](INDICE.md#etiqueta-proceso) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/22-documentacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se escribe, se versiona y se enlaza la documentación de PRISMA: la de este repositorio y los
 README de los tres repositorios de código. La decisión y su porqué están en [ADR-027](adr/ADR-027-documentacion-versionada.md); aquí están las
@@ -179,6 +179,10 @@ rehace entero en cada corrida. **No se edita a mano.**
 
 Las marcas ⚡ y 🔒 de las tareas de [`TODO.md`](../TODO.md) también las pone la herramienta, a partir de las
 dependencias del plan: ⚡ si todo lo que la tarea necesita ya está hecho, 🔒 si no.
+
+Las otras dos marcas dicen **en qué va** una tarea, y eso no se deduce de ninguna dependencia: 🚧
+cuando alguien la está haciendo y ✏️ cuando está escrita pero sin verificar. Las pone quien trabaja
+la tarea, y la herramienta las respeta y las deja de primeras en la línea.
 
 ---
 

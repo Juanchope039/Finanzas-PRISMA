@@ -130,7 +130,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | Documento | Versión | Estado | Actualizado | Etiquetas |
 |---|:---:|---|:---:|---|
 | [PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
-| [Tareas de PRISMA](../TODO.md) | 1.0.0 | 🔄 Vivo | 2026-09-16 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
+| [Tareas de PRISMA](../TODO.md) | 1.1.0 | 🔄 Vivo | 2026-09-16 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
 | [Índice navegable de la documentación](INDICE.md) | 1.0.0 | 🔄 Vivo | 2026-09-16 | — |
 | [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Finanzas](#etiqueta-finanzas) · [Plan](#etiqueta-plan) |
 | [01 · Visión y alcance](01-vision-y-alcance.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Requisitos](#etiqueta-requisitos) |
@@ -154,7 +154,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
 | [20 · Contrato de la API](20-contrato-de-api.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Paralelo](#etiqueta-paralelo) · [Proceso](#etiqueta-proceso) |
-| [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Proceso](#etiqueta-proceso) |
+| [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 1.1.0 | ✅ Vigente | 2026-09-16 | [Proceso](#etiqueta-proceso) |
 | [Contrato de la API · v0.2.0](../contrato/README.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [Decisiones de arquitectura (ADR)](adr/README.md) | 1.0.0 | 🔄 Vivo | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) |
 | [ADR-001 · Stack tecnológico](adr/ADR-001-stack.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) |

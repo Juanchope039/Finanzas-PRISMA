@@ -610,7 +610,9 @@ function tareasHechas(todo) {
   return hechas;
 }
 
-const MARCAS = /^((?:⚡|🔒|✏️|⏭️)\s*)*/u;
+// 🚧 y ✏️ las pone una persona y la herramienta las respeta: dicen en qué va una tarea, y eso no
+// está en el plan. ⏭️, ⚡ y 🔒 salen de las dependencias y se reescriben enteras en cada corrida.
+const MARCAS = /^((?:⚡|🔒|✏️|⏭️|🚧)\s*)*/u;
 
 function marcasDeTareas(todo, tareas, hechas) {
   const listas = new Set(plan.listasYa(tareas, hechas).map((t) => t.id));
@@ -628,6 +630,7 @@ function marcasDeTareas(todo, tareas, hechas) {
       const actuales = m[3].match(MARCAS)[0];
       const resto = m[3].slice(actuales.length);
       let marcas = '';
+      if (actuales.includes('🚧')) marcas += '🚧';
       if (actuales.includes('✏️')) marcas += '✏️';
       if (tarea.movida) marcas += '⏭️';
       if (m[2] === ' ' && !tarea.movida) marcas += listas.has(id) ? '⚡' : '🔒';
