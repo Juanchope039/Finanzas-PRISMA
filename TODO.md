@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.8.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [1.9.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -43,8 +43,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 0 | 0 | 10 | 15 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
-| [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 0 | 0 | 13 | 14 |
-| **Total** | **132** | **26** | **0** | **106** | **129,5** |
+| [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 12 |
+| **Total** | **132** | **27** | **0** | **105** | **127,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -59,11 +59,12 @@ Lo que tiene su commit en `main` con la integración continua en verde, que es l
 | **Front** | El proyecto Flutter con su integración continua, la insignia de versión y ambiente, el bloqueo por MAJOR incompatible y `Dinero` en Dart | [0.3](docs/08-plan-de-desarrollo.md#tarea-0-3) · [0.12](docs/08-plan-de-desarrollo.md#tarea-0-12) · [0.13](docs/08-plan-de-desarrollo.md#tarea-0-13) · [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9) |
 | **Front · sistema de diseño** | La tabla, el panel de confirmación en línea, la píldora de estado y los formatos colombianos de fecha y porcentaje; el cliente HTTP con clave de idempotencia; y el panel «Acerca de» | [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19) · [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19) · [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10) |
 | **Front · formularios** | El renderizador del descriptor: pinta los campos que manda la API con su teclado, sus límites, sus opciones y sus avisos, y no trae ninguna regla propia | [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18) |
+| **Front · sin conexión** | La PWA con su manifiesto en español y la cola local en IndexedDB: cada intención se guarda con su clave **antes** de intentar enviarse, y se reintenta con la espera de [17 §5.2](docs/17-resiliencia-offline-y-cache.md#52-cuánto-se-espera-entre-reintentos) hasta que la API la acepte o la rechace con motivo | [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) |
 | **Contrato** | El contrato v0.3.0 en [`contrato/openapi.json`](contrato/openapi.json): el sobre, los 18 códigos, el descriptor con sus listas, y cuentas y categorías acordadas **antes** de implementarlas | [0.15](docs/08-plan-de-desarrollo.md#tarea-0-15) · [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) · [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) |
 | **Base** | **Nada aplicado todavía.** Las 22 tablas, la auditoría y las políticas RLS están escritas en la migración inicial y esperan al proyecto dev de Supabase | — |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
-**347 pruebas en verde en la API** y 103 en el front. El dominio se prueba con las cifras de los
+**347 pruebas en verde en la API** y 119 en el front. El dominio se prueba con las cifras de los
 documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md): si una prueba falla, o se rompió el código o el documento dice
 otra cosa.
 
@@ -71,8 +72,8 @@ otra cosa.
 
 Nada en las manos ahora mismo.
 
-**Lo siguiente, en cuanto alguien lo tome:** el carril Front tiene la PWA con su cola sin conexión
-([9.1](docs/08-plan-de-desarrollo.md#tarea-9-1)), que la destrabó el cliente con clave de idempotencia. El carril Contrato ya
+**Lo siguiente, en cuanto alguien lo tome:** el carril Front se quedó sin tareas que no esperen a la
+API. El carril Contrato ya
 entregó el de cuentas y categorías ([1.17](docs/08-plan-de-desarrollo.md#tarea-1-17)), y el siguiente es el del [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) ([2.19](docs/08-plan-de-desarrollo.md#tarea-2-19)), que espera al
 acceso. En el carril API,
 la [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3) destrabó el bordado por tiempo de máquina ([5.4](docs/08-plan-de-desarrollo.md#tarea-5-4)) y el margen por hora ([5.6](docs/08-plan-de-desarrollo.md#tarea-5-6)); lo
@@ -93,7 +94,6 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
 | **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.6](docs/08-plan-de-desarrollo.md#tarea-5-6) |
-| **Front** | [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) |
 | **Contrato** | [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
 <!-- /generado:plan-listas-ya -->
@@ -101,13 +101,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **106 tareas y 129,5 días de trabajo** de 132 tareas del plan.
+Quedan **105 tareas y 127,5 días de trabajo** de 132 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 19,5 semanas | **22,5 semanas** |
+| 1 | 19,2 semanas | **22,2 semanas** |
 | 2 | 12,0 semanas | **15,0 semanas** |
-| 3 | 10,4 semanas | **13,4 semanas** |
+| 3 | 10,3 semanas | **13,3 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -350,7 +350,10 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 
 **No se parte: lo hacen todos los carriles juntos**, porque consiste en integrar y probar lo de todos.
 
-- [ ] ⚡ [**9.1**](docs/08-plan-de-desarrollo.md#tarea-9-1) PWA instalable y cola persistente con la clave guardada antes de enviar · Front
+- [x] [**9.1**](docs/08-plan-de-desarrollo.md#tarea-9-1) PWA instalable y cola persistente con la clave guardada antes de enviar · Front — el
+      manifiesto en español con el tema del mockup, y la cola en IndexedDB que sobrevive a cerrar la
+      aplicación: guarda la intención con su clave antes de enviarla, reintenta con la espera de
+      [17 §5.2](docs/17-resiliencia-offline-y-cache.md#52-cuánto-se-espera-entre-reintentos) y deja «no sincronizada», con el mensaje de la API, lo que se rechazó con motivo
 - [ ] 🔒 [**9.2**](docs/08-plan-de-desarrollo.md#tarea-9-2) Ambiente uat con datos anonimizados y su semilla · Base, API
 - [ ] 🔒 [**9.3**](docs/08-plan-de-desarrollo.md#tarea-9-3) Promoción de uat a prod sin recompilar · API, Front
 - [ ] 🔒 [**9.4**](docs/08-plan-de-desarrollo.md#tarea-9-4) Reversión ensayada en qa, con el tiempo medido · API, Front
@@ -433,6 +436,17 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
   migración inicial no se ha aplicado a ninguna base.
 - **Sin qa hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9)** ([ADR-026](docs/adr/ADR-026-railway-al-final.md)): mientras tanto, «terminado» es fusionado a `main` con la
   integración continua en verde.
+- **Los íconos de la PWA siguen siendo los de la plantilla de Flutter.** El logo del taller es
+  apaisado —760×253— y volverlo un ícono cuadrado de 192 y 512 píxeles es una decisión de diseño,
+  no un recorte: hay que decidir si va la marca sola o el nombre sobre el color de la insignia.
+- **El service worker de la PWA no se ha visto funcionar en un navegador de verdad.** Lo genera
+  Flutter con su estrategia «offline-first» y el navegador integrado de las herramientas no deja
+  registrar ninguno, ni siquiera uno vacío. Falta abrir la compilación web en Edge o Chrome y
+  comprobar que se registra, que la aplicación abre sin red y que ofrece instalarse; y eso también
+  es parte de la [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) y de la [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6).
+- **La pantalla «Datos sin conexión» de [17 §7](docs/17-resiliencia-offline-y-cache.md#7-purga-de-la-caché-por-el-usuario) no existe todavía**, ni el aviso de «pendiente de
+  sincronizar» que la [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) dejó listo para pintar: la cola ya cuenta cuántas esperan y quién las
+  muestre llega con el registro rápido ([3.5](docs/08-plan-de-desarrollo.md#tarea-3-5)).
 - **El servicio de Railway conectado a `prisma_front`** intenta construir en cada push y falla,
   porque todavía no hay receta de construcción para Flutter. Conviene desconectarlo hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9).
 - **`dart.yml` del front** es la plantilla de GitHub y falla con Flutter. Se dejó a propósito; la
@@ -483,7 +497,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] Editar y anular cuentas y categorías no entran al contrato todavía, porque ningún requisito
       las pide
 
-**Del front (tareas [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19), [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19), [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18) y [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10)):**
+**Del front (tareas [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19), [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19), [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18), [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10) y [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1)):**
 
 - [ ] «Acerca de» se abre tocando la insignia de versión. El mockup lo pone en el menú de la
       sesión, que llega con el [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) ([2.2](docs/08-plan-de-desarrollo.md#tarea-2-2) y [2.14](docs/08-plan-de-desarrollo.md#tarea-2-14)); la insignia ya es el sitio donde se mira la versión
@@ -498,6 +512,12 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] Un campo opcional vacío viaja como `null` y no como cadena vacía
 - [ ] El botón que envía lo pone la pantalla, no el renderizador, porque su texto es parte de la
       acción
+- [ ] Encolar una acción devuelve «nada» cuando queda pendiente, y eso es lo que la pantalla muestra
+      como *Pendiente de sincronizar*: nunca un «listo» que mentiría
+- [ ] Solo se reintentan solas la falta de respuesta, los `5xx` y el `40902`; lo que la API rechaza
+      con motivo espera a una persona
+- [ ] Lo guardado que no se puede leer —de una versión anterior del formato— se deja quieto en vez de
+      borrarse
 
 ---
 
