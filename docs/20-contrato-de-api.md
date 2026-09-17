@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
@@ -307,7 +307,10 @@ Idempotency-Key: 0c8a5e21-4b73-4f16-9d40-7a1e5c2b9f63
 }
 ```
 
-Un nombre que no existe responde `404` con `40400`.
+Un nombre que no existe responde `404` con `40400`. Y **un cuerpo sin `nombre`, o con el nombre en
+blanco, responde `400` con `40000`**: el esquema lo declara obligatorio, y una petición que no nombra
+ningún formulario no se entiende. No es `40400` —no se buscó nada, así que decir «no se encontró»
+sería mentir— ni `42200`, que es para datos que llegan bien formados y no pasan las reglas.
 
 | Regla de la forma | Por qué |
 |---|---|
@@ -360,6 +363,11 @@ en vez de recordarse en cuatro sitios distintos.
 Se eximen dos operaciones, y por una razón que no es comodidad: `POST /api/v0/sesiones` y
 `POST /api/v0/sesiones/renovacion`. Cuando se piden todavía no hay clave de firma con qué firmar,
 y su respuesta trae secretos que no deben quedar guardados en la tabla de idempotencia.
+
+> **Eximir de la clave no exime de la transacción.** Quien abre la transacción de una petición es el
+> filtro de esta cabecera ([§5.5](#55-la-regla-que-hace-que-esto-sea-real-y-no-decorativo)), así que una ruta exenta se queda sin ella y toda consulta suya
+> viajaría sin identidad. En las dos exentas la abre el adaptador del caso de uso, que es donde por
+> fin se sabe quién pregunta: [`07-arquitectura.md`](07-arquitectura.md) [§7.2](07-arquitectura.md#72-la-solución-obligatoria) y [T-02](12-pruebas-y-calidad.md#t-02).
 
 > **La clave la genera el front en el momento en que la persona decide la acción**, no en cada
 > reintento. Es la diferencia entre «reintentar esta acción» y «hacer otra acción igual»: si la
@@ -701,7 +709,7 @@ firma se arma igual que en una escritura, con `sha256` del cuerpo vacío; y esta
 | Con qué configuración corre cada ambiente y cómo se publica | [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [07](07-arquitectura.md "07 · Arquitectura técnica") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

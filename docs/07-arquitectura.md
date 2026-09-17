@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
+| [3.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
 
 Tres partes —un front en Flutter multiplataforma, una API en Java 25 con Spring Boot y una capa
 de datos PostgreSQL siempre en línea—. Arquitectura hexagonal (puertos y adaptadores) sobre Clean
@@ -591,6 +591,23 @@ políticas ya escritas funcionan sin tocar una sola línea de SQL.** RLS sigue s
 > transacción la abre `ConIdentidad` y no un `@Transactional`, ArchUnit impide que otra clase traiga
 > un `DataSource`, un `JdbcTemplate`, un gestor de transacciones o esa anotación: serían puertas
 > laterales por donde una consulta saldría sin decir quién pregunta.
+
+**Quién abre esa transacción, y por qué no siempre el mismo.** En una petición normal la abre el
+filtro de idempotencia, que es quien está más afuera: así la fila de la clave y el efecto de la
+operación caen dentro de la misma ([`20-contrato-de-api.md`](20-contrato-de-api.md) [§5.5](20-contrato-de-api.md#55-la-regla-que-hace-que-esto-sea-real-y-no-decorativo)). **Las dos rutas exentas de
+la clave —el ingreso y la renovación— no pueden hacerlo así**, porque cuando el filtro corre todavía
+no hay identidad: el `sub` lo devuelve el proveedor en la misma llamada que comprueba la contraseña,
+ya dentro del caso de uso. Ahí la abre el adaptador del puerto que el caso de uso usa, y ese es el
+primer punto donde ya se sabe quién pregunta y aún no se tocó ninguna tabla. Siguen siendo **una
+transacción por petición** y dos clases en total, enumeradas una por una en la regla de ArchUnit:
+tener ahí una lista de nombres y no un paquete es a propósito, porque abrir esa transacción es
+decidir a nombre de quién habla la API.
+
+> **Que una ruta esté exenta de la clave de idempotencia no la exime de la transacción.** El día que
+> se dio por hecho lo contrario, el ingreso respondió `50000` a todo el mundo: la consulta de la
+> ficha salía fuera de toda transacción y `ConsultaSinIdentidad` la detenía —que es justo lo que
+> [T-01](12-pruebas-y-calidad.md#t-01) pide—, así que nadie podía entrar. Lo vigila
+> [T-02](12-pruebas-y-calidad.md#t-02).
 
 ### 7.3 Las cuatro condiciones que lo hacen real
 
