@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.9.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [1.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -39,12 +39,12 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 19 | 1 | 0 | 18 | 21,5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 3 | 0 | 10 | 11,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 1 | 0 | 9 | 11 |
-| [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 2 | 0 | 8 | 8 |
+| [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 3 | 0 | 7 | 7 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 0 | 0 | 10 | 15 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 12 |
-| **Total** | **132** | **27** | **0** | **105** | **127,5** |
+| **Total** | **132** | **28** | **0** | **104** | **126,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -55,7 +55,7 @@ Lo que tiene su commit en `main` con la integración continua en verde, que es l
 | Carril | Qué hay | Tareas |
 |---|---|---|
 | **API · cimientos** | Esqueleto hexagonal con su regla de dependencias verificada, el sobre `{status, mensaje, data}` en toda respuesta, el catálogo de códigos de cinco dígitos, `GET /version`, el descriptor de formulario, el contrato v0.2.0 fijado y los hilos virtuales de Java 25 | [0.1](docs/08-plan-de-desarrollo.md#tarea-0-1) · [0.2](docs/08-plan-de-desarrollo.md#tarea-0-2) · [0.6](docs/08-plan-de-desarrollo.md#tarea-0-6) · [0.7](docs/08-plan-de-desarrollo.md#tarea-0-7) · [0.11](docs/08-plan-de-desarrollo.md#tarea-0-11) · [0.14](docs/08-plan-de-desarrollo.md#tarea-0-14) … [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) |
-| **API · dominio** | `Dinero`; `Movimiento` con los nueve tipos y su efecto sobre las tres cifras; `Pedido` con sus cinco estados; `Producto`, `Costeo` partido en materia y tiempo, la tarifa por hora y los tres márgenes; y `RegistrarMovimiento`, el primer caso de uso, con la marca de registro tardío | [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9) · [3.1](docs/08-plan-de-desarrollo.md#tarea-3-1) · [3.2](docs/08-plan-de-desarrollo.md#tarea-3-2) · [3.11](docs/08-plan-de-desarrollo.md#tarea-3-11) · [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1) · [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1) · [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3) |
+| **API · dominio** | `Dinero`; `Movimiento` con los nueve tipos y su efecto sobre las tres cifras; `Pedido` con sus cinco estados; `Producto`, `Costeo` partido en materia y tiempo, la tarifa por hora, los tres márgenes y el cuadro que lee cada producto contra el resto del taller; y `RegistrarMovimiento`, el primer caso de uso, con la marca de registro tardío | [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9) · [3.1](docs/08-plan-de-desarrollo.md#tarea-3-1) · [3.2](docs/08-plan-de-desarrollo.md#tarea-3-2) · [3.11](docs/08-plan-de-desarrollo.md#tarea-3-11) · [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1) · [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1) · [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3) · [5.6](docs/08-plan-de-desarrollo.md#tarea-5-6) |
 | **Front** | El proyecto Flutter con su integración continua, la insignia de versión y ambiente, el bloqueo por MAJOR incompatible y `Dinero` en Dart | [0.3](docs/08-plan-de-desarrollo.md#tarea-0-3) · [0.12](docs/08-plan-de-desarrollo.md#tarea-0-12) · [0.13](docs/08-plan-de-desarrollo.md#tarea-0-13) · [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9) |
 | **Front · sistema de diseño** | La tabla, el panel de confirmación en línea, la píldora de estado y los formatos colombianos de fecha y porcentaje; el cliente HTTP con clave de idempotencia; y el panel «Acerca de» | [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19) · [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19) · [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10) |
 | **Front · formularios** | El renderizador del descriptor: pinta los campos que manda la API con su teclado, sus límites, sus opciones y sus avisos, y no trae ninguna regla propia | [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18) |
@@ -64,7 +64,7 @@ Lo que tiene su commit en `main` con la integración continua en verde, que es l
 | **Base** | **Nada aplicado todavía.** Las 22 tablas, la auditoría y las políticas RLS están escritas en la migración inicial y esperan al proyecto dev de Supabase | — |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
-**347 pruebas en verde en la API** y 119 en el front. El dominio se prueba con las cifras de los
+**367 pruebas en verde en la API** y 119 en el front. El dominio se prueba con las cifras de los
 documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md): si una prueba falla, o se rompió el código o el documento dice
 otra cosa.
 
@@ -76,8 +76,8 @@ Nada en las manos ahora mismo.
 API. El carril Contrato ya
 entregó el de cuentas y categorías ([1.17](docs/08-plan-de-desarrollo.md#tarea-1-17)), y el siguiente es el del [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) ([2.19](docs/08-plan-de-desarrollo.md#tarea-2-19)), que espera al
 acceso. En el carril API,
-la [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3) destrabó el bordado por tiempo de máquina ([5.4](docs/08-plan-de-desarrollo.md#tarea-5-4)) y el margen por hora ([5.6](docs/08-plan-de-desarrollo.md#tarea-5-6)); lo
-demás espera a la base. La lista al día la calcula la herramienta, y
+sigue el bordado por tiempo de máquina ([5.4](docs/08-plan-de-desarrollo.md#tarea-5-4)), y el cuadro de margen por hora ([5.6](docs/08-plan-de-desarrollo.md#tarea-5-6)) destrabó la
+sugerencia de precio ([5.7](docs/08-plan-de-desarrollo.md#tarea-5-7)); lo demás espera a la base. La lista al día la calcula la herramienta, y
 está justo abajo.
 
 > **El carril API no llega más lejos en el [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) sin base de datos.** El repositorio de
@@ -93,7 +93,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.6](docs/08-plan-de-desarrollo.md#tarea-5-6) |
+| **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
 | **Contrato** | [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
 <!-- /generado:plan-listas-ya -->
@@ -101,13 +101,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **105 tareas y 127,5 días de trabajo** de 132 tareas del plan.
+Quedan **104 tareas y 126,5 días de trabajo** de 132 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 19,2 semanas | **22,2 semanas** |
-| 2 | 12,0 semanas | **15,0 semanas** |
-| 3 | 10,3 semanas | **13,3 semanas** |
+| 1 | 19,1 semanas | **22,1 semanas** |
+| 2 | 12,1 semanas | **15,1 semanas** |
+| 3 | 10,4 semanas | **13,4 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -305,8 +305,11 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       la [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5), y el tiempo de máquina del bordado, la [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4)
 - [ ] ⚡ [**5.4**](docs/08-plan-de-desarrollo.md#tarea-5-4) Costeo de bordado por tiempo de máquina · API
 - [ ] 🔒 [**5.5**](docs/08-plan-de-desarrollo.md#tarea-5-5) Historial de costos con fecha de vigencia · Base, API
-- [ ] ⚡ [**5.6**](docs/08-plan-de-desarrollo.md#tarea-5-6) Margen por hora · API
-- [ ] 🔒 [**5.7**](docs/08-plan-de-desarrollo.md#tarea-5-7) Sugerencia de precio por margen objetivo · API
+- [x] [**5.6**](docs/08-plan-de-desarrollo.md#tarea-5-6) Margen por hora · API — `CompararMargenes` arma el cuadro de [10 §4.4](docs/10-ux-y-mockups.md#44-productos-y-servicios),
+      ordenado por margen por hora y también por porcentaje, y lee cada producto contra la mediana de
+      los demás: con la tabla de [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes), solo el rompecabezas rinde menos. Trae la lectura, su nivel y el
+      texto con los montos; el endpoint es la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) y su contrato, la [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10)
+- [ ] ⚡ [**5.7**](docs/08-plan-de-desarrollo.md#tarea-5-7) Sugerencia de precio por margen objetivo · API
 - [ ] 🔒 [**5.8**](docs/08-plan-de-desarrollo.md#tarea-5-8) Costos y márgenes ocultos al tipo Operación: la API no los envía · API
 - [ ] 🔒 [**5.9**](docs/08-plan-de-desarrollo.md#tarea-5-9) Cuadro comparativo ordenable por margen por hora · Front
 - [ ] 🔒 [**5.10**](docs/08-plan-de-desarrollo.md#tarea-5-10) Contrato de productos, servicios y costeo · Contrato
@@ -423,6 +426,10 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
   `50000`, «algo salió mal». La traducción a códigos de cinco dígitos con su mensaje en español
   llega con los endpoints y con los contratos que los acuerdan (tareas [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8), [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) y [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13)): hasta
   entonces, ninguno de esos mensajes es el que verá el taller.
+- **El cuadro de márgenes ya decide cosas que el contrato de la [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) tiene que llevar.** La [5.6](docs/08-plan-de-desarrollo.md#tarea-5-6)
+  dejó en el dominio la lectura de cada producto, su nivel de alerta, el texto con los montos, la
+  mediana contra la que se leyó y los dos órdenes del cuadro. Si el contrato no los trae, el front de
+  la [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) tendría que volver a ordenar y a decidir qué pinta en rojo, que es lo que [ADR-018](docs/adr/ADR-018-front-sin-decisiones.md) prohíbe.
 - **Dinero con decimales en la frontera.** Cuando llegue el primer endpoint que recibe plata (tarea
   1.10), comprobar con una prueba que un JSON con `1500.5` en un campo de dinero se rechaza y no se
   trunca a `1500` en silencio. [ADR-003](docs/adr/ADR-003-dinero-entero.md) exige rechazarlo, y la conversión de Jackson hay que verla,
@@ -467,7 +474,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] La pantalla de versión incompatible tiene tres filas de versiones y no las dos del mockup
 - [ ] Se siguió el texto del mockup y no el literal del escenario [BDD-101-1](docs/03-requisitos-y-bdd.md#bdd-101-1)
 
-**Del dominio (tareas [3.1](docs/08-plan-de-desarrollo.md#tarea-3-1), [3.2](docs/08-plan-de-desarrollo.md#tarea-3-2), [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1), [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1) y [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3)):**
+**Del dominio (tareas [3.1](docs/08-plan-de-desarrollo.md#tarea-3-1), [3.2](docs/08-plan-de-desarrollo.md#tarea-3-2), [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1), [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1), [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3) y [5.6](docs/08-plan-de-desarrollo.md#tarea-5-6)):**
 
 - [ ] El dominio rechaza dos cosas que la base permite: un gasto con cuenta de destino, y una
       transferencia de una cuenta a sí misma ([§9](#9-a-vigilar))
@@ -485,6 +492,14 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       recalcularla desde el pro-labore de hoy cambiaría los costos de los pedidos viejos
 - [ ] Un mes sin horas productivas no tiene tarifa y se rechaza; un costo mensual en cero sí da
       tarifa cero
+- [ ] Un producto rinde menos cuando deja por hora menos del 70 % de la mediana de **los demás**, que
+      es la regla del formulario del mockup. No se tomó el umbral fijo de $30.000 con que el mockup
+      pinta la columna de la tabla: depende de los precios del taller de ejemplo
+- [ ] La mediana de una cantidad par es el promedio de los dos del centro, redondeado a peso; el
+      mockup tomaba el de arriba
+- [ ] Vender a pérdida es alerta crítica y rendir menos, alta. [11 §2](docs/11-riesgos-y-proteccion-de-datos.md#2-riesgos-del-negocio-que-el-sistema-ayuda-a-detectar) pone «margen por hora bajo
+      o negativo» juntos en Alta; [12 §5](docs/12-pruebas-y-calidad.md#5-casos-límite-que-deben-probarse) pide el negativo en rojo, y el rojo es de lo crítico ([10 §3.1](docs/10-ux-y-mockups.md#31-color))
+- [ ] Pérdida es margen negativo, no margen cero: el mockup avisaba «vendes a pérdida» también en cero
 
 **Del contrato (tarea [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17)):**
 
