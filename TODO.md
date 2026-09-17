@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [3.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -36,7 +36,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 17 | 16 | 0 | 1 | 1 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 14 | 0 | 6 | 8 |
-| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 19 | 5 | 0 | 14 | 17 |
+| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 19 | 6 | 0 | 13 | 15,5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 3 | 0 | 10 | 11,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 1 | 0 | 9 | 11 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 3 | 0 | 7 | 7 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 12 |
-| **Total** | **132** | **43** | **0** | **89** | **111** |
+| **Total** | **132** | **44** | **0** | **88** | **109,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -81,10 +81,10 @@ tiene de dónde salir: cada restricción se llama como la llama el [04](docs/04-
 ([1.14](docs/08-plan-de-desarrollo.md#tarea-1-14)), que necesitaba las dos: la transacción de la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) y la tabla de la [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13). En el carril Base, con
 `cargos` ([2.3](docs/08-plan-de-desarrollo.md#tarea-2-3)), la tabla de idempotencia ([1.13](docs/08-plan-de-desarrollo.md#tarea-1-13)), su purga ([1.16](docs/08-plan-de-desarrollo.md#tarea-1-16)) y la semilla reproducible
 ([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)) cerradas, siguen la primera promoción a qa ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) y la tabla `usuarios` ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)). El
-carril Contrato, con los de los sprints 3 a 8. **El carril Front se queda sin nada que tomar**: con
-la pantalla de acceso ([2.6](docs/08-plan-de-desarrollo.md#tarea-2-6)) hecha, lo que sigue —usuarios, cargos, la navegación dictada y el
-canal firmado— espera a que la API tenga sesión, y eso sigue con la [2.1](docs/08-plan-de-desarrollo.md#tarea-2-1). La lista al día la calcula
-la herramienta, y está justo abajo.
+carril Contrato, con los de los sprints 3 a 8. **El carril Front vuelve a tener de dónde agarrar**:
+la [2.1](docs/08-plan-de-desarrollo.md#tarea-2-1) ya entrega sesión, así que la pantalla de acceso ([2.6](docs/08-plan-de-desarrollo.md#tarea-2-6)) tiene por fin contra qué entrar, y
+detrás van la sesión de 30 días ([2.2](docs/08-plan-de-desarrollo.md#tarea-2-2)), usuarios, cargos y la navegación dictada. La lista al día
+la calcula la herramienta, y está justo abajo.
 
 > **El [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) está cerrado salvo lo que cuesta dinero.** La base existe, tiene dueño distinto del
 > de la API y **RLS ya juzga**: conectada como `prisma_api`, la misma consulta devuelve cero filas de
@@ -101,7 +101,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) · [1.14](docs/08-plan-de-desarrollo.md#tarea-1-14) · [2.1](docs/08-plan-de-desarrollo.md#tarea-2-1) · [3.3](docs/08-plan-de-desarrollo.md#tarea-3-3) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
+| **API** | [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) · [1.14](docs/08-plan-de-desarrollo.md#tarea-1-14) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.12](docs/08-plan-de-desarrollo.md#tarea-2-12) · [2.14](docs/08-plan-de-desarrollo.md#tarea-2-14) · [3.3](docs/08-plan-de-desarrollo.md#tarea-3-3) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
 | **Base** | [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12) · [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) |
 | **Contrato** | [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
@@ -110,13 +110,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **89 tareas y 111 días de trabajo** de 132 tareas del plan.
+Quedan **88 tareas y 109,5 días de trabajo** de 132 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 16,7 semanas | **19,7 semanas** |
+| 1 | 16,5 semanas | **19,5 semanas** |
 | 2 | 10,5 semanas | **13,5 semanas** |
-| 3 | 9,4 semanas | **12,4 semanas** |
+| 3 | 9,3 semanas | **12,3 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -124,10 +124,9 @@ Quedan **89 tareas y 111 días de trabajo** de 132 tareas del plan.
 El orden sale de las dependencias del [plan](docs/08-plan-de-desarrollo.md): cuántas tareas pendientes cuelgan de cada una, directa
 o indirectamente. No es el orden en que se descubrieron.
 
-- [ ] ⚡ **La sesión contra Supabase Auth** ([2.1](docs/08-plan-de-desarrollo.md#tarea-2-1)) — **lo que más libera ahora: 51 tareas penden de
-      ella**, y ya no espera a nada: la tabla `usuarios` ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)) fue lo último que le faltaba. Sin
-      sesión no hay acceso, ni pantallas de usuarios y cargos, ni navegación dictada, ni canal
-      firmado: el carril Front lleva parado desde la pantalla de acceso esperando exactamente esto.
+- [x] **La sesión contra Supabase Auth** ([2.1](docs/08-plan-de-desarrollo.md#tarea-2-1)) — hecha: era lo que más liberaba, con 51 tareas
+      detrás, y con ella arranca el [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) entero. El carril Front deja de estar parado, y la
+      puerta a la base de la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) pasa de estar probada a estar usada.
 - [x] **La tabla `usuarios`** ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)) — hecha: ya se le ve cumplir el [04 §4.2](docs/04-modelo-de-datos.md#42-cargos-usuarios-y-cuentas) con sesión de verdad.
       Destrabó la [2.1](docs/08-plan-de-desarrollo.md#tarea-2-1), y con ella el [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) entero.
 - [ ] ⚡ **El filtro de idempotencia** ([1.14](docs/08-plan-de-desarrollo.md#tarea-1-14)) — **46 tareas detrás**, y ya tiene las dos piezas que
@@ -275,7 +274,14 @@ hasta aplicarlo y probarlo.
 
 ## 4. Sprint 2 · acceso, usuarios, cargos y canal firmado
 
-- [ ] ⚡ [**2.1**](docs/08-plan-de-desarrollo.md#tarea-2-1) Autenticación contra Supabase Auth desde la API, con el correo sintético en el servidor · API
+- [x] [**2.1**](docs/08-plan-de-desarrollo.md#tarea-2-1) Autenticación contra Supabase Auth desde la API, con el correo sintético en el
+      servidor · API — `POST /api/v0/sesiones`, y con ella **la primera transacción con identidad
+      que abre una petición de verdad**: la ficha de `usuarios` se lee con RLS juzgando, no con un
+      `if`. El usuario se normaliza y el correo se arma en el servidor ([ADR-009](docs/adr/ADR-009-login-por-usuario.md)); un usuario que no
+      existe y una contraseña equivocada responden **el mismo cuerpo byte a byte** ([A-04](docs/12-pruebas-y-calidad.md#a-04)), y el
+      desactivado responde `40301` solo con la contraseña correcta. Trae el tipo de campo `clave`,
+      el formulario «acceso» y los códigos `40104` y `40301`. Veintisiete pruebas nuevas, 417 en
+      verde, y siete más entrando con las cinco personas de la semilla contra el Supabase local
 - [ ] 🔒 [**2.2**](docs/08-plan-de-desarrollo.md#tarea-2-2) Sesión de 30 días y enrutamiento según la navegación que dicta la API · API, Front
 - [x] [**2.3**](docs/08-plan-de-desarrollo.md#tarea-2-3) Tabla `cargos` con semilla y RLS · Base — **sin migración nueva**: la tabla,
       sus seis cargos de arranque y sus dos políticas ya eran las del [04 §4.2](docs/04-modelo-de-datos.md#42-cargos-usuarios-y-cuentas) y el [§7](docs/04-modelo-de-datos.md#7-seguridad-por-tipo-de-usuario-rls). Lo
@@ -300,14 +306,14 @@ hasta aplicarlo y probarlo.
       falla si aparece. Trae el sexto tipo de campo del descriptor, `clave`, que el contrato v0.4.0
       agregó y el renderizador de la [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18) todavía no conocía
 - [ ] 🔒 [**2.7**](docs/08-plan-de-desarrollo.md#tarea-2-7) Gestión de usuarios: crear, editar, desactivar con motivo y restablecer clave · API, Front
-- [ ] 🔒 [**2.8**](docs/08-plan-de-desarrollo.md#tarea-2-8) Catálogo de cargos · API, Front
-- [ ] 🔒 [**2.9**](docs/08-plan-de-desarrollo.md#tarea-2-9) Registro de cada inicio de sesión con fecha, dispositivo e IP · API, Base
+- [ ] ⚡ [**2.8**](docs/08-plan-de-desarrollo.md#tarea-2-8) Catálogo de cargos · API, Front
+- [ ] ⚡ [**2.9**](docs/08-plan-de-desarrollo.md#tarea-2-9) Registro de cada inicio de sesión con fecha, dispositivo e IP · API, Base
 - [x] [**2.10**](docs/08-plan-de-desarrollo.md#tarea-2-10) Panel «Acerca de» ([RF-100](docs/03-requisitos-y-bdd.md#rf-100)) · Front, API — los seis datos de [19 §5.3](docs/19-ambientes-y-entrega.md#53-el-panel-acerca-de), y lo que
       no se pudo consultar lo dice en vez de inventarlo
 - [ ] 🔒 [**2.11**](docs/08-plan-de-desarrollo.md#tarea-2-11) La prueba de permisos del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1), también contra la base de qa · API
-- [ ] 🔒 [**2.12**](docs/08-plan-de-desarrollo.md#tarea-2-12) Clave de firma de sesión, solo en memoria en el front · API, Front
+- [ ] ⚡ [**2.12**](docs/08-plan-de-desarrollo.md#tarea-2-12) Clave de firma de sesión, solo en memoria en el front · API, Front
 - [ ] 🔒 [**2.13**](docs/08-plan-de-desarrollo.md#tarea-2-13) Filtro de firma: HMAC, nonce y marca de tiempo (`40101` a `40103`) · API
-- [ ] 🔒 [**2.14**](docs/08-plan-de-desarrollo.md#tarea-2-14) Navegación dictada por la API ([RF-103](docs/03-requisitos-y-bdd.md#rf-103)) · API, Front
+- [ ] ⚡ [**2.14**](docs/08-plan-de-desarrollo.md#tarea-2-14) Navegación dictada por la API ([RF-103](docs/03-requisitos-y-bdd.md#rf-103)) · API, Front
 - [ ] 🔒 [**2.15**](docs/08-plan-de-desarrollo.md#tarea-2-15) Tabla única de usuarios activos y desactivados ([RF-84](docs/03-requisitos-y-bdd.md#rf-84) a [RF-87](docs/03-requisitos-y-bdd.md#rf-87)) · API, Front
 - [ ] 🔒 [**2.16**](docs/08-plan-de-desarrollo.md#tarea-2-16) Bitácora de cambios y reversión sin borrar ([RF-88](docs/03-requisitos-y-bdd.md#rf-88), [RF-89](docs/03-requisitos-y-bdd.md#rf-89), [RF-91](docs/03-requisitos-y-bdd.md#rf-91)) · Base, API, Front
 - [ ] 🔒 [**2.17**](docs/08-plan-de-desarrollo.md#tarea-2-17) Cambio de clave obligatorio al reactivar ([RF-90](docs/03-requisitos-y-bdd.md#rf-90)) · API, Front
@@ -572,7 +578,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 
 **Del contrato sin GET ([ADR-030](docs/adr/ADR-030-contrato-sin-get.md)):**
 
-- [ ] La copia fijada de `prisma_api` declara el contrato `0.5.0` aunque solo sirva dos de sus 26 operaciones. Declara contra qué versión está escrita, no cuánto implementa; dejarla en `0.2.0` habría dado dos contratos distintos con el mismo número
+- [ ] La copia fijada de `prisma_api` declara el contrato `0.5.0` aunque solo sirva tres de sus 26 operaciones. Declara contra qué versión está escrita, no cuánto implementa; dejarla en `0.2.0` habría dado dos contratos distintos con el mismo número
 - [ ] Las lecturas van a `POST /api/v0/consultas/<recurso>`, con `cargos/asignables` aplanado a `cargos-asignables`
 - [ ] Las seis consultas sin datos que filtrar viajan sin cuerpo; solo bitácora, navegación y formularios lo llevan
 - [ ] Las dos operaciones de sesión siguen exentas de `Idempotency-Key`, por la razón que ya tenían: no hay clave de firma todavía y su respuesta trae secretos
@@ -781,6 +787,39 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       con motivo espera a una persona
 - [ ] Lo guardado que no se puede leer —de una versión anterior del formato— se deja quieto en vez de
       borrarse
+
+**De la tarea [2.1](docs/08-plan-de-desarrollo.md#tarea-2-1):**
+
+- [ ] **El `sub` sale del cuerpo que devuelve GoTrue, no de verificar la firma del token.** En el
+      inicio de sesión el token nace en una llamada servidor a servidor, y ningún endpoint recibe
+      todavía un token de un cliente. Verificarlo contra el JWKS ES256 es del filtro de sesión
+      ([2.2](docs/08-plan-de-desarrollo.md#tarea-2-2)), que es quien lee `Authorization: Bearer`
+- [ ] **`activo` lo comprueba la API, no una política de RLS.** Las políticas dejan a una persona
+      desactivada leer su propia ficha, y el contrato exige que `40301` salga **solo** con la
+      contraseña correcta ([BDD-28-3](docs/03-requisitos-y-bdd.md#bdd-28-3)). Esconderla con una política daría `40104` y contradiría al
+      contrato
+- [ ] **Quien autentica bien y no tiene ficha en `usuarios` responde `40104`**, igual que quien no
+      existe. Cualquier otra respuesta le confirmaría a un desconocido que ese correo sí existe en
+      Auth. Queda una línea en el registro del servidor, porque es una inconsistencia de datos
+- [ ] **El acceso es el único endpoint sin firma, sin idempotencia y sin tope de intentos.** El
+      catálogo no tiene un `429` y ningún documento pide bloqueo ni retardo tras varios fallos: se
+      dejó fuera a propósito, y conviene decidir si hace falta antes del go-live
+- [ ] 🔒 **El catálogo acordado le atribuye a la «Tarea [2.1](docs/08-plan-de-desarrollo.md#tarea-2-1)» tres marcas que no le corresponden.**
+      `40302` lo emite el filtro de sesión ([2.2](docs/08-plan-de-desarrollo.md#tarea-2-2)) y `42210` el cambio de contraseña; y la marca de
+      `20100` dice que el primer endpoint que crea algo es el alta de usuarios, cuando resultó ser
+      el inicio de sesión. Los tres textos hay que corregirlos en un PR de contrato
+- [ ] **La copia fijada publica el 201 sin la cabecera `Set-Cookie`** que el contrato acordado le
+      pone: la cookie `prisma_renovacion` es de la [2.2](docs/08-plan-de-desarrollo.md#tarea-2-2), y declararla sin emitirla sería mentir. La
+      descripción de la operación sí se copió literal, para no reescribirla en cada tarea
+- [ ] **`TipoDeCampo` estrena `clave` pero no `casilla`**, que el enum acordado tiene en medio.
+      Ningún formulario usa `casilla` todavía, y el generador valida tipo contra tipo de Java al
+      arrancar: declararlo sería código que ninguna prueba ejerce
+- [ ] **La clave de firma se genera y se devuelve, y no se guarda en ningún sitio.** El esquema
+      `Sesion` la declara obligatoria; dónde vive del lado del servidor y quién la comprueba son la
+      [2.12](docs/08-plan-de-desarrollo.md#tarea-2-12) y la [2.13](docs/08-plan-de-desarrollo.md#tarea-2-13)
+- [ ] **Una `SUPABASE_URL` vacía no impide arrancar**: la API responde `50000` a todo intento de
+      entrar, en vez de negarse a arrancar. Es a propósito, para no romper la compilación donde no
+      hay Supabase, pero deja el fallo lejos del sitio donde se causó
 
 ---
 
