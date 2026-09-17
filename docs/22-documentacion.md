@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/22-documentacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Proceso](INDICE.md#etiqueta-proceso) |
+| [1.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/22-documentacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se escribe, se versiona y se enlaza la documentación de PRISMA: la de este repositorio y los
 README de los tres repositorios de código. La decisión y su porqué están en [ADR-027](adr/ADR-027-documentacion-versionada.md); aquí están las
@@ -23,6 +23,9 @@ reglas.
 - **Fuera quedan las plantillas de terceros**, como el README que Flutter pone dentro de
   `ios/Runner/Assets.xcassets/`: no las escribió el proyecto. La lista vive en
   `scripts/docs/config.mjs`.
+- **Fuera quedan también las carpetas de herramientas** —`.claude/` y `.agents/`, con las
+  habilidades que alguien instale en cualquiera de los cuatro repositorios—. Traen su propio
+  Markdown, no lo escribe el proyecto y actualizarlo sería editar algo de otro.
 
 ---
 

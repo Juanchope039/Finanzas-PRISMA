@@ -35,7 +35,13 @@ function markdownDe(carpeta) {
     .split('\0')
     .filter(Boolean)
     .map((r) => (carpeta ? `${carpeta}/${r}` : r))
-    .filter((r) => !cfg.EXCLUIDOS.has(r) && fs.existsSync(path.join(RAIZ, r)));
+    .filter((r) => !cfg.EXCLUIDOS.has(r) && !enCarpetaExcluida(r) && fs.existsSync(path.join(RAIZ, r)));
+}
+
+/** Si el archivo vive dentro de una carpeta de herramientas, a cualquier profundidad. */
+function enCarpetaExcluida(ruta) {
+  const partes = ruta.split('/');
+  return cfg.CARPETAS_EXCLUIDAS.some((carpeta) => partes.includes(carpeta));
 }
 
 function cargarArchivos() {

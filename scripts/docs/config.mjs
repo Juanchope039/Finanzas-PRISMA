@@ -50,6 +50,11 @@ export const EXCLUIDOS = new Set([
   'repositories/frontend-flutter/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md',
 ]);
 
+// Carpetas de herramientas que traen su propio Markdown: habilidades y configuración de agentes.
+// No son documentación del proyecto, no se versionan con ADR-027 y quien las instala no las escribe,
+// así que pedirles encabezado sería pedirle a la herramienta que edite algo de otro.
+export const CARPETAS_EXCLUIDAS = ['.claude', '.agents'];
+
 export const ZONA_HORARIA = 'America/Bogota';
 
 // Documento donde viven las reglas: los enlaces de estado y etiqueta apuntan aquí.
