@@ -130,7 +130,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | Documento | Versión | Estado | Actualizado | Etiquetas |
 |---|:---:|---|:---:|---|
 | [PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
-| [Tareas de PRISMA](../TODO.md) | 1.13.0 | 🔄 Vivo | 2026-09-17 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
+| [Tareas de PRISMA](../TODO.md) | 1.14.0 | 🔄 Vivo | 2026-09-17 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
 | [Índice navegable de la documentación](INDICE.md) | 1.0.0 | 🔄 Vivo | 2026-09-16 | — |
 | [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Finanzas](#etiqueta-finanzas) · [Plan](#etiqueta-plan) |
 | [01 · Visión y alcance](01-vision-y-alcance.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Requisitos](#etiqueta-requisitos) |
@@ -148,7 +148,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [13 · Respaldo y exportación](13-respaldo-y-exportacion.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Base de datos](#etiqueta-base-de-datos) · [Datos personales](#etiqueta-datos-personales) |
 | [14 · Roadmap e ideas de valor](14-roadmap-e-ideas.md) | 1.0.0 | 🔄 Vivo | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
 | [15 · Glosario](15-glosario.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) |
-| [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Base de datos](#etiqueta-base-de-datos) · [Calidad](#etiqueta-calidad) |
+| [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Base de datos](#etiqueta-base-de-datos) · [Calidad](#etiqueta-calidad) |
 | [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Front](#etiqueta-front) · [API](#etiqueta-api) · [Arquitectura](#etiqueta-arquitectura) |
 | [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) | 0.1.0 | 💡 Propuesta | 2026-09-16 | [Entrega](#etiqueta-entrega) · [Front](#etiqueta-front) |
 | [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
@@ -186,7 +186,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica](adr/ADR-027-documentacion-versionada.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Proceso](#etiqueta-proceso) |
 | [ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué](adr/ADR-028-un-commit-por-tarea.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Proceso](#etiqueta-proceso) · [Plan](#etiqueta-plan) |
 | [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Base de datos](#etiqueta-base-de-datos) · [API](#etiqueta-api) · [Entrega](#etiqueta-entrega) · [Calidad](#etiqueta-calidad) |
-| [CLAUDE.md](../CLAUDE.md) | 1.0.0 | 🔄 Vivo | 2026-09-16 | [Proceso](#etiqueta-proceso) |
+| [CLAUDE.md](../CLAUDE.md) | 1.1.0 | 🔄 Vivo | 2026-09-17 | [Proceso](#etiqueta-proceso) |
 | [Herramienta de documentación](../scripts/docs/README.md) | 1.1.0 | ✅ Vigente | 2026-09-16 | [Proceso](#etiqueta-proceso) |
 <!-- /generado:estado-de-la-documentacion -->
 

@@ -2,10 +2,11 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-16 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
-> **Construcción: construido, pero todavía no corrió contra ninguna base** (tareas [0.5](08-plan-de-desarrollo.md#tarea-0-5) y [1.1](08-plan-de-desarrollo.md#tarea-1-1)).
-> Fue la primera pieza de código ejecutable del proyecto.
+> **Construcción: construido y corriendo contra dev**, donde el esquema está aplicado y verificado
+> línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5) y [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5)). **qa va dos migraciones atrás**: promoverlas es
+> la [1.12](08-plan-de-desarrollo.md#tarea-1-12). Fue la primera pieza de código ejecutable del proyecto.
 > Convierte el esquema que describe [`04-modelo-de-datos.md`](04-modelo-de-datos.md) en una
 > base de datos real, reproducible en cualquier ambiente con un comando.
 
@@ -47,12 +48,19 @@ un momento; las migraciones son la receta reproducible. Los snapshots se usan pa
 ```
 supabase/
   config.toml                          Configuración de la pila local
-  migrations/
-    20260915120000_esquema_inicial.sql Todo el esquema (doc 04 + tabla exportaciones del doc 13)
+  migrations/                          Siete, en orden y ninguna editable una vez aplicada:
+    …_esquema_inicial.sql              Todo el esquema (doc 04 + tabla exportaciones del doc 13)
+    …_ajusta_rls_y_vistas_al_doc_04.sql Apaga la RLS que Supabase enciende sola; security_invoker
+    …_rol_prisma_api.sql               El rol con el que se conecta la API (doc 04 §9)
+    …_schema_version.sql               La tabla del SemVer del esquema (ADR-014)
+    …_force_row_level_security.sql     FORCE en catorce tablas (doc 04 §7.1)
+    …_dominios_y_restricciones_con_nombre.sql  Los nueve dominios del §4.1 y los nombres del §11
+    …_revoca_borrado_a_todos_los_roles.sql     Nadie borra salvo el dueño (doc 04 §5.1)
   seed.sql                             Datos de prueba fijos y deterministas
 
 scripts/db/
   reset-local.ps1                      Recrea la BD local (migraciones + seed)
+  verificar-base.sql                   Le pregunta a la base si cumple el doc 04 (ver §5.1)
   snapshot.ps1                         Toma un snapshot (esquema y/o datos) con marca de tiempo
   restore.ps1                          Restaura un snapshot .sql sobre una BD destino
   generar-datos-prueba.ps1             Wrapper del generador de volumen (opcional)
@@ -113,6 +121,32 @@ supabase db push                                  # aplica las migraciones al re
 `db push` aplica solo lo que falte, así que es seguro correrlo de nuevo tras cada migración
 nueva. **El seed NO se aplica a remoto** (crea usuarios con contraseñas conocidas): en
 producción los usuarios reales los crea Gerencia desde la app.
+
+### 5.1 Comprobar que quedó como dice el modelo
+
+Aplicar no es lo mismo que quedar bien. `scripts/db/verificar-base.sql` le hace a la base las
+preguntas del [`04-modelo-de-datos.md`](04-modelo-de-datos.md) y contesta `OK` o `>>> FALLA` por
+cada una: los nueve dominios y sus 61 columnas, que ninguna restricción se haya quedado con el
+nombre que le puso PostgreSQL, que nadie salvo el dueño pueda borrar, que los catorce triggers de
+auditoría **escriban**, y que RLS le conteste distinto a una sesión de Operación y a una de
+Gerencia.
+
+```powershell
+supabase db query --linked -f scripts/db/verificar-base.sql                        # el proyecto vinculado
+supabase db query --linked --project-ref <ref> -f scripts/db/verificar-base.sql    # otro ambiente
+psql "<cadena de conexión>" -f scripts/db/verificar-base.sql                       # o directo
+```
+
+Dos condiciones: se corre **como el dueño** de las tablas —el guion se cambia de rol para probar qué
+puede hacer cada uno, y para eso tiene que poder volver— y **contra una base con la semilla**, porque
+las pruebas de permisos necesitan una persona de Gerencia y otra de Operación de verdad.
+
+> **No deja rastro.** Lo poco que escribe —mover un cargo para ver si el trigger de auditoría se
+> dispara— va dentro de una transacción que termina en `ROLLBACK`. Se puede correr contra cualquier
+> ambiente, incluido uno con datos.
+
+Es también la forma de ver qué le falta a un ambiente contra otro: corrido contra qa hoy, el guion
+dice en qué se quedó atrás ([1.12](08-plan-de-desarrollo.md#tarea-1-12)).
 
 ---
 
@@ -184,6 +218,9 @@ que sea limpio y rápido; los reactiva al final.
   tiene trigger de auditoría de fila.
 - **Política RLS de `exportaciones`:** el doc [13](13-respaldo-y-exportacion.md) [§7](13-respaldo-y-exportacion.md#7-alcance-por-rol) dice "acceso exclusivo de Gerencia" pero no
   escribe la política; en la migración se creó una coherente con el patrón, marcada como tal.
+- **Nombre de los `CHECK` de `exportaciones`:** el doc [13](13-respaldo-y-exportacion.md) [§8](13-respaldo-y-exportacion.md#8-tabla-de-registro) los escribe sin nombre, que es lo que
+  el [04 §4.1](04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) prohíbe. Se bautizaron siguiendo su patrón al cerrar la [1.1](08-plan-de-desarrollo.md#tarea-1-1), y quedó anotado en
+  [`TODO.md` §10](../TODO.md#10-decisiones-de-construcción-que-conviene-revisar).
 
 Cada uno de estos puntos está comentado en el propio SQL para que no pase desapercibido.
 
@@ -286,7 +323,7 @@ el incremental propio es para **desarrollo** y para llevarse deltas de forma por
 | Esfuerzo | Mantener cursor + orden | Ninguno |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API")
+**🔗 Referenciado desde:** [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

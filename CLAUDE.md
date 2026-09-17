@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-16 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -214,9 +214,15 @@ El índice navegable de los 61 documentos está en [`docs/INDICE.md`](docs/INDIC
 ## 6. Dónde va el proyecto hoy
 
 El estado al día vive en [`TODO.md`](TODO.md) [§1](TODO.md#1-hecho-en-progreso-y-pendiente), con una tabla por sprint que calcula la herramienta. En
-resumen: el [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) está casi cerrado, el dominio que no necesita base de datos ya está construido y
-probado, y **todo el carril Base espera a que se configure el proyecto dev de Supabase** (tarea
-[0.4](docs/08-plan-de-desarrollo.md#tarea-0-4)), que es lo que más destraba del plan entero.
+resumen: el [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) está cerrado salvo lo que cuesta dinero, el dominio que no necesita base de datos
+ya está construido y probado, y **la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) está aplicada y verificada en dev** ([1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) a
+[1.5](docs/08-plan-de-desarrollo.md#tarea-1-5)): dominios, nombres, borrado revocado, auditoría por triggers y RLS juzgando a una sesión de
+verdad. Lo que más destraba ahora es llevar la identidad hasta PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)) y poner qa al día,
+que va dos migraciones atrás ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)).
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-026](docs/adr/ADR-026-railway-al-final.md)—, «terminado» quiere decir
 fusionado a `main` con la integración continua en verde.
+
+Para la base hay además una forma de preguntarle si cumple el modelo, en vez de suponerlo:
+`scripts/db/verificar-base.sql` de `prisma_db` contesta `OK` o `>>> FALLA` por cada promesa del
+[04](docs/04-modelo-de-datos.md), y corre dentro de una transacción que se revierte ([16 §5.1](docs/16-base-de-datos-y-snapshots.md#51-comprobar-que-quedó-como-dice-el-modelo)).
