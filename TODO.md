@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [1.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -34,7 +34,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 <!-- generado:plan-tablero · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
-| [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 17 | 14 | 0 | 3 | 3 |
+| [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 17 | 16 | 0 | 1 | 1 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 5 | 0 | 15 | 17 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 19 | 1 | 0 | 18 | 21,5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 3 | 0 | 10 | 11,5 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 12 |
-| **Total** | **132** | **28** | **0** | **104** | **126,5** |
+| **Total** | **132** | **30** | **0** | **102** | **124,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -61,7 +61,7 @@ Lo que tiene su commit en `main` con la integración continua en verde, que es l
 | **Front · formularios** | El renderizador del descriptor: pinta los campos que manda la API con su teclado, sus límites, sus opciones y sus avisos, y no trae ninguna regla propia | [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18) |
 | **Front · sin conexión** | La PWA con su manifiesto en español y la cola local en IndexedDB: cada intención se guarda con su clave **antes** de intentar enviarse, y se reintenta con la espera de [17 §5.2](docs/17-resiliencia-offline-y-cache.md#52-cuánto-se-espera-entre-reintentos) hasta que la API la acepte o la rechace con motivo | [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) |
 | **Contrato** | El contrato v0.3.0 en [`contrato/openapi.json`](contrato/openapi.json): el sobre, los 18 códigos, el descriptor con sus listas, y cuentas y categorías acordadas **antes** de implementarlas | [0.15](docs/08-plan-de-desarrollo.md#tarea-0-15) · [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) · [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) |
-| **Base** | **Nada aplicado todavía.** Las 22 tablas, la auditoría y las políticas RLS están escritas en la migración inicial y esperan al proyecto dev de Supabase | — |
+| **Base** | **El esquema está aplicado en dev y en qa**, con la semilla del mockup: 23 tablas, la auditoría por triggers, 31 políticas, las dieciséis tablas con RLS que pide [04 §7](docs/04-modelo-de-datos.md#7-seguridad-por-tipo-de-usuario-rls), `schema_version` en `0.1.0` y el rol `prisma_api`, con el que **RLS ya juzga a la API** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
 **367 pruebas en verde en la API** y 119 en el front. El dominio se prueba con las cifras de los
@@ -80,10 +80,11 @@ sigue el bordado por tiempo de máquina ([5.4](docs/08-plan-de-desarrollo.md#tar
 sugerencia de precio ([5.7](docs/08-plan-de-desarrollo.md#tarea-5-7)); lo demás espera a la base. La lista al día la calcula la herramienta, y
 está justo abajo.
 
-> **El carril API no llega más lejos en el [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) sin base de datos.** El repositorio de
-> movimientos ([3.3](docs/08-plan-de-desarrollo.md#tarea-3-3)) necesita la transacción con identidad ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)), y esa espera al proyecto dev
-> de Supabase ([0.4](docs/08-plan-de-desarrollo.md#tarea-0-4)). Por eso lo hecho hoy es todo dominio y casos de uso: es exactamente la
-> parte que se puede construir y probar sin ella.
+> **El [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) está cerrado salvo lo que cuesta dinero.** La base existe, tiene dueño distinto del
+> de la API y **RLS ya juzga**: conectada como `prisma_api`, la misma consulta devuelve cero filas de
+> `usuarios` y las cuatro `cuentas`, porque lo decide la base y no un `if`. Lo que queda de [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) son
+> uat y prod, que son de pago y los decide Gerencia; y [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) y [0.9](docs/08-plan-de-desarrollo.md#tarea-0-9), que el [ADR-026](docs/adr/ADR-026-railway-al-final.md) mandó
+> al [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9). El carril Base puede seguir en el [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1).
 
 ### 1.4 ⬜ Pendiente: lo que puede empezar hoy, en paralelo
 
@@ -101,22 +102,20 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **104 tareas y 126,5 días de trabajo** de 132 tareas del plan.
+Quedan **102 tareas y 124,5 días de trabajo** de 132 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 19,1 semanas | **22,1 semanas** |
-| 2 | 12,1 semanas | **15,1 semanas** |
-| 3 | 10,4 semanas | **13,4 semanas** |
+| 1 | 18,7 semanas | **21,7 semanas** |
+| 2 | 11,9 semanas | **14,9 semanas** |
+| 3 | 10,2 semanas | **13,2 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
 
-- [ ] ⚡ [**0.4**](docs/08-plan-de-desarrollo.md#tarea-0-4) · **Configurar el proyecto dev de Supabase.** Es la primera tarea de la cadena más
-      larga del plan: todo el carril Base espera por ella. Guardar la contraseña de la base; iniciar
-      sesión con `npx supabase login` y enlazar `prisma_db` con `npx supabase link` (el CLI se
-      descarga la primera vez); y llenar `backend-api/.env` a partir de `.env.ejemplo`, que nunca se
-      sube.
+- [ ] ⚡ **uat y prod** · Decisión — son los dos proyectos de Supabase que faltan para cerrar [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4), y
+      los dos son **de pago** ([19 §8.1](docs/19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no)). Los decide Gerencia, y hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) no hay nada que
+      promover a ellos.
 - [ ] **Una sola licencia** · Decisión — este repositorio y el front están con AGPL-3.0; la API y la
       base, con GPL-3.0.
 
@@ -127,17 +126,20 @@ Quedan **104 tareas y 126,5 días de trabajo** de 132 tareas del plan.
 - [x] [**0.1**](docs/08-plan-de-desarrollo.md#tarea-0-1) Proyecto `prisma_api`: Java 25, Spring Boot 4 y Gradle, con el esqueleto hexagonal · API
 - [x] [**0.2**](docs/08-plan-de-desarrollo.md#tarea-0-2) Regla de frontera con ArchUnit en la integración continua · API
 - [x] [**0.3**](docs/08-plan-de-desarrollo.md#tarea-0-3) Proyecto `prisma_front` en Flutter, web por defecto · Front
-- [ ] ⚡ [**0.4**](docs/08-plan-de-desarrollo.md#tarea-0-4) Los cuatro proyectos de Supabase · Decisión — dev ya existe y falta configurarlo; qa,
-      uat y prod se crean antes de promover, y uat y prod son de pago
-- [ ] 🔒 [**0.5**](docs/08-plan-de-desarrollo.md#tarea-0-5) Rol `prisma_api` sin `BYPASSRLS`, sin `SUPERUSER` y sin ser dueño de las tablas · Base
+- [ ] ⚡ [**0.4**](docs/08-plan-de-desarrollo.md#tarea-0-4) Los cuatro proyectos de Supabase · Decisión — **dev y qa** configurados, con el
+      esquema, la semilla y el rol `prisma_api`; faltan uat y prod, que son de pago y los decide
+      Gerencia
+- [x] [**0.5**](docs/08-plan-de-desarrollo.md#tarea-0-5) Rol `prisma_api` sin `BYPASSRLS`, sin `SUPERUSER` y sin ser dueño de las tablas ·
+      Base — creado en dev y en qa; en dev ya se comprobó que RLS lo juzga
 - [x] [**0.6**](docs/08-plan-de-desarrollo.md#tarea-0-6) Secretos fuera del repositorio: variables de entorno en la API y `--dart-define` en el
       front · API, Front
 - [x] [**0.7**](docs/08-plan-de-desarrollo.md#tarea-0-7) Integración continua por proyecto: formato, análisis, pruebas y compilación · API, Front
 - [ ] ⏭️ [**0.8**](docs/08-plan-de-desarrollo.md#tarea-0-8) Imagen de la API arrancando en los ambientes, en Railway ([ADR-026](docs/adr/ADR-026-railway-al-final.md)). El `Dockerfile` ya
       existe y la integración continua lo construye en cada push a `main` · API
 - [ ] ⏭️ [**0.9**](docs/08-plan-de-desarrollo.md#tarea-0-9) Entrega a dev al fusionar ([ADR-026](docs/adr/ADR-026-railway-al-final.md)) · API, Front
-- [ ] 🔒 [**0.10**](docs/08-plan-de-desarrollo.md#tarea-0-10) SemVer y migraciones con `schema_version` · Base — el SemVer ya está en
-      `build.gradle.kts` y en `pubspec.yaml`; falta la tabla `schema_version`
+- [x] [**0.10**](docs/08-plan-de-desarrollo.md#tarea-0-10) SemVer y migraciones con `schema_version` · Base — la tabla guarda una fila por
+      versión publicada y hoy dice `0.1.0`, con la etiqueta `esquema-v0.1.0` de [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) puesta.
+      Que la API la lea en vez de `PRISMA_ESQUEMA` es del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1)
 - [x] [**0.11**](docs/08-plan-de-desarrollo.md#tarea-0-11) `GET /version`: versión de la API, del esquema y ambiente · API
 - [x] [**0.12**](docs/08-plan-de-desarrollo.md#tarea-0-12) Insignia `v0.1.0 · Desarrollo` en el pie de la barra lateral y franja de ambiente · Front
 - [x] [**0.13**](docs/08-plan-de-desarrollo.md#tarea-0-13) El front comprueba el MAJOR de la API y bloquea con la pantalla del mockup · Front
@@ -376,7 +378,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 |---|---|---|---|---|
 | 1 | Dónde se aloja la API | Quien dirige | Tarea [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) | ✅ Railway, al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)) |
 | 2 | Dónde se publica el front web | Quien dirige | Tarea [0.9](docs/08-plan-de-desarrollo.md#tarea-0-9) | ✅ Railway, al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)) |
-| 3 | Los cuatro proyectos de Supabase y el pago de uat y prod | Quien dirige crea; Gerencia paga | Tarea [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) | 🟡 dev creado; faltan qa, uat y prod |
+| 3 | Los cuatro proyectos de Supabase y el pago de uat y prod | Quien dirige crea; Gerencia paga | Tarea [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) | 🟡 dev y qa configurados, con el esquema y la semilla aplicados; faltan uat y prod, los de pago |
 | 4 | PostgreSQL para desarrollar sin Docker | Quien dirige | Tareas [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) y [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) | ✅ El proyecto dev de Supabase, mientras Docker no arranque |
 | 5 | Remotos de los repositorios | Quien dirige | Integración continua | ✅ Los cuatro en GitHub |
 | 6 | Cómo consiguen la API y su CI el esquema de `prisma_db` | Carril API | Tareas [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7), [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) y [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) | ✅ Por etiqueta, con el Supabase CLI en la tubería ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) |
@@ -473,6 +475,43 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] El catálogo de códigos va dentro del OpenAPI, en `x-prisma-codigos`
 - [ ] La pantalla de versión incompatible tiene tres filas de versiones y no las dos del mockup
 - [ ] Se siguió el texto del mockup y no el literal del escenario [BDD-101-1](docs/03-requisitos-y-bdd.md#bdd-101-1)
+
+**Del proyecto dev de Supabase (tarea [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4)):**
+
+- [ ] Supabase enciende RLS sola en cada tabla nueva de `public`, con un event trigger suyo,
+      `ensure_rls`. Se apagó en las seis que [04 §7](docs/04-modelo-de-datos.md#7-seguridad-por-tipo-de-usuario-rls) deja sin RLS a propósito, en una migración
+      aparte: con RLS encendida y cero políticas habrían quedado mudas en cuanto exista el rol
+      `prisma_api`
+- [ ] Las cuatro vistas que nacieron sin `security_invoker` ya lo llevan, por el mismo motivo que
+      [04 §5.6](docs/04-modelo-de-datos.md#56-la-bitácora-de-la-pantalla-es-una-vista-no-una-tabla-nueva) se lo exige a `v_bitacora_usuarios`. Hoy no cambia nada; el día que esas
+      tablas restrinjan filas, la fuga habría sido silenciosa
+- [ ] **La Data API del proyecto expone `public`**, así que las seis tablas sin RLS se pueden leer
+      con la clave anónima. Nadie debe hablar con la base salvo `prisma_api`: lo coherente sería
+      apagar la Data API o revocarle el acceso a `anon`, y eso lo decide quien dirige
+- [ ] El proyecto firma los JWT con clave asimétrica **ES256**, no con un secreto compartido:
+      `SUPABASE_JWT_SECRET` va vacío y la verificación del token ([2.1](docs/08-plan-de-desarrollo.md#tarea-2-1)) tendrá que ir contra el
+      JWKS del proyecto
+- [ ] Las claves `anon` y `service_role` son las heredadas, y Supabase las retira a finales de
+      2026: antes del go-live hay que pasar a las publicables y secretas
+- [ ] La semilla necesitó `SET search_path = public, extensions`, porque `pgcrypto` no vive en
+      `public` y sin eso `gen_salt()` no existe
+- [ ] El `.env` de la API lo carga `spring.config.import`, que no estaba en ninguna parte: hasta
+      ahora el archivo se llenaba y no lo leía nadie
+
+**De las tareas [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) y [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10):**
+
+- [ ] **La contraseña del rol `prisma_api` no está en la migración.** [04 §9](docs/04-modelo-de-datos.md#9-el-rol-con-el-que-se-conecta-la-api) la escribe como
+      `:'clave_prisma_api'`, que es sintaxis de `psql` y no existe dentro de un archivo de
+      migración, y este repositorio es público. El rol nace sin contraseña —con `LOGIN` y sin
+      contraseña no autentica— y se le fija la suya por ambiente, desde fuera
+- [ ] Esa migración tampoco puede reafirmar `NOSUPERUSER` ni `NOBYPASSRLS` con un `ALTER ROLE`:
+      cambiar esos dos atributos exige ser superusuario, y el rol con el que Supabase aplica las
+      migraciones no lo es. Quedan fijados en el `CREATE ROLE`, y la verificación los comprueba
+- [ ] **`schema_version` no la describe ningún documento.** La nombran [ADR-014](docs/adr/ADR-014-semver.md), [19 §4.1](docs/19-ambientes-y-entrega.md#41-tres-cosas-versionadas-por-separado) y el
+      [RNF-23](docs/03-requisitos-y-bdd.md#rnf-23), pero ninguno dice qué columnas lleva. Se decidió un **histórico**: una fila por
+      versión publicada, no un número que se pisa, que es lo coherente con [ADR-004](docs/adr/ADR-004-base-solo-escritura.md)
+- [ ] **qa reusa el proyecto de Supabase que sobraba** en vez de crear uno nuevo, y su rol
+      `prisma_api` queda sin contraseña hasta que algo apunte ahí
 
 **Del dominio (tareas [3.1](docs/08-plan-de-desarrollo.md#tarea-3-1), [3.2](docs/08-plan-de-desarrollo.md#tarea-3-2), [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1), [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1), [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3) y [5.6](docs/08-plan-de-desarrollo.md#tarea-5-6)):**
 
