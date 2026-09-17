@@ -2710,10 +2710,6 @@
     "mensaje" : "Registro creado.",
     "modulo" : "GENERICO",
     "nombre" : "CREADO",
-    "pendienteDeEmitir" : {
-      "quien" : "El primer endpoint que crea algo: el alta de usuarios",
-      "sprint" : 2
-    },
     "status" : 20100
   }, {
     "cuando" : "JSON inválido, método que la ruta no acepta, tipo de contenido o parámetro equivocado",
@@ -2765,15 +2761,11 @@
     "nombre" : "ERROR_NO_PREVISTO",
     "status" : 50000
   }, {
-    "cuando" : "Una petición que escribe llegó sin la cabecera Idempotency-Key",
+    "cuando" : "Una petición llegó sin la cabecera Idempotency-Key, o con una que no es un UUID v4",
     "http" : 400,
     "mensaje" : "No se pudo enviar la operación. Intenta de nuevo.",
     "modulo" : "SESION_Y_TRANSPORTE",
     "nombre" : "FALTA_CLAVE_DE_IDEMPOTENCIA",
-    "pendienteDeEmitir" : {
-      "quien" : "FiltroDeIdempotencia",
-      "sprint" : 1
-    },
     "status" : 40002
   }, {
     "cuando" : "Le faltan las cabeceras de firma a una petición con sesión, o el HMAC no corresponde con la clave de firma de la sesión",
@@ -2814,10 +2806,6 @@
     "mensaje" : "Usuario o contraseña incorrectos.",
     "modulo" : "SESION_Y_TRANSPORTE",
     "nombre" : "CREDENCIALES_INCORRECTAS",
-    "pendienteDeEmitir" : {
-      "quien" : "Tarea 2.1: inicio de sesión",
-      "sprint" : 2
-    },
     "status" : 40104
   }, {
     "cuando" : "Inicia o renueva la sesión un usuario desactivado. Al iniciarla, solo con la contraseña correcta: con una equivocada responde 40104",
@@ -2825,10 +2813,6 @@
     "mensaje" : "Este usuario está desactivado. Habla con Gerencia.",
     "modulo" : "SESION_Y_TRANSPORTE",
     "nombre" : "USUARIO_DESACTIVADO",
-    "pendienteDeEmitir" : {
-      "quien" : "Tarea 2.1: inicio de sesión",
-      "sprint" : 2
-    },
     "status" : 40301
   }, {
     "cuando" : "La sesión entró con una contraseña temporal y pide algo distinto de cambiarla, renovar o cerrar la sesión, o un formulario",
@@ -2847,10 +2831,6 @@
     "mensaje" : "Esa operación ya se registró con otros datos.",
     "modulo" : "SESION_Y_TRANSPORTE",
     "nombre" : "CLAVE_REPETIDA_OTROS_DATOS",
-    "pendienteDeEmitir" : {
-      "quien" : "FiltroDeIdempotencia",
-      "sprint" : 1
-    },
     "status" : 40901
   }, {
     "cuando" : "Misma Idempotency-Key, y la primera petición todavía no termina",
@@ -2858,10 +2838,6 @@
     "mensaje" : "Esa operación se está procesando. Espera un momento.",
     "modulo" : "SESION_Y_TRANSPORTE",
     "nombre" : "OPERACION_EN_CURSO",
-    "pendienteDeEmitir" : {
-      "quien" : "FiltroDeIdempotencia",
-      "sprint" : 1
-    },
     "status" : 40902
   }, {
     "cuando" : "Desactivar, quitarle el tipo Gerencia o revertir un cambio sobre el último usuario activo de Gerencia. Lo rechaza la base",

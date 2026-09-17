@@ -2,14 +2,16 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
 
 > **Construcción: en parte.** En `prisma_api` ya están construidos el sobre de respuesta, el
 > catálogo de códigos, la consulta de versión y el descriptor de formulario, con el contrato v0.5.0
-> (tareas [0.11](08-plan-de-desarrollo.md#tarea-0-11) y [0.14](08-plan-de-desarrollo.md#tarea-0-14) a [0.18](08-plan-de-desarrollo.md#tarea-0-18)). La idempotencia y el canal firmado llegan en los Sprints 1 y 2. Este
+> (tareas [0.11](08-plan-de-desarrollo.md#tarea-0-11) y [0.14](08-plan-de-desarrollo.md#tarea-0-14) a [0.18](08-plan-de-desarrollo.md#tarea-0-18)). El filtro de idempotencia ([1.14](08-plan-de-desarrollo.md#tarea-1-14)) ya exige la cabecera en
+> toda operación menos las dos de sesión, y registrará la clave en cuanto una petición traiga
+> sesión ([2.2](08-plan-de-desarrollo.md#tarea-2-2)). El canal firmado llega en el [Sprint 2](08-plan-de-desarrollo.md#sprint-2). Este
 > documento fijó el contrato antes de escribir el primer controlador, porque un contrato acordado
 > después es un contrato que ya se rompió en tres sitios distintos.
 
@@ -345,7 +347,10 @@ le avisó.
 ### 5.1 La cabecera
 
 **Toda petición lleva obligatoriamente la cabecera `Idempotency-Key` con un UUID v4**, lea o
-escriba. Sin ella, la API responde `40002` y no procesa nada.
+escriba. Sin ella, la API responde `40002` y no procesa nada, y **una clave presente que no es un
+UUID v4 responde lo mismo**: para quien la manda rota y para quien no la manda el defecto es el
+mismo y se arregla igual, así que partirlo en dos códigos solo le daría al front una diferencia que
+no puede aprovechar.
 
 La regla ya no cuelga del verbo, porque desde [ADR-030](adr/ADR-030-contrato-sin-get.md) todo es
 `POST`. Lo que dice si una operación lee o escribe es **su ruta**: una lectura está bajo

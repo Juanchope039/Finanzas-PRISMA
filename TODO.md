@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [3.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -35,7 +35,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 17 | 16 | 0 | 1 | 1 |
-| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 14 | 0 | 6 | 8 |
+| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 15 | 0 | 5 | 6 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 19 | 6 | 0 | 13 | 15,5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 3 | 0 | 10 | 11,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 1 | 0 | 9 | 11 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 12 |
-| **Total** | **132** | **44** | **0** | **88** | **109,5** |
+| **Total** | **132** | **45** | **0** | **87** | **107,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -76,9 +76,10 @@ Nada en las manos ahora mismo.
 
 **Lo siguiente, en cuanto alguien lo tome:** cerrar la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) destrabó lo que la estaba
 esperando. En el carril API, con la identidad llegando ya a PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)), se abren la prueba
-de permisos con sesión real ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)), la traducción de restricción a código del catálogo ([1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)) —que ya
-tiene de dónde salir: cada restricción se llama como la llama el [04](docs/04-modelo-de-datos.md)— y el filtro de idempotencia
-([1.14](docs/08-plan-de-desarrollo.md#tarea-1-14)), que necesitaba las dos: la transacción de la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) y la tabla de la [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13). En el carril Base, con
+de permisos con sesión real ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)) y la traducción de restricción a código del catálogo ([1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)) —que ya
+tiene de dónde salir: cada restricción se llama como la llama el [04](docs/04-modelo-de-datos.md)—. El filtro de idempotencia
+([1.14](docs/08-plan-de-desarrollo.md#tarea-1-14)) ya salió de esa lista: necesitaba la transacción de la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) y la tabla de la [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13), y con las dos
+quedó hecho; detrás de él se abre la prueba de corte ([1.15](docs/08-plan-de-desarrollo.md#tarea-1-15)). En el carril Base, con
 `cargos` ([2.3](docs/08-plan-de-desarrollo.md#tarea-2-3)), la tabla de idempotencia ([1.13](docs/08-plan-de-desarrollo.md#tarea-1-13)), su purga ([1.16](docs/08-plan-de-desarrollo.md#tarea-1-16)) y la semilla reproducible
 ([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)) cerradas, siguen la primera promoción a qa ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) y la tabla `usuarios` ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)). El
 carril Contrato, con los de los sprints 3 a 8. **El carril Front vuelve a tener de dónde agarrar**:
@@ -101,7 +102,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) · [1.14](docs/08-plan-de-desarrollo.md#tarea-1-14) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.12](docs/08-plan-de-desarrollo.md#tarea-2-12) · [2.14](docs/08-plan-de-desarrollo.md#tarea-2-14) · [3.3](docs/08-plan-de-desarrollo.md#tarea-3-3) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
+| **API** | [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.12](docs/08-plan-de-desarrollo.md#tarea-2-12) · [2.14](docs/08-plan-de-desarrollo.md#tarea-2-14) · [3.3](docs/08-plan-de-desarrollo.md#tarea-3-3) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
 | **Base** | [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12) · [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) |
 | **Contrato** | [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
@@ -110,13 +111,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **88 tareas y 109,5 días de trabajo** de 132 tareas del plan.
+Quedan **87 tareas y 107,5 días de trabajo** de 132 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 16,5 semanas | **19,5 semanas** |
-| 2 | 10,5 semanas | **13,5 semanas** |
-| 3 | 9,3 semanas | **12,3 semanas** |
+| 1 | 16,2 semanas | **19,2 semanas** |
+| 2 | 10,3 semanas | **13,3 semanas** |
+| 3 | 9,1 semanas | **12,1 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -129,10 +130,11 @@ o indirectamente. No es el orden en que se descubrieron.
       puerta a la base de la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) pasa de estar probada a estar usada.
 - [x] **La tabla `usuarios`** ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)) — hecha: ya se le ve cumplir el [04 §4.2](docs/04-modelo-de-datos.md#42-cargos-usuarios-y-cuentas) con sesión de verdad.
       Destrabó la [2.1](docs/08-plan-de-desarrollo.md#tarea-2-1), y con ella el [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) entero.
-- [ ] ⚡ **El filtro de idempotencia** ([1.14](docs/08-plan-de-desarrollo.md#tarea-1-14)) — **46 tareas detrás**, y ya tiene las dos piezas que
-      esperaba: la transacción con identidad de la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) y la tabla de la [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13). Toda operación que escribe
-      exige `Idempotency-Key` ([ADR-020](docs/adr/ADR-020-idempotencia.md)), así que cada endpoint que se escriba antes que este
-      filtro habrá que volver a tocarlo después.
+- [x] **El filtro de idempotencia** ([1.14](docs/08-plan-de-desarrollo.md#tarea-1-14)) — hecha: tenía **46 tareas detrás**, y ninguna vuelve a
+      tocarse por esto. Toda petición bajo `/api/v0/` exige `Idempotency-Key` ([ADR-020](docs/adr/ADR-020-idempotencia.md)) salvo el
+      ingreso y la renovación, y **el filtro abre la única transacción de la petición**, que es lo
+      que hace que la clave y el efecto caigan juntos. Registrar la clave espera al filtro de sesión
+      ([2.2](docs/08-plan-de-desarrollo.md#tarea-2-2)): hasta ese día ninguna petición trae identidad.
 - [ ] ⚡ **Poner qa al día** ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) — destraba una sola tarea, la [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11), pero mientras tanto **dev y qa
       dejaron de ser iguales**: las cuatro migraciones de las tareas [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1), [1.2](docs/08-plan-de-desarrollo.md#tarea-1-2), [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) y [1.16](docs/08-plan-de-desarrollo.md#tarea-1-16) solo están en
       dev. Correr `scripts/db/verificar-base.sql` contra qa lo dice línea por línea: ahí la base
@@ -243,8 +245,14 @@ hasta aplicarlo y probarlo.
       persona lee, escribe y sella solo sus claves, **y Gerencia no es excepción**; nadie que atienda
       peticiones borra una. `verificar-base.sql` lo pregunta con sesión de verdad ([P-33](docs/12-pruebas-y-calidad.md#p-33), [P-34](docs/12-pruebas-y-calidad.md#p-34) y
       [P-37](docs/12-pruebas-y-calidad.md#p-37)) y lo vio fallar abriendo cada política. Sin trigger de auditoría ni purga, que es la [1.16](docs/08-plan-de-desarrollo.md#tarea-1-16)
-- [ ] ⚡ [**1.14**](docs/08-plan-de-desarrollo.md#tarea-1-14) Filtro de idempotencia · API
-- [ ] 🔒 [**1.15**](docs/08-plan-de-desarrollo.md#tarea-1-15) Prueba de corte entre el efecto y la clave · API
+- [x] [**1.14**](docs/08-plan-de-desarrollo.md#tarea-1-14) Filtro de idempotencia · API — el filtro abre **la única transacción de la
+      petición** y corre la cadena adentro, así que la fila de la clave y el efecto se confirman o se
+      revierten juntos ([20 §5.5](docs/20-contrato-de-api.md#55-la-regla-que-hace-que-esto-sea-real-y-no-decorativo)); una regla de ArchUnit deja que nadie más la abra. La cabecera se
+      exige en toda petición, lea o escriba, con las dos de sesión exentas por ruta exacta, y la
+      frontera la escribe un solo sitio que usan el filtro **y** el OpenAPI generado. Las cuatro
+      situaciones del [20 §5.2](docs/20-contrato-de-api.md#52-las-cuatro-situaciones) probadas contra la base, más la clave vencida que se reutiliza y el
+      `5xx` que no se guarda: 447 pruebas en verde y 20 de integración
+- [ ] ⚡ [**1.15**](docs/08-plan-de-desarrollo.md#tarea-1-15) Prueba de corte entre el efecto y la clave · API
 - [x] [**1.16**](docs/08-plan-de-desarrollo.md#tarea-1-16) Purga de claves vencidas a las 72 horas · API, Base — `pg_cron` agenda
       `purgar_peticiones_idempotentes` con el horario y la sentencia del [04 §4.9](docs/04-modelo-de-datos.md#49-claves-de-idempotencia), corriendo como el
       rol de migraciones y no como el de la aplicación, que sigue sin `DELETE`. `verificar-base.sql`
@@ -305,7 +313,7 @@ hasta aplicarlo y probarlo.
       cambie ([BDD-32-1](docs/03-requisitos-y-bdd.md#bdd-32-1)), y ningún mensaje de la API vive en el front: una prueba de frontera
       falla si aparece. Trae el sexto tipo de campo del descriptor, `clave`, que el contrato v0.4.0
       agregó y el renderizador de la [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18) todavía no conocía
-- [ ] 🔒 [**2.7**](docs/08-plan-de-desarrollo.md#tarea-2-7) Gestión de usuarios: crear, editar, desactivar con motivo y restablecer clave · API, Front
+- [ ] ⚡ [**2.7**](docs/08-plan-de-desarrollo.md#tarea-2-7) Gestión de usuarios: crear, editar, desactivar con motivo y restablecer clave · API, Front
 - [ ] ⚡ [**2.8**](docs/08-plan-de-desarrollo.md#tarea-2-8) Catálogo de cargos · API, Front
 - [ ] ⚡ [**2.9**](docs/08-plan-de-desarrollo.md#tarea-2-9) Registro de cada inicio de sesión con fecha, dispositivo e IP · API, Base
 - [x] [**2.10**](docs/08-plan-de-desarrollo.md#tarea-2-10) Panel «Acerca de» ([RF-100](docs/03-requisitos-y-bdd.md#rf-100)) · Front, API — los seis datos de [19 §5.3](docs/19-ambientes-y-entrega.md#53-el-panel-acerca-de), y lo que
@@ -820,6 +828,38 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **Una `SUPABASE_URL` vacía no impide arrancar**: la API responde `50000` a todo intento de
       entrar, en vez de negarse a arrancar. Es a propósito, para no romper la compilación donde no
       hay Supabase, pero deja el fallo lejos del sitio donde se causó
+
+**De la tarea [1.14](docs/08-plan-de-desarrollo.md#tarea-1-14):**
+
+- [ ] **La cabecera se exige en toda petición, lea o escriba, y no solo en las escrituras.** La fila
+      del plan dice «toda escritura», pero es anterior al [ADR-030](docs/adr/ADR-030-contrato-sin-get.md): desde que todo es `POST`, el
+      [20 §5.1](docs/20-contrato-de-api.md#51-la-cabecera) dice «toda petición» y el contrato acordado la declara requerida en 24 de sus
+      26 operaciones. Seguir la fila del plan dejaría al OpenAPI generado mintiendo sobre nueve
+- [ ] **La exención es por ruta exacta, no por «si escribe».** El ingreso **escribe** y va sin clave,
+      así que eximir por verbo o por prefijo de consultas le rompería el acceso al front
+- [ ] **Una clave presente que no es un UUID v4 responde `40002`, igual que si faltara.** Ningún
+      documento cubría el caso: es el mismo defecto del cliente y se arregla igual
+- [ ] **La huella es SHA-256 de método, ruta con query, usuario y los bytes crudos del cuerpo**, sin
+      normalizar el JSON. Normalizar obligaría a parsear dentro de un filtro, y la huella existe para
+      detectar una clave reutilizada para otra cosa, no para juzgar equivalencia semántica
+- [ ] **El `40902` sale de un tiempo límite de espera en la llave primaria, no de leer
+      `estado = 'en_curso'`:** la fila de la primera petición está sin confirmar y ninguna otra sesión
+      la ve nunca. Y como corolario, **no existe una fila «en curso» colgada**
+- [ ] **Ese tiempo agotado llega como `55P03`, y Spring no lo clasifica:** viaja en un
+      `UncategorizedSQLException`, así que se mira el SQLSTATE. Confiando solo en las excepciones de
+      Spring, la segunda petición respondía `50000` en vez de `40902`
+- [ ] **La respuesta guardada vuelve del `jsonb` reserializada:** mismo contenido y mismo `status`,
+      pero otro orden de claves y otro espaciado, así que no es byte a byte. Serlo exigiría guardar el
+      texto crudo en vez de un objeto que se pueda inspeccionar en la base
+- [ ] **No se guarda un `5xx`: se revierte.** El front reintenta todo `5xx` con la misma clave, y
+      guardarlo dejaría la operación muerta 72 horas devolviendo el mismo fallo. Un `4xx` sí se guarda
+- [ ] **Una petición sin identidad exige la cabecera pero no registra fila.** `usuario_id` es
+      `NOT NULL` y las tres políticas cuelgan de `auth.uid()`. **Hoy eso es todo el tráfico**: el
+      filtro de sesión llega con la [2.2](docs/08-plan-de-desarrollo.md#tarea-2-2), y hasta ese día el efecto visible es el `40002` y el
+      parámetro en el contrato
+- [ ] **El ingreso responde `50000` contra una base real, y no lo rompió esta tarea:**
+      `UsuariosEnPostgres` pide la conexión sin transacción abierta, y en `main` tampoco la abría
+      nadie. La abre el filtro de sesión de la [2.2](docs/08-plan-de-desarrollo.md#tarea-2-2)
 
 ---
 
