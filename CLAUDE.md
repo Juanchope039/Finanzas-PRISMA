@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.1.2](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -105,11 +105,17 @@ aceptado**, salvo que la siguiente esté marcada ⚡ en el tablero y no toque lo
 `develop`**: aquí la base es `main`.
 
 **Una tarea del plan es un commit, y el commit explica por qué** ([ADR-028](docs/adr/ADR-028-un-commit-por-tarea.md)). El asunto lleva
-sprint y número —`Sprint 3 / 3.11: marca de registro tardio`— y el cuerpo tiene tres títulos: «Que
-hace», «Que se decidio, y por que» y «Como se verifico», este último con el conteo de pruebas y
-**qué se rompió a propósito para verlas fallar**. Dos tareas no van en un mismo commit aunque toquen
-la misma clase. Lo que no es tarea —documentación, herramientas— va aparte y sin número. Los mensajes
-van **en español sin tildes**, como el resto del historial.
+sprint y número —`Sprint 3 / 3.11: marca de registro tardio`— y el cuerpo son **tres líneas, una por
+título**: `Hace:`, `Decide:` y `Verifica:`, esta última con el conteo de pruebas y **qué se rompió a
+propósito para verlas fallar**. Dos tareas no van en un mismo commit aunque toquen la misma clase.
+Lo que no es tarea —documentación, herramientas— va aparte y sin número. Los mensajes van **en
+español sin tildes**, como el resto del historial.
+
+**Y el mensaje entero no pasa de 256 caracteres** ([ADR-031](docs/adr/ADR-031-commit-de-256-caracteres.md)), contando asunto, cuerpo y
+trailers: `printf '%s' "$(git log -1 --pretty=%B)" | wc -c`. Descontados el asunto y el
+`Co-Authored-By`, quedan unos 50 caracteres por línea, que es una frase. **El porqué largo no va en
+el commit: va en el plan**, que no tiene tope y se escribió antes. Lo comprueba
+`verificar --base <SHA>` en cada PR, y los commits de fusión quedan exentos.
 
 **Todo `.md` lleva encabezado con versión, estado y fechas** ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md), [`docs/22-documentacion.md`](docs/22-documentacion.md)). Al
 cambiar un documento: subir su versión (MAJOR si alguien actuaría mal con la anterior), poner la

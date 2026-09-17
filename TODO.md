@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -787,10 +787,13 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 ## Cómo se mantiene este archivo
 
 - **Una tarea hecha es un commit, y el commit explica por qué** ([ADR-028](docs/adr/ADR-028-un-commit-por-tarea.md)). El asunto lleva el
-  sprint y el número —`Sprint 3 / 3.11: marca de registro tardio`— y el cuerpo dice qué hace, qué se
-  decidió y por qué, y cómo se verificó, incluido qué se rompió a propósito para ver fallar las
+  sprint y el número —`Sprint 3 / 3.11: marca de registro tardio`— y el cuerpo son tres líneas:
+  `Hace:`, `Decide:` y `Verifica:`, la última con qué se rompió a propósito para ver fallar las
   pruebas. Dos tareas no van en un mismo commit aunque toquen la misma clase. Así `git log
   --oneline` es esta misma lista, en el orden en que se hizo.
+- **Y el mensaje entero cabe en 256 caracteres** ([ADR-031](docs/adr/ADR-031-commit-de-256-caracteres.md)), trailers incluidos, para que
+  `git log` se lea de corrido. El porqué largo va en el plan de `plan/`, que no tiene tope y se
+  escribió antes; `verificar --base` lo comprueba en cada PR.
 - Una tarea se marca `[x]` cuando su commit está en `develop` con la integración continua en verde
   ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)). La marca viaja en el PR de la especificación de esa misma tarea, que se
   acepta junto con el del código. Lo escrito pero no probado lleva ✏️, no `[x]`; lo que alguien
