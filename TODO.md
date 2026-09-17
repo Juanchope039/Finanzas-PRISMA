@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.21.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [1.22.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -63,7 +63,7 @@ Lo que tiene su commit en `develop` con la integración continua en verde, que e
 | **Front · la sesión** | **La puerta**: sin sesión se ve «Entra con tu usuario», y quien entra con una clave temporal va a «Crea tu contraseña» en vez de al tablero —que ni siquiera se construye hasta que la cambie—. Los dos formularios los manda la API, y los rechazos también: el «Usuario o contraseña incorrectos» que se lee en pantalla no está escrito en ninguna parte del front | [2.6](docs/08-plan-de-desarrollo.md#tarea-2-6) |
 | **Front · sin conexión** | La PWA con su manifiesto en español y la cola local en IndexedDB: cada intención se guarda con su clave **antes** de intentar enviarse, y se reintenta con la espera de [17 §5.2](docs/17-resiliencia-offline-y-cache.md#52-cuánto-se-espera-entre-reintentos) hasta que la API la acepte o la rechace con motivo | [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) |
 | **Contrato** | El contrato v0.4.0 en [`contrato/openapi.json`](contrato/openapi.json): el sobre, el descriptor con sus listas, cuentas y categorías, y **el [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) entero acordado antes de implementarlo** —`/sesiones`, `/usuarios`, `/cargos`, `/bitacora`, `/navegacion` y las tres cabeceras del canal firmado— | [0.15](docs/08-plan-de-desarrollo.md#tarea-0-15) · [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) · [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) · [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) |
-| **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 24 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 61 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los catorce triggers de auditoría escribiendo y las 34 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` en `0.1.0` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. La semilla es fija, re-ejecutable y con filas en toda tabla que preguntan las pruebas de permisos, y `sembrar.ps1` la lleva a dev y a qa sin dejarla acercarse a uat ni a prod. Todo esto **en dev**: qa se quedó tres migraciones atrás, hasta la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12) | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) |
+| **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 24 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 61 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los catorce triggers de auditoría escribiendo y las 34 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` en `0.1.0` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. La semilla es fija, re-ejecutable y con filas en toda tabla que preguntan las pruebas de permisos, y `sembrar.ps1` la lleva a dev y a qa sin dejarla acercarse a uat ni a prod. Todo esto **en dev**: qa se quedó cuatro migraciones atrás, hasta la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12) | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
 **379 pruebas en verde en la API** —y 7 más contra la base local— y 165 en el front. El dominio se prueba con las cifras de los
@@ -121,11 +121,11 @@ Quedan **90 tareas y 112 días de trabajo** de 132 tareas del plan.
 
 ### 1.6 Para destrabar, en orden de lo que más libera
 
-- [ ] ⚡ **Poner qa al día** ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) — **dev y qa dejaron de ser iguales**: las tres migraciones
-      de las tareas [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1), [1.2](docs/08-plan-de-desarrollo.md#tarea-1-2) y [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) solo están en dev. Correr `scripts/db/verificar-base.sql`
-      contra qa lo dice línea por línea: ahí la base todavía acepta un saldo negativo, un sobre del
-      120 % y una anulación cuyo motivo es un espacio en blanco, y no tiene dónde guardar una clave
-      de idempotencia. Promoverlas **es** la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12), que para eso existe: escribir el
+- [ ] ⚡ **Poner qa al día** ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) — **dev y qa dejaron de ser iguales**: las cuatro migraciones
+      de las tareas [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1), [1.2](docs/08-plan-de-desarrollo.md#tarea-1-2), [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) y [1.16](docs/08-plan-de-desarrollo.md#tarea-1-16) solo están en dev. Correr
+      `scripts/db/verificar-base.sql` contra qa lo dice línea por línea: ahí la base todavía acepta un
+      saldo negativo, un sobre del 120 % y una anulación cuyo motivo es un espacio en blanco, no tiene
+      dónde guardar una clave de idempotencia y no purga ninguna. Promoverlas **es** la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12), que para eso existe: escribir el
       procedimiento y usarlo por primera vez. La semilla que va con ellas ya está lista ([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)).
 - [x] **La identidad hasta PostgreSQL** ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)) — hecha: RLS ya juzga a la persona y no a
       `prisma_api`. Destrabó la prueba de permisos ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)) y, con la tabla de la [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13), la idempotencia
@@ -723,6 +723,21 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       solo leyera `cron.job` probaría la base desde el repositorio equivocado
 - [ ] **La purga de `nonces_vistos` no entra todavía:** su tabla es del [04 §4.10](docs/04-modelo-de-datos.md) y llega con el canal
       firmado del [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2). La consulta de vigilancia pregunta por la tabla que existe
+
+**De la primera promoción a qa (tarea [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)):**
+
+- [ ] **La versión del esquema sube a `0.2.0`, y esa regla no la escribió ningún documento.**
+      [19 §4.2](docs/19-ambientes-y-entrega.md#42-las-reglas) define MAJOR, MINOR y PATCH **para la API**; del esquema solo se sabe que lleva
+      SemVer propio. Se decidió lo mínimo: mientras todo siga en `0.y.z` y ninguna API en producción
+      escriba, una tabla nueva y unas restricciones más estrictas son **MINOR**. Es la decisión que
+      esta lista le pedía a la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12), y responde la entrada de arriba sobre `schema_version`
+- [ ] **Las ramas `qa`, `uat` y `prod` de `prisma_db` no se tocaron.** Existen en el remoto, las tres
+      en el mismo commit viejo, y **ningún documento las menciona**: [21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración) solo nombra `develop` y
+      `main`. O son el estado de cada ambiente y llevan tiempo mintiendo, o son restos de cuando se
+      creó el repositorio. Moverlas sería inventar un flujo de ramas por ambiente que nadie decidió
+- [ ] **La promoción se hace a mano, aunque [19 §7.1](docs/19-ambientes-y-entrega.md#71-publicar) la dé por «Automático».** Esa tubería llega en el
+      [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), y `prisma_db` no tiene integración continua: no existe `.github/` en
+      el repositorio. El procedimiento de [16 §5.3](docs/16-base-de-datos-y-snapshots.md#53-promover-a-qa-paso-a-paso) dice lo que hay, no lo que habrá
 
 **Del front (tareas [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19), [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19), [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18), [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10) y [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1)):**
 
