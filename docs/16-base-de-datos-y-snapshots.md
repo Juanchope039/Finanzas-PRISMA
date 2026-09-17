@@ -2,11 +2,11 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [1.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 > **Construcción: construido y corriendo contra dev**, donde el esquema está aplicado y verificado
-> línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5), [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5) y [1.13](08-plan-de-desarrollo.md#tarea-1-13)). **qa va tres migraciones atrás**: promoverlas es
-> la [1.12](08-plan-de-desarrollo.md#tarea-1-12). Fue la primera pieza de código ejecutable del proyecto.
+> línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5), [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5) y [1.13](08-plan-de-desarrollo.md#tarea-1-13)). **qa va cuatro migraciones atrás**: el procedimiento para
+> promoverlas está en el [§5.3](#53-promover-a-qa-paso-a-paso), y correrlo es lo que cierra la [1.12](08-plan-de-desarrollo.md#tarea-1-12). Fue la primera pieza de código ejecutable del proyecto.
 > Convierte el esquema que describe [`04-modelo-de-datos.md`](04-modelo-de-datos.md) en una
 > base de datos real, reproducible en cualquier ambiente con un comando.
 
@@ -121,6 +121,8 @@ supabase db push                                  # aplica las migraciones al re
 
 `db push` aplica solo lo que falte, así que es seguro correrlo de nuevo tras cada migración
 nueva. La semilla no viaja con las migraciones y tiene su propia regla: [§5.2](#52-la-semilla-en-dev-y-en-qa).
+Y el comando suelto no es el procedimiento: promover un ambiente entero, en orden y comprobándolo,
+es el [§5.3](#53-promover-a-qa-paso-a-paso).
 
 ### 5.1 Comprobar que quedó como dice el modelo
 
@@ -173,6 +175,52 @@ al día, sin borrar nada, así que correrla dos veces deja lo mismo que correrla
 **determinista**: los ids están escritos y las fechas que alguien lee también, porque con `NOW()`
 todo movimiento con más de una semana se vería como registro tardío ([RN-14](03-requisitos-y-bdd.md#rn-14)) y la semilla dejaría de
 ser la misma cada vez.
+
+### 5.3 Promover a qa, paso a paso
+
+Arriba está el comando; esto es **el procedimiento**, que es lo que pedía la tarea [1.12](08-plan-de-desarrollo.md#tarea-1-12). Se hace
+**a mano**: [19 §7.1](19-ambientes-y-entrega.md#71-publicar) da el paso a qa por «Automático», pero esa tubería llega en el
+[Sprint 9](08-plan-de-desarrollo.md#sprint-9) ([ADR-026](adr/ADR-026-railway-al-final.md)) y `prisma_db` todavía no tiene integración continua.
+
+```powershell
+# 0 · Qué le falta al ambiente, antes de tocarlo. No deja rastro: termina en ROLLBACK
+supabase db query --linked -f scripts/db/verificar-base.sql
+
+# 1 · Qué se aplicaría, sin aplicar nada
+./scripts/db/promover.ps1 -Ambiente qa -EnSeco
+
+# 2 · Aplicarlo. El CLI enseña la lista y pregunta antes
+./scripts/db/promover.ps1 -Ambiente qa
+
+# 3 · La semilla, que no viaja con las migraciones
+./scripts/db/sembrar.ps1 -Ambiente qa
+
+# 4 · Preguntarle otra vez a la base, ahora entero en OK
+supabase db query --linked -f scripts/db/verificar-base.sql
+```
+
+| Paso | Por qué no se salta |
+|---|---|
+| **0** | Es la única forma de saber **en qué se quedó atrás** el ambiente, y queda como prueba de lo que había antes. Después ya no se puede mirar |
+| **1** | Enseña la lista de migraciones pendientes. Si ahí aparece algo que no se esperaba, el ambiente no era el que se creía |
+| **2** | `db push` aplica **solo lo que falte** y en orden. Una migración ya aplicada no se edita jamás ([§2.2](19-ambientes-y-entrega.md#22-una-migración-aplicada-no-se-edita-nunca)): si subió mal, se corrige con otra |
+| **3** | `verificar-base.sql` necesita una persona de Gerencia y otra de Operación **de verdad** ([§5.1](#51-comprobar-que-quedó-como-dice-el-modelo)). Sin semilla, lo que falla es la falta de gente, no el esquema |
+| **4** | Aplicar no es quedar bien. El informe entero en `OK` es lo que cierra la promoción, y el bloque `1.12` comprueba además que la base publique la versión que dice el repositorio |
+
+**El guion pide dos llaves**, las mismas que `sembrar.ps1`: el **ambiente** —que hoy solo admite
+`qa`, porque uat y prod no existen ([0.4](08-plan-de-desarrollo.md#tarea-0-4))— y la **referencia del proyecto vinculado**, escrita
+entera. Y una tercera la pone el CLI, que enseña la lista y pregunta antes de aplicar. Promover no
+puede ser un descuido, y la salvaguarda va dentro del guion y no en este documento.
+
+**Con qué credencial.** No con la del rol `prisma_api`, que es la de la aplicación y no promueve
+nada ([19 §3.3](19-ambientes-y-entrega.md#33-dónde-viven-los-secretos)): con el vínculo del proyecto que el CLI guarda tras `supabase link`. Ninguna
+referencia ni contraseña se escribe en el repositorio, que es público.
+
+**Y la promoción termina con un número.** El esquema lleva su propio SemVer en `schema_version`
+([19 §4.1](19-ambientes-y-entrega.md#41-tres-cosas-versionadas-por-separado)) y [ADR-029](adr/ADR-029-esquema-por-etiqueta.md) lo ata a la etiqueta `esquema-vX.Y.Z` de `prisma_db`: son el mismo número
+escrito dos veces. Una migración fusionada sin etiquetar «no existe para nadie más», así que al
+promover se publica la versión —con su migración, no a mano— y se etiqueta el commit ya fusionado
+en `develop`. La etiqueta anterior **no se mueve**: es la foto de por dónde pasó cada ambiente.
 
 ---
 
