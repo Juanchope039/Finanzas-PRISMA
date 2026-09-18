@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [4.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -37,14 +37,14 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 16 | 2 | 1 | 3,5 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 15 | 0 | 5 | 6 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 20 | 12 | 0 | 8 | 9 |
-| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 3 | 0 | 10 | 11,5 |
+| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 4 | 0 | 9 | 10,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 1 | 0 | 9 | 11 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 3 | 0 | 7 | 7 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 0 | 0 | 10 | 15 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 11 | 1 | 0 | 10 | 9,5 |
-| **Total** | **133** | **51** | **2** | **80** | **101** |
+| **Total** | **133** | **52** | **2** | **79** | **100** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -56,7 +56,7 @@ Lo que tiene su commit en `develop` con la integración continua en verde, que e
 |---|---|---|
 | **API · cimientos** | Esqueleto hexagonal con su regla de dependencias verificada, el sobre `{status, mensaje, data}` en toda respuesta, el catálogo de códigos de cinco dígitos, la consulta de versión, el descriptor de formulario, el contrato v0.5.0 fijado y los hilos virtuales de Java 25 | [0.1](docs/08-plan-de-desarrollo.md#tarea-0-1) · [0.2](docs/08-plan-de-desarrollo.md#tarea-0-2) · [0.6](docs/08-plan-de-desarrollo.md#tarea-0-6) · [0.7](docs/08-plan-de-desarrollo.md#tarea-0-7) · [0.11](docs/08-plan-de-desarrollo.md#tarea-0-11) · [0.14](docs/08-plan-de-desarrollo.md#tarea-0-14) … [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) |
 | **API · dominio** | `Dinero`; `Movimiento` con los nueve tipos y su efecto sobre las tres cifras; `Pedido` con sus cinco estados; `Producto`, `Costeo` partido en materia y tiempo, la tarifa por hora, los tres márgenes y el cuadro que lee cada producto contra el resto del taller; y `RegistrarMovimiento`, el primer caso de uso, con la marca de registro tardío | [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9) · [3.1](docs/08-plan-de-desarrollo.md#tarea-3-1) · [3.2](docs/08-plan-de-desarrollo.md#tarea-3-2) · [3.11](docs/08-plan-de-desarrollo.md#tarea-3-11) · [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1) · [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1) · [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3) · [5.6](docs/08-plan-de-desarrollo.md#tarea-5-6) |
-| **API · la base** | `ConIdentidad`, **la única puerta a PostgreSQL**: abre la transacción, le dice a la base quién pregunta y se vuelve `authenticated`, y fuera de ella ninguna consulta sale —ni por un `DataSource` o un `@Transactional` de otra clase, que ArchUnit impide—. Probada contra la base local conectada como `prisma_api`: Gerencia ve el pro-labore, Operación no, y la conexión vuelve al pool sin la identidad de nadie | [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) |
+| **API · la base** | `ConIdentidad`, **la única puerta a PostgreSQL**: abre la transacción, le dice a la base quién pregunta y se vuelve `authenticated`, y fuera de ella ninguna consulta sale —ni por un `DataSource` o un `@Transactional` de otra clase, que ArchUnit impide—. Probada contra la base local conectada como `prisma_api`: Gerencia ve el pro-labore, Operación no, y la conexión vuelve al pool sin la identidad de nadie. **Y el libro ya llega a la base**: `MovimientosEnPostgres` guarda lo que `RegistrarMovimiento` decide, con el autor y el instante que puso el caso de uso; registrar a nombre de otra persona lo rechaza `mov_insercion` y no un `if`, y la bitácora la escribe el trigger con la persona de la sesión | [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) · [3.3](docs/08-plan-de-desarrollo.md#tarea-3-3) |
 | **API · el acceso** | Las cuatro operaciones de `/sesiones` contra Supabase Auth, el **canal firmado** comprobando cada petición y la navegación que dicta qué ve cada sesión. La sesión dura 30 días en la cookie `prisma_renovacion` —`HttpOnly`, así que el front no la ve—, cada renovación estrena token y clave de firma, y un token vencido responde `40100` para que el cliente renueve en vez de mandar a la pantalla de acceso | [2.1](docs/08-plan-de-desarrollo.md#tarea-2-1) · [2.2](docs/08-plan-de-desarrollo.md#tarea-2-2) · [2.12](docs/08-plan-de-desarrollo.md#tarea-2-12) · [2.13](docs/08-plan-de-desarrollo.md#tarea-2-13) · [2.14](docs/08-plan-de-desarrollo.md#tarea-2-14) |
 | **API y Front · las personas** | **Quién entra al sistema, administrado desde el sistema**: crear con clave temporal, editar el nombre, el cargo y el tipo, desactivar con motivo escrito y restablecer la contraseña —que además corta las sesiones abiertas—. **Ni un permiso vive en la API**: crear lo autoriza `usuarios_insercion`, y al último usuario activo de Gerencia lo rechaza un trigger que estaba puesto desde el esquema inicial. La identidad se crea contra GoTrue con la clave de servicio, acotada a eso por el [ADR-033](docs/adr/ADR-033-service-role-solo-en-auth.md) y vigilada por una prueba que rompe la compilación si aparece en otro archivo | [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) |
 | **Front** | El proyecto Flutter con su integración continua, la insignia de versión y ambiente, el bloqueo por MAJOR incompatible y `Dinero` en Dart | [0.3](docs/08-plan-de-desarrollo.md#tarea-0-3) · [0.12](docs/08-plan-de-desarrollo.md#tarea-0-12) · [0.13](docs/08-plan-de-desarrollo.md#tarea-0-13) · [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9) |
@@ -68,7 +68,7 @@ Lo que tiene su commit en `develop` con la integración continua en verde, que e
 | **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 24 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 61 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los catorce triggers de auditoría escribiendo y las 34 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` en `0.1.0` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. La semilla es fija, re-ejecutable y con filas en toda tabla que preguntan las pruebas de permisos, y `sembrar.ps1` la lleva a dev y a qa sin dejarla acercarse a uat ni a prod. Todo esto **en dev**: qa se quedó cuatro migraciones atrás, hasta la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12) | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) · [2.4](docs/08-plan-de-desarrollo.md#tarea-2-4) |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
-**563 pruebas en verde en la API** —y 51 más contra la base local— y 229 en el front. El dominio se prueba con las cifras de los
+**565 pruebas en verde en la API** —y 68 más contra la base local— y 229 en el front. El dominio se prueba con las cifras de los
 documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md): si una prueba falla, o se rompió el código o el documento dice
 otra cosa.
 
@@ -90,8 +90,10 @@ la sesión y quien entra con clave temporal la cambia y llega al tablero. Y con 
 puede dar de alta a alguien**, que era lo último que solo sabía hacer `seed.sql`. Lo que queda del
 [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) es el catálogo de cargos ([2.8](docs/08-plan-de-desarrollo.md#tarea-2-8)), el registro de cada ingreso ([2.9](docs/08-plan-de-desarrollo.md#tarea-2-9)), la vista previa de
 Operación ([2.18](docs/08-plan-de-desarrollo.md#tarea-2-18)) y lo que cuelga de la pantalla de usuarios: su tabla completa ([2.15](docs/08-plan-de-desarrollo.md#tarea-2-15)), la bitácora
-([2.16](docs/08-plan-de-desarrollo.md#tarea-2-16)) y la clave obligatoria al reactivar ([2.17](docs/08-plan-de-desarrollo.md#tarea-2-17)). La lista al día la calcula la herramienta, y
-está justo abajo.
+([2.16](docs/08-plan-de-desarrollo.md#tarea-2-16)) y la clave obligatoria al reactivar ([2.17](docs/08-plan-de-desarrollo.md#tarea-2-17)). **Y el [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) arrancó por lo que más
+destrababa: el libro ya llega a PostgreSQL** ([3.3](docs/08-plan-de-desarrollo.md#tarea-3-3)). A los endpoints de movimientos ([3.4](docs/08-plan-de-desarrollo.md#tarea-3-4)) ya solo les
+falta su contrato ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13)), medio día que además abre el registro rápido del front ([3.5](docs/08-plan-de-desarrollo.md#tarea-3-5)). La
+lista al día la calcula la herramienta, y está justo abajo.
 
 > **El [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) está cerrado salvo lo que cuesta dinero.** La base existe, tiene dueño distinto del
 > de la API y **RLS ya juzga**: conectada como `prisma_api`, la misma consulta devuelve cero filas de
@@ -108,7 +110,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) · [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.3](docs/08-plan-de-desarrollo.md#tarea-3-3) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
+| **API** | [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) · [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
 | **Base** | [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12) · [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) |
 | **Front** | [2.18](docs/08-plan-de-desarrollo.md#tarea-2-18) |
 | **Contrato** | [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
@@ -118,13 +120,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **82 tareas y 101 días de trabajo** de 133 tareas del plan.
+Quedan **81 tareas y 100 días de trabajo** de 133 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 15,2 semanas | **18,2 semanas** |
-| 2 | 8,5 semanas | **11,5 semanas** |
-| 3 | 6,9 semanas | **9,9 semanas** |
+| 1 | 15,0 semanas | **18,0 semanas** |
+| 2 | 8,4 semanas | **11,4 semanas** |
+| 3 | 7,1 semanas | **10,1 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -132,12 +134,9 @@ Quedan **82 tareas y 101 días de trabajo** de 133 tareas del plan.
 El orden sale de las dependencias del [plan](docs/08-plan-de-desarrollo.md): cuántas tareas pendientes cuelgan de cada una, directa
 o indirectamente. No es el orden en que se descubrieron.
 
-- [ ] ⚡ **El repositorio de movimientos** ([3.3](docs/08-plan-de-desarrollo.md#tarea-3-3)) — **36 tareas detrás**, y ya tiene sus dos
-      piezas: la puerta a la base de la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) y el `Movimiento` del dominio ([3.1](docs/08-plan-de-desarrollo.md#tarea-3-1)). Es lo que
-      abre el [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) entero, porque hasta que exista, lo que el dominio calcula no llega a
-      PostgreSQL.
 - [ ] ⚡ **El contrato de movimientos** ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13)) — **32 tareas detrás** por medio día de trabajo,
-      y sin nada pendiente que lo detenga. Un contrato se acuerda **antes** de implementarlo
+      y sin nada pendiente que lo detenga. **Con el repositorio hecho, es lo único que les falta a los
+      endpoints** ([3.4](docs/08-plan-de-desarrollo.md#tarea-3-4)). Un contrato se acuerda **antes** de implementarlo
       ([21 §3.2](docs/21-trabajo-en-paralelo.md#32-contrato-acordado-y-contrato-generado-no-se-contradicen)): escribirlo tarde deja al carril Front esperando al API, que es justo lo que
       el paralelismo quiere evitar.
 - [ ] ⚡ **Poner qa al día** ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) — destraba una sola tarea, la [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11), pero mientras tanto **dev y qa
@@ -150,6 +149,11 @@ o indirectamente. No es el orden en que se descubrieron.
 - [ ] ⚡ **uat y prod** · Decisión — son los dos proyectos de Supabase que faltan para cerrar [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4), y
       los dos son **de pago** ([19 §8.1](docs/19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no)). Los decide Gerencia, y hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) no hay nada que
       promover a ellos.
+- [x] **El repositorio de movimientos** ([3.3](docs/08-plan-de-desarrollo.md#tarea-3-3)) — hecho: tenía **36 tareas detrás** y abría el
+      [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) entero. Lo que el dominio calcula ya llega a PostgreSQL con la persona de la sesión,
+      y quien juzga si puede escribirlo es `mov_insercion`, no la API. Detrás se abren los saldos por
+      cuenta ([3.12](docs/08-plan-de-desarrollo.md#tarea-3-12)) y el anticipo como pasivo ([4.4](docs/08-plan-de-desarrollo.md#tarea-4-4)), y los endpoints ([3.4](docs/08-plan-de-desarrollo.md#tarea-3-4)) quedan esperando solo
+      a su contrato.
 - [x] **La gestión de usuarios** ([2.7](docs/08-plan-de-desarrollo.md#tarea-2-7)) — hecha: era lo que más quedaba por destrabar del
       [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2), y detrás se abren la tabla única de activos y desactivados ([2.15](docs/08-plan-de-desarrollo.md#tarea-2-15)), la bitácora
       con su reversión ([2.16](docs/08-plan-de-desarrollo.md#tarea-2-16)) y el cambio obligatorio al reactivar ([2.17](docs/08-plan-de-desarrollo.md#tarea-2-17)). **Hasta hoy las únicas
@@ -410,7 +414,9 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [x] [**3.2**](docs/08-plan-de-desarrollo.md#tarea-3-2) Caso de uso `RegistrarMovimiento` con doble fecha · API — la del movimiento la trae
       quien registra y la de digitación la pone el reloj del servidor; el futuro se rechaza y «hoy» es
       el día en `America/Bogota`
-- [ ] ⚡ [**3.3**](docs/08-plan-de-desarrollo.md#tarea-3-3) Repositorio de movimientos contra PostgreSQL · API
+- [x] [**3.3**](docs/08-plan-de-desarrollo.md#tarea-3-3) Repositorio de movimientos contra PostgreSQL · API — `MovimientosEnPostgres`
+      guarda por `ConIdentidad` el autor y el instante que puso el caso de uso, y la base juzga:
+      registrar a nombre de otra persona lo rechaza `mov_insercion`
 - [ ] 🔒 [**3.4**](docs/08-plan-de-desarrollo.md#tarea-3-4) Endpoints de movimientos con sus códigos del catálogo · API
 - [ ] 🔒 [**3.5**](docs/08-plan-de-desarrollo.md#tarea-3-5) Formulario de registro rápido para celular, pintado del descriptor · Front
 - [ ] 🔒 [**3.6**](docs/08-plan-de-desarrollo.md#tarea-3-6) Foto del recibo comprimida, subida a través de la API · Front, API
@@ -420,7 +426,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [ ] 🔒 [**3.10**](docs/08-plan-de-desarrollo.md#tarea-3-10) Corrección por contra-asiento · API
 - [x] [**3.11**](docs/08-plan-de-desarrollo.md#tarea-3-11) Marca de registro tardío · API — más de 7 días entre lo que ocurrió y lo que se
       digitó, contados en días de Bogotá
-- [ ] 🔒 [**3.12**](docs/08-plan-de-desarrollo.md#tarea-3-12) Saldos por cuenta · API
+- [ ] ⚡ [**3.12**](docs/08-plan-de-desarrollo.md#tarea-3-12) Saldos por cuenta · API
 - [ ] ⚡ [**3.13**](docs/08-plan-de-desarrollo.md#tarea-3-13) Contrato de movimientos · Contrato
 
 **[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
@@ -477,7 +483,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       que existen entre ellos; entregado y cancelado son finales, y anular no es cancelar
 - [ ] 🔒 [**4.2**](docs/08-plan-de-desarrollo.md#tarea-4-2) Gestión de clientes · API, Front
 - [ ] 🔒 [**4.3**](docs/08-plan-de-desarrollo.md#tarea-4-3) Pedido con líneas de producto · API, Front
-- [ ] 🔒 [**4.4**](docs/08-plan-de-desarrollo.md#tarea-4-4) `CobrarAnticipo`: crea pasivo, no ingreso · API
+- [ ] ⚡ [**4.4**](docs/08-plan-de-desarrollo.md#tarea-4-4) `CobrarAnticipo`: crea pasivo, no ingreso · API
 - [ ] 🔒 [**4.5**](docs/08-plan-de-desarrollo.md#tarea-4-5) Función en la base que entrega el pedido y causa la venta en una transacción · Base
 - [ ] 🔒 [**4.6**](docs/08-plan-de-desarrollo.md#tarea-4-6) Listado ordenado por fecha con filtros · API, Front
 - [ ] 🔒 [**4.7**](docs/08-plan-de-desarrollo.md#tarea-4-7) Resaltado de pedidos estancados · API, Front
@@ -575,6 +581,14 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
   base tendría que hacerlo también. Ya no se pueden sumar a la migración inicial —está aplicada, y
   una migración aplicada no se edita ([ADR-004](docs/adr/ADR-004-base-solo-escritura.md))—: van en una migración nueva y con nombre explícito,
   como pide [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes). Antes hay que escribirlas en el [04](docs/04-modelo-de-datos.md), que es donde se decide qué debe existir.
+- **`fecha_no_futura` mira el día de la sesión, y no el de Bogotá.** Compara con `CURRENT_DATE`, que
+  PostgreSQL calcula en el huso de la sesión, y pgjdbc le pone a la sesión el de la JVM que se
+  conecta (comprobado en la [3.3](docs/08-plan-de-desarrollo.md#tarea-3-3)). En esta máquina es `America/Bogota`, pero el contenedor de la API corre en
+  UTC: entre las 7 de la noche y la medianoche del taller, la base aceptaría un movimiento con fecha
+  de mañana. Hoy no pasa, porque `RegistrarMovimiento` lo rechaza antes con el día de Bogotá
+  ([RNF-08](docs/03-requisitos-y-bdd.md#rnf-08)); pero la regla de la base es la que no se puede saltar ([ADR-015](docs/adr/ADR-015-validacion-tres-capas.md)), y hoy depende de
+  quién se conecte. Se cierra en la base —comparando con `(now() AT TIME ZONE 'America/Bogota')::date`—
+  o fijando el huso de la conexión; cualquiera de las dos es una decisión, y va primero al [04](docs/04-modelo-de-datos.md).
 - **`cuentas` no tiene RLS, y [RF-97](docs/03-requisitos-y-bdd.md#rf-97) dice que solo Gerencia crea cuentas.** [04 §7](docs/04-modelo-de-datos.md#7-seguridad-por-tipo-de-usuario-rls) la deja a
   propósito sin política, porque los dos tipos trabajan con ella todo el día. Pero entonces el
   «solo Gerencia» del contrato de la [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) no lo puede imponer la base, y quedaría en un `if` de
@@ -932,7 +946,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       y no dice nada de las categorías
 - [ ] `casilla` es un quinto tipo de campo del descriptor, para el `BOOLEAN` de `es_fijo`
 - [ ] Una lista trae `opciones` —fijas— o `origen` —la ruta que las da—, y nunca las dos
-- [ ] 🔒 `POST /api/v0/consultas/cuentas` no devuelve saldos, ni a Gerencia: los saldos son la [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12)
+- [ ] ⚡ `POST /api/v0/consultas/cuentas` no devuelve saldos, ni a Gerencia: los saldos son la [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12)
 - [ ] Tres códigos nuevos para las reglas que no caben en el descriptor: `42220`, `42221` y `42222`
 - [ ] Editar y anular cuentas y categorías no entran al contrato todavía, porque ningún requisito
       las pide
@@ -1127,10 +1141,12 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       trigger que congela la ficha propia. Los dos significan «no te alcanza» y salían como error
       del sistema. Que la API los traduzca no es que decida permisos: sigue sin mirar de qué tipo
       es nadie
-- [ ] **La traducción de restricción a código está escrita a mano en `UsuariosEnPostgres`.** Mira el
-      nombre de la restricción y el texto del `RAISE EXCEPTION`, que es lo que el [04](docs/04-modelo-de-datos.md) permite al
-      exigir nombres explícitos. La tabla general es la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8), y cuando exista este método se va con
-      ella
+- [ ] **La traducción de restricción a código está escrita a mano en `UsuariosEnPostgres`**, y
+      desde la [3.3](docs/08-plan-de-desarrollo.md#tarea-3-3) también en `MovimientosEnPostgres`, que por ahora solo traduce el rechazo de
+      permisos. Mira el nombre de la restricción y el texto del `RAISE EXCEPTION`, que es lo que el [04](docs/04-modelo-de-datos.md)
+      permite al exigir nombres explícitos. La tabla general es la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8), y cuando exista estos
+      métodos se van con ella: con dos adaptadores buscando el mismo texto, cada uno que llegue antes
+      que ella lo copia otra vez
 
 **De dejar la integración continua en verde:**
 
@@ -1140,6 +1156,36 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       contra una base de verdad. La sexta, la del filtro y la sonda de salud, acepta `200` o `503`:
       lo suyo es que la petición llegue a la sonda, no que la base esté viva. El hueco lo cierra el
       trabajo aparte que el [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) manda levantar con Supabase, y que depende de la [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20)
+
+**Del repositorio de movimientos ([3.3](docs/08-plan-de-desarrollo.md#tarea-3-3)):**
+
+- [ ] **El autor y el instante de un movimiento los pone el caso de uso, no la base.** `creado_por`
+      es el de la digitación y no `auth.uid()`: así `mov_insercion` compara dos cosas distintas y
+      juzga de verdad —registrar a nombre de otra persona lo rechaza la base, y hay prueba—. Y
+      `creado_en` es el instante con que `RegistrarMovimiento` decidió qué día era hoy, y no el
+      `DEFAULT NOW()`: con dos relojes, el movimiento devuelto y la fila guardada podrían caer en días
+      distintos cerca de la medianoche
+- [ ] **La bitácora de lo que escribe la API no sabe desde dónde.** `fn_auditar` saca el
+      dispositivo de `request.headers`, que llenaba PostgREST y la API no llena, y la IP de
+      `inet_client_addr()`, que con la API en medio es la conexión de la API. Cada movimiento queda
+      auditado con la persona correcta, **la IP de la API y ningún dispositivo**, y el [ADR-005](docs/adr/ADR-005-auditoria-por-triggers.md) promete
+      los dos. La fila tampoco los tiene: `dispositivo` e `ip` de `movimientos` quedan vacíos, porque
+      el dominio no los trae y ningún documento dice de dónde salen. El sitio natural es
+      `ConIdentidad`, que pondría las cabeceras de la petición junto a los claims, con la [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9), que
+      es la tarea que trae dispositivo e IP. Toca Base y API, y no se inventa aquí
+- [ ] **Solo se traduce el rechazo de permisos, que sale como `40300`.** La llave primaria, las
+      foráneas y los `CHECK` de `movimientos` salen sin traducir hasta que el contrato de la [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) les
+      dé código y la [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) los emita. Tres de ellos los ataja antes el dominio; los otros —una cuenta
+      o una categoría que no existe, un id repetido— hoy saldrían como `50000`, y todavía no hay
+      endpoint que los alcance
+- [ ] **El mismo id dos veces lo rechaza la llave primaria, y no se traga en silencio.** El id lo
+      pone quien pide, al decidir la acción ([ADR-020](docs/adr/ADR-020-idempotencia.md)): si la clave de idempotencia ya se purgó y la
+      misma acción vuelve, el libro no la duplica. Qué responde la API en ese caso es del contrato
+- [ ] **Un movimiento que llega anulado no se guarda como nuevo**: el adaptador lo rechaza antes de
+      pedir conexión. Ningún documento lo pedía, pero el `INSERT` no escribe la anulación, y
+      guardarlo así la habría perdido sin avisar
+- [ ] **`RegistrarMovimiento` todavía no está cableado.** El bean y su `Clock` los pone su primer
+      consumidor, que es la [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4); el adaptador sí es un bean desde ya
 
 ---
 
