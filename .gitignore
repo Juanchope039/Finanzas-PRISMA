@@ -1,4 +1,5 @@
 .claude/
+plan/
 
 # Snapshots de la base de datos (se generan a demanda, no se versionan)
 /snapshots/
