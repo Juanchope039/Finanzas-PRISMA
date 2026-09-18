@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [3.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -103,6 +103,12 @@ prod. Lo único que cambia entre ambientes es la configuración del [§3](#3-la-
 > **Recompilar para prod sería aprobar una cosa y publicar otra.** Entre dos compilaciones cambia
 > la versión de una dependencia, la fecha, el compilador. Lo que Gerencia firmó en UAT dejaría de
 > ser lo que corre en el taller, y la firma no valdría nada.
+
+> **Dev es la excepción, y es deliberada** ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)). Railway construye dev desde el repositorio en
+> cada fusión, sin publicar la imagen en ningún registro: hoy no hay registro al que publicarla, y
+> montarlo es trabajo de la promoción del [Sprint 9](08-plan-de-desarrollo.md#sprint-9) ([9.3](08-plan-de-desarrollo.md#tarea-9-3)). La regla de arriba gobierna **qa → uat →
+> prod**, que es donde una firma depende de ella. Dev construye desde su rama porque dev es
+> precisamente donde se comprueba que la imagen construye.
 
 Consecuencia práctica: la configuración del front **no puede compilarse dentro del artefacto de
 prod en el momento de publicar**, porque eso es recompilar. Cada ambiente compila su propio
