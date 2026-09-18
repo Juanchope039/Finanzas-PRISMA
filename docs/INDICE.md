@@ -136,32 +136,32 @@ Qué significa cada estado y cuándo sube una versión está en
 | Documento | Versión | Estado | Actualizado | Etiquetas |
 |---|:---:|---|:---:|---|
 | [PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) | 1.2.0 | ✅ Vigente | 2026-09-17 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
-| [Tareas de PRISMA](../TODO.md) | 4.8.0 | 🔄 Vivo | 2026-09-18 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
+| [Tareas de PRISMA](../TODO.md) | 4.10.0 | 🔄 Vivo | 2026-09-18 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
 | [Índice navegable de la documentación](INDICE.md) | 1.2.0 | 🔄 Vivo | 2026-09-17 | — |
 | [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Finanzas](#etiqueta-finanzas) · [Plan](#etiqueta-plan) |
 | [01 · Visión y alcance](01-vision-y-alcance.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Requisitos](#etiqueta-requisitos) |
-| [02 · Casos de uso](02-casos-de-uso.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Requisitos](#etiqueta-requisitos) · [Negocio](#etiqueta-negocio) |
+| [02 · Casos de uso](02-casos-de-uso.md) | 1.2.0 | ✅ Vigente | 2026-09-18 | [Requisitos](#etiqueta-requisitos) · [Negocio](#etiqueta-negocio) |
 | [03 · Requisitos, reglas de negocio y escenarios BDD](03-requisitos-y-bdd.md) | 2.0.0 | ✅ Vigente | 2026-09-17 | [Requisitos](#etiqueta-requisitos) · [Calidad](#etiqueta-calidad) |
-| [04 · Modelo de datos](04-modelo-de-datos.md) | 2.0.0 | ✅ Vigente | 2026-09-18 | [Base de datos](#etiqueta-base-de-datos) · [Arquitectura](#etiqueta-arquitectura) |
+| [04 · Modelo de datos](04-modelo-de-datos.md) | 3.0.0 | ✅ Vigente | 2026-09-18 | [Base de datos](#etiqueta-base-de-datos) · [Arquitectura](#etiqueta-arquitectura) |
 | [05 · Reglas financieras y KPIs](05-reglas-financieras.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Finanzas](#etiqueta-finanzas) · [Negocio](#etiqueta-negocio) |
 | [06 · Nómina y capacidad de pago](06-nomina-y-capacidad-de-pago.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Nómina](#etiqueta-nomina) · [Finanzas](#etiqueta-finanzas) · [Negocio](#etiqueta-negocio) |
-| [07 · Arquitectura técnica](07-arquitectura.md) | 3.2.0 | ✅ Vigente | 2026-09-17 | [Arquitectura](#etiqueta-arquitectura) · [API](#etiqueta-api) · [Front](#etiqueta-front) · [Base de datos](#etiqueta-base-de-datos) · [Seguridad](#etiqueta-seguridad) |
+| [07 · Arquitectura técnica](07-arquitectura.md) | 4.0.0 | ✅ Vigente | 2026-09-18 | [Arquitectura](#etiqueta-arquitectura) · [API](#etiqueta-api) · [Front](#etiqueta-front) · [Base de datos](#etiqueta-base-de-datos) · [Seguridad](#etiqueta-seguridad) |
 | [08 · Plan de desarrollo](08-plan-de-desarrollo.md) | 4.1.0 | ✅ Vigente | 2026-09-18 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
-| [09 · Plan de implantación](09-plan-de-implantacion.md) | 3.0.0 | ✅ Vigente | 2026-09-17 | [Plan](#etiqueta-plan) · [Entrega](#etiqueta-entrega) · [Negocio](#etiqueta-negocio) |
+| [09 · Plan de implantación](09-plan-de-implantacion.md) | 4.0.0 | ✅ Vigente | 2026-09-18 | [Plan](#etiqueta-plan) · [Entrega](#etiqueta-entrega) · [Negocio](#etiqueta-negocio) |
 | [10 · Diseño de experiencia y mockups](10-ux-y-mockups.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [UX](#etiqueta-ux) · [Front](#etiqueta-front) |
-| [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Seguridad](#etiqueta-seguridad) · [Datos personales](#etiqueta-datos-personales) · [Negocio](#etiqueta-negocio) |
-| [12 · Pruebas y calidad](12-pruebas-y-calidad.md) | 2.2.0 | ✅ Vigente | 2026-09-17 | [Calidad](#etiqueta-calidad) |
+| [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) | 2.0.0 | ✅ Vigente | 2026-09-18 | [Seguridad](#etiqueta-seguridad) · [Datos personales](#etiqueta-datos-personales) · [Negocio](#etiqueta-negocio) |
+| [12 · Pruebas y calidad](12-pruebas-y-calidad.md) | 2.3.0 | ✅ Vigente | 2026-09-18 | [Calidad](#etiqueta-calidad) |
 | [13 · Respaldo y exportación](13-respaldo-y-exportacion.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Base de datos](#etiqueta-base-de-datos) · [Datos personales](#etiqueta-datos-personales) |
 | [14 · Roadmap e ideas de valor](14-roadmap-e-ideas.md) | 1.0.0 | 🔄 Vivo | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
 | [15 · Glosario](15-glosario.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Negocio](#etiqueta-negocio) |
 | [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) | 1.7.0 | ✅ Vigente | 2026-09-17 | [Base de datos](#etiqueta-base-de-datos) · [Calidad](#etiqueta-calidad) |
 | [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Front](#etiqueta-front) · [API](#etiqueta-api) · [Arquitectura](#etiqueta-arquitectura) |
 | [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) | 0.1.0 | 💡 Propuesta | 2026-09-16 | [Entrega](#etiqueta-entrega) · [Front](#etiqueta-front) |
-| [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 3.2.0 | ✅ Vigente | 2026-09-18 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
+| [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 4.0.0 | ✅ Vigente | 2026-09-18 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
 | [20 · Contrato de la API](20-contrato-de-api.md) | 2.3.0 | ✅ Vigente | 2026-09-18 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) | 2.3.0 | ✅ Vigente | 2026-09-17 | [Paralelo](#etiqueta-paralelo) · [Proceso](#etiqueta-proceso) |
 | [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 1.6.0 | ✅ Vigente | 2026-09-17 | [Proceso](#etiqueta-proceso) |
-| [Contrato de la API · v0.7.0](../contrato/README.md) | 2.1.0 | ✅ Vigente | 2026-09-18 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
+| [Contrato de la API · v0.8.0](../contrato/README.md) | 2.2.0 | ✅ Vigente | 2026-09-18 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [Decisiones de arquitectura (ADR)](adr/README.md) | 1.5.0 | 🔄 Vivo | 2026-09-17 | [Arquitectura](#etiqueta-arquitectura) |
 | [ADR-001 · Stack tecnológico](adr/ADR-001-stack.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) |
 | [ADR-002 · Arquitectura hexagonal con regla de dependencias verificada](adr/ADR-002-arquitectura-hexagonal.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) · [API](#etiqueta-api) |
@@ -174,7 +174,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [ADR-009 · Acceso con nombre de usuario, no con correo](adr/ADR-009-login-por-usuario.md) | 1.1.0 | ✅ Aceptado | 2026-09-17 | [Seguridad](#etiqueta-seguridad) · [API](#etiqueta-api) |
 | [ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario](adr/ADR-010-almacenamiento-contrasenas.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Seguridad](#etiqueta-seguridad) |
 | [ADR-011 · Stack: Flutter y Dart con API propia](adr/ADR-011-stack-flutter-dart.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) · [Front](#etiqueta-front) · [API](#etiqueta-api) |
-| [ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando](adr/ADR-012-identidad-a-postgres.md) | 1.1.0 | ✅ Aceptado | 2026-09-17 | [Seguridad](#etiqueta-seguridad) · [API](#etiqueta-api) · [Base de datos](#etiqueta-base-de-datos) |
+| [ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando](adr/ADR-012-identidad-a-postgres.md) | 2.0.0 | ✅ Aceptado | 2026-09-18 | [Seguridad](#etiqueta-seguridad) · [API](#etiqueta-api) · [Base de datos](#etiqueta-base-de-datos) |
 | [ADR-013 · Cuatro ambientes y promoción de migraciones](adr/ADR-013-cuatro-ambientes.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Entrega](#etiqueta-entrega) |
 | [ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad](adr/ADR-014-semver.md) | 1.1.0 | ✅ Aceptado | 2026-09-17 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
 | [ADR-015 · Validación en tres capas, con la base como juez](adr/ADR-015-validacion-tres-capas.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) · [Front](#etiqueta-front) · [API](#etiqueta-api) |
@@ -195,7 +195,8 @@ Qué significa cada estado y cuándo sube una versión está en
 | [ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0](adr/ADR-030-contrato-sin-get.md) | 1.0.0 | ✅ Aceptado | 2026-09-17 | [API](#etiqueta-api) · [Contrato](#etiqueta-contrato) · [Seguridad](#etiqueta-seguridad) |
 | [ADR-031 · El mensaje de commit cabe en 256 caracteres](adr/ADR-031-commit-de-256-caracteres.md) | 1.0.0 | ✅ Aceptado | 2026-09-17 | — |
 | [ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final](adr/ADR-032-railway-en-dev-ahora.md) | 1.0.0 | ✅ Aceptado | 2026-09-17 | [Entrega](#etiqueta-entrega) · [Plan](#etiqueta-plan) |
-| [CLAUDE.md](../CLAUDE.md) | 6.1.0 | 🔄 Vivo | 2026-09-18 | [Proceso](#etiqueta-proceso) |
+| [ADR-033 · La clave de servicio entra, pero solo para crear identidades](adr/ADR-033-service-role-solo-en-auth.md) | 1.0.0 | ✅ Aceptado | 2026-09-18 | [Seguridad](#etiqueta-seguridad) · [API](#etiqueta-api) |
+| [CLAUDE.md](../CLAUDE.md) | 6.2.0 | 🔄 Vivo | 2026-09-18 | [Proceso](#etiqueta-proceso) |
 | [Herramienta de documentación](../scripts/docs/README.md) | 1.4.0 | ✅ Vigente | 2026-09-17 | [Proceso](#etiqueta-proceso) |
 <!-- /generado:estado-de-la-documentacion -->
 
@@ -232,11 +233,11 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-api"></a>API
 
-[07 · Arquitectura técnica](07-arquitectura.md) · [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) · [20 · Contrato de la API](20-contrato-de-api.md) · [Contrato de la API · v0.7.0](../contrato/README.md) · [ADR-002 · Arquitectura hexagonal con regla de dependencias verificada](adr/ADR-002-arquitectura-hexagonal.md) · [ADR-003 · Dinero como entero de pesos](adr/ADR-003-dinero-entero.md) · [ADR-009 · Acceso con nombre de usuario, no con correo](adr/ADR-009-login-por-usuario.md) · [ADR-011 · Stack: Flutter y Dart con API propia](adr/ADR-011-stack-flutter-dart.md) · [ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando](adr/ADR-012-identidad-a-postgres.md) · [ADR-015 · Validación en tres capas, con la base como juez](adr/ADR-015-validacion-tres-capas.md) · [ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API](adr/ADR-017-api-en-java.md) · [ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos](adr/ADR-019-contrato-de-respuesta.md) · [ADR-020 · Idempotencia obligatoria en toda escritura](adr/ADR-020-idempotencia.md) · [ADR-021 · Canal firmado contra repetición y manipulación](adr/ADR-021-canal-firmado.md) · [ADR-024 · Java 25, Gradle y Spring Boot 4 en la API](adr/ADR-024-java-25-y-gradle.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) · [ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0](adr/ADR-030-contrato-sin-get.md)
+[07 · Arquitectura técnica](07-arquitectura.md) · [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) · [20 · Contrato de la API](20-contrato-de-api.md) · [Contrato de la API · v0.8.0](../contrato/README.md) · [ADR-002 · Arquitectura hexagonal con regla de dependencias verificada](adr/ADR-002-arquitectura-hexagonal.md) · [ADR-003 · Dinero como entero de pesos](adr/ADR-003-dinero-entero.md) · [ADR-009 · Acceso con nombre de usuario, no con correo](adr/ADR-009-login-por-usuario.md) · [ADR-011 · Stack: Flutter y Dart con API propia](adr/ADR-011-stack-flutter-dart.md) · [ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando](adr/ADR-012-identidad-a-postgres.md) · [ADR-015 · Validación en tres capas, con la base como juez](adr/ADR-015-validacion-tres-capas.md) · [ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API](adr/ADR-017-api-en-java.md) · [ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos](adr/ADR-019-contrato-de-respuesta.md) · [ADR-020 · Idempotencia obligatoria en toda escritura](adr/ADR-020-idempotencia.md) · [ADR-021 · Canal firmado contra repetición y manipulación](adr/ADR-021-canal-firmado.md) · [ADR-024 · Java 25, Gradle y Spring Boot 4 en la API](adr/ADR-024-java-25-y-gradle.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) · [ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0](adr/ADR-030-contrato-sin-get.md) · [ADR-033 · La clave de servicio entra, pero solo para crear identidades](adr/ADR-033-service-role-solo-en-auth.md)
 
 ### <a id="etiqueta-front"></a>Front
 
-[07 · Arquitectura técnica](07-arquitectura.md) · [10 · Diseño de experiencia y mockups](10-ux-y-mockups.md) · [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) · [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) · [20 · Contrato de la API](20-contrato-de-api.md) · [Contrato de la API · v0.7.0](../contrato/README.md) · [ADR-007 · PWA en lugar de aplicación nativa](adr/ADR-007-pwa.md) · [ADR-011 · Stack: Flutter y Dart con API propia](adr/ADR-011-stack-flutter-dart.md) · [ADR-015 · Validación en tres capas, con la base como juez](adr/ADR-015-validacion-tres-capas.md) · [ADR-016 · Flutter Web instalable como PWA](adr/ADR-016-flutter-web-pwa.md) · [ADR-018 · Tres partes, y el front no toma decisiones](adr/ADR-018-front-sin-decisiones.md)
+[07 · Arquitectura técnica](07-arquitectura.md) · [10 · Diseño de experiencia y mockups](10-ux-y-mockups.md) · [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) · [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) · [20 · Contrato de la API](20-contrato-de-api.md) · [Contrato de la API · v0.8.0](../contrato/README.md) · [ADR-007 · PWA en lugar de aplicación nativa](adr/ADR-007-pwa.md) · [ADR-011 · Stack: Flutter y Dart con API propia](adr/ADR-011-stack-flutter-dart.md) · [ADR-015 · Validación en tres capas, con la base como juez](adr/ADR-015-validacion-tres-capas.md) · [ADR-016 · Flutter Web instalable como PWA](adr/ADR-016-flutter-web-pwa.md) · [ADR-018 · Tres partes, y el front no toma decisiones](adr/ADR-018-front-sin-decisiones.md)
 
 ### <a id="etiqueta-base-de-datos"></a>Base de datos
 
@@ -244,7 +245,7 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-seguridad"></a>Seguridad
 
-[07 · Arquitectura técnica](07-arquitectura.md) · [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) · [ADR-005 · Auditoría por triggers, no por la aplicación](adr/ADR-005-auditoria-por-triggers.md) · [ADR-006 · Permisos con Row Level Security](adr/ADR-006-rls-por-rol.md) · [ADR-009 · Acceso con nombre de usuario, no con correo](adr/ADR-009-login-por-usuario.md) · [ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario](adr/ADR-010-almacenamiento-contrasenas.md) · [ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando](adr/ADR-012-identidad-a-postgres.md) · [ADR-021 · Canal firmado contra repetición y manipulación](adr/ADR-021-canal-firmado.md) · [ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0](adr/ADR-030-contrato-sin-get.md)
+[07 · Arquitectura técnica](07-arquitectura.md) · [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) · [ADR-005 · Auditoría por triggers, no por la aplicación](adr/ADR-005-auditoria-por-triggers.md) · [ADR-006 · Permisos con Row Level Security](adr/ADR-006-rls-por-rol.md) · [ADR-009 · Acceso con nombre de usuario, no con correo](adr/ADR-009-login-por-usuario.md) · [ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario](adr/ADR-010-almacenamiento-contrasenas.md) · [ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando](adr/ADR-012-identidad-a-postgres.md) · [ADR-021 · Canal firmado contra repetición y manipulación](adr/ADR-021-canal-firmado.md) · [ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0](adr/ADR-030-contrato-sin-get.md) · [ADR-033 · La clave de servicio entra, pero solo para crear identidades](adr/ADR-033-service-role-solo-en-auth.md)
 
 ### <a id="etiqueta-datos-personales"></a>Datos personales
 
@@ -268,7 +269,7 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-contrato"></a>Contrato
 
-[20 · Contrato de la API](20-contrato-de-api.md) · [Contrato de la API · v0.7.0](../contrato/README.md) · [ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos](adr/ADR-019-contrato-de-respuesta.md) · [ADR-020 · Idempotencia obligatoria en toda escritura](adr/ADR-020-idempotencia.md) · [ADR-021 · Canal firmado contra repetición y manipulación](adr/ADR-021-canal-firmado.md) · [ADR-022 · OpenAPI generado del código y verificado en integración continua](adr/ADR-022-openapi-generado.md) · [ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0](adr/ADR-030-contrato-sin-get.md)
+[20 · Contrato de la API](20-contrato-de-api.md) · [Contrato de la API · v0.8.0](../contrato/README.md) · [ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos](adr/ADR-019-contrato-de-respuesta.md) · [ADR-020 · Idempotencia obligatoria en toda escritura](adr/ADR-020-idempotencia.md) · [ADR-021 · Canal firmado contra repetición y manipulación](adr/ADR-021-canal-firmado.md) · [ADR-022 · OpenAPI generado del código y verificado en integración continua](adr/ADR-022-openapi-generado.md) · [ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0](adr/ADR-030-contrato-sin-get.md)
 
 ### <a id="etiqueta-proceso"></a>Proceso
 

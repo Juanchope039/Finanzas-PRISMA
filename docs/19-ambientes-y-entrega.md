@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-18 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-18 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -168,7 +168,7 @@ dentro del artefacto.
 | `SUPABASE_URL` | Proyecto de Supabase del ambiente | Uno distinto por ambiente |
 | `SUPABASE_ANON_KEY` | Iniciar sesión contra Supabase Auth | Solo la usa la API, no el front |
 | `SUPABASE_JWT_SECRET` | Verificar el token que llega en cada petición | Secreto |
-| `SUPABASE_SERVICE_ROLE_KEY` | Migraciones y tareas administrativas | **Jamás en el camino de una petición de usuario.** Secreto aparte, con acceso aparte |
+| `SUPABASE_SERVICE_ROLE_KEY` | Migraciones, y crear identidades contra GoTrue | **Jamás contra PostgreSQL** ([ADR-033](adr/ADR-033-service-role-solo-en-auth.md)). Secreto aparte, con acceso aparte |
 | `DOMINIO_CORREO_SINTETICO` | Armar el correo interno del login ([ADR-009](adr/ADR-009-login-por-usuario.md)) | Fijo de por vida. El front nunca lo ve |
 | `ORIGENES_PERMITIDOS` | CORS: el dominio del front de ese ambiente, y solo ese | prod no acepta al front de qa |
 | `SERVER_PORT` | Dónde escucha | Spring Boot la lee tal cual, sin código de por medio |
@@ -181,7 +181,7 @@ dentro del artefacto.
 |---|---|---|
 | Claves de la API por ambiente | Gestor de secretos del proveedor de despliegue | En el repositorio |
 | Claves que necesita la integración continua | Secretos del repositorio, uno por ambiente | En el archivo del pipeline |
-| `SUPABASE_SERVICE_ROLE_KEY` | Secreto separado, solo para el trabajo de migraciones | En el despliegue de la API que atiende usuarios |
+| `SUPABASE_SERVICE_ROLE_KEY` | Secreto separado del de la base y del de las migraciones | En el front, y en cualquier conexión a PostgreSQL |
 
 En el repositorio solo hay un `.env.ejemplo` con las claves y los valores vacíos. Sirve para
 saber qué hace falta, no para arrancar nada.
