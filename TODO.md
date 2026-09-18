@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [4.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -1156,6 +1156,30 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       contra una base de verdad. La sexta, la del filtro y la sonda de salud, acepta `200` o `503`:
       lo suyo es que la petición llegue a la sonda, no que la base esté viva. El hueco lo cierra el
       trabajo aparte que el [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) manda levantar con Supabase, y que depende de la [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20)
+
+**Del arreglo de la pantalla de acceso:**
+
+- [ ] **El envío del formulario sigue sin distinguir «no hubo respuesta» de «llegó algo sin forma de
+      sobre»**: las dos se leen como «No se pudo conectar con el servidor». La carga del formulario ya
+      las separa; el envío no, porque `Sesiones` devuelve `Sobre?` y cambiarlo arrastra a la cola de
+      pendientes del [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) dentro de un arreglo pequeño. Es la misma imprecisión, en la otra
+      mitad de la misma pantalla
+- [ ] **«Reintentar» quedó escrito dos veces**: como componente para las dos pantallas de sesión, y a
+      mano dentro de la capa de versión incompatible. Es el mismo botón; unificarlos toca una pantalla
+      aprobada que ese arreglo no abría, y queda dicho en el propio componente para que no se descubra
+      por sorpresa
+- [ ] **El arreglo no subió la versión del front**, siguiendo lo que hizo el arreglo suelto anterior.
+      Si un cambio de comportamiento visible debe llevar versión propia, la regla no está escrita
+
+**De los datos de dev:**
+
+- [ ] **El cargo «Gerente General (CEO)» existe solo en la semilla**, no en el catálogo de arranque
+      del [04](docs/04-modelo-de-datos.md). Se decidió así para no ampliar el catálogo del negocio de paso: una migración lo
+      metería también en uat y en prod. Si el cargo es de verdad del negocio, le toca su migración
+- [ ] **Cada `supabase db reset` deja al rol `prisma_api` sin contraseña** y la API falla contra la
+      base con el resto en pie, porque las dos consultas que se sirven de memoria siguen respondiendo
+      `200`. La migración lo crea así a propósito —el repositorio es público—, pero `reset-local.ps1`
+      tampoco la repone, así que cada quien lo descubre solo
 
 **Del repositorio de movimientos ([3.3](docs/08-plan-de-desarrollo.md#tarea-3-3)):**
 
