@@ -1004,7 +1004,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.6.0"
+    "version" : "0.7.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -2112,7 +2112,7 @@
             "description" : "Created",
             "headers" : {
               "Set-Cookie" : {
-                "description" : "La cookie prisma_renovacion: HttpOnly, Secure, SameSite=Strict, Path=/sesiones y 30 días de vida que vuelven a empezar con cada renovación. El front nunca la lee. Trae la de esta sesión",
+                "description" : "La cookie prisma_renovacion: HttpOnly, Secure, SameSite=None, Path=/api/v0/sesiones y 30 días de vida que vuelven a empezar con cada renovación. El front nunca la lee. Trae la de esta sesión",
                 "schema" : {
                   "type" : "string"
                 }
@@ -2261,10 +2261,10 @@
         "description" : "Cambia la cookie prisma_renovacion por un token nuevo y una clave de firma nueva. Es lo que el front pide al recargar la página —la clave de firma vivía en memoria y se fue con ella— y antes de que venza el token. Tampoco lleva firma ni Idempotency-Key, por la misma razón que el inicio de sesión. Cada renovación entrega una cookie nueva y la anterior deja de servir. Una sesión cerrada, sin cookie o sin uso en 30 días responde 40100 (RF-04); la de un usuario que Gerencia desactivó mientras tanto, 40301. Puede devolver 20000, 40100 y 40301.",
         "operationId" : "renovarSesion",
         "parameters" : [ {
-          "description" : "La cookie prisma_renovacion: HttpOnly, Secure, SameSite=Strict, Path=/sesiones y 30 días de vida que vuelven a empezar con cada renovación. El front nunca la lee",
+          "description" : "La cookie prisma_renovacion: HttpOnly, Secure, SameSite=None, Path=/api/v0/sesiones y 30 días de vida que vuelven a empezar con cada renovación. El front nunca la lee. Sin ella la respuesta es 40100, no un 400: quien abre la aplicación por primera vez no armó mal la petición, es que todavía no ha entrado",
           "in" : "cookie",
           "name" : "prisma_renovacion",
-          "required" : true,
+          "required" : false,
           "schema" : {
             "type" : "string"
           }
@@ -2281,7 +2281,7 @@
             "description" : "OK",
             "headers" : {
               "Set-Cookie" : {
-                "description" : "La cookie prisma_renovacion: HttpOnly, Secure, SameSite=Strict, Path=/sesiones y 30 días de vida que vuelven a empezar con cada renovación. El front nunca la lee. Trae la de esta sesión",
+                "description" : "La cookie prisma_renovacion: HttpOnly, Secure, SameSite=None, Path=/api/v0/sesiones y 30 días de vida que vuelven a empezar con cada renovación. El front nunca la lee. Trae la de esta sesión",
                 "schema" : {
                   "type" : "string"
                 }
@@ -2808,10 +2808,6 @@
     "mensaje" : "Crea tu contraseña para continuar.",
     "modulo" : "SESION_Y_TRANSPORTE",
     "nombre" : "DEBE_CAMBIAR_CLAVE",
-    "pendienteDeEmitir" : {
-      "quien" : "Tarea 2.1: inicio de sesión",
-      "sprint" : 2
-    },
     "status" : 40302
   }, {
     "cuando" : "Misma Idempotency-Key con una huella de petición distinta",
@@ -2877,10 +2873,6 @@
     "mensaje" : "Las dos contraseñas no coinciden. Escríbelas otra vez.",
     "modulo" : "USUARIOS_Y_CARGOS",
     "nombre" : "CLAVES_NO_COINCIDEN",
-    "pendienteDeEmitir" : {
-      "quien" : "Tarea 2.1: inicio de sesión y cambio de contraseña",
-      "sprint" : 2
-    },
     "status" : 42210
   }, {
     "cuando" : "Crear un usuario con un nombre de usuario que ya existe, sin distinguir mayúsculas. El error va en data.errores, sobre usuario",
