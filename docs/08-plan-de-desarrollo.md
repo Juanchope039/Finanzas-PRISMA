@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -11,7 +11,7 @@ cuánto dura el desarrollo según cuántos carriles avancen a la vez. Un carril 
 persona, un equipo o una sesión de trabajo; al plan le da igual.
 
 <!-- generado:plan-resumen · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**27,4 semanas con 1 carril**, **17,7 semanas con 2 carriles** y **15,3 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
+**27,4 semanas con 1 carril**, **16,6 semanas con 2 carriles** y **13,9 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
 <!-- /generado:plan-resumen -->
 
 > **El plan de 7 sprints daba por hecho que no había backend.**
@@ -124,22 +124,22 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 | Carriles activos | Desarrollo | Estabilización | Total | Frente a 1 carril |
 |:---:|---:|---:|---:|---:|
 | 1 | 24,4 semanas | 3 semanas | **27,4 semanas** | — |
-| 2 | 14,7 semanas | 3 semanas | **17,7 semanas** | −9,7 semanas |
-| 3 | 12,3 semanas | 3 semanas | **15,3 semanas** | −12,0 semanas |
+| 2 | 13,6 semanas | 3 semanas | **16,6 semanas** | −10,8 semanas |
+| 3 | 10,9 semanas | 3 semanas | **13,9 semanas** | −13,5 semanas |
 
 | Hito | 1 carril | 2 carriles | 3 carriles |
 |---|:---:|:---:|:---:|
 | [H1](#h1) · Sprint 0 | semana 4 | semana 3 | semana 3 |
-| [H2](#h2) · Sprint 1 | semana 7 | semana 4 | semana 4 |
-| [H3](#h3) · Sprint 2 | semana 10 | semana 6 | semana 6 |
-| [H4](#h4) · Sprint 3 | semana 12 | semana 7 | semana 6 |
+| [H2](#h2) · Sprint 1 | semana 7 | semana 5 | semana 4 |
+| [H3](#h3) · Sprint 2 | semana 11 | semana 7 | semana 6 |
+| [H4](#h4) · Sprint 3 | semana 13 | semana 8 | semana 6 |
 | [H5](#h5) · Sprint 4 | semana 15 | semana 9 | semana 8 |
-| [H6](#h6) · Sprint 5 | semana 16 | semana 9 | semana 8 |
+| [H6](#h6) · Sprint 5 | semana 17 | semana 10 | semana 8 |
 | [H7](#h7) · Sprint 6 | semana 19 | semana 11 | semana 9 |
-| [H8](#h8) · Sprint 7 | semana 20 | semana 12 | semana 9 |
+| [H8](#h8) · Sprint 7 | semana 21 | semana 12 | semana 9 |
 | [H9](#h9) · Sprint 8 | semana 23 | semana 14 | semana 11 |
-| [H10](#h10) · Sprint 9 | semana 25 | semana 15 | semana 13 |
-| [H11](#h11) · go-live | semana 28 | semana 18 | semana 16 |
+| [H10](#h10) · Sprint 9 | semana 25 | semana 14 | semana 11 |
+| [H11](#h11) · go-live | semana 28 | semana 17 | semana 14 |
 <!-- /generado:plan-calendario -->
 
 **Cómo se calcula.** Se reparten las tareas en el tiempo respetando sus dependencias, siempre
@@ -158,9 +158,9 @@ alrededor de 17 semanas, y eso es lo que permite confiar en la cifra de tres.
 ### 1.2 La cadena que no se parte
 
 <!-- generado:plan-camino-critico · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**La cadena más larga de dependencias suma 29,5 días en 21 tareas.** Un día de retraso en cualquiera de ellas es un día de retraso del plan entero, tenga los carriles que tenga:
+**La cadena más larga de dependencias suma 24,5 días en 16 tareas.** Un día de retraso en cualquiera de ellas es un día de retraso del plan entero, tenga los carriles que tenga:
 
-[0.4](#tarea-0-4) → [0.10](#tarea-0-10) → [1.1](#tarea-1-1) → [1.4](#tarea-1-4) → [2.3](#tarea-2-3) → [2.4](#tarea-2-4) → [2.1](#tarea-2-1) → [2.12](#tarea-2-12) → [2.13](#tarea-2-13) → [5.2](#tarea-5-2) → [4.3](#tarea-4-3) → [4.5](#tarea-4-5) → [6.1](#tarea-6-1) → [6.5](#tarea-6-5) → [8.5](#tarea-8-5) → [8.6](#tarea-8-6) → [0.8](#tarea-0-8) → [0.9](#tarea-0-9) → [9.2](#tarea-9-2) → [9.3](#tarea-9-3) → [9.10](#tarea-9-10)
+[0.4](#tarea-0-4) → [0.10](#tarea-0-10) → [1.1](#tarea-1-1) → [1.4](#tarea-1-4) → [2.3](#tarea-2-3) → [2.4](#tarea-2-4) → [2.1](#tarea-2-1) → [2.12](#tarea-2-12) → [2.13](#tarea-2-13) → [5.2](#tarea-5-2) → [4.3](#tarea-4-3) → [4.5](#tarea-4-5) → [6.1](#tarea-6-1) → [6.5](#tarea-6-5) → [8.5](#tarea-8-5) → [8.6](#tarea-8-6)
 <!-- /generado:plan-camino-critico -->
 
 ### 1.3 El diagrama con 3 carriles
@@ -176,55 +176,55 @@ gantt
     axisFormat %d/%m
 
     section API
-    S0 :api0, 2026-09-15, 2026-10-02
-    S1 :api1, 2026-09-22, 2026-10-08
-    S2 :api2, 2026-10-05, 2026-10-22
-    S3 :api3, 2026-10-08, 2026-10-24
-    S4 :api4, 2026-10-11, 2026-11-04
-    S5 :api5, 2026-10-22, 2026-11-02
-    S6 :api6, 2026-11-02, 2026-11-13
-    S7 :api7, 2026-10-25, 2026-11-15
-    S8 :api8, 2026-10-25, 2026-11-28
-    S9 :api9, 2026-11-28, 2026-12-10
+    S0 :api0, 2026-09-15, 2026-10-05
+    S1 :api1, 2026-09-22, 2026-10-07
+    S2 :api2, 2026-10-07, 2026-10-24
+    S3 :api3, 2026-10-08, 2026-10-23
+    S4 :api4, 2026-10-12, 2026-11-03
+    S5 :api5, 2026-10-23, 2026-11-06
+    S6 :api6, 2026-11-01, 2026-11-12
+    S7 :api7, 2026-10-26, 2026-11-16
+    S8 :api8, 2026-10-26, 2026-11-30
+    S9 :api9, 2026-11-17, 2026-11-26
 
     section Base
     S0 :base0, 2026-09-16, 2026-09-19
     S1 :base1, 2026-09-19, 2026-10-04
-    S2 :base2, 2026-10-02, 2026-10-17
-    S4 :base4, 2026-10-31, 2026-11-02
-    S5 :base5, 2026-10-30, 2026-10-31
+    S2 :base2, 2026-10-04, 2026-10-20
+    S4 :base4, 2026-10-30, 2026-11-01
+    S5 :base5, 2026-10-28, 2026-10-29
     S6 :base6, 2026-11-08, 2026-11-10
-    S8 :base8, 2026-11-04, 2026-11-06
-    S9 :base9, 2026-12-01, 2026-12-02
+    S8 :base8, 2026-11-14, 2026-11-17
+    S9 :base9, 2026-11-16, 2026-11-18
 
     section Front
-    S0 :front0, 2026-09-15, 2026-09-30
-    S1 :front1, 2026-09-25, 2026-10-02
-    S2 :front2, 2026-10-05, 2026-10-17
-    S3 :front3, 2026-10-08, 2026-10-19
-    S5 :front5, 2026-11-02, 2026-11-04
-    S6 :front6, 2026-11-06, 2026-11-12
-    S7 :front7, 2026-11-12, 2026-11-15
-    S9 :front9, 2026-11-15, 2026-12-03
+    S0 :front0, 2026-09-15, 2026-10-03
+    S1 :front1, 2026-09-25, 2026-10-01
+    S2 :front2, 2026-10-06, 2026-10-20
+    S3 :front3, 2026-10-10, 2026-10-16
+    S5 :front5, 2026-11-03, 2026-11-04
+    S6 :front6, 2026-11-04, 2026-11-11
+    S7 :front7, 2026-11-13, 2026-11-16
+    S9 :front9, 2026-11-12, 2026-11-20
 
     section Contrato
     S1 :contrato1, 2026-09-24, 2026-09-25
-    S2 :contrato2, 2026-10-04, 2026-10-05
-    S3 :contrato3, 2026-10-08, 2026-10-09
-    S4 :contrato4, 2026-10-13, 2026-10-14
+    S2 :contrato2, 2026-10-05, 2026-10-06
+    S3 :contrato3, 2026-10-09, 2026-10-10
+    S4 :contrato4, 2026-10-20, 2026-10-21
     S5 :contrato5, 2026-10-24, 2026-10-25
     S6 :contrato6, 2026-10-24, 2026-10-25
-    S7 :contrato7, 2026-10-24, 2026-10-25
-    S8 :contrato8, 2026-10-24, 2026-10-25
+    S7 :contrato7, 2026-10-25, 2026-10-26
+    S8 :contrato8, 2026-10-26, 2026-10-27
 
     section Decisión
     S0 :decisin0, 2026-09-15, 2026-09-16
     S1 :decisin1, 2026-09-15, 2026-09-16
 
     section Implantación
-    Estabilización y aprobación en UAT :est, 2026-12-10, 2026-12-24
-    Migración y capacitación :mig, 2026-12-24, 2026-12-31
-    Go-live :milestone, 2026-12-31, 0d
+    Estabilización y aprobación en UAT :est, 2026-11-30, 2026-12-14
+    Migración y capacitación :mig, 2026-12-14, 2026-12-21
+    Go-live :milestone, 2026-12-21, 0d
 ```
 <!-- /generado:plan-gantt -->
 
@@ -247,9 +247,10 @@ gantt
 | <a id="h10"></a>**H10** | [Sprint 9](#sprint-9) | Gerencia aprueba en UAT exactamente el artefacto que irá a prod |
 | <a id="h11"></a>**H11** | Go-live | El Excel y el cuaderno dejan de usarse |
 
-> **[H1](#h1) se cumple en dos partes** ([ADR-026](adr/ADR-026-railway-al-final.md)). La insignia de
-> versión y el sobre en toda respuesta, al cerrar el [Sprint 0](#sprint-0). Que un cambio fusionado se despliegue
-> solo hasta dev, en el [Sprint 9](#sprint-9), cuando llega el alojamiento.
+> **[H1](#h1) vuelve a cumplirse de una sola vez** ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)). El [ADR-026](adr/ADR-026-railway-al-final.md) lo había partido
+> en dos porque no había a dónde desplegar; desde que **dev se aloja en Railway**, la insignia de
+> versión, el sobre en toda respuesta y el cambio fusionado que llega solo hasta dev se cumplen
+> juntos, al cerrar el [Sprint 0](#sprint-0).
 
 ---
 
@@ -301,8 +302,8 @@ hoy, con lo que ya está hecho, está en [`TODO.md`](../TODO.md).
 | <a id="tarea-0-5"></a>0.5 | Rol `prisma_api` en los cuatro: sin `BYPASSRLS`, sin `SUPERUSER` y sin ser dueño de las tablas | Base | [0.4](#tarea-0-4) | 1 |
 | <a id="tarea-0-6"></a>0.6 | Secretos por ambiente fuera del repositorio: variables de entorno en la API, `--dart-define` en el front | API, Front | [0.1](#tarea-0-1), [0.3](#tarea-0-3) | 1 |
 | <a id="tarea-0-7"></a>0.7 | Integración continua: formato con `spotless`, análisis estático, pruebas y compilación en la API; `dart format`, `dart analyze`, pruebas y compilación en el front, **para cada proyecto por separado** | API, Front | [0.1](#tarea-0-1), [0.3](#tarea-0-3) | 2 |
-| <a id="tarea-0-8"></a>0.8 | ⏭️ **[Sprint 9](#sprint-9)** · **Imagen de contenedor de la API**: JRE 25 mínimo, memoria de la JVM acotada por variable, y arranque verificado en los cuatro ambientes | API | [0.1](#tarea-0-1), [H4](#h4), [H5](#h5), [H6](#h6), [H7](#h7), [H8](#h8), [H9](#h9) | 1 |
-| <a id="tarea-0-9"></a>0.9 | ⏭️ **[Sprint 9](#sprint-9)** · Entrega a dev al fusionar en la rama principal: despliegue de la imagen de la API y publicación del front | API, Front | [0.7](#tarea-0-7), [0.8](#tarea-0-8) | 1,5 |
+| <a id="tarea-0-8"></a>0.8 | **Imagen de contenedor de la API**: JRE 25 mínimo, memoria de la JVM acotada por variable, el puerto que inyecte el alojamiento y la sonda de disponibilidad mirando la base. **Arranque verificado en dev**; los otros tres ambientes, cuando existan ([9.2](#tarea-9-2), [9.3](#tarea-9-3)) | API | [0.1](#tarea-0-1) | 1 |
+| <a id="tarea-0-9"></a>0.9 | Entrega a dev al fusionar en la rama principal: despliegue de la imagen de la API y publicación del front, con su receta de construcción | API, Front | [0.7](#tarea-0-7), [0.8](#tarea-0-8) | 1,5 |
 | <a id="tarea-0-10"></a>0.10 | SemVer en el `pubspec.yaml` del front y en el `build.gradle.kts` de la API, y migraciones numeradas con tabla `schema_version` | Base | [0.4](#tarea-0-4) | 1 |
 | <a id="tarea-0-11"></a>0.11 | `POST /api/v0/consultas/version`: versión de la API, versión del esquema y ambiente | API | [0.14](#tarea-0-14) | 0,5 |
 | <a id="tarea-0-12"></a>0.12 | Insignia `v0.1.0 · Desarrollo` **en el pie de la barra lateral, abajo a la izquierda**, y franja fija de ambiente arriba en dev, qa y uat; en prod, franja ninguna y la versión en color neutro | Front | [0.3](#tarea-0-3) | 1 |
@@ -320,17 +321,16 @@ hoy, con lo que ya está hecho, está en [`TODO.md`](../TODO.md).
 | Oleada | Tareas | Carriles | Días |
 |:---:|---|---|---:|
 | 1 | [0.1](#tarea-0-1) · [0.3](#tarea-0-3) · [0.4](#tarea-0-4) | API, Front, Decisión | 4,5 |
-| 2 | [0.2](#tarea-0-2) · [0.5](#tarea-0-5) · [0.6](#tarea-0-6) · [0.7](#tarea-0-7) · [0.10](#tarea-0-10) · [0.12](#tarea-0-12) · [0.14](#tarea-0-14) · [0.15](#tarea-0-15) · [0.19](#tarea-0-19) | API, Base, Front | 11,5 |
-| 3 | [0.11](#tarea-0-11) · [0.16](#tarea-0-16) · [0.17](#tarea-0-17) · [0.18](#tarea-0-18) | API | 4,5 |
+| 2 | [0.2](#tarea-0-2) · [0.5](#tarea-0-5) · [0.6](#tarea-0-6) · [0.7](#tarea-0-7) · [0.8](#tarea-0-8) · [0.10](#tarea-0-10) · [0.12](#tarea-0-12) · [0.14](#tarea-0-14) · [0.15](#tarea-0-15) · [0.19](#tarea-0-19) | API, Base, Front | 12,5 |
+| 3 | [0.9](#tarea-0-9) · [0.11](#tarea-0-11) · [0.16](#tarea-0-16) · [0.17](#tarea-0-17) · [0.18](#tarea-0-18) | API | 6 |
 | 4 | [0.13](#tarea-0-13) | Front | 1 |
-
-Fuera de las oleadas, porque se hacen en otro sprint: [0.8](#tarea-0-8) · [0.9](#tarea-0-9).
 <!-- /generado:plan-oleadas-0 -->
 
-> **0.8 y 0.9 se hacen en el [Sprint 9](#sprint-9).** El despliegue en Railway va al final del desarrollo
-> ([ADR-026](adr/ADR-026-railway-al-final.md)): hasta entonces no hay a dónde entregar, y dev es la
-> máquina de quien desarrolla contra el proyecto dev de Supabase. Lo demás del [Sprint 0](#sprint-0) se cierra
-> aquí, y su «terminado cuando» se lee sin el despliegue automático.
+> **0.8 y 0.9 se hacen aquí, y solo para dev** ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)). El [ADR-026](adr/ADR-026-railway-al-final.md) las había movido al
+> [Sprint 9](#sprint-9) porque no había a dónde entregar; volvieron cuando hubo algo que enseñar fuera de la
+> máquina de desarrollo, que era la condición que ese mismo ADR dejó escrita. **qa, uat y prod siguen
+> en el [Sprint 9](#sprint-9)**, y con ellos el «arranque verificado en los cuatro ambientes» de la 0.8 y la
+> promoción del artefacto entre ambientes.
 
 **Terminado cuando** — un cambio fusionado llega solo hasta dev sin que nadie toque una consola,
 la versión y el ambiente se leen en el pie de la barra lateral, y un endpoint de prueba responde
@@ -692,9 +692,10 @@ pro-labore sí.
 | 3 | [9.10](#tarea-9-10) | API | 0,5 |
 <!-- /generado:plan-oleadas-9 -->
 
-> **Aquí llegan también las tareas [0.8](#tarea-0-8) y [0.9](#tarea-0-9)** —la imagen de la API arrancando en los ambientes y
-> la entrega automática a dev—, movidas del [Sprint 0](#sprint-0) por [ADR-026](adr/ADR-026-railway-al-final.md).
-> Con ellas el sprint pasa de 11,5 a 14 días, la misma carga que el [Sprint 3](#sprint-3) lleva en dos semanas.
+> **Las tareas [0.8](#tarea-0-8) y [0.9](#tarea-0-9) ya no llegan aquí:** volvieron al [Sprint 0](#sprint-0) por [ADR-032](adr/ADR-032-railway-en-dev-ahora.md), y el sprint
+> se queda en sus 11,5 días. Lo que sí sigue siendo de este sprint es todo lo que dependía de tener
+> **los otros tres ambientes**: levantarlos ([9.2](#tarea-9-2)), promover el artefacto sin recompilarlo ([9.3](#tarea-9-3)),
+> ensayar la reversión ([9.4](#tarea-9-4)) y verificar el arranque de la imagen donde todavía no corre.
 
 **Terminado cuando** — Gerencia aprueba en UAT y ese mismo artefacto, sin reconstruir, queda
 listo para prod.
@@ -825,13 +826,13 @@ graph LR
   S9["S9 · Promoción, PWA y endurecimiento"]
   S0 --> S1
   S1 --> S2
+  S1 --> S9
   S2 --> S3
   S2 --> S5
   S3 --> S4
   S4 --> G67
   S5 --> S4
   G67 --> S8
-  S8 --> S9
 ```
 <!-- /generado:plan-grafo -->
 
@@ -867,7 +868,7 @@ El [Sprint 9](#sprint-9) va de último porque endurece lo que ya existe. No es r
 «funciona en mi computador» de «Gerencia lo aprobó y el taller lo tiene».
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-011](adr/ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
+**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-011](adr/ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
 <!-- /generado:referenciado-desde -->
 
 ---

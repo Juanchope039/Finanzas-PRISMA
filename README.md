@@ -3,7 +3,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/README.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Negocio](docs/INDICE.md#etiqueta-negocio) · [Plan](docs/INDICE.md#etiqueta-plan) |
+| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/README.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Negocio](docs/INDICE.md#etiqueta-negocio) · [Plan](docs/INDICE.md#etiqueta-plan) |
 
 > **PRISMA** = **P**lataforma de **R**egistro, **I**nversión, **S**eguimiento, **M**árgenes y **A**dministración.
 > Un solo lugar para saber cuánto entra, cuánto sale, cuánto queda y cuánto se puede pagar.
@@ -55,7 +55,7 @@ PRISMA existe para responder esas tres preguntas con números, no con intuición
 | 20 | [Contrato de API](docs/20-contrato-de-api.md) | El sobre `{status, mensaje, data}`, los códigos de 5 dígitos, la idempotencia y el canal firmado |
 | 21 | [Trabajo en paralelo](docs/21-trabajo-en-paralelo.md) | Cómo avanzan varios carriles a la vez sin bloquearse: repartos, repositorios y reglas de convivencia |
 | 22 | [Documentación](docs/22-documentacion.md) | Versiones, estados, fechas, etiquetas y referencias enlazadas de todos los documentos |
-| — | [ADRs](docs/adr/) | Las 27 decisiones de arquitectura registradas |
+| — | [ADRs](docs/adr/) | Las 32 decisiones de arquitectura registradas |
 | — | [Contrato de la API](contrato/) | El `openapi.json` acordado entre front y API, con el catálogo de códigos dentro |
 | — | [Tareas](TODO.md) | Lo hecho y lo pendiente, tarea por tarea, y qué se puede avanzar en paralelo |
 
@@ -167,9 +167,10 @@ sprint, y el descriptor de formulario. Todavía no hay ninguna funcionalidad de 
 **Lo que falta para cerrarlo** son las dos tareas que necesitan una base de datos corriendo, 0.5 y
 0.10. Se hacen contra el proyecto dev de Supabase, que ya existe y falta configurar, porque Docker
 sigue sin arrancar en la máquina de desarrollo. Los otros tres proyectos de Supabase (0.4) se crean
-antes de promover. La imagen de la API y la entrega automática a dev (0.8 y 0.9) pasan al [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9):
-el sistema se despliega en Railway al final del desarrollo
-([ADR-026](docs/adr/ADR-026-railway-al-final.md)).
+antes de promover. La imagen de la API y la entrega automática a dev (0.8 y 0.9) **se hacen en este
+sprint y solo para dev**, que se aloja en Railway desde el
+[ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md); qa, uat y prod siguen esperando al
+[Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9).
 
 El detalle tarea por tarea —lo hecho, lo pendiente, lo bloqueado y qué se puede avanzar en
 paralelo— está en [`TODO.md`](TODO.md).

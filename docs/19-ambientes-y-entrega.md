@@ -2,15 +2,20 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
-> **Construcción: la integración continua ya corre; los ambientes y la publicación, todavía no.**
-> La API, el front y esta especificación se verifican en cada push y cada PR ([§6.1](#61-en-cada-empuje-en-paralelo)). Los cuatro
-> ambientes y los canales de publicación llegan en el [Sprint 9](08-plan-de-desarrollo.md#sprint-9), con el despliegue en Railway
-> ([ADR-026](adr/ADR-026-railway-al-final.md)). Este documento fija cómo deben quedar antes del go-live, para que la decisión se tome
-> ahora y no la noche de la primera publicación.
+> **Construcción: la integración continua corre y dev ya está alojado; qa, uat y prod todavía no.**
+> La API, el front y esta especificación se verifican en cada push y cada PR ([§6.1](#61-en-cada-empuje-en-paralelo)). **Dev vive en
+> Railway** desde el [ADR-032](adr/ADR-032-railway-en-dev-ahora.md), con la API en un servicio y el front en otro; los otros tres
+> ambientes y la promoción entre ellos llegan en el [Sprint 9](08-plan-de-desarrollo.md#sprint-9). Este documento fija cómo deben quedar
+> antes del go-live, para que la decisión se tome ahora y no la noche de la primera publicación.
+>
+> **Dev se duerme, y eso no es una avería.** Su proyecto de Supabase está en plan gratuito y se pausa
+> tras una semana sin actividad; con la sonda de disponibilidad mirando la base ([§2.4](#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro)), un despliegue
+> intentado con el proyecto pausado **no pasa a verde hasta que alguien lo despierte** en la consola
+> de Supabase y reintente. El [RNF-20](03-requisitos-y-bdd.md#rnf-20) habla de los ambientes de negocio, no de dev.
 
 ---
 
@@ -416,9 +421,11 @@ Son, como mínimo, **dos proyectos de Supabase de pago y dos instancias de la AP
 Pero es mayor de la que habría con un binario de unas decenas de megabytes, y decirlo es parte de
 haber elegido Java a conciencia y no por descuido.
 
-El alojamiento de la API y del front es **Railway**, y se contrata al final del desarrollo
-([ADR-026](adr/ADR-026-railway-al-final.md)). Hasta entonces, dev es la máquina de quien desarrolla
-contra el proyecto dev de Supabase, que es lo que la fila de dev ya permitía.
+El alojamiento de la API y del front es **Railway**. **Dev se aloja desde ya**, en plan gratuito y
+asumiendo que se duerme; qa, uat y prod se contratan al final del desarrollo
+([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)). La máquina de quien desarrolla sigue siendo un dev
+válido contra el mismo proyecto de Supabase: lo que cambia es que ahora hay además una URL que
+alguien de fuera puede abrir.
 
 > **Costo al mínimo no es costo cero, y confundirlos se paga en disponibilidad.** Lo que se ahorra
 > apagando uat o dejando dormir a prod se cobra el día que Gerencia no puede aprobar, o que la
@@ -447,7 +454,7 @@ solo está **con qué configuración corre cada ambiente y cómo se mueve una ve
 | Qué forma tiene cada respuesta de la API y qué cabeceras lleva | [`20-contrato-de-api.md`](20-contrato-de-api.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

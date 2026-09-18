@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -34,7 +34,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 <!-- generado:plan-tablero · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
-| [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 17 | 16 | 0 | 1 | 1 |
+| [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 16 | 2 | 1 | 3,5 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 15 | 0 | 5 | 6 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 19 | 6 | 0 | 13 | 15,5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 3 | 0 | 10 | 11,5 |
@@ -43,8 +43,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 0 | 0 | 10 | 15 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
-| [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 12 |
-| **Total** | **132** | **45** | **0** | **87** | **107,5** |
+| [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 11 | 1 | 0 | 10 | 9,5 |
+| **Total** | **132** | **45** | **2** | **85** | **107,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -102,7 +102,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.12](docs/08-plan-de-desarrollo.md#tarea-2-12) · [2.14](docs/08-plan-de-desarrollo.md#tarea-2-14) · [3.3](docs/08-plan-de-desarrollo.md#tarea-3-3) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
+| **API** | [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) · [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.12](docs/08-plan-de-desarrollo.md#tarea-2-12) · [2.14](docs/08-plan-de-desarrollo.md#tarea-2-14) · [3.3](docs/08-plan-de-desarrollo.md#tarea-3-3) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
 | **Base** | [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12) · [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) |
 | **Contrato** | [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
@@ -116,8 +116,8 @@ Quedan **87 tareas y 107,5 días de trabajo** de 132 tareas del plan.
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
 | 1 | 16,2 semanas | **19,2 semanas** |
-| 2 | 10,3 semanas | **13,3 semanas** |
-| 3 | 9,1 semanas | **12,1 semanas** |
+| 2 | 9,0 semanas | **12,0 semanas** |
+| 3 | 7,4 semanas | **10,4 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -178,9 +178,12 @@ o indirectamente. No es el orden en que se descubrieron.
 - [x] [**0.6**](docs/08-plan-de-desarrollo.md#tarea-0-6) Secretos fuera del repositorio: variables de entorno en la API y `--dart-define` en el
       front · API, Front
 - [x] [**0.7**](docs/08-plan-de-desarrollo.md#tarea-0-7) Integración continua por proyecto: formato, análisis, pruebas y compilación · API, Front
-- [ ] ⏭️ [**0.8**](docs/08-plan-de-desarrollo.md#tarea-0-8) Imagen de la API arrancando en los ambientes, en Railway ([ADR-026](docs/adr/ADR-026-railway-al-final.md)). El `Dockerfile` ya
-      existe y la integración continua lo construye en cada push a `main` · API
-- [ ] ⏭️ [**0.9**](docs/08-plan-de-desarrollo.md#tarea-0-9) Entrega a dev al fusionar ([ADR-026](docs/adr/ADR-026-railway-al-final.md)) · API, Front
+- [ ] 🚧⚡ [**0.8**](docs/08-plan-de-desarrollo.md#tarea-0-8) Imagen de la API arrancando **en dev**, en Railway ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)). El `Dockerfile` ya existía;
+      lo que faltaba era que la aplicación leyera el `PORT` que le inyectan —hoy lo ignora y queda
+      inalcanzable con el proceso vivo— y que la sonda de disponibilidad mirara la base en vez de
+      responder `UP` con ella caída. Los otros tres ambientes, en el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · API
+- [ ] 🚧🔒 [**0.9**](docs/08-plan-de-desarrollo.md#tarea-0-9) Entrega a dev al fusionar ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)), con la receta de construcción del front
+      —`Dockerfile`, `nginx` y `.dockerignore`— que hasta ahora no existía · API, Front
 - [x] [**0.10**](docs/08-plan-de-desarrollo.md#tarea-0-10) SemVer y migraciones con `schema_version` · Base — la tabla guarda una fila por
       versión publicada y hoy dice `0.1.0`, con la etiqueta `esquema-v0.1.0` de [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) puesta.
       Que la API la lea en vez de `PRISMA_ESQUEMA` es del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1)
@@ -208,7 +211,7 @@ o indirectamente. No es el orden en que se descubrieron.
 - [x] Hito [H0](docs/08-plan-de-desarrollo.md#h0): mockup confirmado por Gerencia el 16/09/2026 · Decisión
 
 **Hito [H1](docs/08-plan-de-desarrollo.md#h1):** la insignia y el sobre en toda respuesta ya se cumplen; el despliegue automático a dev
-llega con el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9).
+se cierra con la [0.9](docs/08-plan-de-desarrollo.md#tarea-0-9), que volvió a este sprint por [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md).
 
 ---
 
@@ -563,8 +566,8 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
   [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7). `prisma_db` es privado, así que necesita el secreto `PRISMA_DB_TOKEN` en `prisma_api`, y ese lo
   crea quien dirige. Y `prisma_db` todavía no tiene ninguna etiqueta `esquema-v…`, aunque su
   esquema ya esté aplicado: etiquetarlo es parte de la promoción que tiene que escribir la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12).
-- **Sin qa hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9)** ([ADR-026](docs/adr/ADR-026-railway-al-final.md)): mientras tanto, «terminado» es fusionado a `develop` con la
-  integración continua en verde.
+- **Sin qa hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9)** ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)): mientras tanto, «terminado» es fusionado a `develop` con la
+  integración continua en verde. Que dev ya esté en línea no crea la puerta de qa.
 - **Los íconos de la PWA siguen siendo los de la plantilla de Flutter.** El logo del taller es
   apaisado —760×253— y volverlo un ícono cuadrado de 192 y 512 píxeles es una decisión de diseño,
   no un recorte: hay que decidir si va la marca sola o el nombre sobre el color de la insignia.
@@ -576,8 +579,9 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 - **La pantalla «Datos sin conexión» de [17 §7](docs/17-resiliencia-offline-y-cache.md#7-purga-de-la-caché-por-el-usuario) no existe todavía**, ni el aviso de «pendiente de
   sincronizar» que la [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) dejó listo para pintar: la cola ya cuenta cuántas esperan y quién las
   muestre llega con el registro rápido ([3.5](docs/08-plan-de-desarrollo.md#tarea-3-5)).
-- **El servicio de Railway conectado a `prisma_front`** intenta construir en cada push y falla,
-  porque todavía no hay receta de construcción para Flutter. Conviene desconectarlo hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9).
+- **El servicio de Railway conectado a `prisma_front`** intentaba construir en cada push y fallaba,
+  porque no había receta de construcción para Flutter. Ya la hay ([0.9](docs/08-plan-de-desarrollo.md#tarea-0-9)): falta revisar en la consola
+  si ese servicio se reconfigura o se borra, para no terminar con dos y sin saber cuál es el bueno.
 - **`dart.yml` del front** es la plantilla de GitHub y falla con Flutter. Se dejó a propósito; la
   integración continua de verdad es `ci.yml`.
 
@@ -595,6 +599,28 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] El catálogo de códigos va dentro del OpenAPI, en `x-prisma-codigos`
 - [ ] La pantalla de versión incompatible tiene tres filas de versiones y no las dos del mockup
 - [ ] Se siguió el texto del mockup y no el literal del escenario [BDD-101-1](docs/03-requisitos-y-bdd.md#bdd-101-1)
+
+**De poner dev en línea ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)):**
+
+- [ ] **Dev construye desde el repositorio y no promueve una imagen**, que es lo contrario de lo que
+      pide [19 §2.3](docs/19-ambientes-y-entrega.md#23-el-artefacto-se-promueve-no-se-reconstruye). Cumplirlo pide publicar la imagen en un registro desde la integración continua
+      y que el alojamiento despliegue esa etiqueta; es trabajo de la promoción del [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9)
+- [ ] **La API y el front quedan en dos dominios distintos**, por decisión de quien dirige. La cookie
+      `prisma_renovacion` de la [2.2](docs/08-plan-de-desarrollo.md#tarea-2-2) va a exigir `SameSite=None` y `allowCredentials=true` —hoy en
+      `false` con su justificación escrita—, y `*.up.railway.app` está en la Public Suffix List, así
+      que ni siendo subdominios hermanos la comparten. La alternativa era un dominio con `nginx`
+      haciendo de proxy
+- [ ] **Las contraseñas de la semilla quedan alcanzables desde internet.** Mientras sigan siendo las
+      de la semilla, el enlace de dev no se comparte fuera de quien tenga que verlo. Cambiarlas en el
+      proyecto dev es lo que cierra el riesgo
+- [ ] El nivel de registro de `org.springframework.jdbc.core` en dev pasa a salir de `LOG_SQL`, con
+      `INFO` por defecto: las consultas llevan adentro el correo sintético de cada persona, y dev ya
+      no es solo una máquina
+- [ ] La imagen que compila el front es `ghcr.io/cirruslabs/flutter`, fijada por versión. Es una
+      dependencia de un tercero en tiempo de construcción; la alternativa sin terceros es clonar
+      Flutter por git sobre Debian, más lenta
+- [ ] El `railway.json` de cada repositorio guarda la sonda, su tiempo de espera y la política de
+      reinicio. Son decisiones de entrega que hoy no describe ningún documento
 
 **Del contrato sin GET ([ADR-030](docs/adr/ADR-030-contrato-sin-get.md)):**
 
