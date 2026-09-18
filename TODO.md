@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [4.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -151,8 +151,12 @@ o indirectamente. No es el orden en que se descubrieron.
 - [ ] ⚡ **uat y prod** · Decisión — son los dos proyectos de Supabase que faltan para cerrar [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4), y
       los dos son **de pago** ([19 §8.1](docs/19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no)). Los decide Gerencia, y hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) no hay nada que
       promover a ellos.
-- [ ] **Una sola licencia** · Decisión — este repositorio y el front están con AGPL-3.0; la API y la
-      base, con GPL-3.0.
+- [x] **Una sola licencia** · Decisión — resuelta: **AGPL-3.0 en los cuatro repositorios**. La API y
+      la base venían con GPL-3.0 del `Initial commit` con que GitHub crea un repositorio, sin que
+      nadie la hubiera elegido, y el hueco caía justo donde importa: PRISMA no se distribuye, se
+      **sirve por la red**, así que la GPL no obliga a publicar nada a quien tome la API, la
+      modifique y la ofrezca como servicio. La sección 13 de la AGPL es lo que cierra eso, y estaba
+      puesta en el front —que no decide nada— y no en la API, donde vive toda la lógica.
 - [x] **La sesión contra Supabase Auth** ([2.1](docs/08-plan-de-desarrollo.md#tarea-2-1)) — hecha: era lo que más liberaba, con 51 tareas
       detrás, y con ella arranca el [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) entero. El carril Front deja de estar parado, y la
       puerta a la base de la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) pasa de estar probada a estar usada.
@@ -501,7 +505,8 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 | 11 | El dominio, del que dependen el correo sintético, la URL de la API y CORS | Gerencia | — | ✅ `prisma.com`: la API en `api.prisma.com` y `api-dev.prisma.com`, el correo sintético en `@usuarios.prisma.com`. Se cambió sin migrar nada porque todavía no existe ningún usuario real; desde el primero, «fijo de por vida» quiere decir exactamente eso ([ADR-009](docs/adr/ADR-009-login-por-usuario.md)) |
 | 12 | Plazos de conservación y registro de bases de datos personales (Ley 1581) | Un abogado | Go-live | ⬜ |
 | 13 | Qué objetivos nativos se publican | Gerencia | Nada hoy: no hay disparador | ⬜ |
-| 14 | Una sola licencia para los cuatro repositorios | Quien dirige | Nada técnico | ⬜ AGPL-3.0 en este y en el front; GPL-3.0 en la API y la base |
+| 14 | Una sola licencia para los cuatro repositorios | Quien dirige | Nada técnico | ✅ **AGPL-3.0 en los cuatro**: PRISMA se sirve por la red y no se distribuye, y la sección 13 es lo único que obliga a publicar lo que alguien modifique de un servicio |
+| 15 | Encabezado de licencia en cada archivo fuente | Quien dirige | Nada técnico | ⬜ Hoy no lo lleva ninguno. La AGPL lo recomienda, pero son cientos de archivos en tres lenguajes y el `LICENSE` del repositorio ya dice cuál rige |
 
 **Lo que el modelo de datos todavía no define** ([`04-modelo-de-datos.md`](docs/04-modelo-de-datos.md)):
 
