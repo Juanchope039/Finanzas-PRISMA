@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [4.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -910,6 +910,22 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **Los documentos no se ponen de acuerdo en cuál es la rama base:** el [21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración) y el
       [08 §4](docs/08-plan-de-desarrollo.md#4-definición-de-terminado) dicen `develop`; el [ADR-026](docs/adr/ADR-026-railway-al-final.md) y el [ADR-028](docs/adr/ADR-028-un-commit-por-tarea.md), `main`. La regla de empujar esquiva la
       contradicción nombrando la rama de trabajo, pero la contradicción sigue ahí
+
+**De los dos arreglos del camino real (no son tareas del plan):**
+
+- [ ] **La transacción del ingreso la abre un adaptador del puerto**, `UsuariosDelRecienAutenticado`,
+      y no el filtro: cuando el filtro corre todavía no hay identidad, porque la devuelve el
+      proveedor al comprobar la contraseña. La regla de ArchUnit pasa de «solo un filtro» a enumerar
+      **dos clases**, y ninguna otra puede abrirla
+- [ ] **Un cuerpo sin `nombre` en `POST /api/v0/consultas/formularios` responde `40000`.** Ningún
+      documento cubría el caso: el [20 §4.3](docs/20-contrato-de-api.md#43-cómo-se-pide-y-qué-forma-tiene) solo decía qué pasa con un nombre que no existe
+      (`40400`). Se descartó `42200`, que habría exigido validación en ese record y cambiado el
+      esquema publicado
+- [ ] **La prueba que caza esto no corre en la integración continua.** La tubería de la API solo
+      hace `./gradlew build`, y el trabajo aparte con la base que decidió [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) [§3](#3-sprint-1--base-rls-identidad-e-idempotencia) todavía no
+      existe. Además ese trabajo levanta `supabase db start`, que **no** trae GoTrue: las pruebas del
+      ingreso necesitan `supabase start`. Mientras tanto, el cableado del ingreso solo se comprueba
+      en la máquina de quien lo corre
 
 **De dejar la integración continua en verde:**
 

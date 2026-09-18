@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Calidad](INDICE.md#etiqueta-calidad) |
+| [2.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Calidad](INDICE.md#etiqueta-calidad) |
 
 ---
 
@@ -55,7 +55,7 @@ el front y la API es el contrato de versiones, y eso está en la sección 9.
 |---|---|---|
 | **dev** | Unidad y widget en cada guardado; integración sobre su propio contenedor de PostgreSQL | Ficticios, se pueden borrar |
 | **qa** | Todo, en cada integración a `develop`. **Es la que bloquea la promoción** | Ficticios, con semilla reproducible |
-| **uat** | [P-01](#p-01) a [P-39](#p-39) —[P-32](#p-32) sin su paso 3, ver 3.1— y los recorridos manuales, antes de la aprobación de Gerencia. Además, [RE-01](#re-01) una vez por trimestre ([§10.3](#103-re-01--un-respaldo-que-nunca-se-restauró-no-es-un-respaldo)) | Realistas y anonimizados |
+| **uat** | [P-01](#p-01) a [P-39](#p-39) —[P-32](#p-32) sin su paso 3, ver 3.1— y los recorridos manuales, antes de la aprobación de Gerencia. Además, [RE-01](#re-01) una vez por trimestre ([§10.4](#104-re-01--un-respaldo-que-nunca-se-restauró-no-es-un-respaldo)) | Realistas y anonimizados |
 | **prod** | Pruebas de humo de solo lectura, después de publicar | Reales |
 
 > **Ninguna prueba automática escribe en prod.** Las de integración siembran filas y las borran;
@@ -79,12 +79,12 @@ que falla ahí no siempre significa que el código esté mal.
 | Acceso y administración de usuarios ([§7](#7-pruebas-de-acceso-y-administración-de-usuarios)) | [A-01](#a-01) a [A-16](#a-16) | 16 |
 | Vista previa de Operación ([§7.1](#71-la-vista-previa-de-operación)) | [A-17](#a-17) a [A-19](#a-19) | 3 |
 | Contrato entre las tres partes ([§9](#9-pruebas-del-contrato-entre-las-tres-partes)) | [C-01](#c-01) a [C-04](#c-04) | 4 |
-| Idempotencia, canal firmado y durabilidad ([§10](#10-idempotencia-canal-firmado-y-durabilidad)) | [I-01](#i-01), [I-02](#i-02), [F-01](#f-01), [F-02](#f-02), [T-01](#t-01), [RE-01](#re-01) | 6 |
-| **Total** | | **111** |
+| Idempotencia, canal firmado y durabilidad ([§10](#10-idempotencia-canal-firmado-y-durabilidad)) | [I-01](#i-01), [I-02](#i-02), [F-01](#f-01), [F-02](#f-02), [T-01](#t-01), [T-02](#t-02), [RE-01](#re-01) | 7 |
+| **Total** | | **112** |
 
-Son **100 automáticas, 10 manuales y 1 de operación trimestral** —[RE-01](#re-01), la restauración del
+Son **101 automáticas, 10 manuales y 1 de operación trimestral** —[RE-01](#re-01), la restauración del
 respaldo—. No son todas las que habrá: las unitarias del dominio serán muchas más y se miden por
-cobertura, no por lista. Estas 111 están escritas aquí una por una porque ninguna puede quedar al
+cobertura, no por lista. Estas 112 están escritas aquí una por una porque ninguna puede quedar al
 criterio de quien programe ese día.
 
 ---
@@ -533,7 +533,26 @@ Regla que verifica: **ningún repositorio se llama fuera de una transacción.** 
 en ejecución, comprobando que no hay transacción activa y exigiendo que la llamada falle en vez de
 seguir.
 
-### <a id="re-01"></a>10.3 RE-01 · Un respaldo que nunca se restauró no es un respaldo
+### <a id="t-02"></a>10.3 T-02 · El cableado de producción también abre su transacción
+
+[T-01](#t-01) exige que una consulta fuera de transacción **falle**. [T-02](#t-02) exige lo contrario y lo
+complementario: que en el camino real de cada ruta haya alguien que **abra** la suya. Son las dos
+caras, y sin la segunda cumplir la primera se ve exactamente igual que estar roto.
+
+Ya pasó una vez: el inicio de sesión respondió `50000` a todo el mundo con sus tres pruebas en verde.
+La ruta está exenta de la clave de idempotencia ([20 §5.1](20-contrato-de-api.md#51-la-cabecera)) y es el filtro de esa clave quien
+abre la transacción de la petición, así que no la abría nadie; la consulta de la ficha salía sin
+identidad y `ConsultaSinIdentidad` la detenía, que es justo lo que [T-01](#t-01) pide. **Lo que
+ninguna prueba veía no era una clase: era el cableado**, y las tres lo sustituían —una con dobles de
+los dos puertos y dos armando los adaptadores a mano, con la envoltura que producción no tenía—.
+
+Regla que verifica: **cada ruta se prueba al menos una vez con el cableado de producción entero y
+hablándole por HTTP.** Sin sustituir puertos, sin armar adaptadores y sin MockMvc: se levanta la
+aplicación como se levanta de verdad, se manda la petición como la manda el front —con las cabeceras
+que lleva y sin las que no— y se comprueba el `status` del sobre. Una prueba que arma el cableado
+nunca prueba el cableado.
+
+### <a id="re-01"></a>10.4 RE-01 · Un respaldo que nunca se restauró no es un respaldo
 
 Es la única prueba de esta lista que no corre en cada cambio: corre **una vez por trimestre, en
 uat**, y la ejecuta quien desarrolle con Gerencia avisada. Se restaura el respaldo de prod
@@ -557,7 +576,7 @@ El procedimiento y las políticas de retención están en
 **restaurar es una prueba con fecha, no una buena intención.**
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
