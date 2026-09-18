@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/09-plan-de-implantacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Plan](INDICE.md#etiqueta-plan) · [Entrega](INDICE.md#etiqueta-entrega) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [5.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/09-plan-de-implantacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Plan](INDICE.md#etiqueta-plan) · [Entrega](INDICE.md#etiqueta-entrega) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 Cómo se pasa de tener el software construido a que el negocio realmente lo use.
 
@@ -118,7 +118,7 @@ pasos cuestan plata y hay que decidirlos con tiempo.
 | # | Paso | Responsable | Cuándo |
 |---|---|---|---|
 | 1 | Crear los **cuatro proyectos de Supabase**: dev, qa, uat y prod. Cada uno con su propia base, sus claves y su almacenamiento | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
-| 2 | **Contratar lo que hay que pagar:** el plan de pago de Supabase en uat y prod, y el alojamiento de `prisma_api` en prod, que no se puede apagar. dev y qa se quedan en planes gratuitos o apagables | Gerencia | Antes de levantar uat |
+| 2 | **Contratar lo que hay que pagar:** el plan de pago de Supabase en uat y prod, y el alojamiento de `prisma_api` en **uat y en prod**, que no se pueden apagar ([19 §2.4](19-ambientes-y-entrega.md#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro), condición 2 del [ADR-026](adr/ADR-026-railway-al-final.md)). dev y qa se quedan en planes gratuitos o apagables | Gerencia | Antes de levantar uat |
 | 3 | Crear el rol **`prisma_api`** en cada ambiente: sin `BYPASSRLS`, sin `SUPERUSER` y sin ser dueño de las tablas | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
 | 4 | **Levantar el alojamiento de la API en los cuatro ambientes**: una imagen de contenedor por versión, con su memoria y sus variables ([§3.2](#32-alojar-la-api-de-java-en-los-cuatro-ambientes)), en Railway ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)) | Apoyo técnico | dev, en el [Sprint 0](08-plan-de-desarrollo.md#sprint-0); los otros tres, en el [Sprint 9](08-plan-de-desarrollo.md#sprint-9) |
 | 5 | Cargar los **secretos de cada ambiente** fuera del repositorio: variables de entorno en la API, `--dart-define` al compilar el front | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
@@ -130,8 +130,10 @@ pasos cuestan plata y hay que decidirlos con tiempo.
 > **Esto no es un impedimento, es una factura.** «Siempre en línea» significa que prod y uat no
 > pueden estar en el plan gratuito de Supabase: ese plan pausa el proyecto tras una semana de
 > inactividad y un taller que factura los lunes encontraría el sistema dormido. Y la API en Java
-> necesita un contenedor encendido en prod, que también se paga. Son **dos proyectos de Supabase
-> de pago y un alojamiento de API**. Por eso **[RNF-14](03-requisitos-y-bdd.md#rnf-14) ya no exige costo cero sino costo mensual al
+> necesita un contenedor encendido, que también se paga: **en prod porque el taller trabaja, y en
+> uat porque la primera petición después de la siesta paga el arranque entero de la JVM y eso es lo
+> que Gerencia se encontraría al ir a aprobar** ([19 §2.4](19-ambientes-y-entrega.md#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro)). Son **dos proyectos de Supabase
+> de pago y dos alojamientos de API encendidos**. Por eso **[RNF-14](03-requisitos-y-bdd.md#rnf-14) ya no exige costo cero sino costo mensual al
 > mínimo sostenible**: el costo cero era incompatible con [RNF-20](03-requisitos-y-bdd.md#rnf-20), y sostener la contradicción en
 > el papel no la habría hecho desaparecer el día del go-live.
 
@@ -157,7 +159,7 @@ go-live:
 |---|---:|---|
 | dev | 512 MB | Sí. Se puede apagar fuera de horario |
 | qa | 512 MB | Sí. Se enciende para la tanda de pruebas |
-| uat | 768 MB | Sí, avisándole a Gerencia: el primer clic de la sesión de aprobación puede tardar unos segundos |
+| uat | 768 MB | Solo el de después de desplegar, avisándole a Gerencia: el primer clic de la sesión de aprobación puede tardar unos segundos. **Por inactividad no**, que es lo que obliga a pagarlo |
 | **prod** | **1 GB** | **No.** [RNF-20](03-requisitos-y-bdd.md#rnf-20) exige estar siempre en línea; prod no baja a cero |
 
 > **La JVM pide memoria y eso no se negocia, se presupuesta.** Por debajo de 512 MB, Spring Boot
