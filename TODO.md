@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.9.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [4.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -1115,6 +1115,18 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **Un tipo de usuario que no es ni Gerencia ni Operación sale como `42200`**, porque el
       catálogo no tiene código propio para eso y no debería: las dos opciones viajan en el
       descriptor y el front pinta esas
+- [ ] ⚡ **El sello de idempotencia tapaba el rechazo de la base, y se arregló aquí.** Cuando una
+      sentencia falla, PostgreSQL deja la transacción abortada y no acepta ni una más; el filtro de
+      la [1.14](docs/08-plan-de-desarrollo.md#tarea-1-14) intentaba sellar la respuesta dentro de esa misma transacción, y su `25P02` salía
+      del filtro **pisando** el sobre que el controlador ya había armado. Operación intentando
+      quitarse el acceso leía «algo salió mal» con el guardián haciendo exactamente su trabajo.
+      Ahora, si el sello no cabe, se revierte la clave y se responde lo que salió —el mecanismo que
+      el filtro ya tenía para los 5xx—. **No se vio antes porque hasta la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) ninguna escritura
+      llegaba a que la base la rechazara**, y ningún doble aborta una transacción de verdad
+- [ ] **Dos rechazos de la base pasan a `40300`**: el de una política sobre un `INSERT` y el del
+      trigger que congela la ficha propia. Los dos significan «no te alcanza» y salían como error
+      del sistema. Que la API los traduzca no es que decida permisos: sigue sin mirar de qué tipo
+      es nadie
 - [ ] **La traducción de restricción a código está escrita a mano en `UsuariosEnPostgres`.** Mira el
       nombre de la restricción y el texto del `RAISE EXCEPTION`, que es lo que el [04](docs/04-modelo-de-datos.md) permite al
       exigir nombres explícitos. La tabla general es la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8), y cuando exista este método se va con
