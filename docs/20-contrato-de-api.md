@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-18 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-18 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
@@ -107,7 +107,7 @@ con `status` `20000` es imposible de escribir por accidente.
 
 ### 2.2 Los códigos base
 
-Nueve códigos transversales, los que aparecen en cualquier módulo. **Todos terminan en `00`**,
+Diez códigos transversales, los que aparecen en cualquier módulo. **Todos terminan en `00`**,
 que es el caso reservado al genérico de cada estado HTTP:
 
 | Código | HTTP | Significado |
@@ -121,6 +121,16 @@ que es el caso reservado al genérico de cada estado HTTP:
 | `40900` | 409 | Conflicto de estado |
 | `42200` | 422 | Los datos no pasan las reglas |
 | `50000` | 500 | Error no previsto |
+| `50300` | 503 | El sistema no está disponible |
+
+> **Por qué `50300` no es un `50000`.** El genérico dice «Algo salió mal. Intenta de nuevo en un
+> momento», y hay una familia de fallos para la que esa frase es falsa en las dos mitades: cuando un
+> servicio del que la API depende no contesta, o cuando le falta una variable para hablar con él, no
+> ha pasado nada imprevisto —está previsto y tiene nombre— y reintentar no arregla nada, porque una
+> variable sin cargar sigue sin cargarse un momento después. Que los dos casos compartan código es a
+> propósito: para quien está delante son la misma situación y no puede hacer nada distinto en
+> ninguna, así que lo único útil es que avise. Cuál de los dos fue queda en el registro del servidor,
+> que es donde lo lee quien administra.
 
 La idempotencia ([§5](#5-idempotencia)) y el canal firmado ([§6](#6-el-canal-firmado)) agregan los suyos, y están listados en esas secciones.
 
@@ -153,7 +163,7 @@ módulo, igual en todos los estados HTTP.**
 Así `42213` se lee de un vistazo: **HTTP 422, módulo de usuarios, caso 3 de ese módulo.**
 
 > **El caso `00` está reservado al genérico y no pertenece a ningún módulo.** Sin esa reserva, los
-> nueve códigos base habrían caído dentro del rango de Sesión y seguridad y `42200` habría
+> diez códigos base habrían caído dentro del rango de Sesión y seguridad y `42200` habría
 > afirmado ser de un módulo al que no pertenece. El reparto por rangos empieza en `01`.
 
 El rango `01`–`09` cubre **sesión, seguridad y transporte**: lo que ocurre *antes* de que la
@@ -755,7 +765,7 @@ firma se arma igual que en una escritura, con `sha256` del cuerpo vacío; y esta
 | Con qué configuración corre cada ambiente y cómo se publica | [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [Contrato](../contrato/README.md "Contrato de la API · v0.8.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [Contrato](../contrato/README.md "Contrato de la API · v0.9.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
