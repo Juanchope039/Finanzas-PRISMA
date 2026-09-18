@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
+| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
 
 Tres partes —un front en Flutter multiplataforma, una API en Java 25 con Spring Boot y una capa
 de datos PostgreSQL siempre en línea—. Arquitectura hexagonal (puertos y adaptadores) sobre Clean
@@ -618,8 +618,11 @@ Sin estas cuatro, lo anterior es teatro:
 2. **El usuario de la API no puede ser dueño de las tablas.** El dueño se salta RLS por defecto.
 3. **`ALTER TABLE … FORCE ROW LEVEL SECURITY` en todas las tablas**, para que ni el dueño se
    libre. Es cinturón y tirantes, y aquí se justifica.
-4. **La clave `service_role` de Supabase no se usa nunca en el camino de una petición de usuario.**
-   Queda reservada para migraciones y tareas administrativas, y vive en un secreto distinto.
+4. **La clave `service_role` de Supabase no se usa nunca para hablar con PostgreSQL:** ni por
+   conexión directa, ni por PostgREST, ni por ninguna vía que evalúe —o deje de evaluar— RLS. Vive
+   en un secreto distinto del de la base y del de las migraciones. Contra GoTrue se usa solo en las
+   dos operaciones de administración de identidades que enumera el [ADR-033](adr/ADR-033-service-role-solo-en-auth.md) —crear una persona y
+   restablecerle la contraseña—, porque la API de administración es la única forma de hacerlas.
 
 > **Dos tablas no admiten la tercera condición, y está decidido así.** `usuarios` y `auditoria`
 > se quedan sin `FORCE`: la primera porque `fn_es_gerencia()` la consulta y el ciclo solo se

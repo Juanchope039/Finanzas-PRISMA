@@ -1,8 +1,8 @@
-# Contrato de la API · v0.7.0
+# Contrato de la API · v0.8.0
 
 | Versión | Estado | Creado | Actualizado | Contrato | Etiquetas |
 |---|---|---|---|---|---|
-| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/contrato/README.md "Historial de cambios") | [✅ Vigente](../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [0.7.0](openapi.json) | [Contrato](../docs/INDICE.md#etiqueta-contrato) · [API](../docs/INDICE.md#etiqueta-api) · [Front](../docs/INDICE.md#etiqueta-front) |
+| [2.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/contrato/README.md "Historial de cambios") | [✅ Vigente](../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [0.8.0](openapi.json) | [Contrato](../docs/INDICE.md#etiqueta-contrato) · [API](../docs/INDICE.md#etiqueta-api) · [Front](../docs/INDICE.md#etiqueta-front) |
 
 Este es **el contrato entre `prisma_front` y `prisma_api`**: lo que viaja por el cable, dicho en
 un solo archivo. Vive aquí, y no en ninguno de los repositorios de código, porque no le pertenece
@@ -161,9 +161,9 @@ controladores. Si difieren, la compilación falla y dice en qué línea
 
 | | |
 |---|---|
-| **Versión** | `0.7.0` |
+| **Versión** | `0.8.0` |
 | **Rutas** | Todas bajo `/api/v0`, y **ninguna usa GET** ([ADR-030](../docs/adr/ADR-030-contrato-sin-get.md)): las nueve lecturas cuelgan de `/api/v0/consultas/…` y las diecisiete escrituras, de su recurso. 26 operaciones en 26 rutas |
-| **Códigos** | 30: los 9 genéricos, 9 de sesión y transporte, 9 de usuarios y cargos y 3 de movimientos y cuentas, de los cuales 11 siguen marcados como pendientes |
+| **Códigos** | 30: los 9 genéricos, 9 de sesión y transporte, 9 de usuarios y cargos y 3 de movimientos y cuentas, de los cuales 7 siguen marcados como pendientes |
 | **Copia fijada en `prisma_api`** | Va en `0.7.0` y sirve **siete** de las 26 operaciones: la versión, el descriptor, la navegación y las cuatro de `/sesiones`. **No declara que las implemente todas**: declara contra qué versión del contrato está escrita, y `0.2.0` dejó de existir el día en que sus dos rutas cambiaron de verbo y de ruta. Saltarse el número habría sido peor: dos contratos distintos con el mismo `0.2.0` |
 | **Origen** | Las dos versiones se generaron del esqueleto de la API durante el [Sprint 0](../docs/08-plan-de-desarrollo.md#sprint-0) y se revisaron antes de fijarlas. De aquí en adelante el orden es el inverso: primero se acuerda aquí, después se implementa |
 
@@ -173,6 +173,7 @@ controladores. Si difieren, la compilación falla y dice en qué línea
 
 | Versión | Qué cambió | Por qué |
 |---|---|---|
+| `0.8.0` | Cuatro códigos de usuarios —`40910`, `42211`, `42212` y `42213`— dejan de estar marcados como pendientes de emitir | Tarea [2.7](../docs/08-plan-de-desarrollo.md#tarea-2-7): la gestión de usuarios ya los emite, y los cuatro los decide la base —el `UNIQUE` del usuario, su `CHECK` de formato, la llave foránea del cargo y el trigger de la última Gerencia—. **Sube la MINOR sin cambiar ninguna operación**, como el `0.6.0`: las seis rutas de `/usuarios` estaban acordadas desde el `0.4.0` y aquí solo empiezan a existir |
 | `0.7.0` | La cookie `prisma_renovacion` pasa a `SameSite=None` y `Path=/api/v0/sesiones`, se declara **opcional** en la renovación, y `40302` y `42210` dejan de estar pendientes de emitir | Tarea [2.2](../docs/08-plan-de-desarrollo.md#tarea-2-2). El front y la API viven en dominios distintos desde [ADR-032](../docs/adr/ADR-032-railway-en-dev-ahora.md), y con `Strict` el navegador no manda la cookie nunca; el `Path` se escribió antes de que [ADR-030](../docs/adr/ADR-030-contrato-sin-get.md) pusiera el prefijo, así que no alcanzaba ninguna ruta real. La cookie es opcional porque **sin ella la respuesta es `40100` y no un `400`**: quien abre la aplicación por primera vez no armó mal la petición, es que todavía no ha entrado. **Sube la MINOR sin cambiar ninguna operación**: la prueba [C-04](../docs/12-pruebas-y-calidad.md#c-04) trata la descripción de una cabecera como cambio de contrato igual |
 | `0.6.0` | Los tres códigos del canal firmado —`40101`, `40102` y `40103`— dejan de estar marcados como pendientes de emitir | Tarea [2.13](../docs/08-plan-de-desarrollo.md#tarea-2-13): el filtro de firma ya los emite. **Sube la MINOR sin cambiar ninguna operación**, porque `pendienteDeEmitir` es lo que le dice al front qué códigos puede esperar ya |
 | `0.5.0` | **Ninguna operación usa GET.** Las nueve lecturas pasan a `POST /api/v0/consultas/…` con su cuerpo, las diecisiete escrituras ganan el prefijo `/api/v0`, y `Idempotency-Key` pasa a ser obligatoria también al leer. Tres esquemas nuevos: `ConsultaDeBitacora`, `ConsultaDeFormulario` y `ConsultaDeNavegacion` | [ADR-030](../docs/adr/ADR-030-contrato-sin-get.md). **Sube la MINOR aunque rompe todo lo anterior**, por el mismo motivo que `0.4.0`: antes del go-live todo es `0.y.z` ([ADR-014](../docs/adr/ADR-014-semver.md)) y esta vez los dos lados cambian en el mismo día, no cada uno a su ritmo. Es el primer cambio de contrato que invalida algo ya construido: `prisma_api` servía dos rutas y `prisma_front` las consumía |

@@ -1004,7 +1004,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.7.0"
+    "version" : "0.8.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -2829,10 +2829,6 @@
     "mensaje" : "No se puede desactivar ni degradar al último usuario de Gerencia.",
     "modulo" : "USUARIOS_Y_CARGOS",
     "nombre" : "ULTIMA_GERENCIA",
-    "pendienteDeEmitir" : {
-      "quien" : "Tarea 2.7: gestión de usuarios",
-      "sprint" : 2
-    },
     "status" : 40910
   }, {
     "cuando" : "Desactivar un cargo, o revertir su creación o su reactivación, mientras lo tengan personas activas",
@@ -2880,10 +2876,6 @@
     "mensaje" : "Ya hay alguien con ese usuario. Elige otro.",
     "modulo" : "USUARIOS_Y_CARGOS",
     "nombre" : "USUARIO_YA_EXISTE",
-    "pendienteDeEmitir" : {
-      "quien" : "Tarea 2.7: gestión de usuarios",
-      "sprint" : 2
-    },
     "status" : 42211
   }, {
     "cuando" : "Crear un usuario cuyo nombre de usuario, ya en minúsculas, no cumple el formato. El error va en data.errores, sobre usuario",
@@ -2891,10 +2883,6 @@
     "mensaje" : "El usuario va en minúsculas, de 3 a 20 caracteres: letras sin tilde, números, punto, guion y guion bajo, y empieza con una letra o un número.",
     "modulo" : "USUARIOS_Y_CARGOS",
     "nombre" : "USUARIO_CON_FORMATO_INVALIDO",
-    "pendienteDeEmitir" : {
-      "quien" : "Tarea 2.7: gestión de usuarios",
-      "sprint" : 2
-    },
     "status" : 42212
   }, {
     "cuando" : "Asignar un cargo que no existe o que está inactivo. El error va en data.errores, sobre cargoId",
@@ -2902,10 +2890,6 @@
     "mensaje" : "Elige un cargo activo del catálogo.",
     "modulo" : "USUARIOS_Y_CARGOS",
     "nombre" : "CARGO_NO_ASIGNABLE",
-    "pendienteDeEmitir" : {
-      "quien" : "Tarea 2.7: gestión de usuarios",
-      "sprint" : 2
-    },
     "status" : 42213
   }, {
     "cuando" : "Crear o renombrar un cargo con el nombre de otro, sin distinguir mayúsculas. El error va en data.errores, sobre nombre",
