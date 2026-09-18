@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [4.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -910,6 +910,15 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **Los documentos no se ponen de acuerdo en cuál es la rama base:** el [21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración) y el
       [08 §4](docs/08-plan-de-desarrollo.md#4-definición-de-terminado) dicen `develop`; el [ADR-026](docs/adr/ADR-026-railway-al-final.md) y el [ADR-028](docs/adr/ADR-028-un-commit-por-tarea.md), `main`. La regla de empujar esquiva la
       contradicción nombrando la rama de trabajo, pero la contradicción sigue ahí
+
+**De dejar la integración continua en verde:**
+
+- [ ] **Seis pruebas salen de la compilación de siempre y dejan de comprobarse en cada empuje.**
+      Cinco necesitan PostgreSQL —el ingreso lee la ficha de `public.usuarios` con la identidad
+      puesta— y pasan a llevar `@Tag("integracion")`, así que corren con `./gradlew integracion`
+      contra una base de verdad. La sexta, la del filtro y la sonda de salud, acepta `200` o `503`:
+      lo suyo es que la petición llegue a la sonda, no que la base esté viva. El hueco lo cierra el
+      trabajo aparte que el [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) manda levantar con Supabase, y que depende de la [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20)
 
 ---
 
