@@ -1,4 +1,4 @@
-# 10 · La aplicación en línea, en dev
+# 11 · La aplicación en línea, en dev
 
 **2026-09-17** · Tareas [0.8](../docs/08-plan-de-desarrollo.md#tarea-0-8) y [0.9](../docs/08-plan-de-desarrollo.md#tarea-0-9) del [Sprint 0](../docs/08-plan-de-desarrollo.md#sprint-0), carriles API y Front, traídas del
 [Sprint 9](../docs/08-plan-de-desarrollo.md#sprint-9) a donde estaban. Toca los tres repositorios de código, doce documentos y la consola de
