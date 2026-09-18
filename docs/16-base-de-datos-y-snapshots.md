@@ -2,12 +2,12 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-18 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-18 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
-> **Construcción: construido y corriendo contra dev**, donde el esquema está aplicado y verificado
-> línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5), [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5) y [1.13](08-plan-de-desarrollo.md#tarea-1-13)). **qa va siete migraciones atrás** —eran cuatro, y
-> desde entonces se fusionaron tres más—: el procedimiento para promoverlas está en el
-> [§5.3](#53-promover-a-qa-paso-a-paso), y correrlo es lo que cierra la [1.12](08-plan-de-desarrollo.md#tarea-1-12). Fue la primera pieza de código ejecutable del proyecto.
+> **Construcción: construido y corriendo contra dev y contra qa**, donde el esquema está aplicado y
+> verificado línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5), [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5) y [1.13](08-plan-de-desarrollo.md#tarea-1-13)). **qa quedó al día** con el
+> procedimiento del [§5.3](#53-promover-a-qa-paso-a-paso), que es lo que cerró la [1.12](08-plan-de-desarrollo.md#tarea-1-12): cinco migraciones aplicadas y las 109
+> comprobaciones en `OK`. El que va atrás ahora es dev, al que le falta la `0.3.0`. Fue la primera pieza de código ejecutable del proyecto.
 > Convierte el esquema que describe [`04-modelo-de-datos.md`](04-modelo-de-datos.md) en una
 > base de datos real, reproducible en cualquier ambiente con un comando.
 
