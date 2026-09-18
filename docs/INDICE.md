@@ -148,7 +148,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [07 · Arquitectura técnica](07-arquitectura.md) | 3.2.0 | ✅ Vigente | 2026-09-17 | [Arquitectura](#etiqueta-arquitectura) · [API](#etiqueta-api) · [Front](#etiqueta-front) · [Base de datos](#etiqueta-base-de-datos) · [Seguridad](#etiqueta-seguridad) |
 | [08 · Plan de desarrollo](08-plan-de-desarrollo.md) | 4.0.0 | ✅ Vigente | 2026-09-17 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
 | [09 · Plan de implantación](09-plan-de-implantacion.md) | 3.0.0 | ✅ Vigente | 2026-09-17 | [Plan](#etiqueta-plan) · [Entrega](#etiqueta-entrega) · [Negocio](#etiqueta-negocio) |
-| [10 · Diseño de experiencia y mockups](10-ux-y-mockups.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [UX](#etiqueta-ux) · [Front](#etiqueta-front) |
+| [10 · Diseño de experiencia y mockups](10-ux-y-mockups.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [UX](#etiqueta-ux) · [Front](#etiqueta-front) |
 | [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Seguridad](#etiqueta-seguridad) · [Datos personales](#etiqueta-datos-personales) · [Negocio](#etiqueta-negocio) |
 | [12 · Pruebas y calidad](12-pruebas-y-calidad.md) | 2.2.0 | ✅ Vigente | 2026-09-17 | [Calidad](#etiqueta-calidad) |
 | [13 · Respaldo y exportación](13-respaldo-y-exportacion.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Base de datos](#etiqueta-base-de-datos) · [Datos personales](#etiqueta-datos-personales) |

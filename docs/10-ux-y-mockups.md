@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -335,6 +335,23 @@ de correo —se entra con nombre de usuario— y no hay enlace de recuperación.
 | No hay «olvidé mi contraseña» | No hay correo real a donde mandar nada. La clave la restablece Gerencia en persona; decirlo en la pantalla ahorra la búsqueda del enlace que no existe |
 | El campo Usuario no autocapitaliza ni autocorrige | En el celular, `Marcela` con mayúscula inicial sería el primer intento fallido de todas |
 | Enter envía desde los dos campos y el foco arranca en Usuario | Se entra sin soltar el teclado ni mover el pulgar. [RNF-19](03-requisitos-y-bdd.md#rnf-19) pide menos de 10 segundos con una sola mano |
+
+**Cuando los campos no llegan.** Los campos los dicta la API ([RF-102](03-requisitos-y-bdd.md#rf-102)),
+así que hay dos formas de quedarse sin ellos. La pantalla **las distingue**, porque no se arreglan
+igual y porque un aviso equivocado manda a buscar el fallo al sitio equivocado:
+
+| Lo que pasó | Lo que se lee |
+|---|---|
+| No se pudo hablar con el servidor: sin conexión, servidor caído o tiempo agotado | «No se pudo conectar con el servidor. Revisa tu conexión e intenta de nuevo.» |
+| El servidor respondió, y aun así no hay formulario que pintar | «No se pudo cargar el formulario. Intenta de nuevo en un momento.» |
+
+En los dos casos la tarjeta queda **sin campos** y con un botón **Reintentar** debajo del aviso, que
+vuelve a pedir el formulario sin recargar la página. Sin ese botón el primer texto promete un
+reintento que no se puede hacer.
+
+Son de los poquísimos textos que **escribe el front**, igual que los de [§4.10](#410-versión-incompatible)
+y por la misma razón: se muestran justo cuando no hay servidor que los dicte. Ninguno habla de una
+regla de negocio, así que [RNF-28](03-requisitos-y-bdd.md#rnf-28) sigue en pie.
 
 **Vista previa · entra con un clic.** Debajo del formulario hay un botón por cada usuario de
 ejemplo que rellena y envía. Existe **solo en el mockup**, y por dos razones. La primera es que
