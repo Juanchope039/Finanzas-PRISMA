@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [5.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -155,8 +155,10 @@ o indirectamente. No es el orden en que se descubrieron.
       ([1.13](docs/08-plan-de-desarrollo.md#tarea-1-13)), su purga ([1.16](docs/08-plan-de-desarrollo.md#tarea-1-16)), las dos tablas del canal firmado ([2.20](docs/08-plan-de-desarrollo.md#tarea-2-20)) y las dos filas de versión.
       De 45 comprobaciones en falla a **109 en `OK`**. Queda al revés: dev sin la `0.3.0`.
 - [ ] ⚡ **uat y prod** · Decisión — son los dos proyectos de Supabase que faltan para cerrar [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4), y
-      los dos son **de pago** ([19 §8.1](docs/19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no)). Los decide Gerencia, y hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) no hay nada que
-      promover a ellos.
+      los dos son **de pago** ([19 §8.1](docs/19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no)). **Ya no falta averiguar nada:** el expediente está en el
+      [§7.1](#71-el-expediente-de-uat-y-prod) con la cifra —≈ 55 USD al mes—, cada fuente con su fecha de consulta y las cuatro
+      condiciones del [ADR-026](docs/adr/ADR-026-railway-al-final.md) comprobadas contra Railway una por una. Lo que falta es la firma de
+      Gerencia, que es el paso 2 del [09 §3.1](docs/09-plan-de-implantacion.md#31-alistamiento-técnico-de-los-ambientes), y hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) no hay nada que promover a ellos.
 - [x] **El repositorio de movimientos** ([3.3](docs/08-plan-de-desarrollo.md#tarea-3-3)) — hecho: tenía **36 tareas detrás** y abría el
       [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) entero. Lo que el dominio calcula ya llega a PostgreSQL con la persona de la sesión,
       y quien juzga si puede escribirlo es `mov_insercion`, no la API. Detrás se abren los saldos por
@@ -554,7 +556,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 |---|---|---|---|---|
 | 1 | Dónde se aloja la API | Quien dirige | Tarea [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) | ✅ Railway, al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)) |
 | 2 | Dónde se publica el front web | Quien dirige | Tarea [0.9](docs/08-plan-de-desarrollo.md#tarea-0-9) | ✅ Railway, al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)) |
-| 3 | Los cuatro proyectos de Supabase y el pago de uat y prod | Quien dirige crea; Gerencia paga | Tarea [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) | 🟡 dev y qa configurados, con el esquema y la semilla aplicados; faltan uat y prod, los de pago |
+| 3 | Los cuatro proyectos de Supabase y el pago de uat y prod | Quien dirige crea; Gerencia paga | Tarea [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) | 🟡 dev y qa configurados, con el esquema y la semilla aplicados. **El expediente está listo y la cifra es ≈ 55 USD al mes** ([§7.1](#71-el-expediente-de-uat-y-prod)); falta la firma de Gerencia, que es el paso 2 del [09 §3.1](docs/09-plan-de-implantacion.md#31-alistamiento-técnico-de-los-ambientes) |
 | 4 | PostgreSQL para desarrollar sin Docker | Quien dirige | Tareas [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) y [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) | ✅ El proyecto dev de Supabase, mientras Docker no arranque |
 | 5 | Remotos de los repositorios | Quien dirige | Integración continua | ✅ Los cuatro en GitHub |
 | 6 | Cómo consiguen la API y su CI el esquema de `prisma_db` | Carril API | Tareas [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7), [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) y [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) | ✅ Por etiqueta, con el Supabase CLI en la tubería ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) |
@@ -573,6 +575,86 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 - [ ] La variante del trigger de auditoría para `usuarios`, que detecta `desactivado_en` · [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2)
 - [ ] 🔒 El `CREATE TABLE` de `adjuntos` · [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3), tarea [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6)
 - [ ] 🔒 El `CREATE TABLE` de `cotizaciones` y `cotizacion_lineas` · [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8), tarea [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8)
+
+### 7.1 El expediente de uat y prod
+
+Lo que le falta a la fila 3 para poder decidirse. **Ningún documento del proyecto traía una cifra**:
+el [19 §8.1](docs/19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no) decía «es una factura, y es pequeña», y eso no es un número. Aquí están, **consultadas
+el 2026-09-18**, con su fuente, porque un precio sin fecha envejece sin avisar.
+
+**1 · Cuánto cuesta al mes**
+
+| Proveedor | Qué hay que contratar | Al mes |
+|---|---|---:|
+| Supabase | Plan **Pro** en una organización nueva para uat y prod: 25 USD de plan + 10 por proyecto − 10 de crédito incluido | **35 USD** |
+| Railway | Plan **Pro** por espacio de trabajo, 20 USD con 20 USD de crédito incluido | **20 USD** |
+| | **Total** | **≈ 55 USD** |
+
+- **El plan de Supabase es por organización, no por proyecto**, y la cuenta tiene **dos proyectos
+  gratuitos en total** repartidos como quiera: dev y qa ya los gastaron. Así que uat y prod no caben
+  en el plan gratuito ni aunque se aceptara que se pausen. Se pueden tener una organización gratuita
+  y una de pago a la vez, y por eso lo barato es **dejar dev y qa donde están y abrir una
+  organización nueva para los dos de pago**: meter los cuatro en una sola sube a 55 USD solo en
+  Supabase, y lo único que se gana es que dev y qa dejen de pausarse.
+- **El plan gratuito pausa el proyecto tras una semana de inactividad; el Pro dice «nunca».** Eso, y
+  no otra cosa, es lo que compra el [RNF-20](docs/03-requisitos-y-bdd.md#rnf-20).
+- **Railway cobra lo que se usa, no lo que se reserva**: 10 USD por GB al mes y 20 por vCPU al mes,
+  facturado por segundo. uat con 768 MB y prod con 1 GB ([09 §3.2](docs/09-plan-de-implantacion.md#32-alojar-la-api-de-java-en-los-cuatro-ambientes)) son 1,75 GB, o sea **17,50 USD de
+  memoria** si los dos estuvieran siempre en su piso, más la CPU que gasten. Cabe en el crédito de
+  20 del plan Pro, pero **justo**: el de Hobby son 5 USD y no alcanza. Y dev ya está en Railway
+  ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)), así que lo que gaste cuenta contra el mismo crédito.
+- Fuentes: [supabase.com/pricing](https://supabase.com/pricing), [su guía de facturación](https://supabase.com/docs/guides/platform/billing-on-supabase),
+  [railway.com/pricing](https://railway.com/pricing) y [su referencia de precios](https://docs.railway.com/reference/pricing).
+
+**2 · Qué desbloquea**
+
+`0.4` → [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2) uat en pie → [9.3](docs/08-plan-de-desarrollo.md#tarea-9-3) promover sin recompilar y [9.5](docs/08-plan-de-desarrollo.md#tarea-9-5) permisos en los cuatro ambientes →
+[9.10](docs/08-plan-de-desarrollo.md#tarea-9-10) etiquetar `1.0.0` → [H10](docs/08-plan-de-desarrollo.md#h10) → go-live. **[H10](docs/08-plan-de-desarrollo.md#h10) es «Gerencia aprueba en UAT exactamente el
+artefacto que irá a prod»**, y sin uat contratado esa firma no tiene sobre qué hacerse.
+
+**3 · Qué pasa si se aplaza**
+
+Nada, hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9): antes no hay nada que promover ahí, y el [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md) ya decidió no abrir
+los cuatro ambientes ahora. Lo que no se puede aplazar es **decidirlo**: el [09 §3.1](docs/09-plan-de-implantacion.md#31-alistamiento-técnico-de-los-ambientes) dice que «dos de
+los pasos cuestan plata y hay que decidirlos con tiempo», y una decisión de gasto descubierta la
+semana de la firma se toma mal o se pospone. Posponerla mueve el go-live.
+
+**Las cuatro condiciones del [ADR-026](docs/adr/ADR-026-railway-al-final.md), comprobadas contra Railway**
+
+| # | Condición | Cómo responde Railway |
+|---|---|---|
+| 1 | Se promueve la imagen, no se recompila | Despliega imágenes de contenedor, que es lo que la API ya produce. **Falta el registro de imágenes**, que no existe todavía y sin el cual esta condición no se cumple entre ambientes |
+| 2 | uat y prod no se duermen | **No descarta ningún plan**, que era el miedo: dormirse es un interruptor por servicio —«Serverless», en los ajustes de despliegue— que viene apagado. Se deja apagado en uat y prod y ya. Encendido, duerme el servicio a los 10 minutos sin actividad y **la primera petición puede contestar 502**, que es exactamente lo que invalidaría la revisión de Gerencia |
+| 3 | Los secretos viven en el gestor del proveedor | Variables por ambiente, que es como ya corre dev |
+| 4 | La `service_role` no entra en el servicio de la API | No depende del proveedor: es nuestra ([ADR-033](docs/adr/ADR-033-service-role-solo-en-auth.md)) |
+
+El [ADR-026](docs/adr/ADR-026-railway-al-final.md) las numera como tres porque junta las dos últimas en una; se separan aquí porque se
+comprueban por separado.
+
+**Quién hace cada paso del [09 §3.1](docs/09-plan-de-implantacion.md#31-alistamiento-técnico-de-los-ambientes)**
+
+De los nueve, **el paso 2 es el único de Gerencia** —contratar lo que hay que pagar, antes de
+levantar uat— y los otros ocho son de apoyo técnico. Ninguno de esos ocho puede correr para uat y
+prod hasta que el 2 esté hecho, porque los proyectos todavía no existen.
+
+**Y lo que uat exige y no es dinero:** datos **realistas y anonimizados**, con su propia semilla
+([9.2](docs/08-plan-de-desarrollo.md#tarea-9-2)). La de dev y qa no entra ahí nunca —lleva nombres reales del equipo—, y `sembrar.ps1` solo
+admite `dev` y `qa` para que la regla no dependa de que alguien se acuerde. Es el riesgo [R-23](docs/11-riesgos-y-proteccion-de-datos.md) y es
+la Ley 1581.
+
+**Lo que este expediente deja fuera a propósito**, para que una decisión de gasto no se convierta en
+una reunión de todo: las cuatro del [21 §8](docs/21-trabajo-en-paralelo.md#8-qué-hay-que-decidir-antes-de-abrir-un-segundo-carril) —quién trabaja cada carril, los permisos de escritura,
+contrato por etiqueta o por paquete, y quién desempata un cambio de contrato—; el **plan pago de
+dev**; el **registro de imágenes** de la condición 1; y **apagar la Data API** o revocarle el acceso
+a `anon`.
+
+**Dos de esa lista tienen fecha externa y no esperan a Gerencia:**
+
+- **Las claves heredadas.** Supabase «deprecia las claves `anon` y `service_role` para finales de
+  2026» y las reemplaza por `sb_publishable_…` y `sb_secret_…` ([su documentación](https://supabase.com/docs/guides/api/api-keys), consultada el
+  2026-09-18). Crear uat y prod con claves que van a morir es hacer el trabajo dos veces, y las
+  variables que hoy las nombran están en el [09 §3.2](docs/09-plan-de-implantacion.md#32-alojar-la-api-de-java-en-los-cuatro-ambientes).
+- **Las contraseñas de la semilla en dev**, hoy alcanzables desde internet.
 
 ---
 
@@ -1030,6 +1112,26 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       `0.3.0` aplicada mientras su migración todavía espera revisión. El contenido es el mismo que se
       va a fusionar, pero el orden correcto es al revés, y la etiqueta del [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) solo se puede
       poner después. Si el PR se rechazara, qa tendría una migración que el repositorio no tiene
+
+**De la preparación de uat y prod (tarea [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4)):**
+
+- [ ] **La contradicción de la factura se resolvió contra el [09](docs/09-plan-de-implantacion.md), que era el que estaba mal.** Decía «dos
+      proyectos de Supabase de pago y **un** alojamiento de API»; el [19 §8.1](docs/19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no) dice **dos**. Ganó el 19
+      porque no está solo: el [19 §2.4](docs/19-ambientes-y-entrega.md#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro) explica el porqué —«la primera petición después de la siesta paga
+      el arranque entero»— y la condición 2 del [ADR-026](docs/adr/ADR-026-railway-al-final.md), que el [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md) dejó **intacta**, dice que uat y
+      prod no se duermen. Tres fuentes contra una. De paso, la fila de uat del [09 §3.2](docs/09-plan-de-implantacion.md#32-alojar-la-api-de-java-en-los-cuatro-ambientes) aceptaba el
+      arranque en frío sin distinguir cuál: ahora acepta el de después de desplegar y no el de la
+      inactividad, que es el que cuesta dinero
+- [ ] ⚡ **La [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) no se marcó, y el plan 25 decía marcarla.** Pide «los cuatro proyectos de Supabase», y
+      uat y prod **no existen**: marcarla sería escribir en el tablero algo que no es cierto, que es
+      justo lo que acabó de costar trabajo descubrir en qa. Por lo mismo la fila 3 del [§7](#7-decisiones-pendientes) sigue en 🟡 y
+      no pasó a ✅: lo que está listo es el expediente, no la decisión. Pasan las dos el día que
+      Gerencia firme y los proyectos existan
+- [ ] **No se escribió ningún ADR nuevo, y esa también es una decisión.** El plan pedía uno solo si algo
+      cambiaba respecto del [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md) —adelantar uat o prod, pagar dev, montar el registro de imágenes— y
+      no cambió nada: uat y prod siguen esperando al [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) y no se contrató nada. Poner precio a lo
+      ya decidido no es decidir de nuevo. Lo que sí apareció es que el [ADR-033](docs/adr/ADR-033-service-role-solo-en-auth.md) **no estaba en el índice
+      de ADR**, que por eso contaba 32
 
 **Del front (tareas [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19), [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19), [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18), [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10) y [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1)):**
 
