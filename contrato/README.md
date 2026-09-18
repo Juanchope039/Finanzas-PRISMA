@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Contrato | Etiquetas |
 |---|---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/contrato/README.md "Historial de cambios") | [✅ Vigente](../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [0.5.0](openapi.json) | [Contrato](../docs/INDICE.md#etiqueta-contrato) · [API](../docs/INDICE.md#etiqueta-api) · [Front](../docs/INDICE.md#etiqueta-front) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/contrato/README.md "Historial de cambios") | [✅ Vigente](../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [0.6.0](openapi.json) | [Contrato](../docs/INDICE.md#etiqueta-contrato) · [API](../docs/INDICE.md#etiqueta-api) · [Front](../docs/INDICE.md#etiqueta-front) |
 
 Este es **el contrato entre `prisma_front` y `prisma_api`**: lo que viaja por el cable, dicho en
 un solo archivo. Vive aquí, y no en ninguno de los repositorios de código, porque no le pertenece
