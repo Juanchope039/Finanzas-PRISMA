@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [3.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-18 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -308,6 +308,18 @@ Lo que comprueba cada etapa:
 > cambiara el contrato sin volver a generarlo. Actualizarlo cuesta un comando; descubrir en prod
 > que Swagger describe una API que ya no existe cuesta mucho más. Es la prueba [C-04](12-pruebas-y-calidad.md#c-04) de
 > [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) y lo que hace exigible el **[RNF-30](03-requisitos-y-bdd.md#rnf-30)**.
+
+> **Una integración continua roja no despliega, y no avisa.** Railway espera a ese mismo conjunto de
+> comprobaciones antes de construir dev ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)): si falla, marca el despliegue `SKIPPED` y el
+> ambiente **se queda en la versión anterior**, en verde, sin una sola señal en la pantalla. Fusionar
+> no es entregar: entregar es lo que pasa **después** de que las comprobaciones pasen.
+
+> **Y si lo que está roto es el archivo del flujo, no hay ni registros que abrir.** GitHub no llega a
+> crear ningún trabajo: la ejecución aparece con el nombre de la ruta en vez del suyo, y ahí se acaba
+> el rastro. Le pasó a `prisma_front` entre el 17 y el 18 de septiembre de 2026 —un `: ` dentro de un
+> escalar plano—, y dev pasó un día entero sirviendo la versión anterior mientras se fusionaban tres
+> tareas. Por eso `prisma_front` comprueba ahora sus propios flujos en `flutter test`: un archivo que
+> no se deja leer no puede correr el trabajo que comprobaría que se deja leer.
 
 ### 6.2 En cada promoción
 
