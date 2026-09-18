@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.14.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [4.15.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -634,8 +634,8 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
   existen ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)) y se corren a mano con `./gradlew integracion` contra la base local; el trabajo de
   integración continua que descarga `prisma_db` por etiqueta y levanta Supabase se monta con la
   [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7). `prisma_db` es privado, así que necesita el secreto `PRISMA_DB_TOKEN` en `prisma_api`, y ese lo
-  crea quien dirige. Y `prisma_db` todavía no tiene ninguna etiqueta `esquema-v…`, aunque su
-  esquema ya esté aplicado: etiquetarlo es parte de la promoción que tiene que escribir la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12).
+  crea quien dirige. Y `prisma_db` solo tiene la etiqueta `esquema-v0.1.0`, siete migraciones por
+  detrás de lo que dice su `develop`: poner la que falta es parte de la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12).
 - **Sin qa hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9)** ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)): mientras tanto, «terminado» es fusionado a `develop` con la
   integración continua en verde. Que dev ya esté en línea no crea la puerta de qa.
 - **Los íconos de la PWA siguen siendo los de la plantilla de Flutter.** El logo del taller es
@@ -975,11 +975,30 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 
 **De la primera promoción a qa (tarea [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)):**
 
-- [ ] **La versión del esquema sube a `0.2.0`, y esa regla no la escribió ningún documento.**
-      [19 §4.2](docs/19-ambientes-y-entrega.md#42-las-reglas) define MAJOR, MINOR y PATCH **para la API**; del esquema solo se sabe que lleva
-      SemVer propio. Se decidió lo mínimo: mientras todo siga en `0.y.z` y ninguna API en producción
-      escriba, una tabla nueva y unas restricciones más estrictas son **MINOR**. Es la decisión que
-      esta lista le pedía a la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12), y responde la entrada de arriba sobre `schema_version`
+- [ ] **La versión del esquema sube a `0.2.0`, y luego a `0.3.0`, y esa regla no la escribió ningún
+      documento.** [19 §4.2](docs/19-ambientes-y-entrega.md#42-las-reglas) define MAJOR, MINOR y PATCH **para la API**; del esquema solo se
+      sabe que lleva SemVer propio. Se decidió lo mínimo: mientras todo siga en `0.y.z` y ninguna API
+      en producción escriba, una tabla nueva y unas restricciones más estrictas son **MINOR**. Es la
+      decisión que esta lista le pedía a la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12), y responde la entrada de arriba sobre
+      `schema_version`
+- [ ] **La `0.2.0` describe cuatro cambios y la base tiene cinco, y se arregló con una fila más y no
+      corrigiéndola.** Entre que se fusionó y que se promovió entraron las dos tablas del canal
+      firmado ([2.20](docs/08-plan-de-desarrollo.md#tarea-2-20)), que su descripción no nombra. Corregirla es lo que pediría el cuerpo, pero ya
+      estaba aplicada, y editar una migración aplicada no cambia el ambiente que la corrió y sí deja
+      a los demás creyendo otra historia. La `0.3.0` lo dice en una fila nueva. El precio fue tocar
+      el bloque `1.12` de `verificar-base.sql`, que llevaba los dos valores escritos a mano
+- [ ] **Dos frases del [§10](#10-decisiones-de-construcción-que-conviene-revisar) sobre la rama `qa` no pueden ser verdad a la vez.** Arriba: moverlas
+      «sería inventar un flujo de ramas por ambiente que nadie decidió». Abajo, en lo de empujar
+      siempre: «en `prisma_db`, promover a qa es un PR contra la rama `qa`». El [21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración) solo nombra
+      `develop` y `main`, y el procedimiento del [16 §5.3](docs/16-base-de-datos-y-snapshots.md#53-promover-a-qa-paso-a-paso) promueve con `db push` desde `develop`, sin
+      tocar ninguna de las tres. Promover no necesita la respuesta; el flujo de ambientes del
+      [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), sí
+- [ ] **`prisma_db` es privado, y sus guiones dicen que es público.** `promover.ps1` y el
+      [16 §5.3](docs/16-base-de-datos-y-snapshots.md#53-promover-a-qa-paso-a-paso) justifican no escribir ahí ninguna referencia ni contraseña «porque el repositorio es
+      público», y quien manda es el hábito, no el motivo: la referencia sigue sin escribirse. Pero el
+      privado es el que necesita el secreto `PRISMA_DB_TOKEN` de la [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7), y el que decide si `prisma_db`
+      puede recibir integración continua sin gastar minutos de una cuenta. Público es **este**
+      repositorio, no aquel
 - [ ] **Las ramas `qa`, `uat` y `prod` de `prisma_db` no se tocaron.** Existen en el remoto, las tres
       en el mismo commit viejo, y **ningún documento las menciona**: [21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración) solo nombra `develop` y
       `main`. O son el estado de cada ambiente y llevan tiempo mintiendo, o son restos de cuando se

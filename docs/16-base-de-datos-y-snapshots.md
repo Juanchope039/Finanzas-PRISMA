@@ -2,11 +2,12 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-18 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 > **Construcción: construido y corriendo contra dev**, donde el esquema está aplicado y verificado
-> línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5), [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5) y [1.13](08-plan-de-desarrollo.md#tarea-1-13)). **qa va cuatro migraciones atrás**: el procedimiento para
-> promoverlas está en el [§5.3](#53-promover-a-qa-paso-a-paso), y correrlo es lo que cierra la [1.12](08-plan-de-desarrollo.md#tarea-1-12). Fue la primera pieza de código ejecutable del proyecto.
+> línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5), [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5) y [1.13](08-plan-de-desarrollo.md#tarea-1-13)). **qa va siete migraciones atrás** —eran cuatro, y
+> desde entonces se fusionaron tres más—: el procedimiento para promoverlas está en el
+> [§5.3](#53-promover-a-qa-paso-a-paso), y correrlo es lo que cierra la [1.12](08-plan-de-desarrollo.md#tarea-1-12). Fue la primera pieza de código ejecutable del proyecto.
 > Convierte el esquema que describe [`04-modelo-de-datos.md`](04-modelo-de-datos.md) en una
 > base de datos real, reproducible en cualquier ambiente con un comando.
 
@@ -48,7 +49,7 @@ un momento; las migraciones son la receta reproducible. Los snapshots se usan pa
 ```
 supabase/
   config.toml                          Configuración de la pila local
-  migrations/                          Ocho, en orden y ninguna editable una vez aplicada:
+  migrations/                          Doce, en orden y ninguna editable una vez aplicada:
     …_esquema_inicial.sql              Todo el esquema (doc 04 + tabla exportaciones del doc 13)
     …_ajusta_rls_y_vistas_al_doc_04.sql Apaga la RLS que Supabase enciende sola; security_invoker
     …_rol_prisma_api.sql               El rol con el que se conecta la API (doc 04 §9)
@@ -57,10 +58,16 @@ supabase/
     …_dominios_y_restricciones_con_nombre.sql  Los nueve dominios del §4.1 y los nombres del §11
     …_revoca_borrado_a_todos_los_roles.sql     Nadie borra salvo el dueño (doc 04 §5.1)
     …_peticiones_idempotentes.sql      Las claves de idempotencia, cada una solo de quien la envió (doc 04 §4.9)
+    …_purga_de_claves_vencidas.sql     La purga de las vencidas, agendada con pg_cron (doc 04 §7.1)
+    …_publica_version_0_2_0.sql        Publica la 0.2.0 en schema_version (ADR-029)
+    …_tablas_del_canal_firmado.sql     nonces_vistos y sesiones, las dos del filtro de firma (doc 04 §4.10)
+    …_publica_version_0_3_0.sql        Publica la 0.3.0, que es la anterior más esas dos tablas
   seed.sql                             Datos de prueba fijos y deterministas
 
 scripts/db/
   reset-local.ps1                      Recrea la BD local (migraciones + seed)
+  promover.ps1                         Aplica a qa lo que le falte, con sus dos llaves (ver §5.3)
+  sembrar.ps1                          Lleva la semilla a dev o a qa, y no la deja acercarse a uat ni a prod
   verificar-base.sql                   Le pregunta a la base si cumple el doc 04 (ver §5.1)
   snapshot.ps1                         Toma un snapshot (esquema y/o datos) con marca de tiempo
   restore.ps1                          Restaura un snapshot .sql sobre una BD destino
@@ -183,29 +190,34 @@ Arriba está el comando; esto es **el procedimiento**, que es lo que pedía la t
 [Sprint 9](08-plan-de-desarrollo.md#sprint-9) ([ADR-026](adr/ADR-026-railway-al-final.md)) y `prisma_db` todavía no tiene integración continua.
 
 ```powershell
-# 0 · Qué le falta al ambiente, antes de tocarlo. No deja rastro: termina en ROLLBACK
+# 0 · Apuntar el CLI a qa. Los cinco pasos que siguen dicen --linked, y el vínculo
+#     se queda donde se trabajó, que es dev
+supabase link --project-ref <la referencia de qa>
+
+# 1 · Qué le falta al ambiente, antes de tocarlo. No deja rastro: termina en ROLLBACK
 supabase db query --linked -f scripts/db/verificar-base.sql
 
-# 1 · Qué se aplicaría, sin aplicar nada
+# 2 · Qué se aplicaría, sin aplicar nada
 ./scripts/db/promover.ps1 -Ambiente qa -EnSeco
 
-# 2 · Aplicarlo. El CLI enseña la lista y pregunta antes
+# 3 · Aplicarlo. El CLI enseña la lista y pregunta antes
 ./scripts/db/promover.ps1 -Ambiente qa
 
-# 3 · La semilla, que no viaja con las migraciones
+# 4 · La semilla, que no viaja con las migraciones
 ./scripts/db/sembrar.ps1 -Ambiente qa
 
-# 4 · Preguntarle otra vez a la base, ahora entero en OK
+# 5 · Preguntarle otra vez a la base, ahora entero en OK
 supabase db query --linked -f scripts/db/verificar-base.sql
 ```
 
 | Paso | Por qué no se salta |
 |---|---|
-| **0** | Es la única forma de saber **en qué se quedó atrás** el ambiente, y queda como prueba de lo que había antes. Después ya no se puede mirar |
-| **1** | Enseña la lista de migraciones pendientes. Si ahí aparece algo que no se esperaba, el ambiente no era el que se creía |
-| **2** | `db push` aplica **solo lo que falte** y en orden. Una migración ya aplicada no se edita jamás ([§2.2](19-ambientes-y-entrega.md#22-una-migración-aplicada-no-se-edita-nunca)): si subió mal, se corrige con otra |
-| **3** | `verificar-base.sql` necesita una persona de Gerencia y otra de Operación **de verdad** ([§5.1](#51-comprobar-que-quedó-como-dice-el-modelo)). Sin semilla, lo que falla es la falta de gente, no el esquema |
-| **4** | Aplicar no es quedar bien. El informe entero en `OK` es lo que cierra la promoción, y el bloque `1.12` comprueba además que la base publique la versión que dice el repositorio |
+| **0** | `--linked` no elige ambiente: obedece al último `supabase link`, y ese apunta a dev porque es donde se trabaja. Sin este paso el procedimiento promueve al ambiente equivocado sin que nada avise, y **es el único error del que no hay vuelta**. `promover.ps1` compara la referencia tecleada con el vínculo real, pero detectar el error es peor que no cometerlo. Si el proyecto está dormido —qa va en plan gratuito y se duerme tras una semana quieto ([19 §8.1](19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no))—, hay que despertarlo primero |
+| **1** | Es la única forma de saber **en qué se quedó atrás** el ambiente, y queda como prueba de lo que había antes. Después ya no se puede mirar |
+| **2** | Enseña la lista de migraciones pendientes. Si ahí aparece algo que no se esperaba, el ambiente no era el que se creía |
+| **3** | `db push` aplica **solo lo que falte** y en orden. Una migración ya aplicada no se edita jamás ([§2.2](19-ambientes-y-entrega.md#22-una-migración-aplicada-no-se-edita-nunca)): si subió mal, se corrige con otra |
+| **4** | `verificar-base.sql` necesita una persona de Gerencia y otra de Operación **de verdad** ([§5.1](#51-comprobar-que-quedó-como-dice-el-modelo)). Sin semilla, lo que falla es la falta de gente, no el esquema |
+| **5** | Aplicar no es quedar bien. El informe entero en `OK` es lo que cierra la promoción, y el bloque `1.12` comprueba además que la base publique la versión que dice el repositorio |
 
 **El guion pide dos llaves**, las mismas que `sembrar.ps1`: el **ambiente** —que hoy solo admite
 `qa`, porque uat y prod no existen ([0.4](08-plan-de-desarrollo.md#tarea-0-4))— y la **referencia del proyecto vinculado**, escrita
