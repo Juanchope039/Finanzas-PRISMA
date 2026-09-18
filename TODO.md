@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [4.13.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -75,6 +75,13 @@ otra cosa.
 ### 1.3 🚧 En progreso
 
 Nada en las manos ahora mismo.
+
+**⬜ En cola, sin empezar — el alta de usuarios está caída en dev.** Crear a alguien responde «algo
+salió mal» con cualquier nombre de usuario: falta `SUPABASE_SERVICE_ROLE_KEY` en el despliegue de la
+API, y el fallo no sabe decirlo porque `ProveedorNoDisponible` no tiene código propio. Deja sin
+servir la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) recién terminada. Carril **API**, rama `feature/gestion-de-usuarios-arreglo`,
+anotado el 2026-09-18. El plan es `plan/23-el-alta-decia-algo-salio-mal.md`. Es un arreglo suelto:
+no lleva número de tarea y no entra en las cuentas de abajo.
 
 **Lo siguiente, en cuanto alguien lo tome:** cerrar la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) destrabó lo que la estaba
 esperando. En el carril API, con la identidad llegando ya a PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)), se abren la prueba
