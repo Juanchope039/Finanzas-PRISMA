@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [6.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -245,9 +245,11 @@ ya está construido y probado, y **la base del [Sprint 1](docs/08-plan-de-desarr
 [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5)): dominios, nombres, borrado revocado, auditoría por triggers y RLS juzgando a una sesión de
 verdad. La identidad ya llega hasta PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)), la sesión contra Supabase Auth ya entrega
 sesión ([2.1](docs/08-plan-de-desarrollo.md#tarea-2-1)) y **toda petición pasa por el filtro de idempotencia** ([1.14](docs/08-plan-de-desarrollo.md#tarea-1-14)), que exige la cabecera
-y abre esa única transacción; registrar la clave espera al filtro de sesión ([2.2](docs/08-plan-de-desarrollo.md#tarea-2-2)), porque hasta
-ese día ninguna petición trae identidad. Van 46 de las 133 tareas, y lo que más destraba ahora es
-poner qa al día, que va cuatro migraciones atrás ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)).
+y abre esa única transacción. **El acceso está cerrado de punta a punta** —se entra, se recarga y se
+sigue dentro ([2.2](docs/08-plan-de-desarrollo.md#tarea-2-2))— y **Gerencia ya da de alta a quien haga falta** ([2.7](docs/08-plan-de-desarrollo.md#tarea-2-7)), que era lo último que
+solo sabía hacer la semilla. Van 51 de las 133 tareas, y lo que más destraba ahora es el contrato
+de movimientos ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13)), medio día con 32 tareas detrás, y el repositorio que abre el [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3)
+entero ([3.3](docs/08-plan-de-desarrollo.md#tarea-3-3)). Sigue pendiente poner qa al día, cuatro migraciones atrás ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)).
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.
