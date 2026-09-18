@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -90,21 +90,23 @@ erDiagram
 | 24 | `cargos` | Catálogo de cargos del negocio, administrado por Gerencia | |
 | 25 | `peticiones_idempotentes` | Claves de idempotencia y la respuesta que devolvió cada una | ✅ |
 | 26 | `nonces_vistos` | Nonce ya usados por el canal firmado, dentro de su ventana | ✅ |
+| 27 | `sesiones` | La clave de firma de cada sesión abierta, del lado del servidor | ✅ |
 
 *Sensible = el acceso a la tabla está restringido por Row Level Security ([§7](#7-seguridad-por-tipo-de-usuario-rls)). En la mayoría eso
 significa «solo Gerencia», pero no en todas: en `usuarios`, `empleados`, `nomina_periodos`,
-`nomina_detalle`, `adelantos`, `peticiones_idempotentes` y `nonces_vistos` cada persona alcanza **su propia fila y
-nada más**; `clientes` lo lee y lo crea cualquiera, porque sin cliente no hay pedido ([CU-05](02-casos-de-uso.md#cu-05)); y
+`nomina_detalle`, `adelantos`, `peticiones_idempotentes`, `nonces_vistos` y `sesiones` cada persona alcanza **su propia fila y
+nada más** —y en las dos últimas, tampoco Gerencia—; `clientes` lo lee y lo crea cualquiera, porque sin cliente no hay pedido ([CU-05](02-casos-de-uso.md#cu-05)); y
 `movimientos` lo lee todo el mundo, porque los dos tipos registran el día a día. La regla de cada
 tabla está en el [§7](#7-seguridad-por-tipo-de-usuario-rls).*
 
 `cargos` va al final de la lista para no renumerar las 23 entidades anteriores. En el esquema
 SQL sí aparece antes de `usuarios`, porque `usuarios` la referencia.
 
-Las entidades **25** y **26** —`peticiones_idempotentes` y `nonces_vistos`— son las dos únicas
-que no son del negocio: no guardan plata, ni personas, ni pedidos. Una guarda el rastro de qué
-peticiones ya se atendieron, para no cobrar dos veces lo mismo ([§4.9](#49-claves-de-idempotencia)); la otra, qué nonce ya se
-usaron, para que nadie reenvíe una petición capturada ([§4.10](#410-los-nonce-vistos)). Están en el catálogo porque son
+Las entidades **25**, **26** y **27** —`peticiones_idempotentes`, `nonces_vistos` y `sesiones`— son
+las tres únicas que no son del negocio: no guardan plata, ni personas, ni pedidos. La primera guarda el rastro de qué
+peticiones ya se atendieron, para no cobrar dos veces lo mismo ([§4.9](#49-claves-de-idempotencia)); la segunda, qué nonce ya se
+usaron, para que nadie reenvíe una petición capturada ([§4.10](#410-los-nonce-vistos)); la tercera, con qué clave firma cada
+sesión, que es contra lo que se comprueban esos envíos ([§4.11](#411-las-sesiones-abiertas)). Están en el catálogo porque son
 tablas más del esquema y hay que poder contarlas, y no están en el diagrama del [§2](#2-diagrama-entidadrelación) por la misma
 razón por la que sí pueden borrarse: no son entidades del taller, son mecanismos de transporte.
 
@@ -859,6 +861,56 @@ Aquí la purga sí es de corrección y no solo de higiene, y conviene notar la d
 cada diez minutos, no una vez al día, porque una tabla que recibe una fila por petición y solo
 necesita recordarlas cinco minutos crece rápido si nadie la limpia.
 
+### 4.11 Las sesiones abiertas
+
+La tercera y última tabla que no es del negocio, y la que faltaba para que el canal firmado
+existiera de los dos lados. Al iniciar sesión, la API genera una **clave de firma** y se la entrega
+al cliente, que la guarda solo en memoria ([20 §6.1](20-contrato-de-api.md#61-las-tres-cabeceras)). Si el servidor no la guardara en ninguna parte
+—que es como estuvo entre la [2.1](08-plan-de-desarrollo.md#tarea-2-1) y la [2.20](08-plan-de-desarrollo.md#tarea-2-20)— no tendría **contra qué** comparar el HMAC de cada
+petición, y las tres cabeceras viajarían sin que nadie pudiera comprobarlas.
+
+```sql
+CREATE TABLE sesiones (
+  token_hash     TEXT PRIMARY KEY CONSTRAINT sesiones_token_hash_es_sha256
+                   CHECK (token_hash ~ '^[0-9a-f]{64}$'),
+  usuario_id     UUID NOT NULL REFERENCES usuarios(id),
+  clave_de_firma TEXT NOT NULL,
+  creado_en      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  expira_en      TIMESTAMPTZ NOT NULL CONSTRAINT sesiones_vence_despues
+                   CHECK (expira_en > creado_en)
+);
+
+CREATE INDEX idx_sesiones_expira ON sesiones (expira_en);
+```
+
+**La llave primaria es el resumen del token, no el token.** Guardar el token entero convertiría esta
+tabla en una lista de llaves de la casa: quien consiguiera una copia entraría como cualquiera, sin
+necesidad de contraseña. Con su `sha256` alcanza para encontrar la fila —el filtro llega con el
+token en la mano y lo resume—, y la restricción `sesiones_token_hash_es_sha256` impide que alguien
+meta ahí el token por descuido. Es la misma razón por la que nadie guarda contraseñas en claro.
+
+> **Ni Gerencia lee una clave de firma ajena.** Es la única cosa del modelo con la que se puede
+> **suplantar** a otra persona —no ver sus datos: hacerse pasar por ella—, así que esta tabla y
+> `nonces_vistos` son las dos sensibles sin excepción de Gerencia ([§7](#7-seguridad-por-tipo-de-usuario-rls)). Una clave que otro puede
+> leer no es un secreto compartido con nadie: es un secreto y ya.
+
+**Retención: la vida del token, treinta días** ([ADR-009](adr/ADR-009-login-por-usuario.md)), y se purga como las otras dos. La purga
+no es de corrección sino de higiene —una sesión vencida no deja entrar, porque `expira_en` ya la
+descarta al buscarla—, pero **una clave de firma que ya no sirve y sigue guardada es superficie de
+ataque a cambio de nada**, así que se va con las demás:
+
+```sql
+SELECT cron.schedule(
+  'purgar_sesiones_vencidas',
+  '40 3 * * *',
+  $cron$ DELETE FROM sesiones WHERE expira_en < NOW() $cron$
+);
+```
+
+> **Esta tabla no sustituye a la sesión de Supabase Auth ni la duplica.** Quién entró, con qué
+> contraseña y hasta cuándo vale su token lo sigue decidiendo el proveedor ([ADR-010](adr/ADR-010-almacenamiento-contrasenas.md)). Aquí solo vive
+> lo que el proveedor no guarda y el canal firmado necesita: la clave con la que esa sesión firma.
+
 ---
 
 ## 5. Diseño de solo escritura
@@ -1583,6 +1635,25 @@ ALTER TABLE nonces_vistos ENABLE ROW LEVEL SECURITY;
 > más lento y además abriría una carrera entre las dos operaciones. Se inserta, y si choca, se
 > responde `40103`.
 
+**Y la decimoséptima: `sesiones`.** Entidad 27 del [§3](#3-catálogo-de-entidades), la misma regla otra vez, y sin `UPDATE`
+por la misma razón: una sesión se abre una vez y no se modifica.
+
+```sql
+-- La clave de firma de cada sesión: cada quien la suya, y nadie más.
+CREATE POLICY sesiones_lectura ON sesiones FOR SELECT
+  USING (usuario_id = auth.uid());
+CREATE POLICY sesiones_insercion ON sesiones FOR INSERT
+  WITH CHECK (usuario_id = auth.uid());
+
+ALTER TABLE sesiones ENABLE ROW LEVEL SECURITY;
+```
+
+> **Aquí Gerencia tampoco es excepción, y es la vez que más importa.** En el resto del modelo, la
+> excepción de Gerencia deja **ver** lo que Operación no ve. Una clave de firma no se ve: se
+> **usa**, y quien la tenga puede firmar peticiones a nombre de otra persona. Darle esa excepción a
+> Gerencia sería darle la capacidad de suplantar a cualquiera, que es exactamente lo que ningún
+> permiso del taller debería poder hacer.
+
 **Aquí `fn_es_gerencia()` no aparece, y es una decisión.** Es la única tabla sensible sin
 excepción de Gerencia, porque no hay nada en ella que Gerencia necesite. La clave y la huella no
 son información del negocio: son el comprobante de que una petición ya se atendió, y solo le
@@ -1597,8 +1668,8 @@ ninguna clave llegaría nunca a servir para un reintento.
 `DELETE` no lleva política, y por eso la purga del [§4.9](#49-claves-de-idempotencia) no corre como la aplicación: corre como el
 rol de migraciones, que es dueño de la tabla y tiene `BYPASSRLS`.
 
-Con esto, las quince tablas que el [§3](#3-catálogo-de-entidades) marca como sensibles tienen política, y con `cargos` son
-dieciséis las que llevan RLS encendida. Las nueve restantes —`cuentas`, `categorias`, `adjuntos`,
+Con esto, las dieciséis tablas que el [§3](#3-catálogo-de-entidades) marca como sensibles tienen política, y con `cargos` son
+diecisiete las que llevan RLS encendida. Las nueve restantes —`cuentas`, `categorias`, `adjuntos`,
 `pedidos`, `pedido_lineas`, `anticipos`, `productos`, `cotizaciones` y `cotizacion_lineas`—
 siguen sin RLS a propósito: los dos tipos trabajan con ellas todo el día y no hay nada que
 separar. El principio 6 del [§1](#1-principios-del-modelo) se lee así: **en cada tabla donde haya algo que proteger.**
@@ -1639,9 +1710,10 @@ ALTER TABLE sobres_config     FORCE ROW LEVEL SECURITY;
 ALTER TABLE cierres_mensuales FORCE ROW LEVEL SECURITY;
 ALTER TABLE peticiones_idempotentes FORCE ROW LEVEL SECURITY;
 ALTER TABLE nonces_vistos         FORCE ROW LEVEL SECURITY;
+ALTER TABLE sesiones              FORCE ROW LEVEL SECURITY;
 ```
 
-Son **catorce de las dieciséis tablas con RLS**. Las dos que faltan no son un olvido: el modelo,
+Son **quince de las diecisiete tablas con RLS**. Las dos que faltan no son un olvido: el modelo,
 tal como está escrito, deja de funcionar si se les pone.
 
 | Tabla | Por qué no lleva `FORCE` | Qué la protege en su lugar |
@@ -1743,7 +1815,7 @@ se queda con los suyos, que no incluyen nada que `authenticated` no tenga.
 |---|---|---|
 | `prisma_api` | Atender peticiones de usuario | Secreto del ambiente, leído por la API al arrancar |
 | Rol de migraciones (`postgres`) | Crear tablas, promover migraciones, sembrar | Secreto distinto, solo en la canalización de despliegue |
-| `service_role` de Supabase | Tareas administrativas puntuales | Secreto distinto. **Nunca en el camino de una petición de usuario** |
+| `service_role` de Supabase | Migraciones, y crear identidades contra GoTrue ([ADR-033](adr/ADR-033-service-role-solo-en-auth.md)) | Secreto distinto. **Nunca contra PostgreSQL** |
 
 Que sean tres claves distintas y no una es el punto: si la de la API se filtra, lo que se filtra
 es un rol que no puede borrar, no puede crear y no se salta RLS.
@@ -1851,7 +1923,7 @@ mismas reglas que la base— solo aguanta si esta prueba corre en cada despliegu
 capas que deciden se separan y ninguna avisa.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-020](adr/ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.8.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-020](adr/ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

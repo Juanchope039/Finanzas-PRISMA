@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-18 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -168,7 +168,7 @@ dentro del artefacto.
 | `SUPABASE_URL` | Proyecto de Supabase del ambiente | Uno distinto por ambiente |
 | `SUPABASE_ANON_KEY` | Iniciar sesión contra Supabase Auth | Solo la usa la API, no el front |
 | `SUPABASE_JWT_SECRET` | Verificar el token que llega en cada petición | Secreto |
-| `SUPABASE_SERVICE_ROLE_KEY` | Migraciones y tareas administrativas | **Jamás en el camino de una petición de usuario.** Secreto aparte, con acceso aparte |
+| `SUPABASE_SERVICE_ROLE_KEY` | Migraciones, y crear identidades contra GoTrue | **Jamás contra PostgreSQL** ([ADR-033](adr/ADR-033-service-role-solo-en-auth.md)). Secreto aparte, con acceso aparte |
 | `DOMINIO_CORREO_SINTETICO` | Armar el correo interno del login ([ADR-009](adr/ADR-009-login-por-usuario.md)) | Fijo de por vida. El front nunca lo ve |
 | `ORIGENES_PERMITIDOS` | CORS: el dominio del front de ese ambiente, y solo ese | prod no acepta al front de qa |
 | `SERVER_PORT` | Dónde escucha | Spring Boot la lee tal cual, sin código de por medio |
@@ -181,7 +181,7 @@ dentro del artefacto.
 |---|---|---|
 | Claves de la API por ambiente | Gestor de secretos del proveedor de despliegue | En el repositorio |
 | Claves que necesita la integración continua | Secretos del repositorio, uno por ambiente | En el archivo del pipeline |
-| `SUPABASE_SERVICE_ROLE_KEY` | Secreto separado, solo para el trabajo de migraciones | En el despliegue de la API que atiende usuarios |
+| `SUPABASE_SERVICE_ROLE_KEY` | Secreto separado del de la base y del de las migraciones | En el front, y en cualquier conexión a PostgreSQL |
 
 En el repositorio solo hay un `.env.ejemplo` con las claves y los valores vacíos. Sirve para
 saber qué hace falta, no para arrancar nada.
@@ -308,6 +308,18 @@ Lo que comprueba cada etapa:
 > cambiara el contrato sin volver a generarlo. Actualizarlo cuesta un comando; descubrir en prod
 > que Swagger describe una API que ya no existe cuesta mucho más. Es la prueba [C-04](12-pruebas-y-calidad.md#c-04) de
 > [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) y lo que hace exigible el **[RNF-30](03-requisitos-y-bdd.md#rnf-30)**.
+
+> **Una integración continua roja no despliega, y no avisa.** Railway espera a ese mismo conjunto de
+> comprobaciones antes de construir dev ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)): si falla, marca el despliegue `SKIPPED` y el
+> ambiente **se queda en la versión anterior**, en verde, sin una sola señal en la pantalla. Fusionar
+> no es entregar: entregar es lo que pasa **después** de que las comprobaciones pasen.
+
+> **Y si lo que está roto es el archivo del flujo, no hay ni registros que abrir.** GitHub no llega a
+> crear ningún trabajo: la ejecución aparece con el nombre de la ruta en vez del suyo, y ahí se acaba
+> el rastro. Le pasó a `prisma_front` entre el 17 y el 18 de septiembre de 2026 —un `: ` dentro de un
+> escalar plano—, y dev pasó un día entero sirviendo la versión anterior mientras se fusionaban tres
+> tareas. Por eso `prisma_front` comprueba ahora sus propios flujos en `flutter test`: un archivo que
+> no se deja leer no puede correr el trabajo que comprobaría que se deja leer.
 
 ### 6.2 En cada promoción
 

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/02-casos-de-uso.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/02-casos-de-uso.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 Los 37 casos de uso del MVP. Cada uno indica el **rol autorizado**, y esa autorización se
 implementa en la base de datos, no en la pantalla.
@@ -51,7 +51,7 @@ implementa en la base de datos, no en la pantalla.
 | [CU-28](#cu-28) | Iniciar sesión con usuario y contraseña | GER · OPE | Usuario activo | Sesión abierta con nombre, cargo y tipo cargados |
 | [CU-29](#cu-29) | Crear un usuario | GER | Cargo existente en el catálogo | Usuario activo con clave temporal y cambio obligatorio |
 | [CU-30](#cu-30) | Desactivar un usuario | GER | Usuario activo que no sea la última Gerencia | Marcado inactivo con motivo; **nunca borrado** |
-| <a id="cu-31"></a>CU-31 | Restablecer la contraseña de un usuario | GER | Usuario existente | Clave temporal entregada en persona; cambio obligatorio al entrar |
+| [CU-31](#cu-31) | Restablecer la contraseña de un usuario | GER | Usuario existente | Clave temporal entregada en persona; cambio obligatorio al entrar |
 | <a id="cu-32"></a>CU-32 | Cambiar la propia contraseña | GER · OPE | Sesión activa | Contraseña actualizada; `debe_cambiar_clave` en falso |
 | <a id="cu-33"></a>CU-33 | Administrar el catálogo de cargos | GER | — | Cargo creado, renombrado o desactivado con motivo |
 | [CU-34](#cu-34) | Reactivar un usuario desactivado | GER | Usuario desactivado | Acceso devuelto con motivo escrito y cambio de clave obligatorio |
@@ -466,6 +466,49 @@ primer ingreso.
 
 ---
 
+### <a id="cu-31"></a>CU-31 · Restablecer la contraseña de un usuario
+
+| | |
+|---|---|
+| **Actor** | Gerencia (exclusivo) |
+| **Objetivo** | Devolverle el acceso a quien olvidó su contraseña, sin un correo de recuperación que no existe |
+| **Precondición** | Usuario existente |
+
+**Flujo principal**
+
+1. La persona le dice a Gerencia que no puede entrar. Es una conversación, no un formulario: aquí
+   no hay «¿olvidaste tu contraseña?» porque no hay a dónde mandarlo ([ADR-009](adr/ADR-009-login-por-usuario.md)).
+2. Gerencia la localiza en el listado y elige *Restablecer clave*.
+3. El sistema pide una **contraseña temporal** de al menos 8 caracteres, y la muestra en claro **a
+   propósito**: Gerencia tiene que poder dictarla.
+4. Al confirmar, el sistema cambia la contraseña en el proveedor de identidad, deja
+   `debe_cambiar_clave = TRUE` y escribe `clave_restablecida` en auditoría.
+5. **Las sesiones que esa persona tuviera abiertas dejan de servir.** Si el restablecimiento fue
+   porque alguien no debería seguir entrando, una sesión viva sería el fallo entero.
+6. Gerencia le entrega la clave temporal **en persona**, y en el siguiente ingreso el sistema la
+   obliga a cambiarla ([RF-79](03-requisitos-y-bdd.md#rf-79), [CU-32](#cu-32)).
+
+**Regla de negocio central**
+
+> **La contraseña anterior no se recupera: se reemplaza.** El sistema guarda su hash y nada más, y
+> eso es también lo que hace que restablecer una clave sea **el único cambio que la bitácora no
+> puede revertir** ([CU-35](#cu-35)): no se puede devolver lo que nunca se guardó. Para volver atrás se
+> restablece otra vez, y eso deja una entrada nueva.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | La clave temporal tiene menos de 8 caracteres | Se rechaza |
+| A2 | Quien lo intenta es de tipo Operación | Se rechaza. Cada quien cambia la suya por [CU-32](#cu-32), que es otra cosa |
+| A3 | El usuario está desactivado | No se ofrece: una clave nueva no le devolvería el acceso. Lo que corresponde es reactivarlo ([CU-34](#cu-34)) |
+| A4 | El proveedor de identidad no responde | No se cambia nada y se dice que no se pudo. Una clave a medias dejaría a la persona sin la vieja y sin la nueva |
+
+**Postcondición** — Usuario con una contraseña temporal conocida por Gerencia, obligado a cambiarla
+al entrar, y sin ninguna sesión anterior en pie.
+
+---
+
 ### <a id="cu-34"></a>CU-34 · Reactivar un usuario desactivado
 
 | | |
@@ -681,7 +724,7 @@ de los dos quede mal descrito. Tampoco agrega tablas: reutiliza `exportaciones` 
 puntos 2.1 y 8).
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [15](15-glosario.md "15 · Glosario") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica")
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [15](15-glosario.md "15 · Glosario") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades")
 <!-- /generado:referenciado-desde -->
 
 ---

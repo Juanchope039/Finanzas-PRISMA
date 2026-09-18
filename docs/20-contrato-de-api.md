@@ -2,18 +2,18 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-17 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-18 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
 
 > **Construcción: en parte.** En `prisma_api` ya están construidos el sobre de respuesta, el
-> catálogo de códigos, la consulta de versión y el descriptor de formulario, con el contrato v0.5.0
-> (tareas [0.11](08-plan-de-desarrollo.md#tarea-0-11) y [0.14](08-plan-de-desarrollo.md#tarea-0-14) a [0.18](08-plan-de-desarrollo.md#tarea-0-18)). El filtro de idempotencia ([1.14](08-plan-de-desarrollo.md#tarea-1-14)) ya exige la cabecera en
-> toda operación menos las dos de sesión, y registrará la clave en cuanto una petición traiga
-> sesión ([2.2](08-plan-de-desarrollo.md#tarea-2-2)). El canal firmado llega en el [Sprint 2](08-plan-de-desarrollo.md#sprint-2). Este
-> documento fijó el contrato antes de escribir el primer controlador, porque un contrato acordado
-> después es un contrato que ya se rompió en tres sitios distintos.
+> catálogo de códigos, la consulta de versión, el descriptor de formulario, la navegación y las
+> cuatro operaciones de `/sesiones`, con el contrato v0.7.0 (tareas [0.11](08-plan-de-desarrollo.md#tarea-0-11) y [0.14](08-plan-de-desarrollo.md#tarea-0-14) a [0.18](08-plan-de-desarrollo.md#tarea-0-18),
+> [2.1](08-plan-de-desarrollo.md#tarea-2-1), [2.2](08-plan-de-desarrollo.md#tarea-2-2) y [2.14](08-plan-de-desarrollo.md#tarea-2-14)). El **canal firmado existe de los dos lados** ([2.13](08-plan-de-desarrollo.md#tarea-2-13)) y el filtro de
+> idempotencia ([1.14](08-plan-de-desarrollo.md#tarea-1-14)) ya registra cada clave a nombre de quien firmó. Este documento fijó el
+> contrato antes de escribir el primer controlador, porque un contrato acordado después es un
+> contrato que ya se rompió en tres sitios distintos.
 
 **Este documento no repite la arquitectura.** Cómo está construido el sistema por dentro —las
 capas, la regla de dependencias, cómo la identidad llega hasta PostgreSQL— está en
@@ -506,6 +506,52 @@ de certificado en las compilaciones nativas de Flutter, donde sí es posible.
 
 La decisión está en [ADR-021](adr/ADR-021-canal-firmado.md).
 
+### 6.5 La sesión: qué vive dónde, y qué pasa cuando se recarga la página
+
+Una sesión abierta tiene **tres piezas**, y lo que las separa es dónde puede vivir cada una.
+
+| Pieza | Dónde vive | Por qué ahí |
+|---|---|---|
+| El **token de acceso** | En la memoria del cliente, y viaja en `Authorization: Bearer` | Dura una hora. Es lo que PostgreSQL lee para saber quién pregunta ([ADR-012](adr/ADR-012-identidad-a-postgres.md)) |
+| La **clave de firma** | Solo en la memoria del cliente | Se usa en cada petición, así que el código tiene que tenerla a mano ([§6.1](#61-las-tres-cabeceras)) |
+| El **testigo de renovación** | En la cookie `prisma_renovacion`, `HttpOnly` | Se usa una vez cada tanto, así que puede vivir donde el código **no llega**: ni un script que se colara en la página se lo lleva |
+
+**Recargar la página pierde las dos primeras** —están en memoria, que es donde el
+[ADR-021](adr/ADR-021-canal-firmado.md) quiere que estén— y conserva la tercera, porque la guarda el
+navegador. Por eso lo primero que hace el front al abrirse es pedir
+`POST /api/v0/sesiones/renovacion`: si la cookie sigue valiendo, vuelve con un token nuevo, una
+clave de firma nueva y una cookie nueva; si no, responde `40100` y lo que toca es la pantalla de
+acceso. El front no lee la cookie en ningún momento: solo la manda el navegador.
+
+| Atributo de la cookie | Valor | Por qué |
+|---|---|---|
+| `HttpOnly` | sí | Es lo que la pone fuera del alcance del JavaScript de la página |
+| `Secure` | sí | Solo viaja por https. Los navegadores tratan `localhost` como sitio de confianza, así que en una máquina local funciona igual |
+| `SameSite` | `None` | El front y la API viven en **dominios distintos** ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)), y con `Strict` el navegador no la mandaría nunca. Con un dominio único volvería a ser `Strict` |
+| `Path` | `/api/v0/sesiones` | Solo las tres operaciones que la necesitan. No acompaña a cada consulta del día |
+| `Max-Age` | 30 días, otra vez enteros en cada renovación | Es el [RF-04](03-requisitos-y-bdd.md#rf-04): una sesión sin usar treinta días caduca sola |
+
+`SameSite=None` obliga a que la API responda con credenciales de navegador permitidas, y eso a su
+vez obliga a que **los orígenes estén enumerados uno a uno**: con un comodín, el navegador rechaza
+la respuesta entera. Es la razón por la que `ORIGENES_PERMITIDOS` nunca puede ser `*`.
+
+**Cada renovación estrena clave de firma**, y eso es lo que hace que renovar no sea solo alargar un
+plazo: una sesión copiada con la clave anterior no puede firmar las peticiones de la nueva. La única
+excepción la pone el proveedor: si dos renovaciones caen muy seguidas, devuelve la sesión que ya
+había emitido —para que un reintento no deje a nadie fuera— y entonces la clave de firma que se
+responde es **la que ya estaba guardada**, no una nueva.
+
+**Un token vencido responde `40100`, no `40101`.** Son dos cosas distintas y el cliente hace cosas
+distintas con cada una: `40100` es «renueva», y `40101` es «alguien está fabricando peticiones».
+Confundirlas obligaría a volver a teclear la contraseña cada hora.
+
+> **Cerrar sesión deja el testigo sin valor, no el token.** `DELETE /api/v0/sesiones/actual` revoca
+> la renovación en el proveedor y vence la cookie, así que nadie vuelve a entrar con ella; pero el
+> token de acceso que ya salió sigue sirviendo hasta que venza, como mucho una hora. La tabla
+> `sesiones` no admite `UPDATE` ni `DELETE` —nada se borra ([ADR-004](adr/ADR-004-base-solo-escritura.md))—, así que hoy no hay dónde
+> marcar esa fila. Cerrarla del todo pide una tarea de Base, y está anotado en
+> [`TODO.md`](../TODO.md#10-decisiones-de-construcción-que-conviene-revisar).
+
 ---
 
 ## 7. Swagger
@@ -709,7 +755,7 @@ firma se arma igual que en una escritura, con `sha256` del cuerpo vacío; y esta
 | Con qué configuración corre cada ambiente y cómo se publica | [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [Contrato](../contrato/README.md "Contrato de la API · v0.8.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

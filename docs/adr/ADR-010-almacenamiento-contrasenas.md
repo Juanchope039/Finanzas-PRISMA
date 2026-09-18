@@ -85,5 +85,5 @@ por usuario que bcrypt ya aplica.
 ---
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica")
+**🔗 Referenciado desde:** [04](../04-modelo-de-datos.md "04 · Modelo de datos") · [07](../07-arquitectura.md "07 · Arquitectura técnica")
 <!-- /generado:referenciado-desde -->

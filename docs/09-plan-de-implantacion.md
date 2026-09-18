@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/09-plan-de-implantacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Plan](INDICE.md#etiqueta-plan) · [Entrega](INDICE.md#etiqueta-entrega) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/09-plan-de-implantacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Plan](INDICE.md#etiqueta-plan) · [Entrega](INDICE.md#etiqueta-entrega) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 Cómo se pasa de tener el software construido a que el negocio realmente lo use.
 
@@ -122,7 +122,7 @@ pasos cuestan plata y hay que decidirlos con tiempo.
 | 3 | Crear el rol **`prisma_api`** en cada ambiente: sin `BYPASSRLS`, sin `SUPERUSER` y sin ser dueño de las tablas | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
 | 4 | **Levantar el alojamiento de la API en los cuatro ambientes**: una imagen de contenedor por versión, con su memoria y sus variables ([§3.2](#32-alojar-la-api-de-java-en-los-cuatro-ambientes)), en Railway ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)) | Apoyo técnico | dev, en el [Sprint 0](08-plan-de-desarrollo.md#sprint-0); los otros tres, en el [Sprint 9](08-plan-de-desarrollo.md#sprint-9) |
 | 5 | Cargar los **secretos de cada ambiente** fuera del repositorio: variables de entorno en la API, `--dart-define` al compilar el front | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
-| 6 | Guardar la clave `service_role` de cada ambiente en un **secreto aparte**, reservado para migraciones y tareas administrativas | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
+| 6 | Guardar la clave `service_role` de cada ambiente en un **secreto aparte**, reservado para migraciones y para crear identidades contra GoTrue ([ADR-033](adr/ADR-033-service-role-solo-en-auth.md)) | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
 | 7 | Promover el esquema dev → qa → uat → prod y verificar `schema_version` en cada base | Apoyo técnico | Antes de cada hito |
 | 8 | Comprobar en cada ambiente que `POST /api/v0/consultas/version` responde el ambiente correcto y que la franja aparece donde debe | Apoyo técnico | Antes de cada hito |
 | 9 | Ejecutar la prueba de permisos con sesión real en los cuatro ambientes ([ADR-012](adr/ADR-012-identidad-a-postgres.md)) | Apoyo técnico | Antes del go-live |
@@ -179,7 +179,7 @@ cargado, y cuatro veces, antes de promover nada:
 | Memoria de la JVM | La de la tabla anterior, como variable y no dentro de la imagen: así se ajusta sin recompilar |
 | `DATABASE_URL` | La base de ese ambiente, siempre con el rol `prisma_api` |
 | `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_JWT_SECRET` | Uno por proyecto de Supabase. Son secretos |
-| `SUPABASE_SERVICE_ROLE_KEY` | Uno por proyecto, y **fuera del despliegue que atiende usuarios** |
+| `SUPABASE_SERVICE_ROLE_KEY` | Uno por proyecto. La API lo lee para crear identidades contra GoTrue, y **nunca para hablar con PostgreSQL** ([ADR-033](adr/ADR-033-service-role-solo-en-auth.md)) |
 | `ORIGENES_PERMITIDOS` | Solo el dominio del front de ese ambiente. Prod no le responde al front de qa |
 
 > **La misma imagen en los cuatro ambientes; lo único distinto son las variables.** Si para que
