@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [4.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -582,8 +582,6 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 - **El servicio de Railway conectado a `prisma_front`** intentaba construir en cada push y fallaba,
   porque no había receta de construcción para Flutter. Ya la hay ([0.9](docs/08-plan-de-desarrollo.md#tarea-0-9)): falta revisar en la consola
   si ese servicio se reconfigura o se borra, para no terminar con dos y sin saber cuál es el bueno.
-- **`dart.yml` del front** es la plantilla de GitHub y falla con Flutter. Se dejó a propósito; la
-  integración continua de verdad es `ci.yml`.
 
 ---
 
