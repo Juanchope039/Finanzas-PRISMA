@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [4.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -11,7 +11,7 @@ cuánto dura el desarrollo según cuántos carriles avancen a la vez. Un carril 
 persona, un equipo o una sesión de trabajo; al plan le da igual.
 
 <!-- generado:plan-resumen · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**27,4 semanas con 1 carril**, **16,6 semanas con 2 carriles** y **13,9 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
+**27,4 semanas con 1 carril**, **16,7 semanas con 2 carriles** y **14,0 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
 <!-- /generado:plan-resumen -->
 
 > **El plan de 7 sprints daba por hecho que no había backend.**
@@ -119,13 +119,13 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 ### 1.1 Cuánto dura con 1, 2 o 3 carriles activos
 
 <!-- generado:plan-calendario · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**162 días de trabajo en 132 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
+**162,5 días de trabajo en 133 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
 
 | Carriles activos | Desarrollo | Estabilización | Total | Frente a 1 carril |
 |:---:|---:|---:|---:|---:|
 | 1 | 24,4 semanas | 3 semanas | **27,4 semanas** | — |
-| 2 | 13,6 semanas | 3 semanas | **16,6 semanas** | −10,8 semanas |
-| 3 | 10,9 semanas | 3 semanas | **13,9 semanas** | −13,5 semanas |
+| 2 | 13,7 semanas | 3 semanas | **16,7 semanas** | −10,8 semanas |
+| 3 | 11,0 semanas | 3 semanas | **14,0 semanas** | −13,4 semanas |
 
 | Hito | 1 carril | 2 carriles | 3 carriles |
 |---|:---:|:---:|:---:|
@@ -135,11 +135,11 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 | [H4](#h4) · Sprint 3 | semana 13 | semana 8 | semana 6 |
 | [H5](#h5) · Sprint 4 | semana 15 | semana 9 | semana 8 |
 | [H6](#h6) · Sprint 5 | semana 17 | semana 10 | semana 8 |
-| [H7](#h7) · Sprint 6 | semana 19 | semana 11 | semana 9 |
+| [H7](#h7) · Sprint 6 | semana 19 | semana 12 | semana 9 |
 | [H8](#h8) · Sprint 7 | semana 21 | semana 12 | semana 9 |
-| [H9](#h9) · Sprint 8 | semana 23 | semana 14 | semana 11 |
+| [H9](#h9) · Sprint 8 | semana 23 | semana 14 | semana 12 |
 | [H10](#h10) · Sprint 9 | semana 25 | semana 14 | semana 11 |
-| [H11](#h11) · go-live | semana 28 | semana 17 | semana 14 |
+| [H11](#h11) · go-live | semana 28 | semana 17 | semana 15 |
 <!-- /generado:plan-calendario -->
 
 **Cómo se calcula.** Se reparten las tareas en el tiempo respetando sus dependencias, siempre
@@ -179,33 +179,33 @@ gantt
     S0 :api0, 2026-09-15, 2026-10-05
     S1 :api1, 2026-09-22, 2026-10-07
     S2 :api2, 2026-10-07, 2026-10-24
-    S3 :api3, 2026-10-08, 2026-10-23
+    S3 :api3, 2026-10-08, 2026-10-24
     S4 :api4, 2026-10-12, 2026-11-03
-    S5 :api5, 2026-10-23, 2026-11-06
-    S6 :api6, 2026-11-01, 2026-11-12
-    S7 :api7, 2026-10-26, 2026-11-16
-    S8 :api8, 2026-10-26, 2026-11-30
-    S9 :api9, 2026-11-17, 2026-11-26
+    S5 :api5, 2026-10-24, 2026-11-06
+    S6 :api6, 2026-11-03, 2026-11-14
+    S7 :api7, 2026-10-26, 2026-11-14
+    S8 :api8, 2026-10-26, 2026-12-01
+    S9 :api9, 2026-11-16, 2026-11-26
 
     section Base
     S0 :base0, 2026-09-16, 2026-09-19
     S1 :base1, 2026-09-19, 2026-10-04
-    S2 :base2, 2026-10-04, 2026-10-20
-    S4 :base4, 2026-10-30, 2026-11-01
+    S2 :base2, 2026-10-04, 2026-10-19
+    S4 :base4, 2026-10-30, 2026-11-02
     S5 :base5, 2026-10-28, 2026-10-29
     S6 :base6, 2026-11-08, 2026-11-10
-    S8 :base8, 2026-11-14, 2026-11-17
-    S9 :base9, 2026-11-16, 2026-11-18
+    S8 :base8, 2026-11-16, 2026-11-18
+    S9 :base9, 2026-11-15, 2026-11-16
 
     section Front
     S0 :front0, 2026-09-15, 2026-10-03
     S1 :front1, 2026-09-25, 2026-10-01
     S2 :front2, 2026-10-06, 2026-10-20
     S3 :front3, 2026-10-10, 2026-10-16
-    S5 :front5, 2026-11-03, 2026-11-04
-    S6 :front6, 2026-11-04, 2026-11-11
-    S7 :front7, 2026-11-13, 2026-11-16
-    S9 :front9, 2026-11-12, 2026-11-20
+    S5 :front5, 2026-11-02, 2026-11-03
+    S6 :front6, 2026-11-06, 2026-11-12
+    S7 :front7, 2026-11-12, 2026-11-15
+    S9 :front9, 2026-11-14, 2026-11-20
 
     section Contrato
     S1 :contrato1, 2026-09-24, 2026-09-25
@@ -213,7 +213,7 @@ gantt
     S3 :contrato3, 2026-10-09, 2026-10-10
     S4 :contrato4, 2026-10-20, 2026-10-21
     S5 :contrato5, 2026-10-24, 2026-10-25
-    S6 :contrato6, 2026-10-24, 2026-10-25
+    S6 :contrato6, 2026-10-25, 2026-10-26
     S7 :contrato7, 2026-10-25, 2026-10-26
     S8 :contrato8, 2026-10-26, 2026-10-27
 
@@ -222,9 +222,9 @@ gantt
     S1 :decisin1, 2026-09-15, 2026-09-16
 
     section Implantación
-    Estabilización y aprobación en UAT :est, 2026-11-30, 2026-12-14
-    Migración y capacitación :mig, 2026-12-14, 2026-12-21
-    Go-live :milestone, 2026-12-21, 0d
+    Estabilización y aprobación en UAT :est, 2026-12-01, 2026-12-15
+    Migración y capacitación :mig, 2026-12-15, 2026-12-22
+    Go-live :milestone, 2026-12-22, 0d
 ```
 <!-- /generado:plan-gantt -->
 
@@ -413,13 +413,14 @@ mismo `POST` enviado dos veces con la misma clave deja un solo movimiento.
 | <a id="tarea-2-10"></a>2.10 | Panel «Acerca de»: versión del front, de la API y del esquema, ambiente, fecha de compilación y referencia del commit ([RF-100](03-requisitos-y-bdd.md#rf-100)) | Front, API | [0.11](#tarea-0-11), [0.12](#tarea-0-12) | 0,5 |
 | <a id="tarea-2-11"></a>2.11 | La prueba de permisos del [Sprint 1](#sprint-1) se ejecuta también en qa, contra la base de qa | API | [1.7](#tarea-1-7), [1.12](#tarea-1-12) | 0,5 |
 | <a id="tarea-2-12"></a>2.12 | **Clave de firma de sesión**: la API la entrega al iniciar sesión y el front la guarda **solo en memoria**, nunca en disco ni en `localStorage` | API, Front | [2.1](#tarea-2-1) | 1 |
-| <a id="tarea-2-13"></a>2.13 | **Filtro de firma** en la API: HMAC del método, la ruta, la marca de tiempo, el nonce y el resumen del cuerpo; rechaza con `40101`, `40102` y `40103` según el caso | API | [2.12](#tarea-2-12) | 1,5 |
+| <a id="tarea-2-13"></a>2.13 | **Filtro de firma** en la API: HMAC del método, la ruta, la marca de tiempo, el nonce y el resumen del cuerpo; rechaza con `40101`, `40102` y `40103` según el caso | API | [2.12](#tarea-2-12), [2.20](#tarea-2-20) | 1,5 |
 | <a id="tarea-2-14"></a>2.14 | La API devuelve la navegación que esa sesión puede ver y el front la pinta sin decidir nada ([RF-103](03-requisitos-y-bdd.md#rf-103)) | API, Front | [2.1](#tarea-2-1) | 1 |
 | <a id="tarea-2-15"></a>2.15 | Tabla única de usuarios activos y desactivados, con el estado y la fecha y hora de desactivación en cada fila, y cambio de estado desde la propia tabla con confirmación y motivo escrito ([RF-84](03-requisitos-y-bdd.md#rf-84) … [RF-87](03-requisitos-y-bdd.md#rf-87)) | API, Front | [2.7](#tarea-2-7) | 1,5 |
 | <a id="tarea-2-16"></a>2.16 | Bitácora de todo cambio sobre usuarios y cargos —quién, cuándo y por qué— y reversión que escribe una entrada nueva sin borrar la original; se rechaza la reversión que dejaría el sistema sin Gerencia activa ([RF-88](03-requisitos-y-bdd.md#rf-88), [RF-89](03-requisitos-y-bdd.md#rf-89), [RF-91](03-requisitos-y-bdd.md#rf-91)) | Base, API, Front | [1.3](#tarea-1-3), [2.7](#tarea-2-7), [2.8](#tarea-2-8) | 2,5 |
 | <a id="tarea-2-17"></a>2.17 | Cambio obligatorio de contraseña también al reactivar un usuario ([RF-90](03-requisitos-y-bdd.md#rf-90)) | API, Front | [2.7](#tarea-2-7) | 0,5 |
 | <a id="tarea-2-18"></a>2.18 | Vista previa de la interfaz de Operación para Gerencia, señalada de forma permanente y con salida a un clic, y la constancia de que **no sustituye la prueba de permisos con sesión real** ([RF-92](03-requisitos-y-bdd.md#rf-92) … [RF-94](03-requisitos-y-bdd.md#rf-94)) | Front, API | [2.14](#tarea-2-14) | 1,5 |
 | <a id="tarea-2-19"></a>2.19 | **Contrato de acceso, usuarios, cargos y canal firmado**: endpoints, cabeceras de firma y los códigos `40101` a `40103`, acordados antes de implementar | Contrato | [1.17](#tarea-1-17) | 1 |
+| <a id="tarea-2-20"></a>2.20 | **Tablas del canal firmado**: `sesiones`, donde vive del lado del servidor la clave que la [2.12](#tarea-2-12) entrega y hoy nadie guarda, y `nonces_vistos` ([04 §4.10](04-modelo-de-datos.md#410-los-nonce-vistos)), con sus políticas y la purga de la ventana | Base | [2.4](#tarea-2-4) | 0,5 |
 
 <!-- generado:plan-oleadas-2 · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **Qué puede ir a la vez en este sprint.** Cada oleada espera solo a las anteriores; dentro de una oleada, todo arranca junto.
@@ -428,10 +429,17 @@ mismo `POST` enviado dos veces con la misma clave deja un solo movimiento.
 |:---:|---|---|---:|
 | 1 | [2.3](#tarea-2-3) · [2.10](#tarea-2-10) · [2.11](#tarea-2-11) · [2.19](#tarea-2-19) | Base, Front, API, Contrato | 3 |
 | 2 | [2.4](#tarea-2-4) · [2.6](#tarea-2-6) | Base, Front | 2,5 |
-| 3 | [2.1](#tarea-2-1) · [2.5](#tarea-2-5) | API, Base | 2 |
+| 3 | [2.1](#tarea-2-1) · [2.5](#tarea-2-5) · [2.20](#tarea-2-20) | API, Base | 2,5 |
 | 4 | [2.7](#tarea-2-7) · [2.8](#tarea-2-8) · [2.9](#tarea-2-9) · [2.12](#tarea-2-12) · [2.14](#tarea-2-14) | API | 5,5 |
 | 5 | [2.2](#tarea-2-2) · [2.13](#tarea-2-13) · [2.15](#tarea-2-15) · [2.16](#tarea-2-16) · [2.17](#tarea-2-17) · [2.18](#tarea-2-18) | API, Base, Front | 9 |
 <!-- /generado:plan-oleadas-2 -->
+
+> **La [2.20](#tarea-2-20) apareció al ir a hacer la [2.13](#tarea-2-13), y no estaba.** El filtro de firma necesita dos tablas
+> que no existen: `nonces_vistos`, que el [04 §4.10](04-modelo-de-datos.md#410-los-nonce-vistos) especifica entera desde hace días pero ninguna
+> migración crea, y **una donde guardar la clave de firma**, que la [2.12](#tarea-2-12) genera, entrega y olvida.
+> Sin la segunda no hay HMAC que comprobar. Va como tarea de Base y no dentro de la [2.13](#tarea-2-13) por el
+> mismo reparto que ya tuvo la idempotencia —la tabla fue la [1.13](#tarea-1-13) y el filtro la [1.14](#tarea-1-14)—: dos
+> carriles, dos commits, y el trabajo de Base donde alguien lo busca.
 
 **Terminado cuando** — dos usuarios con tipos distintos entran con su propio nombre de usuario,
 la sesión de Operación no alcanza lo restringido en dev y en qa, y una petición capturada y
@@ -868,7 +876,7 @@ El [Sprint 9](#sprint-9) va de último porque endurece lo que ya existe. No es r
 «funciona en mi computador» de «Gerencia lo aprobó y el taller lo tiene».
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-011](adr/ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
+**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-011](adr/ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
 <!-- /generado:referenciado-desde -->
 
 ---
