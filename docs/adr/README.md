@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
+| [1.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
 
 Registro de las decisiones técnicas importantes: qué se decidió, por qué, qué alternativas se
 consideraron y qué consecuencias tiene.
@@ -34,14 +34,15 @@ consideraron y qué consecuencias tiene.
 | [023](ADR-023-tres-repositorios.md) | Tres repositorios y el contrato como artefacto versionado | Reemplazado por [025](ADR-025-cuatro-repositorios.md) |
 | [024](ADR-024-java-25-y-gradle.md) | Java 25, Gradle y Spring Boot 4 en la API | Aceptado |
 | [025](ADR-025-cuatro-repositorios.md) | Cuatro repositorios: la base de datos sale de la API | Aceptado |
-| [026](ADR-026-railway-al-final.md) | Railway aloja la API y el front, y el despliegue va al final del desarrollo | Aceptado |
+| [026](ADR-026-railway-al-final.md) | Railway aloja la API y el front, y el despliegue va al final del desarrollo | Reemplazado por [032](ADR-032-railway-en-dev-ahora.md) |
 | [027](ADR-027-documentacion-versionada.md) | La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica | Aceptado |
 | [028](ADR-028-un-commit-por-tarea.md) | Cada tarea hecha es un commit, y el commit explica por qué | Aceptado |
 | [029](ADR-029-esquema-por-etiqueta.md) | El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase | Aceptado |
 | [030](ADR-030-contrato-sin-get.md) | El contrato no usa GET: toda operación viaja por POST bajo `/api/v0` | Aceptado |
 | [031](ADR-031-commit-de-256-caracteres.md) | El mensaje de commit cabe en 256 caracteres | Aceptado |
+| [032](ADR-032-railway-en-dev-ahora.md) | Railway aloja dev desde ahora, y los otros tres ambientes siguen al final | Aceptado |
 
-Son **31 decisiones** registradas: 25 aceptadas y 6 reemplazadas.
+Son **32 decisiones** registradas: 25 aceptadas y 7 reemplazadas.
 
 > **Sobre la numeración.** El cambio de stack se planeó como [ADR-010](ADR-010-almacenamiento-contrasenas.md) y [ADR-011](ADR-011-stack-flutter-dart.md), pero el 010 ya
 > estaba ocupado por la decisión de contraseñas. Un número asignado no se reutiliza, así que el

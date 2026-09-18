@@ -2,7 +2,15 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-026-railway-al-final.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-16 | 2026-09-16 | [Entrega](../INDICE.md#etiqueta-entrega) · [Plan](../INDICE.md#etiqueta-plan) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-026-railway-al-final.md "Historial de cambios") | [⛔ Reemplazado](../22-documentacion.md#estados-de-un-adr) por [ADR-032](ADR-032-railway-en-dev-ahora.md) | 2026-09-16 | 2026-09-17 | [Entrega](../INDICE.md#etiqueta-entrega) · [Plan](../INDICE.md#etiqueta-plan) |
+
+> **Lo reemplaza [ADR-032](ADR-032-railway-en-dev-ahora.md):** el código vive en GitHub y se
+> despliega en Railway, tal como se decide abajo, y **qa, uat y prod siguen esperando al
+> [Sprint 9](../08-plan-de-desarrollo.md#sprint-9)** por la razón que aquí se argumenta. Cambia una cosa: **dev se aloja desde ahora**, por
+> la condición que este mismo ADR dejó escrita en «A vigilar» —alguien necesita ver la aplicación
+> fuera de la máquina de desarrollo—, y con ella vuelven las tareas [0.8](../08-plan-de-desarrollo.md#tarea-0-8) y [0.9](../08-plan-de-desarrollo.md#tarea-0-9) al [Sprint 0](../08-plan-de-desarrollo.md#sprint-0). La
+> condición 1 de abajo —promover la imagen, no recompilarla— **no se cumple en dev**, y el
+> [ADR-032](ADR-032-railway-en-dev-ahora.md) explica por qué. El cuerpo de abajo se conserva tal como se escribió.
 
 ## Contexto
 
@@ -117,5 +125,5 @@ un ambiente real, y esa es exactamente la parte que un despliegue temprano habr�
 ---
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](../09-plan-de-implantacion.md "09 · Plan de implantación") · [16](../16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](../19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [CLAUDE](../../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [07](../07-arquitectura.md "07 · Arquitectura técnica") · [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [16](../16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [ADR-032](ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final")
 <!-- /generado:referenciado-desde -->

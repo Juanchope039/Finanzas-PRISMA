@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/21-trabajo-en-paralelo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Paralelo](INDICE.md#etiqueta-paralelo) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [2.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/21-trabajo-en-paralelo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Paralelo](INDICE.md#etiqueta-paralelo) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo avanza PRISMA en varios carriles a la vez sin que se bloqueen ni se pisen. **Un carril no es
 una persona:** es un frente de trabajo, y puede llevarlo una persona, un equipo o una sesión de
@@ -196,7 +196,7 @@ Las cadenas no son del todo independientes, y el plan lo dice tarea por tarea en
 
 Se resuelve por orden, no por coordinación: cada tarea arranca cuando lo que necesita está
 **fusionado a `develop` con la integración continua en verde**. Hasta el [Sprint 9](08-plan-de-desarrollo.md#sprint-9) no hay qa donde
-integrar ([ADR-026](adr/ADR-026-railway-al-final.md)), así que `develop` hace de puerta.
+integrar ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)), así que `develop` hace de puerta.
 
 ---
 
@@ -263,7 +263,7 @@ sabe resolver solo.
   `prisma_db`). Nadie desarrolla contra una base compartida: una prueba que falla por lo que otro
   guardó hace diez minutos se termina ignorando, y con ella se ignoran las de verdad.
 - **Excepción vigente:** en la máquina de desarrollo Docker no arranca, y la base de dev es el
-  proyecto de Supabase en la nube ([ADR-026](adr/ADR-026-railway-al-final.md)). Con un carril no estorba. **Con dos o más, cada carril
+  proyecto de Supabase en la nube ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)). Con un carril no estorba. **Con dos o más, cada carril
   que toque la base usa su propio proyecto gratuito de Supabase**, hasta que Docker vuelva.
 - **dev, qa, uat y prod siguen siendo los cuatro de siempre.** No hay ambiente por carril.
 - **La puerta es `develop` con la integración continua en verde** hasta el [Sprint 9](08-plan-de-desarrollo.md#sprint-9), y **qa** desde
@@ -362,7 +362,7 @@ conflicto en un bloque generado no se resuelve a mano sino volviendo a correr la
 4. **Quién aprueba un cambio de contrato** cuando los carriles no se ponen de acuerdo.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-023](adr/ADR-023-tres-repositorios.md "ADR-023 · Tres repositorios y el contrato como artefacto versionado") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
+**🔗 Referenciado desde:** [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.5.0") · [ADR-023](adr/ADR-023-tres-repositorios.md "ADR-023 · Tres repositorios y el contrato como artefacto versionado") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
 <!-- /generado:referenciado-desde -->
 
 ---

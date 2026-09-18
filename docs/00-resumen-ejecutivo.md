@@ -151,7 +151,7 @@ base de datos y las pantallas. Con más carriles se termina antes, pero no en la
 que van en cadena y la puesta en marcha no se parte.
 
 <!-- generado:plan-resumen · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**27,4 semanas con 1 carril**, **17,7 semanas con 2 carriles** y **15,3 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](08-plan-de-desarrollo.md#1-cronograma-por-carriles).
+**27,4 semanas con 1 carril**, **16,6 semanas con 2 carriles** y **13,9 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](08-plan-de-desarrollo.md#1-cronograma-por-carriles).
 <!-- /generado:plan-resumen -->
 
 | Sprint | Entrega |
@@ -176,22 +176,22 @@ que van en cadena y la puesta en marcha no se parte.
 | Carriles activos | Desarrollo | Estabilización | Total | Frente a 1 carril |
 |:---:|---:|---:|---:|---:|
 | 1 | 24,4 semanas | 3 semanas | **27,4 semanas** | — |
-| 2 | 14,7 semanas | 3 semanas | **17,7 semanas** | −9,7 semanas |
-| 3 | 12,3 semanas | 3 semanas | **15,3 semanas** | −12,0 semanas |
+| 2 | 13,6 semanas | 3 semanas | **16,6 semanas** | −10,8 semanas |
+| 3 | 10,9 semanas | 3 semanas | **13,9 semanas** | −13,5 semanas |
 
 | Hito | 1 carril | 2 carriles | 3 carriles |
 |---|:---:|:---:|:---:|
 | [H1](08-plan-de-desarrollo.md#h1) · Sprint 0 | semana 4 | semana 3 | semana 3 |
-| [H2](08-plan-de-desarrollo.md#h2) · Sprint 1 | semana 7 | semana 4 | semana 4 |
-| [H3](08-plan-de-desarrollo.md#h3) · Sprint 2 | semana 10 | semana 6 | semana 6 |
-| [H4](08-plan-de-desarrollo.md#h4) · Sprint 3 | semana 12 | semana 7 | semana 6 |
+| [H2](08-plan-de-desarrollo.md#h2) · Sprint 1 | semana 7 | semana 5 | semana 4 |
+| [H3](08-plan-de-desarrollo.md#h3) · Sprint 2 | semana 11 | semana 7 | semana 6 |
+| [H4](08-plan-de-desarrollo.md#h4) · Sprint 3 | semana 13 | semana 8 | semana 6 |
 | [H5](08-plan-de-desarrollo.md#h5) · Sprint 4 | semana 15 | semana 9 | semana 8 |
-| [H6](08-plan-de-desarrollo.md#h6) · Sprint 5 | semana 16 | semana 9 | semana 8 |
+| [H6](08-plan-de-desarrollo.md#h6) · Sprint 5 | semana 17 | semana 10 | semana 8 |
 | [H7](08-plan-de-desarrollo.md#h7) · Sprint 6 | semana 19 | semana 11 | semana 9 |
-| [H8](08-plan-de-desarrollo.md#h8) · Sprint 7 | semana 20 | semana 12 | semana 9 |
+| [H8](08-plan-de-desarrollo.md#h8) · Sprint 7 | semana 21 | semana 12 | semana 9 |
 | [H9](08-plan-de-desarrollo.md#h9) · Sprint 8 | semana 23 | semana 14 | semana 11 |
-| [H10](08-plan-de-desarrollo.md#h10) · Sprint 9 | semana 25 | semana 15 | semana 13 |
-| [H11](08-plan-de-desarrollo.md#h11) · go-live | semana 28 | semana 18 | semana 16 |
+| [H10](08-plan-de-desarrollo.md#h10) · Sprint 9 | semana 25 | semana 14 | semana 11 |
+| [H11](08-plan-de-desarrollo.md#h11) · go-live | semana 28 | semana 17 | semana 14 |
 <!-- /generado:plan-calendario -->
 
 > **Son más de 16 semanas porque el backend volvió al proyecto.** Construir, probar y desplegar la
