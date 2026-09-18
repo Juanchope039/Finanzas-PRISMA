@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [4.14.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -75,6 +75,14 @@ otra cosa.
 ### 1.3 🚧 En progreso
 
 Nada en las manos ahora mismo.
+
+**🚧 El alta de usuarios está caída en dev, y el arreglo espera revisión.** Crear a alguien responde
+«algo salió mal» con cualquier nombre de usuario: falta `SUPABASE_SERVICE_ROLE_KEY` en el despliegue
+de la API, y el fallo no sabía decirlo porque `ProveedorNoDisponible` no tenía código propio. Deja
+sin servir la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) recién terminada. Carril **API**, rama `feature/gestion-de-usuarios-arreglo`
+en los dos repositorios, anotado el 2026-09-18. El plan es `plan/23-el-alta-decia-algo-salio-mal.md`.
+Es un arreglo suelto: no lleva número de tarea y no entra en las cuentas de abajo. **Falta cargar la
+variable en Railway**, que es lo único que el código no puede hacer solo.
 
 **Lo siguiente, en cuanto alguien lo tome:** cerrar la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) destrabó lo que la estaba
 esperando. En el carril API, con la identidad llegando ya a PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)), se abren la prueba
@@ -1147,6 +1155,31 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       permite al exigir nombres explícitos. La tabla general es la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8), y cuando exista estos
       métodos se van con ella: con dos adaptadores buscando el mismo texto, cada uno que llegue antes
       que ella lo copia otra vez
+
+**Del arreglo del alta de usuarios (`plan/23-el-alta-decia-algo-salio-mal.md`):**
+
+- [ ] 🔒 **El alta estuvo caída en dev desde el día en que se publicó la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7), y nadie lo supo.**
+      Faltaba `SUPABASE_SERVICE_ROLE_KEY` en el servicio de la API. Esa variable la lista el
+      [19](docs/19-ambientes-y-entrega.md), la documenta el `.env.ejemplo` y `application.yml` avisa por escrito de qué deja de
+      funcionar sin ella: **el documento estaba bien y aun así el ambiente salió sin cargarla**. Lo
+      que no existe es nada que compruebe que un ambiente publicado tiene lo que dice necesitar, y
+      eso no lo arregla este plan
+- [ ] **`ProveedorNoDisponible` estrena el décimo código base, `50300`.** Antes no tenía manejador y
+      salía como `50000`, «Algo salió mal. Intenta de nuevo en un momento», que era falso en las dos
+      mitades. Falta configurar y proveedor caído comparten código a propósito: para quien está
+      delante son la misma situación. Cuál fue queda en el registro
+- [ ] **Quién es un usuario repetido lo decide ahora el `error_code` de GoTrue y no el estado.** El
+      adaptador daba por repetido todo 409 y todo 422, y GoTrue usa el 422 también para la clave
+      débil y el correo que no acepta: comprobado contra el GoTrue local, `weak_password` llegaba a
+      Gerencia como «Ya hay alguien con ese usuario. Elige otro.» Si el cuerpo no trae `error_code`
+      se decide por el estado, como antes
+- [ ] **Siguen cayendo al `50000` cuatro rechazos de `usuarios`** que `UsuariosEnPostgres.traducir`
+      no conoce: `usuarios_nombre_completo_minimo`, `usuarios_id_fkey`, `usuarios_pkey` y
+      `motivo_con_contenido`. Se dejaron fuera a propósito —se disparan con valores concretos y no
+      con cualquiera, así que no eran lo que tenía el alta caída— y los recoge la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)
+- [ ] **`@Size(min = 3)` sobre `nombreCompleto` no recorta y el `CHECK` de la base sí**, así que
+      `"  a"` pasa la validación del formulario y lo rechaza PostgreSQL. Alcanzable desde la
+      pantalla, y hoy sale como error del sistema
 
 **De dejar la integración continua en verde:**
 

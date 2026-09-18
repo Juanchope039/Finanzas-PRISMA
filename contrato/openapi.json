@@ -1004,7 +1004,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.8.0"
+    "version" : "0.9.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -2760,6 +2760,13 @@
     "modulo" : "GENERICO",
     "nombre" : "ERROR_NO_PREVISTO",
     "status" : 50000
+  }, {
+    "cuando" : "Un servicio del que la API depende no contestó, o le falta una variable para hablar con él. No es un fallo imprevisto y reintentar no lo arregla: por eso no sale como 50000",
+    "http" : 503,
+    "mensaje" : "El sistema no está disponible en este momento. Avisa a quien administra PRISMA.",
+    "modulo" : "GENERICO",
+    "nombre" : "SERVICIO_NO_DISPONIBLE",
+    "status" : 50300
   }, {
     "cuando" : "Una petición llegó sin la cabecera Idempotency-Key, o con una que no es un UUID v4",
     "http" : 400,
