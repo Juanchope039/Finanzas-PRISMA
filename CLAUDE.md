@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [7.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -282,7 +282,9 @@ figurar en ninguna parte. **Y el contrato de capital es el quinto seguido** ([7.
 las inversiones, los aportes, el retiro partido en pro-labore y distribución, el pro-labore, los
 sobres y el patrimonio, en el rango `90`–`99`, que estaba reservado. A diferencia de los tres
 anteriores, **no transcribe un dominio construido**: sale de los documentos, y lo que decide está en el [`TODO.md`](TODO.md)
-[§10](TODO.md#10-decisiones-de-construcción-que-conviene-revisar), junto con que **sus formularios todavía no tienen pantalla**. Van 59 de las 138 tareas.
+[§10](TODO.md#10-decisiones-de-construcción-que-conviene-revisar), junto con que **sus formularios todavía no tienen pantalla**. **Y la aplicación está en línea en dev** ([0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) y [0.9](docs/08-plan-de-desarrollo.md#tarea-0-9)): fusionar a
+`develop` entrega, la API arranca leyendo el `PORT` que le inyectan y no recibe tráfico hasta que
+alcanza la base. Van 61 de las 138 tareas.
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.
