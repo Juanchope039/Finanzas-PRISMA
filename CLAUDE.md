@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.13.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [7.14.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -316,8 +316,16 @@ que Operación elija sin ver la caja. El «solo Gerencia» que el contrato prome
 dos. En el front, el panel «Cuentas de dinero» vive dentro de Movimientos y se pinta solo si la
 navegación lo dice. **Y el [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) cerró partiendo su última tarea** ([0.4](docs/08-plan-de-desarrollo.md#tarea-0-4)): pedía los cuatro
 proyectos de Supabase, dev y qa llevan meses en pie y los dos de pago —uat y prod, que firma
-Gerencia— son ahora la [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12), en el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), junto a las tareas que los necesitan. Van 68 de
-las 142 tareas.
+Gerencia— son ahora la [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12), en el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), junto a las tareas que los necesitan. **Y el carril
+Contrato se cerró** ([6.10](docs/08-plan-de-desarrollo.md#tarea-6-10)): el contrato de reportes es el décimo y último, y con él los diez
+módulos del plan están acordados antes de implementarse. Son seis operaciones —el Inicio entero en
+una consulta, el año mes a mes, los meses cerrados, la descarga en CSV o PDF, el cierre de un mes y
+los saldos por cuenta— y cinco códigos, cuatro de ellos en el rango `60`–`69`, **el último que
+seguía vacío**. Lo que decide es que **el Inicio no se pinta con seis llamadas**, que el promedio de
+ganancias y el punto de equilibrio **faltan en vez de valer cero** cuando no hay de dónde sacarlos,
+y que **cerrar un mes no manda cifras**: el snapshot lo calcula la API porque después nadie lo
+corrige. Detrás se abren siete tareas, entre ellas el dashboard ([6.3](docs/08-plan-de-desarrollo.md#tarea-6-3)) y el reporte anual
+([6.5](docs/08-plan-de-desarrollo.md#tarea-6-5)). Van 69 de las 142 tareas.
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.
