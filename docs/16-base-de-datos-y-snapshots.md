@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-19 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [3.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-19 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 > **Construcción: construido y corriendo contra dev y contra qa**, donde el esquema está aplicado y
 > verificado línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5), [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5) y [1.13](08-plan-de-desarrollo.md#tarea-1-13)). **qa quedó al día** con el
@@ -49,7 +49,7 @@ un momento; las migraciones son la receta reproducible. Los snapshots se usan pa
 ```
 supabase/
   config.toml                          Configuración de la pila local
-  migrations/                          Doce, en orden y ninguna editable una vez aplicada:
+  migrations/                          Catorce, en orden y ninguna editable una vez aplicada:
     …_esquema_inicial.sql              Todo el esquema (doc 04 + tabla exportaciones del doc 13)
     …_ajusta_rls_y_vistas_al_doc_04.sql Apaga la RLS que Supabase enciende sola; security_invoker
     …_rol_prisma_api.sql               El rol con el que se conecta la API (doc 04 §9)
@@ -62,6 +62,8 @@ supabase/
     …_publica_version_0_2_0.sql        Publica la 0.2.0 en schema_version (ADR-029)
     …_tablas_del_canal_firmado.sql     nonces_vistos y sesiones, las dos del filtro de firma (doc 04 §4.10)
     …_publica_version_0_3_0.sql        Publica la 0.3.0, que es la anterior más esas dos tablas
+    …_tabla_adjuntos_y_bucket_de_soportes.sql  La ficha del soporte y el bucket privado (doc 04 §4.12)
+    …_publica_version_0_4_0.sql        Publica la 0.4.0, que es la anterior más esa tabla y su bucket
   seed.sql                             Datos de prueba fijos y deterministas
 
 scripts/db/
@@ -136,11 +138,12 @@ es el [§5.3](#53-promover-a-qa-paso-a-paso).
 
 Aplicar no es lo mismo que quedar bien. `scripts/db/verificar-base.sql` le hace a la base las
 preguntas del [`04-modelo-de-datos.md`](04-modelo-de-datos.md) y contesta `OK` o `>>> FALLA` por
-cada una: los nueve dominios y sus 61 columnas, que ninguna restricción se haya quedado con el
-nombre que le puso PostgreSQL, que nadie salvo el dueño pueda borrar, que los catorce triggers de
+cada una: los nueve dominios y sus 62 columnas, que ninguna restricción se haya quedado con el
+nombre que le puso PostgreSQL, que nadie salvo el dueño pueda borrar, que los quince triggers de
 auditoría **escriban**, que RLS le conteste distinto a una sesión de Operación y a una de
-Gerencia, que el catálogo de cargos lo lea todo el mundo y lo escriba solo Gerencia, y que cada
-persona alcance sus claves de idempotencia y ninguna otra.
+Gerencia, que el catálogo de cargos lo lea todo el mundo y lo escriba solo Gerencia, que cada
+persona alcance sus claves de idempotencia y ninguna otra, y que el bucket de soportes sea privado
+y traiga el techo y los cuatro tipos que el contrato promete.
 
 ```powershell
 supabase db query --linked -f scripts/db/verificar-base.sql                        # el proyecto vinculado
@@ -304,9 +307,11 @@ que sea limpio y rápido; los reactiva al final.
 
 ## 9. Límites conocidos (heredados del doc 04)
 
-- **Tablas sin `CREATE TABLE` en la doc:** `adjuntos`, `cotizaciones` y `cotizacion_lineas`
+- **Tablas sin `CREATE TABLE` en la doc:** `cotizaciones` y `cotizacion_lineas`
   aparecen en el catálogo y el diagrama del doc [04](04-modelo-de-datos.md) pero no tienen definición escrita. **No se
-  inventaron**: quedan pendientes de especificar antes de agregarlas a una migración.
+  inventaron**: quedan pendientes de especificar antes de agregarlas a una migración. **`adjuntos`
+  salió de esta lista** con la [3.14](08-plan-de-desarrollo.md#tarea-3-14): la especifica el [04 §4.12](04-modelo-de-datos.md#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido) y la crea una
+  migración, junto con el bucket privado en el que vive el archivo.
 - **Auditoría de `usuarios`:** el doc [04](04-modelo-de-datos.md) [§5.4](04-modelo-de-datos.md#54-auditoría-por-triggers) dice que necesita una variante propia del trigger
   (detecta `desactivado_en`, no `anulado_en`) y no la especifica. Por eso `usuarios` aún no
   tiene trigger de auditoría de fila.
@@ -428,7 +433,7 @@ el incremental propio es para **desarrollo** y para llevarse deltas de forma por
 | Esfuerzo | Mantener cursor + orden | Ninguno |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
