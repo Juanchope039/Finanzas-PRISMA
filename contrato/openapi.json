@@ -213,6 +213,43 @@
         },
         "type" : "object"
       },
+      "ConsultaDeCosteo" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/costeo: lo que la persona lleva escrito en el formulario de producto, para que la API devuelva las cifras sin que el front calcule ninguna (ADR-018)",
+        "properties" : {
+          "costoConsumibles" : {
+            "format" : "int64",
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "costoInsumo" : {
+            "format" : "int64",
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "margenObjetivo" : {
+            "description" : "Sobre qué margen se quiere el precio sugerido, en puntos (RF-33). El mockup lo mueve entre 20 y 80 de cinco en cinco. Sin él, la respuesta no trae precio sugerido",
+            "format" : "int32",
+            "maximum" : 99,
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "minutosTrabajo" : {
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "precioVenta" : {
+            "format" : "int64",
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "productoId" : {
+            "description" : "El producto que se está editando, para dejarlo fuera de la mediana con la que se compara: un producto metido en su propia referencia se disimula. Ausente mientras todavía no exista",
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
       "ConsultaDeFormulario" : {
         "description" : "El cuerpo de POST /api/v0/consultas/formularios",
         "properties" : {
@@ -309,6 +346,91 @@
         },
         "type" : "object"
       },
+      "ConsultaDeProductos" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/productos. Todo es opcional: sin nada, lo que se vende hoy ordenado por margen por hora",
+        "properties" : {
+          "incluirInactivos" : {
+            "description" : "Con true salen también los desactivados, que es el panel «Productos desactivados» del mockup. Solo para Gerencia",
+            "type" : "boolean"
+          },
+          "orden" : {
+            "description" : "Los dos órdenes del cuadro de 10 §4.4, y los dos los decide la API. Sin él, margen_por_hora, que es el que orienta la decisión cuando hay más pedidos que tiempo (05 §7.2). A una sesión de Operación el catálogo le llega por nombre: ordenar por margen exige leer lo que la base no le deja ver",
+            "enum" : [ "margen_por_hora", "margen_porcentual" ],
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "Costeo" : {
+        "description" : "Lo que cuesta producir una unidad y desde cuándo cuesta eso (05 §7.1). Un costeo no se sobrescribe nunca: cada cambio agrega una fila con su vigencia (04 §4.5), y así un pedido viejo conserva el costo que tenía cuando se produjo",
+        "properties" : {
+          "costoConsumibles" : {
+            "description" : "Tinta, papel transfer, hilo, energía",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "costoInsumo" : {
+            "description" : "El material que se convierte en el producto",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "costoUnitario" : {
+            "description" : "Materia más tiempo: lo que cuesta producir una unidad (05 §7.1). Lo calcula la API, y viaja aquí y no en los márgenes porque un producto sin precio también lo tiene",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "minutosTrabajo" : {
+            "description" : "Los minutos de persona que lleva una unidad",
+            "type" : "number"
+          },
+          "precioVenta" : {
+            "description" : "A cuánto se vendía la unidad con este costeo",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "tarifaHora" : {
+            "description" : "Lo que costaba una hora de quien produce cuando se registró este costeo: el costo mensual dividido entre las horas productivas del mes (05 §7.1). La pone la API y se congela aquí, porque recalcularla con el pro-labore de hoy cambiaría los costos de los pedidos viejos",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "vigenteDesde" : {
+            "description" : "Desde qué día rige. El costeo vigente es el de la fecha mayor y, si hay varios del mismo día, el último registrado",
+            "format" : "date",
+            "type" : "string"
+          }
+        },
+        "required" : [ "costoConsumibles", "costoInsumo", "costoUnitario", "minutosTrabajo", "precioVenta", "tarifaHora", "vigenteDesde" ],
+        "type" : "object"
+      },
+      "CosteoCalculado" : {
+        "description" : "Lo que el formulario de producto pinta en vivo: el costo, los márgenes, la lectura frente al resto del taller y el precio que habría que cobrar para el margen objetivo",
+        "properties" : {
+          "costoUnitario" : {
+            "description" : "Materia más tiempo (05 §7.1)",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "lectura" : {
+            "$ref" : "#/components/schemas/LecturaDeMargen"
+          },
+          "margenes" : {
+            "$ref" : "#/components/schemas/Margenes",
+            "description" : "Ausente cuando el precio de venta es cero: sin precio no hay márgenes que calcular"
+          },
+          "precioSugerido" : {
+            "description" : "El precio que deja el margen objetivo sobre este costo (RF-33). Ausente si la consulta no trae margenObjetivo",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "tarifaHora" : {
+            "description" : "La que la API tomó del pro-labore vigente para cobrar los minutos de trabajo",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "costoUnitario", "lectura", "tarifaHora" ],
+        "type" : "object"
+      },
       "Cuenta" : {
         "properties" : {
           "id" : {
@@ -339,6 +461,49 @@
           }
         },
         "required" : [ "nombre" ],
+        "type" : "object"
+      },
+      "DatosDeProducto" : {
+        "description" : "El formulario «producto», el mismo para crear y para editar. Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"producto\"}",
+        "properties" : {
+          "costoConsumibles" : {
+            "description" : "Tinta, papel transfer, hilo, energía: lo que se gasta produciendo la unidad (05 §7.1). Sin él, cero",
+            "format" : "int64",
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "costoInsumo" : {
+            "description" : "Lo que cuesta el material que se convierte en el producto (05 §7.1). Sin él, cero",
+            "format" : "int64",
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "minutosTrabajo" : {
+            "description" : "Los minutos de persona que lleva una unidad, con dos decimales como máximo, que es lo que guarda NUMERIC(6,2) (04 §4.1); más decimales responden 42240. En cero cuando el ítem no consume tiempo del taller: entonces su margen por hora no existe, y viaja vacío en vez de en cero",
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "nombre" : {
+            "description" : "Cómo se llama en el taller",
+            "type" : "string"
+          },
+          "precioVenta" : {
+            "description" : "Pesos enteros (ADR-003). En cero mientras no se decida a cuánto se vende: el producto existe y todavía no tiene márgenes que calcular",
+            "format" : "int64",
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "tipo" : {
+            "description" : "Los dos valores del ENUM tipo_item. Los dos se costean igual; la diferencia es que un servicio no tiene unidades en bodega",
+            "enum" : [ "producto", "servicio" ],
+            "type" : "string"
+          },
+          "unidad" : {
+            "description" : "En qué se cuenta: unidad, docena, metro. Sin ella, «unidad»",
+            "type" : "string"
+          }
+        },
+        "required" : [ "nombre", "tipo" ],
         "type" : "object"
       },
       "Desactivacion" : {
@@ -373,7 +538,7 @@
             "type" : "string"
           },
           "maximo" : {
-            "description" : "Límite superior: pesos en dinero, caracteres en texto y en clave. Ausente si no hay",
+            "description" : "Límite superior: pesos en dinero, caracteres en texto y en clave, la cantidad en numero. Ausente si no hay",
             "format" : "int64",
             "type" : "integer"
           },
@@ -381,7 +546,7 @@
             "$ref" : "#/components/schemas/MensajesDeCampo"
           },
           "minimo" : {
-            "description" : "Límite inferior: pesos en dinero, caracteres en texto y en clave. Ausente si no hay",
+            "description" : "Límite inferior: pesos en dinero, caracteres en texto y en clave, la cantidad en numero. Ausente si no hay",
             "format" : "int64",
             "type" : "integer"
           },
@@ -406,8 +571,8 @@
             "type" : "string"
           },
           "tipo" : {
-            "description" : "clave es un texto que se pinta oculto, con un botón para mostrarlo; teclado de texto",
-            "enum" : [ "dinero", "texto", "fecha", "lista", "casilla", "clave" ],
+            "description" : "clave es un texto que se pinta oculto, con un botón para mostrarlo; teclado de texto. numero es una cantidad que no es plata —los minutos de trabajo, un porcentaje—, con teclado numérico",
+            "enum" : [ "dinero", "texto", "fecha", "lista", "casilla", "clave", "numero" ],
             "type" : "string"
           }
         },
@@ -546,6 +711,31 @@
         "required" : [ "debeCambiarClave", "id", "nombreCompleto", "tipo", "usuario" ],
         "type" : "object"
       },
+      "LecturaDeMargen" : {
+        "description" : "Lo que dice el margen de un producto cuando se lo pone al lado del resto del taller. La decide la API con su texto y su nivel; el front la pinta y no la calcula (ADR-018)",
+        "properties" : {
+          "detalle" : {
+            "description" : "La explicación con los montos de este producto, porque «Deja $26.000 por hora contra $48.000 de la mediana» orienta y «revisa tu margen» no (10 §6)",
+            "type" : "string"
+          },
+          "medianaDelResto" : {
+            "description" : "La mediana del margen por hora de los demás productos del cuadro, contra la que se leyó este. Ausente si este no tiene margen por hora o si ningún otro lo tiene",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "nivel" : {
+            "description" : "De qué color se pinta (10 §3.1): vender a pérdida es crítica y rendir menos que el resto del taller, alta",
+            "enum" : [ "critica", "alta", "informativa" ],
+            "type" : "string"
+          },
+          "titulo" : {
+            "description" : "La frase corta que encabeza la lectura: «Rinde bien por hora de trabajo», «Rinde menos que el resto del taller», «A este precio vendes a pérdida», «No consume tiempo de taller» o «Todavía no tiene precio»",
+            "type" : "string"
+          }
+        },
+        "required" : [ "detalle", "nivel", "titulo" ],
+        "type" : "object"
+      },
       "LineaDePedido" : {
         "description" : "Un renglón del pedido: qué producto, cuántos y a qué precio",
         "properties" : {
@@ -568,6 +758,27 @@
         "required" : [ "cantidad", "precioUnitario", "productoId" ],
         "type" : "object"
       },
+      "Margenes" : {
+        "description" : "Los tres márgenes de 05 §7.2: margen en pesos = precio − costo unitario; porcentual = margen en pesos ÷ precio; por hora = margen en pesos ÷ (minutos ÷ 60). El tercero es el que guía la decisión cuando hay más pedidos que tiempo",
+        "properties" : {
+          "enPesos" : {
+            "description" : "Precio de venta menos costo unitario. Negativo cuando se vende por debajo de lo que cuesta producirlo",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "porHora" : {
+            "description" : "Lo que deja una hora de trabajo. Ausente —y no en cero— cuando el ítem no consume tiempo del taller: en cero quedaría de último en el cuadro como si fuera el peor negocio",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "porcentual" : {
+            "description" : "El margen en pesos sobre el precio de venta, en puntos y con dos decimales",
+            "type" : "number"
+          }
+        },
+        "required" : [ "enPesos", "porcentual" ],
+        "type" : "object"
+      },
       "MensajesDeCampo" : {
         "properties" : {
           "maximo" : {
@@ -583,7 +794,7 @@
         "type" : "object"
       },
       "Motivo" : {
-        "description" : "Los siete formularios de motivo —«desactivacion-de-usuario», «reactivacion-de-usuario», «desactivacion-de-cargo», «reversion», «anulacion-de-pedido», «anulacion-de-cliente» y «anulacion-de-movimiento»—: el mismo campo, con la etiqueta y los mensajes de cada uno",
+        "description" : "Los ocho formularios de motivo —«desactivacion-de-usuario», «reactivacion-de-usuario», «desactivacion-de-cargo», «desactivacion-de-producto», «reversion», «anulacion-de-pedido», «anulacion-de-cliente» y «anulacion-de-movimiento»—: el mismo campo, con la etiqueta y los mensajes de cada uno",
         "properties" : {
           "motivo" : {
             "description" : "Qué pasó y por qué. Queda en la ficha, en la bitácora o junto al registro",
@@ -1052,6 +1263,52 @@
         "required" : [ "anticipado", "anticipoPct", "clienteId", "estado", "estancado", "fechaPedido", "id", "lineas", "numero", "saldoPendiente", "valorTotal" ],
         "type" : "object"
       },
+      "Producto" : {
+        "properties" : {
+          "activo" : {
+            "description" : "Si se sigue ofreciendo. Uno inactivo no entra en pedidos nuevos y sigue entero en los viejos",
+            "type" : "boolean"
+          },
+          "costeo" : {
+            "$ref" : "#/components/schemas/Costeo",
+            "description" : "El costo con el que se vende hoy. Solo a Gerencia: costos_producto lleva la política costos_solo_gerencia, así que a una sesión de Operación PostgreSQL no le devuelve ni una fila (04 §7, RF-34)"
+          },
+          "desactivacion" : {
+            "$ref" : "#/components/schemas/Desactivacion",
+            "description" : "Solo en un producto inactivo: cuándo, quién y por qué se dejó de ofrecer"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "lectura" : {
+            "$ref" : "#/components/schemas/LecturaDeMargen",
+            "description" : "Qué dice el margen de este producto frente al resto del taller. Solo a Gerencia"
+          },
+          "margenes" : {
+            "$ref" : "#/components/schemas/Margenes",
+            "description" : "Los tres márgenes de 05 §7.2. Solo a Gerencia, y ausente también para ella cuando el producto todavía no tiene precio"
+          },
+          "nombre" : {
+            "type" : "string"
+          },
+          "precioActual" : {
+            "description" : "A cuánto se vende hoy. Es el precio de la ficha; el costeo guarda además el que tenía cuando se registró",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "tipo" : {
+            "enum" : [ "producto", "servicio" ],
+            "type" : "string"
+          },
+          "unidad" : {
+            "description" : "En qué se cuenta: unidad, docena, metro",
+            "type" : "string"
+          }
+        },
+        "required" : [ "activo", "id", "nombre", "precioActual", "tipo", "unidad" ],
+        "type" : "object"
+      },
       "Reversion" : {
         "properties" : {
           "posible" : {
@@ -1163,6 +1420,25 @@
         "properties" : {
           "data" : {
             "$ref" : "#/components/schemas/Cliente",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreCosteoCalculado" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/CosteoCalculado",
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
           },
           "mensaje" : {
@@ -1386,6 +1662,28 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobreListProducto" : {
+        "properties" : {
+          "data" : {
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver",
+            "items" : {
+              "$ref" : "#/components/schemas/Producto"
+            },
+            "type" : "array"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreListUsuario" : {
         "properties" : {
           "data" : {
@@ -1488,6 +1786,25 @@
         "properties" : {
           "data" : {
             "$ref" : "#/components/schemas/Pedido",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreProducto" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Producto",
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
           },
           "mensaje" : {
@@ -1647,7 +1964,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.11.0"
+    "version" : "0.12.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -2593,6 +2910,73 @@
         "tags" : [ "Clientes" ]
       }
     },
+    "/api/v0/consultas/costeo" : {
+      "post" : {
+        "description" : "La vista previa que el formulario de producto pinta en vivo: el costo unitario, los tres márgenes, la lectura frente al resto del taller y el precio que habría que cobrar para el margen objetivo (RF-30, RF-31, RF-33). Las cuatro son plata o son reglas, así que las calcula la API y el front solo las pinta (ADR-018). No escribe nada: sirve para ver antes de guardar, y es también la sugerencia de precio de la tarea 5.7. Con productoId, ese producto queda fuera de la mediana con la que se compara. Solo Gerencia. Sin pro-labore definido responde 40940, y un tiempo con más de dos decimales, 42240. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902, 40940, 42200 con data.errores y 42240.",
+        "operationId" : "costeo",
+        "parameters" : [ {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeCosteo"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreCosteoCalculado"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Costo, márgenes y precio sugerido",
+        "tags" : [ "Productos" ]
+      }
+    },
     "/api/v0/consultas/cuentas" : {
       "post" : {
         "description" : "Las cuentas de dinero sin anular, en el orden en que se pintan. Las piden los dos tipos de usuario: Operación elige por nombre la cuenta de un movimiento. Por eso no traen saldo: la caja es de Gerencia (01 §4) y los saldos tienen su propia consulta (tarea 3.12). Puede devolver 20000, 40100, 40101, 40102, 40103 y 40302.",
@@ -2916,6 +3300,73 @@
         },
         "summary" : "Los pedidos por fecha",
         "tags" : [ "Pedidos" ]
+      }
+    },
+    "/api/v0/consultas/productos" : {
+      "post" : {
+        "description" : "El catálogo con su costeo vigente, sus tres márgenes y lo que dicen frente al resto del taller, en el orden que se pida (RF-28, RF-30, RF-31, CU-09). Es el cuadro de 10 §4.4, y quien lo ordena y quien lo lee es la API: el front no vuelve a ordenar ni decide qué pinta en rojo (ADR-018). A una sesión de Operación le llegan el nombre, el tipo, la unidad y el precio, y ni el costeo ni los márgenes ni la lectura, porque costos_producto lleva RLS y PostgreSQL no le devuelve esas filas (ADR-006, RF-34, BDD-02-2); por eso a Operación el catálogo le llega por nombre. Los desactivados no salen salvo que se pidan. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901, 40902 y 42200 con data.errores.",
+        "operationId" : "productos",
+        "parameters" : [ {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeProductos"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreListProducto"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "El cuadro de productos y servicios",
+        "tags" : [ "Productos" ]
       }
     },
     "/api/v0/consultas/usuarios" : {
@@ -3688,6 +4139,300 @@
         "tags" : [ "Pedidos" ]
       }
     },
+    "/api/v0/productos/{id}" : {
+      "put" : {
+        "description" : "Da de alta algo que el taller vende, con su primer costeo (RF-28, RF-29, CU-09, CU-10). El id va en la ruta y no en el cuerpo: lo genera quien pide al decidir la acción, junto con la clave de idempotencia (ADR-020), así que reintentar la misma petición no crea dos productos, y si ese id ya existe responde 40900. El costo viaja con la ficha en una sola petición porque es una sola transacción (20 §5.1): la fila de productos y la primera de costos_producto caen juntas o no cae ninguna. La tarifa por hora no se manda: la API la saca del pro-labore vigente y la congela en el costeo (05 §7.1), y sin pro-labore definido responde 40940. Solo Gerencia. El formulario es «producto»; el tiempo con más de dos decimales no cabe en el descriptor y responde 42240. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 40940, 42200 con data.errores y 42240.",
+        "operationId" : "crearProducto",
+        "parameters" : [ {
+          "description" : "El id del producto, que genera quien lo da de alta",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DatosDeProducto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreProducto"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Crear un producto o un servicio",
+        "tags" : [ "Productos" ]
+      }
+    },
+    "/api/v0/productos/{id}/desactivacion" : {
+      "post" : {
+        "description" : "Lo saca del catálogo con motivo escrito: deja de ofrecerse al cotizar y al crear pedidos, y no se borra (RN-13). Los pedidos que ya lo tienen siguen enteros, y el producto queda abajo con su motivo y su fecha, como en el mockup. En productos eso se escribe en anulado_en, anulado_por y anulado_motivo, que es la misma forma de los cargos (04 §4.2): la tabla no tiene columnas propias de desactivación. Uno ya inactivo responde 40900. Solo Gerencia. El formulario es «desactivacion-de-producto». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902 y 42200 con data.errores.",
+        "operationId" : "desactivarProducto",
+        "parameters" : [ {
+          "description" : "El id del producto",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Motivo"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreProducto"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Desactivar un producto",
+        "tags" : [ "Productos" ]
+      }
+    },
+    "/api/v0/productos/{id}/edicion" : {
+      "post" : {
+        "description" : "Guarda el formulario entero, como el botón «Guardar cambios» del mockup: corrige la ficha y, si el costo o el precio cambiaron, agrega una fila nueva a costos_producto con la fecha de hoy, porque un costeo no se sobrescribe nunca (04 §4.5, RF-35). Así un pedido viejo conserva el costo que tenía cuando se produjo. Editar dos veces el mismo día deja dos filas con la misma vigencia, y la vigente es la última registrada. Solo Gerencia. Un producto que no existe responde 40400. El formulario es «producto», el mismo que crea. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902, 40940, 42200 con data.errores y 42240.",
+        "operationId" : "editarProducto",
+        "parameters" : [ {
+          "description" : "El id del producto",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DatosDeProducto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreProducto"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Guardar los cambios de un producto",
+        "tags" : [ "Productos" ]
+      }
+    },
+    "/api/v0/productos/{id}/reactivacion" : {
+      "post" : {
+        "description" : "Lo devuelve al catálogo para volver a ofrecerlo, como el botón «Reactivar» del mockup. No pide motivo, igual que en el mockup y que en los cargos. Uno activo responde 40900. Solo Gerencia. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901 y 40902.",
+        "operationId" : "reactivarProducto",
+        "parameters" : [ {
+          "description" : "El id del producto",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreProducto"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Reactivar un producto",
+        "tags" : [ "Productos" ]
+      }
+    },
     "/api/v0/sesiones" : {
       "post" : {
         "description" : "Entra con el nombre de usuario y la contraseña, sin correo (RF-01, CU-28). La API pasa el usuario a minúsculas, arma el correo sintético y llama al proveedor: el correo nunca viaja por aquí (ADR-009). No lleva sesión, firma ni Idempotency-Key: todavía no hay clave con qué firmar, y la respuesta trae secretos que no se guardan en la tabla de idempotencia. Responde el token, la clave de firma y quién entró; la renovación va aparte, en la cookie prisma_renovacion. Un usuario que no existe y una contraseña equivocada responden lo mismo, 40104, para no revelar quién trabaja en el taller; 40301 solo sale con la contraseña correcta. Escribe inicio_sesion o inicio_sesion_fallido en la auditoría, nunca con la contraseña tecleada. El formulario es «acceso». Puede devolver 20100, 40000, 40104, 40301 y 42200 con data.errores.",
@@ -4302,6 +5047,9 @@
     "description" : "Los pedidos del taller, y la entrega que causa la venta",
     "name" : "Pedidos"
   }, {
+    "description" : "El catálogo de lo que el taller vende, con su costo y su margen por hora",
+    "name" : "Productos"
+  }, {
     "description" : "Las personas con acceso, su tipo y su cargo",
     "name" : "Usuarios"
   }, {
@@ -4493,6 +5241,17 @@
       "sprint" : 4
     },
     "status" : 40932
+  }, {
+    "cuando" : "Registrar o editar un costeo cuando no hay pro-labore definido con horas productivas: sin él la hora de trabajo no tiene precio, y el costo unitario no se puede calcular (05 §7.1, RN-08)",
+    "http" : 409,
+    "mensaje" : "Todavía no está definido el pro-labore, así que el trabajo no tiene precio. Defínelo antes de costear.",
+    "modulo" : "PRODUCTOS_Y_COSTEO",
+    "nombre" : "SIN_TARIFA_POR_HORA",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 5.2: catálogo de productos y servicios",
+      "sprint" : 5
+    },
+    "status" : 40940
   }, {
     "cuando" : "Los datos llegaron bien formados pero no pasan las reglas; cada campo va en data.errores",
     "http" : 422,
@@ -4704,6 +5463,17 @@
       "sprint" : 4
     },
     "status" : 42235
+  }, {
+    "cuando" : "Los minutos de trabajo llegan con más de dos decimales, que es lo que guarda la columna NUMERIC(6,2). El error va en data.errores, sobre minutosTrabajo",
+    "http" : 422,
+    "mensaje" : "El tiempo de trabajo se registra con dos decimales como máximo.",
+    "modulo" : "PRODUCTOS_Y_COSTEO",
+    "nombre" : "TIEMPO_DE_TRABAJO_INVALIDO",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 5.2: catálogo de productos y servicios",
+      "sprint" : 5
+    },
+    "status" : 42240
   }, {
     "cuando" : "Cualquier fallo no contemplado. Nunca expone la traza ni el texto de la excepción",
     "http" : 500,
