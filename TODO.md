@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -39,12 +39,12 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 20 | 13 | 0 | 7 | 7,5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 14 | 5 | 0 | 9 | 11 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 2 | 0 | 8 | 10,5 |
-| [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 3 | 0 | 7 | 7 |
+| [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 4 | 0 | 6 | 6,5 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 0 | 0 | 10 | 15 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 11 | 1 | 0 | 10 | 9,5 |
-| **Total** | **134** | **57** | **2** | **75** | **96,5** |
+| **Total** | **134** | **58** | **2** | **74** | **96** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -64,7 +64,7 @@ Lo que tiene su commit en `develop` con la integración continua en verde, que e
 | **Front · formularios** | El renderizador del descriptor: pinta los campos que manda la API con su teclado, sus límites, sus opciones y sus avisos, y no trae ninguna regla propia | [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18) |
 | **Front · la sesión** | **La puerta**: sin sesión se ve «Entra con tu usuario», y quien entra con una clave temporal va a «Crea tu contraseña» en vez de al tablero —que ni siquiera se construye hasta que la cambie—. Los dos formularios los manda la API, y los rechazos también: el «Usuario o contraseña incorrectos» que se lee en pantalla no está escrito en ninguna parte del front. **Recargar la página ya no saca a nadie**: lo primero que hace la aplicación al abrirse es renovar con la cookie, y si un token vence a media jornada el cliente lo repone y reintenta sin que se note. Arriba, la identidad con su menú de la sesión; a la izquierda, el menú que dicta la API | [2.6](docs/08-plan-de-desarrollo.md#tarea-2-6) · [2.2](docs/08-plan-de-desarrollo.md#tarea-2-2) · [2.12](docs/08-plan-de-desarrollo.md#tarea-2-12) · [2.14](docs/08-plan-de-desarrollo.md#tarea-2-14) |
 | **Front · sin conexión** | La PWA con su manifiesto en español y la cola local en IndexedDB: cada intención se guarda con su clave **antes** de intentar enviarse, y se reintenta con la espera de [17 §5.2](docs/17-resiliencia-offline-y-cache.md#52-cuánto-se-espera-entre-reintentos) hasta que la API la acepte o la rechace con motivo | [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) |
-| **Contrato** | El contrato v0.11.0 en [`contrato/openapi.json`](contrato/openapi.json): el sobre, el descriptor con sus listas, cuentas y categorías, y **los sprints [2](docs/08-plan-de-desarrollo.md#sprint-2), [3](docs/08-plan-de-desarrollo.md#sprint-3) y [4](docs/08-plan-de-desarrollo.md#sprint-4) enteros acordados antes de implementarlos** —`/sesiones`, `/usuarios`, `/cargos`, `/bitacora`, `/navegacion` y las tres cabeceras del canal firmado; los movimientos con su registro, su anulación, su adjunto y su libro con filtros; y los clientes, los pedidos y sus anticipos— | [0.15](docs/08-plan-de-desarrollo.md#tarea-0-15) · [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) · [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) · [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) · [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) |
+| **Contrato** | El contrato v0.12.0 en [`contrato/openapi.json`](contrato/openapi.json): el sobre, el descriptor con sus listas, cuentas y categorías, y **los sprints [2](docs/08-plan-de-desarrollo.md#sprint-2), [3](docs/08-plan-de-desarrollo.md#sprint-3), [4](docs/08-plan-de-desarrollo.md#sprint-4) y [5](docs/08-plan-de-desarrollo.md#sprint-5) enteros acordados antes de implementarlos** —`/sesiones`, `/usuarios`, `/cargos`, `/bitacora`, `/navegacion` y las tres cabeceras del canal firmado; los movimientos con su registro, su anulación, su adjunto y su libro con filtros; los clientes, los pedidos y sus anticipos; y los productos con su costeo, su cuadro de márgenes y lo que Operación no recibe— | [0.15](docs/08-plan-de-desarrollo.md#tarea-0-15) · [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) · [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) · [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) · [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) |
 | **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 24 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 61 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los catorce triggers de auditoría escribiendo y las 34 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. La semilla es fija, re-ejecutable y con filas en toda tabla que preguntan las pruebas de permisos, y `sembrar.ps1` la lleva a dev y a qa sin dejarla acercarse a uat ni a prod. Y esto ya no es solo dev: **qa quedó al día con la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)**, con sus 109 comprobaciones en `OK` y `schema_version` en `0.3.0` | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) · [2.4](docs/08-plan-de-desarrollo.md#tarea-2-4) |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
@@ -122,23 +122,23 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) · [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
+| **API** | [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) · [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
 | **Base** | [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) |
-| **Front** | [3.5](docs/08-plan-de-desarrollo.md#tarea-3-5) |
-| **Contrato** | [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
+| **Front** | [3.5](docs/08-plan-de-desarrollo.md#tarea-3-5) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) |
+| **Contrato** | [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **77 tareas y 96,5 días de trabajo** de 134 tareas del plan.
+Quedan **76 tareas y 96 días de trabajo** de 134 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 14,5 semanas | **17,5 semanas** |
-| 2 | 8,2 semanas | **11,2 semanas** |
-| 3 | 6,6 semanas | **9,6 semanas** |
+| 1 | 14,4 semanas | **17,4 semanas** |
+| 2 | 8,1 semanas | **11,1 semanas** |
+| 3 | 6,4 semanas | **9,4 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -146,6 +146,14 @@ Quedan **77 tareas y 96,5 días de trabajo** de 134 tareas del plan.
 El orden sale de las dependencias del [plan](docs/08-plan-de-desarrollo.md): cuántas tareas pendientes cuelgan de cada una, directa
 o indirectamente. No es el orden en que se descubrieron.
 
+- [x] **El contrato de productos y costeo** ([5.10](docs/08-plan-de-desarrollo.md#tarea-5-10)) — hecho: tenía **24 tareas detrás** por medio día
+      de trabajo, y era lo que más liberaba. Dos directas —el catálogo ([5.2](docs/08-plan-de-desarrollo.md#tarea-5-2)) y el cuadro
+      comparativo ([5.9](docs/08-plan-de-desarrollo.md#tarea-5-9))— y 22 indirectas, porque la cadena no se queda en el sprint: la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2)
+      destraba el pedido con líneas ([4.3](docs/08-plan-de-desarrollo.md#tarea-4-3)), y de ahí salen la función de entrega ([4.5](docs/08-plan-de-desarrollo.md#tarea-4-5)) —del camino
+      crítico—, las tres cifras ([6.1](docs/08-plan-de-desarrollo.md#tarea-6-1)) y con ellas casi todo el [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6). El `v0.12.0` estrena el
+      rango `40`–`49`, y el contrato casi no decide: **transcribe el dominio que ya estaba
+      construido** por la [5.1](docs/08-plan-de-desarrollo.md#tarea-5-1), la [5.3](docs/08-plan-de-desarrollo.md#tarea-5-3) y la [5.6](docs/08-plan-de-desarrollo.md#tarea-5-6). Lo que sí decide es que **a Operación no le
+      llegan el costo, los márgenes ni los minutos**, con lo que la [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) deja de ser un `if`.
 - [x] **El contrato de movimientos** ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13)) — hecho: tenía **32 tareas detrás** por medio día de
       trabajo, y era lo único que les faltaba a los endpoints ([3.4](docs/08-plan-de-desarrollo.md#tarea-3-4)). El `v0.11.0` llena el rango
       `20`–`29`, que estaba en tres de nueve. Un movimiento se registra con `PUT` a su propio id, se
@@ -504,7 +512,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [x] [**5.1**](docs/08-plan-de-desarrollo.md#tarea-5-1) Dominio `Producto` y servicio `calcularMargenes` · API — los tres márgenes de
       [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes) reproducidos producto por producto, con el margen por hora vacío —no en cero—
       cuando el ítem no consume tiempo
-- [ ] 🔒 [**5.2**](docs/08-plan-de-desarrollo.md#tarea-5-2) Catálogo de productos y servicios · API, Front
+- [ ] ⚡ [**5.2**](docs/08-plan-de-desarrollo.md#tarea-5-2) Catálogo de productos y servicios · API, Front
 - [x] [**5.3**](docs/08-plan-de-desarrollo.md#tarea-5-3) Costeo unitario: insumo, consumibles y minutos de trabajo · API — las dos fórmulas
       de [05 §7.1](docs/05-reglas-financieras.md#71-costo-unitario): el costo partido en materia y tiempo, y la tarifa por hora que sale del
       pro-labore o del salario. Reproduce la tabla de [06 §4.1](docs/06-nomina-y-capacidad-de-pago.md#41-el-margen-de-contribución-correcto). Atar el costeo al historial de cada producto es
@@ -517,8 +525,11 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       texto con los montos; el endpoint es la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) y su contrato, la [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10)
 - [ ] ⚡ [**5.7**](docs/08-plan-de-desarrollo.md#tarea-5-7) Sugerencia de precio por margen objetivo · API
 - [ ] 🔒 [**5.8**](docs/08-plan-de-desarrollo.md#tarea-5-8) Costos y márgenes ocultos al tipo Operación: la API no los envía · API
-- [ ] 🔒 [**5.9**](docs/08-plan-de-desarrollo.md#tarea-5-9) Cuadro comparativo ordenable por margen por hora · Front
-- [ ] ⚡ [**5.10**](docs/08-plan-de-desarrollo.md#tarea-5-10) Contrato de productos, servicios y costeo · Contrato
+- [ ] ⚡ [**5.9**](docs/08-plan-de-desarrollo.md#tarea-5-9) Cuadro comparativo ordenable por margen por hora · Front
+- [x] [**5.10**](docs/08-plan-de-desarrollo.md#tarea-5-10) Contrato de productos, servicios y costeo · Contrato — v0.12.0: seis
+      operaciones, once esquemas y dos códigos que estrenan el rango `40`–`49`. El formulario se
+      guarda de una vez y el costo no se sobrescribe: si cambió, entra una fila nueva. **A Operación
+      no le llegan ni el costo ni los márgenes ni los minutos**, porque `costos_producto` lleva RLS
 
 **[Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos**
 
@@ -734,8 +745,8 @@ a `anon`.
 - **Las reglas del dominio todavía no tienen código del catálogo.** `Movimiento`, `Pedido` y
   `Costeo` rechazan lo que no se puede registrar con excepciones de Java, y hoy eso saldría como
   `50000`, «algo salió mal». Las de `Movimiento` y `Pedido` **ya tienen nombre y mensaje acordados**
-  ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) y [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10)), pero nadie los emite hasta la [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) y la [4.3](docs/08-plan-de-desarrollo.md#tarea-4-3). Las de `Costeo` esperan a su
-  contrato ([5.10](docs/08-plan-de-desarrollo.md#tarea-5-10)). Hasta entonces, ninguno de esos mensajes es el que verá el taller.
+  ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13), [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) y [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10)), pero nadie los emite hasta la [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4), la [4.3](docs/08-plan-de-desarrollo.md#tarea-4-3) y la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2). Hasta
+  entonces, ninguno de esos mensajes es el que verá el taller.
 - **El contra-asiento se quedó sin ruta acordada.** La [3.10](docs/08-plan-de-desarrollo.md#tarea-3-10) corrige un movimiento errado creando
   otro que lo reversa, con `corrige_a_id` apuntando al original ([04 §5.3](docs/04-modelo-de-datos.md#53-corrección-por-contra-asiento)), pero `corrigeAId` no
   entró al contrato de la [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13): no cabe en el formulario «movimiento» —el descriptor pinta
@@ -747,10 +758,24 @@ a `anon`.
   `movimientos.tipo`—, el dominio no lo mira y el contrato de la [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) no le dio código, porque
   ningún documento escribe esa regla. O se escribe en el [05](docs/05-reglas-financieras.md) y entonces tiene código y
   restricción, o se dice por qué da igual.
-- **El cuadro de márgenes ya decide cosas que el contrato de la [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) tiene que llevar.** La [5.6](docs/08-plan-de-desarrollo.md#tarea-5-6)
-  dejó en el dominio la lectura de cada producto, su nivel de alerta, el texto con los montos, la
-  mediana contra la que se leyó y los dos órdenes del cuadro. Si el contrato no los trae, el front de
-  la [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) tendría que volver a ordenar y a decidir qué pinta en rojo, que es lo que [ADR-018](docs/adr/ADR-018-front-sin-decisiones.md) prohíbe.
+- **El mockup le muestra el tiempo a Operación y la base no se lo deja ver.** En la tabla de
+  productos, las columnas de costo y margen llevan la marca de Gerencia y la de «Tiempo» no; pero
+  `minutos_trabajo` vive en `costos_producto`, que lleva la política `costos_solo_gerencia`, así que
+  **PostgreSQL no le devuelve ni una fila a una sesión de Operación** ([04 §7](docs/04-modelo-de-datos.md#7-seguridad-por-tipo-de-usuario-rls)). El contrato de la
+  [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) siguió a la base, que es lo que [ADR-006](docs/adr/ADR-006-rls-por-rol.md) manda, y le declara a Operación el nombre, el tipo,
+  la unidad y el precio. O se ajusta el mockup, o los minutos salen de la tabla de costos: mientras
+  tanto, esa columna no se puede pintar para Operación.
+- **`productos` deja apagarse sin motivo, y `cargos` no.** Las dos tablas dicen «inactivo» con
+  `activo` y guardan el porqué en `anulado_*`, pero solo `cargos` tiene el `CHECK`
+  `desactivacion_con_motivo` que amarra las dos cosas ([04 §4.2](docs/04-modelo-de-datos.md#42-cargos-usuarios-y-cuentas)). El contrato promete que ningún
+  producto sale del catálogo sin motivo escrito, y hoy esa promesa la sostendría solo la API, que es
+  la capa que [ADR-015](docs/adr/ADR-015-validacion-tres-capas.md) dice que sí se puede saltar. Cerrarlo es una restricción nueva, y entra
+  primero al [04](docs/04-modelo-de-datos.md).
+- **La semilla y los documentos no dicen la misma tarifa por hora.** `prolabore_config` siembra
+  $1.500.000 sobre 160 horas, que dan **$9.375**; el [05 §7.4](docs/05-reglas-financieras.md#74-el-indicador-que-concilia-los-dos-mundos) y el [06 §4.1](docs/06-nomina-y-capacidad-de-pago.md#41-el-margen-de-contribución-correcto) trabajan con **$9.400**, que
+  es lo que la semilla escribe a mano en `costos_producto.tarifa_hora`. Mientras la tarifa fuera un
+  número de ejemplo daba igual; desde el contrato de la [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) la calcula la API con esa división,
+  así que los costeos de la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) saldrían 25 pesos por hora por debajo de los del documento.
 - **Dinero con decimales en la frontera.** Cuando llegue el primer endpoint que recibe plata (tarea
   1.10), comprobar con una prueba que un JSON con `1500.5` en un campo de dinero se rechaza y no se
   trunca a `1500` en silencio. [ADR-003](docs/adr/ADR-003-dinero-entero.md) exige rechazarlo, y la conversión de Jackson hay que verla,
@@ -1575,6 +1600,54 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       foránea trae la tabla y la restricción, no la columna, y deducirla del nombre sería adivinar;
       un `CHECK` de tabla es una regla entre columnas y no tiene una sola a la que apuntar. Salen
       como `42200` sin `data.errores`, hasta que el contrato de cada módulo diga a qué campo van
+
+**De la tarea [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10):**
+
+- [ ] **Guardar el formulario es una sola operación, y por dentro son dos escrituras.** El mockup
+      tiene un solo botón, y el modelo tiene dos tablas; partirlo en «editar la ficha» y «registrar
+      un costeo» habría mandado dos peticiones y, con ellas, dos transacciones ([20 §5.1](docs/20-contrato-de-api.md#51-la-cabecera)): media
+      edición podría quedar escrita. `edicion` recibe el formulario entero y **agrega fila de costo
+      solo si el costo o el precio cambiaron**, porque un costeo no se sobrescribe nunca
+- [ ] **Editar dos veces el mismo día deja dos costeos con la misma vigencia, y vale el último.**
+      `idx_costos_vigencia` no es único y ningún documento dice qué pasa con el empate, así que sin
+      esa regla escrita «el costeo de hoy» sería ambiguo el segundo día de trabajo de cualquiera.
+      La alternativa era rechazar el segundo guardado del día, que es una edición normal
+- [ ] 🔒 **La vigencia no se elige: es el día en que se guarda.** El mockup no tiene campo de fecha,
+      y ponerlo sería diseñar una pantalla que nadie diseñó. Retro-fechar un costeo —corregir el
+      costo de marzo— **no tiene ruta**, y la [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5) es la que dirá si hace falta
+- [ ] **Desactivar un producto escribe en `anulado_*`, y no hay operación de anular.** Es la forma de
+      `cargos` ([04 §4.2](docs/04-modelo-de-datos.md#42-cargos-usuarios-y-cuentas)), y `productos` no tiene columnas propias de desactivación. Anular un
+      producto —el registro que no debió existir, [RN-13](docs/03-requisitos-y-bdd.md#rn-13)— existe en el dominio y en la tabla, y se queda
+      **sin ruta** porque ninguna pantalla lo pinta: el panel del mockup solo desactiva y reactiva
+- [ ] **La tarifa por hora la pone la API y no viaja en el formulario**, como no viaja en el mockup:
+      sale del pro-labore ([05 §7.1](docs/05-reglas-financieras.md#71-costo-unitario)) y se congela en el costeo. Pero **quién produce no se pregunta**,
+      y el documento dice «según quién haga el trabajo»: hoy se toma el pro-labore, que es el único
+      que existirá hasta la [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3). Cuando haya empleadas con salario ([8.1](docs/08-plan-de-desarrollo.md#tarea-8-1)), eso es una decisión
+      de quien dirige y cambia el contrato
+- [ ] **El formulario gana un campo que el mockup no tiene, `unidad`, y pierde el margen objetivo.**
+      La columna existe y la semilla la usa —el bordado se cuenta «por servicio»—, así que sin campo
+      no habría forma de escribirla; va opcional y con «unidad» por omisión. El margen objetivo, en
+      cambio, **no se guarda**: es una pregunta, y va en `POST /api/v0/consultas/costeo`
+- [ ] **La vista previa del formulario cuesta una petición por cambio.** Es el precio de que el
+      front no calcule plata ([ADR-018](docs/adr/ADR-018-front-sin-decisiones.md)): el costo, los tres márgenes, la lectura y el precio sugerido
+      los da la API. Cada una lleva su clave de idempotencia y su firma, así que el carril Front
+      tendrá que espaciar las llamadas mientras se escribe
+- [ ] **El costo unitario viaja en el costeo y no en los márgenes**, al revés que en el dominio. Un
+      producto sin precio no tiene márgenes y **sí tiene costo**, y su lectura lo dice con el monto;
+      repetirlo en los dos sitios habría sido mandar dos veces la misma cifra
+- [ ] **Dos códigos, no diez.** Las reglas del formulario son `obligatorio` y `minimo` y responden
+      `42200`; los choques de estado son el `40900` genérico, como en los cargos. Solo quedan fuera
+      el tiempo con más de dos decimales (`42240`) y la falta de pro-labore (`40940`). Quedan libres
+      `40941` a `40949` y `42241` a `42249`
+- [ ] **El historial de costos se escribe y no se lee.** El [RF-35](docs/03-requisitos-y-bdd.md#rf-35) pide conservarlo, no mostrarlo, y
+      ninguna pantalla del [10](docs/10-ux-y-mockups.md) ni del mockup lo pinta: darle consulta sería acordar una pantalla que
+      nadie diseñó. Si Gerencia quiere verlo, es una operación nueva y sube la MINOR
+- [ ] **El `minutos_maquina` del bordado se cede por nombre.** La columna existe y la tarifa de
+      máquina no está en ningún documento, así que el costeo no la declara; la [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) **no depende de
+      este contrato** y, cuando esa decisión exista, el costeo gana el campo
+- [ ] **El descriptor gana `numero` y el `porcentaje` del `0.10.0` desaparece.** Los minutos no son
+      ninguno de los seis tipos anteriores, y sin tipo el front no puede pintar el campo. De paso, el
+      `anticipoPct` del formulario «pedido» se declaraba de un tipo que nunca existió en el contrato
 
 **De la versión en cada PR ([ADR-034](docs/adr/ADR-034-la-version-sube-en-cada-pr.md)):**
 

@@ -1,8 +1,8 @@
-# Contrato de la API · v0.11.0
+# Contrato de la API · v0.12.0
 
 | Versión | Estado | Creado | Actualizado | Contrato | Etiquetas |
 |---|---|---|---|---|---|
-| [3.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/contrato/README.md "Historial de cambios") | [✅ Vigente](../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [0.11.0](openapi.json) | [Contrato](../docs/INDICE.md#etiqueta-contrato) · [API](../docs/INDICE.md#etiqueta-api) · [Front](../docs/INDICE.md#etiqueta-front) |
+| [3.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/contrato/README.md "Historial de cambios") | [✅ Vigente](../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [0.12.0](openapi.json) | [Contrato](../docs/INDICE.md#etiqueta-contrato) · [API](../docs/INDICE.md#etiqueta-api) · [Front](../docs/INDICE.md#etiqueta-front) |
 
 Este es **el contrato entre `prisma_front` y `prisma_api`**: lo que viaja por el cable, dicho en
 un solo archivo. Vive aquí, y no en ninguno de los repositorios de código, porque no le pertenece
@@ -29,6 +29,7 @@ sigue vigente a través de [ADR-025](../docs/adr/ADR-025-cuatro-repositorios.md)
 | Usuarios, cargos y bitácora | `/api/v0/usuarios`, `/api/v0/cargos` y las consultas de usuarios, cargos y bitácora, siete formularios más y los códigos `40910` a `40913` y `42211` a `42214` | La pantalla de Gestión de usuarios entera ([2.7](../docs/08-plan-de-desarrollo.md#tarea-2-7), [2.8](../docs/08-plan-de-desarrollo.md#tarea-2-8), [2.15](../docs/08-plan-de-desarrollo.md#tarea-2-15) a [2.18](../docs/08-plan-de-desarrollo.md#tarea-2-18)) |
 | Pedidos y clientes | `/api/v0/clientes`, `/api/v0/pedidos` con sus cuatro transiciones, las consultas de clientes y pedidos, los formularios `cliente`, `pedido`, `anticipo`, `entrega` y `cancelacion` ([abajo](#los-formularios-acordados)) y los códigos `40930` a `40932` y `42230` a `42235` | La [4.2](../docs/08-plan-de-desarrollo.md#tarea-4-2) construye la gestión de clientes y la [4.3](../docs/08-plan-de-desarrollo.md#tarea-4-3) a la [4.9](../docs/08-plan-de-desarrollo.md#tarea-4-9), los pedidos; el carril Front pinta sus pantallas sin esperar a ninguna |
 | Movimientos | `PUT /api/v0/movimientos/{id}` para registrar, `/{id}/anulacion` y `/{id}/adjuntos` para anular y adjuntar, `POST /api/v0/consultas/movimientos` para el libro con filtros, el formulario `movimiento` ([abajo](#los-formularios-acordados)) y los códigos `40020`, `40021` y `42223` a `42226` | El [Sprint 3](../docs/08-plan-de-desarrollo.md#sprint-3) entero acordado antes de implementarlo: los endpoints ([3.4](../docs/08-plan-de-desarrollo.md#tarea-3-4)), el registro rápido ([3.5](../docs/08-plan-de-desarrollo.md#tarea-3-5)), el adjunto ([3.6](../docs/08-plan-de-desarrollo.md#tarea-3-6)), las transferencias ([3.7](../docs/08-plan-de-desarrollo.md#tarea-3-7)), el listado ([3.8](../docs/08-plan-de-desarrollo.md#tarea-3-8)) y la anulación ([3.9](../docs/08-plan-de-desarrollo.md#tarea-3-9)) |
+| Productos y costeo | `PUT /api/v0/productos/{id}` para crear, `/{id}/edicion`, `/{id}/desactivacion` y `/{id}/reactivacion` para lo demás, `POST /api/v0/consultas/productos` para el cuadro y `POST /api/v0/consultas/costeo` para la vista previa del formulario, los formularios `producto` y `desactivacion-de-producto` ([abajo](#los-formularios-acordados)) y los códigos `40940` y `42240` | El catálogo ([5.2](../docs/08-plan-de-desarrollo.md#tarea-5-2)), el cuadro comparativo ([5.9](../docs/08-plan-de-desarrollo.md#tarea-5-9)), el historial de costos ([5.5](../docs/08-plan-de-desarrollo.md#tarea-5-5)), la sugerencia de precio ([5.7](../docs/08-plan-de-desarrollo.md#tarea-5-7)) y lo que Operación no recibe ([5.8](../docs/08-plan-de-desarrollo.md#tarea-5-8)). Detrás quedan el pedido con líneas ([4.3](../docs/08-plan-de-desarrollo.md#tarea-4-3)) y, con él, el [Sprint 6](../docs/08-plan-de-desarrollo.md#sprint-6) |
 | El canal firmado | Las cabeceras `X-Prisma-Nonce`, `X-Prisma-Timestamp` y `X-Prisma-Firma` en cada operación con sesión, también en las de cuentas y categorías. Cómo se arma la firma, al byte, está en [`20-contrato-de-api.md`](../docs/20-contrato-de-api.md) [§6.2](../docs/20-contrato-de-api.md#62-cómo-se-arma-la-firma) | El filtro de la API ([2.13](../docs/08-plan-de-desarrollo.md#tarea-2-13)) y el interceptor del front firman y comprueban exactamente lo mismo |
 
 > **El catálogo va dentro del OpenAPI a propósito.** El contrato son dos cosas —rutas y códigos—,
@@ -144,7 +145,7 @@ y el correo llega después, si llega; exigirlo obligaría a inventárselo para p
 | `clienteId` | Cliente | `lista` | obligatorio | obligatorio: «Elige el cliente. Si no está, créalo primero.» | `origen`: `/api/v0/consultas/clientes` |
 | `fechaPedido` | Fecha del pedido | `fecha` | — | — | `ayuda`: «Sin ella, hoy.» |
 | `fechaEntregaPrevista` | Fecha de entrega | `fecha` | — | — | — |
-| `anticipoPct` | Anticipo al confirmar | `porcentaje` | `minimo` 0 · `maximo` 100 | minimo y maximo: «El anticipo va entre 0 y 100 %.» | `ayuda`: «La política del negocio es 50 %.» |
+| `anticipoPct` | Anticipo al confirmar | `numero` | `minimo` 0 · `maximo` 100 | minimo y maximo: «El anticipo va entre 0 y 100 %.» | `teclado`: `numerico` · `ayuda`: «La política del negocio es 50 %.» |
 | `notas` | Notas | `texto` | — | — | — |
 
 **Las líneas del pedido no están en el descriptor, y no por olvido.** El descriptor sabe expresar
@@ -155,8 +156,11 @@ con un producto que no existe responde `42231` sobre `lineas`. Un cliente que no
 anulado responde `42232` sobre `clienteId`.
 
 > **El mockup pinta el anticipo con un deslizador y el descriptor no sabe decir eso.** Captura
-> `anticipo_pct` con un `range` de paso 5, y aquí el campo se declara como el porcentaje que es, con
-> su mínimo y su máximo. **Cómo se pinta es del carril Front:** la API dicta reglas, no controles.
+> `anticipo_pct` con un `range` de paso 5, y aquí el campo se declara como el número que es, con su
+> mínimo y su máximo. **Cómo se pinta es del carril Front:** la API dicta reglas, no controles. El
+> `0.10.0` lo declaró de tipo `porcentaje`, que no existe en el contrato ni en el
+> [§4.3](../docs/20-contrato-de-api.md#43-cómo-se-pide-y-qué-forma-tiene); el `0.12.0` lo corrige a `numero`, el tipo que entró con el formulario
+> `producto`.
 
 > **El valor total no se manda, se calcula.** Sale de las líneas, y por eso no es un campo del
 > formulario: mandarlo sería dejar que el front calcule plata ([ADR-018](../docs/adr/ADR-018-front-sin-decisiones.md)). Lo mismo el número
@@ -223,7 +227,45 @@ que cambia es el texto de `data.errores`.
 primera y un gasto pida la segunda: el descriptor solo sabe decir `obligatorio`, `minimo` y `maximo`,
 nunca «obligatorio si» ([§4.4](../docs/20-contrato-de-api.md#44-las-reglas-que-caben-y-por-qué-no-caben-más)). Una regla condicional en el descriptor sería código en el front.
 
-### Los siete formularios de motivo
+### `producto` · crear o editar un producto o un servicio
+
+| `campo` | `etiqueta` | `tipo` | Reglas | `mensajes` | Lo demás |
+|---|---|---|---|---|---|
+| `nombre` | Nombre | `texto` | obligatorio | obligatorio: «Escribe el nombre del producto o del servicio.» | `ayuda`: «Como se le dice en el taller: gorra bordada, tula estampada…» |
+| `tipo` | Tipo | `lista` | obligatorio | obligatorio: «Elige si es un producto o un servicio.» | `opciones`: `producto` «Producto» · `servicio` «Servicio» |
+| `unidad` | Unidad | `texto` | — | — | `ayuda`: «En qué se cuenta: unidad, docena, metro. Déjala vacía para contarlo por unidad.» |
+| `minutosTrabajo` | Minutos de trabajo | `numero` | `minimo` 0 | minimo: «El tiempo de trabajo no puede ser negativo.» | `teclado`: `numerico` · `ayuda`: «Cuántos minutos de persona lleva una unidad. En cero si no consume tiempo del taller: entonces no tiene margen por hora.» |
+| `precioVenta` | Precio de venta | `dinero` | `minimo` 0 | minimo: «El precio de venta no puede ser negativo.» | `teclado`: `numerico` · `ayuda`: «En cero mientras no se sepa a cuánto se vende.» |
+| `costoInsumo` | Material | `dinero` | `minimo` 0 | minimo: «El costo del material no puede ser negativo.» | `teclado`: `numerico` · `ayuda`: «Lo que cuesta el material que se convierte en el producto.» |
+| `costoConsumibles` | Consumibles | `dinero` | `minimo` 0 | minimo: «El costo de los consumibles no puede ser negativo.» | `teclado`: `numerico` · `ayuda`: «Tinta, papel transfer, hilo, energía: lo que se gasta produciéndolo.» |
+
+**Es el mismo formulario para crear y para editar**, como el de cargo, porque el mockup tiene uno
+solo y un solo botón de guardar. Al guardar, la ficha se corrige y el costo **no se sobrescribe**:
+si cambió, entra una fila nueva en `costos_producto` ([`04-modelo-de-datos.md`](../docs/04-modelo-de-datos.md) [§4.5](../docs/04-modelo-de-datos.md#45-productos-costeo-y-cotizaciones)), y así un pedido
+viejo conserva el costo que tenía cuando se produjo.
+
+**El material y los consumibles son dos campos, y el mockup los suma en uno.** Los separan
+[`05-reglas-financieras.md`](../docs/05-reglas-financieras.md) [§7.1](../docs/05-reglas-financieras.md#71-costo-unitario) y el [RF-29](../docs/03-requisitos-y-bdd.md#rf-29), y la tabla tiene una columna para cada uno: juntarlos
+dejaría una en cero para siempre.
+
+**Ni el tiempo ni el precio son obligatorios, a propósito.** Un ítem en cero minutos es el que no
+consume tiempo de taller, y su margen por hora **no existe**: viaja vacío, no en cero. Un precio en
+cero es un producto al que todavía nadie le puso precio, y su lectura lo dice. El formulario del
+mockup exige un minuto como mínimo; eso dejaría sin poder escribirse justo los dos casos que el
+dominio modela.
+
+**La tarifa por hora no es un campo.** Sale del pro-labore o del salario de quien produce
+([§7.1](../docs/05-reglas-financieras.md#71-costo-unitario)) y la pone la API, que la congela en el costeo; sin pro-labore definido, guardar responde
+`40940`. Y un tiempo con más de dos decimales —lo que la columna `NUMERIC(6,2)` guarda— responde
+`42240` sobre `minutosTrabajo`: es la única regla de este formulario que no cabe en el descriptor.
+
+> **El margen objetivo del mockup no es un campo del formulario.** Su deslizador no se guarda: pide
+> un precio sugerido, y eso es `POST /api/v0/consultas/costeo` con `margenObjetivo`. Esa misma
+> consulta devuelve el costo unitario, los tres márgenes y la lectura que el formulario pinta en
+> vivo, porque las cuatro son plata o son reglas y ninguna se calcula en el front
+> ([ADR-018](../docs/adr/ADR-018-front-sin-decisiones.md)).
+
+### Los ocho formularios de motivo
 
 Tienen un solo campo, `motivo`, de tipo `texto`, obligatorio y con `minimo` 5, que es lo que
 exige el dominio `motivo` de la base ([`04-modelo-de-datos.md`](../docs/04-modelo-de-datos.md) [§4.1](../docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes)). Lo que cambia es la etiqueta y
@@ -234,6 +276,7 @@ lo que dice cuando falta, que es el texto del mockup para cada caso:
 | `desactivacion-de-usuario` | Motivo | obligatorio: «Escribe el motivo. Sin motivo escrito no se desactiva a nadie.» · minimo: «El motivo tiene que explicar algo: escribe al menos 5 caracteres.» |
 | `reactivacion-de-usuario` | Motivo de la reactivación | obligatorio: «Escribe el motivo de la reactivación. Queda en la bitácora.» · minimo: «El motivo tiene que explicar algo: escribe al menos 5 caracteres.» |
 | `desactivacion-de-cargo` | Motivo | obligatorio: «Escribe el motivo. Sin motivo escrito no sale ningún cargo del catálogo.» · minimo: «El motivo tiene que explicar algo: escribe al menos 5 caracteres.» |
+| `desactivacion-de-producto` | Motivo | obligatorio: «Escribe el motivo. Sin motivo escrito no sale ningún producto del catálogo.» · minimo: «El motivo tiene que explicar algo: escribe al menos 5 caracteres.» |
 | `reversion` | Motivo de la reversión | obligatorio: «Escribe el motivo de la reversión. Queda al lado del cambio que deshace.» · minimo: «El motivo tiene que explicar algo: escribe al menos 5 caracteres.» |
 | `anulacion-de-pedido` | Motivo de la anulación | obligatorio: «Escribe el motivo. Nada se borra: el pedido queda con su motivo a la vista.» · minimo: «El motivo tiene que explicar algo: escribe al menos 5 caracteres.» |
 | `anulacion-de-cliente` | Motivo de la anulación | obligatorio: «Escribe el motivo. Sus pedidos siguen enteros.» · minimo: «El motivo tiene que explicar algo: escribe al menos 5 caracteres.» |
@@ -264,10 +307,10 @@ controladores. Si difieren, la compilación falla y dice en qué línea
 
 | | |
 |---|---|
-| **Versión** | `0.11.0` |
-| **Rutas** | Todas bajo `/api/v0`, y **ninguna usa GET** ([ADR-030](../docs/adr/ADR-030-contrato-sin-get.md)): las doce lecturas cuelgan de `/api/v0/consultas/…` y las veintisiete escrituras, de su recurso. 39 operaciones en 39 rutas |
-| **Códigos** | 46: los 10 genéricos y 9 por módulo en los cuatro que ya tienen contrato —sesión y transporte, usuarios y cargos, movimientos y cuentas, y pedidos y clientes—, de los cuales 22 siguen marcados como pendientes de emitir |
-| **Copia fijada en `prisma_api`** | Va en `0.9.0` y sirve **trece** de las 39 operaciones: la versión, el descriptor, la navegación, las cuatro de `/sesiones`, las cinco de `/usuarios` y los cargos asignables. **No declara que las implemente todas**: declara contra qué versión del contrato está escrita, y `0.2.0` dejó de existir el día en que sus dos rutas cambiaron de verbo y de ruta. Saltarse el número habría sido peor: dos contratos distintos con el mismo `0.2.0` |
+| **Versión** | `0.12.0` |
+| **Rutas** | Todas bajo `/api/v0`, y **ninguna usa GET** ([ADR-030](../docs/adr/ADR-030-contrato-sin-get.md)): las catorce lecturas cuelgan de `/api/v0/consultas/…` y las treinta y una escrituras, de su recurso. 45 operaciones en 45 rutas |
+| **Códigos** | 48: los 10 genéricos, 9 en cada uno de los cuatro módulos que ya tenían contrato —sesión y transporte, usuarios y cargos, movimientos y cuentas, y pedidos y clientes— y 2 del quinto, productos y costeo, que estrena su rango. 24 siguen marcados como pendientes de emitir |
+| **Copia fijada en `prisma_api`** | Va en `0.9.0` y sirve **trece** de las 45 operaciones: la versión, el descriptor, la navegación, las cuatro de `/sesiones`, las cinco de `/usuarios` y los cargos asignables. **No declara que las implemente todas**: declara contra qué versión del contrato está escrita, y `0.2.0` dejó de existir el día en que sus dos rutas cambiaron de verbo y de ruta. Saltarse el número habría sido peor: dos contratos distintos con el mismo `0.2.0` |
 | **Origen** | Las dos versiones se generaron del esqueleto de la API durante el [Sprint 0](../docs/08-plan-de-desarrollo.md#sprint-0) y se revisaron antes de fijarlas. De aquí en adelante el orden es el inverso: primero se acuerda aquí, después se implementa |
 
 ---
@@ -276,6 +319,7 @@ controladores. Si difieren, la compilación falla y dice en qué línea
 
 | Versión | Qué cambió | Por qué |
 |---|---|---|
+| `0.12.0` | Productos y costeo: `PUT /api/v0/productos/{id}`, su edición, su desactivación y su reactivación, `POST /api/v0/consultas/productos` y `POST /api/v0/consultas/costeo`; once esquemas, los formularios `producto` y `desactivacion-de-producto`, el tipo `numero` en el descriptor y dos códigos —`40940` y `42240`— que estrenan el rango `40`–`49` | [RF-28](../docs/03-requisitos-y-bdd.md#rf-28) a [RF-35](../docs/03-requisitos-y-bdd.md#rf-35) y [BDD-02-2](../docs/03-requisitos-y-bdd.md#bdd-02-2), tarea [5.10](../docs/08-plan-de-desarrollo.md#tarea-5-10). **Adición compatible**: nada de `0.11.0` cambia de forma; el descriptor gana un tipo —como ganó `casilla` en el `0.3.0` y `clave` en el `0.4.0`—, el esquema `Motivo` pasa de siete formularios a ocho, y el `porcentaje` que el `0.10.0` le puso a `anticipoPct` en este README pasa a `numero`, que es el tipo que sí existe. El contrato casi no decide: transcribe el dominio que ya construyeron la [5.1](../docs/08-plan-de-desarrollo.md#tarea-5-1), la [5.3](../docs/08-plan-de-desarrollo.md#tarea-5-3) y la [5.6](../docs/08-plan-de-desarrollo.md#tarea-5-6). Lo que sí decide es que **a Operación no le llegan ni el costo ni los márgenes ni los minutos**, porque `costos_producto` lleva RLS y PostgreSQL no le devuelve esas filas ([ADR-006](../docs/adr/ADR-006-rls-por-rol.md)) |
 | `0.11.0` | Movimientos: `PUT /api/v0/movimientos/{id}`, su anulación, su adjunto y `POST /api/v0/consultas/movimientos`; ocho esquemas, el formulario `movimiento`, el séptimo de motivo y seis códigos —`40020`, `40021` y `42223` a `42226`— | Tarea [3.13](../docs/08-plan-de-desarrollo.md#tarea-3-13), con [RF-08](../docs/03-requisitos-y-bdd.md#rf-08) a [RF-16](../docs/03-requisitos-y-bdd.md#rf-16) detrás. **Adición compatible**: nada de `0.10.0` cambia de forma, y solo se amplía la descripción del esquema `Motivo`, que ya servía a seis formularios y ahora a siete. El registro reutiliza lo que el `0.10.0` acababa de fijar: `PUT` al id que genera quien pide ([ADR-020](../docs/adr/ADR-020-idempotencia.md)), el mismo dos veces responde `40900`, la anulación cuelga del recurso con el esquema `Motivo`, y `Anulacion` se comparte en vez de repetirse |
 | `0.10.0` | Clientes, pedidos y anticipos: 9 operaciones nuevas, 14 esquemas, los formularios `cliente`, `pedido`, `anticipo`, `entrega` y `cancelacion`, los dos de motivo, y 9 códigos en el rango `30`–`39`, que esta versión estrena. Todos van marcados como pendientes de emitir | [RF-18](../docs/03-requisitos-y-bdd.md#rf-18) a [RF-26](../docs/03-requisitos-y-bdd.md#rf-26), [RN-05](../docs/03-requisitos-y-bdd.md#rn-05), [RN-06](../docs/03-requisitos-y-bdd.md#rn-06) y [RN-13](../docs/03-requisitos-y-bdd.md#rn-13), tarea [4.10](../docs/08-plan-de-desarrollo.md#tarea-4-10). **Adición compatible**: un cliente de `0.9.0` no encuentra nada suyo cambiado, así que sube la MINOR. Es el mismo caso que `0.3.0` |
 | `0.9.0` | El décimo código base, `50300`, para cuando un servicio del que la API depende no contesta o le falta una variable | Arreglo del alta de usuarios (`plan/23-el-alta-decia-algo-salio-mal.md`). Antes ese fallo salía como `50000`, «Algo salió mal. Intenta de nuevo en un momento», que era falso en las dos mitades: no había pasado nada imprevisto y reintentar no arreglaba nada. **Sube la MINOR sin cambiar ninguna operación**, como el `0.6.0` y el `0.8.0`. La fila se escribió tarde, con la [4.10](../docs/08-plan-de-desarrollo.md#tarea-4-10): el encabezado y el `openapi.json` ya iban en `0.9.0` y este historial no lo decía |
