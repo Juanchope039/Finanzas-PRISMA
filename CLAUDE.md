@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.14.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [7.15.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -325,7 +325,15 @@ seguía vacío**. Lo que decide es que **el Inicio no se pinta con seis llamadas
 ganancias y el punto de equilibrio **faltan en vez de valer cero** cuando no hay de dónde sacarlos,
 y que **cerrar un mes no manda cifras**: el snapshot lo calcula la API porque después nadie lo
 corrige. Detrás se abren siete tareas, entre ellas el dashboard ([6.3](docs/08-plan-de-desarrollo.md#tarea-6-3)) y el reporte anual
-([6.5](docs/08-plan-de-desarrollo.md#tarea-6-5)). Van 69 de las 142 tareas.
+([6.5](docs/08-plan-de-desarrollo.md#tarea-6-5)). **Y los permisos dejaron de suponerse**
+([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)): una usuaria de Operación entra por HTTP con su usuario y su contraseña, y desde esa
+sesión se recorren [P-01](docs/12-pruebas-y-calidad.md#p-01) a [P-32](docs/12-pruebas-y-calidad.md#p-32) —el patrimonio, los costos, la auditoría y las cuatro tablas de
+Gerencia llegan vacías; el desprendible propio llega y el ajeno no; ascenderse sola o registrarse un
+adelanto los rechaza PostgreSQL—, y de cada rechazo se afirma **que lo dijo la base**: el `42501` de
+una política o el `P0001` de un trigger, no que lanzó algo. [P-32](docs/12-pruebas-y-calidad.md#p-32) repite la lectura **sin capa de
+aplicación en medio** y el resultado no cambia. Con ella entró **la tubería que corre lo que habla
+con la base** ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) [§3](#3-reglas-del-proyecto)): descarga `prisma_db` por etiqueta y levanta Supabase, así que [C-01](docs/12-pruebas-y-calidad.md#c-01) y las
+demás **por fin gatean un PR**. Van 70 de las 142 tareas.
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.
