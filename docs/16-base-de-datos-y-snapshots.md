@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-18 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-19 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 > **Construcción: construido y corriendo contra dev y contra qa**, donde el esquema está aplicado y
 > verificado línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5), [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5) y [1.13](08-plan-de-desarrollo.md#tarea-1-13)). **qa quedó al día** con el
@@ -69,6 +69,7 @@ scripts/db/
   promover.ps1                         Aplica a qa lo que le falte, con sus dos llaves (ver §5.3)
   sembrar.ps1                          Lleva la semilla a dev o a qa, y no la deja acercarse a uat ni a prod
   verificar-base.sql                   Le pregunta a la base si cumple el doc 04 (ver §5.1)
+  la-version-subio.ps1                 C-05: el PR que agrega migraciones publica su versión (ver §5.3)
   snapshot.ps1                         Toma un snapshot (esquema y/o datos) con marca de tiempo
   restore.ps1                          Restaura un snapshot .sql sobre una BD destino
   generar-datos-prueba.ps1             Wrapper del generador de volumen (opcional)
@@ -228,11 +229,18 @@ puede ser un descuido, y la salvaguarda va dentro del guion y no en este documen
 nada ([19 §3.3](19-ambientes-y-entrega.md#33-dónde-viven-los-secretos)): con el vínculo del proyecto que el CLI guarda tras `supabase link`. Ninguna
 referencia ni contraseña se escribe en el repositorio, que es público.
 
-**Y la promoción termina con un número.** El esquema lleva su propio SemVer en `schema_version`
+**Y cada migración llega con su número.** El esquema lleva su propio SemVer en `schema_version`
 ([19 §4.1](19-ambientes-y-entrega.md#41-tres-cosas-versionadas-por-separado)) y [ADR-029](adr/ADR-029-esquema-por-etiqueta.md) lo ata a la etiqueta `esquema-vX.Y.Z` de `prisma_db`: son el mismo número
-escrito dos veces. Una migración fusionada sin etiquetar «no existe para nadie más», así que al
-promover se publica la versión —con su migración, no a mano— y se etiqueta el commit ya fusionado
-en `develop`. La etiqueta anterior **no se mueve**: es la foto de por dónde pasó cada ambiente.
+escrito dos veces. **La versión se publica en el mismo PR que la migración**, no al promover
+([ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md)): la última migración del PR inserta la fila de la versión siguiente —un paso—, y el bloque
+`1.12` de `verificar-base.sql` pasa a esperarla. Lo exige la prueba [C-05](12-pruebas-y-calidad.md#c-05), que además rechaza el PR que
+toque una migración ya fusionada. Así, promover ya no publica nada: lleva a qa las migraciones que le
+falten, y con ellas sus números. Publicarla al promover dejaba a dev, entre dos promociones, con un
+esquema que su número no describía —y «Acerca de» lo muestra—.
+
+Después de fusionar se etiqueta el commit ya fusionado en `develop`, y la etiqueta anterior **no se
+mueve**: es la foto de por dónde pasó cada ambiente. Una migración fusionada sin etiquetar sigue sin
+existir «para nadie más».
 
 ---
 
@@ -420,7 +428,7 @@ el incremental propio es para **desarrollo** y para llevarse deltas de forma por
 | Esfuerzo | Mantener cursor + orden | Ninguno |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

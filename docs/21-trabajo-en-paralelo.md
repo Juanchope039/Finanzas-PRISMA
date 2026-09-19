@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/21-trabajo-en-paralelo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Paralelo](INDICE.md#etiqueta-paralelo) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [2.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/21-trabajo-en-paralelo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Paralelo](INDICE.md#etiqueta-paralelo) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo avanza PRISMA en varios carriles a la vez sin que se bloqueen ni se pisen. **Un carril no es
 una persona:** es un frente de trabajo, y puede llevarlo una persona, un equipo o una sesión de
@@ -283,7 +283,7 @@ El ciclo de una tarea, entero:
 | 1 | Traer la base | `git switch develop && git pull`. Se arranca desde lo último integrado, no desde lo que había ayer |
 | 2 | Abrir la rama | `git switch -c feature/2.19`, con **el id de la tarea del plan** en el nombre: `feature/1.10`, `feature/0.11`. Es el mismo número que llevan el asunto del commit ([ADR-028](adr/ADR-028-un-commit-por-tarea.md)) y la fila del tablero, así que una rama abierta dice sola qué tarea es y contra qué fila se revisa |
 | 3 | El trabajo, con su commit | Una tarea es un commit ([ADR-028](adr/ADR-028-un-commit-por-tarea.md)). La rama puede llevar más de uno si hace falta, pero la tarea no se parte en dos. El mensaje entero cabe en **256 caracteres** ([ADR-031](adr/ADR-031-commit-de-256-caracteres.md)): tres líneas de cuerpo, y el porqué largo en el plan |
-| 4 | **La documentación al día** | Antes de abrir el PR: subir la versión de cada `.md` tocado, poner la fecha, correr `enlazar` y luego `verificar` ([§6.7](#67-la-documentación)). Un PR con la documentación desfasada lo rechaza la integración continua igual, y descubrirlo ahí es descubrirlo tarde |
+| 4 | **La documentación y la versión al día** | Antes de abrir el PR: subir la versión de cada `.md` tocado, poner la fecha, correr `enlazar` y luego `verificar` ([§6.7](#67-la-documentación)). Y si la tarea cambia lo que se publica, **subir un paso la versión del proyecto** —o publicar la del esquema, si agrega una migración— ([ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md)). Un PR con cualquiera de las dos desfasada lo rechaza la integración continua igual, y descubrirlo ahí es descubrirlo tarde |
 | 5 | Abrir el PR | La rama ya está empujada desde su primer commit —la regla de abajo—, así que aquí solo se abre el PR contra `develop` |
 | 6 | **Esperar a que lo acepten** | No se empieza otra tarea hasta que el PR esté aceptado |
 

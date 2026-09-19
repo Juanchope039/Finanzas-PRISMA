@@ -136,33 +136,33 @@ Qué significa cada estado y cuándo sube una versión está en
 | Documento | Versión | Estado | Actualizado | Etiquetas |
 |---|:---:|---|:---:|---|
 | [PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) | 1.2.0 | ✅ Vigente | 2026-09-17 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
-| [Tareas de PRISMA](../TODO.md) | 6.2.0 | 🔄 Vivo | 2026-09-19 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
+| [Tareas de PRISMA](../TODO.md) | 6.3.0 | 🔄 Vivo | 2026-09-19 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
 | [Índice navegable de la documentación](INDICE.md) | 1.2.0 | 🔄 Vivo | 2026-09-17 | — |
 | [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Finanzas](#etiqueta-finanzas) · [Plan](#etiqueta-plan) |
 | [01 · Visión y alcance](01-vision-y-alcance.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Requisitos](#etiqueta-requisitos) |
 | [02 · Casos de uso](02-casos-de-uso.md) | 1.2.0 | ✅ Vigente | 2026-09-18 | [Requisitos](#etiqueta-requisitos) · [Negocio](#etiqueta-negocio) |
-| [03 · Requisitos, reglas de negocio y escenarios BDD](03-requisitos-y-bdd.md) | 2.0.0 | ✅ Vigente | 2026-09-17 | [Requisitos](#etiqueta-requisitos) · [Calidad](#etiqueta-calidad) |
+| [03 · Requisitos, reglas de negocio y escenarios BDD](03-requisitos-y-bdd.md) | 2.1.0 | ✅ Vigente | 2026-09-19 | [Requisitos](#etiqueta-requisitos) · [Calidad](#etiqueta-calidad) |
 | [04 · Modelo de datos](04-modelo-de-datos.md) | 4.0.0 | ✅ Vigente | 2026-09-18 | [Base de datos](#etiqueta-base-de-datos) · [Arquitectura](#etiqueta-arquitectura) |
 | [05 · Reglas financieras y KPIs](05-reglas-financieras.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Finanzas](#etiqueta-finanzas) · [Negocio](#etiqueta-negocio) |
 | [06 · Nómina y capacidad de pago](06-nomina-y-capacidad-de-pago.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Nómina](#etiqueta-nomina) · [Finanzas](#etiqueta-finanzas) · [Negocio](#etiqueta-negocio) |
 | [07 · Arquitectura técnica](07-arquitectura.md) | 5.0.0 | ✅ Vigente | 2026-09-18 | [Arquitectura](#etiqueta-arquitectura) · [API](#etiqueta-api) · [Front](#etiqueta-front) · [Base de datos](#etiqueta-base-de-datos) · [Seguridad](#etiqueta-seguridad) |
-| [08 · Plan de desarrollo](08-plan-de-desarrollo.md) | 4.2.0 | ✅ Vigente | 2026-09-19 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
+| [08 · Plan de desarrollo](08-plan-de-desarrollo.md) | 5.0.0 | ✅ Vigente | 2026-09-19 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
 | [09 · Plan de implantación](09-plan-de-implantacion.md) | 5.0.0 | ✅ Vigente | 2026-09-18 | [Plan](#etiqueta-plan) · [Entrega](#etiqueta-entrega) · [Negocio](#etiqueta-negocio) |
 | [10 · Diseño de experiencia y mockups](10-ux-y-mockups.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [UX](#etiqueta-ux) · [Front](#etiqueta-front) |
 | [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) | 2.0.0 | ✅ Vigente | 2026-09-18 | [Seguridad](#etiqueta-seguridad) · [Datos personales](#etiqueta-datos-personales) · [Negocio](#etiqueta-negocio) |
-| [12 · Pruebas y calidad](12-pruebas-y-calidad.md) | 3.0.0 | ✅ Vigente | 2026-09-18 | [Calidad](#etiqueta-calidad) |
+| [12 · Pruebas y calidad](12-pruebas-y-calidad.md) | 3.1.0 | ✅ Vigente | 2026-09-19 | [Calidad](#etiqueta-calidad) |
 | [13 · Respaldo y exportación](13-respaldo-y-exportacion.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Base de datos](#etiqueta-base-de-datos) · [Datos personales](#etiqueta-datos-personales) |
 | [14 · Roadmap e ideas de valor](14-roadmap-e-ideas.md) | 1.0.0 | 🔄 Vivo | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
 | [15 · Glosario](15-glosario.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Negocio](#etiqueta-negocio) |
-| [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) | 2.1.0 | ✅ Vigente | 2026-09-18 | [Base de datos](#etiqueta-base-de-datos) · [Calidad](#etiqueta-calidad) |
+| [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) | 3.0.0 | ✅ Vigente | 2026-09-19 | [Base de datos](#etiqueta-base-de-datos) · [Calidad](#etiqueta-calidad) |
 | [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Front](#etiqueta-front) · [API](#etiqueta-api) · [Arquitectura](#etiqueta-arquitectura) |
 | [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) | 0.1.0 | 💡 Propuesta | 2026-09-16 | [Entrega](#etiqueta-entrega) · [Front](#etiqueta-front) |
-| [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 4.0.0 | ✅ Vigente | 2026-09-18 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
+| [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 5.0.0 | ✅ Vigente | 2026-09-19 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
 | [20 · Contrato de la API](20-contrato-de-api.md) | 2.5.0 | ✅ Vigente | 2026-09-19 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
-| [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) | 2.3.0 | ✅ Vigente | 2026-09-17 | [Paralelo](#etiqueta-paralelo) · [Proceso](#etiqueta-proceso) |
+| [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) | 2.4.0 | ✅ Vigente | 2026-09-19 | [Paralelo](#etiqueta-paralelo) · [Proceso](#etiqueta-proceso) |
 | [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 1.6.0 | ✅ Vigente | 2026-09-17 | [Proceso](#etiqueta-proceso) |
 | [Contrato de la API · v0.11.0](../contrato/README.md) | 3.1.0 | ✅ Vigente | 2026-09-19 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
-| [Decisiones de arquitectura (ADR)](adr/README.md) | 1.6.0 | 🔄 Vivo | 2026-09-18 | [Arquitectura](#etiqueta-arquitectura) |
+| [Decisiones de arquitectura (ADR)](adr/README.md) | 1.7.0 | 🔄 Vivo | 2026-09-19 | [Arquitectura](#etiqueta-arquitectura) |
 | [ADR-001 · Stack tecnológico](adr/ADR-001-stack.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) |
 | [ADR-002 · Arquitectura hexagonal con regla de dependencias verificada](adr/ADR-002-arquitectura-hexagonal.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) · [API](#etiqueta-api) |
 | [ADR-003 · Dinero como entero de pesos](adr/ADR-003-dinero-entero.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Finanzas](#etiqueta-finanzas) · [API](#etiqueta-api) · [Base de datos](#etiqueta-base-de-datos) |
@@ -176,7 +176,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [ADR-011 · Stack: Flutter y Dart con API propia](adr/ADR-011-stack-flutter-dart.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) · [Front](#etiqueta-front) · [API](#etiqueta-api) |
 | [ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando](adr/ADR-012-identidad-a-postgres.md) | 2.0.0 | ✅ Aceptado | 2026-09-18 | [Seguridad](#etiqueta-seguridad) · [API](#etiqueta-api) · [Base de datos](#etiqueta-base-de-datos) |
 | [ADR-013 · Cuatro ambientes y promoción de migraciones](adr/ADR-013-cuatro-ambientes.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Entrega](#etiqueta-entrega) |
-| [ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad](adr/ADR-014-semver.md) | 1.1.0 | ✅ Aceptado | 2026-09-17 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
+| [ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad](adr/ADR-014-semver.md) | 1.2.0 | ✅ Aceptado | 2026-09-19 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
 | [ADR-015 · Validación en tres capas, con la base como juez](adr/ADR-015-validacion-tres-capas.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) · [Front](#etiqueta-front) · [API](#etiqueta-api) |
 | [ADR-016 · Flutter Web instalable como PWA](adr/ADR-016-flutter-web-pwa.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Front](#etiqueta-front) |
 | [ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API](adr/ADR-017-api-en-java.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) · [API](#etiqueta-api) |
@@ -196,7 +196,8 @@ Qué significa cada estado y cuándo sube una versión está en
 | [ADR-031 · El mensaje de commit cabe en 256 caracteres](adr/ADR-031-commit-de-256-caracteres.md) | 1.0.0 | ✅ Aceptado | 2026-09-17 | — |
 | [ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final](adr/ADR-032-railway-en-dev-ahora.md) | 1.0.0 | ✅ Aceptado | 2026-09-17 | [Entrega](#etiqueta-entrega) · [Plan](#etiqueta-plan) |
 | [ADR-033 · La clave de servicio entra, pero solo para crear identidades](adr/ADR-033-service-role-solo-en-auth.md) | 1.0.0 | ✅ Aceptado | 2026-09-18 | [Seguridad](#etiqueta-seguridad) · [API](#etiqueta-api) |
-| [CLAUDE.md](../CLAUDE.md) | 6.8.0 | 🔄 Vivo | 2026-09-19 | [Proceso](#etiqueta-proceso) |
+| [ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige](adr/ADR-034-la-version-sube-en-cada-pr.md) | 1.0.0 | ✅ Aceptado | 2026-09-19 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) · [Calidad](#etiqueta-calidad) |
+| [CLAUDE.md](../CLAUDE.md) | 7.0.0 | 🔄 Vivo | 2026-09-19 | [Proceso](#etiqueta-proceso) |
 | [Herramienta de documentación](../scripts/docs/README.md) | 1.4.0 | ✅ Vigente | 2026-09-17 | [Proceso](#etiqueta-proceso) |
 <!-- /generado:estado-de-la-documentacion -->
 
@@ -253,11 +254,11 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-calidad"></a>Calidad
 
-[03 · Requisitos, reglas de negocio y escenarios BDD](03-requisitos-y-bdd.md) · [12 · Pruebas y calidad](12-pruebas-y-calidad.md) · [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) · [ADR-022 · OpenAPI generado del código y verificado en integración continua](adr/ADR-022-openapi-generado.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md)
+[03 · Requisitos, reglas de negocio y escenarios BDD](03-requisitos-y-bdd.md) · [12 · Pruebas y calidad](12-pruebas-y-calidad.md) · [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) · [ADR-022 · OpenAPI generado del código y verificado en integración continua](adr/ADR-022-openapi-generado.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) · [ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige](adr/ADR-034-la-version-sube-en-cada-pr.md)
 
 ### <a id="etiqueta-entrega"></a>Entrega
 
-[09 · Plan de implantación](09-plan-de-implantacion.md) · [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) · [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) · [ADR-013 · Cuatro ambientes y promoción de migraciones](adr/ADR-013-cuatro-ambientes.md) · [ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad](adr/ADR-014-semver.md) · [ADR-024 · Java 25, Gradle y Spring Boot 4 en la API](adr/ADR-024-java-25-y-gradle.md) · [ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo](adr/ADR-026-railway-al-final.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) · [ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final](adr/ADR-032-railway-en-dev-ahora.md)
+[09 · Plan de implantación](09-plan-de-implantacion.md) · [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) · [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) · [ADR-013 · Cuatro ambientes y promoción de migraciones](adr/ADR-013-cuatro-ambientes.md) · [ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad](adr/ADR-014-semver.md) · [ADR-024 · Java 25, Gradle y Spring Boot 4 en la API](adr/ADR-024-java-25-y-gradle.md) · [ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo](adr/ADR-026-railway-al-final.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) · [ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final](adr/ADR-032-railway-en-dev-ahora.md) · [ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige](adr/ADR-034-la-version-sube-en-cada-pr.md)
 
 ### <a id="etiqueta-plan"></a>Plan
 
@@ -273,7 +274,7 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-proceso"></a>Proceso
 
-[19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) · [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) · [22 · Documentación: versiones, estados y referencias](22-documentacion.md) · [ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad](adr/ADR-014-semver.md) · [ADR-023 · Tres repositorios y el contrato como artefacto versionado](adr/ADR-023-tres-repositorios.md) · [ADR-025 · Cuatro repositorios: la base de datos sale de la API](adr/ADR-025-cuatro-repositorios.md) · [ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica](adr/ADR-027-documentacion-versionada.md) · [ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué](adr/ADR-028-un-commit-por-tarea.md) · [CLAUDE.md](../CLAUDE.md) · [Herramienta de documentación](../scripts/docs/README.md)
+[19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) · [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) · [22 · Documentación: versiones, estados y referencias](22-documentacion.md) · [ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad](adr/ADR-014-semver.md) · [ADR-023 · Tres repositorios y el contrato como artefacto versionado](adr/ADR-023-tres-repositorios.md) · [ADR-025 · Cuatro repositorios: la base de datos sale de la API](adr/ADR-025-cuatro-repositorios.md) · [ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica](adr/ADR-027-documentacion-versionada.md) · [ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué](adr/ADR-028-un-commit-por-tarea.md) · [ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige](adr/ADR-034-la-version-sube-en-cada-pr.md) · [CLAUDE.md](../CLAUDE.md) · [Herramienta de documentación](../scripts/docs/README.md)
 <!-- /generado:etiquetas -->
 
 ---

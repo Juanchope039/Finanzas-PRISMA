@@ -2,12 +2,12 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-18 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [5.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-19 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
 > **Construcción: la integración continua corre y dev ya está alojado; qa, uat y prod todavía no.**
-> La API, el front y esta especificación se verifican en cada push y cada PR ([§6.1](#61-en-cada-empuje-en-paralelo)). **Dev vive en
+> La API, el front, la base y esta especificación se verifican en cada push y cada PR ([§6.1](#61-en-cada-empuje-en-paralelo)). **Dev vive en
 > Railway** desde el [ADR-032](adr/ADR-032-railway-en-dev-ahora.md), con la API en un servicio y el front en otro; los otros tres
 > ambientes y la promoción entre ellos llegan en el [Sprint 9](08-plan-de-desarrollo.md#sprint-9). Este documento fija cómo deben quedar
 > antes del go-live, para que la decisión se tome ahora y no la noche de la primera publicación.
@@ -198,6 +198,19 @@ saber qué hace falta, no para arrancar nada.
 | `prisma_api` | `build.gradle.kts` | `MAJOR.MINOR.PATCH`, y la misma cadena etiqueta la imagen de contenedor |
 | Esquema de base (`prisma_db`) | Migraciones numeradas + tabla `schema_version` | `MAJOR.MINOR.PATCH` |
 
+**Cada número se escribe una sola vez, y todo lo demás lo lee** ([ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md)):
+
+| Número | Se escribe en | Y de ahí lo leen |
+|---|---|---|
+| Del front | `pubspec.yaml` | La tubería, que lo compila entero en `PRISMA_VERSION`. `lib/ambiente.dart` lo repite para compilar a mano, y una prueba exige que sea el mismo |
+| De la API | `build.gradle.kts` | El `application.yml`, que lo recibe al compilar, y `POST /api/v0/consultas/version`, que lo responde |
+| Del esquema | La migración que inserta la fila en `schema_version` | `POST /api/v0/consultas/version`, que lee la última fila **de la base de ese ambiente** —con la sesión de quien pregunta; sin sesión responde `desconocido`— |
+
+La versión del esquema que la API **necesita** es otro número y vive en otro sitio: `prisma.esquema`,
+fijo en el artefacto. Es el que va a comparar la sonda de disponibilidad del [ADR-025](adr/ADR-025-cuatro-repositorios.md) y el que usa la
+tubería del [ADR-029](adr/ADR-029-esquema-por-etiqueta.md). El panel muestra la que la base **tiene**, que es lo que contesta «qué estaba
+corriendo».
+
 ### 4.2 Las reglas
 
 - **Antes del go-live todo es `0.y.z`.** La primera publicación en prod es `1.0.0`. Es lo que
@@ -208,6 +221,18 @@ saber qué hace falta, no para arrancar nada.
 - **PATCH**: corrección que no cambia el contrato.
 - **Las versiones del front y de la API son independientes.** No se sincronizan artificialmente:
   fingir que van juntas oculta cuál de las dos cambió de verdad.
+- **Cada PR que cambia lo que se publica sube la versión de su proyecto un paso** —el PATCH, el
+  MINOR o el MAJOR siguiente de la que había en `develop`, y nada más—, y la integración continua de
+  cada repositorio lo exige con la prueba [C-05](12-pruebas-y-calidad.md#c-05) ([ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md)). Cuál de los tres pasos toca lo decide
+  quien escribe, con las tres reglas de arriba; saltarse números, no.
+- **Lo que no se publica no pide versión:** las pruebas, el README, la licencia, los flujos de
+  `.github/` y la configuración del repositorio y del despliegue. Todo lo demás, sí, incluida una
+  carpeta nueva que nadie haya listado: lo peor que eso cuesta es un PATCH de más.
+- **En el front, el número de compilación sube de uno en uno con la versión**, y solo con ella: es
+  el `versionCode` de Android, que solo puede crecer.
+- **La versión del esquema se publica en el mismo PR que la migración**, en la última migración que
+  agrega, y el bloque `1.12` de `verificar-base.sql` espera ese mismo número. Una migración que ya
+  estaba no cambia nunca ([§2.2](#22-una-migración-aplicada-no-se-edita-nunca)): si cambiara, el número dejaría de describir algo fijo.
 
 ### 4.3 El contrato de compatibilidad
 
@@ -275,6 +300,19 @@ Dentro del menú de la sesión, una opción que abre un panel con:
 Sirve para lo que sirve de verdad: cuando alguien reporta un fallo, lo primero que hay que saber
 es qué versión estaba usando y contra qué servidor.
 
+**Y por eso ningún dato se escribe a mano en el panel:** cada uno sale de su fuente ([§4.1](#41-tres-cosas-versionadas-por-separado)).
+
+| Dato | De dónde sale |
+|---|---|
+| Versión del front | El `pubspec.yaml`, **entera**, con su `+BUILD`. La insignia del [§5.1](#51-la-insignia-permanente) lleva la misma sin el número de compilación |
+| Versión de la API | El `build.gradle.kts`, por `POST /api/v0/consultas/version` |
+| Versión del esquema | La última fila de `schema_version` **en la base de ese ambiente**, que la API lee con la sesión de quien pregunta. El panel solo existe con la sesión abierta; sin sesión, la consulta responde `desconocido` |
+| Ambiente, fecha de compilación y commit | La tubería, al compilar el artefacto |
+
+Las dos primeras las sube cada PR y la tercera cada migración, y la prueba [C-05](12-pruebas-y-calidad.md#c-05) lo exige. Lo que el
+panel no puede hacer es inventar: si la API no contesta, las dos filas que dependen de ella dicen
+que no se pudo consultar.
+
 ---
 
 ## 6. Integración continua
@@ -287,8 +325,9 @@ solo hace esperar. La puerta para fusionar es que **todos** terminen en verde, n
 
 | Repositorio | Trabajos que corren a la vez |
 |---|---|
-| `prisma_api` | **Compilar y probar** —formato, compilación, regla de dependencias y todas las pruebas— y **construir la imagen**, este solo en `main` |
-| `prisma_front` | **Formato y análisis**, **pruebas** —incluida la regla de frontera— y **compilación web** |
+| `prisma_api` | **Compilar y probar** —formato, compilación, regla de dependencias y todas las pruebas—, **la versión subió**, solo contra `develop`, y **construir la imagen**, este solo en `main` |
+| `prisma_front` | **Formato y análisis**, **pruebas** —incluida la regla de frontera—, **la versión subió**, solo contra `develop`, y **compilación web** |
+| `prisma_db` | **La versión subió**, que por ahora es su única comprobación: lo demás del [§6.2](#62-en-cada-promoción) necesita levantar Supabase, y llega con la tubería del [ADR-029](adr/ADR-029-esquema-por-etiqueta.md) |
 | `Finanzas-PRISMA` | **Verificar la documentación**: encabezados, enlaces, referencias, plan y versiones ([`22-documentacion.md`](22-documentacion.md)) |
 
 Lo que comprueba cada etapa:
@@ -301,6 +340,7 @@ Lo que comprueba cada etapa:
 | Pruebas unitarias | Las fórmulas financieras, sin base ni red ([`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md)) | Falla una |
 | **OpenAPI** | Regenera el documento desde los controladores y lo compara con el `openapi.json` versionado ([ADR-022](adr/ADR-022-openapi-generado.md)) | El regenerado difiere del versionado |
 | Compilación | `flutter build web` y la imagen de contenedor de `prisma_api` | No compila |
+| **Versión** | Compara con `develop` y exige que la versión del proyecto suba un paso si el PR cambia lo que se publica; en `prisma_db`, además, que ninguna migración vieja cambie ([C-05](12-pruebas-y-calidad.md#c-05), [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md)) | Cambió lo que se publica y la versión no subió, o subió más de un paso |
 | Documentación | `node scripts/docs/documentar.mjs verificar --base <commit>` en la especificación | Un encabezado está mal, algo quedó sin enlazar o un documento cambió sin subir su versión |
 
 > **La documentación desactualizada deja de ser un descuido y pasa a ser una compilación roja.** El
@@ -472,7 +512,7 @@ solo está **con qué configuración corre cada ambiente y cómo se mueve una ve
 | Qué forma tiene cada respuesta de la API y qué cabeceras lleva | [`20-contrato-de-api.md`](20-contrato-de-api.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
