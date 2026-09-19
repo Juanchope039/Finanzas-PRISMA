@@ -1,6 +1,50 @@
 {
   "components" : {
     "schemas" : {
+      "Adjunto" : {
+        "description" : "Un soporte del movimiento: la foto del recibo o el PDF de la factura",
+        "properties" : {
+          "bytes" : {
+            "description" : "Cuánto pesa el archivo",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "nombre" : {
+            "description" : "El nombre con que se subió",
+            "type" : "string"
+          },
+          "tipo" : {
+            "description" : "El tipo de contenido del archivo",
+            "enum" : [ "image/jpeg", "image/png", "image/webp", "application/pdf" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "bytes", "id", "nombre", "tipo" ],
+        "type" : "object"
+      },
+      "Anulacion" : {
+        "description" : "Quién anuló el movimiento, cuándo y por qué. Nada se borra nunca (RN-13, 04 §5.2)",
+        "properties" : {
+          "en" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "motivo" : {
+            "description" : "Qué pasó y por qué. Queda junto al movimiento para siempre",
+            "type" : "string"
+          },
+          "por" : {
+            "description" : "El nombre completo de quien lo anuló",
+            "type" : "string"
+          }
+        },
+        "required" : [ "en", "motivo", "por" ],
+        "type" : "object"
+      },
       "AvisoDeVistaPrevia" : {
         "properties" : {
           "texto" : {
@@ -132,6 +176,50 @@
           }
         },
         "required" : [ "nombre" ],
+        "type" : "object"
+      },
+      "ConsultaDeMovimientos" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/movimientos. Sin ningún filtro trae el libro entero",
+        "properties" : {
+          "categoriaId" : {
+            "description" : "Solo los de esta categoría",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "cuentaId" : {
+            "description" : "Solo los que tocan esta cuenta, sea la de origen o la de destino",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "desde" : {
+            "description" : "Por fecha del movimiento, no por la de digitación (RN-01). Incluye el día",
+            "format" : "date",
+            "type" : "string"
+          },
+          "hasta" : {
+            "description" : "Por fecha del movimiento. Incluye el día",
+            "format" : "date",
+            "type" : "string"
+          },
+          "incluirAnulados" : {
+            "description" : "El modo «ver anulados» del 04 §5.5, que solo alcanza Gerencia. Sin él, los anulados no viajan",
+            "type" : "boolean"
+          },
+          "limite" : {
+            "description" : "Cuántos de los más recientes. Sin él, todos",
+            "format" : "int32",
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "tipos" : {
+            "description" : "Solo estos tipos. Sin él, todos",
+            "items" : {
+              "enum" : [ "ingreso", "gasto", "transferencia", "inversion", "aporte", "retiro_prolabore", "retiro_distribucion", "anticipo_recibido", "adelanto_empleada" ],
+              "type" : "string"
+            },
+            "type" : "array"
+          }
+        },
         "type" : "object"
       },
       "ConsultaDeNavegacion" : {
@@ -381,14 +469,92 @@
         "type" : "object"
       },
       "Motivo" : {
-        "description" : "Los formularios «desactivacion-de-usuario», «reactivacion-de-usuario», «desactivacion-de-cargo» y «reversion»: el mismo campo, con la etiqueta y los mensajes de cada uno",
+        "description" : "Los formularios «desactivacion-de-usuario», «reactivacion-de-usuario», «desactivacion-de-cargo», «reversion» y «anulacion-de-movimiento»: el mismo campo, con la etiqueta y los mensajes de cada uno",
         "properties" : {
           "motivo" : {
-            "description" : "Qué pasó y por qué. Queda en la ficha o en la bitácora",
+            "description" : "Qué pasó y por qué. Queda en la ficha, en la bitácora o junto al movimiento",
             "type" : "string"
           }
         },
         "required" : [ "motivo" ],
+        "type" : "object"
+      },
+      "Movimiento" : {
+        "properties" : {
+          "adjuntos" : {
+            "description" : "Las fotos y los PDF que lo soportan. Vacío si no tiene",
+            "items" : {
+              "$ref" : "#/components/schemas/Adjunto"
+            },
+            "type" : "array"
+          },
+          "anulacion" : {
+            "$ref" : "#/components/schemas/Anulacion",
+            "description" : "Solo en un movimiento anulado. Uno anulado no suma en ninguna cifra"
+          },
+          "categoria" : {
+            "description" : "El nombre de la categoría. Ausente si no tiene",
+            "type" : "string"
+          },
+          "categoriaId" : {
+            "description" : "Ausente si no tiene categoría",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "cuenta" : {
+            "description" : "El nombre de la cuenta. En una transferencia, la de origen",
+            "type" : "string"
+          },
+          "cuentaDestino" : {
+            "description" : "El nombre de la cuenta de destino. Solo en una transferencia",
+            "type" : "string"
+          },
+          "cuentaDestinoId" : {
+            "description" : "Solo en una transferencia",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "cuentaId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "descripcion" : {
+            "description" : "Ausente si se registró sin ella",
+            "type" : "string"
+          },
+          "fechaMovimiento" : {
+            "description" : "Cuándo ocurrió de verdad. Es la que manda en todos los reportes (RN-01)",
+            "format" : "date",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "registradoEn" : {
+            "description" : "Cuándo se digitó. Manda en la auditoría y nunca en los reportes",
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "registradoPor" : {
+            "description" : "El nombre completo de quien lo registró",
+            "type" : "string"
+          },
+          "registroTardio" : {
+            "description" : "Se digitó más de 7 días después de ocurrido (RN-14). No es un error: es la señal de que el hábito de registro se aflojó",
+            "type" : "boolean"
+          },
+          "tipo" : {
+            "enum" : [ "ingreso", "gasto", "transferencia", "inversion", "aporte", "retiro_prolabore", "retiro_distribucion", "anticipo_recibido", "adelanto_empleada" ],
+            "type" : "string"
+          },
+          "valor" : {
+            "description" : "Pesos enteros, siempre positivo. Qué le suma o le resta a cada cifra lo dice el tipo (05 §2)",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "adjuntos", "cuenta", "cuentaId", "fechaMovimiento", "id", "registradoEn", "registradoPor", "registroTardio", "tipo", "valor" ],
         "type" : "object"
       },
       "Navegacion" : {
@@ -475,6 +641,48 @@
         "required" : [ "clave", "usuario" ],
         "type" : "object"
       },
+      "NuevoMovimiento" : {
+        "description" : "El formulario «movimiento». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"movimiento\"}",
+        "properties" : {
+          "categoriaId" : {
+            "description" : "Una de POST /api/v0/consultas/categorias. Una transferencia no lleva categoría",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "cuentaDestinoId" : {
+            "description" : "Una de POST /api/v0/consultas/cuentas, distinta de cuentaId y solo en una transferencia. Las tres situaciones que no cuadran responden 42226",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "cuentaId" : {
+            "description" : "Una de POST /api/v0/consultas/cuentas. En una transferencia es la de origen",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "descripcion" : {
+            "description" : "En qué se fue la plata, en palabras. Puede quedar vacía",
+            "type" : "string"
+          },
+          "fechaMovimiento" : {
+            "description" : "Cuándo ocurrió de verdad, no cuándo se digita (RN-01). En America/Bogota, y posterior a hoy responde 42223",
+            "format" : "date",
+            "type" : "string"
+          },
+          "tipo" : {
+            "description" : "Los otros seis tipos del libro se registran desde sus propias pantallas y llegan con sus contratos",
+            "enum" : [ "ingreso", "gasto", "transferencia" ],
+            "type" : "string"
+          },
+          "valor" : {
+            "description" : "Pesos enteros y mayor que cero (RN-02, ADR-003)",
+            "format" : "int64",
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        },
+        "required" : [ "cuentaId", "fechaMovimiento", "tipo", "valor" ],
+        "type" : "object"
+      },
       "NuevoUsuario" : {
         "description" : "El formulario «usuario». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"usuario\"}",
         "properties" : {
@@ -548,6 +756,24 @@
         "required" : [ "entradas", "total" ],
         "type" : "object"
       },
+      "PaginaDeMovimientos" : {
+        "properties" : {
+          "movimientos" : {
+            "description" : "Los más recientes primero, por fecha del movimiento",
+            "items" : {
+              "$ref" : "#/components/schemas/Movimiento"
+            },
+            "type" : "array"
+          },
+          "total" : {
+            "description" : "Cuántos hay en total con esos filtros, para decir cuántos faltan",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "movimientos", "total" ],
+        "type" : "object"
+      },
       "Reversion" : {
         "properties" : {
           "posible" : {
@@ -596,6 +822,25 @@
           }
         },
         "required" : [ "claveDeFirma", "identidad", "token", "tokenExpiraEn" ],
+        "type" : "object"
+      },
+      "SobreAdjunto" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Adjunto",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
       "SobreCargo" : {
@@ -822,6 +1067,25 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobreMovimiento" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Movimiento",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreNavegacion" : {
         "properties" : {
           "data" : {
@@ -845,6 +1109,25 @@
         "properties" : {
           "data" : {
             "$ref" : "#/components/schemas/PaginaDeBitacora",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobrePaginaDeMovimientos" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/PaginaDeMovimientos",
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
           },
           "mensaje" : {
@@ -1004,7 +1287,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.8.0"
+    "version" : "0.9.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -1865,6 +2148,73 @@
         "tags" : [ "Formularios" ]
       }
     },
+    "/api/v0/consultas/movimientos" : {
+      "post" : {
+        "description" : "El libro único con sus filtros: rango de fechas del movimiento, tipo, categoría y cuenta, lo más reciente primero (RF-08 a RF-13). Cada movimiento dice si llegó tarde y, si está anulado, quién lo anuló y por qué. Los anulados no viajan salvo que se pidan con incluirAnulados, que es el modo «ver anulados» y solo lo alcanza Gerencia (04 §5.5). Los dos tipos de usuario consultan el libro. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300 y 40302.",
+        "operationId" : "movimientos",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeMovimientos"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobrePaginaDeMovimientos"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "El libro de movimientos",
+        "tags" : [ "Movimientos" ]
+      }
+    },
     "/api/v0/consultas/navegacion" : {
       "post" : {
         "description" : "Las secciones del menú lateral, en el orden en que se pintan, y las dos entradas del menú de la sesión que dependen del tipo (RF-103, 10 §2.1 y §5.3). El front pinta lo que llega y no decide qué ocultar: una sección que no viene no existe. Con vista=operacion responde lo que vería Operación y el aviso fijo de la vista previa (RF-92 a RF-94); solo la pide Gerencia, y el tipo real de la sesión no cambia. Puede devolver 20000, 40100, 40101, 40102, 40103, 40300 y 40302.",
@@ -2084,6 +2434,242 @@
         },
         "summary" : "Crear una cuenta de dinero",
         "tags" : [ "Cuentas" ]
+      }
+    },
+    "/api/v0/movimientos/{id}" : {
+      "put" : {
+        "description" : "Registra un ingreso, un gasto o una transferencia con su fecha real y su fecha de digitación (RF-08 a RF-11, CU-01, CU-02). El id lo genera quien registra al decidir la acción, junto con la clave de idempotencia (ADR-020), así que va en la ruta y no en el cuerpo; repetir la misma petición nunca duplica el libro, y un id ya registrado responde 40920. Quien registra es la persona de la sesión, y que sea ella lo juzga mov_insercion (04 §7), no un if. Lo digitado más de 7 días después de ocurrido se guarda igual y llega marcado como registro tardío (RN-14). Registran los dos tipos de usuario. El formulario es «movimiento»; la fecha futura, la cuenta, la categoría y la cuenta de destino no caben en el descriptor y responden 42223, 42224, 42225 y 42226. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902, 40920, 42200, 42223, 42224, 42225 y 42226; los cinco últimos con data.errores.",
+        "operationId" : "registrarMovimiento",
+        "parameters" : [ {
+          "description" : "El id del movimiento, que genera quien registra junto con la clave de idempotencia",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevoMovimiento"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreMovimiento"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Registrar un movimiento",
+        "tags" : [ "Movimientos" ]
+      }
+    },
+    "/api/v0/movimientos/{id}/adjuntos" : {
+      "post" : {
+        "description" : "Sube la foto del recibo o el PDF de la factura y lo deja colgado del movimiento (RF-09, RF-12, CU-02). El archivo pasa por la API y nunca va directo al almacenamiento (07 §1). Máximo 5 MB, que responde 40020, y solo image/jpeg, image/png, image/webp o application/pdf, que responde 40021. Adjuntan los dos tipos de usuario. No tiene formulario: el cuerpo es multipart/form-data con una sola parte, «archivo». Devolver el archivo todavía no está acordado. Puede devolver 20100, 40002, 40020, 40021, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40901 y 40902.",
+        "operationId" : "adjuntarSoporte",
+        "parameters" : [ {
+          "description" : "El id del movimiento al que se le adjunta el soporte",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "properties" : {
+                  "archivo" : {
+                    "description" : "La foto o el PDF, de 5 MB como máximo",
+                    "format" : "binary",
+                    "type" : "string"
+                  }
+                },
+                "required" : [ "archivo" ],
+                "type" : "object"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreAdjunto"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Adjuntar el soporte de un movimiento",
+        "tags" : [ "Movimientos" ]
+      }
+    },
+    "/api/v0/movimientos/{id}/anulacion" : {
+      "post" : {
+        "description" : "Marca el movimiento como anulado con motivo escrito, con quién y con cuándo: no lo borra ni lo edita, y desde ese momento no suma en ninguna cifra (RF-14, RN-13, CU-03). Para corregir un valor equivocado se registra un contra-asiento, que es otro movimiento, y el original queda intacto (RF-15, 04 §5.3). Solo Gerencia, y lo rechaza la base con mov_anulacion (04 §7). Uno que ya estaba anulado responde 40921 y no se hace nada. El formulario es «anulacion-de-movimiento». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40901, 40902, 40921 y 42200 con data.errores.",
+        "operationId" : "anularMovimiento",
+        "parameters" : [ {
+          "description" : "El id del movimiento que se anula",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Motivo"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreMovimiento"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Anular un movimiento",
+        "tags" : [ "Movimientos" ]
       }
     },
     "/api/v0/sesiones" : {
@@ -2688,6 +3274,9 @@
     "description" : "Los campos de cada formulario y sus reglas, como datos",
     "name" : "Formularios"
   }, {
+    "description" : "El libro único: lo que entra, lo que sale y lo que solo cambia de cuenta",
+    "name" : "Movimientos"
+  }, {
     "description" : "Lo que la sesión puede ver, dictado por la API",
     "name" : "Navegación"
   }, {
@@ -2903,6 +3492,50 @@
     },
     "status" : 42214
   }, {
+    "cuando" : "El archivo que se adjunta pasa de 5 MB",
+    "http" : 400,
+    "mensaje" : "Esa foto pesa demasiado. El máximo son 5 MB.",
+    "modulo" : "MOVIMIENTOS_Y_CUENTAS",
+    "nombre" : "ADJUNTO_DEMASIADO_GRANDE",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 3.6: adjuntar la foto del recibo",
+      "sprint" : 3
+    },
+    "status" : 40020
+  }, {
+    "cuando" : "El archivo que se adjunta no es image/jpeg, image/png, image/webp ni application/pdf",
+    "http" : 400,
+    "mensaje" : "Solo se pueden adjuntar fotos o archivos PDF.",
+    "modulo" : "MOVIMIENTOS_Y_CUENTAS",
+    "nombre" : "ADJUNTO_NO_ES_FOTO_NI_PDF",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 3.6: adjuntar la foto del recibo",
+      "sprint" : 3
+    },
+    "status" : 40021
+  }, {
+    "cuando" : "Registrar un movimiento con un id que ya está en el libro. Lo rechaza la llave primaria, no un if",
+    "http" : 409,
+    "mensaje" : "Ese movimiento ya está registrado.",
+    "modulo" : "MOVIMIENTOS_Y_CUENTAS",
+    "nombre" : "MOVIMIENTO_YA_REGISTRADO",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 3.4: endpoints de movimientos",
+      "sprint" : 3
+    },
+    "status" : 40920
+  }, {
+    "cuando" : "Anular un movimiento que ya estaba anulado",
+    "http" : 409,
+    "mensaje" : "Ese movimiento ya estaba anulado.",
+    "modulo" : "MOVIMIENTOS_Y_CUENTAS",
+    "nombre" : "MOVIMIENTO_YA_ANULADO",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 3.9: anulación con motivo obligatorio",
+      "sprint" : 3
+    },
+    "status" : 40921
+  }, {
     "cuando" : "Se crea una categoría dentro de otra que no existe o que fue anulada. El error va en data.errores, sobre padreId",
     "http" : 422,
     "mensaje" : "La categoría madre que elegiste no existe.",
@@ -2935,5 +3568,49 @@
       "sprint" : 1
     },
     "status" : 42222
+  }, {
+    "cuando" : "La fecha del movimiento es posterior a hoy en America/Bogota. El error va en data.errores, sobre fechaMovimiento",
+    "http" : 422,
+    "mensaje" : "Esa fecha todavía no llega. Aquí va cuándo ocurrió de verdad, no cuándo se va a pagar.",
+    "modulo" : "MOVIMIENTOS_Y_CUENTAS",
+    "nombre" : "FECHA_EN_EL_FUTURO",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 3.4: endpoints de movimientos",
+      "sprint" : 3
+    },
+    "status" : 42223
+  }, {
+    "cuando" : "La cuenta no existe o está anulada. El error va en data.errores, sobre cuentaId",
+    "http" : 422,
+    "mensaje" : "Elige una cuenta del catálogo que no esté anulada.",
+    "modulo" : "MOVIMIENTOS_Y_CUENTAS",
+    "nombre" : "CUENTA_NO_DISPONIBLE",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 3.4: endpoints de movimientos",
+      "sprint" : 3
+    },
+    "status" : 42224
+  }, {
+    "cuando" : "La categoría no existe o está anulada. El error va en data.errores, sobre categoriaId",
+    "http" : 422,
+    "mensaje" : "Elige una categoría del catálogo que no esté anulada.",
+    "modulo" : "MOVIMIENTOS_Y_CUENTAS",
+    "nombre" : "CATEGORIA_NO_DISPONIBLE",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 3.4: endpoints de movimientos",
+      "sprint" : 3
+    },
+    "status" : 42225
+  }, {
+    "cuando" : "Una transferencia sin cuenta de destino, una con la misma de origen, o cualquier otro tipo con cuenta de destino. El error va en data.errores, sobre cuentaDestinoId",
+    "http" : 422,
+    "mensaje" : "Una transferencia va de una cuenta a otra distinta, y ningún otro movimiento tiene cuenta de destino.",
+    "modulo" : "MOVIMIENTOS_Y_CUENTAS",
+    "nombre" : "CUENTA_DE_DESTINO_QUE_NO_CORRESPONDE",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 3.4: endpoints de movimientos",
+      "sprint" : 3
+    },
+    "status" : 42226
   } ]
 }
