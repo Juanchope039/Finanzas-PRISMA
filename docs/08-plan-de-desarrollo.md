@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [5.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -11,7 +11,7 @@ cuánto dura el desarrollo según cuántos carriles avancen a la vez. Un carril 
 persona, un equipo o una sesión de trabajo; al plan le da igual.
 
 <!-- generado:plan-resumen · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**28,4 semanas con 1 carril**, **17,2 semanas con 2 carriles** y **14,1 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
+**28,4 semanas con 1 carril**, **17,2 semanas con 2 carriles** y **14,2 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
 <!-- /generado:plan-resumen -->
 
 > **El plan de 7 sprints daba por hecho que no había backend.**
@@ -119,13 +119,13 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 ### 1.1 Cuánto dura con 1, 2 o 3 carriles activos
 
 <!-- generado:plan-calendario · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**169 días de trabajo en 141 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
+**169 días de trabajo en 142 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
 
 | Carriles activos | Desarrollo | Estabilización | Total | Frente a 1 carril |
 |:---:|---:|---:|---:|---:|
 | 1 | 25,4 semanas | 3 semanas | **28,4 semanas** | — |
 | 2 | 14,2 semanas | 3 semanas | **17,2 semanas** | −11,3 semanas |
-| 3 | 11,1 semanas | 3 semanas | **14,1 semanas** | −14,3 semanas |
+| 3 | 11,2 semanas | 3 semanas | **14,2 semanas** | −14,2 semanas |
 
 | Hito | 1 carril | 2 carriles | 3 carriles |
 |---|:---:|:---:|:---:|
@@ -158,7 +158,7 @@ alrededor de 17 semanas, y eso es lo que permite confiar en la cifra de tres.
 ### 1.2 La cadena que no se parte
 
 <!-- generado:plan-camino-critico · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**La cadena más larga de dependencias suma 24,5 días en 16 tareas.** Un día de retraso en cualquiera de ellas es un día de retraso del plan entero, tenga los carriles que tenga:
+**La cadena más larga de dependencias suma 24 días en 16 tareas.** Un día de retraso en cualquiera de ellas es un día de retraso del plan entero, tenga los carriles que tenga:
 
 [0.4](#tarea-0-4) → [0.10](#tarea-0-10) → [1.1](#tarea-1-1) → [1.4](#tarea-1-4) → [2.3](#tarea-2-3) → [2.4](#tarea-2-4) → [2.1](#tarea-2-1) → [2.12](#tarea-2-12) → [2.13](#tarea-2-13) → [5.2](#tarea-5-2) → [4.3](#tarea-4-3) → [4.5](#tarea-4-5) → [6.1](#tarea-6-1) → [6.5](#tarea-6-5) → [8.5](#tarea-8-5) → [8.6](#tarea-8-6)
 <!-- /generado:plan-camino-critico -->
@@ -179,48 +179,49 @@ gantt
     S0 :api0, 2026-09-15, 2026-10-05
     S1 :api1, 2026-09-22, 2026-10-07
     S2 :api2, 2026-10-07, 2026-10-24
-    S3 :api3, 2026-10-09, 2026-10-27
-    S4 :api4, 2026-10-22, 2026-11-08
+    S3 :api3, 2026-10-09, 2026-10-26
+    S4 :api4, 2026-10-21, 2026-11-04
     S5 :api5, 2026-10-25, 2026-11-06
-    S6 :api6, 2026-11-06, 2026-11-17
-    S7 :api7, 2026-10-29, 2026-11-19
-    S8 :api8, 2026-10-29, 2026-12-02
-    S9 :api9, 2026-11-21, 2026-11-30
+    S6 :api6, 2026-11-07, 2026-11-18
+    S7 :api7, 2026-10-28, 2026-11-18
+    S8 :api8, 2026-11-04, 2026-12-02
+    S9 :api9, 2026-11-20, 2026-11-30
 
     section Base
-    S0 :base0, 2026-09-16, 2026-09-19
-    S1 :base1, 2026-09-19, 2026-10-05
-    S2 :base2, 2026-10-05, 2026-10-21
-    S3 :base3, 2026-10-15, 2026-10-22
-    S4 :base4, 2026-10-24, 2026-11-06
-    S5 :base5, 2026-11-02, 2026-11-04
+    S0 :base0, 2026-09-16, 2026-09-18
+    S1 :base1, 2026-09-18, 2026-10-04
+    S2 :base2, 2026-10-04, 2026-10-20
+    S3 :base3, 2026-10-14, 2026-10-21
+    S4 :base4, 2026-10-24, 2026-11-03
+    S5 :base5, 2026-10-30, 2026-10-31
     S6 :base6, 2026-11-12, 2026-11-14
-    S8 :base8, 2026-11-08, 2026-11-20
-    S9 :base9, 2026-11-20, 2026-11-21
+    S8 :base8, 2026-11-06, 2026-11-10
+    S9 :base9, 2026-11-19, 2026-11-20
 
     section Front
     S0 :front0, 2026-09-15, 2026-10-03
-    S1 :front1, 2026-09-27, 2026-10-01
+    S1 :front1, 2026-09-26, 2026-09-30
     S2 :front2, 2026-10-06, 2026-10-18
     S3 :front3, 2026-10-12, 2026-10-20
-    S5 :front5, 2026-11-06, 2026-11-07
-    S6 :front6, 2026-11-09, 2026-11-16
-    S7 :front7, 2026-11-16, 2026-11-18
-    S9 :front9, 2026-11-19, 2026-11-24
+    S5 :front5, 2026-11-03, 2026-11-04
+    S6 :front6, 2026-11-10, 2026-11-17
+    S7 :front7, 2026-11-16, 2026-11-19
+    S9 :front9, 2026-11-18, 2026-11-23
 
     section Contrato
     S1 :contrato1, 2026-09-24, 2026-09-25
     S2 :contrato2, 2026-10-05, 2026-10-06
-    S3 :contrato3, 2026-10-12, 2026-10-13
-    S4 :contrato4, 2026-10-24, 2026-10-25
-    S5 :contrato5, 2026-10-27, 2026-10-28
-    S6 :contrato6, 2026-10-28, 2026-10-29
+    S3 :contrato3, 2026-10-11, 2026-10-12
+    S4 :contrato4, 2026-10-23, 2026-10-24
+    S5 :contrato5, 2026-10-26, 2026-10-27
+    S6 :contrato6, 2026-10-27, 2026-10-28
     S7 :contrato7, 2026-10-28, 2026-10-29
     S8 :contrato8, 2026-10-28, 2026-10-29
 
     section Decisión
     S0 :decisin0, 2026-09-15, 2026-09-16
     S1 :decisin1, 2026-09-15, 2026-09-16
+    S9 :decisin9, 2026-09-16, 2026-09-17
 
     section Implantación
     Estabilización y aprobación en UAT :est, 2026-12-02, 2026-12-16
@@ -299,7 +300,7 @@ hoy, con lo que ya está hecho, está en [`TODO.md`](../TODO.md).
 | <a id="tarea-0-1"></a>0.1 | Proyecto `prisma_api` en **Java 25 con Spring Boot**, construido con **Gradle**, con el esqueleto hexagonal en paquetes: `dominio`, `aplicacion`, `infraestructura`, `interfaz` | API | — | 2 |
 | <a id="tarea-0-2"></a>0.2 | Regla de frontera verificada en la integración continua con **ArchUnit**: la construcción falla si `dominio` importa Spring, JDBC o HTTP | API | [0.1](#tarea-0-1) | 1 |
 | <a id="tarea-0-3"></a>0.3 | Proyecto `prisma_front` en Flutter, con **web por defecto** y la misma separación por capas | Front | — | 1,5 |
-| <a id="tarea-0-4"></a>0.4 | Los cuatro proyectos de Supabase —dev, qa, uat y prod— cada uno con su base, sus claves y su almacenamiento | Decisión | — | 1 |
+| <a id="tarea-0-4"></a>0.4 | Los proyectos **dev y qa** de Supabase, cada uno con su base, sus claves y su almacenamiento. Los dos de pago —uat y prod— son la [9.12](#tarea-9-12) | Decisión | — | 0,5 |
 | <a id="tarea-0-5"></a>0.5 | Rol `prisma_api` en los cuatro: sin `BYPASSRLS`, sin `SUPERUSER` y sin ser dueño de las tablas | Base | [0.4](#tarea-0-4) | 1 |
 | <a id="tarea-0-6"></a>0.6 | Secretos por ambiente fuera del repositorio: variables de entorno en la API, `--dart-define` en el front | API, Front | [0.1](#tarea-0-1), [0.3](#tarea-0-3) | 1 |
 | <a id="tarea-0-7"></a>0.7 | Integración continua: formato con `spotless`, análisis estático, pruebas y compilación en la API; `dart format`, `dart analyze`, pruebas y compilación en el front, **para cada proyecto por separado** | API, Front | [0.1](#tarea-0-1), [0.3](#tarea-0-3) | 2 |
@@ -321,7 +322,7 @@ hoy, con lo que ya está hecho, está en [`TODO.md`](../TODO.md).
 
 | Oleada | Tareas | Carriles | Días |
 |:---:|---|---|---:|
-| 1 | [0.1](#tarea-0-1) · [0.3](#tarea-0-3) · [0.4](#tarea-0-4) | API, Front, Decisión | 4,5 |
+| 1 | [0.1](#tarea-0-1) · [0.3](#tarea-0-3) · [0.4](#tarea-0-4) | API, Front, Decisión | 4 |
 | 2 | [0.2](#tarea-0-2) · [0.5](#tarea-0-5) · [0.6](#tarea-0-6) · [0.7](#tarea-0-7) · [0.8](#tarea-0-8) · [0.10](#tarea-0-10) · [0.12](#tarea-0-12) · [0.14](#tarea-0-14) · [0.15](#tarea-0-15) · [0.19](#tarea-0-19) | API, Base, Front | 12,5 |
 | 3 | [0.9](#tarea-0-9) · [0.11](#tarea-0-11) · [0.16](#tarea-0-16) · [0.17](#tarea-0-17) · [0.18](#tarea-0-18) | API | 6 |
 | 4 | [0.13](#tarea-0-13) | Front | 1 |
@@ -332,6 +333,11 @@ hoy, con lo que ya está hecho, está en [`TODO.md`](../TODO.md).
 > máquina de desarrollo, que era la condición que ese mismo ADR dejó escrita. **qa, uat y prod siguen
 > en el [Sprint 9](#sprint-9)**, y con ellos el «arranque verificado en los cuatro ambientes» de la 0.8 y la
 > promoción del artefacto entre ambientes.
+
+> **Los dos proyectos de Supabase que se pagan tampoco se crean aquí:** la [0.4](#tarea-0-4) crea dev y qa,
+> que son los gratuitos; uat y prod son la [9.12](#tarea-9-12), en el [Sprint 9](#sprint-9), que es donde ya viven las
+> tareas que los necesitan. Los cuatro ambientes sí se **diseñan** en este sprint —los secretos de la
+> [0.6](#tarea-0-6), la franja de la [0.12](#tarea-0-12) y el SemVer de la [0.10](#tarea-0-10)—: lo que espera a Gerencia es contratar dos.
 
 **Terminado cuando** — un cambio fusionado llega solo hasta dev sin que nadie toque una consola,
 la versión y el ambiente se leen en el pie de la barra lateral, y un endpoint de prueba responde
@@ -688,7 +694,7 @@ pro-labore sí.
 | # | Tarea | Carril | Depende de | Días |
 |---|---|---|---|---:|
 | <a id="tarea-9-1"></a>9.1 | PWA instalable sobre la compilación web de Flutter y cola local persistente sin conexión, con su clave de idempotencia guardada **antes** de intentar enviar ([ADR-016](adr/ADR-016-flutter-web-pwa.md)) | Front | [1.19](#tarea-1-19) | 2 |
-| <a id="tarea-9-2"></a>9.2 | Ambiente uat en pie: datos realistas **anonimizados** y su propia semilla | Base, API | [0.9](#tarea-0-9), [1.11](#tarea-1-11) | 1 |
+| <a id="tarea-9-2"></a>9.2 | Ambiente uat en pie: datos realistas **anonimizados** y su propia semilla | Base, API | [0.9](#tarea-0-9), [1.11](#tarea-1-11), [9.12](#tarea-9-12) | 1 |
 | <a id="tarea-9-3"></a>9.3 | Promoción del artefacto aprobado de uat a prod **sin recompilar**, con la misma versión | API, Front | [9.2](#tarea-9-2) | 1 |
 | <a id="tarea-9-4"></a>9.4 | Procedimiento de reversión ensayado en qa: volver la API y el front a la versión anterior y medir cuánto tarda | API, Front | [0.9](#tarea-0-9) | 1,5 |
 | <a id="tarea-9-5"></a>9.5 | La prueba de permisos con sesión real corre en los cuatro ambientes, no solo en dev | API | [1.7](#tarea-1-7), [9.2](#tarea-9-2) | 1 |
@@ -698,21 +704,24 @@ pro-labore sí.
 | <a id="tarea-9-9"></a>9.9 | Prueba de verdad del contrato de compatibilidad: el front rechaza un MAJOR de API distinto | Front | [0.9](#tarea-0-9), [0.13](#tarea-0-13) | 0,5 |
 | <a id="tarea-9-10"></a>9.10 | Etiquetar `1.0.0` del front y de la API para el go-live | API, Front | [9.1](#tarea-9-1), [9.3](#tarea-9-3), [9.4](#tarea-9-4), [9.5](#tarea-9-5), [9.6](#tarea-9-6), [9.7](#tarea-9-7), [9.8](#tarea-9-8), [9.9](#tarea-9-9), [9.11](#tarea-9-11) | 0,5 |
 | <a id="tarea-9-11"></a>9.11 | Swagger abierto en `/docs` en dev, qa y uat, y **detrás de autenticación en prod**: el catálogo de endpoints es un mapa del sistema | API | [0.9](#tarea-0-9) | 0,5 |
+| <a id="tarea-9-12"></a>9.12 | **Los proyectos uat y prod de Supabase, que son los dos de pago** ([19 §8.1](19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no)): contratados, cada uno con su base, sus claves y su almacenamiento. Lo que falta no es trabajo sino la firma de Gerencia, que es el paso 2 del [09 §3.1](09-plan-de-implantacion.md#31-alistamiento-técnico-de-los-ambientes) | Decisión | [0.4](#tarea-0-4) | 0,5 |
 
 <!-- generado:plan-oleadas-9 · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **Qué puede ir a la vez en este sprint.** Cada oleada espera solo a las anteriores; dentro de una oleada, todo arranca junto.
 
 | Oleada | Tareas | Carriles | Días |
 |:---:|---|---|---:|
-| 1 | [9.1](#tarea-9-1) · [9.2](#tarea-9-2) · [9.4](#tarea-9-4) · [9.6](#tarea-9-6) · [9.7](#tarea-9-7) · [9.8](#tarea-9-8) · [9.9](#tarea-9-9) · [9.11](#tarea-9-11) | Front, Base, API | 9 |
-| 2 | [9.3](#tarea-9-3) · [9.5](#tarea-9-5) | API | 2 |
-| 3 | [9.10](#tarea-9-10) | API | 0,5 |
+| 1 | [9.1](#tarea-9-1) · [9.4](#tarea-9-4) · [9.6](#tarea-9-6) · [9.7](#tarea-9-7) · [9.8](#tarea-9-8) · [9.9](#tarea-9-9) · [9.11](#tarea-9-11) · [9.12](#tarea-9-12) | Front, API, Decisión | 8,5 |
+| 2 | [9.2](#tarea-9-2) | Base | 1 |
+| 3 | [9.3](#tarea-9-3) · [9.5](#tarea-9-5) | API | 2 |
+| 4 | [9.10](#tarea-9-10) | API | 0,5 |
 <!-- /generado:plan-oleadas-9 -->
 
 > **Las tareas [0.8](#tarea-0-8) y [0.9](#tarea-0-9) ya no llegan aquí:** volvieron al [Sprint 0](#sprint-0) por [ADR-032](adr/ADR-032-railway-en-dev-ahora.md), y el sprint
-> se queda en sus 11,5 días. Lo que sí sigue siendo de este sprint es todo lo que dependía de tener
-> **los otros tres ambientes**: levantarlos ([9.2](#tarea-9-2)), promover el artefacto sin recompilarlo ([9.3](#tarea-9-3)),
-> ensayar la reversión ([9.4](#tarea-9-4)) y verificar el arranque de la imagen donde todavía no corre.
+> queda en 12 días. Lo que sí sigue siendo de este sprint es todo lo que dependía de tener **los
+> otros tres ambientes**: contratar los dos que se pagan ([9.12](#tarea-9-12)), levantar uat ([9.2](#tarea-9-2)), promover
+> el artefacto sin recompilarlo ([9.3](#tarea-9-3)), ensayar la reversión ([9.4](#tarea-9-4)) y verificar el arranque de la
+> imagen donde todavía no corre.
 
 **Terminado cuando** — Gerencia aprueba en UAT y ese mismo artefacto, sin reconstruir, queda
 listo para prod.

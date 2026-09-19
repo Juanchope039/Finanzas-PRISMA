@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-19 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [3.2.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-19 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 > **Construcción: construido y corriendo contra dev y contra qa**, donde el esquema está aplicado y
 > verificado línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5), [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5) y [1.13](08-plan-de-desarrollo.md#tarea-1-13)). **qa quedó al día** con el
@@ -224,7 +224,7 @@ supabase db query --linked -f scripts/db/verificar-base.sql
 | **5** | Aplicar no es quedar bien. El informe entero en `OK` es lo que cierra la promoción, y el bloque `1.12` comprueba además que la base publique la versión que dice el repositorio |
 
 **El guion pide dos llaves**, las mismas que `sembrar.ps1`: el **ambiente** —que hoy solo admite
-`qa`, porque uat y prod no existen ([0.4](08-plan-de-desarrollo.md#tarea-0-4))— y la **referencia del proyecto vinculado**, escrita
+`qa`, porque uat y prod no existen ([9.12](08-plan-de-desarrollo.md#tarea-9-12))— y la **referencia del proyecto vinculado**, escrita
 entera. Y una tercera la pone el CLI, que enseña la lista y pregunta antes de aplicar. Promover no
 puede ser un descuido, y la salvaguarda va dentro del guion y no en este documento.
 

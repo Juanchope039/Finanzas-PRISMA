@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [7.13.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -135,7 +135,7 @@ fecha de hoy, correr `enlazar` y luego `verificar`. **Los bloques `<!-- generado
 a mano**, ni las marcas ⚡ 🔒 ⏭️ de [`TODO.md`](TODO.md); 🚧 y ✏️ sí las pone una persona.
 
 **El plan manda sobre el tablero.** [`docs/08-plan-de-desarrollo.md`](docs/08-plan-de-desarrollo.md) dice qué hay que hacer, en qué
-carril y de qué depende; [`TODO.md`](TODO.md) dice en qué va. Los dos tienen que enumerar las mismas 141 tareas y
+carril y de qué depende; [`TODO.md`](TODO.md) dice en qué va. Los dos tienen que enumerar las mismas 142 tareas y
 la verificación falla si no. **Una tarea nueva entra primero al plan**, nunca al tablero.
 
 **Nunca `git add -A` en este repositorio**: hay archivos sueltos en la raíz que no son del proyecto.
@@ -250,7 +250,7 @@ El índice navegable de los 61 documentos está en [`docs/INDICE.md`](docs/INDIC
 ## 6. Dónde va el proyecto hoy
 
 El estado al día vive en [`TODO.md`](TODO.md) [§1](TODO.md#1-hecho-en-progreso-y-pendiente), con una tabla por sprint que calcula la herramienta. En
-resumen: el [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) está cerrado salvo lo que cuesta dinero, el dominio que no necesita base de datos
+resumen: el [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) está cerrado, el dominio que no necesita base de datos
 ya está construido y probado, y **la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) está aplicada y verificada en dev y en qa** ([1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) a
 [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5)): dominios, nombres, borrado revocado, auditoría por triggers y RLS juzgando a una sesión de
 verdad. La identidad ya llega hasta PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)), la sesión contra Supabase Auth ya entrega
@@ -314,7 +314,10 @@ y ahora existen las cuatro operaciones de cuentas y categorías, con las cuentas
 que Operación elija sin ver la caja. El «solo Gerencia» que el contrato promete desde la [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17)
 **lo impone por fin la base**, con el molde de `cargos`: hasta esa migración, Operación creaba las
 dos. En el front, el panel «Cuentas de dinero» vive dentro de Movimientos y se pinta solo si la
-navegación lo dice. Van 67 de las 141 tareas.
+navegación lo dice. **Y el [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) cerró partiendo su última tarea** ([0.4](docs/08-plan-de-desarrollo.md#tarea-0-4)): pedía los cuatro
+proyectos de Supabase, dev y qa llevan meses en pie y los dos de pago —uat y prod, que firma
+Gerencia— son ahora la [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12), en el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), junto a las tareas que los necesitan. Van 68 de
+las 142 tareas.
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.
