@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [7.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -135,7 +135,7 @@ fecha de hoy, correr `enlazar` y luego `verificar`. **Los bloques `<!-- generado
 a mano**, ni las marcas ⚡ 🔒 ⏭️ de [`TODO.md`](TODO.md); 🚧 y ✏️ sí las pone una persona.
 
 **El plan manda sobre el tablero.** [`docs/08-plan-de-desarrollo.md`](docs/08-plan-de-desarrollo.md) dice qué hay que hacer, en qué
-carril y de qué depende; [`TODO.md`](TODO.md) dice en qué va. Los dos tienen que enumerar las mismas 140 tareas y
+carril y de qué depende; [`TODO.md`](TODO.md) dice en qué va. Los dos tienen que enumerar las mismas 141 tareas y
 la verificación falla si no. **Una tarea nueva entra primero al plan**, nunca al tablero.
 
 **Nunca `git add -A` en este repositorio**: hay archivos sueltos en la raíz que no son del proyecto.
@@ -300,7 +300,15 @@ contrato declara nombres que la petición no trae. **Y el andamio ya cabe en un 
 baja al pie de la pantalla. **Y la base ya sabe guardar un soporte** ([3.14](docs/08-plan-de-desarrollo.md#tarea-3-14)): `adjuntos` estaba en
 el catálogo y en el diagrama desde el principio y no tenía `CREATE TABLE`, y ahora la tiene junto
 con el bucket privado `soportes`, que **impone el techo de 5 MB y los cuatro tipos de contenido
-antes de que los bytes se guarden**, no después. Van 65 de las 140 tareas.
+antes de que los bytes se guarden**, no después. **Y el [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) quedó acordado entero** ([8.11](docs/08-plan-de-desarrollo.md#tarea-8-11)), que
+era el último contrato por acordar de los que el plan tenía: la nómina con sus empleadas, sus
+adelantos y su liquidación, el simulador que responde si se puede contratar, el cotizador con su PDF
+y el validador de anticipo mínimo, y el importador de CSV. Son 25 operaciones y 17 códigos que
+estrenan a la vez **los tres rangos que quedaban vacíos**, con lo que los diez módulos del plan ya
+tienen el suyo. Lo que decide es **cómo baja un archivo**: dentro del sobre, en base64 y con tope de
+5 MB, para que ninguna ruta tenga dos formas de contestar. Y con él entró al plan la [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12), las
+tablas del cotizador, que estaban en el catálogo del [04](docs/04-modelo-de-datos.md) sin `CREATE TABLE` y que ninguna tarea
+creaba. Van 66 de las 141 tareas.
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.

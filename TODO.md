@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.14.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.15.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -25,7 +25,7 @@ Cada tarea dice su **carril**: **API** (`prisma_api`), **Base** (`prisma_db`), *
 
 ## 1. Hecho, en progreso y pendiente
 
-Las tres preguntas de siempre. Las secciones 2 a 6 enumeran **las 140 tareas del plan**, una por una
+Las tres preguntas de siempre. Las secciones 2 a 6 enumeran **las 141 tareas del plan**, una por una
 y con su marca; aquí está el resumen. Que no falte ninguna no depende de la memoria de nadie: la
 herramienta compara el tablero con el plan y la verificación falla si alguna no está.
 
@@ -42,9 +42,9 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 4 | 0 | 6 | 6,5 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 0 | 0 | 10 | 15 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
-| [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
+| [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 1 | 0 | 11 | 16,5 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 11 | 1 | 0 | 10 | 9,5 |
-| **Total** | **140** | **65** | **0** | **75** | **92,5** |
+| **Total** | **141** | **66** | **0** | **75** | **93** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -64,7 +64,7 @@ Lo que tiene su commit en `develop` con la integración continua en verde, que e
 | **Front · formularios** | El renderizador del descriptor: pinta los campos que manda la API con su teclado, sus límites, sus opciones y sus avisos, y no trae ninguna regla propia | [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18) |
 | **Front · la sesión** | **La puerta**: sin sesión se ve «Entra con tu usuario», y quien entra con una clave temporal va a «Crea tu contraseña» en vez de al tablero —que ni siquiera se construye hasta que la cambie—. Los dos formularios los manda la API, y los rechazos también: el «Usuario o contraseña incorrectos» que se lee en pantalla no está escrito en ninguna parte del front. **Recargar la página ya no saca a nadie**: lo primero que hace la aplicación al abrirse es renovar con la cookie, y si un token vence a media jornada el cliente lo repone y reintenta sin que se note. Arriba, la identidad con su menú de la sesión; a la izquierda, el menú que dicta la API | [2.6](docs/08-plan-de-desarrollo.md#tarea-2-6) · [2.2](docs/08-plan-de-desarrollo.md#tarea-2-2) · [2.12](docs/08-plan-de-desarrollo.md#tarea-2-12) · [2.14](docs/08-plan-de-desarrollo.md#tarea-2-14) |
 | **Front · sin conexión** | La PWA con su manifiesto en español y la cola local en IndexedDB: cada intención se guarda con su clave **antes** de intentar enviarse, y se reintenta con la espera de [17 §5.2](docs/17-resiliencia-offline-y-cache.md#52-cuánto-se-espera-entre-reintentos) hasta que la API la acepte o la rechace con motivo | [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) |
-| **Contrato** | El contrato v0.14.0 en [`contrato/openapi.json`](contrato/openapi.json): el sobre, el descriptor con sus listas, cuentas y categorías, y **los sprints [2](docs/08-plan-de-desarrollo.md#sprint-2), [3](docs/08-plan-de-desarrollo.md#sprint-3), [4](docs/08-plan-de-desarrollo.md#sprint-4), [5](docs/08-plan-de-desarrollo.md#sprint-5) y [7](docs/08-plan-de-desarrollo.md#sprint-7) acordados antes de implementarlos** —`/sesiones`, `/usuarios`, `/cargos`, `/bitacora`, `/navegacion` y las tres cabeceras del canal firmado; los movimientos con su registro, su anulación, su adjunto y su libro con filtros; los clientes, los pedidos y sus anticipos; los productos con su costeo, su cuadro de márgenes y lo que Operación no recibe; y el capital: las inversiones, los aportes, el retiro partido en pro-labore y distribución, el pro-labore, los sobres y el patrimonio— | [0.15](docs/08-plan-de-desarrollo.md#tarea-0-15) · [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) · [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) · [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) · [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) |
+| **Contrato** | El contrato v0.15.0 en [`contrato/openapi.json`](contrato/openapi.json): el sobre, el descriptor con sus listas, cuentas y categorías, y **los sprints [2](docs/08-plan-de-desarrollo.md#sprint-2), [3](docs/08-plan-de-desarrollo.md#sprint-3), [4](docs/08-plan-de-desarrollo.md#sprint-4), [5](docs/08-plan-de-desarrollo.md#sprint-5), [7](docs/08-plan-de-desarrollo.md#sprint-7) y [8](docs/08-plan-de-desarrollo.md#sprint-8) acordados antes de implementarlos** —`/sesiones`, `/usuarios`, `/cargos`, `/bitacora`, `/navegacion` y las tres cabeceras del canal firmado; los movimientos con su registro, su anulación, su adjunto y su libro con filtros; los clientes, los pedidos y sus anticipos; los productos con su costeo, su cuadro de márgenes y lo que Operación no recibe; y el capital: las inversiones, los aportes, el retiro partido en pro-labore y distribución, el pro-labore, los sobres y el patrimonio; y la nómina entera con el simulador, el cotizador y el importador— | [0.15](docs/08-plan-de-desarrollo.md#tarea-0-15) · [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) · [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) · [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) · [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 25 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 62 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los quince triggers de auditoría escribiendo y las 34 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. La semilla es fija, re-ejecutable y con filas en toda tabla que preguntan las pruebas de permisos, y `sembrar.ps1` la lleva a dev y a qa sin dejarla acercarse a uat ni a prod. Y esto ya no es solo dev: **qa quedó al día con la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)**, con sus 109 comprobaciones en `OK` y `schema_version` en `0.3.0`. Y con la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) el esquema estrena la tabla `adjuntos` —la ficha del soporte, con su trigger y sus dos flechas excluyentes— y el **bucket privado `soportes`**, que impone el techo de 5 MB y los cuatro tipos de contenido **antes** de que los bytes se guarden: son 123 comprobaciones en `OK` contra la base local, y `0.4.0` **todavía sin promover a dev ni a qa** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) · [2.4](docs/08-plan-de-desarrollo.md#tarea-2-4) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
@@ -95,7 +95,7 @@ empuje**, porque necesita la base levantada y es la [1.7](docs/08-plan-de-desarr
 quedó hecho; detrás de él se abre la prueba de corte ([1.15](docs/08-plan-de-desarrollo.md#tarea-1-15)). En el carril Base, con
 `cargos` ([2.3](docs/08-plan-de-desarrollo.md#tarea-2-3)), la tabla de idempotencia ([1.13](docs/08-plan-de-desarrollo.md#tarea-1-13)), su purga ([1.16](docs/08-plan-de-desarrollo.md#tarea-1-16)) y la semilla reproducible
 ([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)) y la primera promoción a qa ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) cerradas, sigue la tabla `usuarios` ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)). El
-carril Contrato, con los de los sprints 3 a 8. **El acceso está cerrado de punta a punta**: con la
+carril Contrato, al que **ya solo le queda el del [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6)** ([6.10](docs/08-plan-de-desarrollo.md#tarea-6-10)). **El acceso está cerrado de punta a punta**: con la
 sesión de 30 días ([2.2](docs/08-plan-de-desarrollo.md#tarea-2-2)) se entra, se recarga la página y se sigue dentro, se sale por el menú de
 la sesión y quien entra con clave temporal la cambia y llega al tablero. Y con la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) **Gerencia ya
 puede dar de alta a alguien**, que era lo último que solo sabía hacer `seed.sql`. Lo que queda del
@@ -125,23 +125,23 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.7](docs/08-plan-de-desarrollo.md#tarea-3-7) · [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) · [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
-| **Base** | [1.21](docs/08-plan-de-desarrollo.md#tarea-1-21) · [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [2.21](docs/08-plan-de-desarrollo.md#tarea-2-21) · [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2) |
+| **API** | [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.7](docs/08-plan-de-desarrollo.md#tarea-3-7) · [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) · [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **Base** | [1.21](docs/08-plan-de-desarrollo.md#tarea-1-21) · [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [2.21](docs/08-plan-de-desarrollo.md#tarea-2-21) · [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) · [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2) |
 | **Front** | [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
-| **Contrato** | [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
+| **Contrato** | [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **75 tareas y 92,5 días de trabajo** de 140 tareas del plan.
+Quedan **75 tareas y 93 días de trabajo** de 141 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 13,9 semanas | **16,9 semanas** |
+| 1 | 14,0 semanas | **17,0 semanas** |
 | 2 | 7,8 semanas | **10,8 semanas** |
-| 3 | 6,5 semanas | **9,5 semanas** |
+| 3 | 6,4 semanas | **9,4 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -149,6 +149,17 @@ Quedan **75 tareas y 92,5 días de trabajo** de 140 tareas del plan.
 El orden sale de las dependencias del [plan](docs/08-plan-de-desarrollo.md): cuántas tareas pendientes cuelgan de cada una, directa
 o indirectamente. No es el orden en que se descubrieron.
 
+- [x] **El contrato de nómina, simulador, cotizaciones e importación** ([8.11](docs/08-plan-de-desarrollo.md#tarea-8-11)) — hecho: tenía
+      **once tareas detrás**, que es el [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) entero menos él mismo. Seis directas —las empleadas
+      ([8.1](docs/08-plan-de-desarrollo.md#tarea-8-1)), el simulador ([8.5](docs/08-plan-de-desarrollo.md#tarea-8-5)), el cotizador ([8.8](docs/08-plan-de-desarrollo.md#tarea-8-8)), el anticipo mínimo ([8.9](docs/08-plan-de-desarrollo.md#tarea-8-9)), el importador ([8.10](docs/08-plan-de-desarrollo.md#tarea-8-10)) y las
+      tablas del cotizador ([8.12](docs/08-plan-de-desarrollo.md#tarea-8-12))— y cinco indirectas: los adelantos ([8.3](docs/08-plan-de-desarrollo.md#tarea-8-3)), la liquidación en la base
+      ([8.2](docs/08-plan-de-desarrollo.md#tarea-8-2)), el desprendible ([8.4](docs/08-plan-de-desarrollo.md#tarea-8-4)), las unidades por vender ([8.6](docs/08-plan-de-desarrollo.md#tarea-8-6)) y las horas pagadas contra
+      facturadas ([8.7](docs/08-plan-de-desarrollo.md#tarea-8-7)). El `v0.15.0` estrena **los tres rangos que quedaban vacíos** —`50`–`59`,
+      `70`–`79` y `80`–`89`— y con eso los diez módulos del plan tienen el suyo. Como el de capital,
+      **sale de los documentos y no de un dominio construido**. Lo que decide es **cómo baja un
+      archivo**: dentro del sobre, en base64 y con tope de 5 MB, que sirve también para la descarga de
+      la [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) y para devolver un adjunto ([3.6](docs/08-plan-de-desarrollo.md#tarea-3-6)). **Y cerró la migración sin tarea que la [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) daba por
+      hecha**: `cotizaciones` y `cotizacion_lineas` son ahora la [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12).
 - [x] **El contrato de capital** ([7.9](docs/08-plan-de-desarrollo.md#tarea-7-9)) — hecho: tenía **19 tareas detrás** por medio día de trabajo.
       Cuatro directas —las inversiones ([7.1](docs/08-plan-de-desarrollo.md#tarea-7-1)), los aportes ([7.2](docs/08-plan-de-desarrollo.md#tarea-7-2)), el pro-labore ([7.3](docs/08-plan-de-desarrollo.md#tarea-7-3)) y los sobres
       ([7.7](docs/08-plan-de-desarrollo.md#tarea-7-7))— y quince indirectas: el retiro partido ([7.4](docs/08-plan-de-desarrollo.md#tarea-7-4)), el patrimonio ([7.5](docs/08-plan-de-desarrollo.md#tarea-7-5)) y su alerta ([7.6](docs/08-plan-de-desarrollo.md#tarea-7-6)), y
@@ -601,13 +612,17 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 - [ ] 🔒 [**8.8**](docs/08-plan-de-desarrollo.md#tarea-8-8) Cotizaciones y remisiones en PDF con logo · API, Front
 - [ ] 🔒 [**8.9**](docs/08-plan-de-desarrollo.md#tarea-8-9) Validador de anticipo mínimo · API
-- [ ] ⚡ [**8.11**](docs/08-plan-de-desarrollo.md#tarea-8-11) Contrato de nómina, simulador, cotizaciones e importación · Contrato
+- [x] [**8.11**](docs/08-plan-de-desarrollo.md#tarea-8-11) Contrato de nómina, simulador, cotizaciones e importación · Contrato — v0.15.0:
+      25 operaciones, 46 esquemas y 17 códigos que estrenan a la vez los tres rangos que quedaban
+      vacíos. Un archivo baja dentro del sobre, en base64: es el esquema `Documento`
+- [ ] ⚡ [**8.12**](docs/08-plan-de-desarrollo.md#tarea-8-12) Tablas `cotizaciones` y `cotizacion_lineas` · Base — el
+      contrato de la [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) promete un cotizador y las dos tablas no tienen `CREATE TABLE`
 
 ### Amortiguador · Nómina
 
 La toma el carril que termine primero su cadena: es la funcionalidad más independiente del sistema.
 
-- [ ] 🔒 [**8.1**](docs/08-plan-de-desarrollo.md#tarea-8-1) Registro de empleadas · API, Front
+- [ ] ⚡ [**8.1**](docs/08-plan-de-desarrollo.md#tarea-8-1) Registro de empleadas · API, Front
 - [ ] 🔒 [**8.2**](docs/08-plan-de-desarrollo.md#tarea-8-2) Liquidación de nómina en la base, descontando adelantos · Base
 - [ ] 🔒 [**8.3**](docs/08-plan-de-desarrollo.md#tarea-8-3) Adelantos como cuenta por cobrar · API
 - [ ] 🔒 [**8.4**](docs/08-plan-de-desarrollo.md#tarea-8-4) Desprendible PDF con acceso restringido al propio · API
@@ -663,7 +678,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 
 - [ ] La variante del trigger de auditoría para `usuarios`, que detecta `desactivado_en` · [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2)
 - [x] El `CREATE TABLE` de `adjuntos` · lo escribió la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) en el [04 §4.12](docs/04-modelo-de-datos.md#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido)
-- [ ] 🔒 El `CREATE TABLE` de `cotizaciones` y `cotizacion_lineas` · [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8), tarea [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8)
+- [ ] ⚡ El `CREATE TABLE` de `cotizaciones` y `cotizacion_lineas` · [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8), tarea [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12)
 
 ### 7.1 El expediente de uat y prod
 
@@ -1845,6 +1860,68 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       de salir sin campo y va sobre `pctRetiro`; y las horas con más de dos decimales. Quedan libres
       `42295` a `42299` y todos los demás estados del rango
 
+**De la tarea [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11):**
+
+- [ ] **Un archivo baja dentro del sobre, en base64, y no como bytes crudos.** Es la primera vez que
+      el contrato entrega un archivo, y vale también para la descarga de la [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10). Devolver el PDF
+      directamente obligaría a la misma ruta a tener **dos formas de respuesta** —el archivo cuando
+      sale bien y el sobre cuando sale un `40300` o un `40400`—, y el front tendría que mirar el
+      `Content-Type` antes de saber cómo leer lo que le llegó. Se paga un 33 % de tamaño y **el tope
+      queda escrito: 5 MB**, el mismo del adjunto de subida. Si la exportación completa del
+      [13](docs/13-respaldo-y-exportacion.md) llega a pesar más, esta decisión no le sirve y necesita la suya
+- [ ] **El recargo de hora extra viaja en la liquidación porque no tiene dónde vivir.** El
+      [06 §6.1](docs/06-nomina-y-capacidad-de-pago.md#61-fórmulas) lo llama «configurable por empleada» y `empleados` **no tiene columna** para él;
+      `nomina_detalle` guarda el resultado, `valor_horas_extra`, no la tarifa. Se decidió lo mínimo:
+      el formulario `liquidacion` lo pide con 25 % puesto, que es la cifra del ejemplo del documento.
+      Si quien dirige lo quiere en la ficha, son una columna y una tarea de Base
+- [ ] **El importador no guarda historial, y por eso no necesita tabla.** La matriz del
+      [03](docs/03-requisitos-y-bdd.md) nombra una tabla `importaciones` que **ningún documento define** —lo mismo que pasaba con
+      `adjuntos`—. En vez de inventarla, la importación se parte en dos llamadas sin estado entre
+      ellas: la consulta lee y no escribe, y `PUT /api/v0/importaciones/{id}` vuelve a recibir el
+      archivo y escribe. El mismo id confirmado dos veces responde `40900` por la idempotencia que ya
+      existe ([ADR-020](docs/adr/ADR-020-idempotencia.md)), y los duplicados del [BDD-21-3](docs/03-requisitos-y-bdd.md#bdd-21-3) se detectan contra `movimientos`. Si se
+      quiere un historial de importaciones, es una tarea nueva
+- [ ] **El simulador sin pro-labore responde `40950`, y a Operación le responde lo mismo.** El
+      [BDD-18-2](docs/03-requisitos-y-bdd.md#bdd-18-2) pide bloquearlo sin pro-labore y el [BDD-02-3](docs/03-requisitos-y-bdd.md#bdd-02-3) pide que a Operación la rechace la base.
+      `prolabore_config` lleva RLS y le devuelve cero filas, así que **desde la API los dos casos son
+      indistinguibles**: contestar `40300` a uno y `40950` al otro sería que la API vuelva a decidir un
+      permiso, que es lo que el [ADR-006](docs/adr/ADR-006-rls-por-rol.md) le prohíbe. Es la misma lectura que hizo la [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) con los
+      conjuntos vacíos de `activos` y `sobres_config`
+- [ ] **Tres reglas que el contrato promete y `empleados` y `adelantos` no imponen.** La fecha de
+      retiro anterior a la de ingreso responde `42250` y **no hay `CHECK` que lo rechace**; y las dos
+      tablas tienen las tres columnas de anulación **sin el `CHECK anulacion_con_motivo`** que
+      `movimientos` sí lleva ([04 §4.3](docs/04-modelo-de-datos.md#43-movimientos--el-libro-único)), así que hoy se puede anular sin motivo y sin autor. Son del
+      mismo tipo que las cuatro que recuperó el carril Base ([2.21](docs/08-plan-de-desarrollo.md#tarea-2-21), [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22), [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) y [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11)) y no están en
+      ninguna tarea
+- [ ] **Cuatro operaciones de empleada, y ningún RF pide tres de ellas.** El [RF-54](docs/03-requisitos-y-bdd.md#rf-54) solo pide
+      registrarlas. La edición, el retiro y la anulación entran porque **las columnas ya existen**
+      —`fecha_retiro` y las tres de anulación— y sin operación se quedarían muertas; lo mismo el
+      cierre del período de nómina, que es lo único que escribiría `cerrado_en`. Anular un activo o un
+      aporte se quedó sin ruta en la [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) por el criterio contrario, y conviene que quien dirige elija
+      uno de los dos para todo el contrato
+- [ ] **Una cotización no se edita: se anula y se emite otra.** Es un papel que ya se le pasó al
+      cliente, y cambiarle el precio por debajo dejaría el PDF que él tiene diciendo otra cosa. El
+      catálogo de productos sí se edita, porque nadie se lo llevó impreso
+- [ ] **El importador tiene pantalla, y es Configuración**, que es lo que la matriz del [03](docs/03-requisitos-y-bdd.md) le pone a
+      [RF-64](docs/03-requisitos-y-bdd.md#rf-64)–[RF-70](docs/03-requisitos-y-bdd.md#rf-70) y el [10 §2.1](docs/10-ux-y-mockups.md#21-navegación-por-rol) le da a Gerencia. **El mockup no la dibuja** y la lista de secciones del
+      contrato tampoco la tiene —son ocho y Configuración no está—, que es la discrepancia ya anotada
+      más arriba. El Front la diseña antes de construir la [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10)
+- [ ] **Devolver un adjunto ya tiene forma y sigue sin operación.** El `openapi.json` decía «devolver
+      el archivo todavía no está acordado»; ahora dice que la forma es `Documento` y que la operación
+      es de la [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6). No se metió aquí porque es del rango de movimientos y del carril de otra tarea
+- [ ] ⚡ **Entró una tarea nueva al plan, la [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12), y el total pasa de 140 a 141.** `cotizaciones` y
+      `cotizacion_lineas` están en el catálogo y el diagrama del [04](docs/04-modelo-de-datos.md) sin `CREATE TABLE`, el
+      [16 §9](docs/16-base-de-datos-y-snapshots.md#9-límites-conocidos-heredados-del-doc-04) decía que quedaban pendientes de especificar y **ninguna tarea las creaba**: la [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) las
+      daba por hechas. Es lo mismo que le pasó a `adjuntos` con el contrato de movimientos, y se
+      resolvió igual. La [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) pasa a depender de ella
+- [ ] 🔒 **La [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) no cabía en el medio día que el [08](docs/08-plan-de-desarrollo.md) le calcula, y no se recortó.** Son cuatro
+      módulos y 25 operaciones, contra las 9 de pedidos y las 6 de productos, y como la [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) sale de los
+      documentos en vez de transcribir un dominio ya construido. La cifra del plan no se corrige
+      —es la estimación con que se planificó—; queda dicha en `plan/47-el-contrato-de-nomina-y-cotizaciones.md`
+- [ ] **El [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) dice cubrir hasta el [RF-69](docs/03-requisitos-y-bdd.md#rf-69) y este contrato llega al [RF-65](docs/03-requisitos-y-bdd.md#rf-65).** Los cuatro que
+      faltan no son suyos: la exportación ([RF-66](docs/03-requisitos-y-bdd.md#rf-66)) es de la [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10), la bitácora ([RF-67](docs/03-requisitos-y-bdd.md#rf-67)) ya está en el
+      contrato desde el `0.4.0`, «ver anulados» ([RF-68](docs/03-requisitos-y-bdd.md#rf-68)) viaja como `incluirAnulados` en cada consulta,
+      y la PWA ([RF-69](docs/03-requisitos-y-bdd.md#rf-69)) no es contrato: es la [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1), que ya está hecha
 **De la versión en cada PR ([ADR-034](docs/adr/ADR-034-la-version-sube-en-cada-pr.md)):**
 
 - [ ] **Sin sesión, `esquema` responde `desconocido`.** La consulta de versión es anónima —el front la

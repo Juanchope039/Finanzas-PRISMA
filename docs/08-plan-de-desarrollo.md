@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [5.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -11,7 +11,7 @@ cuánto dura el desarrollo según cuántos carriles avancen a la vez. Un carril 
 persona, un equipo o una sesión de trabajo; al plan le da igual.
 
 <!-- generado:plan-resumen · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**28,3 semanas con 1 carril**, **17,1 semanas con 2 carriles** y **14,1 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
+**28,4 semanas con 1 carril**, **17,2 semanas con 2 carriles** y **14,1 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
 <!-- /generado:plan-resumen -->
 
 > **El plan de 7 sprints daba por hecho que no había backend.**
@@ -119,13 +119,13 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 ### 1.1 Cuánto dura con 1, 2 o 3 carriles activos
 
 <!-- generado:plan-calendario · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**168 días de trabajo en 140 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
+**169 días de trabajo en 141 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
 
 | Carriles activos | Desarrollo | Estabilización | Total | Frente a 1 carril |
 |:---:|---:|---:|---:|---:|
-| 1 | 25,3 semanas | 3 semanas | **28,3 semanas** | — |
-| 2 | 14,1 semanas | 3 semanas | **17,1 semanas** | −11,2 semanas |
-| 3 | 11,1 semanas | 3 semanas | **14,1 semanas** | −14,2 semanas |
+| 1 | 25,4 semanas | 3 semanas | **28,4 semanas** | — |
+| 2 | 14,2 semanas | 3 semanas | **17,2 semanas** | −11,3 semanas |
+| 3 | 11,1 semanas | 3 semanas | **14,1 semanas** | −14,3 semanas |
 
 | Hito | 1 carril | 2 carriles | 3 carriles |
 |---|:---:|:---:|:---:|
@@ -185,7 +185,7 @@ gantt
     S6 :api6, 2026-11-06, 2026-11-17
     S7 :api7, 2026-10-29, 2026-11-19
     S8 :api8, 2026-10-29, 2026-12-02
-    S9 :api9, 2026-11-20, 2026-11-30
+    S9 :api9, 2026-11-21, 2026-11-30
 
     section Base
     S0 :base0, 2026-09-16, 2026-09-19
@@ -195,8 +195,8 @@ gantt
     S4 :base4, 2026-10-24, 2026-11-06
     S5 :base5, 2026-11-02, 2026-11-04
     S6 :base6, 2026-11-12, 2026-11-14
-    S8 :base8, 2026-11-08, 2026-11-10
-    S9 :base9, 2026-11-19, 2026-11-20
+    S8 :base8, 2026-11-08, 2026-11-20
+    S9 :base9, 2026-11-20, 2026-11-21
 
     section Front
     S0 :front0, 2026-09-15, 2026-10-03
@@ -206,7 +206,7 @@ gantt
     S5 :front5, 2026-11-06, 2026-11-07
     S6 :front6, 2026-11-09, 2026-11-16
     S7 :front7, 2026-11-16, 2026-11-18
-    S9 :front9, 2026-11-18, 2026-11-23
+    S9 :front9, 2026-11-19, 2026-11-24
 
     section Contrato
     S1 :contrato1, 2026-09-24, 2026-09-25
@@ -655,19 +655,20 @@ pro-labore sí.
 | <a id="tarea-8-5"></a>8.5 | Simulador de capacidad de pago con controles en vivo | API, Front | [5.6](#tarea-5-6), [6.5](#tarea-6-5), [7.3](#tarea-7-3), [8.11](#tarea-8-11) | 2,5 |
 | <a id="tarea-8-6"></a>8.6 | Traducción a unidades de producto por vender | API | [5.6](#tarea-5-6), [8.5](#tarea-8-5) | 1 |
 | <a id="tarea-8-7"></a>8.7 | Indicador de horas pagadas contra facturadas | API, Front | [5.6](#tarea-5-6), [8.2](#tarea-8-2) | 1 |
-| <a id="tarea-8-8"></a>8.8 | Cotizaciones y remisiones en PDF con logo | API, Front | [4.3](#tarea-4-3), [5.2](#tarea-5-2), [8.11](#tarea-8-11) | 2 |
-| <a id="tarea-8-9"></a>8.9 | Validador de anticipo mínimo | API | [4.4](#tarea-4-4), [5.3](#tarea-5-3) | 1 |
-| <a id="tarea-8-10"></a>8.10 | Importador de CSV con mapeo y reporte de errores | API, Front | [3.4](#tarea-3-4), [4.3](#tarea-4-3) | 2 |
+| <a id="tarea-8-8"></a>8.8 | Cotizaciones y remisiones en PDF con logo | API, Front | [4.3](#tarea-4-3), [5.2](#tarea-5-2), [8.11](#tarea-8-11), [8.12](#tarea-8-12) | 2 |
+| <a id="tarea-8-9"></a>8.9 | Validador de anticipo mínimo | API | [4.4](#tarea-4-4), [5.3](#tarea-5-3), [8.11](#tarea-8-11) | 1 |
+| <a id="tarea-8-10"></a>8.10 | Importador de CSV con mapeo y reporte de errores | API, Front | [3.4](#tarea-3-4), [4.3](#tarea-4-3), [8.11](#tarea-8-11) | 2 |
 | <a id="tarea-8-11"></a>8.11 | **Contrato de nómina, simulador, cotizaciones e importación** | Contrato | [2.19](#tarea-2-19) | 0,5 |
+| <a id="tarea-8-12"></a>8.12 | Tablas `cotizaciones` y `cotizacion_lineas`: especificarlas en el [04](04-modelo-de-datos.md) y escribir su migración | Base | [1.1](#tarea-1-1), [8.11](#tarea-8-11) | 1 |
 
 <!-- generado:plan-oleadas-8 · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **Qué puede ir a la vez en este sprint.** Cada oleada espera solo a las anteriores; dentro de una oleada, todo arranca junto.
 
 | Oleada | Tareas | Carriles | Días |
 |:---:|---|---|---:|
-| 1 | [8.9](#tarea-8-9) · [8.10](#tarea-8-10) · [8.11](#tarea-8-11) | API, Contrato | 3,5 |
-| 2 | [8.1](#tarea-8-1) · [8.5](#tarea-8-5) · [8.8](#tarea-8-8) | API | 5,5 |
-| 3 | [8.3](#tarea-8-3) · [8.6](#tarea-8-6) | API | 2,5 |
+| 1 | [8.11](#tarea-8-11) | Contrato | 0,5 |
+| 2 | [8.1](#tarea-8-1) · [8.5](#tarea-8-5) · [8.9](#tarea-8-9) · [8.10](#tarea-8-10) · [8.12](#tarea-8-12) | API, Base | 7,5 |
+| 3 | [8.3](#tarea-8-3) · [8.6](#tarea-8-6) · [8.8](#tarea-8-8) | API | 4,5 |
 | 4 | [8.2](#tarea-8-2) | Base | 2 |
 | 5 | [8.4](#tarea-8-4) · [8.7](#tarea-8-7) | API | 2,5 |
 <!-- /generado:plan-oleadas-8 -->
@@ -887,7 +888,7 @@ El [Sprint 9](#sprint-9) va de último porque endurece lo que ya existe. No es r
 «funciona en mi computador» de «Gerencia lo aprobó y el taller lo tiene».
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.14.0") · [ADR-011](adr/ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
+**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.15.0") · [ADR-011](adr/ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
 <!-- /generado:referenciado-desde -->
 
 ---
