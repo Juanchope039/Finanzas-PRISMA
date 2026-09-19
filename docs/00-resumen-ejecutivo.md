@@ -151,7 +151,7 @@ base de datos y las pantallas. Con más carriles se termina antes, pero no en la
 que van en cadena y la puesta en marcha no se parte.
 
 <!-- generado:plan-resumen · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**28,4 semanas con 1 carril**, **17,2 semanas con 2 carriles** y **14,1 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](08-plan-de-desarrollo.md#1-cronograma-por-carriles).
+**28,4 semanas con 1 carril**, **17,2 semanas con 2 carriles** y **14,2 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](08-plan-de-desarrollo.md#1-cronograma-por-carriles).
 <!-- /generado:plan-resumen -->
 
 | Sprint | Entrega |
@@ -171,13 +171,13 @@ que van en cadena y la puesta en marcha no se parte.
 **En qué semana llega cada hito**, según cuántos carriles avancen a la vez:
 
 <!-- generado:plan-calendario · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**169 días de trabajo en 141 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
+**169 días de trabajo en 142 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
 
 | Carriles activos | Desarrollo | Estabilización | Total | Frente a 1 carril |
 |:---:|---:|---:|---:|---:|
 | 1 | 25,4 semanas | 3 semanas | **28,4 semanas** | — |
 | 2 | 14,2 semanas | 3 semanas | **17,2 semanas** | −11,3 semanas |
-| 3 | 11,1 semanas | 3 semanas | **14,1 semanas** | −14,3 semanas |
+| 3 | 11,2 semanas | 3 semanas | **14,2 semanas** | −14,2 semanas |
 
 | Hito | 1 carril | 2 carriles | 3 carriles |
 |---|:---:|:---:|:---:|
