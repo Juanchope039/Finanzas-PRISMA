@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [5.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -11,7 +11,7 @@ cuánto dura el desarrollo según cuántos carriles avancen a la vez. Un carril 
 persona, un equipo o una sesión de trabajo; al plan le da igual.
 
 <!-- generado:plan-resumen · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**28,0 semanas con 1 carril**, **17,0 semanas con 2 carriles** y **14,1 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
+**28,1 semanas con 1 carril**, **17,0 semanas con 2 carriles** y **14,1 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
 <!-- /generado:plan-resumen -->
 
 > **El plan de 7 sprints daba por hecho que no había backend.**
@@ -119,20 +119,20 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 ### 1.1 Cuánto dura con 1, 2 o 3 carriles activos
 
 <!-- generado:plan-calendario · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**166,5 días de trabajo en 138 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
+**167 días de trabajo en 139 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
 
 | Carriles activos | Desarrollo | Estabilización | Total | Frente a 1 carril |
 |:---:|---:|---:|---:|---:|
-| 1 | 25,0 semanas | 3 semanas | **28,0 semanas** | — |
-| 2 | 14,0 semanas | 3 semanas | **17,0 semanas** | −11,0 semanas |
-| 3 | 11,1 semanas | 3 semanas | **14,1 semanas** | −13,9 semanas |
+| 1 | 25,1 semanas | 3 semanas | **28,1 semanas** | — |
+| 2 | 14,0 semanas | 3 semanas | **17,0 semanas** | −11,1 semanas |
+| 3 | 11,1 semanas | 3 semanas | **14,1 semanas** | −14,0 semanas |
 
 | Hito | 1 carril | 2 carriles | 3 carriles |
 |---|:---:|:---:|:---:|
 | [H1](#h1) · Sprint 0 | semana 4 | semana 3 | semana 3 |
 | [H2](#h2) · Sprint 1 | semana 7 | semana 5 | semana 4 |
 | [H3](#h3) · Sprint 2 | semana 11 | semana 7 | semana 6 |
-| [H4](#h4) · Sprint 3 | semana 13 | semana 8 | semana 6 |
+| [H4](#h4) · Sprint 3 | semana 14 | semana 8 | semana 6 |
 | [H5](#h5) · Sprint 4 | semana 16 | semana 9 | semana 8 |
 | [H6](#h6) · Sprint 5 | semana 17 | semana 10 | semana 8 |
 | [H7](#h7) · Sprint 6 | semana 20 | semana 12 | semana 10 |
@@ -180,43 +180,43 @@ gantt
     S1 :api1, 2026-09-22, 2026-10-07
     S2 :api2, 2026-10-07, 2026-10-24
     S3 :api3, 2026-10-09, 2026-10-26
-    S4 :api4, 2026-10-21, 2026-11-04
-    S5 :api5, 2026-10-24, 2026-11-05
+    S4 :api4, 2026-10-21, 2026-11-06
+    S5 :api5, 2026-10-24, 2026-11-07
     S6 :api6, 2026-11-06, 2026-11-17
-    S7 :api7, 2026-10-28, 2026-11-19
-    S8 :api8, 2026-11-04, 2026-12-02
-    S9 :api9, 2026-11-19, 2026-11-28
+    S7 :api7, 2026-10-28, 2026-11-18
+    S8 :api8, 2026-10-29, 2026-12-02
+    S9 :api9, 2026-11-20, 2026-11-29
 
     section Base
     S0 :base0, 2026-09-16, 2026-09-19
-    S1 :base1, 2026-09-19, 2026-10-04
-    S2 :base2, 2026-10-04, 2026-10-19
-    S3 :base3, 2026-10-14, 2026-10-21
-    S4 :base4, 2026-10-24, 2026-11-02
-    S5 :base5, 2026-10-30, 2026-10-31
+    S1 :base1, 2026-09-19, 2026-10-05
+    S2 :base2, 2026-10-05, 2026-10-20
+    S3 :base3, 2026-10-15, 2026-10-21
+    S4 :base4, 2026-10-24, 2026-11-05
+    S5 :base5, 2026-11-02, 2026-11-03
     S6 :base6, 2026-11-12, 2026-11-14
-    S8 :base8, 2026-11-08, 2026-11-10
-    S9 :base9, 2026-11-19, 2026-11-20
+    S8 :base8, 2026-11-07, 2026-11-10
+    S9 :base9, 2026-11-18, 2026-11-20
 
     section Front
     S0 :front0, 2026-09-15, 2026-10-03
     S1 :front1, 2026-09-27, 2026-10-01
     S2 :front2, 2026-10-06, 2026-10-20
     S3 :front3, 2026-10-12, 2026-10-18
-    S5 :front5, 2026-11-02, 2026-11-04
+    S5 :front5, 2026-11-05, 2026-11-06
     S6 :front6, 2026-11-10, 2026-11-16
-    S7 :front7, 2026-11-16, 2026-11-19
-    S9 :front9, 2026-11-05, 2026-11-22
+    S7 :front7, 2026-11-16, 2026-11-18
+    S9 :front9, 2026-11-18, 2026-11-22
 
     section Contrato
     S1 :contrato1, 2026-09-24, 2026-09-25
     S2 :contrato2, 2026-10-05, 2026-10-06
-    S3 :contrato3, 2026-10-11, 2026-10-12
+    S3 :contrato3, 2026-10-12, 2026-10-13
     S4 :contrato4, 2026-10-23, 2026-10-24
     S5 :contrato5, 2026-10-26, 2026-10-27
-    S6 :contrato6, 2026-10-26, 2026-10-27
-    S7 :contrato7, 2026-10-27, 2026-10-28
-    S8 :contrato8, 2026-11-04, 2026-11-05
+    S6 :contrato6, 2026-10-27, 2026-10-28
+    S7 :contrato7, 2026-10-28, 2026-10-29
+    S8 :contrato8, 2026-10-28, 2026-10-29
 
     section Decisión
     S0 :decisin0, 2026-09-15, 2026-09-16
@@ -369,6 +369,7 @@ con el sobre de tres claves y un código que está en el catálogo.
 | <a id="tarea-1-18"></a>1.18 | **Renderizador del descriptor de formulario** en el front: campos, teclado, límites y mensajes tal como llegan de la API ([RF-102](03-requisitos-y-bdd.md#rf-102)) | Front | [0.17](#tarea-0-17), [0.19](#tarea-0-19) | 2 |
 | <a id="tarea-1-19"></a>1.19 | **Cliente HTTP con `Idempotency-Key`**: la clave se genera cuando la persona decide la acción y se reutiliza en cada reintento ([ADR-020](adr/ADR-020-idempotencia.md)) | Front | [0.3](#tarea-0-3) | 1 |
 | <a id="tarea-1-20"></a>1.20 | **Decidir cómo consiguen la API y su integración continua el esquema de `prisma_db`** para las pruebas de integración: etiqueta, submódulo o imagen de PostgreSQL ([ADR-025](adr/ADR-025-cuatro-repositorios.md)) | Decisión | — | 0,5 |
+| <a id="tarea-1-21"></a>1.21 | **`anon` no toca nada**: migración que le revoca los permisos que Supabase le da por defecto sobre `public` —hoy `SELECT`, `INSERT` y `UPDATE` sobre todas las tablas— y `ALTER DEFAULT PRIVILEGES` para que las que se creen después nazcan cerradas ([04 §9.1](04-modelo-de-datos.md#91-anon-no-toca-nada)). `authenticated` no se toca: es el rol que la API asume en cada transacción. Apagar la Data API en la consola no basta, porque no viaja al ambiente siguiente | Base | [1.1](#tarea-1-1) | 0,5 |
 
 <!-- generado:plan-oleadas-1 · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **Qué puede ir a la vez en este sprint.** Cada oleada espera solo a las anteriores; dentro de una oleada, todo arranca junto.
@@ -376,7 +377,7 @@ con el sobre de tres claves y un código que está en el catálogo.
 | Oleada | Tareas | Carriles | Días |
 |:---:|---|---|---:|
 | 1 | [1.1](#tarea-1-1) · [1.9](#tarea-1-9) · [1.17](#tarea-1-17) · [1.18](#tarea-1-18) · [1.19](#tarea-1-19) · [1.20](#tarea-1-20) | Base, API, Contrato, Front, Decisión | 7,5 |
-| 2 | [1.2](#tarea-1-2) · [1.3](#tarea-1-3) · [1.4](#tarea-1-4) · [1.8](#tarea-1-8) · [1.11](#tarea-1-11) · [1.13](#tarea-1-13) | Base, API | 6 |
+| 2 | [1.2](#tarea-1-2) · [1.3](#tarea-1-3) · [1.4](#tarea-1-4) · [1.8](#tarea-1-8) · [1.11](#tarea-1-11) · [1.13](#tarea-1-13) · [1.21](#tarea-1-21) | Base, API | 6,5 |
 | 3 | [1.5](#tarea-1-5) · [1.6](#tarea-1-6) · [1.12](#tarea-1-12) · [1.16](#tarea-1-16) | Base, API | 3 |
 | 4 | [1.7](#tarea-1-7) · [1.14](#tarea-1-14) | API | 3,5 |
 | 5 | [1.10](#tarea-1-10) · [1.15](#tarea-1-15) | API | 2,5 |

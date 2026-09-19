@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/21-trabajo-en-paralelo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Paralelo](INDICE.md#etiqueta-paralelo) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/21-trabajo-en-paralelo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Paralelo](INDICE.md#etiqueta-paralelo) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo avanza PRISMA en varios carriles a la vez sin que se bloqueen ni se pisen. **Un carril no es
 una persona:** es un frente de trabajo, y puede llevarlo una persona, un equipo o una sesión de
@@ -266,9 +266,13 @@ sabe resolver solo.
 - **Cada carril desarrolla contra su propio PostgreSQL**, levantado con Docker (`reset-local.ps1` de
   `prisma_db`). Nadie desarrolla contra una base compartida: una prueba que falla por lo que otro
   guardó hace diez minutos se termina ignorando, y con ella se ignoran las de verdad.
-- **Excepción vigente:** en la máquina de desarrollo Docker no arranca, y la base de dev es el
-  proyecto de Supabase en la nube ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)). Con un carril no estorba. **Con dos o más, cada carril
-  que toque la base usa su propio proyecto gratuito de Supabase**, hasta que Docker vuelva.
+- **Docker ya arranca**, así que la excepción que mandaba a cada carril a su propio proyecto gratuito
+  de Supabase se acabó: no quedan proyectos gratuitos que repartir —dev y qa gastaron los dos
+  ([§7.1](../TODO.md#71-el-expediente-de-uat-y-prod) del tablero)— y desarrollar contra la nube era desarrollar contra un ambiente. **Cada
+  carril que toque la base levanta su propio Supabase local**, con otro `project_id` y otros puertos
+  en una copia de `supabase/config.toml` que no se versiona. Sin eso, API y Base comparten el
+  `54321` y el `54322`, y el `reset` de uno rompe las pruebas del otro a mitad de camino —y de paso
+  la API de integración contra la que trabaja el Front—.
 - **dev, qa, uat y prod siguen siendo los cuatro de siempre.** No hay ambiente por carril.
 - **La puerta es `develop` con la integración continua en verde** hasta el [Sprint 9](08-plan-de-desarrollo.md#sprint-9), y **qa** desde
   entonces. Lo de todos los carriles tiene que estar verde junto antes de promover.
@@ -296,6 +300,13 @@ Lo es cuando el tablero la marca ⚡ —todo lo que necesita ya está hecho—, 
 en revisión y no toca los mismos archivos. Entonces su rama sale de `develop` sin esperar. En
 cualquier otro caso, empezar antes es construir sobre algo que la revisión todavía puede cambiar, y
 rehacerlo cuesta más de lo que ahorró no esperar.
+
+**Y la marca ⚡ se lee por mitades.** Una tarea de dos carriles —«API, Front»— se marca cuando están
+hechas las dos mitades de todo lo que necesita, y eso hace esperar a la mitad API por una mitad Front
+que va detrás por diseño y que no usa. Así que **la mitad de un carril puede empezar en cuanto están
+fusionadas las mitades de su propio carril —y las tareas de un carril solo— de todo lo que necesita**,
+aunque el tablero todavía no marque la tarea. La tarea se marca hecha cuando aterrizan sus dos
+mitades, no antes. Lo demás del paso 6 no cambia: se espera igual a que acepten el PR.
 
 - **La rama se empuja siempre**, en cuanto tiene su primer commit y sin esperar a que alguien lo
   pida, también cuando el commit no es una tarea del plan —documentación, herramientas, un arreglo
@@ -362,8 +373,11 @@ conflicto en un bloque generado no se resuelve a mano sino volviendo a correr la
    carriles.
 3. **Si el contrato se publica como paquete** (artefacto en un repositorio Maven —que es el
    formato, lo publique Gradle o quien sea— y paquete de Dart) o se consume por etiqueta de git.
-   Lo segundo es más simple y alcanza para dos o tres carriles.
-4. **Quién aprueba un cambio de contrato** cuando los carriles no se ponen de acuerdo.
+   **Decidido: por etiqueta**, `contrato-vX.Y.Z` en cada fusión que cambie `openapi.json` ([TODO §7](../TODO.md#7-decisiones-pendientes),
+   fila 8). El paquete pedía un registro y unas credenciales que no existen, para resolver unas
+   dependencias que nadie tiene.
+4. **Quién aprueba un cambio de contrato** cuando los carriles no se ponen de acuerdo. **Decidido:
+   quien dirige**, que además es quien revisa los PR (fila 9).
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **🔗 Referenciado desde:** [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.13.0") · [ADR-023](adr/ADR-023-tres-repositorios.md "ADR-023 · Tres repositorios y el contrato como artefacto versionado") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
