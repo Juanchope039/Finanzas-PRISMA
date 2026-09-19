@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [7.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -135,7 +135,7 @@ fecha de hoy, correr `enlazar` y luego `verificar`. **Los bloques `<!-- generado
 a mano**, ni las marcas ⚡ 🔒 ⏭️ de [`TODO.md`](TODO.md); 🚧 y ✏️ sí las pone una persona.
 
 **El plan manda sobre el tablero.** [`docs/08-plan-de-desarrollo.md`](docs/08-plan-de-desarrollo.md) dice qué hay que hacer, en qué
-carril y de qué depende; [`TODO.md`](TODO.md) dice en qué va. Los dos tienen que enumerar las mismas 134 tareas y
+carril y de qué depende; [`TODO.md`](TODO.md) dice en qué va. Los dos tienen que enumerar las mismas 138 tareas y
 la verificación falla si no. **Una tarea nueva entra primero al plan**, nunca al tablero.
 
 **Nunca `git add -A` en este repositorio**: hay archivos sueltos en la raíz que no son del proyecto.
@@ -270,8 +270,9 @@ lo que destraba la gestión de clientes ([4.2](docs/08-plan-de-desarrollo.md#tar
 registra con `PUT` a su propio id, se anula con motivo, se le adjunta el soporte y se lee con
 filtros, y el rango `20`–`29` pasó de tres códigos a nueve. Con eso se destraban a la vez los
 endpoints de movimientos ([3.4](docs/08-plan-de-desarrollo.md#tarea-3-4)) y el registro rápido del front ([3.5](docs/08-plan-de-desarrollo.md#tarea-3-5)); y entró una tarea que no
-existía, la tabla `adjuntos` ([3.14](docs/08-plan-de-desarrollo.md#tarea-3-14)), que la [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6) y la [4.8](docs/08-plan-de-desarrollo.md#tarea-4-8) daban por hecha. Van 57 de las 134
-tareas.
+existía, la tabla `adjuntos` ([3.14](docs/08-plan-de-desarrollo.md#tarea-3-14)), que la [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6) y la [4.8](docs/08-plan-de-desarrollo.md#tarea-4-8) daban por hecha. **Y el carril Base
+recuperó cuatro tareas que nadie había presupuestado** ([2.21](docs/08-plan-de-desarrollo.md#tarea-2-21), [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22), [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) y [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11)): reglas que el
+contrato ya promete y la base todavía no impone. Van 57 de las 138 tareas.
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.

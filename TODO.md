@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -25,7 +25,7 @@ Cada tarea dice su **carril**: **API** (`prisma_api`), **Base** (`prisma_db`), *
 
 ## 1. Hecho, en progreso y pendiente
 
-Las tres preguntas de siempre. Las secciones 2 a 6 enumeran **las 134 tareas del plan**, una por una
+Las tres preguntas de siempre. Las secciones 2 a 6 enumeran **las 138 tareas del plan**, una por una
 y con su marca; aquí está el resumen. Que no falte ninguna no depende de la memoria de nadie: la
 herramienta compara el tablero con el plan y la verificación falla si alguna no está.
 
@@ -36,15 +36,15 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 16 | 2 | 1 | 3,5 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 17 | 0 | 3 | 4 |
-| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 20 | 13 | 0 | 7 | 7,5 |
-| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 14 | 5 | 0 | 9 | 11 |
-| [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 2 | 0 | 8 | 10,5 |
+| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 13 | 0 | 9 | 9,5 |
+| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 15 | 5 | 0 | 10 | 11,5 |
+| [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 2 | 0 | 9 | 11 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 3 | 0 | 7 | 7 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 0 | 0 | 10 | 15 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 11 | 1 | 0 | 10 | 9,5 |
-| **Total** | **134** | **57** | **2** | **75** | **96,5** |
+| **Total** | **138** | **57** | **2** | **79** | **99,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -122,8 +122,8 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) · [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
-| **Base** | [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) |
+| **API** | [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) · [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
+| **Base** | [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [2.21](docs/08-plan-de-desarrollo.md#tarea-2-21) · [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) |
 | **Front** | [3.5](docs/08-plan-de-desarrollo.md#tarea-3-5) |
 | **Contrato** | [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
@@ -132,13 +132,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **77 tareas y 96,5 días de trabajo** de 134 tareas del plan.
+Quedan **81 tareas y 99,5 días de trabajo** de 138 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 14,5 semanas | **17,5 semanas** |
-| 2 | 8,2 semanas | **11,2 semanas** |
-| 3 | 6,6 semanas | **9,6 semanas** |
+| 1 | 15,0 semanas | **18,0 semanas** |
+| 2 | 8,3 semanas | **11,3 semanas** |
+| 3 | 6,8 semanas | **9,8 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -398,8 +398,8 @@ hasta aplicarlo y probarlo.
       en la API**: quien decide si Gerencia puede crear es `usuarios_insercion`, y al último usuario
       de Gerencia lo rechaza un trigger que estaba puesto desde el esquema inicial. El descriptor
       estrena `opciones` y `origen`, que el contrato declaraba y ningún formulario usaba
-- [ ] ⚡ [**2.8**](docs/08-plan-de-desarrollo.md#tarea-2-8) Catálogo de cargos · API, Front
-- [ ] ⚡ [**2.9**](docs/08-plan-de-desarrollo.md#tarea-2-9) Registro de cada inicio de sesión con fecha, dispositivo e IP · API, Base
+- [ ] 🔒 [**2.8**](docs/08-plan-de-desarrollo.md#tarea-2-8) Catálogo de cargos · API, Front
+- [ ] 🔒 [**2.9**](docs/08-plan-de-desarrollo.md#tarea-2-9) Registro de cada inicio de sesión con fecha, dispositivo e IP · API, Base
 - [x] [**2.10**](docs/08-plan-de-desarrollo.md#tarea-2-10) Panel «Acerca de» ([RF-100](docs/03-requisitos-y-bdd.md#rf-100)) · Front, API — los seis datos de [19 §5.3](docs/19-ambientes-y-entrega.md#53-el-panel-acerca-de), y lo que
       no se pudo consultar lo dice en vez de inventarlo
 - [ ] 🔒 [**2.11**](docs/08-plan-de-desarrollo.md#tarea-2-11) La prueba de permisos del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1), también contra la base de qa · API
@@ -414,7 +414,7 @@ hasta aplicarlo y probarlo.
       prueba de frontera falla si alguien escribe una en `lib/`. Y con ella el filtro de firma
       **publica la identidad**, que es lo que destraba el registro de idempotencia: llevaba desde
       la [1.14](docs/08-plan-de-desarrollo.md#tarea-1-14) escrito y sin usarse porque ninguna petición traía identidad
-- [ ] ⚡ [**2.15**](docs/08-plan-de-desarrollo.md#tarea-2-15) Tabla única de usuarios activos y desactivados ([RF-84](docs/03-requisitos-y-bdd.md#rf-84) a [RF-87](docs/03-requisitos-y-bdd.md#rf-87)) · API, Front
+- [ ] 🔒 [**2.15**](docs/08-plan-de-desarrollo.md#tarea-2-15) Tabla única de usuarios activos y desactivados ([RF-84](docs/03-requisitos-y-bdd.md#rf-84) a [RF-87](docs/03-requisitos-y-bdd.md#rf-87)) · API, Front
 - [ ] 🔒 [**2.16**](docs/08-plan-de-desarrollo.md#tarea-2-16) Bitácora de cambios y reversión sin borrar ([RF-88](docs/03-requisitos-y-bdd.md#rf-88), [RF-89](docs/03-requisitos-y-bdd.md#rf-89), [RF-91](docs/03-requisitos-y-bdd.md#rf-91)) · Base, API, Front
 - [ ] ⚡ [**2.17**](docs/08-plan-de-desarrollo.md#tarea-2-17) Cambio de clave obligatorio al reactivar ([RF-90](docs/03-requisitos-y-bdd.md#rf-90)) · API, Front
 - [x] [**2.18**](docs/08-plan-de-desarrollo.md#tarea-2-18) Vista previa de Operación para Gerencia ([RF-92](docs/03-requisitos-y-bdd.md#rf-92) a [RF-94](docs/03-requisitos-y-bdd.md#rf-94)) · Front, API — el
@@ -436,6 +436,10 @@ hasta aplicarlo y probarlo.
       `/navegacion`, `/usuarios`, `/cargos` y `/bitacora`, siete formularios más y los códigos `40100`
       a `40104`, `40301`, `40302`, `40910` a `40913` y `42210` a `42214`. El canal firmado va con sus
       tres cabeceras `X-Prisma-`; cómo se arma la firma, al byte, vive en [20 §6.2](docs/20-contrato-de-api.md#62-cómo-se-arma-la-firma) y no se copia aquí
+- [ ] ⚡ [**2.21**](docs/08-plan-de-desarrollo.md#tarea-2-21) Auditoría de `usuarios` y eventos con nombre · Base — sin ella la bitácora
+      solo puede enseñar filas de `cargos`, y la esperan la [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9), la [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) y la [2.16](docs/08-plan-de-desarrollo.md#tarea-2-16)
+- [ ] ⚡ [**2.22**](docs/08-plan-de-desarrollo.md#tarea-2-22) `cargos`: nombre único sin mayúsculas y el cargo que no se desactiva · Base — dos
+      códigos que el contrato promete desde el `0.4.0` y que hoy no tienen regla en la base
 
 ---
 
@@ -471,6 +475,9 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       anular con motivo, adjuntar el soporte y el libro con filtros; ocho esquemas, el formulario
       `movimiento` y seis códigos del rango 20-29. Contrato `0.11.0`
 - [ ] ⚡ [**3.14**](docs/08-plan-de-desarrollo.md#tarea-3-14) Tabla `adjuntos` y bucket de soportes · Base
+- [ ] ⚡ [**3.15**](docs/08-plan-de-desarrollo.md#tarea-3-15) `movimientos`: destino solo en transferencias, origen distinto del destino y la
+      fecha contra el día de Bogotá · Base — las dos primeras solo las rechaza hoy el dominio de la
+      API, y una transferencia a la misma cuenta **baja el saldo** en `v_saldos_cuenta`
 
 **[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
 
@@ -535,6 +542,8 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [x] [**4.10**](docs/08-plan-de-desarrollo.md#tarea-4-10) Contrato de clientes, pedidos y anticipos · Contrato — v0.10.0:
       nueve operaciones, catorce esquemas y nueve códigos que estrenan el rango `30`–`39`. La entrega
       recibe lo que recibe `fn_entregar_pedido` y nada más; cancelar y anular son dos operaciones
+- [ ] ⚡ [**4.11**](docs/08-plan-de-desarrollo.md#tarea-4-11) `pedidos`: el motivo de la cancelación y el destino del anticipo · Base — el
+      contrato los declara desde el `0.10.0` y la tabla no tiene dónde guardarlos; la [4.9](docs/08-plan-de-desarrollo.md#tarea-4-9) los espera
 
 **[Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Cotizador**
 
@@ -731,6 +740,14 @@ a `anon`.
   «solo Gerencia» del contrato de la [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) no lo puede imponer la base, y quedaría en un `if` de
   la API, que es justo lo que [ADR-006](docs/adr/ADR-006-rls-por-rol.md) evita. La [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) tiene que decidirlo: una política de
   `INSERT` sobre `cuentas` —y otra sobre `categorias`— o dejar dicho por qué aquí sí basta la API.
+- **`fn_auditar` lee `OLD.anulado_en` en cinco tablas que no tienen esa columna**, y hay que
+  comprobarlo contra una base antes de arreglarlo. Son `costos_producto`, `prolabore_config`,
+  `nomina_detalle`, `sobres_config` y `cierres_mensuales`: leyendo la función, un `UPDATE` sobre
+  cualquiera falla con `42703`, que además la API no sabe traducir. **Nada lo caza hoy:**
+  `verificar-base.sql` solo actualiza `cargos`, y la semilla corre con los triggers apagados. La
+  prueba es un `UPDATE` con sesión de Gerencia sobre una fila de cada una; el arreglo lleva migración
+  propia, versión de esquema y una comprobación por tabla auditada. **Bloquea a la [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5)**, que anula
+  costos, y a la [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8), la [8.2](docs/08-plan-de-desarrollo.md#tarea-8-2) y las 7.x.
 - **Las reglas del dominio todavía no tienen código del catálogo.** `Movimiento`, `Pedido` y
   `Costeo` rechazan lo que no se puede registrar con excepciones de Java, y hoy eso saldría como
   `50000`, «algo salió mal». Las de `Movimiento` y `Pedido` **ya tienen nombre y mensaje acordados**
@@ -1343,7 +1360,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       pero tienen etiquetas y mensajes distintos. Aquí se declara el de desactivar una persona;
       como `@Formulario` es por clase, las tareas [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8), [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) y [2.16](docs/08-plan-de-desarrollo.md#tarea-2-16) van a necesitar una clase cada
       una, y entonces sus esquemas en el OpenAPI dejarán de llamarse todos `Motivo`
-- [ ] ⚡ **`cargos-asignables` entra con esta tarea y no con la [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8)**, que es la del catálogo de
+- [ ] 🔒 **`cargos-asignables` entra con esta tarea y no con la [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8)**, que es la del catálogo de
       cargos. Es el `origen` declarado del campo `cargoId`: sin ella el formulario de alta no se
       puede pintar, y esperar a la 2.8 habría dejado la 2.7 sin desplegable
 - [ ] **El tipo de campo `lista` pasa a admitir `UUID` además de `String`.** Hay dos clases de
@@ -1575,6 +1592,36 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       foránea trae la tabla y la restricción, no la columna, y deducirla del nombre sería adivinar;
       un `CHECK` de tabla es una regla entre columnas y no tiene una sola a la que apuntar. Salen
       como `42200` sin `data.errores`, hasta que el contrato de cada módulo diga a qué campo van
+
+**De las cuatro tareas de Base ([2.21](docs/08-plan-de-desarrollo.md#tarea-2-21), [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22), [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) y [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11)):**
+
+- [ ] **Los eventos con nombre los escribe la función y no el trigger de fila**, y eso se aparta de
+      la hoja de ruta del carril, que se los pedía a la variante del trigger. No puede, por dos
+      razones: **el motivo de una reactivación no está en la fila** —reactivar deja las tres columnas
+      `desactivado_*` en `NULL`, y un trigger solo ve `OLD` y `NEW`— y **un `UPDATE` que cambia el
+      nombre y el cargo a la vez tiene que dejar dos entradas**, porque el contrato y el mockup
+      pintan una por campo con su «de → a». El [04 §5.4](docs/04-modelo-de-datos.md#54-auditoría-por-triggers) ya repartía así el trabajo
+- [ ] **Son cinco acciones nuevas del `CHECK` y no tres.** A las de `usuarios` —`nombre_cambiado`,
+      `cargo_cambiado` y `tipo_cambiado`— se suman las dos del catálogo, `cargo_renombrado` y
+      `cargo_reactivado`: al cruzar los doce eventos del contrato contra `auditoria_accion_valida`
+      faltaban las cinco. Sin ellas, renombrar y reactivar un cargo llegan a la bitácora como
+      `UPDATE`, que es justo lo que no distingue una cosa de la otra
+- [ ] **`auditoria` gana una columna `motivo`**, en vez de guardarlo dentro de `datos_despues`. El
+      contrato lo declara como campo propio de una entrada y el mockup lo captura aparte de los
+      valores de antes y después; en el JSON habría que adivinar dónde está según la acción
+- [ ] **`cargos.nombre` pasa a `CITEXT` y no a un índice sobre `lower(nombre)`.** Así conserva el
+      nombre `cargos_nombre_key`, del que ya cuelga el `42214` en la tabla de traducción de la API, y
+      no entra ninguna extensión nueva: `usuarios.usuario` ya la usa
+- [ ] **`destino_del_anticipo` es un `TEXT` con `CHECK` y no un ENUM nuevo.** Es el precedente de
+      `aportes_retiros.clase`; los ENUM de este modelo son los que viajan por varias tablas, y de un
+      ENUM no se quita un valor. Que sea obligatorio depende del pedido y no del campo, así que eso
+      lo sigue comprobando la API con el `42235`
+- [ ] **Cancelar y anular no comparten columnas en `pedidos`.** Un pedido cancelado y después anulado
+      perdería una de las dos historias. Son cuatro columnas nuevas y un `CHECK` propio
+- [ ] ⚡ **Tres de las cuatro le dejan trabajo a la API el mismo día.** La [C-01](docs/12-pruebas-y-calidad.md#c-01) cruza `pg_constraint`
+      con la tabla de traducción **en las dos direcciones**, así que la fila no se puede poner antes
+      de que exista la migración ni después: va en el mismo PR en que la API recoja el esquema. Son
+      dos filas por la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) y dos por la [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11); la [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) no pide ninguna
 
 **De la versión en cada PR ([ADR-034](docs/adr/ADR-034-la-version-sube-en-cada-pr.md)):**
 
