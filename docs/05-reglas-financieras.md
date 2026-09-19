@@ -554,7 +554,7 @@ Caja libre  = Saldo total − Anticipos por devengar − Gastos fijos comprometi
 Si alguna de estas igualdades falla, hay un error de registro o de cálculo.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [Contrato](../contrato/README.md "Contrato de la API · v0.15.0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [Contrato](../contrato/README.md "Contrato de la API · v0.16.0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
