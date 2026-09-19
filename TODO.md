@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.8.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -772,6 +772,18 @@ a `anon`.
   prueba es un `UPDATE` con sesión de Gerencia sobre una fila de cada una; el arreglo lleva migración
   propia, versión de esquema y una comprobación por tabla auditada. **Bloquea a la [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5)**, que anula
   costos, y a la [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8), la [8.2](docs/08-plan-de-desarrollo.md#tarea-8-2) y las 7.x.
+- **Quedan 30 diferencias entre lo que sirve la API y lo acordado, y son del contrato.** El arreglo
+  de la copia fijada cerró 31 de 61 —las cabeceras de firma, que faltaban en **todas** las
+  operaciones con sesión; dos `operationId`; ocho descripciones; el `201` de crear usuario; las dos
+  etiquetas; el `cuando` del `40101`— y dejó medidas las que no son del código: los `minLength` y
+  `maxLength` que la API emite de sus `@Size` y el acordado no declara; cinco descripciones de
+  esquema que el acordado no tiene; el `style: simple` que springdoc le pone a `Set-Cookie`; la
+  etiqueta de `cargos-asignables`, donde **el acordado es el que está mal** porque `cargos` la lee
+  todo el mundo ([P-14](docs/12-pruebas-y-calidad.md#p-14)); y el `requestBody` de la navegación, que el acordado declara obligatorio y
+  el código acepta ausente —cambiarlo es una decisión, porque el front vuelve a su vista pidiéndola
+  sin cuerpo—. Las del `DescriptorDeCampo` se cierran con los tipos que le faltan: `casilla` con la
+  [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) y `numero` con la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2). **Hasta que estén, la copia fijada no puede ser el acordado byte a
+  byte**, que es lo que haría exigible la promesa del [21 §3.1](docs/21-trabajo-en-paralelo.md#31-el-punto-débil-de-tener-repositorios-separados-y-cómo-se-tapa).
 - **Las reglas del dominio todavía no tienen código del catálogo.** `Movimiento`, `Pedido` y
   `Costeo` rechazan lo que no se puede registrar con excepciones de Java, y hoy eso saldría como
   `50000`, «algo salió mal». Las de `Movimiento` y `Pedido` **ya tienen nombre y mensaje acordados**
