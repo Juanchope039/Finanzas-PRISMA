@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-19 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-19 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
@@ -20,8 +20,8 @@ capas, la regla de dependencias, cómo la identidad llega hasta PostgreSQL— es
 [`07-arquitectura.md`](07-arquitectura.md). Aquí solo está **lo que viaja por el cable**.
 
 > **Ninguna operación usa `GET`** ([ADR-030](adr/ADR-030-contrato-sin-get.md)). Toda la API cuelga
-> de `/api/v0`; las nueve lecturas viajan por `POST` bajo `/api/v0/consultas/…`, con sus datos en el
-> cuerpo y no en la URL; las diecisiete escrituras se quedan en su recurso. El `v0` es el MAJOR de
+> de `/api/v0`; las catorce lecturas viajan por `POST` bajo `/api/v0/consultas/…`, con sus datos en
+> el cuerpo y no en la URL; las treinta y una escrituras se quedan en su recurso. El `v0` es el MAJOR de
 > la API y pasa a `v1` con la primera publicación en producción ([ADR-014](adr/ADR-014-semver.md)).
 > Fuera del prefijo y fuera de la regla quedan los estáticos del front, Swagger, `/error` y las
 > sondas de Actuator: no son operaciones del contrato.
@@ -279,7 +279,10 @@ La decisión de que el front no contenga ninguna regla está en
 > acordados desde el contrato `v0.3.0`** (tarea [1.17](08-plan-de-desarrollo.md#tarea-1-17)) y la API los construye con la 1.10, junto con los
 > formularios `cuenta` y `categoria` que los usan. **El tipo `clave` entró con el contrato
 > `v0.4.0`** (tarea [2.19](08-plan-de-desarrollo.md#tarea-2-19)), porque lo necesitan los formularios `acceso` y `cambio-de-clave`: el front
-> lo pinta desde la [2.6](08-plan-de-desarrollo.md#tarea-2-6) y la API lo genera con la [2.1](08-plan-de-desarrollo.md#tarea-2-1).
+> lo pinta desde la [2.6](08-plan-de-desarrollo.md#tarea-2-6) y la API lo genera con la [2.1](08-plan-de-desarrollo.md#tarea-2-1). **Y el tipo `numero` entró con el contrato
+> `v0.12.0`** (tarea [5.10](08-plan-de-desarrollo.md#tarea-5-10)), porque los minutos de trabajo de un producto no son ninguno de los
+> seis anteriores y sin un tipo que los exprese el front no puede pintar el campo; con él, el
+> anticipo de un pedido deja de declararse `porcentaje`, que nunca existió.
 
 ```http
 POST /api/v0/consultas/formularios HTTP/1.1
@@ -326,9 +329,9 @@ sería mentir— ni `42200`, que es para datos que llegan bien formados y no pas
 |---|---|
 | `campos` llega **en el orden en que se pinta** | El front no reordena. Qué va primero es una decisión de la pantalla aprobada, no del cliente |
 | **Una clave que no aplica no viaja**, ni siquiera en `null` | Un campo sin máximo no lleva `maximo`. El front no tiene que distinguir «no hay límite» de «el límite es nulo» |
-| `tipo` es uno de `dinero`, `texto`, `fecha`, `lista`, `casilla`, `clave` | Cada uno exige un tipo concreto en la API: `dinero` solo acepta pesos enteros ([ADR-003](adr/ADR-003-dinero-entero.md)) y `casilla`, un sí o un no. Una `clave` es un texto que se pinta oculto, con un botón para mostrarlo |
-| `minimo` y `maximo` se leen según el tipo | En `dinero` son pesos; en `texto` y en `clave`, caracteres |
-| `teclado` es `numerico` o `texto` | Y no viaja en `fecha`, `lista` ni `casilla`, que se eligen y no abren teclado; una `clave` abre el de texto |
+| `tipo` es uno de `dinero`, `texto`, `fecha`, `lista`, `casilla`, `clave`, `numero` | Cada uno exige un tipo concreto en la API: `dinero` solo acepta pesos enteros ([ADR-003](adr/ADR-003-dinero-entero.md)) y `casilla`, un sí o un no. Una `clave` es un texto que se pinta oculto, con un botón para mostrarlo. Un `numero` es una cantidad que **no es plata** —los minutos de trabajo de un producto, un porcentaje—, y por eso no es `dinero`: ahí sí caben decimales |
+| `minimo` y `maximo` se leen según el tipo | En `dinero` son pesos; en `texto` y en `clave`, caracteres; en `numero`, la cantidad misma |
+| `teclado` es `numerico` o `texto` | Y no viaja en `fecha`, `lista` ni `casilla`, que se eligen y no abren teclado; una `clave` abre el de texto y un `numero`, el numérico |
 | **Una `lista` trae `opciones` o `origen`, nunca los dos ni ninguno** | Las opciones fijas —el tipo de una cuenta— viajan en el descriptor. Las que salen de datos —la categoría madre— dicen de qué ruta salen: una consulta del contrato, bajo `/api/v0/consultas/…`, cuya `data` es una lista de objetos con `id` y `nombre`, y el `id` es el valor. **El front no decide ni los valores ni a dónde pedirlos**, y la API vuelve a comprobar que lo elegido está entre ellos |
 | `mensajes` trae un texto **por cada regla que el campo tiene** | Es el mismo texto que llega en `data.errores` cuando esa regla falla en el servidor ([§8.2](#82-los-datos-no-pasan-las-reglas--42200)), y la prueba `DescriptorContraValidacionTest` lo compara palabra por palabra |
 
@@ -801,7 +804,7 @@ firma se arma igual que en una escritura, con `sha256` del cuerpo vacío; y esta
 | Con qué configuración corre cada ambiente y cómo se publica | [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [Contrato](../contrato/README.md "Contrato de la API · v0.11.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [Contrato](../contrato/README.md "Contrato de la API · v0.12.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
