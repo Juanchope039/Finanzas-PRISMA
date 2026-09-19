@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.13.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -37,14 +37,14 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 18 | 0 | 1 | 1 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 17 | 0 | 4 | 4,5 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 13 | 0 | 9 | 9,5 |
-| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 16 | 7 | 0 | 9 | 9,5 |
+| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 16 | 8 | 0 | 8 | 8,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 2 | 0 | 9 | 11 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 4 | 0 | 6 | 6,5 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 0 | 0 | 10 | 15 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 11 | 1 | 0 | 10 | 9,5 |
-| **Total** | **140** | **63** | **0** | **77** | **94,5** |
+| **Total** | **140** | **64** | **0** | **76** | **93,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -127,7 +127,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 |---|---|
 | **API** | [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.7](docs/08-plan-de-desarrollo.md#tarea-3-7) · [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) · [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [1.21](docs/08-plan-de-desarrollo.md#tarea-1-21) · [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [2.21](docs/08-plan-de-desarrollo.md#tarea-2-21) · [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2) |
-| **Front** | [3.16](docs/08-plan-de-desarrollo.md#tarea-3-16) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
+| **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Contrato** | [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
 <!-- /generado:plan-listas-ya -->
@@ -135,13 +135,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **77 tareas y 94,5 días de trabajo** de 140 tareas del plan.
+Quedan **76 tareas y 93,5 días de trabajo** de 140 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 14,2 semanas | **17,2 semanas** |
-| 2 | 8,0 semanas | **11,0 semanas** |
-| 3 | 6,7 semanas | **9,7 semanas** |
+| 1 | 14,0 semanas | **17,0 semanas** |
+| 2 | 7,9 semanas | **10,9 semanas** |
+| 3 | 6,4 semanas | **9,4 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -515,9 +515,10 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [ ] ⚡ [**3.15**](docs/08-plan-de-desarrollo.md#tarea-3-15) `movimientos`: destino solo en transferencias, origen distinto del destino y la
       fecha contra el día de Bogotá · Base — las dos primeras solo las rechaza hoy el dominio de la
       API, y una transferencia a la misma cuenta **baja el saldo** en `v_saldos_cuenta`
-- [ ] ⚡ [**3.16**](docs/08-plan-de-desarrollo.md#tarea-3-16) El andamio en el celular · Front — por debajo de
-      760 px la barra lateral pasa a ser una barra superior fija y el menú se desplaza de lado,
-      como el mockup; sin ella el [H4](docs/08-plan-de-desarrollo.md#h4) no se puede cronometrar en un celular
+- [x] [**3.16**](docs/08-plan-de-desarrollo.md#tarea-3-16) El andamio en el celular · Front — de 760 px para abajo, como el
+      mockup, **el menú va arriba y de lado**: el logo y las pestañas en una barra fija, el topbar
+      debajo a todo el ancho y la insignia al pie de la pantalla. Girar el celular no borra lo que
+      se estaba escribiendo. `prisma_front` en `0.5.0+5`, con 296 pruebas
 
 **[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
 
@@ -1903,7 +1904,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 
 **De la 3.16 (`plan/40-la-3-16-entra-al-plan.md`):**
 
-- [ ] ⚡ **Entró una tarea nueva al plan, la [3.16](docs/08-plan-de-desarrollo.md#tarea-3-16), y el total pasa de 139 a 140.** El
+- [ ] 🔒 **Entró una tarea nueva al plan, la [3.16](docs/08-plan-de-desarrollo.md#tarea-3-16), y el total pasa de 139 a 140.** El
       [H4](docs/08-plan-de-desarrollo.md#h4) se cronometra en un celular y el front no tiene diseño para uno: la barra
       lateral mide 224 px en cualquier pantalla. El mockup sí lo diseñó —por debajo de 760 px la barra
       pasa arriba y el menú se desplaza de lado—, así que era trabajo real que no estaba en ninguna
@@ -1946,6 +1947,33 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       copiado del contrato y, en el navegador, el camino de «el servidor respondió y no mandó
       formulario». **Queda por hacer en cuanto la 3.4 llegue a `develop`**, y antes del cronómetro
       del [M-01](docs/12-pruebas-y-calidad.md#m-01)
+
+**De la 3.16 (`plan/45-el-andamio-en-el-celular.md`):**
+
+- [ ] **El corte es 760, y 760 ya es celular.** Es el `@media (max-width:760px)` del mockup, y
+      `max-width` incluye su valor. Se pregunta en un solo sitio, `disposicion.dart`, para que el
+      andamio y las pantallas no puedan partir en anchos distintos. **Un celular acostado mide más
+      de 760 y recibe el andamio de escritorio**, igual que en el mockup
+- [ ] **La insignia va al pie de la pantalla, no al final de lo que se desplaza.** El mockup la deja
+      caer al final del contenido porque ahí se desplaza la página entera; en el front cada pantalla
+      se desplaza por dentro, y el [10 §5.7](docs/10-ux-y-mockups.md#57-la-versión-y-el-ambiente-a-la-vista) pide conservar la esquina, no el mecanismo. En el pie **el
+      teclado la tapa en vez de empujarla**, y el botón flotante se acomoda solo encima de ella
+- [ ] **Las pestañas se tocan en 44 px de alto aunque se vean de 31**, como las del mockup: el
+      [10 §3.3](docs/10-ux-y-mockups.md#33-accesibilidad) pide 44 × 44 como mínimo y manda sobre el mockup. Y **el menú de lado también se
+      arrastra con el ratón**, porque sin barra de desplazamiento una ventana angosta en un computador
+      no tenía otra forma de llegar a la última sección
+- [ ] **Las franjas siguen arriba de todo en el celular.** En el mockup van dentro del `.topbar`; en
+      el front van encima del andamio desde que existen, y moverlas solo en el celular haría que el
+      mismo aviso viviera en dos sitios según el ancho
+- [ ] **`TopbarSesion` no cambió:** entre 600 y 760 px el front muestra el cargo que el mockup
+      esconde. Por debajo de 600 los dos lo esconden, y el front además pone iniciales, como pide el
+      [10 §5.3](docs/10-ux-y-mockups.md#53-la-sesión-en-el-topbar)
+- [ ] **La tarjeta de las secciones sin pantalla se desplaza y ya no dice «el menú de la
+      izquierda»**: a 320 px con las dos franjas puestas no cabía, y en el celular el menú ya no está
+      a la izquierda
+- [ ] ⚡ **El andamio no se ha visto en un celular de verdad.** Se probó a 375, 320 y 1280 px en las
+      pruebas, y en el navegador con la vista de celular a 375 contra una API simulada. **Queda por
+      hacer en un teléfono**, antes del cronómetro del [M-01](docs/12-pruebas-y-calidad.md#m-01)
 
 ---
 
