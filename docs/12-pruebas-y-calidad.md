@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Calidad](INDICE.md#etiqueta-calidad) |
+| [3.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Calidad](INDICE.md#etiqueta-calidad) |
 
 ---
 
@@ -78,13 +78,13 @@ que falla ahí no siempre significa que el código esté mal.
 | Recorridos manuales ([§6](#6-recorridos-manuales)) | [M-01](#m-01) a [M-10](#m-10) | 10 |
 | Acceso y administración de usuarios ([§7](#7-pruebas-de-acceso-y-administración-de-usuarios)) | [A-01](#a-01) a [A-16](#a-16) | 16 |
 | Vista previa de Operación ([§7.1](#71-la-vista-previa-de-operación)) | [A-17](#a-17) a [A-19](#a-19) | 3 |
-| Contrato entre las tres partes ([§9](#9-pruebas-del-contrato-entre-las-tres-partes)) | [C-01](#c-01) a [C-04](#c-04) | 4 |
+| Contrato entre las tres partes ([§9](#9-pruebas-del-contrato-entre-las-tres-partes)) | [C-01](#c-01) a [C-05](#c-05) | 5 |
 | Idempotencia, canal firmado y durabilidad ([§10](#10-idempotencia-canal-firmado-y-durabilidad)) | [I-01](#i-01), [I-02](#i-02), [F-01](#f-01), [F-02](#f-02), [T-01](#t-01), [T-02](#t-02), [RE-01](#re-01) | 7 |
-| **Total** | | **112** |
+| **Total** | | **113** |
 
-Son **101 automáticas, 10 manuales y 1 de operación trimestral** —[RE-01](#re-01), la restauración del
+Son **102 automáticas, 10 manuales y 1 de operación trimestral** —[RE-01](#re-01), la restauración del
 respaldo—. No son todas las que habrá: las unitarias del dominio serán muchas más y se miden por
-cobertura, no por lista. Estas 112 están escritas aquí una por una porque ninguna puede quedar al
+cobertura, no por lista. Estas 113 están escritas aquí una por una porque ninguna puede quedar al
 criterio de quien programe ese día.
 
 ---
@@ -413,7 +413,8 @@ revisa con una vara más floja que la otra.
 Dos capas deciden —la base y `prisma_api`— y una tercera solo pinta: el formulario, que aplica el
 descriptor que la API le dictó. Eso solo es sostenible si algo vigila que las tres no se separen
 con el tiempo. Y versionar el front y la API por separado solo es sostenible si algo detecta cuándo
-dejaron de entenderse. Estas cuatro pruebas son ese vigilante.
+dejaron de entenderse, y si los números que se comparan dicen la verdad. Estas cinco pruebas son
+ese vigilante.
 
 | # | Prueba | Resultado esperado |
 |---|---|---|
@@ -421,6 +422,7 @@ dejaron de entenderse. Estas cuatro pruebas son ese vigilante.
 | [C-02](#c-02) | Arrancar el front declarando una MAJOR de API distinta a la que responde `POST /api/v0/consultas/version` | El front se planta en la primera pantalla y no deja seguir |
 | [C-03](#c-03) | Cruzar los códigos de cinco dígitos que emite el código fuente contra el catálogo | Ninguno emitido falta en el catálogo y ninguno del catálogo sobra. Falla nombrando el código |
 | [C-04](#c-04) | Regenerar el OpenAPI desde los controladores y compararlo con el `openapi.json` versionado | Idénticos. Cualquier diferencia rompe la compilación |
+| [C-05](#c-05) | Comparar cada PR contra `develop`: qué cambió y cómo quedó la versión del proyecto | Si cambió lo que se publica, la versión subió **un paso**. Si no, falla nombrando los archivos y los tres pasos posibles |
 
 ### <a id="c-01"></a>9.1 C-01 · Ninguna restricción sin mensaje
 
@@ -496,6 +498,35 @@ hace exigible el **[RNF-30](03-requisitos-y-bdd.md#rnf-30)** y la que sostiene [
 > **Actualizar la documentación deja de ser disciplina y pasa a ser un requisito para poder mezclar
 > el cambio.** Un documento que depende de que alguien se acuerde se desactualiza el primer día en
 > que alguien tiene prisa, y a partir de ahí miente con toda seguridad.
+
+### <a id="c-05"></a>9.5 C-05 · La versión sube un paso en cada PR
+
+[C-02](#c-02) compara números: el MAJOR que el front espera con el que la API responde. Esa comparación vale
+lo que valgan los números, y el 18 de septiembre de 2026 no valían nada: «Acerca de» decía front
+`0.2.0`, API `0.2.0` y esquema `0.1.0` después de diecisiete PR que no los tocaron, con la base en
+`0.3.0`. [C-05](#c-05) es la que hace que el número se mueva cuando el proyecto se mueve ([ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md)).
+
+Corre en un trabajo propio de cada integración continua, «La versión subió», en el PR contra
+`develop` y en el empuje a `develop`:
+
+| Repositorio | Qué exige | Cómo se corre en una máquina |
+|---|---|---|
+| `prisma_front` | Si el PR cambia lo que se publica, el `pubspec.yaml` sube un paso y el número de compilación, uno | `dart run tool/la_version_subio.dart origin/develop` |
+| `prisma_api` | Si el PR cambia lo que se publica, el `build.gradle.kts` sube un paso | `./gradlew laVersionSubio --args=origin/develop` |
+| `prisma_db` | Ninguna migración que ya estaba cambia; si el PR agrega migraciones, la última publica en `schema_version` la versión siguiente; y `verificar-base.sql` la espera | `./scripts/db/la-version-subio.ps1 -Base origin/develop` |
+
+Tres detalles deciden si sirve de algo:
+
+- **Un paso, ni más ni menos.** La prueba no sabe si el cambio corrige o agrega, y no lo intenta: eso
+  lo decide quien escribe. Lo que sí sabe es que `0.3.0` → `0.30.0` es una errata.
+- **Lo que no se publica está escrito; todo lo demás, se publica.** Pruebas, README, flujos y
+  configuración del repositorio no piden versión. Una carpeta nueva que nadie listó, sí: al revés,
+  se escaparía sin avisar.
+- **El mensaje trae el arreglo.** Dice qué archivos exigen la versión y cuáles son los tres pasos
+  posibles, con sus números. Una prueba que solo dice «la versión está mal» se termina silenciando.
+
+La lógica de las dos primeras tiene sus pruebas unitarias en el `test` de siempre de cada
+repositorio, y la tercera se vio fallar contra cinco ramas rotas a propósito antes de fusionarse.
 
 ---
 
@@ -587,7 +618,7 @@ El procedimiento y las políticas de retención están en
 **restaurar es una prueba con fecha, no una buena intención.**
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.11.0") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.11.0") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

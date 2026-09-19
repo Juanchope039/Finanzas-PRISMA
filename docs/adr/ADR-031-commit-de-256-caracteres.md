@@ -115,5 +115,5 @@ la decisión. Cuando no se sabe, no sale; y que no salga es la señal, no el pro
 ---
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](../22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-028](ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [CLAUDE](../../CLAUDE.md "CLAUDE.md") · [README](../../scripts/docs/README.md "Herramienta de documentación")
+**🔗 Referenciado desde:** [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](../22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-028](ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-034](ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [CLAUDE](../../CLAUDE.md "CLAUDE.md") · [README](../../scripts/docs/README.md "Herramienta de documentación")
 <!-- /generado:referenciado-desde -->

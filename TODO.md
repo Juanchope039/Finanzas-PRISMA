@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -230,8 +230,9 @@ o indirectamente. No es el orden en que se descubrieron.
 - [ ] 🚧🔒 [**0.9**](docs/08-plan-de-desarrollo.md#tarea-0-9) Entrega a dev al fusionar ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)), con la receta de construcción del front
       —`Dockerfile`, `nginx` y `.dockerignore`— que hasta ahora no existía · API, Front
 - [x] [**0.10**](docs/08-plan-de-desarrollo.md#tarea-0-10) SemVer y migraciones con `schema_version` · Base — la tabla guarda una fila por
-      versión publicada y hoy dice `0.1.0`, con la etiqueta `esquema-v0.1.0` de [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) puesta.
-      Que la API la lea en vez de `PRISMA_ESQUEMA` es del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1)
+      versión publicada y hoy va por la `0.3.0`, con sus etiquetas de [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) puestas. Desde el
+      [ADR-034](docs/adr/ADR-034-la-version-sube-en-cada-pr.md) la API la lee de la base, en vez de la variable `PRISMA_ESQUEMA`, y cada migración
+      publica la suya en su mismo PR
 - [x] [**0.11**](docs/08-plan-de-desarrollo.md#tarea-0-11) `POST /api/v0/consultas/version`: versión de la API, del esquema y ambiente · API
 - [x] [**0.12**](docs/08-plan-de-desarrollo.md#tarea-0-12) Insignia `v0.1.0 · Desarrollo` en el pie de la barra lateral y franja de ambiente · Front
 - [x] [**0.13**](docs/08-plan-de-desarrollo.md#tarea-0-13) El front comprueba el MAJOR de la API y bloquea con la pantalla del mockup · Front
@@ -698,6 +699,18 @@ a `anon`.
 
 ## 9. A vigilar
 
+- **Dev tiene las tablas de la `0.3.0` y su `schema_version` dice `0.2.0`.** La migración que publica
+  la `0.3.0` se aplicó en qa con la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12) y en dev no. Desde que la API lee la tabla ([ADR-034](docs/adr/ADR-034-la-version-sube-en-cada-pr.md)), «Acerca de»
+  dice en dev `0.2.0`, que es lo que esa base dice de sí misma. Se arregla aplicándole a dev lo que le
+  falta, con el CLI vinculado a dev, y no editando nada: es escribir en un ambiente remoto y lo hace
+  quien tiene las llaves.
+- **«La versión subió» avisa, pero todavía no bloquea el botón de fusionar.** Es un trabajo más de la
+  integración continua de los tres repositorios de código, y GitHub deja fusionar un PR en rojo
+  mientras la comprobación no esté marcada como obligatoria en la protección de `develop`. Lo que sí
+  hace hoy en la API y el front, aunque se fusione en rojo, es parar el despliegue: el empuje a
+  `develop` también la corre, y Railway no construye dev con la integración continua en rojo.
+  `prisma_db` no se despliega, así que ahí la única cerradura es esa casilla. Marcarla es
+  configuración de GitHub, y es de quien dirige.
 - **A `movimientos` le faltan dos restricciones con nombre.** La base exige cuenta de destino en una
   transferencia (`transferencia_con_destino`), pero no prohíbe que la traiga un gasto, ni que una
   transferencia vaya de una cuenta a sí misma: las dos cosas entrarían sin que nada avisara y
@@ -1562,6 +1575,52 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       foránea trae la tabla y la restricción, no la columna, y deducirla del nombre sería adivinar;
       un `CHECK` de tabla es una regla entre columnas y no tiene una sola a la que apuntar. Salen
       como `42200` sin `data.errores`, hasta que el contrato de cada módulo diga a qué campo van
+
+**De la versión en cada PR ([ADR-034](docs/adr/ADR-034-la-version-sube-en-cada-pr.md)):**
+
+- [ ] **Sin sesión, `esquema` responde `desconocido`.** La consulta de versión es anónima —el front la
+      hace antes de que nadie entre—, y leer la base sin identidad habría sido la primera excepción al
+      [ADR-012](docs/adr/ADR-012-identidad-a-postgres.md), además de atar la comprobación del MAJOR a que la base conteste. Con sesión se lee
+      dentro de la transacción que ya abrió el filtro de idempotencia, que es el caso del panel.
+      **El contrato no lo dice**: la descripción del campo sigue siendo «Versión del esquema de base
+      de datos», y cambiarla es cambiar el contrato. Queda para el próximo que se acuerde, igual que
+      volver el campo opcional, que era la otra salida limpia y no había versión del contrato que
+      la API pudiera fijar con solo ese cambio
+- [ ] **La versión que muestra el panel es la última de `schema_version` por `aplicada_en`, y por
+      SemVer si empatan**, que es la misma consulta del bloque `1.12` de `verificar-base.sql`. La
+      prueba de integración calcula lo esperado solo por SemVer, para que las dos no puedan
+      torcerse juntas
+- [ ] **`prisma.esquema` deja de ser la variable `PRISMA_ESQUEMA` y pasa a `0.3.0` fijo.** Es lo que
+      el artefacto necesita, y eso viaja con el artefacto, no con el ambiente. Nada la lee todavía:
+      la leerán la sonda del [ADR-025](docs/adr/ADR-025-cuatro-repositorios.md) y la tubería del [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md). Si en Railway hay una `PRISMA_ESQUEMA`, ya no
+      hace nada
+- [ ] **Un paso por PR, y ni uno más.** La puerta no distingue una corrección de una función nueva
+      —eso lo decide quien escribe—, pero sí rechaza saltarse números. [19 §4.2](docs/19-ambientes-y-entrega.md#42-las-reglas) define PATCH, MINOR y
+      MAJOR para la API; para el front y el esquema se usaron las mismas palabras: corrige, agrega o
+      rompe
+- [ ] **Lo que no se publica, por repositorio.** En el front: `test/`, `tool/`, `.github/`, el README,
+      la licencia, `.gitignore`, `.gitattributes`, `.metadata`, `analysis_options.yaml` y
+      `railway.json`. En la API: `src/test/`, `contrato/`, `.github/`, el README, la licencia, los dos
+      de git, `.env.ejemplo` y `railway.json`. **`railway.json` no pide versión** —cambia cómo se
+      despliega, no lo que se despliega— y **`.dockerignore` sí**, porque cambia lo que entra a la
+      imagen. Lo que no esté en la lista pide versión, carpetas nuevas incluidas
+- [ ] **El número de compilación del front sube de uno en uno con la versión, y solo con ella.** Ningún
+      documento decía cómo se mueve; es el `versionCode` de Android y tiene que crecer, y atarlo a la
+      versión lo vuelve el conteo de versiones publicadas
+- [ ] **La puerta corre también en el empuje a `develop`, y no en `main`.** En el empuje es la segunda
+      cerradura: lo que entre sin subir la versión deja la integración continua en rojo y Railway no
+      despliega. A `main` llega `develop` entero, con varios pasos juntos
+- [ ] **La versión del esquema se publica en la última migración del PR**, y el bloque `1.12` de
+      `verificar-base.sql` cambia en ese mismo PR. La etiqueta `esquema-vX.Y.Z` del [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) se sigue
+      poniendo a mano después de fusionar: automatizarla es que la integración continua escriba en
+      el repositorio, y eso no se decidió
+- [ ] **La puesta al día fue un MINOR en los dos proyectos**: el front de `0.2.0+2` a `0.3.0+3` y la
+      API de `0.2.0` a `0.3.0`. No se reconstruyeron las versiones que habría habido si cada PR hubiera
+      subido la suya, por la misma razón por la que [22 §3](docs/22-documentacion.md#3-versiones) no reconstruyó las de los documentos.
+      Que los dos queden en `0.3.0` es coincidencia, no sincronización
+- [ ] **Las cadenas del guion de `prisma_db` van sin tildes.** Windows PowerShell 5.1 lee un `.ps1`
+      sin BOM como ANSI, y una raya dentro de una cadena se vuelve una comilla tipográfica que cierra
+      la cadena. Los demás guiones no llevan BOM, y ponérselo a uno solo sería una excepción más
 
 ---
 

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/03-requisitos-y-bdd.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/03-requisitos-y-bdd.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 ---
 
@@ -211,7 +211,7 @@ evalúa Row Level Security; el cargo es descriptivo y nunca decide un permiso.
 | <a id="rnf-20"></a>RNF-20 | Disponibilidad | La base de datos está siempre en línea: ningún ambiente de negocio se pausa por inactividad | Consulta contra prod y uat tras una semana sin uso; responde sin necesidad de reactivar el proyecto |
 | <a id="rnf-21"></a>RNF-21 | Seguridad | Todo acceso a datos pasa por la API; el front no se conecta a la base ni a Auth | Revisión de dependencias y de importaciones del front: no existe cliente de Supabase |
 | <a id="rnf-22"></a>RNF-22 | Seguridad | Los permisos los sigue aplicando PostgreSQL con Row Level Security aunque haya una API en medio | Prueba de integración con sesión real de Operación y la comprobación de la capa de aplicación desactivada |
-| <a id="rnf-23"></a>RNF-23 | Mantenibilidad | Cada proyecto —front, API y esquema— se versiona por separado con SemVer | Revisión del `pubspec.yaml` del front, del archivo de construcción de la API y de la tabla `schema_version` en cada publicación |
+| <a id="rnf-23"></a>RNF-23 | Mantenibilidad | Cada proyecto —front, API y esquema— se versiona por separado con SemVer | [C-05](12-pruebas-y-calidad.md#c-05) en cada PR, en la integración continua de cada repositorio: si cambia lo que se publica, la versión del `pubspec.yaml`, del `build.gradle.kts` o la que publica la migración en `schema_version` sube un paso ([ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md)) |
 | <a id="rnf-24"></a>RNF-24 | Seguridad | Ningún secreto vive en el repositorio | Escaneo de secretos en cada integración; la configuración entra por variables de entorno y `--dart-define` |
 | <a id="rnf-25"></a>RNF-25 | Mantenibilidad | Toda restricción de la base tiene nombre explícito y mensaje traducido al español | Prueba que recorre `pg_constraint` y exige entrada en la tabla de traducción de la API |
 | <a id="rnf-26"></a>RNF-26 | Mantenibilidad | Toda respuesta de la API, con éxito o con error, usa el sobre `{status, mensaje, data}` con un código de cinco dígitos | Prueba de contrato que recorre todos los endpoints y rechaza cualquier respuesta con otra forma |

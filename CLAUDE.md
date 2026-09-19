@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.8.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [7.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -50,6 +50,7 @@ cuyo contenido cambió haya subido su versión. `enlazar --en-seco` muestra lo q
 ./gradlew spotlessApply                          # formatea; sin esto, build falla
 ./gradlew test --tests '*MovimientoTest'         # una sola clase de prueba
 ./gradlew bootRun                                # queda en http://localhost:8081
+./gradlew laVersionSubio --args=origin/develop   # C-05: la versión subió un paso
 ```
 
 `build` incluye `spotlessCheck`, y `-Werror` está activo: **un aviso del compilador rompe la
@@ -68,6 +69,7 @@ dart format --set-exit-if-changed .
 dart analyze --fatal-infos
 flutter test                                     # incluye test/frontera_test.dart
 flutter test test/frontera_test.dart             # un solo archivo
+dart run tool/la_version_subio.dart origin/develop   # C-05: la versión subió un paso
 flutter run -d chrome --dart-define=PRISMA_API_URL=http://localhost:8081 --dart-define=PRISMA_AMBIENTE=dev --dart-define=PRISMA_API_MAJOR=0
 ```
 
@@ -79,6 +81,7 @@ Flutter Web no lee variables de entorno en el navegador: la configuración entra
 ```powershell
 supabase start                 # PostgreSQL, Auth y Studio en Docker
 ./scripts/db/reset-local.ps1   # aplica las migraciones y carga la semilla
+./scripts/db/la-version-subio.ps1 -Base origin/develop   # C-05: la migración publica su versión
 ```
 
 Queda en `postgresql://postgres:postgres@127.0.0.1:54322/postgres`, que es donde la busca la
@@ -118,6 +121,13 @@ trailers: `printf '%s' "$(git log -1 --pretty=%B)" | wc -c`. Descontados el asun
 `Co-Authored-By`, quedan unos 50 caracteres por línea, que es una frase. **El porqué largo no va en
 el commit: va en el plan**, que no tiene tope y se escribió antes. Lo comprueba
 `verificar --base <SHA>` en cada PR, y los commits de fusión quedan exentos.
+
+**Y la versión del proyecto sube un paso en cada PR que cambia lo que se publica** ([ADR-034](docs/adr/ADR-034-la-version-sube-en-cada-pr.md)): el
+PATCH, el MINOR o el MAJOR siguiente de la que hay en `develop` —en el front, con el `+BUILD` uno
+más—. Si el PR agrega una migración, la última publica en `schema_version` la versión siguiente del
+esquema, y `verificar-base.sql` pasa a esperarla. Las pruebas, los README y los flujos no piden
+versión. Lo exige la prueba [C-05](docs/12-pruebas-y-calidad.md#c-05), en el trabajo «La versión subió» de cada integración continua, y es
+lo que hace que «Acerca de» diga la verdad: estuvo diciendo `0.2.0` después de diecisiete PR.
 
 **Todo `.md` lleva encabezado con versión, estado y fechas** ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md), [`docs/22-documentacion.md`](docs/22-documentacion.md)). Al
 cambiar un documento: subir su versión (MAJOR si alguien actuaría mal con la anterior), poner la

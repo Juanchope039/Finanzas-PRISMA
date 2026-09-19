@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
+| [1.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
 
 Registro de las decisiones técnicas importantes: qué se decidió, por qué, qué alternativas se
 consideraron y qué consecuencias tiene.
@@ -42,8 +42,9 @@ consideraron y qué consecuencias tiene.
 | [031](ADR-031-commit-de-256-caracteres.md) | El mensaje de commit cabe en 256 caracteres | Aceptado |
 | [032](ADR-032-railway-en-dev-ahora.md) | Railway aloja dev desde ahora, y los otros tres ambientes siguen al final | Aceptado |
 | [033](ADR-033-service-role-solo-en-auth.md) | La clave de servicio entra, pero solo para crear identidades | Aceptado |
+| [034](ADR-034-la-version-sube-en-cada-pr.md) | La versión sube un paso en cada PR, y la integración continua lo exige | Aceptado |
 
-Son **33 decisiones** registradas: 26 aceptadas y 7 reemplazadas.
+Son **34 decisiones** registradas: 27 aceptadas y 7 reemplazadas.
 
 > **Sobre la numeración.** El cambio de stack se planeó como [ADR-010](ADR-010-almacenamiento-contrasenas.md) y [ADR-011](ADR-011-stack-flutter-dart.md), pero el 010 ya
 > estaba ocupado por la decisión de contraseñas. Un número asignado no se reutiliza, así que el
