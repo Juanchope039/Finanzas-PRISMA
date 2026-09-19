@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Calidad](INDICE.md#etiqueta-calidad) |
+| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Calidad](INDICE.md#etiqueta-calidad) |
 
 ---
 
@@ -351,7 +351,7 @@ que importa no es qué muestra la pantalla, sino qué deja hacer el sistema.
 | <a id="a-04"></a>A-04 | Usuario que no existe | El mismo mensaje de [A-03](#a-03), palabra por palabra. Si el mensaje difiere, revela qué usuarios existen |
 | <a id="a-05"></a>A-05 | Usuario desactivado con la contraseña correcta | No entra. «Este usuario está desactivado. Habla con Gerencia.» |
 | <a id="a-06"></a>A-06 | Primer ingreso con `debe_cambiar_clave = TRUE` | No llega al tablero: pantalla de cambio obligatorio. Al guardar, `debe_cambiar_clave` queda en falso |
-| <a id="a-07"></a>A-07 | Crear un usuario con un nombre de usuario ya existente | Rechazado por el `UNIQUE` de `usuarios.usuario`, no solo por el aviso de la pantalla. `Marcela` y `marcela` son el mismo usuario |
+| <a id="a-07"></a>A-07 | Crear un usuario con un nombre de usuario ya existente | Rechazado por el `UNIQUE` de `usuarios.usuario`, no solo por el aviso de la pantalla. `Marcela` y `marcela` son el mismo usuario. **En el camino real quien rechaza primero es el proveedor de identidad**, porque el correo sintético choca antes de que se llegue a insertar: se comprueba en los dos sitios, y en el proveedor por `error_code` y no por el estado, que también usa para la clave débil |
 | <a id="a-08"></a>A-08 | Desactivar al último usuario activo de tipo Gerencia | Rechazado por el trigger `tg_proteger_ultima_gerencia`: «No se puede desactivar ni degradar al último usuario de Gerencia» |
 | <a id="a-09"></a>A-09 | Desactivar un cargo que tiene personas activas asignadas | Rechazado con aviso claro; el cargo sigue activo y nadie se queda sin cargo |
 | <a id="a-10"></a>A-10 | Desactivar un usuario dejando el motivo vacío | Rechazado por el `CHECK desactivacion_con_motivo`: el usuario sigue activo. Sin motivo no se desactiva, y el rechazo viene de la base, no solo del aviso de la pantalla |
@@ -424,9 +424,10 @@ dejaron de entenderse. Estas cuatro pruebas son ese vigilante.
 
 ### <a id="c-01"></a>9.1 C-01 · Ninguna restricción sin mensaje
 
-La base no sabe hablar: rechaza con `23514 check_violation` sobre `movimientos_valor_positivo`, y
-eso no se le muestra a la dueña del taller. La API traduce **nombre de restricción → código HTTP +
-mensaje en español + campo del formulario**. [C-01](#c-01) recorre `pg_constraint` del ambiente y comprueba
+La base no sabe hablar: rechaza con `23514 check_violation` sobre
+`dinero_positivo_mayor_que_cero`, y eso no se le muestra a la dueña del taller. La API traduce
+**`(objeto, restricción)` → código de cinco dígitos + campo del formulario al que señala**, y el
+mensaje en español sale de ese código. [C-01](#c-01) recorre `pg_constraint` del ambiente y comprueba
 que cada restricción nombrada tenga su entrada en esa tabla. Es la prueba que sostiene la
 traducción de restricciones —de [`ADR-015`](adr/ADR-015-validacion-tres-capas.md), recogida después
 por [`ADR-018`](adr/ADR-018-front-sin-decisiones.md)— y la que verifica el **[RNF-25](03-requisitos-y-bdd.md#rnf-25)**.
@@ -439,6 +440,16 @@ Tres detalles deciden si la prueba sirve de algo:
   decir cuál, o el arreglo se vuelve una búsqueda a ciegas.
 - **También falla al revés.** Una entrada en la tabla de traducción que ya no corresponde a ninguna
   restricción es un mensaje muerto, y peor: esconde que la regla desapareció de la base.
+
+> **Renombrar una restricción falla las dos direcciones a la vez**, y por eso el
+> [04 §4.1](04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) dice que los nombres no se pueden mover: el nombre nuevo sale huérfano y el viejo,
+> muerto. Es el único cambio que la prueba denuncia por duplicado, y el que más falta hacía.
+
+**Corre con `./gradlew integracion`, no en cada empuje.** Necesita las restricciones *aplicadas* y
+no el archivo `.sql` ([ADR-029](adr/ADR-029-esquema-por-etiqueta.md)), así que hoy queda fuera de la compilación de siempre; quien la
+mete adentro es la tarea [1.7](08-plan-de-desarrollo.md#tarea-1-7), que descarga `prisma_db` por etiqueta y levanta Supabase. A cambio
+es la más barata de las de integración: se conecta como el dueño y **solo lee** el catálogo de
+PostgreSQL, sin RLS, sin identidad y sin semilla.
 
 En ejecución, la contraparte es la regla de `prisma_api`: un error de la base que no esté en la
 tabla se devuelve como 500 y se registra como defecto. [C-01](#c-01) existe para que eso nunca ocurra
@@ -576,7 +587,7 @@ El procedimiento y las políticas de retención están en
 **restaurar es una prueba con fecha, no una buena intención.**
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.9.0") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.10.0") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

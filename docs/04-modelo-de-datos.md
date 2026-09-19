@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -1870,8 +1870,17 @@ dos copias de una regla financiera es exactamente el problema que estas funcione
 La base no sabe hablar. Cuando rechaza algo devuelve `23514 check_violation` en la restricción
 `transferencia_con_destino`, y eso no se le puede mostrar a la dueña del taller. La API traduce.
 Para que pueda traducir, cada restricción de este documento tiene **nombre explícito** ([§4.1](#41-tipos-y-convenciones-comunes)) y
-cada nombre tiene su entrada en la tabla de traducción de `prisma_api`: código HTTP, mensaje en
-español y campo del formulario al que señala.
+cada nombre tiene su entrada en la tabla de traducción de `prisma_api`: un **código de cinco
+dígitos** del catálogo —de donde sale el mensaje en español, que no se escribe dos veces— y el
+campo del formulario al que señala.
+
+> **La tabla existe desde la tarea [1.8](08-plan-de-desarrollo.md#tarea-1-8)** y es
+> `interfaz/error/TraduccionDeRestricciones` en `prisma_api`. Casi todas sus filas comparten el
+> código transversal de su clase, por lo mismo que los dominios: noventa y tres frases que dicen
+> dos cosas no son noventa y tres mensajes. Un rechazo de llave foránea ocurre en cualquier
+> módulo, así que su código tiene que ser uno de los transversales; darle un caso de módulo
+> afirmaría pertenecer a uno al que no pertenece ([20 §2.4](20-contrato-de-api.md#24-los-rangos-por-módulo)). Lo que lleva código propio es lo que ya
+> tiene contrato acordado, y el contrato de cada módulo afina el resto cuando le toca.
 
 **La tabla de traducción se indexa por `(objeto, restricción)`, no por el nombre solo.** En este
 modelo `anulacion_con_motivo` existe en `cargos`, `cuentas` y `movimientos`, y
@@ -1905,7 +1914,7 @@ Cada fila que salga de ahí y no tenga entrada en la tabla de traducción **hace
 Agregar una restricción y olvidar el mensaje deja de ser un descubrimiento del día de producción
 y pasa a ser un rojo en la canalización.
 
-Dos cosas que esta consulta no cubre, y hay que decirlas:
+Tres cosas que esta consulta no cubre, y hay que decirlas:
 
 - **`NOT NULL` no aparece en `pg_constraint`.** Llega como `23502` trayendo la tabla y la columna,
   no un nombre de restricción, así que la tabla de traducción lo resuelve por columna. Son
@@ -1915,6 +1924,12 @@ Dos cosas que esta consulta no cubre, y hay que decirlas:
   barato: la API sabe qué campo mandó, así que arma el mensaje con el campo de la petición y el
   texto del dominio. A cambio, el mensaje de `dinero_no_negativo` se escribe una sola vez y sirve
   para las veintidós columnas que usan ese dominio.
+- **Las llaves primarias quedan fuera del filtro**, y aun así se traducen. El identificador lo pone
+  quien pide, al decidir la acción ([ADR-020](adr/ADR-020-idempotencia.md)), así que el mismo dos veces es un caso real y no un
+  imposible. Que la tabla tenga esas filas sin que la consulta las exija es a propósito: la
+  dirección que busca traducciones muertas mira **todas** las restricciones de la base, no solo
+  las de este filtro, o denunciaría como muerta la única fila que impide que ese rechazo salga
+  como error del sistema.
 
 Este contrato es la mitad que sostiene el modelo de **dos capas que deciden —la base y la API— y
 una que pinta**, que [ADR-018](adr/ADR-018-front-sin-decisiones.md) fijó al reemplazar a
@@ -1923,7 +1938,7 @@ mismas reglas que la base— solo aguanta si esta prueba corre en cada despliegu
 capas que deciden se separan y ninguna avisa.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.9.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-020](adr/ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.10.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-020](adr/ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

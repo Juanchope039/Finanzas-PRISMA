@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-19 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-18 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
@@ -69,10 +69,10 @@ cuarta clave al sobre**: viaja dentro de `data`, en una lista llamada `errores`.
 ```json
 {
   "status": 42200,
-  "mensaje": "Revisa los datos.",
+  "mensaje": "Revisa los datos del gasto.",
   "data": {
     "errores": [
-      { "campo": "valor", "mensaje": "El valor tiene que ser mayor que cero." }
+      { "campo": "valor", "mensaje": "El gasto tiene que ser mayor que cero." }
     ]
   }
 }
@@ -107,7 +107,7 @@ con `status` `20000` es imposible de escribir por accidente.
 
 ### 2.2 Los códigos base
 
-Nueve códigos transversales, los que aparecen en cualquier módulo. **Todos terminan en `00`**,
+Diez códigos transversales, los que aparecen en cualquier módulo. **Todos terminan en `00`**,
 que es el caso reservado al genérico de cada estado HTTP:
 
 | Código | HTTP | Significado |
@@ -121,6 +121,16 @@ que es el caso reservado al genérico de cada estado HTTP:
 | `40900` | 409 | Conflicto de estado |
 | `42200` | 422 | Los datos no pasan las reglas |
 | `50000` | 500 | Error no previsto |
+| `50300` | 503 | El sistema no está disponible |
+
+> **Por qué `50300` no es un `50000`.** El genérico dice «Algo salió mal. Intenta de nuevo en un
+> momento», y hay una familia de fallos para la que esa frase es falsa en las dos mitades: cuando un
+> servicio del que la API depende no contesta, o cuando le falta una variable para hablar con él, no
+> ha pasado nada imprevisto —está previsto y tiene nombre— y reintentar no arregla nada, porque una
+> variable sin cargar sigue sin cargarse un momento después. Que los dos casos compartan código es a
+> propósito: para quien está delante son la misma situación y no puede hacer nada distinto en
+> ninguna, así que lo único útil es que avise. Cuál de los dos fue queda en el registro del servidor,
+> que es donde lo lee quien administra.
 
 La idempotencia ([§5](#5-idempotencia)) y el canal firmado ([§6](#6-el-canal-firmado)) agregan los suyos, y están listados en esas secciones.
 
@@ -153,7 +163,7 @@ módulo, igual en todos los estados HTTP.**
 Así `42213` se lee de un vistazo: **HTTP 422, módulo de usuarios, caso 3 de ese módulo.**
 
 > **El caso `00` está reservado al genérico y no pertenece a ningún módulo.** Sin esa reserva, los
-> nueve códigos base habrían caído dentro del rango de Sesión y seguridad y `42200` habría
+> diez códigos base habrían caído dentro del rango de Sesión y seguridad y `42200` habría
 > afirmado ser de un módulo al que no pertenece. El reparto por rangos empieza en `01`.
 
 El rango `01`–`09` cubre **sesión, seguridad y transporte**: lo que ocurre *antes* de que la
@@ -277,7 +287,7 @@ Host: api.prisma.com
 Content-Type: application/json
 Idempotency-Key: 0c8a5e21-4b73-4f16-9d40-7a1e5c2b9f63
 
-{ "nombre": "movimiento" }
+{ "nombre": "gasto" }
 ```
 
 ```json
@@ -285,27 +295,27 @@ Idempotency-Key: 0c8a5e21-4b73-4f16-9d40-7a1e5c2b9f63
   "status": 20000,
   "mensaje": "Consulta correcta.",
   "data": {
-    "formulario": "movimiento",
+    "formulario": "gasto",
     "campos": [
       {
         "campo": "valor",
-        "etiqueta": "Valor",
+        "etiqueta": "Valor del gasto",
         "tipo": "dinero",
         "obligatorio": true,
         "minimo": 1,
+        "maximo": 99999999,
         "teclado": "numerico",
+        "ayuda": "En pesos, sin centavos",
         "mensajes": {
-          "obligatorio": "Escribe cuánto fue. Un movimiento de $0 no dice nada.",
-          "minimo": "El valor tiene que ser mayor que cero."
+          "obligatorio": "Escribe cuánto fue el gasto.",
+          "minimo": "El gasto tiene que ser mayor que cero.",
+          "maximo": "Ese valor es demasiado alto para un gasto."
         }
       }
     ]
   }
 }
 ```
-
-Es **uno de los siete campos** que trae «movimiento», y se ve ahí la regla de abajo: como el valor no
-tiene tope, ni `maximo` ni su mensaje viajan —no viajan en `null`, sencillamente no están—.
 
 Un nombre que no existe responde `404` con `40400`. Y **un cuerpo sin `nombre`, o con el nombre en
 blanco, responde `400` con `40000`**: el esquema lo declara obligatorio, y una petición que no nombra
@@ -602,13 +612,13 @@ acuerda nadie. La decisión está en [ADR-022](adr/ADR-022-openapi-generado.md).
 
 ## 8. El contrato funcionando
 
-Cuatro intercambios completos —tres sobre la misma escritura, registrar un gasto en el libro, y
-uno de lectura— para que el contrato se vea, no solo se lea. Las cabeceras van enteras; el sobre, entero.
+Cuatro intercambios completos —tres sobre la misma escritura, registrar un gasto, y uno de
+lectura— para que el contrato se vea, no solo se lea. Las cabeceras van enteras; el sobre, entero.
 
 ### 8.1 Éxito · `20100`
 
 ```http
-PUT /api/v0/movimientos/b21f8c40-3d7e-4a19-9c62-0e5a7f1d8b34 HTTP/1.1
+POST /api/v0/gastos HTTP/1.1
 Host: api.prisma.com
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
@@ -617,14 +627,7 @@ X-Prisma-Nonce: c9d2b4e1-7a03-4f52-8b6d-2e9f1a4c7b08
 X-Prisma-Timestamp: 2026-09-15T19:32:07Z
 X-Prisma-Firma: 9f2a4c7d1e85b03a6f4c2d9e7b1a5c38d0f6e2b49a7c1d3e5f8a0b2c4d6e8f1a
 
-{
-  "tipo": "gasto",
-  "valor": 120000,
-  "fechaMovimiento": "2026-09-15",
-  "cuentaId": "3f9a1c02-7d84-4e6b-9051-c8a2e4b70d13",
-  "categoriaId": "a70e5d81-2b9c-4f36-8ae4-1d05c3b97e6f",
-  "descripcion": "Tinta plastisol negra"
-}
+{ "valor": 120000, "concepto": "Tinta plastisol negra", "cuenta": "caja" }
 ```
 
 ```http
@@ -633,37 +636,22 @@ Content-Type: application/json
 
 {
   "status": 20100,
-  "mensaje": "Movimiento registrado.",
+  "mensaje": "Gasto registrado.",
   "data": {
     "id": "b21f8c40-3d7e-4a19-9c62-0e5a7f1d8b34",
-    "tipo": "gasto",
     "valor": 120000,
-    "fechaMovimiento": "2026-09-15",
-    "cuenta": "Caja",
-    "cuentaId": "3f9a1c02-7d84-4e6b-9051-c8a2e4b70d13",
-    "categoria": "Insumos",
-    "categoriaId": "a70e5d81-2b9c-4f36-8ae4-1d05c3b97e6f",
-    "descripcion": "Tinta plastisol negra",
-    "registradoPor": "Marcela Ríos",
-    "registradoEn": "2026-09-15T19:32:07Z",
-    "registroTardio": false,
-    "adjuntos": []
+    "concepto": "Tinta plastisol negra",
+    "fecha": "2026-09-15"
   }
 }
 ```
 
-**El id del movimiento va en la ruta, y lo genera quien registra** al decidir la acción, junto con la
-clave de idempotencia ([ADR-020](adr/ADR-020-idempotencia.md)). Por eso el verbo es `PUT` y no `POST`: la petición dice dónde va lo
-que trae, así que repetirla nunca duplica el libro, ni siquiera cuando la clave ya se purgó. Un id
-que ya está registrado responde `40920`.
-
 ### 8.2 Los datos no pasan las reglas · `42200`
 
-Otro movimiento —otro id en la ruta y otra clave de idempotencia, porque es otra intención— con el
-valor en cero:
+Mismo endpoint, un valor en cero y una clave de idempotencia nueva, porque es otra intención:
 
 ```http
-PUT /api/v0/movimientos/7c0d5e93-1a46-4b28-8fd1-6e93a0c25b47 HTTP/1.1
+POST /api/v0/gastos HTTP/1.1
 Host: api.prisma.com
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
@@ -672,14 +660,7 @@ X-Prisma-Nonce: 41e0b8a2-96c5-4d17-b3ea-58f7c0d21e6b
 X-Prisma-Timestamp: 2026-09-15T19:34:52Z
 X-Prisma-Firma: 3c7e19a5d84b0f62c1e73a9d5b08f4e6a2c9d17b30e58f4a6c2b9d0e7f1a3c58
 
-{
-  "tipo": "gasto",
-  "valor": 0,
-  "fechaMovimiento": "2026-09-15",
-  "cuentaId": "3f9a1c02-7d84-4e6b-9051-c8a2e4b70d13",
-  "categoriaId": "a70e5d81-2b9c-4f36-8ae4-1d05c3b97e6f",
-  "descripcion": "Tinta plastisol negra"
-}
+{ "valor": 0, "concepto": "Tinta plastisol negra", "cuenta": "caja" }
 ```
 
 ```http
@@ -688,10 +669,10 @@ Content-Type: application/json
 
 {
   "status": 42200,
-  "mensaje": "Revisa los datos.",
+  "mensaje": "Revisa los datos del gasto.",
   "data": {
     "errores": [
-      { "campo": "valor", "mensaje": "El valor tiene que ser mayor que cero." }
+      { "campo": "valor", "mensaje": "El gasto tiene que ser mayor que cero." }
     ]
   }
 }
@@ -706,7 +687,7 @@ llega dos veces por caminos distintos.
 La clave del [§8.1](#81-éxito--20100), reutilizada con un cuerpo distinto:
 
 ```http
-PUT /api/v0/movimientos/b21f8c40-3d7e-4a19-9c62-0e5a7f1d8b34 HTTP/1.1
+POST /api/v0/gastos HTTP/1.1
 Host: api.prisma.com
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
@@ -715,14 +696,7 @@ X-Prisma-Nonce: 7b3f2e08-c194-4a6d-85f1-2c0e9a4d7b63
 X-Prisma-Timestamp: 2026-09-15T19:36:10Z
 X-Prisma-Firma: e5a1c39d7f204b86e0c1a7d3f95b28c4d6e0a71f39b5c2d8e4a06f1b7c3d9e52
 
-{
-  "tipo": "gasto",
-  "valor": 95000,
-  "fechaMovimiento": "2026-09-15",
-  "cuentaId": "3f9a1c02-7d84-4e6b-9051-c8a2e4b70d13",
-  "categoriaId": "a70e5d81-2b9c-4f36-8ae4-1d05c3b97e6f",
-  "descripcion": "Tinta plastisol roja"
-}
+{ "valor": 95000, "concepto": "Tinta plastisol roja", "cuenta": "caja" }
 ```
 
 ```http
@@ -791,7 +765,7 @@ firma se arma igual que en una escritura, con `sha256` del cuerpo vacío; y esta
 | Con qué configuración corre cada ambiente y cómo se publica | [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [Contrato](../contrato/README.md "Contrato de la API · v0.9.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [Contrato](../contrato/README.md "Contrato de la API · v0.10.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

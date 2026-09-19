@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.13.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -25,7 +25,7 @@ Cada tarea dice su **carril**: **API** (`prisma_api`), **Base** (`prisma_db`), *
 
 ## 1. Hecho, en progreso y pendiente
 
-Las tres preguntas de siempre. Las secciones 2 a 6 enumeran **las 134 tareas del plan**, una por una
+Las tres preguntas de siempre. Las secciones 2 a 6 enumeran **las 133 tareas del plan**, una por una
 y con su marca; aquí está el resumen. Que no falte ninguna no depende de la memoria de nadie: la
 herramienta compara el tablero con el plan y la verificación falla si alguna no está.
 
@@ -35,16 +35,16 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 16 | 2 | 1 | 3,5 |
-| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 15 | 0 | 5 | 6 |
-| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 20 | 12 | 0 | 8 | 9 |
-| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 14 | 5 | 0 | 9 | 11 |
-| [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 1 | 0 | 9 | 11 |
+| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 17 | 0 | 3 | 4 |
+| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 20 | 13 | 0 | 7 | 7,5 |
+| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 4 | 0 | 9 | 10,5 |
+| [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 2 | 0 | 8 | 10,5 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 3 | 0 | 7 | 7 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 0 | 0 | 10 | 15 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 11 | 1 | 0 | 10 | 9,5 |
-| **Total** | **134** | **53** | **2** | **79** | **100,5** |
+| **Total** | **133** | **56** | **2** | **75** | **96** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -64,8 +64,8 @@ Lo que tiene su commit en `develop` con la integración continua en verde, que e
 | **Front · formularios** | El renderizador del descriptor: pinta los campos que manda la API con su teclado, sus límites, sus opciones y sus avisos, y no trae ninguna regla propia | [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18) |
 | **Front · la sesión** | **La puerta**: sin sesión se ve «Entra con tu usuario», y quien entra con una clave temporal va a «Crea tu contraseña» en vez de al tablero —que ni siquiera se construye hasta que la cambie—. Los dos formularios los manda la API, y los rechazos también: el «Usuario o contraseña incorrectos» que se lee en pantalla no está escrito en ninguna parte del front. **Recargar la página ya no saca a nadie**: lo primero que hace la aplicación al abrirse es renovar con la cookie, y si un token vence a media jornada el cliente lo repone y reintenta sin que se note. Arriba, la identidad con su menú de la sesión; a la izquierda, el menú que dicta la API | [2.6](docs/08-plan-de-desarrollo.md#tarea-2-6) · [2.2](docs/08-plan-de-desarrollo.md#tarea-2-2) · [2.12](docs/08-plan-de-desarrollo.md#tarea-2-12) · [2.14](docs/08-plan-de-desarrollo.md#tarea-2-14) |
 | **Front · sin conexión** | La PWA con su manifiesto en español y la cola local en IndexedDB: cada intención se guarda con su clave **antes** de intentar enviarse, y se reintenta con la espera de [17 §5.2](docs/17-resiliencia-offline-y-cache.md#52-cuánto-se-espera-entre-reintentos) hasta que la API la acepte o la rechace con motivo | [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) |
-| **Contrato** | El contrato v0.9.0 en [`contrato/openapi.json`](contrato/openapi.json): el sobre, el descriptor con sus listas, cuentas y categorías, y **los sprints [2](docs/08-plan-de-desarrollo.md#sprint-2) y [3](docs/08-plan-de-desarrollo.md#sprint-3) enteros acordados antes de implementarlos** —`/sesiones`, `/usuarios`, `/cargos`, `/bitacora`, `/navegacion`, las tres cabeceras del canal firmado, y los movimientos con su registro por `PUT` a su propio id, su anulación, su adjunto y su libro con filtros— | [0.15](docs/08-plan-de-desarrollo.md#tarea-0-15) · [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) · [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) · [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) · [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) |
-| **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 24 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 61 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los catorce triggers de auditoría escribiendo y las 34 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` en `0.1.0` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. La semilla es fija, re-ejecutable y con filas en toda tabla que preguntan las pruebas de permisos, y `sembrar.ps1` la lleva a dev y a qa sin dejarla acercarse a uat ni a prod. Todo esto **en dev**: qa se quedó cuatro migraciones atrás, hasta la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12) | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) · [2.4](docs/08-plan-de-desarrollo.md#tarea-2-4) |
+| **Contrato** | El contrato v0.4.0 en [`contrato/openapi.json`](contrato/openapi.json): el sobre, el descriptor con sus listas, cuentas y categorías, y **el [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) entero acordado antes de implementarlo** —`/sesiones`, `/usuarios`, `/cargos`, `/bitacora`, `/navegacion` y las tres cabeceras del canal firmado— | [0.15](docs/08-plan-de-desarrollo.md#tarea-0-15) · [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) · [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) · [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) |
+| **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 24 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 61 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los catorce triggers de auditoría escribiendo y las 34 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. La semilla es fija, re-ejecutable y con filas en toda tabla que preguntan las pruebas de permisos, y `sembrar.ps1` la lleva a dev y a qa sin dejarla acercarse a uat ni a prod. Y esto ya no es solo dev: **qa quedó al día con la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)**, con sus 109 comprobaciones en `OK` y `schema_version` en `0.3.0` | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) · [2.4](docs/08-plan-de-desarrollo.md#tarea-2-4) |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
 **565 pruebas en verde en la API** —y 68 más contra la base local— y 229 en el front. El dominio se prueba con las cifras de los
@@ -76,26 +76,34 @@ otra cosa.
 
 Nada en las manos ahora mismo.
 
+**🚧 El alta de usuarios está caída en dev, y el arreglo espera revisión.** Crear a alguien responde
+«algo salió mal» con cualquier nombre de usuario: falta `SUPABASE_SERVICE_ROLE_KEY` en el despliegue
+de la API, y el fallo no sabía decirlo porque `ProveedorNoDisponible` no tenía código propio. Deja
+sin servir la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) recién terminada. Carril **API**, rama `feature/gestion-de-usuarios-arreglo`
+en los dos repositorios, anotado el 2026-09-18. El plan es `plan/23-el-alta-decia-algo-salio-mal.md`.
+Es un arreglo suelto: no lleva número de tarea y no entra en las cuentas de abajo. **Falta cargar la
+variable en Railway**, que es lo único que el código no puede hacer solo.
+
 **Lo siguiente, en cuanto alguien lo tome:** cerrar la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) destrabó lo que la estaba
-esperando. En el carril API, con la identidad llegando ya a PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)), se abren la prueba
-de permisos con sesión real ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)) y la traducción de restricción a código del catálogo ([1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)) —que ya
-tiene de dónde salir: cada restricción se llama como la llama el [04](docs/04-modelo-de-datos.md)—. El filtro de idempotencia
+esperando. En el carril API, con la identidad llegando ya a PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)), se abre la prueba
+de permisos con sesión real ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)), que **conviene hacer seguida** de la traducción de restricción a
+código ([1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)): esa ya está hecha, y dejó una prueba —[C-01](docs/12-pruebas-y-calidad.md#c-01)— que hoy **nadie ejecuta en cada
+empuje**, porque necesita la base levantada y es la [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) la que la mete en la tubería. El filtro de idempotencia
 ([1.14](docs/08-plan-de-desarrollo.md#tarea-1-14)) ya salió de esa lista: necesitaba la transacción de la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) y la tabla de la [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13), y con las dos
 quedó hecho; detrás de él se abre la prueba de corte ([1.15](docs/08-plan-de-desarrollo.md#tarea-1-15)). En el carril Base, con
 `cargos` ([2.3](docs/08-plan-de-desarrollo.md#tarea-2-3)), la tabla de idempotencia ([1.13](docs/08-plan-de-desarrollo.md#tarea-1-13)), su purga ([1.16](docs/08-plan-de-desarrollo.md#tarea-1-16)) y la semilla reproducible
-([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)) cerradas, siguen la primera promoción a qa ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) y la tabla `usuarios` ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)). El
+([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)) y la primera promoción a qa ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) cerradas, sigue la tabla `usuarios` ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)). El
 carril Contrato, con los de los sprints 3 a 8. **El acceso está cerrado de punta a punta**: con la
 sesión de 30 días ([2.2](docs/08-plan-de-desarrollo.md#tarea-2-2)) se entra, se recarga la página y se sigue dentro, se sale por el menú de
 la sesión y quien entra con clave temporal la cambia y llega al tablero. Y con la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) **Gerencia ya
 puede dar de alta a alguien**, que era lo último que solo sabía hacer `seed.sql`. Lo que queda del
-[Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) es el catálogo de cargos ([2.8](docs/08-plan-de-desarrollo.md#tarea-2-8)), el registro de cada ingreso ([2.9](docs/08-plan-de-desarrollo.md#tarea-2-9)), la vista previa de
-Operación ([2.18](docs/08-plan-de-desarrollo.md#tarea-2-18)) y lo que cuelga de la pantalla de usuarios: su tabla completa ([2.15](docs/08-plan-de-desarrollo.md#tarea-2-15)), la bitácora
-([2.16](docs/08-plan-de-desarrollo.md#tarea-2-16)) y la clave obligatoria al reactivar ([2.17](docs/08-plan-de-desarrollo.md#tarea-2-17)). **Y el [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) es el que más se movió: el libro llega a
-PostgreSQL** ([3.3](docs/08-plan-de-desarrollo.md#tarea-3-3)) **y su contrato ya está acordado** ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13)). Con eso se destraban de golpe los
-endpoints de movimientos ([3.4](docs/08-plan-de-desarrollo.md#tarea-3-4)) y el registro rápido del front ([3.5](docs/08-plan-de-desarrollo.md#tarea-3-5)), que pueden ir a la vez, y
-detrás de ellos el sprint entero. Con el contrato entró también una tarea nueva: **la tabla
-`adjuntos` no existía y ninguna tarea la creaba** ([3.14](docs/08-plan-de-desarrollo.md#tarea-3-14)). La lista al día la calcula la herramienta,
-y está justo abajo.
+[Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) es el catálogo de cargos ([2.8](docs/08-plan-de-desarrollo.md#tarea-2-8)), el registro de cada ingreso ([2.9](docs/08-plan-de-desarrollo.md#tarea-2-9)) y lo que cuelga de
+la pantalla de usuarios: su tabla completa ([2.15](docs/08-plan-de-desarrollo.md#tarea-2-15)), la bitácora ([2.16](docs/08-plan-de-desarrollo.md#tarea-2-16)) y la clave
+obligatoria al reactivar ([2.17](docs/08-plan-de-desarrollo.md#tarea-2-17)). **Con la [2.18](docs/08-plan-de-desarrollo.md#tarea-2-18) el carril Front cerró su parte del sprint:**
+Gerencia ya mira la pantalla como la ve la empleada, y sale de ahí con un clic. **Y el [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) arrancó por lo que más
+destrababa: el libro ya llega a PostgreSQL** ([3.3](docs/08-plan-de-desarrollo.md#tarea-3-3)). A los endpoints de movimientos ([3.4](docs/08-plan-de-desarrollo.md#tarea-3-4)) ya solo les
+falta su contrato ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13)), medio día que además abre el registro rápido del front ([3.5](docs/08-plan-de-desarrollo.md#tarea-3-5)). La
+lista al día la calcula la herramienta, y está justo abajo.
 
 > **El [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) está cerrado salvo lo que cuesta dinero.** La base existe, tiene dueño distinto del
 > de la API y **RLS ya juzga**: conectada como `prisma_api`, la misma consulta devuelve cero filas de
@@ -112,23 +120,22 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) · [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
-| **Base** | [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12) · [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) |
-| **Front** | [2.18](docs/08-plan-de-desarrollo.md#tarea-2-18) · [3.5](docs/08-plan-de-desarrollo.md#tarea-3-5) |
-| **Contrato** | [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
+| **API** | [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) · [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
+| **Base** | [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) |
+| **Contrato** | [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **81 tareas y 100,5 días de trabajo** de 134 tareas del plan.
+Quedan **77 tareas y 96 días de trabajo** de 133 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 15,1 semanas | **18,1 semanas** |
-| 2 | 8,4 semanas | **11,4 semanas** |
-| 3 | 7,1 semanas | **10,1 semanas** |
+| 1 | 14,4 semanas | **17,4 semanas** |
+| 2 | 8,1 semanas | **11,1 semanas** |
+| 3 | 6,4 semanas | **9,4 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -136,23 +143,28 @@ Quedan **81 tareas y 100,5 días de trabajo** de 134 tareas del plan.
 El orden sale de las dependencias del [plan](docs/08-plan-de-desarrollo.md): cuántas tareas pendientes cuelgan de cada una, directa
 o indirectamente. No es el orden en que se descubrieron.
 
-- [ ] ⚡ **Poner qa al día** ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) — destraba una sola tarea, la [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11), pero mientras tanto **dev y qa
-      dejaron de ser iguales**: las cuatro migraciones de las tareas [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1), [1.2](docs/08-plan-de-desarrollo.md#tarea-1-2), [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) y [1.16](docs/08-plan-de-desarrollo.md#tarea-1-16) solo están en
-      dev. Correr `scripts/db/verificar-base.sql` contra qa lo dice línea por línea: ahí la base
-      todavía acepta un saldo negativo, un sobre del 120 % y una anulación cuyo motivo es un espacio
-      en blanco, no tiene dónde guardar una clave de idempotencia y no purga ninguna. El
-      procedimiento ya está escrito y probado contra la base local ([16 §5.3](docs/16-base-de-datos-y-snapshots.md#53-promover-a-qa-paso-a-paso)); falta correrlo
-      contra qa, y eso **es** la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12). La semilla que va con ellas ya está lista ([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)).
+- [ ] ⚡ **El contrato de movimientos** ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13)) — **32 tareas detrás** por medio día de trabajo,
+      y sin nada pendiente que lo detenga. **Con el repositorio hecho, es lo único que les falta a los
+      endpoints** ([3.4](docs/08-plan-de-desarrollo.md#tarea-3-4)). Un contrato se acuerda **antes** de implementarlo
+      ([21 §3.2](docs/21-trabajo-en-paralelo.md#32-contrato-acordado-y-contrato-generado-no-se-contradicen)): escribirlo tarde deja al carril Front esperando al API, que es justo lo que
+      el paralelismo quiere evitar.
+- [x] **El contrato de pedidos** ([4.10](docs/08-plan-de-desarrollo.md#tarea-4-10)) — hecho: tenía **22 tareas detrás**, una directa —la
+      gestión de clientes ([4.2](docs/08-plan-de-desarrollo.md#tarea-4-2))— y 21 indirectas, y la [4.5](docs/08-plan-de-desarrollo.md#tarea-4-5) está en el camino crítico. El
+      `v0.10.0` estrena el rango `30`–`39`, que estaba entero libre. **Dejó una pregunta para
+      Gerencia y una migración sin tarea:** el mockup no tiene pantalla de clientes y `pedidos` no
+      tiene dónde guardar el motivo de la cancelación, las dos en el [§10](#10-decisiones-de-construcción-que-conviene-revisar).
+- [x] **Poner qa al día** ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) — hecho: **dev y qa vuelven a ser el mismo esquema**, y con eso se
+      destraba la prueba de permisos contra qa ([2.11](docs/08-plan-de-desarrollo.md#tarea-2-11)). El retrato de antes desmintió al tablero en
+      lo que más importaba: qa **sí** rechazaba ya el saldo negativo, el sobre del 120 % y el motivo
+      en blanco, porque los dominios ([1.1](docs/08-plan-de-desarrollo.md#tarea-1-1)) y la revocación del borrado ([1.2](docs/08-plan-de-desarrollo.md#tarea-1-2)) llevaban tiempo
+      aplicados allá. Lo que de verdad le faltaba eran cinco migraciones: las claves de idempotencia
+      ([1.13](docs/08-plan-de-desarrollo.md#tarea-1-13)), su purga ([1.16](docs/08-plan-de-desarrollo.md#tarea-1-16)), las dos tablas del canal firmado ([2.20](docs/08-plan-de-desarrollo.md#tarea-2-20)) y las dos filas de versión.
+      De 45 comprobaciones en falla a **109 en `OK`**. Queda al revés: dev sin la `0.3.0`.
 - [ ] ⚡ **uat y prod** · Decisión — son los dos proyectos de Supabase que faltan para cerrar [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4), y
-      los dos son **de pago** ([19 §8.1](docs/19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no)). Los decide Gerencia, y hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) no hay nada que
-      promover a ellos.
-- [x] **El contrato de movimientos** ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13)) — hecho: tenía **32 tareas detrás** por medio día de
-      trabajo, y era lo único que les faltaba a los endpoints ([3.4](docs/08-plan-de-desarrollo.md#tarea-3-4)). Un movimiento se registra con
-      `PUT` a su propio id, se anula con motivo, se le adjunta el soporte y se lee con filtros; y ocho
-      códigos nuevos del rango 20-29 le ponen nombre en español a lo que hoy saldría como `50000`. **Se
-      acordó antes de implementarlo** ([21 §3.2](docs/21-trabajo-en-paralelo.md#32-contrato-acordado-y-contrato-generado-no-se-contradicen)), así que el carril Front puede pintar el registro
-      rápido ([3.5](docs/08-plan-de-desarrollo.md#tarea-3-5)) sin esperar a la API. Destapó además que **la tabla `adjuntos` no existe y
-      ninguna tarea la creaba**: eso es ahora la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14).
+      los dos son **de pago** ([19 §8.1](docs/19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no)). **Ya no falta averiguar nada:** el expediente está en el
+      [§7.1](#71-el-expediente-de-uat-y-prod) con la cifra —≈ 55 USD al mes—, cada fuente con su fecha de consulta y las cuatro
+      condiciones del [ADR-026](docs/adr/ADR-026-railway-al-final.md) comprobadas contra Railway una por una. Lo que falta es la firma de
+      Gerencia, que es el paso 2 del [09 §3.1](docs/09-plan-de-implantacion.md#31-alistamiento-técnico-de-los-ambientes), y hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) no hay nada que promover a ellos.
 - [x] **El repositorio de movimientos** ([3.3](docs/08-plan-de-desarrollo.md#tarea-3-3)) — hecho: tenía **36 tareas detrás** y abría el
       [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) entero. Lo que el dominio calcula ya llega a PostgreSQL con la persona de la sesión,
       y quien juzga si puede escribirlo es `mov_insercion`, no la API. Detrás se abren los saldos por
@@ -272,17 +284,26 @@ hasta aplicarlo y probarlo.
       rotas a propósito: sin el `true`, la identidad de una petición se quedaba pegada a la conexión
       y la siguiente veía lo que no debía. Las corre `./gradlew integracion`, no `build`
 - [ ] ⚡ [**1.7**](docs/08-plan-de-desarrollo.md#tarea-1-7) Prueba de permisos con sesión real, con y sin la comprobación de la API · API
-- [ ] ⚡ [**1.8**](docs/08-plan-de-desarrollo.md#tarea-1-8) Traducción restricción → código del catálogo · API
+- [x] [**1.8**](docs/08-plan-de-desarrollo.md#tarea-1-8) Traducción restricción → código del catálogo · API —
+      `TraduccionDeRestricciones` cruza `(objeto, restricción)` con el catálogo, y [C-01](docs/12-pruebas-y-calidad.md#c-01) la compara
+      con `pg_constraint` en las dos direcciones: renombrar una restricción falla las dos a la vez
 - [x] [**1.9**](docs/08-plan-de-desarrollo.md#tarea-1-9) `Dinero` en Java y en Dart · API, Front — en la API, sumas que fallan al desbordar,
       porcentaje `HALF_UP` y formato colombiano; en el front, un tipo sin operadores y su formato en
       `ui/formato/moneda.dart`. Pruebas con las cifras de los documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md), verificadas en negativo
-- [ ] 🔒 [**1.10**](docs/08-plan-de-desarrollo.md#tarea-1-10) Cuentas y categorías: endpoints y pantalla ([RF-97](docs/03-requisitos-y-bdd.md#rf-97)) · API, Front
+- [ ] ⚡ [**1.10**](docs/08-plan-de-desarrollo.md#tarea-1-10) Cuentas y categorías: endpoints y pantalla ([RF-97](docs/03-requisitos-y-bdd.md#rf-97)) · API, Front
 - [x] [**1.11**](docs/08-plan-de-desarrollo.md#tarea-1-11) Semilla reproducible para dev y qa · Base — ids y fechas escritos,
       re-ejecutable sin borrar nada, y con filas en toda tabla que leen [P-01](docs/12-pruebas-y-calidad.md#p-01) a [P-31](docs/12-pruebas-y-calidad.md#p-31), porque una tabla
       vacía hace pasar «no ve lo ajeno» por la razón equivocada. `scripts/db/sembrar.ps1` la lleva a
       dev y a qa, y se niega con uat y prod. 78 comprobaciones en `OK` contra la base local, y la
       semilla corrida entera contra dev dentro de una transacción revertida
-- [ ] ⚡ [**1.12**](docs/08-plan-de-desarrollo.md#tarea-1-12) Primera promoción de migraciones dev → qa · Base
+- [x] [**1.12**](docs/08-plan-de-desarrollo.md#tarea-1-12) Primera promoción de migraciones dev → qa · Base — corrida con el
+      procedimiento del [16 §5.3](docs/16-base-de-datos-y-snapshots.md#53-promover-a-qa-paso-a-paso), que estrenó su paso 0: apuntar el CLI a qa, porque
+      `--linked` obedece al último `supabase link` y ese apuntaba a dev. El retrato de antes dio **45
+      comprobaciones en falla de 109**; el de después, **109 en `OK`**, con la semilla recargada. Se
+      aplicaron **cinco** migraciones y no las cuatro que decían los documentos: los dominios y la
+      revocación del borrado **ya estaban en qa**, y lo que le faltaba de verdad era la idempotencia
+      entera, el canal firmado entero y la purga. `schema_version` publica `0.3.0`, que esta misma
+      tarea escribió para no dejar a la `0.2.0` describiendo de menos
 - [x] [**1.13**](docs/08-plan-de-desarrollo.md#tarea-1-13) Tabla `peticiones_idempotentes` · Base — transcrita del [04 §4.9](docs/04-modelo-de-datos.md#49-claves-de-idempotencia) en
       una migración nueva, con su índice por vencimiento, las tres políticas `idem_*` y `FORCE`. Cada
       persona lee, escribe y sella solo sus claves, **y Gerencia no es excepción**; nadie que atienda
@@ -390,7 +411,16 @@ hasta aplicarlo y probarlo.
 - [ ] ⚡ [**2.15**](docs/08-plan-de-desarrollo.md#tarea-2-15) Tabla única de usuarios activos y desactivados ([RF-84](docs/03-requisitos-y-bdd.md#rf-84) a [RF-87](docs/03-requisitos-y-bdd.md#rf-87)) · API, Front
 - [ ] 🔒 [**2.16**](docs/08-plan-de-desarrollo.md#tarea-2-16) Bitácora de cambios y reversión sin borrar ([RF-88](docs/03-requisitos-y-bdd.md#rf-88), [RF-89](docs/03-requisitos-y-bdd.md#rf-89), [RF-91](docs/03-requisitos-y-bdd.md#rf-91)) · Base, API, Front
 - [ ] ⚡ [**2.17**](docs/08-plan-de-desarrollo.md#tarea-2-17) Cambio de clave obligatorio al reactivar ([RF-90](docs/03-requisitos-y-bdd.md#rf-90)) · API, Front
-- [ ] ⚡ [**2.18**](docs/08-plan-de-desarrollo.md#tarea-2-18) Vista previa de Operación para Gerencia ([RF-92](docs/03-requisitos-y-bdd.md#rf-92) a [RF-94](docs/03-requisitos-y-bdd.md#rf-94)) · Front, API
+- [x] [**2.18**](docs/08-plan-de-desarrollo.md#tarea-2-18) Vista previa de Operación para Gerencia ([RF-92](docs/03-requisitos-y-bdd.md#rf-92) a [RF-94](docs/03-requisitos-y-bdd.md#rf-94)) · Front, API — el
+      contrato ya la declaraba entera y ahora el servidor la cumple: `vista=operacion` devuelve el
+      menú de Operación y el aviso de la franja, y **volver a mi vista es pedir la navegación con el
+      cuerpo vacío**, que por eso no tiene un `vista=gerencia`. **El front no recorta el menú: lo
+      vuelve a pedir** ([ADR-018](docs/adr/ADR-018-front-sin-decisiones.md)), y `frontera_test.dart` ya lo hacía imposible de otra forma. Las dos
+      banderas siguen saliendo del tipo **real**: `puedeGestionarUsuarios` cae ([A-17](docs/12-pruebas-y-calidad.md#a-17)) y
+      `puedeVerComoOperacion` no ([A-18](docs/12-pruebas-y-calidad.md#a-18)), o Gerencia quedaría atrapada. La franja no se cierra
+      ([A-19](docs/12-pruebas-y-calidad.md#a-19)), se apila con la de ambiente, y su texto lo redacta la API: el título y el párrafo del
+      [RF-94](docs/03-requisitos-y-bdd.md#rf-94) entraron al mapa de `frontera_test.dart`, así que escribirlos en `lib/` rompe la
+      compilación
 - [x] [**2.20**](docs/08-plan-de-desarrollo.md#tarea-2-20) Tablas del canal firmado: `sesiones` y `nonces_vistos` · Base — apareció al ir a
       hacer la [2.13](docs/08-plan-de-desarrollo.md#tarea-2-13): el filtro no tenía dónde leer la clave de firma que la [2.12](docs/08-plan-de-desarrollo.md#tarea-2-12) entrega
       y olvida, y `nonces_vistos` llevaba días especificada en el [04 §4.10](docs/04-modelo-de-datos.md#410-los-nonce-vistos) sin que ninguna
@@ -421,8 +451,8 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [x] [**3.3**](docs/08-plan-de-desarrollo.md#tarea-3-3) Repositorio de movimientos contra PostgreSQL · API — `MovimientosEnPostgres`
       guarda por `ConIdentidad` el autor y el instante que puso el caso de uso, y la base juzga:
       registrar a nombre de otra persona lo rechaza `mov_insercion`
-- [ ] ⚡ [**3.4**](docs/08-plan-de-desarrollo.md#tarea-3-4) Endpoints de movimientos con sus códigos del catálogo · API
-- [ ] ⚡ [**3.5**](docs/08-plan-de-desarrollo.md#tarea-3-5) Formulario de registro rápido para celular, pintado del descriptor · Front
+- [ ] 🔒 [**3.4**](docs/08-plan-de-desarrollo.md#tarea-3-4) Endpoints de movimientos con sus códigos del catálogo · API
+- [ ] 🔒 [**3.5**](docs/08-plan-de-desarrollo.md#tarea-3-5) Formulario de registro rápido para celular, pintado del descriptor · Front
 - [ ] 🔒 [**3.6**](docs/08-plan-de-desarrollo.md#tarea-3-6) Foto del recibo comprimida, subida a través de la API · Front, API
 - [ ] 🔒 [**3.7**](docs/08-plan-de-desarrollo.md#tarea-3-7) Transferencias entre cuentas · API
 - [ ] 🔒 [**3.8**](docs/08-plan-de-desarrollo.md#tarea-3-8) Listado con filtros · API, Front
@@ -431,10 +461,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [x] [**3.11**](docs/08-plan-de-desarrollo.md#tarea-3-11) Marca de registro tardío · API — más de 7 días entre lo que ocurrió y lo que se
       digitó, contados en días de Bogotá
 - [ ] ⚡ [**3.12**](docs/08-plan-de-desarrollo.md#tarea-3-12) Saldos por cuenta · API
-- [x] [**3.13**](docs/08-plan-de-desarrollo.md#tarea-3-13) Contrato de movimientos · Contrato — registrar por `PUT` a su propio id,
-      anular con motivo, adjuntar el soporte y el libro con filtros; nueve esquemas, el formulario
-      `movimiento` y ocho códigos del rango 20-29. Contrato `0.9.0`
-- [ ] ⚡ [**3.14**](docs/08-plan-de-desarrollo.md#tarea-3-14) Tabla `adjuntos` y bucket de soportes · Base
+- [ ] ⚡ [**3.13**](docs/08-plan-de-desarrollo.md#tarea-3-13) Contrato de movimientos · Contrato
 
 **[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
 
@@ -488,7 +515,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 - [x] [**4.1**](docs/08-plan-de-desarrollo.md#tarea-4-1) Dominio `Pedido`, estados y transiciones · API — los cinco estados y los siete pasos
       que existen entre ellos; entregado y cancelado son finales, y anular no es cancelar
-- [ ] 🔒 [**4.2**](docs/08-plan-de-desarrollo.md#tarea-4-2) Gestión de clientes · API, Front
+- [ ] ⚡ [**4.2**](docs/08-plan-de-desarrollo.md#tarea-4-2) Gestión de clientes · API, Front
 - [ ] 🔒 [**4.3**](docs/08-plan-de-desarrollo.md#tarea-4-3) Pedido con líneas de producto · API, Front
 - [ ] ⚡ [**4.4**](docs/08-plan-de-desarrollo.md#tarea-4-4) `CobrarAnticipo`: crea pasivo, no ingreso · API
 - [ ] 🔒 [**4.5**](docs/08-plan-de-desarrollo.md#tarea-4-5) Función en la base que entrega el pedido y causa la venta en una transacción · Base
@@ -496,7 +523,9 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [ ] 🔒 [**4.7**](docs/08-plan-de-desarrollo.md#tarea-4-7) Resaltado de pedidos estancados · API, Front
 - [ ] 🔒 [**4.8**](docs/08-plan-de-desarrollo.md#tarea-4-8) Factura adjunta al pedido · API, Front
 - [ ] 🔒 [**4.9**](docs/08-plan-de-desarrollo.md#tarea-4-9) Cancelación con destino del anticipo · API
-- [ ] ⚡ [**4.10**](docs/08-plan-de-desarrollo.md#tarea-4-10) Contrato de clientes, pedidos y anticipos · Contrato
+- [x] [**4.10**](docs/08-plan-de-desarrollo.md#tarea-4-10) Contrato de clientes, pedidos y anticipos · Contrato — v0.10.0:
+      nueve operaciones, catorce esquemas y nueve códigos que estrenan el rango `30`–`39`. La entrega
+      recibe lo que recibe `fn_entregar_pedido` y nada más; cancelar y anular son dos operaciones
 
 **[Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Cotizador**
 
@@ -546,7 +575,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 |---|---|---|---|---|
 | 1 | Dónde se aloja la API | Quien dirige | Tarea [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) | ✅ Railway, al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)) |
 | 2 | Dónde se publica el front web | Quien dirige | Tarea [0.9](docs/08-plan-de-desarrollo.md#tarea-0-9) | ✅ Railway, al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)) |
-| 3 | Los cuatro proyectos de Supabase y el pago de uat y prod | Quien dirige crea; Gerencia paga | Tarea [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) | 🟡 dev y qa configurados, con el esquema y la semilla aplicados; faltan uat y prod, los de pago |
+| 3 | Los cuatro proyectos de Supabase y el pago de uat y prod | Quien dirige crea; Gerencia paga | Tarea [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) | 🟡 dev y qa configurados, con el esquema y la semilla aplicados. **El expediente está listo y la cifra es ≈ 55 USD al mes** ([§7.1](#71-el-expediente-de-uat-y-prod)); falta la firma de Gerencia, que es el paso 2 del [09 §3.1](docs/09-plan-de-implantacion.md#31-alistamiento-técnico-de-los-ambientes) |
 | 4 | PostgreSQL para desarrollar sin Docker | Quien dirige | Tareas [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) y [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) | ✅ El proyecto dev de Supabase, mientras Docker no arranque |
 | 5 | Remotos de los repositorios | Quien dirige | Integración continua | ✅ Los cuatro en GitHub |
 | 6 | Cómo consiguen la API y su CI el esquema de `prisma_db` | Carril API | Tareas [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7), [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) y [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) | ✅ Por etiqueta, con el Supabase CLI en la tubería ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) |
@@ -565,6 +594,86 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 - [ ] La variante del trigger de auditoría para `usuarios`, que detecta `desactivado_en` · [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2)
 - [ ] 🔒 El `CREATE TABLE` de `adjuntos` · [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3), tarea [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6)
 - [ ] 🔒 El `CREATE TABLE` de `cotizaciones` y `cotizacion_lineas` · [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8), tarea [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8)
+
+### 7.1 El expediente de uat y prod
+
+Lo que le falta a la fila 3 para poder decidirse. **Ningún documento del proyecto traía una cifra**:
+el [19 §8.1](docs/19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no) decía «es una factura, y es pequeña», y eso no es un número. Aquí están, **consultadas
+el 2026-09-18**, con su fuente, porque un precio sin fecha envejece sin avisar.
+
+**1 · Cuánto cuesta al mes**
+
+| Proveedor | Qué hay que contratar | Al mes |
+|---|---|---:|
+| Supabase | Plan **Pro** en una organización nueva para uat y prod: 25 USD de plan + 10 por proyecto − 10 de crédito incluido | **35 USD** |
+| Railway | Plan **Pro** por espacio de trabajo, 20 USD con 20 USD de crédito incluido | **20 USD** |
+| | **Total** | **≈ 55 USD** |
+
+- **El plan de Supabase es por organización, no por proyecto**, y la cuenta tiene **dos proyectos
+  gratuitos en total** repartidos como quiera: dev y qa ya los gastaron. Así que uat y prod no caben
+  en el plan gratuito ni aunque se aceptara que se pausen. Se pueden tener una organización gratuita
+  y una de pago a la vez, y por eso lo barato es **dejar dev y qa donde están y abrir una
+  organización nueva para los dos de pago**: meter los cuatro en una sola sube a 55 USD solo en
+  Supabase, y lo único que se gana es que dev y qa dejen de pausarse.
+- **El plan gratuito pausa el proyecto tras una semana de inactividad; el Pro dice «nunca».** Eso, y
+  no otra cosa, es lo que compra el [RNF-20](docs/03-requisitos-y-bdd.md#rnf-20).
+- **Railway cobra lo que se usa, no lo que se reserva**: 10 USD por GB al mes y 20 por vCPU al mes,
+  facturado por segundo. uat con 768 MB y prod con 1 GB ([09 §3.2](docs/09-plan-de-implantacion.md#32-alojar-la-api-de-java-en-los-cuatro-ambientes)) son 1,75 GB, o sea **17,50 USD de
+  memoria** si los dos estuvieran siempre en su piso, más la CPU que gasten. Cabe en el crédito de
+  20 del plan Pro, pero **justo**: el de Hobby son 5 USD y no alcanza. Y dev ya está en Railway
+  ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)), así que lo que gaste cuenta contra el mismo crédito.
+- Fuentes: [supabase.com/pricing](https://supabase.com/pricing), [su guía de facturación](https://supabase.com/docs/guides/platform/billing-on-supabase),
+  [railway.com/pricing](https://railway.com/pricing) y [su referencia de precios](https://docs.railway.com/reference/pricing).
+
+**2 · Qué desbloquea**
+
+`0.4` → [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2) uat en pie → [9.3](docs/08-plan-de-desarrollo.md#tarea-9-3) promover sin recompilar y [9.5](docs/08-plan-de-desarrollo.md#tarea-9-5) permisos en los cuatro ambientes →
+[9.10](docs/08-plan-de-desarrollo.md#tarea-9-10) etiquetar `1.0.0` → [H10](docs/08-plan-de-desarrollo.md#h10) → go-live. **[H10](docs/08-plan-de-desarrollo.md#h10) es «Gerencia aprueba en UAT exactamente el
+artefacto que irá a prod»**, y sin uat contratado esa firma no tiene sobre qué hacerse.
+
+**3 · Qué pasa si se aplaza**
+
+Nada, hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9): antes no hay nada que promover ahí, y el [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md) ya decidió no abrir
+los cuatro ambientes ahora. Lo que no se puede aplazar es **decidirlo**: el [09 §3.1](docs/09-plan-de-implantacion.md#31-alistamiento-técnico-de-los-ambientes) dice que «dos de
+los pasos cuestan plata y hay que decidirlos con tiempo», y una decisión de gasto descubierta la
+semana de la firma se toma mal o se pospone. Posponerla mueve el go-live.
+
+**Las cuatro condiciones del [ADR-026](docs/adr/ADR-026-railway-al-final.md), comprobadas contra Railway**
+
+| # | Condición | Cómo responde Railway |
+|---|---|---|
+| 1 | Se promueve la imagen, no se recompila | Despliega imágenes de contenedor, que es lo que la API ya produce. **Falta el registro de imágenes**, que no existe todavía y sin el cual esta condición no se cumple entre ambientes |
+| 2 | uat y prod no se duermen | **No descarta ningún plan**, que era el miedo: dormirse es un interruptor por servicio —«Serverless», en los ajustes de despliegue— que viene apagado. Se deja apagado en uat y prod y ya. Encendido, duerme el servicio a los 10 minutos sin actividad y **la primera petición puede contestar 502**, que es exactamente lo que invalidaría la revisión de Gerencia |
+| 3 | Los secretos viven en el gestor del proveedor | Variables por ambiente, que es como ya corre dev |
+| 4 | La `service_role` no entra en el servicio de la API | No depende del proveedor: es nuestra ([ADR-033](docs/adr/ADR-033-service-role-solo-en-auth.md)) |
+
+El [ADR-026](docs/adr/ADR-026-railway-al-final.md) las numera como tres porque junta las dos últimas en una; se separan aquí porque se
+comprueban por separado.
+
+**Quién hace cada paso del [09 §3.1](docs/09-plan-de-implantacion.md#31-alistamiento-técnico-de-los-ambientes)**
+
+De los nueve, **el paso 2 es el único de Gerencia** —contratar lo que hay que pagar, antes de
+levantar uat— y los otros ocho son de apoyo técnico. Ninguno de esos ocho puede correr para uat y
+prod hasta que el 2 esté hecho, porque los proyectos todavía no existen.
+
+**Y lo que uat exige y no es dinero:** datos **realistas y anonimizados**, con su propia semilla
+([9.2](docs/08-plan-de-desarrollo.md#tarea-9-2)). La de dev y qa no entra ahí nunca —lleva nombres reales del equipo—, y `sembrar.ps1` solo
+admite `dev` y `qa` para que la regla no dependa de que alguien se acuerde. Es el riesgo [R-23](docs/11-riesgos-y-proteccion-de-datos.md) y es
+la Ley 1581.
+
+**Lo que este expediente deja fuera a propósito**, para que una decisión de gasto no se convierta en
+una reunión de todo: las cuatro del [21 §8](docs/21-trabajo-en-paralelo.md#8-qué-hay-que-decidir-antes-de-abrir-un-segundo-carril) —quién trabaja cada carril, los permisos de escritura,
+contrato por etiqueta o por paquete, y quién desempata un cambio de contrato—; el **plan pago de
+dev**; el **registro de imágenes** de la condición 1; y **apagar la Data API** o revocarle el acceso
+a `anon`.
+
+**Dos de esa lista tienen fecha externa y no esperan a Gerencia:**
+
+- **Las claves heredadas.** Supabase «deprecia las claves `anon` y `service_role` para finales de
+  2026» y las reemplaza por `sb_publishable_…` y `sb_secret_…` ([su documentación](https://supabase.com/docs/guides/api/api-keys), consultada el
+  2026-09-18). Crear uat y prod con claves que van a morir es hacer el trabajo dos veces, y las
+  variables que hoy las nombran están en el [09 §3.2](docs/09-plan-de-implantacion.md#32-alojar-la-api-de-java-en-los-cuatro-ambientes).
+- **Las contraseñas de la semilla en dev**, hoy alcanzables desde internet.
 
 ---
 
@@ -603,21 +712,9 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
   `INSERT` sobre `cuentas` —y otra sobre `categorias`— o dejar dicho por qué aquí sí basta la API.
 - **Las reglas del dominio todavía no tienen código del catálogo.** `Movimiento`, `Pedido` y
   `Costeo` rechazan lo que no se puede registrar con excepciones de Java, y hoy eso saldría como
-  `50000`, «algo salió mal». Las de `Movimiento` **ya tienen nombre y mensaje acordados** desde la
-  [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) —`42223` a `42226`, `40920` y `40921`—, pero nadie los emite hasta la [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4). Las de `Pedido`
-  y `Costeo` esperan a sus contratos ([4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) y [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10)), y la tabla general de restricción a código,
-  a la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8). Hasta entonces, ninguno de esos mensajes es el que verá el taller.
-- **El contra-asiento se quedó sin ruta acordada.** La [3.10](docs/08-plan-de-desarrollo.md#tarea-3-10) corrige un movimiento errado creando
-  otro que lo reversa, con `corrige_a_id` apuntando al original ([04 §5.3](docs/04-modelo-de-datos.md#53-corrección-por-contra-asiento)), pero `corrigeAId` no
-  entró al contrato de la [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13): no cabe en el formulario «movimiento» —el descriptor pinta
-  todos sus campos, y ese no se pinta— y darle ruta propia era decidir desde aquí una pantalla que
-  nadie ha diseñado. La [3.10](docs/08-plan-de-desarrollo.md#tarea-3-10) depende hoy solo de la [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9), así que hay que acordarle el contrato
-  antes de implementarla ([21 §3.2](docs/21-trabajo-en-paralelo.md#32-contrato-acordado-y-contrato-generado-no-se-contradicen)).
-- **Nadie comprueba que la categoría sea de la naturaleza del movimiento.** Un gasto con una
-  categoría de ingreso entra: la base no lo impide —`categorias.naturaleza` no se cruza con
-  `movimientos.tipo`—, el dominio no lo mira y el contrato de la [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) no le dio código, porque
-  ningún documento escribe esa regla. O se escribe en el [05](docs/05-reglas-financieras.md) y entonces tiene código y
-  restricción, o se dice por qué da igual.
+  `50000`, «algo salió mal». La traducción a códigos de cinco dígitos con su mensaje en español
+  llega con los endpoints y con los contratos que los acuerdan (tareas [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8), [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) y [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13)): hasta
+  entonces, ninguno de esos mensajes es el que verá el taller.
 - **El cuadro de márgenes ya decide cosas que el contrato de la [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) tiene que llevar.** La [5.6](docs/08-plan-de-desarrollo.md#tarea-5-6)
   dejó en el dominio la lectura de cada producto, su nivel de alerta, el texto con los montos, la
   mediana contra la que se leyó y los dos órdenes del cuadro. Si el contrato no los trae, el front de
@@ -645,8 +742,8 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
   existen ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)) y se corren a mano con `./gradlew integracion` contra la base local; el trabajo de
   integración continua que descarga `prisma_db` por etiqueta y levanta Supabase se monta con la
   [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7). `prisma_db` es privado, así que necesita el secreto `PRISMA_DB_TOKEN` en `prisma_api`, y ese lo
-  crea quien dirige. Y `prisma_db` todavía no tiene ninguna etiqueta `esquema-v…`, aunque su
-  esquema ya esté aplicado: etiquetarlo es parte de la promoción que tiene que escribir la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12).
+  crea quien dirige. Y `prisma_db` solo tiene la etiqueta `esquema-v0.1.0`, siete migraciones por
+  detrás de lo que dice su `develop`: poner la que falta es parte de la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12).
 - **Sin qa hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9)** ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)): mientras tanto, «terminado» es fusionado a `develop` con la
   integración continua en verde. Que dev ya esté en línea no crea la puerta de qa.
 - **Los íconos de la PWA siguen siendo los de la plantilla de Flutter.** El logo del taller es
@@ -764,9 +861,10 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **El código `40302` entra al catálogo de la API.** El contrato acordado lo tenía desde la
       [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) marcado como pendiente de la [2.1](docs/08-plan-de-desarrollo.md#tarea-2-1), que no lo emitió. Lo emite esta tarea: quien entró con
       la contraseña temporal no recibe menú
-- [ ] **La operación no acepta `vista=operacion`**, que el contrato declara para la vista previa de
-      Gerencia. Es la [2.18](docs/08-plan-de-desarrollo.md#tarea-2-18), y declarar lo que no se emite es el error que esta misma lista ya
-      tiene anotado para la cookie de renovación
+- [x] **La operación ya acepta `vista=operacion`** — lo cerró la [2.18](docs/08-plan-de-desarrollo.md#tarea-2-18). Estuvo declarado sin
+      emitirse desde la [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19), que es el error que esta misma lista tenía anotado para la cookie de
+      renovación, y la copia fijada del contrato convergió hacia el acordado sin subirle la versión:
+      no se declaró nada nuevo, se empezó a cumplir lo que ya estaba escrito
 - [ ] **El menú pinta y no lleva a ninguna parte todavía.** Las pantallas de cada sección son de los
       sprints 3 a 8; la activa se marca y el contenido es un marcador de posición
 
@@ -912,10 +1010,11 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       cuándo sube el SemVer del esquema; el precedente de la [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) es no moverlo, y `prisma_api`
       declara `0.1.0` en su configuración, que no puede viajar en el mismo commit ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)). Cuándo y
       cómo se publica una versión nueva del esquema es lo que tiene que escribir la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)
-- [ ] **Los docs [07](docs/07-arquitectura.md) y [12](docs/12-pruebas-y-calidad.md) y el [ADR-015](docs/adr/ADR-015-validacion-tres-capas.md) nombran una restricción `movimientos_valor_positivo`
-      que no existe.** El [04](docs/04-modelo-de-datos.md), que es el que manda sobre el esquema, hace de esa regla un dominio: quien
-      rechaza un valor cero es `dinero_positivo_mayor_que_cero`. La tabla de traducción de la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)
-      tiene que salir del [04](docs/04-modelo-de-datos.md) y no de los ejemplos de los otros tres
+- [x] **Los docs [07](docs/07-arquitectura.md) y [12](docs/12-pruebas-y-calidad.md) nombraban una restricción `movimientos_valor_positivo` que no
+      existe.** El [04](docs/04-modelo-de-datos.md), que es el que manda sobre el esquema, hace de esa regla un dominio: quien
+      rechaza un valor cero es `dinero_positivo_mayor_que_cero`. Corregido en los dos por la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8), y
+      la tabla salió del [04](docs/04-modelo-de-datos.md). **El [ADR-015](docs/adr/ADR-015-validacion-tres-capas.md) se queda como estaba**: está reemplazado, y un
+      documento reemplazado «se conserva como historia» ([22 §4](docs/22-documentacion.md))
 - [ ] **La verificación de la base es un guion SQL** (`scripts/db/verificar-base.sql`) y no un marco
       de pruebas: `prisma_db` no tiene ninguno, y lo que hay que comprobar son respuestas de
       PostgreSQL a sesiones de verdad. Corre dentro de una transacción que termina en `ROLLBACK`
@@ -986,11 +1085,30 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 
 **De la primera promoción a qa (tarea [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)):**
 
-- [ ] **La versión del esquema sube a `0.2.0`, y esa regla no la escribió ningún documento.**
-      [19 §4.2](docs/19-ambientes-y-entrega.md#42-las-reglas) define MAJOR, MINOR y PATCH **para la API**; del esquema solo se sabe que lleva
-      SemVer propio. Se decidió lo mínimo: mientras todo siga en `0.y.z` y ninguna API en producción
-      escriba, una tabla nueva y unas restricciones más estrictas son **MINOR**. Es la decisión que
-      esta lista le pedía a la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12), y responde la entrada de arriba sobre `schema_version`
+- [ ] **La versión del esquema sube a `0.2.0`, y luego a `0.3.0`, y esa regla no la escribió ningún
+      documento.** [19 §4.2](docs/19-ambientes-y-entrega.md#42-las-reglas) define MAJOR, MINOR y PATCH **para la API**; del esquema solo se
+      sabe que lleva SemVer propio. Se decidió lo mínimo: mientras todo siga en `0.y.z` y ninguna API
+      en producción escriba, una tabla nueva y unas restricciones más estrictas son **MINOR**. Es la
+      decisión que esta lista le pedía a la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12), y responde la entrada de arriba sobre
+      `schema_version`
+- [ ] **La `0.2.0` describe cuatro cambios y la base tiene cinco, y se arregló con una fila más y no
+      corrigiéndola.** Entre que se fusionó y que se promovió entraron las dos tablas del canal
+      firmado ([2.20](docs/08-plan-de-desarrollo.md#tarea-2-20)), que su descripción no nombra. Corregirla es lo que pediría el cuerpo, pero ya
+      estaba aplicada, y editar una migración aplicada no cambia el ambiente que la corrió y sí deja
+      a los demás creyendo otra historia. La `0.3.0` lo dice en una fila nueva. El precio fue tocar
+      el bloque `1.12` de `verificar-base.sql`, que llevaba los dos valores escritos a mano
+- [ ] **Dos frases del [§10](#10-decisiones-de-construcción-que-conviene-revisar) sobre la rama `qa` no pueden ser verdad a la vez.** Arriba: moverlas
+      «sería inventar un flujo de ramas por ambiente que nadie decidió». Abajo, en lo de empujar
+      siempre: «en `prisma_db`, promover a qa es un PR contra la rama `qa`». El [21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración) solo nombra
+      `develop` y `main`, y el procedimiento del [16 §5.3](docs/16-base-de-datos-y-snapshots.md#53-promover-a-qa-paso-a-paso) promueve con `db push` desde `develop`, sin
+      tocar ninguna de las tres. Promover no necesita la respuesta; el flujo de ambientes del
+      [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), sí
+- [ ] **`prisma_db` es privado, y sus guiones dicen que es público.** `promover.ps1` y el
+      [16 §5.3](docs/16-base-de-datos-y-snapshots.md#53-promover-a-qa-paso-a-paso) justifican no escribir ahí ninguna referencia ni contraseña «porque el repositorio es
+      público», y quien manda es el hábito, no el motivo: la referencia sigue sin escribirse. Pero el
+      privado es el que necesita el secreto `PRISMA_DB_TOKEN` de la [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7), y el que decide si `prisma_db`
+      puede recibir integración continua sin gastar minutos de una cuenta. Público es **este**
+      repositorio, no aquel
 - [ ] **Las ramas `qa`, `uat` y `prod` de `prisma_db` no se tocaron.** Existen en el remoto, las tres
       en el mismo commit viejo, y **ningún documento las menciona**: [21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración) solo nombra `develop` y
       `main`. O son el estado de cada ambiente y llevan tiempo mintiendo, o son restos de cuando se
@@ -998,6 +1116,61 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **La promoción se hace a mano, aunque [19 §7.1](docs/19-ambientes-y-entrega.md#71-publicar) la dé por «Automático».** Esa tubería llega en el
       [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), y `prisma_db` no tiene integración continua: no existe `.github/` en
       el repositorio. El procedimiento de [16 §5.3](docs/16-base-de-datos-y-snapshots.md#53-promover-a-qa-paso-a-paso) dice lo que hay, no lo que habrá
+- [ ] **Nadie sabía en qué estado estaba qa, y esa es la lección de la promoción.** Los documentos
+      decían cuatro migraciones de atraso; eran cinco, y no las mismas: los dominios y la revocación
+      del borrado ya estaban aplicados allá, sin que ningún commit ni ninguna etiqueta lo dijera.
+      Salió bien porque `migration list` y el `-EnSeco` se miran antes de aplicar, no porque el
+      tablero acertara. Mientras el estado de un ambiente se lleve escrito a mano en un documento va
+      a volver a pasar; lo que lo arregla de verdad es la etiqueta por versión del [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md), y que
+      alguien la ponga en cada promoción
+- [ ] **Ahora el que va atrás es dev, y no hay guion que lo arregle.** Le falta la `0.3.0`, que se
+      escribió en esta tarea y viajó a qa en la misma pasada. `promover.ps1` solo admite `qa` a
+      propósito —ofrecer destinos que nadie puede comprobar sería peor—, así que poner dev al día
+      hoy es volver a vincular el CLI y correr `db push` a mano, justo lo que el guion existe para
+      no tener que hacer. O el guion admite `dev`, o la tubería del [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) se encarga de los dos
+- [ ] **Se promovió desde una rama de trabajo, no desde `develop`.** El [16 §5.3](docs/16-base-de-datos-y-snapshots.md#53-promover-a-qa-paso-a-paso) no dice desde
+      dónde se corre, y se corrió desde la rama de la propia [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12), antes de fusionarla: qa tiene la
+      `0.3.0` aplicada mientras su migración todavía espera revisión. El contenido es el mismo que se
+      va a fusionar, pero el orden correcto es al revés, y la etiqueta del [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) solo se puede
+      poner después. Si el PR se rechazara, qa tendría una migración que el repositorio no tiene
+
+**De la preparación de uat y prod (tarea [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4)):**
+
+- [ ] **La contradicción de la factura se resolvió contra el [09](docs/09-plan-de-implantacion.md), que era el que estaba mal.** Decía «dos
+      proyectos de Supabase de pago y **un** alojamiento de API»; el [19 §8.1](docs/19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no) dice **dos**. Ganó el 19
+      porque no está solo: el [19 §2.4](docs/19-ambientes-y-entrega.md#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro) explica el porqué —«la primera petición después de la siesta paga
+      el arranque entero»— y la condición 2 del [ADR-026](docs/adr/ADR-026-railway-al-final.md), que el [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md) dejó **intacta**, dice que uat y
+      prod no se duermen. Tres fuentes contra una. De paso, la fila de uat del [09 §3.2](docs/09-plan-de-implantacion.md#32-alojar-la-api-de-java-en-los-cuatro-ambientes) aceptaba el
+      arranque en frío sin distinguir cuál: ahora acepta el de después de desplegar y no el de la
+      inactividad, que es el que cuesta dinero
+- [ ] ⚡ **La [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) no se marcó, y el plan 25 decía marcarla.** Pide «los cuatro proyectos de Supabase», y
+      uat y prod **no existen**: marcarla sería escribir en el tablero algo que no es cierto, que es
+      justo lo que acabó de costar trabajo descubrir en qa. Por lo mismo la fila 3 del [§7](#7-decisiones-pendientes) sigue en 🟡 y
+      no pasó a ✅: lo que está listo es el expediente, no la decisión. Pasan las dos el día que
+      Gerencia firme y los proyectos existan
+- [ ] **No se escribió ningún ADR nuevo, y esa también es una decisión.** El plan pedía uno solo si algo
+      cambiaba respecto del [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md) —adelantar uat o prod, pagar dev, montar el registro de imágenes— y
+      no cambió nada: uat y prod siguen esperando al [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) y no se contrató nada. Poner precio a lo
+      ya decidido no es decidir de nuevo. Lo que sí apareció es que el [ADR-033](docs/adr/ADR-033-service-role-solo-en-auth.md) **no estaba en el índice
+      de ADR**, que por eso contaba 32
+
+**De la vista previa de Operación (tarea [2.18](docs/08-plan-de-desarrollo.md#tarea-2-18)):**
+
+- [ ] **A Operación se le ignora el pedido de vista previa, en vez de rechazárselo.** Ningún
+      documento dice qué hacer con ese caso: el contrato declara la operación con un `40300` entre
+      sus códigos posibles y dice que «solo la pide Gerencia», pero no declara esa respuesta y
+      ninguna prueba la pide. Se decidió lo mínimo —quien no es Gerencia recibe su propio menú, sin
+      franja y sin interruptor—, porque pedirla sería pedir el menú que ya tiene y rechazarla
+      abriría un camino de error que nadie especificó. Si quien dirige prefiere el rechazo, es una
+      línea en `MenuDeLaSesion` y una prueba
+- [ ] **El [10 §2.1](docs/10-ux-y-mockups.md) nombra tres secciones que el contrato no tiene:** «Configuración», «Inicio» y
+      «Mi desprendible». No estorbaron a esta tarea —el [10 §5.6](docs/10-ux-y-mockups.md#56-vista-previa-de-operación) solo habla de Inversiones, Reportes y
+      Nómina, y esas tres sí están entre las ocho claves— pero o el documento sobra tres o el
+      contrato le faltan tres, y eso lo decide quien dirige y no el carril que pinta
+- [ ] **La mitad de la vista previa que no se pudo construir es la que no tiene pantalla.** El
+      [10 §5.6](docs/10-ux-y-mockups.md) también pide que «Productos deje de mostrar costos y márgenes» y que «Nómina quede
+      bloqueada»: las dos pantallas son de los sprints 5 y 8, así que hoy la sección simplemente no
+      viene en el menú, que es lo que sí se puede comprobar. Al construirlas hay que volver aquí
 
 **Del front (tareas [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19), [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19), [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18), [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10) y [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1)):**
 
@@ -1160,12 +1333,38 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       trigger que congela la ficha propia. Los dos significan «no te alcanza» y salían como error
       del sistema. Que la API los traduzca no es que decida permisos: sigue sin mirar de qué tipo
       es nadie
-- [ ] **La traducción de restricción a código está escrita a mano en `UsuariosEnPostgres`**, y
-      desde la [3.3](docs/08-plan-de-desarrollo.md#tarea-3-3) también en `MovimientosEnPostgres`, que por ahora solo traduce el rechazo de
-      permisos. Mira el nombre de la restricción y el texto del `RAISE EXCEPTION`, que es lo que el [04](docs/04-modelo-de-datos.md)
-      permite al exigir nombres explícitos. La tabla general es la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8), y cuando exista estos
-      métodos se van con ella: con dos adaptadores buscando el mismo texto, cada uno que llegue antes
-      que ella lo copia otra vez
+- [x] **La traducción de restricción a código estaba escrita a mano en `UsuariosEnPostgres`**, y
+      desde la [3.3](docs/08-plan-de-desarrollo.md#tarea-3-3) también en `MovimientosEnPostgres`. Buscaban literales con `contains` sobre el
+      mensaje crudo, y `row-level security policy` estaba escrito dos veces. **Cerrado por la
+      [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)**: el texto se lee en un solo sitio, `RechazoDeLaBase`, que entrega el estado, la
+      restricción y la tabla por separado. Ningún adaptador busca texto ya
+
+**Del arreglo del alta de usuarios (`plan/23-el-alta-decia-algo-salio-mal.md`):**
+
+- [ ] 🔒 **El alta estuvo caída en dev desde el día en que se publicó la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7), y nadie lo supo.**
+      Faltaba `SUPABASE_SERVICE_ROLE_KEY` en el servicio de la API. Esa variable la lista el
+      [19](docs/19-ambientes-y-entrega.md), la documenta el `.env.ejemplo` y `application.yml` avisa por escrito de qué deja de
+      funcionar sin ella: **el documento estaba bien y aun así el ambiente salió sin cargarla**. Lo
+      que no existe es nada que compruebe que un ambiente publicado tiene lo que dice necesitar, y
+      eso no lo arregla este plan
+- [ ] **`ProveedorNoDisponible` estrena el décimo código base, `50300`.** Antes no tenía manejador y
+      salía como `50000`, «Algo salió mal. Intenta de nuevo en un momento», que era falso en las dos
+      mitades. Falta configurar y proveedor caído comparten código a propósito: para quien está
+      delante son la misma situación. Cuál fue queda en el registro
+- [ ] **Quién es un usuario repetido lo decide ahora el `error_code` de GoTrue y no el estado.** El
+      adaptador daba por repetido todo 409 y todo 422, y GoTrue usa el 422 también para la clave
+      débil y el correo que no acepta: comprobado contra el GoTrue local, `weak_password` llegaba a
+      Gerencia como «Ya hay alguien con ese usuario. Elige otro.» Si el cuerpo no trae `error_code`
+      se decide por el estado, como antes
+- [x] **Ya no caen al `50000` los cuatro rechazos de `usuarios`**: `usuarios_nombre_completo_minimo`,
+      `usuarios_id_fkey`, `usuarios_pkey` y `motivo_con_contenido`. Los recogió la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) con el código
+      transversal de su clase —`42200` los tres primeros, `40900` el identificador repetido— y hay
+      cuatro pruebas de integración que los provocan contra PostgreSQL y miran qué sale
+- [x] **`@Size(min = 3)` sobre `nombreCompleto` no recorta y el `CHECK` de la base sí**, así que
+      `"  a"` pasa la validación del formulario y lo rechaza PostgreSQL. **Sigue siendo alcanzable
+      desde la pantalla**, y lo que cambió con la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) es que sale como `42200` señalando
+      `nombreCompleto` en vez de como error del sistema. Que el formulario y la base recorten igual
+      es otra cosa, y no la arregla esa tarea
 
 **De dejar la integración continua en verde:**
 
@@ -1217,51 +1416,93 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       `ConIdentidad`, que pondría las cabeceras de la petición junto a los claims, con la [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9), que
       es la tarea que trae dispositivo e IP. Toca Base y API, y no se inventa aquí
 - [ ] **Solo se traduce el rechazo de permisos, que sale como `40300`.** La llave primaria, las
-      foráneas y los `CHECK` de `movimientos` **ya tienen código** desde la [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) —`40920`, `42223`,
-      `42224`, `42225` y `42226`—, y los emite la [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4). Tres de ellos los ataja antes el dominio; los otros —una cuenta
+      foráneas y los `CHECK` de `movimientos` salen sin traducir hasta que el contrato de la [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) les
+      dé código y la [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) los emita. Tres de ellos los ataja antes el dominio; los otros —una cuenta
       o una categoría que no existe, un id repetido— hoy saldrían como `50000`, y todavía no hay
       endpoint que los alcance
 - [ ] **El mismo id dos veces lo rechaza la llave primaria, y no se traga en silencio.** El id lo
       pone quien pide, al decidir la acción ([ADR-020](docs/adr/ADR-020-idempotencia.md)): si la clave de idempotencia ya se purgó y la
-      misma acción vuelve, el libro no la duplica. Qué responde la API en ese caso **ya lo dice el
-      contrato**: `40920`, «Ese movimiento ya está registrado»
+      misma acción vuelve, el libro no la duplica. Qué responde la API en ese caso es del contrato
 - [ ] **Un movimiento que llega anulado no se guarda como nuevo**: el adaptador lo rechaza antes de
       pedir conexión. Ningún documento lo pedía, pero el `INSERT` no escribe la anulación, y
       guardarlo así la habría perdido sin avisar
 - [ ] **`RegistrarMovimiento` todavía no está cableado.** El bean y su `Clock` los pone su primer
       consumidor, que es la [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4); el adaptador sí es un bean desde ya
 
-**Del contrato de movimientos ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13)):**
+**De la tarea [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10):**
 
-- [ ] **Registrar es `PUT /api/v0/movimientos/{id}` y no `POST` a la colección.** El id lo genera
-      quien registra junto con la clave de idempotencia ([ADR-020](docs/adr/ADR-020-idempotencia.md)), así que en el cuerpo sobraría: el
-      generador de descriptores pinta **todos** los campos del record, y un id no se pinta. Con el id
-      en la ruta, el cuerpo es exactamente el formulario, y repetir la petición nunca duplica el libro
-- [ ] **El formulario «movimiento» ofrece tres tipos de los nueve**: ingreso, gasto y transferencia.
-      Los otros seis tienen su pantalla y su tarea de contrato —[4.10](docs/08-plan-de-desarrollo.md#tarea-4-10), [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) y [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11)—, y ofrecerlos
-      hoy sería acordar pantallas que nadie ha diseñado. La lectura sí devuelve los nueve
-- [ ] **`42226` es un solo código para las tres situaciones de la cuenta de destino** —falta en una
-      transferencia, es la misma de origen, o la trae un tipo que no la lleva—. Son la misma pregunta
-      sobre el mismo campo; lo que cambia es el texto de `data.errores`, como en cualquier `42200`
-- [ ] **El adjunto pesa 5 MB como máximo y es JPEG, PNG, WebP o PDF.** Ningún documento lo decía, y
-      sin un límite escrito el front de la [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6) no sabe a cuánto comprimir. **Lo confirma quien
-      dirige.** Sus dos rechazos van en `400` y no en `422` porque no hay campo de formulario al que
-      señalarle el aviso
-- [ ] **Devolver el adjunto no se declaró.** Ninguna pantalla del [10](docs/10-ux-y-mockups.md) ni del mockup lo pinta
-      todavía, y acordarlo ahora sería decidir desde el contrato cómo se sirve Supabase Storage
-- [ ] **`cuentaDestinoId` y `categoriaId` viajan sin `obligatorio`** aunque una transferencia exija la
-      primera y un gasto pida la segunda: el descriptor no sabe decir «obligatorio si» ([20 §4.4](docs/20-contrato-de-api.md#44-las-reglas-que-caben-y-por-qué-no-caben-más)), y
-      una regla condicional ahí sería código en el front
-- [ ] **Los textos del mockup se adaptaron**, porque el formulario cubre tres tipos y no solo el
-      gasto: «Escribe cuánto se gastó» pasó a «Escribe cuánto fue», y la fecha dejó de nombrar al
-      gasto. La segunda frase de cada aviso quedó igual
-- [ ] ⚡ **Entró una tarea nueva al plan, la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14), y el total pasa de 133 a 134.** La tabla
-      `adjuntos` está en el diagrama y el catálogo del [04](docs/04-modelo-de-datos.md) sin `CREATE TABLE`, [16 §9](docs/16-base-de-datos-y-snapshots.md#9-límites-conocidos-heredados-del-doc-04) dice que queda
-      pendiente de especificar, y **ninguna tarea la creaba**: la [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6) daba por hecho que existía
-- [ ] **El [20 §8](docs/20-contrato-de-api.md#8-el-contrato-funcionando) ejemplificaba con `POST /api/v0/gastos`, una ruta que nunca existió**, y el
-      descriptor del [§4.3](docs/20-contrato-de-api.md#43-cómo-se-pide-y-qué-forma-tiene) con un formulario «gasto» que tampoco. Los dos pasan a los de verdad: si
-      no, el propio documento se contradecía al decir que el mensaje del error es el mismo que el del
-      descriptor
+- [ ] 🔒 **El mockup no tiene pantalla de clientes, y el contrato acaba de acordar tres operaciones
+      de cliente.** En el prototipo que Gerencia aprobó, el campo «Cliente» del formulario de pedido
+      es **texto libre**: no hay lista, ni pantalla donde darlos de alta, ni panel de anulados. Pero
+      la [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) es «Gestión de clientes · API **y** Front» y cuelga de este contrato, así que no
+      declarar nada la dejaba bloqueada. Se acordó el mínimo que esa tarea necesita —crear,
+      consultar y anular, con los cuatro campos del [RF-18](docs/03-requisitos-y-bdd.md#rf-18)—, y **queda por decidir si se diseña la
+      pantalla o si el cliente se sigue escribiendo a mano**. Si se decide lo segundo, sobran tres
+      operaciones y un formulario
+- [ ] **Nueve códigos y no dieciséis, porque los de campo se agrupan.** Los rechazos que las reglas
+      justifican dan, uno por uno, muchos más `422` de los que caben con sentido en un módulo, y el
+      [20 §2.4](docs/20-contrato-de-api.md#24-los-rangos-por-módulo) dice que cuando eso pasa «varios de ellos merecían un estado más preciso». Una
+      pregunta sobre un campo es un código y el texto concreto viaja en `data.errores`; lo que lleva
+      código propio es lo que choca con el **estado** del pedido, porque ahí no hay campo que
+      corregir. Quedan libres `42236` a `42239` y `40933` a `40939`
+- [ ] 🔒 **`pedidos` no tiene dónde guardar el motivo de la cancelación ni el destino del anticipo.**
+      El contrato ya declara `POST /api/v0/pedidos/{id}/cancelacion` con los dos campos, y el dominio
+      de la [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1) lo había anotado: «el modelo todavía no tiene dónde guardarlo». La [4.9](docs/08-plan-de-desarrollo.md#tarea-4-9) necesita
+      una migración que no está en ninguna tarea, igual que le pasó a la tabla `adjuntos` con el
+      contrato de movimientos ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13))
+- [ ] **El número visible del pedido lo pone la API, y ningún documento decía quién.** El mockup los
+      pinta como `P-0287`, así que existen y son correlativos. Por eso `numero` no está en
+      `NuevoPedido` y `pedidos_numero_key` se quedó sin código: el cliente no puede provocar ese
+      choque. Con qué regla se genera la serie es de la [4.3](docs/08-plan-de-desarrollo.md#tarea-4-3)
+- [ ] **El `precioUnitario` viaja en cada línea en vez de leerse del catálogo.** Es lo que hace que
+      un pedido de septiembre siga valiendo lo que valía cuando el precio del producto cambie en
+      noviembre, y es la razón de que `pedido_lineas.precio_unitario` sea una columna y no un `JOIN`.
+      El front lo toma del catálogo al pintar; el contrato no adivina de dónde salió
+- [ ] **La consulta de pedidos no pagina, y el listado de bitácora sí.** El [RF-20](docs/03-requisitos-y-bdd.md#rf-20) pide orden por
+      fecha y filtros por estado y cliente, no páginas, y los filtros de fecha ya acotan lo que
+      vuelve. Si el taller acumula años de pedidos habrá que paginarla, y entonces cambia el contrato
+- [ ] **La entrega parcial entra como estado y no como operación.** Es prioridad C ([RF-25](docs/03-requisitos-y-bdd.md#rf-25)) y el
+      [CU-07](docs/02-casos-de-uso.md#cu-07) A2 la describe como una variante de la entrega, no como otra cosa. `parcial` está en el
+      ENUM y en el contrato; `en_proceso → parcial` es el único paso del dominio sin operación que lo
+      dé, junto con `cotizado → en_proceso`, que es del cotizador
+- [ ] **El anticipo mínimo y el adjunto de la factura se cedieron por nombre.** El anticipo mínimo
+      ([RF-38](docs/03-requisitos-y-bdd.md#rf-38), [RF-39](docs/03-requisitos-y-bdd.md#rf-39), [CU-12](docs/02-casos-de-uso.md#cu-12)) el mockup lo pinta dentro del formulario de pedido, pero su fórmula es
+      del costeo y su operación es del cotizador: va con la [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11). El adjunto ([RF-27](docs/03-requisitos-y-bdd.md#rf-27)) depende de
+      la tabla `adjuntos`, que no existe, y su tarea es la [4.8](docs/08-plan-de-desarrollo.md#tarea-4-8)
+
+**De la tarea [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8):**
+
+- [ ] 🔒 **La tabla no la puede leer un adaptador, y el plan daba por hecho que sí.** Sus filas
+      nombran códigos del catálogo, que viven en `interfaz`, y `ReglaDeDependenciasTest` prohíbe
+      que `infraestructura` conozca esa capa ([07 §3](docs/07-arquitectura.md#3-regla-de-dependencias)). Así que los dos `traducir` no se fueron con
+      ella: lo que se fue es la búsqueda de texto, que era la duplicación real. Cada adaptador
+      sigue convirtiendo en excepción de dominio **lo que su puerto promete** —tres reglas de
+      `usuarios` y el rechazo de política— y el manejador global traduce todo lo demás con la
+      tabla. Que las dos digan lo mismo lo comprueba `TraduccionDeRestriccionesTest`, y sin esa
+      prueba se separarían sin que nadie lo notara
+- [ ] **Casi todas las filas comparten dos códigos, y no es pereza: es el formato.** Un rechazo de
+      llave foránea ocurre en cualquier módulo, y los dos dígitos de caso están repartidos por
+      módulo ([20 §2.4](docs/20-contrato-de-api.md#24-los-rangos-por-módulo)), así que un código propio afirmaría pertenecer a uno al que no pertenece.
+      Los transversales son los diez base, y el caso `00` de `422` y `409` ya está tomado. Quien
+      quiera un mensaje afinado para un módulo lo acuerda en el contrato de ese módulo
+- [ ] **El [04 §11](docs/04-modelo-de-datos.md#11-el-contrato-de-errores) promete más de lo que la tabla entrega en dos puntos.** Dice que un `NOT NULL`
+      se lee «Falta *campo*» y que el rechazo de un dominio se arma «con el campo de la petición y
+      el texto del dominio»; las dos frases son mensajes propios, y la fila lleva un código, nunca
+      un `String`. Hoy salen como `42200` señalando el campo cuando la base lo dice. Cumplirlo al
+      pie exige códigos nuevos —o el cuerpo de la petición en el manejador— y las dos cosas son
+      cambio de contrato
+- [ ] **El controlador de PostgreSQL pasó a ser dependencia de compilación**, y antes solo lo era
+      de ejecución. `PSQLException.getServerErrorMessage()` es lo único que entrega la restricción,
+      la tabla y la columna por separado; ningún tipo de `java.sql` los expone, y la alternativa
+      era volver a buscar texto
+- [ ] **La tabla enumera las 93 restricciones del filtro y las 26 llaves primarias, una por una.**
+      Una regla por clase habría bastado para responder, pero entonces agregar una restricción
+      nueva no rompería nada y nadie decidiría su mensaje, que es justo lo que el [04 §11](docs/04-modelo-de-datos.md#11-el-contrato-de-errores) quiere
+      impedir. El precio es que quien agregue una restricción tiene que agregar su fila
+- [ ] **A las llaves foráneas y a los `CHECK` de tabla no se les señala campo.** El rechazo de una
+      foránea trae la tabla y la restricción, no la columna, y deducirla del nombre sería adivinar;
+      un `CHECK` de tabla es una regla entre columnas y no tiene una sola a la que apuntar. Salen
+      como `42200` sin `data.errores`, hasta que el contrato de cada módulo diga a qué campo van
 
 ---
 
