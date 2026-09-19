@@ -1,6 +1,34 @@
 {
   "components" : {
     "schemas" : {
+      "Activo" : {
+        "description" : "Un equipo o una herramienta del negocio. Comprarlo cambia plata por un bien: baja la caja y no toca la utilidad ni el patrimonio (05 §6.1, BDD-15-1)",
+        "properties" : {
+          "estado" : {
+            "description" : "El único estado que el modelo nombra (04 §4.6). Vender un activo o darlo de baja no está en ningún documento: cuando exista, este enum crece y sube la MINOR",
+            "enum" : [ "en_uso" ],
+            "type" : "string"
+          },
+          "fechaCompra" : {
+            "format" : "date",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "nombre" : {
+            "type" : "string"
+          },
+          "valorCompra" : {
+            "description" : "Pesos enteros",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "estado", "fechaCompra", "id", "nombre", "valorCompra" ],
+        "type" : "object"
+      },
       "Adjunto" : {
         "description" : "Un soporte del movimiento: la foto del recibo o el PDF de la factura",
         "properties" : {
@@ -42,6 +70,34 @@
           }
         },
         "required" : [ "en", "motivo", "por" ],
+        "type" : "object"
+      },
+      "Aporte" : {
+        "description" : "Plata que entra al negocio desde afuera: sube la caja y el patrimonio, y no la utilidad (05 §2)",
+        "properties" : {
+          "cuentaId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "fecha" : {
+            "format" : "date",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "nota" : {
+            "description" : "Ausente si se registró sin ella",
+            "type" : "string"
+          },
+          "valor" : {
+            "description" : "Pesos enteros",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "cuentaId", "fecha", "id", "valor" ],
         "type" : "object"
       },
       "AvisoDeVistaPrevia" : {
@@ -201,6 +257,38 @@
         "required" : [ "id", "nombre" ],
         "type" : "object"
       },
+      "ConfiguracionDeSobres" : {
+        "description" : "Cómo se reparte cada peso que entra en efectivo (05 §11). No se sobrescribe: cada cambio es una fila de sobres_config con su vigencia, y así se conserva el historial (RF-51, 04 §4.8)",
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "pctCostoDirecto" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "pctGastosFijos" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "pctReserva" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "pctRetiro" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "vigenteDesde" : {
+            "description" : "El día en que se guardó, en Bogotá. La vigente es la de la fecha mayor y, si hay varias del mismo día, la última registrada",
+            "format" : "date",
+            "type" : "string"
+          }
+        },
+        "required" : [ "id", "pctCostoDirecto", "pctGastosFijos", "pctReserva", "pctRetiro", "vigenteDesde" ],
+        "type" : "object"
+      },
       "ConsultaDeBitacora" : {
         "description" : "El cuerpo de POST /api/v0/consultas/bitacora",
         "properties" : {
@@ -248,6 +336,24 @@
             "type" : "string"
           }
         },
+        "type" : "object"
+      },
+      "ConsultaDeDivisionDeRetiro" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/division-de-retiro: lo que la persona lleva escrito en el formulario de retiro, para que la API proponga cómo partirlo sin que el front calcule nada (ADR-018)",
+        "properties" : {
+          "fecha" : {
+            "description" : "La fecha del retiro, que dice de qué mes es el pro-labore que se completa. Sin ella, hoy en Bogotá; posterior a hoy responde 42290",
+            "format" : "date",
+            "type" : "string"
+          },
+          "valor" : {
+            "description" : "Todo lo que se va a sacar, en pesos enteros",
+            "format" : "int64",
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        },
+        "required" : [ "valor" ],
         "type" : "object"
       },
       "ConsultaDeFormulario" : {
@@ -595,6 +701,27 @@
         "required" : [ "campos", "formulario" ],
         "type" : "object"
       },
+      "DivisionDeRetiro" : {
+        "description" : "Cómo propone la API partir un retiro (CU-16): pro-labore hasta completar el del mes y el resto distribución. Es una propuesta: la persona la puede cambiar antes de guardar",
+        "properties" : {
+          "distribucion" : {
+            "description" : "Lo que queda como distribución",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "explicacion" : {
+            "description" : "De dónde salen las dos cifras, con los montos: el pro-labore del mes, lo que ya se retiró como pro-labore y lo que falta. Sin pro-labore definido, dice que todo es distribución y por qué eso esconde el trabajo propio (05 §6.3)",
+            "type" : "string"
+          },
+          "prolabore" : {
+            "description" : "Lo que propone tomar como pro-labore",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "distribucion", "explicacion", "prolabore" ],
+        "type" : "object"
+      },
       "EdicionDeUsuario" : {
         "description" : "El formulario «edicion-de-usuario». El usuario no está: es la identidad con la que la persona entra, y no se edita",
         "properties" : {
@@ -709,6 +836,26 @@
           }
         },
         "required" : [ "debeCambiarClave", "id", "nombreCompleto", "tipo", "usuario" ],
+        "type" : "object"
+      },
+      "Lectura" : {
+        "description" : "Lo que dice una cifra, con su texto y su nivel. La decide la API y el front la pinta sin calcularla (ADR-018)",
+        "properties" : {
+          "detalle" : {
+            "description" : "La explicación con los montos, porque «Retiras 78 centavos de cada peso que genera el negocio» orienta y «revisa tus retiros» no (10 §6)",
+            "type" : "string"
+          },
+          "nivel" : {
+            "description" : "De qué color se pinta (10 §3.1): critica en rojo, alta en ámbar e informativa sin alarma",
+            "enum" : [ "critica", "alta", "informativa" ],
+            "type" : "string"
+          },
+          "titulo" : {
+            "description" : "La frase corta que la encabeza",
+            "type" : "string"
+          }
+        },
+        "required" : [ "detalle", "nivel", "titulo" ],
         "type" : "object"
       },
       "LecturaDeMargen" : {
@@ -931,6 +1078,41 @@
         "required" : [ "naturaleza", "nombre" ],
         "type" : "object"
       },
+      "NuevaConfiguracionDeSobres" : {
+        "description" : "El formulario «sobres». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"sobres\"}",
+        "properties" : {
+          "pctCostoDirecto" : {
+            "description" : "Los insumos del próximo pedido. Entre 0 y 100, en puntos enteros: es el dominio porcentaje (04 §4.1)",
+            "format" : "int32",
+            "maximum" : 100,
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "pctGastosFijos" : {
+            "description" : "Arriendo, servicios, internet, pro-labore y nómina",
+            "format" : "int32",
+            "maximum" : 100,
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "pctReserva" : {
+            "description" : "El colchón del negocio para imprevistos",
+            "format" : "int32",
+            "maximum" : 100,
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "pctRetiro" : {
+            "description" : "Lo que se reparte la propiedad. Si los cuatro no suman 100, el aviso llega aquí, con 42293",
+            "format" : "int32",
+            "maximum" : 100,
+            "minimum" : 0,
+            "type" : "integer"
+          }
+        },
+        "required" : [ "pctCostoDirecto", "pctGastosFijos", "pctReserva", "pctRetiro" ],
+        "type" : "object"
+      },
       "NuevaCuenta" : {
         "description" : "El formulario «cuenta». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"cuenta\"}",
         "properties" : {
@@ -967,6 +1149,33 @@
         "required" : [ "clave", "usuario" ],
         "type" : "object"
       },
+      "NuevoActivo" : {
+        "description" : "El formulario «activo». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"activo\"}",
+        "properties" : {
+          "cuentaId" : {
+            "description" : "De dónde salió la plata. Sale de POST /api/v0/consultas/cuentas, y una que no existe o está anulada responde 42291. Sin ella el activo entra sin movimiento: es como se registran los equipos que el taller ya tenía el día del corte, cuya plata ya no está en ningún saldo (09 §4.1 y §4.3)",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "fechaCompra" : {
+            "description" : "Cuándo se compró de verdad. Sin ella, hoy en Bogotá (RNF-08); posterior a hoy responde 42290",
+            "format" : "date",
+            "type" : "string"
+          },
+          "nombre" : {
+            "description" : "Cómo se le dice en el taller: prensa de calor 40×50, máquina bordadora",
+            "type" : "string"
+          },
+          "valorCompra" : {
+            "description" : "Pesos enteros y mayor que cero (ADR-003): es el dominio dinero_positivo de activos.valor_compra",
+            "format" : "int64",
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        },
+        "required" : [ "nombre", "valorCompra" ],
+        "type" : "object"
+      },
       "NuevoAnticipo" : {
         "description" : "El formulario «anticipo». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"anticipo\"}",
         "properties" : {
@@ -983,6 +1192,33 @@
           "valor" : {
             "description" : "Pesos enteros, mayor que cero. Sumado a lo ya cobrado no puede pasar del valor del pedido",
             "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "cuentaId", "valor" ],
+        "type" : "object"
+      },
+      "NuevoAporte" : {
+        "description" : "El formulario «aporte». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"aporte\"}",
+        "properties" : {
+          "cuentaId" : {
+            "description" : "Dónde entró la plata. Sale de POST /api/v0/consultas/cuentas, y una que no existe o está anulada responde 42291. Es obligatoria porque todo aporte es un movimiento: aportes_retiros.movimiento_id no admite nulo (04 §4.6)",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "fecha" : {
+            "description" : "Cuándo entró de verdad. Sin ella, hoy en Bogotá (RNF-08); posterior a hoy responde 42290",
+            "format" : "date",
+            "type" : "string"
+          },
+          "nota" : {
+            "description" : "De dónde salió la plata, si sirve recordarlo. Opcional",
+            "type" : "string"
+          },
+          "valor" : {
+            "description" : "Pesos enteros y mayor que cero (ADR-003)",
+            "format" : "int64",
+            "minimum" : 1,
             "type" : "integer"
           }
         },
@@ -1095,6 +1331,61 @@
         "required" : [ "clienteId", "lineas" ],
         "type" : "object"
       },
+      "NuevoProlabore" : {
+        "description" : "El formulario «prolabore». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"prolabore\"}",
+        "properties" : {
+          "horasMensuales" : {
+            "description" : "Las horas del mes que la gerencia trabaja produciendo, con dos decimales como máximo, que es lo que guarda NUMERIC(6,2) (04 §4.1); más decimales responden 42294. Sin ellas, cero: el trabajo no le pone precio a ningún costeo, y costear responde 40940",
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "justificacion" : {
+            "description" : "Por qué ese valor: con qué se comparó (05 §6.3). La columna admite nulo, y el formulario la pide",
+            "type" : "string"
+          },
+          "valorMensual" : {
+            "description" : "Lo que costaría pagarle a alguien por el trabajo que la gerencia hace en el taller, en pesos enteros (RN-08). Puede ser cero: entonces todo retiro es distribución",
+            "format" : "int64",
+            "minimum" : 0,
+            "type" : "integer"
+          }
+        },
+        "required" : [ "justificacion", "valorMensual" ],
+        "type" : "object"
+      },
+      "NuevoRetiro" : {
+        "description" : "El formulario «retiro». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"retiro\"}",
+        "properties" : {
+          "cuentaId" : {
+            "description" : "De dónde salió la plata. Sale de POST /api/v0/consultas/cuentas, y una que no existe o está anulada responde 42291",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "fecha" : {
+            "description" : "Cuándo salió de verdad. Sin ella, hoy en Bogotá (RNF-08); posterior a hoy responde 42290. De ella sale el mes cuyo pro-labore se completa",
+            "format" : "date",
+            "type" : "string"
+          },
+          "nota" : {
+            "description" : "Opcional",
+            "type" : "string"
+          },
+          "prolabore" : {
+            "description" : "Cuánto de este retiro paga el trabajo de la gerencia en el taller, que es gasto (RN-08); el resto es distribución y no toca la utilidad (RN-07). Mayor que el retiro responde 42292. Sin él, la API lo parte sola: pro-labore hasta completar el del mes, vigente en la fecha del retiro, y el resto distribución (CU-16, BDD-25-1). Es lo mismo que propone POST /api/v0/consultas/division-de-retiro",
+            "format" : "int64",
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "valor" : {
+            "description" : "Todo lo que se saca, en pesos enteros y mayor que cero (ADR-003)",
+            "format" : "int64",
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        },
+        "required" : [ "cuentaId", "valor" ],
+        "type" : "object"
+      },
       "NuevoUsuario" : {
         "description" : "El formulario «usuario». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"usuario\"}",
         "properties" : {
@@ -1185,6 +1476,55 @@
           }
         },
         "required" : [ "movimientos", "total" ],
+        "type" : "object"
+      },
+      "Patrimonio" : {
+        "description" : "Lo que se ha construido y lo que se ha sacado (05 §6.4 y §9.3). Todas las cifras las calcula la API; el front no suma ni divide (ADR-018)",
+        "properties" : {
+          "aportes" : {
+            "description" : "Todo lo aportado desde afuera, desde el primer registro",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "distribuciones" : {
+            "description" : "Todo lo retirado como distribución desde el primer registro, en positivo. El pro-labore no entra: es gasto y ya está descontado de las utilidades",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "distribucionesDoceMeses" : {
+            "description" : "Lo retirado como distribución en los últimos 12 meses",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "lectura" : {
+            "$ref" : "#/components/schemas/Lectura",
+            "description" : "Qué dice la tasa de retiro. En nivel critica es la alerta de descapitalización (RF-49, CU-24, BDD-24-1): las distribuciones de los últimos 12 meses superan las utilidades del mismo período, «Estás retirando más de lo que el negocio genera». Si no, informativa"
+          },
+          "patrimonio" : {
+            "description" : "Aportes menos distribuciones más utilidades acumuladas (05 §6.4). Puede ser negativo",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "retiroDelMes" : {
+            "$ref" : "#/components/schemas/RetiroDelMes",
+            "description" : "Cómo se partió lo retirado en el mes en curso, en Bogotá"
+          },
+          "tasaDeRetiro" : {
+            "description" : "Las distribuciones de los últimos 12 meses entre las utilidades de los últimos 12 meses, en puntos y con dos decimales (05 §9.3). Ausente cuando las utilidades del período no son positivas: dividir entre cero o entre una pérdida no dice nada, y la lectura lo dice en palabras",
+            "type" : "number"
+          },
+          "utilidadesAcumuladas" : {
+            "description" : "Las utilidades causadas desde el primer registro, con el pro-labore ya descontado. Negativas si el negocio acumula pérdidas",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "utilidadesDoceMeses" : {
+            "description" : "Las utilidades causadas de los últimos 12 meses. Puede ser negativa",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "aportes", "distribuciones", "distribucionesDoceMeses", "lectura", "patrimonio", "retiroDelMes", "utilidadesAcumuladas", "utilidadesDoceMeses" ],
         "type" : "object"
       },
       "Pedido" : {
@@ -1309,6 +1649,109 @@
         "required" : [ "activo", "id", "nombre", "precioActual", "tipo", "unidad" ],
         "type" : "object"
       },
+      "Prolabore" : {
+        "description" : "El sueldo de la gerencia por su trabajo en el taller, que es gasto de personal y baja la utilidad (RN-08, 05 §6.3). No se sobrescribe: cada definición es una fila de prolabore_config con su vigencia (04 §4.6)",
+        "properties" : {
+          "horasMensuales" : {
+            "description" : "Las horas productivas del mes",
+            "type" : "number"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "justificacion" : {
+            "description" : "Ausente en una definición que se guardó sin ella: la columna lo permite",
+            "type" : "string"
+          },
+          "tarifaHora" : {
+            "description" : "Lo que cuesta una hora de ese trabajo: el valor mensual entre las horas productivas, redondeado a peso (05 §7.1). Es la que toman los costeos nuevos desde que esta definición rige. Ausente con cero horas",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "valorMensual" : {
+            "description" : "Pesos enteros",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "vigenteDesde" : {
+            "description" : "El día en que se guardó, en Bogotá. La vigente es la de la fecha mayor y, si hay varias del mismo día, la última registrada",
+            "format" : "date",
+            "type" : "string"
+          }
+        },
+        "required" : [ "horasMensuales", "id", "valorMensual", "vigenteDesde" ],
+        "type" : "object"
+      },
+      "Retiro" : {
+        "description" : "Plata que la gerencia saca del negocio, partida en sus dos naturalezas (05 §6.3): las dos partes bajan la caja y el patrimonio, y solo el pro-labore baja la utilidad. Cada parte que no es cero es un movimiento y una fila de aportes_retiros",
+        "properties" : {
+          "cuentaId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "distribucion" : {
+            "description" : "Lo que se reparte por ser propietario (RN-07). Cero si todo fue pro-labore",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "fecha" : {
+            "format" : "date",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "nota" : {
+            "description" : "Ausente si se registró sin ella",
+            "type" : "string"
+          },
+          "prolabore" : {
+            "description" : "Lo que paga el trabajo en el taller (RN-08). Cero si todo fue distribución",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "valor" : {
+            "description" : "El retiro entero: pro-labore más distribución",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "cuentaId", "distribucion", "fecha", "id", "prolabore", "valor" ],
+        "type" : "object"
+      },
+      "RetiroDelMes" : {
+        "description" : "Cómo se partió lo retirado en un mes: el bloque «Cómo se parte el retiro» de 10 §4.5",
+        "properties" : {
+          "anio" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "distribucion" : {
+            "description" : "No es gasto: no toca la utilidad (RN-07)",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "mes" : {
+            "description" : "De 1 a 12",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "prolabore" : {
+            "description" : "Es gasto: baja la utilidad (RN-08)",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "total" : {
+            "description" : "Pro-labore más distribución. Cero si el mes no tiene retiros",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "anio", "distribucion", "mes", "prolabore", "total" ],
+        "type" : "object"
+      },
       "Reversion" : {
         "properties" : {
           "posible" : {
@@ -1359,10 +1802,48 @@
         "required" : [ "claveDeFirma", "identidad", "token", "tokenExpiraEn" ],
         "type" : "object"
       },
+      "SobreActivo" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Activo",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreAdjunto" : {
         "properties" : {
           "data" : {
             "$ref" : "#/components/schemas/Adjunto",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreAporte" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Aporte",
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
           },
           "mensaje" : {
@@ -1435,6 +1916,25 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobreConfiguracionDeSobres" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/ConfiguracionDeSobres",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreCosteoCalculado" : {
         "properties" : {
           "data" : {
@@ -1492,6 +1992,25 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobreDivisionDeRetiro" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/DivisionDeRetiro",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreEntradaDeBitacora" : {
         "properties" : {
           "data" : {
@@ -1516,6 +2035,28 @@
           "data" : {
             "$ref" : "#/components/schemas/Identidad",
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreListActivo" : {
+        "properties" : {
+          "data" : {
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver",
+            "items" : {
+              "$ref" : "#/components/schemas/Activo"
+            },
+            "type" : "array"
           },
           "mensaje" : {
             "description" : "Texto en español para mostrarle tal cual a la persona del taller",
@@ -1782,6 +2323,25 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobrePatrimonio" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Patrimonio",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobrePedido" : {
         "properties" : {
           "data" : {
@@ -1805,6 +2365,44 @@
         "properties" : {
           "data" : {
             "$ref" : "#/components/schemas/Producto",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreProlabore" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Prolabore",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreRetiro" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Retiro",
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
           },
           "mensaje" : {
@@ -1964,10 +2562,162 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.12.0"
+    "version" : "0.13.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
+    "/api/v0/activos/{id}" : {
+      "put" : {
+        "description" : "Registra la compra de un equipo o una herramienta del negocio —una prensa, una bordadora— sin tocar la utilidad (RF-45, CU-15, BDD-15-1). Con cuenta, escribe en la misma transacción el activo y un movimiento de tipo inversion, que baja la caja de esa cuenta y no toca la utilidad ni el patrimonio (05 §6.1). Sin cuenta, escribe solo el activo: es como entran los equipos que el taller ya tenía el día del corte, cuya plata ya no está en ningún saldo (09 §4.1 y §4.3). El id va en la ruta por lo mismo que en movimientos (ADR-020): el mismo dos veces responde 40900. Solo Gerencia, y lo rechaza la base con activos_solo_gerencia (04 §7). El formulario es «activo»; la fecha futura y la cuenta que no sirve no caben en el descriptor y responden 42290 y 42291. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 42200 con data.errores, 42290 y 42291.",
+        "operationId" : "registrarInversion",
+        "parameters" : [ {
+          "description" : "El id del activo, que genera quien lo registra",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevoActivo"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreActivo"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Registrar una inversión en un activo",
+        "tags" : [ "Capital" ]
+      }
+    },
+    "/api/v0/aportes/{id}" : {
+      "put" : {
+        "description" : "Registra plata que entra al negocio desde afuera (RF-46, CU-15): sube la caja y el patrimonio, y no la utilidad (05 §2). Escribe en una sola transacción el movimiento de tipo aporte y su fila de aportes_retiros con clase aporte. El mismo id dos veces responde 40900 (ADR-020). Solo Gerencia, y lo rechaza la base con ret_solo_gerencia (04 §7). El formulario es «aporte»; la fecha futura y la cuenta que no sirve no caben en el descriptor y responden 42290 y 42291. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 42200 con data.errores, 42290 y 42291.",
+        "operationId" : "registrarAporte",
+        "parameters" : [ {
+          "description" : "El id del aporte, que genera quien lo registra",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevoAporte"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreAporte"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Registrar un aporte de capital",
+        "tags" : [ "Capital" ]
+      }
+    },
     "/api/v0/bitacora/{id}/reversion" : {
       "post" : {
         "description" : "Deshace un cambio con un cambio nuevo y motivo escrito: la entrada original no se borra ni se edita, queda marcada como revertida, y responde la entrada nueva, de tipo «Reversión» (RF-89, CU-35). Revertir una reversión se puede. No se revierte una clave restablecida (40912), la creación del propio usuario (40913), lo que dejaría el sistema sin Gerencia activa (40910, RF-91) ni lo que sacaría del catálogo un cargo que tienen personas activas (40911). Una entrada ya revertida responde 40900. Solo Gerencia. El formulario es «reversion». Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902, 40910, 40911, 40912, 40913 y 42200 con data.errores.",
@@ -2615,6 +3365,63 @@
         "tags" : [ "Clientes" ]
       }
     },
+    "/api/v0/consultas/activos" : {
+      "post" : {
+        "description" : "Los equipos y las herramientas del negocio sin anular, del de mayor valor de compra al de menor, que es el orden de la tabla de 10 §4.5 (RF-45). A una sesión de Operación la base no le devuelve ninguna fila, por activos_solo_gerencia (P-20), así que le llega la lista vacía y no un 40300. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902.",
+        "operationId" : "activos",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreListActivo"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Los activos del negocio",
+        "tags" : [ "Capital" ]
+      }
+    },
     "/api/v0/consultas/bitacora" : {
       "post" : {
         "description" : "Los cambios de administración sobre usuarios y cargos, los más recientes primero, con cuándo, quién, sobre quién, qué pasó, el detalle y el motivo (RF-88, 10 §5.5). No trae los inicios de sesión. Cada entrada dice si hoy se puede revertir y, en palabras, qué pasaría o por qué no. Con limite trae solo las más recientes, y total dice cuántas hay. Es de Gerencia, y la base no le muestra la auditoría a nadie más (04 §7). Puede devolver 20000, 40100, 40101, 40102, 40103 y 40302.",
@@ -3034,6 +3841,73 @@
         "tags" : [ "Cuentas" ]
       }
     },
+    "/api/v0/consultas/division-de-retiro" : {
+      "post" : {
+        "description" : "La propuesta que el formulario de retiro pinta antes de guardar (CU-16, paso 3): cuánto del retiro sería pro-labore y cuánto distribución, con una explicación en palabras. Pro-labore hasta completar el del mes —el vigente en la fecha del retiro, menos lo que ya se retiró como pro-labore ese mes— y el resto distribución; sin pro-labore definido, todo es distribución. No escribe nada, y es lo mismo que hace PUT /api/v0/retiros/{id} cuando no se le dice cuánto es pro-labore. Solo Gerencia: sin la fila del pro-labore, que la base no le devuelve a Operación, la propuesta saldría equivocada. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902, 42200 con data.errores y 42290.",
+        "operationId" : "divisionDeRetiro",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeDivisionDeRetiro"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreDivisionDeRetiro"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Cómo se parte un retiro",
+        "tags" : [ "Capital" ]
+      }
+    },
     "/api/v0/consultas/formularios" : {
       "post" : {
         "description" : "Qué campos tiene, en qué orden, y las reglas de cada uno como datos: obligatorio, mínimo, máximo y el texto que se muestra cuando no se cumplen. Ese texto es el mismo que devuelve data.errores cuando la regla falla en el servidor. Sin sesión solo responde el formulario «acceso»; los demás piden sesión y firma. Puede devolver 20000, 40100, 40101, 40102, 40103 y 40400.",
@@ -3235,6 +4109,63 @@
         "tags" : [ "Navegación" ]
       }
     },
+    "/api/v0/consultas/patrimonio" : {
+      "post" : {
+        "description" : "Lo que se ha construido y lo que se ha sacado, como lo pinta 10 §4.5 (RF-48, RF-49, CU-16, CU-24): el patrimonio de 05 §6.4 —aportes menos distribuciones más utilidades acumuladas— con sus tres términos; las distribuciones y las utilidades de los últimos 12 meses, con la tasa de retiro que sale de ellas (05 §9.3); la lectura que la acompaña, que en nivel critica es la alerta de descapitalización; y cómo se partió el retiro del mes en curso. Todo lo calcula la API (ADR-018). Solo Gerencia (01 §4), pero esta vez no lo impide la base: las cifras salen del libro, que leen los dos tipos, y es la misma decisión pendiente que los saldos por cuenta. Hasta que se tome, lo rechaza la API con 40300. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901 y 40902.",
+        "operationId" : "patrimonio",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobrePatrimonio"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "El patrimonio y la tasa de retiro",
+        "tags" : [ "Capital" ]
+      }
+    },
     "/api/v0/consultas/pedidos" : {
       "post" : {
         "description" : "Los pedidos ordenados por fecha, los más recientes primero, con filtros por estado, cliente y rango de fechas (RF-20, CU-08). Cada pedido trae lo anticipado, el saldo pendiente y si está estancado: las tres las calcula la API (RF-23, RF-24), porque el front no calcula plata ni decide qué resaltar (ADR-018). Los anulados no salen salvo que se pidan. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902 y 42200 con data.errores.",
@@ -3367,6 +4298,120 @@
         },
         "summary" : "El cuadro de productos y servicios",
         "tags" : [ "Productos" ]
+      }
+    },
+    "/api/v0/consultas/prolabore" : {
+      "post" : {
+        "description" : "La definición del pro-labore que rige hoy, con la tarifa por hora que de ella toman los costeos (CU-25, 05 §7.1). Sin ninguna definida, data llega en null: es lo que bloquea el simulador de capacidad de pago (BDD-18-2) y el costeo (40940). El historial se conserva en la base y no se lee: ninguna pantalla lo pinta. A una sesión de Operación la base no le devuelve la fila, por prolabore_solo_gerencia (P-21), así que le llega lo mismo que si no hubiera pro-labore. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902.",
+        "operationId" : "prolabore",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreProlabore"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "El pro-labore vigente",
+        "tags" : [ "Capital" ]
+      }
+    },
+    "/api/v0/consultas/sobres" : {
+      "post" : {
+        "description" : "Los porcentajes que rigen hoy (RF-50, 05 §11). El historial se conserva en la base (RF-51) y no se lee: ninguna pantalla lo pinta. Lo asignado y lo usado de cada sobre es del panel del Inicio, que tiene su propio contrato (tareas 7.8 y 6.10). A una sesión de Operación la base no le devuelve la fila, por sobres_solo_gerencia (P-22), así que le llega data en null. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902.",
+        "operationId" : "sobres",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreConfiguracionDeSobres"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Los cuatro sobres vigentes",
+        "tags" : [ "Capital" ]
       }
     },
     "/api/v0/consultas/usuarios" : {
@@ -4433,6 +5478,158 @@
         "tags" : [ "Productos" ]
       }
     },
+    "/api/v0/prolabore/{id}" : {
+      "put" : {
+        "description" : "Define desde hoy cuánto vale al mes el trabajo de la gerencia en el taller y cuántas horas produce (RF-47, CU-25, RN-08). No edita la definición anterior: escribe una fila nueva de prolabore_config, vigente desde el día en que se guarda en Bogotá, así que el historial queda entero (04 §4.6). Desde ese día los costeos nuevos toman de aquí su tarifa por hora (05 §7.1) —los ya guardados conservan la suya—, y cada retiro se parte con el pro-labore vigente en su fecha. El mismo id dos veces responde 40900 (ADR-020). Solo Gerencia, y lo rechaza la base con prolabore_solo_gerencia (04 §7). El formulario es «prolabore»; las horas con más de dos decimales no caben en el descriptor y responden 42294. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 42200 con data.errores y 42294.",
+        "operationId" : "definirProlabore",
+        "parameters" : [ {
+          "description" : "El id de esta definición del pro-labore, que genera quien la guarda",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevoProlabore"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreProlabore"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Definir el pro-labore",
+        "tags" : [ "Capital" ]
+      }
+    },
+    "/api/v0/retiros/{id}" : {
+      "put" : {
+        "description" : "Registra plata que la gerencia saca del negocio, partida en sus dos naturalezas (RF-47, CU-16, RN-07, RN-08): el pro-labore paga el trabajo en el taller y baja la utilidad; la distribución reparte una ganancia ya generada y no la toca. Las dos bajan la caja y el patrimonio (BDD-16-1, BDD-25-1). Escribe en una sola transacción un movimiento —retiro_prolabore o retiro_distribucion— y una fila de aportes_retiros por cada parte que no sea cero. Sin prolabore en el cuerpo, la API parte sola: pro-labore hasta completar el del mes, vigente en la fecha del retiro, y el resto distribución; es lo mismo que propone POST /api/v0/consultas/division-de-retiro. El mismo id dos veces responde 40900 (ADR-020). Solo Gerencia, y lo rechaza la base con ret_solo_gerencia (04 §7). El formulario es «retiro»; la fecha futura, la cuenta que no sirve y un pro-labore mayor que el retiro no caben en el descriptor y responden 42290, 42291 y 42292. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 42200 con data.errores, 42290, 42291 y 42292.",
+        "operationId" : "registrarRetiro",
+        "parameters" : [ {
+          "description" : "El id del retiro, que genera quien lo registra",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevoRetiro"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreRetiro"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Registrar un retiro, partido en pro-labore y distribución",
+        "tags" : [ "Capital" ]
+      }
+    },
     "/api/v0/sesiones" : {
       "post" : {
         "description" : "Entra con el nombre de usuario y la contraseña, sin correo (RF-01, CU-28). La API pasa el usuario a minúsculas, arma el correo sintético y llama al proveedor: el correo nunca viaja por aquí (ADR-009). No lleva sesión, firma ni Idempotency-Key: todavía no hay clave con qué firmar, y la respuesta trae secretos que no se guardan en la tabla de idempotencia. Responde el token, la clave de firma y quién entró; la renovación va aparte, en la cookie prisma_renovacion. Un usuario que no existe y una contraseña equivocada responden lo mismo, 40104, para no revelar quién trabaja en el taller; 40301 solo sale con la contraseña correcta. Escribe inicio_sesion o inicio_sesion_fallido en la auditoría, nunca con la contraseña tecleada. El formulario es «acceso». Puede devolver 20100, 40000, 40104, 40301 y 42200 con data.errores.",
@@ -4638,6 +5835,82 @@
         },
         "summary" : "Renovar la sesión",
         "tags" : [ "Acceso" ]
+      }
+    },
+    "/api/v0/sobres/{id}" : {
+      "put" : {
+        "description" : "Define desde hoy cómo se reparte cada peso que entra en efectivo: costo directo, gastos fijos, reserva y retiro (RF-50, CU-17, 05 §11). No edita la configuración anterior: escribe una fila nueva de sobres_config, vigente desde el día en que se guarda en Bogotá, y así se conserva el historial (RF-51, 04 §4.8). Cada sobre va de 0 a 100 y los cuatro suman 100: lo primero lo dice el descriptor, y lo segundo es la restricción suma_cien, que responde 42293. El mismo id dos veces responde 40900 (ADR-020). Solo Gerencia, y lo rechaza la base con sobres_solo_gerencia (04 §7, P-07). El formulario es «sobres». Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 42200 con data.errores y 42293.",
+        "operationId" : "configurarSobres",
+        "parameters" : [ {
+          "description" : "El id de esta configuración de los sobres, que genera quien la guarda",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevaConfiguracionDeSobres"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreConfiguracionDeSobres"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Configurar los cuatro sobres",
+        "tags" : [ "Capital" ]
       }
     },
     "/api/v0/usuarios" : {
@@ -5022,6 +6295,9 @@
   }, {
     "description" : "Quién cambió qué sobre usuarios y cargos, y cómo se deshace sin borrar",
     "name" : "Bitácora"
+  }, {
+    "description" : "Inversiones en activos, aportes y retiros de la propiedad, el pro-labore, el patrimonio y los cuatro sobres",
+    "name" : "Capital"
   }, {
     "description" : "El catálogo de cargos: describe el oficio, no da permisos",
     "name" : "Cargos"
@@ -5474,6 +6750,61 @@
       "sprint" : 5
     },
     "status" : 42240
+  }, {
+    "cuando" : "La fecha de la compra de un activo, de un aporte o de un retiro es posterior a hoy en America/Bogota. El error va en data.errores, sobre fechaCompra o fecha",
+    "http" : 422,
+    "mensaje" : "Esa fecha todavía no llega. Aquí va cuándo ocurrió de verdad.",
+    "modulo" : "CAPITAL_Y_PATRIMONIO",
+    "nombre" : "FECHA_DE_CAPITAL_INVALIDA",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 7.1: registro de inversiones en activos",
+      "sprint" : 7
+    },
+    "status" : 42290
+  }, {
+    "cuando" : "La cuenta de un activo, de un aporte o de un retiro no existe o está anulada. El error va en data.errores, sobre cuentaId",
+    "http" : 422,
+    "mensaje" : "Elige una cuenta del catálogo.",
+    "modulo" : "CAPITAL_Y_PATRIMONIO",
+    "nombre" : "CUENTA_DE_CAPITAL_NO_ASIGNABLE",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 7.1: registro de inversiones en activos",
+      "sprint" : 7
+    },
+    "status" : 42291
+  }, {
+    "cuando" : "La parte de pro-labore de un retiro es mayor que el retiro entero. El error va en data.errores, sobre prolabore",
+    "http" : 422,
+    "mensaje" : "El pro-labore no puede ser mayor que el retiro.",
+    "modulo" : "CAPITAL_Y_PATRIMONIO",
+    "nombre" : "PROLABORE_MAYOR_QUE_EL_RETIRO",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 7.4: retiro con división automática",
+      "sprint" : 7
+    },
+    "status" : 42292
+  }, {
+    "cuando" : "Los cuatro porcentajes de los sobres no suman 100: es la restricción suma_cien de sobres_config (04 §4.8). El error va en data.errores, sobre pctRetiro",
+    "http" : 422,
+    "mensaje" : "Los cuatro sobres tienen que sumar 100 %.",
+    "modulo" : "CAPITAL_Y_PATRIMONIO",
+    "nombre" : "SOBRES_QUE_NO_SUMAN_CIEN",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 7.7: los cuatro sobres con historial",
+      "sprint" : 7
+    },
+    "status" : 42293
+  }, {
+    "cuando" : "Las horas productivas del pro-labore llegan con más de dos decimales, que es lo que guarda la columna NUMERIC(6,2). El error va en data.errores, sobre horasMensuales",
+    "http" : 422,
+    "mensaje" : "Las horas se registran con dos decimales como máximo.",
+    "modulo" : "CAPITAL_Y_PATRIMONIO",
+    "nombre" : "HORAS_DEL_PROLABORE_INVALIDAS",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 7.3: pro-labore con justificación",
+      "sprint" : 7
+    },
+    "status" : 42294
   }, {
     "cuando" : "Cualquier fallo no contemplado. Nunca expone la traza ni el texto de la excepción",
     "http" : 500,

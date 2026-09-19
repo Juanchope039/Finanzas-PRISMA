@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [7.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -275,7 +275,11 @@ cerró el cuarto contrato seguido** ([5.10](docs/08-plan-de-desarrollo.md#tarea-
 no deciden nada, porque transcriben el dominio que ya estaba construido; lo que sí deciden es que **a
 Operación no le llegan ni el costo ni los márgenes ni los minutos**, porque `costos_producto` lleva
 RLS. Tenía 24 tareas detrás —el catálogo ([5.2](docs/08-plan-de-desarrollo.md#tarea-5-2)) y, tras él, el pedido con líneas ([4.3](docs/08-plan-de-desarrollo.md#tarea-4-3)), la
-entrega ([4.5](docs/08-plan-de-desarrollo.md#tarea-4-5)) y casi todo el [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6)—. Van 58 de las 134 tareas.
+entrega ([4.5](docs/08-plan-de-desarrollo.md#tarea-4-5)) y casi todo el [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6)—. **Y el de capital es el quinto** ([7.9](docs/08-plan-de-desarrollo.md#tarea-7-9)): diez operaciones para
+las inversiones, los aportes, el retiro partido en pro-labore y distribución, el pro-labore, los
+sobres y el patrimonio, en el rango `90`–`99`, que estaba reservado. A diferencia de los tres
+anteriores, **no transcribe un dominio construido**: sale de los documentos, y lo que decide está en el [`TODO.md`](TODO.md)
+[§10](TODO.md#10-decisiones-de-construcción-que-conviene-revisar), junto con que **sus formularios todavía no tienen pantalla**. Van 59 de las 134 tareas.
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.

@@ -1,8 +1,8 @@
-# Contrato de la API · v0.12.0
+# Contrato de la API · v0.13.0
 
 | Versión | Estado | Creado | Actualizado | Contrato | Etiquetas |
 |---|---|---|---|---|---|
-| [3.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/contrato/README.md "Historial de cambios") | [✅ Vigente](../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [0.12.0](openapi.json) | [Contrato](../docs/INDICE.md#etiqueta-contrato) · [API](../docs/INDICE.md#etiqueta-api) · [Front](../docs/INDICE.md#etiqueta-front) |
+| [3.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/contrato/README.md "Historial de cambios") | [✅ Vigente](../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [0.13.0](openapi.json) | [Contrato](../docs/INDICE.md#etiqueta-contrato) · [API](../docs/INDICE.md#etiqueta-api) · [Front](../docs/INDICE.md#etiqueta-front) |
 
 Este es **el contrato entre `prisma_front` y `prisma_api`**: lo que viaja por el cable, dicho en
 un solo archivo. Vive aquí, y no en ninguno de los repositorios de código, porque no le pertenece
@@ -30,6 +30,7 @@ sigue vigente a través de [ADR-025](../docs/adr/ADR-025-cuatro-repositorios.md)
 | Pedidos y clientes | `/api/v0/clientes`, `/api/v0/pedidos` con sus cuatro transiciones, las consultas de clientes y pedidos, los formularios `cliente`, `pedido`, `anticipo`, `entrega` y `cancelacion` ([abajo](#los-formularios-acordados)) y los códigos `40930` a `40932` y `42230` a `42235` | La [4.2](../docs/08-plan-de-desarrollo.md#tarea-4-2) construye la gestión de clientes y la [4.3](../docs/08-plan-de-desarrollo.md#tarea-4-3) a la [4.9](../docs/08-plan-de-desarrollo.md#tarea-4-9), los pedidos; el carril Front pinta sus pantallas sin esperar a ninguna |
 | Movimientos | `PUT /api/v0/movimientos/{id}` para registrar, `/{id}/anulacion` y `/{id}/adjuntos` para anular y adjuntar, `POST /api/v0/consultas/movimientos` para el libro con filtros, el formulario `movimiento` ([abajo](#los-formularios-acordados)) y los códigos `40020`, `40021` y `42223` a `42226` | El [Sprint 3](../docs/08-plan-de-desarrollo.md#sprint-3) entero acordado antes de implementarlo: los endpoints ([3.4](../docs/08-plan-de-desarrollo.md#tarea-3-4)), el registro rápido ([3.5](../docs/08-plan-de-desarrollo.md#tarea-3-5)), el adjunto ([3.6](../docs/08-plan-de-desarrollo.md#tarea-3-6)), las transferencias ([3.7](../docs/08-plan-de-desarrollo.md#tarea-3-7)), el listado ([3.8](../docs/08-plan-de-desarrollo.md#tarea-3-8)) y la anulación ([3.9](../docs/08-plan-de-desarrollo.md#tarea-3-9)) |
 | Productos y costeo | `PUT /api/v0/productos/{id}` para crear, `/{id}/edicion`, `/{id}/desactivacion` y `/{id}/reactivacion` para lo demás, `POST /api/v0/consultas/productos` para el cuadro y `POST /api/v0/consultas/costeo` para la vista previa del formulario, los formularios `producto` y `desactivacion-de-producto` ([abajo](#los-formularios-acordados)) y los códigos `40940` y `42240` | El catálogo ([5.2](../docs/08-plan-de-desarrollo.md#tarea-5-2)), el cuadro comparativo ([5.9](../docs/08-plan-de-desarrollo.md#tarea-5-9)), el historial de costos ([5.5](../docs/08-plan-de-desarrollo.md#tarea-5-5)), la sugerencia de precio ([5.7](../docs/08-plan-de-desarrollo.md#tarea-5-7)) y lo que Operación no recibe ([5.8](../docs/08-plan-de-desarrollo.md#tarea-5-8)). Detrás quedan el pedido con líneas ([4.3](../docs/08-plan-de-desarrollo.md#tarea-4-3)) y, con él, el [Sprint 6](../docs/08-plan-de-desarrollo.md#sprint-6) |
+| Capital | `PUT /api/v0/activos/{id}`, `/aportes/{id}`, `/retiros/{id}`, `/prolabore/{id}` y `/sobres/{id}` para registrar y definir; `POST /api/v0/consultas/activos`, `/division-de-retiro`, `/prolabore`, `/sobres` y `/patrimonio` para leer; los formularios `activo`, `aporte`, `retiro`, `prolabore` y `sobres` ([abajo](#los-formularios-acordados)) y los códigos `42290` a `42294`, que estrenan el rango `90`–`99` | Las inversiones ([7.1](../docs/08-plan-de-desarrollo.md#tarea-7-1)), los aportes ([7.2](../docs/08-plan-de-desarrollo.md#tarea-7-2)), el pro-labore ([7.3](../docs/08-plan-de-desarrollo.md#tarea-7-3)), el retiro partido ([7.4](../docs/08-plan-de-desarrollo.md#tarea-7-4)), el patrimonio y su alerta ([7.5](../docs/08-plan-de-desarrollo.md#tarea-7-5), [7.6](../docs/08-plan-de-desarrollo.md#tarea-7-6)) y los cuatro sobres ([7.7](../docs/08-plan-de-desarrollo.md#tarea-7-7)). Detrás quedan las tres cifras ([6.1](../docs/08-plan-de-desarrollo.md#tarea-6-1)), que esperan al pro-labore y al retiro, y con ellas el [Sprint 6](../docs/08-plan-de-desarrollo.md#sprint-6) |
 | El canal firmado | Las cabeceras `X-Prisma-Nonce`, `X-Prisma-Timestamp` y `X-Prisma-Firma` en cada operación con sesión, también en las de cuentas y categorías. Cómo se arma la firma, al byte, está en [`20-contrato-de-api.md`](../docs/20-contrato-de-api.md) [§6.2](../docs/20-contrato-de-api.md#62-cómo-se-arma-la-firma) | El filtro de la API ([2.13](../docs/08-plan-de-desarrollo.md#tarea-2-13)) y el interceptor del front firman y comprueban exactamente lo mismo |
 
 > **El catálogo va dentro del OpenAPI a propósito.** El contrato son dos cosas —rutas y códigos—,
@@ -265,6 +266,106 @@ dominio modela.
 > vivo, porque las cuatro son plata o son reglas y ninguna se calcula en el front
 > ([ADR-018](../docs/adr/ADR-018-front-sin-decisiones.md)).
 
+### `activo` · registrar una inversión en un activo
+
+> **Ni este formulario ni los cuatro de capital que siguen tienen pantalla todavía.** El mockup
+> pinta «Inversiones y retiros» solo para consultar, y [`10-ux-y-mockups.md`](../docs/10-ux-y-mockups.md) [§2](../docs/10-ux-y-mockups.md#2-mapa-de-navegación) manda el pro-labore y
+> los sobres a una «Configuración» que no tiene clave de navegación. Lo que aquí se acuerda es lo
+> que las tareas necesitan para existir: dónde se pintan lo diseña el carril Front en el mockup
+> antes de construirlo, y lo aprueba quien dirige ([`TODO.md`](../TODO.md) [§10](../TODO.md#10-decisiones-de-construcción-que-conviene-revisar)).
+
+| `campo` | `etiqueta` | `tipo` | Reglas | `mensajes` | Lo demás |
+|---|---|---|---|---|---|
+| `nombre` | Activo | `texto` | obligatorio | obligatorio: «Escribe qué se compró.» | `ayuda`: «Como se le dice en el taller: prensa de calor 40×50, máquina bordadora.» |
+| `valorCompra` | Valor de compra | `dinero` | obligatorio · `minimo` 1 | obligatorio: «Escribe cuánto costó.» · minimo: «El valor de compra tiene que ser mayor que cero.» | `teclado`: `numerico` · `ayuda`: «Una inversión no es un gasto: baja la caja y no toca la utilidad.» |
+| `fechaCompra` | Fecha de compra | `fecha` | — | — | `ayuda`: «Cuándo se compró de verdad. Sin ella, hoy.» |
+| `cuentaId` | Cuenta | `lista` | — | — | `origen`: `/api/v0/consultas/cuentas` · `ayuda`: «De dónde salió la plata. Déjala vacía solo si se compró antes de empezar a llevar las cuentas en PRISMA: esa plata ya no está en ningún saldo.» |
+
+**De la cuenta depende si hay movimiento.** Con ella, entran en la misma transacción el activo y un
+movimiento de tipo `inversion`, que baja la caja de esa cuenta y no toca la utilidad
+([`05-reglas-financieras.md`](../docs/05-reglas-financieras.md) [§6.1](../docs/05-reglas-financieras.md#61-las-tres-salidas-de-plata-que-no-son-iguales)). Sin ella, entra solo el activo: es como se registran los equipos
+que el taller ya tenía el día del corte ([`09-plan-de-implantacion.md`](../docs/09-plan-de-implantacion.md) [§4.1](../docs/09-plan-de-implantacion.md#41-qué-se-migra-y-qué-no)), cuya plata ya no está en
+ninguna cuenta, y `activos.movimiento_id` admite nulo justo para eso. **Por eso la cuenta no es
+obligatoria, y ese es su riesgo:** olvidarla en una compra nueva no le resta a la caja. El descriptor
+no sabe decir «obligatoria si la compra es posterior al corte» —y el corte ni siquiera está en el
+modelo—, así que lo dice la ayuda.
+
+La fecha futura y la cuenta que no existe o está anulada no caben en el descriptor, y responden
+`42290` sobre `fechaCompra` y `42291` sobre `cuentaId`. **Ni la vida útil ni el estado son campos:**
+`vida_util_meses` existe y ningún documento la usa, y un activo nace `en_uso` sin que nada diga
+todavía cómo se vende o se da de baja.
+
+### `aporte` · registrar un aporte de capital
+
+| `campo` | `etiqueta` | `tipo` | Reglas | `mensajes` | Lo demás |
+|---|---|---|---|---|---|
+| `valor` | Valor del aporte | `dinero` | obligatorio · `minimo` 1 | obligatorio: «Escribe cuánto entró.» · minimo: «El aporte tiene que ser mayor que cero.» | `teclado`: `numerico` · `ayuda`: «Plata que entra desde afuera del negocio: sube la caja y el patrimonio, no la utilidad.» |
+| `cuentaId` | Cuenta | `lista` | obligatorio | obligatorio: «Elige en qué cuenta entró la plata.» | `origen`: `/api/v0/consultas/cuentas` |
+| `fecha` | Fecha | `fecha` | — | — | `ayuda`: «Cuándo entró de verdad. Sin ella, hoy.» |
+| `nota` | Nota | `texto` | — | — | `ayuda`: «De dónde salió la plata, si sirve recordarlo.» |
+
+**Aquí la cuenta sí es obligatoria**, porque todo aporte es un movimiento: `aportes_retiros.movimiento_id`
+no admite nulo ([`04-modelo-de-datos.md`](../docs/04-modelo-de-datos.md) [§4.6](../docs/04-modelo-de-datos.md#46-inversiones-capital-y-pro-labore)). La fecha futura responde `42290` sobre `fecha` y la cuenta
+que no sirve, `42291` sobre `cuentaId`.
+
+### `retiro` · registrar un retiro, partido en pro-labore y distribución
+
+| `campo` | `etiqueta` | `tipo` | Reglas | `mensajes` | Lo demás |
+|---|---|---|---|---|---|
+| `valor` | Valor del retiro | `dinero` | obligatorio · `minimo` 1 | obligatorio: «Escribe cuánto sacaste.» · minimo: «El retiro tiene que ser mayor que cero.» | `teclado`: `numerico` |
+| `cuentaId` | Cuenta | `lista` | obligatorio | obligatorio: «Elige de qué cuenta salió la plata.» | `origen`: `/api/v0/consultas/cuentas` |
+| `fecha` | Fecha | `fecha` | — | — | `ayuda`: «Cuándo salió de verdad. Sin ella, hoy.» |
+| `prolabore` | De eso, pro-labore | `dinero` | `minimo` 0 | minimo: «El pro-labore no puede ser negativo.» | `teclado`: `numerico` · `ayuda`: «La parte que paga tu trabajo en el taller: es gasto. El resto es distribución y no toca la utilidad. Si lo dejas vacío, se parte solo con lo que falta de tu pro-labore del mes.» |
+| `nota` | Nota | `texto` | — | — | — |
+
+**El orden es el del [CU-16](../docs/02-casos-de-uso.md#cu-16):** primero el valor, la cuenta y la fecha, y después cómo se clasifica.
+**La división la propone la API y la decide la persona.** `POST /api/v0/consultas/division-de-retiro`,
+con el valor y la fecha, devuelve cuánto sería pro-labore y cuánto distribución, con la explicación
+en palabras, y el formulario pinta la propuesta en `prolabore`. Si el campo llega vacío, la API lo
+parte con la misma regla: pro-labore hasta completar el del mes —el vigente en la fecha del retiro,
+menos lo que ya se sacó como pro-labore ese mes— y el resto distribución. Sin pro-labore definido, todo es
+distribución. Un pro-labore mayor que el retiro responde `42292` sobre `prolabore`.
+
+> **El aviso de caja libre no está, y no por olvido.** El [CU-16](../docs/02-casos-de-uso.md#cu-16) pide advertir cuando la caja libre
+> no alcanza y exigir confirmación ([BDD-16-2](../docs/03-requisitos-y-bdd.md#bdd-16-2)). Pero la caja libre la calcula la tarea [6.1](../docs/08-plan-de-desarrollo.md#tarea-6-1), que depende
+> del retiro, así que no hay orden en que el retiro la pueda usar: va con el contrato de las tres
+> cifras ([6.10](../docs/08-plan-de-desarrollo.md#tarea-6-10)), que le puede sumar el aviso a esta misma vista previa con una MINOR.
+
+### `prolabore` · definir el pro-labore
+
+| `campo` | `etiqueta` | `tipo` | Reglas | `mensajes` | Lo demás |
+|---|---|---|---|---|---|
+| `valorMensual` | Pro-labore mensual | `dinero` | obligatorio · `minimo` 0 | obligatorio: «Escribe cuánto vale al mes tu trabajo en el taller.» · minimo: «El pro-labore no puede ser negativo.» | `teclado`: `numerico` · `ayuda`: «Lo que tendrías que pagarle a alguien para que hiciera lo que tú haces en el taller. No es lo que necesitas para vivir: es lo que vale el trabajo.» |
+| `horasMensuales` | Horas productivas al mes | `numero` | `minimo` 0 | minimo: «Las horas no pueden ser negativas.» | `teclado`: `numerico` · `ayuda`: «Las horas del mes que trabajas produciendo. De ellas sale cuánto cuesta cada minuto en el costeo de los productos; en cero, tu trabajo no le pone precio a ninguno.» |
+| `justificacion` | Justificación | `texto` | obligatorio | obligatorio: «Escribe por qué ese valor: con qué lo comparaste.» | `ayuda`: «Queda junto al valor, para que dentro de un año se sepa de dónde salió.» |
+
+**No se edita: se vuelve a definir.** Cada vez que se guarda entra una fila nueva en
+`prolabore_config`, vigente desde ese día, como el costeo. Los costeos ya guardados conservan su
+tarifa por hora, y cada retiro se parte con el pro-labore vigente en su fecha.
+
+**La justificación es obligatoria aquí y opcional en la base.** La tarea es «Configuración del
+pro-labore **con justificación**» ([7.3](../docs/08-plan-de-desarrollo.md#tarea-7-3)), y [`05-reglas-financieras.md`](../docs/05-reglas-financieras.md) [§6.3](../docs/05-reglas-financieras.md#63-el-pro-labore--la-trampa-del-trabajo-invisible-rn-08) dice cómo se fija ese
+valor; la columna admite nulo, así que esa regla la sostiene la API. **Un pro-labore en cero se
+puede escribir**, porque la columna es `dinero` y no `dinero_positivo`: entonces todo retiro es
+distribución. Las horas con más de dos decimales —lo que guarda `NUMERIC(6,2)`— responden `42294`
+sobre `horasMensuales`.
+
+### `sobres` · configurar los cuatro sobres
+
+| `campo` | `etiqueta` | `tipo` | Reglas | `mensajes` | Lo demás |
+|---|---|---|---|---|---|
+| `pctCostoDirecto` | Costo directo | `numero` | obligatorio · `minimo` 0 · `maximo` 100 | obligatorio: «Escribe qué porcentaje va a este sobre.» · minimo y maximo: «Cada sobre va entre 0 y 100 %.» | `teclado`: `numerico` · `ayuda`: «Los insumos del próximo pedido. Para empezar se sugiere 45 %.» |
+| `pctGastosFijos` | Gastos fijos | `numero` | obligatorio · `minimo` 0 · `maximo` 100 | obligatorio: «Escribe qué porcentaje va a este sobre.» · minimo y maximo: «Cada sobre va entre 0 y 100 %.» | `teclado`: `numerico` · `ayuda`: «Arriendo, servicios, internet, pro-labore y nómina. Se sugiere 25 %.» |
+| `pctReserva` | Reserva | `numero` | obligatorio · `minimo` 0 · `maximo` 100 | obligatorio: «Escribe qué porcentaje va a este sobre.» · minimo y maximo: «Cada sobre va entre 0 y 100 %.» | `teclado`: `numerico` · `ayuda`: «El colchón del negocio para imprevistos. Se sugiere 10 %.» |
+| `pctRetiro` | Retiro | `numero` | obligatorio · `minimo` 0 · `maximo` 100 | obligatorio: «Escribe qué porcentaje va a este sobre.» · minimo y maximo: «Cada sobre va entre 0 y 100 %.» | `teclado`: `numerico` · `ayuda`: «Lo que se reparte la propiedad. Se sugiere 20 %.» |
+
+**Que los cuatro sumen 100 mira los cuatro campos, y no cabe en el descriptor.** Es la restricción
+`suma_cien` de `sobres_config` ([`04-modelo-de-datos.md`](../docs/04-modelo-de-datos.md) [§4.8](../docs/04-modelo-de-datos.md#48-sobres-y-cierres)), y responde `42293` sobre `pctRetiro`, el
+último: la regla mira los cuatro y el aviso cae donde se termina de escribir, como el `42210` cae
+sobre `repeticion`. Los sugeridos de la ayuda son los de arranque de
+[`05-reglas-financieras.md`](../docs/05-reglas-financieras.md) [§11](../docs/05-reglas-financieras.md#11-la-regla-de-los-4-sobres). Cada cambio es una fila nueva con su fecha de vigencia, y así se conserva
+el historial ([RF-51](../docs/03-requisitos-y-bdd.md#rf-51)).
+
 ### Los ocho formularios de motivo
 
 Tienen un solo campo, `motivo`, de tipo `texto`, obligatorio y con `minimo` 5, que es lo que
@@ -307,10 +408,10 @@ controladores. Si difieren, la compilación falla y dice en qué línea
 
 | | |
 |---|---|
-| **Versión** | `0.12.0` |
-| **Rutas** | Todas bajo `/api/v0`, y **ninguna usa GET** ([ADR-030](../docs/adr/ADR-030-contrato-sin-get.md)): las catorce lecturas cuelgan de `/api/v0/consultas/…` y las treinta y una escrituras, de su recurso. 45 operaciones en 45 rutas |
-| **Códigos** | 48: los 10 genéricos, 9 en cada uno de los cuatro módulos que ya tenían contrato —sesión y transporte, usuarios y cargos, movimientos y cuentas, y pedidos y clientes— y 2 del quinto, productos y costeo, que estrena su rango. 24 siguen marcados como pendientes de emitir |
-| **Copia fijada en `prisma_api`** | Va en `0.9.0` y sirve **trece** de las 45 operaciones: la versión, el descriptor, la navegación, las cuatro de `/sesiones`, las cinco de `/usuarios` y los cargos asignables. **No declara que las implemente todas**: declara contra qué versión del contrato está escrita, y `0.2.0` dejó de existir el día en que sus dos rutas cambiaron de verbo y de ruta. Saltarse el número habría sido peor: dos contratos distintos con el mismo `0.2.0` |
+| **Versión** | `0.13.0` |
+| **Rutas** | Todas bajo `/api/v0`, y **ninguna usa GET** ([ADR-030](../docs/adr/ADR-030-contrato-sin-get.md)): las diecinueve lecturas cuelgan de `/api/v0/consultas/…` y las treinta y seis escrituras, de su recurso. 55 operaciones en 55 rutas |
+| **Códigos** | 53: los 10 genéricos, 9 en cada uno de los cuatro módulos que ya tenían contrato —sesión y transporte, usuarios y cargos, movimientos y cuentas, y pedidos y clientes—, 2 de productos y costeo y 5 de capital y patrimonio, que estrena el rango `90`–`99`. 29 siguen marcados como pendientes de emitir |
+| **Copia fijada en `prisma_api`** | Va en `0.9.0` y sirve **trece** de las 55 operaciones: la versión, el descriptor, la navegación, las cuatro de `/sesiones`, las cinco de `/usuarios` y los cargos asignables. **No declara que las implemente todas**: declara contra qué versión del contrato está escrita, y `0.2.0` dejó de existir el día en que sus dos rutas cambiaron de verbo y de ruta. Saltarse el número habría sido peor: dos contratos distintos con el mismo `0.2.0` |
 | **Origen** | Las dos versiones se generaron del esqueleto de la API durante el [Sprint 0](../docs/08-plan-de-desarrollo.md#sprint-0) y se revisaron antes de fijarlas. De aquí en adelante el orden es el inverso: primero se acuerda aquí, después se implementa |
 
 ---
@@ -319,6 +420,7 @@ controladores. Si difieren, la compilación falla y dice en qué línea
 
 | Versión | Qué cambió | Por qué |
 |---|---|---|
+| `0.13.0` | Capital: `PUT /api/v0/activos/{id}`, `/aportes/{id}`, `/retiros/{id}`, `/prolabore/{id}` y `/sobres/{id}`, y cinco consultas —los activos, la división de un retiro, el pro-labore y los sobres vigentes, y el patrimonio—; veintitrés esquemas, los formularios `activo`, `aporte`, `retiro`, `prolabore` y `sobres`, y cinco códigos —`42290` a `42294`— en el rango `90`–`99`, que estaba reservado y pasa a ser de capital y patrimonio | [RF-45](../docs/03-requisitos-y-bdd.md#rf-45) a [RF-51](../docs/03-requisitos-y-bdd.md#rf-51), [CU-15](../docs/02-casos-de-uso.md#cu-15), [CU-16](../docs/02-casos-de-uso.md#cu-16), [CU-17](../docs/02-casos-de-uso.md#cu-17), [CU-24](../docs/02-casos-de-uso.md#cu-24) y [CU-25](../docs/02-casos-de-uso.md#cu-25), tarea [7.9](../docs/08-plan-de-desarrollo.md#tarea-7-9). **Adición compatible**: nada de `0.12.0` cambia de forma. A diferencia del `0.12.0`, aquí no había dominio que transcribir y el contrato sale de los documentos. Lo que decide: **cómo se parte un retiro cuando no se dice** —pro-labore hasta completar el del mes, y el resto distribución—; que el pro-labore y los sobres **se definen desde el día en que se guardan**, sin editar la definición anterior; que **una inversión puede entrar sin cuenta**, que es como entran los equipos que el taller ya tenía el día del corte; y que Capital tiene **rango propio** en vez de apretarse en el de movimientos |
 | `0.12.0` | Productos y costeo: `PUT /api/v0/productos/{id}`, su edición, su desactivación y su reactivación, `POST /api/v0/consultas/productos` y `POST /api/v0/consultas/costeo`; once esquemas, los formularios `producto` y `desactivacion-de-producto`, el tipo `numero` en el descriptor y dos códigos —`40940` y `42240`— que estrenan el rango `40`–`49` | [RF-28](../docs/03-requisitos-y-bdd.md#rf-28) a [RF-35](../docs/03-requisitos-y-bdd.md#rf-35) y [BDD-02-2](../docs/03-requisitos-y-bdd.md#bdd-02-2), tarea [5.10](../docs/08-plan-de-desarrollo.md#tarea-5-10). **Adición compatible**: nada de `0.11.0` cambia de forma; el descriptor gana un tipo —como ganó `casilla` en el `0.3.0` y `clave` en el `0.4.0`—, el esquema `Motivo` pasa de siete formularios a ocho, y el `porcentaje` que el `0.10.0` le puso a `anticipoPct` en este README pasa a `numero`, que es el tipo que sí existe. El contrato casi no decide: transcribe el dominio que ya construyeron la [5.1](../docs/08-plan-de-desarrollo.md#tarea-5-1), la [5.3](../docs/08-plan-de-desarrollo.md#tarea-5-3) y la [5.6](../docs/08-plan-de-desarrollo.md#tarea-5-6). Lo que sí decide es que **a Operación no le llegan ni el costo ni los márgenes ni los minutos**, porque `costos_producto` lleva RLS y PostgreSQL no le devuelve esas filas ([ADR-006](../docs/adr/ADR-006-rls-por-rol.md)) |
 | `0.11.0` | Movimientos: `PUT /api/v0/movimientos/{id}`, su anulación, su adjunto y `POST /api/v0/consultas/movimientos`; ocho esquemas, el formulario `movimiento`, el séptimo de motivo y seis códigos —`40020`, `40021` y `42223` a `42226`— | Tarea [3.13](../docs/08-plan-de-desarrollo.md#tarea-3-13), con [RF-08](../docs/03-requisitos-y-bdd.md#rf-08) a [RF-16](../docs/03-requisitos-y-bdd.md#rf-16) detrás. **Adición compatible**: nada de `0.10.0` cambia de forma, y solo se amplía la descripción del esquema `Motivo`, que ya servía a seis formularios y ahora a siete. El registro reutiliza lo que el `0.10.0` acababa de fijar: `PUT` al id que genera quien pide ([ADR-020](../docs/adr/ADR-020-idempotencia.md)), el mismo dos veces responde `40900`, la anulación cuelga del recurso con el esquema `Motivo`, y `Anulacion` se comparte en vez de repetirse |
 | `0.10.0` | Clientes, pedidos y anticipos: 9 operaciones nuevas, 14 esquemas, los formularios `cliente`, `pedido`, `anticipo`, `entrega` y `cancelacion`, los dos de motivo, y 9 códigos en el rango `30`–`39`, que esta versión estrena. Todos van marcados como pendientes de emitir | [RF-18](../docs/03-requisitos-y-bdd.md#rf-18) a [RF-26](../docs/03-requisitos-y-bdd.md#rf-26), [RN-05](../docs/03-requisitos-y-bdd.md#rn-05), [RN-06](../docs/03-requisitos-y-bdd.md#rn-06) y [RN-13](../docs/03-requisitos-y-bdd.md#rn-13), tarea [4.10](../docs/08-plan-de-desarrollo.md#tarea-4-10). **Adición compatible**: un cliente de `0.9.0` no encuentra nada suyo cambiado, así que sube la MINOR. Es el mismo caso que `0.3.0` |

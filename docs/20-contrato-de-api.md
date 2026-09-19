@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-19 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-19 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
@@ -20,8 +20,8 @@ capas, la regla de dependencias, cómo la identidad llega hasta PostgreSQL— es
 [`07-arquitectura.md`](07-arquitectura.md). Aquí solo está **lo que viaja por el cable**.
 
 > **Ninguna operación usa `GET`** ([ADR-030](adr/ADR-030-contrato-sin-get.md)). Toda la API cuelga
-> de `/api/v0`; las catorce lecturas viajan por `POST` bajo `/api/v0/consultas/…`, con sus datos en
-> el cuerpo y no en la URL; las treinta y una escrituras se quedan en su recurso. El `v0` es el MAJOR de
+> de `/api/v0`; las diecinueve lecturas viajan por `POST` bajo `/api/v0/consultas/…`, con sus datos
+> en el cuerpo y no en la URL; las treinta y seis escrituras se quedan en su recurso. El `v0` es el MAJOR de
 > la API y pasa a `v1` con la primera publicación en producción ([ADR-014](adr/ADR-014-semver.md)).
 > Fuera del prefijo y fuera de la regla quedan los estáticos del front, Swagger, `/error` y las
 > sondas de Actuator: no son operaciones del contrato.
@@ -158,9 +158,15 @@ módulo, igual en todos los estados HTTP.**
 | `60`–`69` | Reportes y cierres |
 | `70`–`79` | Exportación y respaldo |
 | `80`–`89` | Cotizaciones |
-| `90`–`99` | Reservado |
+| `90`–`99` | Capital y patrimonio: inversiones, aportes, retiros, pro-labore y sobres |
 
 Así `42213` se lee de un vistazo: **HTTP 422, módulo de usuarios, caso 3 de ese módulo.**
+
+> **El `90`–`99` era la reserva, y desde el contrato `v0.13.0` es de Capital y patrimonio** (tarea
+> [7.9](08-plan-de-desarrollo.md#tarea-7-9)). El reparto de [ADR-019](adr/ADR-019-contrato-de-respuesta.md) no le había dado rango a un módulo que el plan sí tiene, y el
+> [21 §4.3](21-trabajo-en-paralelo.md#43-fase-2--rebanadas-verticales-sprints-3-a-8) le había puesto el `70`–`79`, que es de Exportación y respaldo. No cabía en el de
+> Movimientos: al `422` del `20`–`29` le quedaban tres casos, y Capital necesitó cinco. Con esto
+> **cada módulo del plan tiene su rango y ya no queda ninguno reservado.**
 
 > **El caso `00` está reservado al genérico y no pertenece a ningún módulo.** Sin esa reserva, los
 > diez códigos base habrían caído dentro del rango de Sesión y seguridad y `42200` habría
@@ -804,7 +810,7 @@ firma se arma igual que en una escritura, con `sha256` del cuerpo vacío; y esta
 | Con qué configuración corre cada ambiente y cómo se publica | [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [Contrato](../contrato/README.md "Contrato de la API · v0.12.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.13.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
