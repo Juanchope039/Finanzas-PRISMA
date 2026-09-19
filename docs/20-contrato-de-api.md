@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.8.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-19 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.9.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-19 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
@@ -162,12 +162,15 @@ módulo, igual en todos los estados HTTP.**
 
 Así `42213` se lee de un vistazo: **HTTP 422, módulo de usuarios, caso 3 de ese módulo.**
 
-> **Desde el contrato `v0.15.0` ya no queda ningún rango vacío.** El `50`–`59` de nómina, el
-> `80`–`89` de cotizaciones y el `70`–`79` se estrenan a la vez con la tarea
-> [8.11](08-plan-de-desarrollo.md#tarea-8-11), que trae diecisiete códigos. El tercero **cambia de nombre**: era
-> «Exportación y respaldo» y pasa a ser «Exportación, importación y respaldo», porque importar es la
-> otra mitad de lo mismo y la matriz del [03](03-requisitos-y-bdd.md) ya los tenía en la misma fila. **Ningún módulo ha
-> agotado un estado HTTP**: el más lleno es nómina, con cuatro casos de `422` de los diez que le caben.
+> **Desde el contrato `v0.17.0` ya no queda ningún rango sin códigos.** El `50`–`59` de nómina, el
+> `80`–`89` de cotizaciones y el `70`–`79` los estrenó a la vez la tarea
+> [8.11](08-plan-de-desarrollo.md#tarea-8-11), con diecisiete códigos. El tercero **cambió de nombre**: era
+> «Exportación y respaldo» y pasó a ser «Exportación, importación y respaldo», porque importar es la
+> otra mitad de lo mismo y la matriz del [03](03-requisitos-y-bdd.md) ya los tenía en la misma fila. **El `60`–`69` fue el
+> último en llenarse**, y lo estrena la [6.10](08-plan-de-desarrollo.md#tarea-6-10) con dos códigos del cierre mensual —`40960` y
+> `40961`— y dos de las consultas del Inicio —`42260` y `42261`—.
+> **Ningún módulo ha agotado un estado HTTP**: el más lleno es movimientos y cuentas, con siete
+> casos de `422` de los diez que le caben.
 >
 > **El `90`–`99` era la reserva, y desde el contrato `v0.13.0` es de Capital y patrimonio** (tarea
 > [7.9](08-plan-de-desarrollo.md#tarea-7-9)). El reparto de [ADR-019](adr/ADR-019-contrato-de-respuesta.md) no le había dado rango a un módulo que el plan sí tiene, y el
@@ -817,7 +820,7 @@ firma se arma igual que en una escritura, con `sha256` del cuerpo vacío; y esta
 | Con qué configuración corre cada ambiente y cómo se publica | [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.16.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.17.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

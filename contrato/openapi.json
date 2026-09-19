@@ -134,6 +134,26 @@
         "required" : [ "bytes", "id", "nombre", "tipo" ],
         "type" : "object"
       },
+      "Alerta" : {
+        "description" : "Una de las cuatro alertas derivadas de 05 §3.4, ya decidida por la API: el front pinta la que le llega y no evalúa ninguna condición (ADR-018). Solo viajan las activas",
+        "properties" : {
+          "destino" : {
+            "description" : "La clave de navegación de la pantalla donde se atiende, de las mismas que trae POST /api/v0/consultas/navegacion: pedidos para un pedido estancado, movimientos para la caja. Ausente cuando no hay a dónde ir",
+            "type" : "string"
+          },
+          "lectura" : {
+            "$ref" : "#/components/schemas/Lectura",
+            "description" : "Qué dice, con su nivel y su acción sugerida en el detalle"
+          },
+          "tipo" : {
+            "description" : "Cuál de las cuatro es (05 §3.4): caja_libre_negativa cuando la caja libre da menos de cero; anticipos_sobre_saldo cuando los anticipos por devengar superan el saldo total; pedido_estancado por cada pedido con anticipo cobrado y 15 días o más sin entregar (RF-24); y concentracion_de_anticipos cuando un solo cliente concentra más del 40 %",
+            "enum" : [ "caja_libre_negativa", "anticipos_sobre_saldo", "pedido_estancado", "concentracion_de_anticipos" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "lectura", "tipo" ],
+        "type" : "object"
+      },
       "AlternativaDeContratacion" : {
         "description" : "Lo que el sistema propone cuando no alcanza, en vez de quedarse en «no» (06 §5)",
         "properties" : {
@@ -370,6 +390,81 @@
         "required" : [ "esFijo", "id", "naturaleza", "nombre" ],
         "type" : "object"
       },
+      "CierreMensual" : {
+        "description" : "El snapshot inmutable de un mes cerrado (05 §8, RN-16, 04 §4.8). Las once cifras las calculó la API el día del cierre y ya no cambian: un movimiento registrado tarde con fecha de este mes se acepta, se marca como ajuste y aparece en el mes corriente, pero este reporte no se mueve. La base lo impone: cierres_mensuales no admite UPDATE (04 §5.3)",
+        "properties" : {
+          "anio" : {
+            "description" : "El año del mes cerrado",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "anticiposAbiertos" : {
+            "description" : "Los anticipos de pedidos todavía no entregados al cierre",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "cajaLibreCierre" : {
+            "description" : "La caja libre al último día del mes (05 §3.3). Puede ser negativa",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "cerradoEn" : {
+            "description" : "Cuándo se cerró",
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "cerradoPor" : {
+            "description" : "El nombre completo de quien lo cerró",
+            "type" : "string"
+          },
+          "costosDirectos" : {
+            "description" : "El costo de los pedidos entregados en el mes",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "flujoCaja" : {
+            "description" : "Entradas menos salidas del mes (05 §9.2). Puede ser negativo",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "gastosOperativos" : {
+            "description" : "Los gastos que no son costo directo, con el pro-labore y la nómina dentro",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "ingresosCausados" : {
+            "description" : "Las ventas de los pedidos entregados en el mes (05 §9.1)",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "mes" : {
+            "description" : "El mes cerrado, de 1 a 12",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "nomina" : {
+            "description" : "Lo pagado a las empleadas en el mes, que ya está dentro de gastosOperativos",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "prolabore" : {
+            "description" : "El pro-labore del mes, que ya está dentro de gastosOperativos (RN-08)",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "utilidadCausada" : {
+            "description" : "Margen bruto menos gastos operativos (05 §9.1). Puede ser negativa: un mes en pérdida es un resultado",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "anio", "anticiposAbiertos", "cajaLibreCierre", "cerradoEn", "cerradoPor", "costosDirectos", "flujoCaja", "gastosOperativos", "id", "ingresosCausados", "mes", "nomina", "prolabore", "utilidadCausada" ],
+        "type" : "object"
+      },
       "ClaveTemporal" : {
         "description" : "El formulario «clave-temporal». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"clave-temporal\"}",
         "properties" : {
@@ -516,6 +611,17 @@
         },
         "type" : "object"
       },
+      "ConsultaDeCierres" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/cierres. Sin año, todos los meses cerrados que haya",
+        "properties" : {
+          "anio" : {
+            "description" : "Solo los cierres de ese año. Fuera de 2020..2100 responde 42260",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "type" : "object"
+      },
       "ConsultaDeCosteo" : {
         "description" : "El cuerpo de POST /api/v0/consultas/costeo: lo que la persona lleva escrito en el formulario de producto, para que la API devuelva las cifras sin que el front calcule ninguna (ADR-018)",
         "properties" : {
@@ -581,6 +687,36 @@
             "type" : "boolean"
           }
         },
+        "type" : "object"
+      },
+      "ConsultaDeDescarga" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/descarga: qué parte del Inicio se lleva y en qué formato (RF-96, 10 §4.1). Son las mismas casillas que pinta el panel de descarga",
+        "properties" : {
+          "anio" : {
+            "description" : "De qué mes se lleva lo que muestra el Inicio. Sin año y mes, el mes en curso en Bogotá",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "formato" : {
+            "description" : "csv para la hoja de cálculo y pdf para el informe impreso",
+            "enum" : [ "csv", "pdf" ],
+            "type" : "string"
+          },
+          "incluye" : {
+            "description" : "Qué zonas del Inicio entran, al menos una: las tres cifras del mes, los saldos por cuenta, los cuatro sobres, los doce meses del gráfico, las alertas activas y los pendientes. Vacío o ausente responde 42261",
+            "items" : {
+              "enum" : [ "cifras", "saldos", "sobres", "doceMeses", "alertas", "pendientes" ],
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "mes" : {
+            "description" : "De 1 a 12. Fuera de rango responde 42260",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "formato", "incluye" ],
         "type" : "object"
       },
       "ConsultaDeDesprendible" : {
@@ -791,6 +927,33 @@
             "description" : "Los dos órdenes del cuadro de 10 §4.4, y los dos los decide la API. Sin él, margen_por_hora, que es el que orienta la decisión cuando hay más pedidos que tiempo (05 §7.2). A una sesión de Operación el catálogo le llega por nombre: ordenar por margen exige leer lo que la base no le deja ver",
             "enum" : [ "margen_por_hora", "margen_porcentual" ],
             "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "ConsultaDeReporte" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/reporte. Sin año, el año en curso en Bogotá (RNF-08)",
+        "properties" : {
+          "anio" : {
+            "description" : "Fuera de 2020..2100 responde 42260",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "type" : "object"
+      },
+      "ConsultaDeTablero" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/tablero. Sin año y mes, el mes en curso en Bogotá (RNF-08), que es lo que pinta el Inicio al abrirse",
+        "properties" : {
+          "anio" : {
+            "description" : "Fuera de 2020..2100 responde 42260",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "mes" : {
+            "description" : "De 1 a 12. Fuera de rango responde 42260",
+            "format" : "int32",
+            "type" : "integer"
           }
         },
         "type" : "object"
@@ -1099,6 +1262,11 @@
       "DivisionDeRetiro" : {
         "description" : "Cómo propone la API partir un retiro (CU-16): pro-labore hasta completar el del mes y el resto distribución. Es una propuesta: la persona la puede cambiar antes de guardar",
         "properties" : {
+          "cajaLibre" : {
+            "description" : "La caja libre de hoy (05 §3.3), para que la pantalla avise con la cifra delante antes de retirar (CU-16 A1, BDD-16-2). La calcula la API, como en el tablero",
+            "format" : "int64",
+            "type" : "integer"
+          },
           "distribucion" : {
             "description" : "Lo que queda como distribución",
             "format" : "int64",
@@ -1108,17 +1276,21 @@
             "description" : "De dónde salen las dos cifras, con los montos: el pro-labore del mes, lo que ya se retiró como pro-labore y lo que falta. Sin pro-labore definido, dice que todo es distribución y por qué eso esconde el trabajo propio (05 §6.3)",
             "type" : "string"
           },
+          "lectura" : {
+            "$ref" : "#/components/schemas/Lectura",
+            "description" : "Qué dice este retiro contra la caja libre. En nivel critica es el aviso de BDD-16-2: el retiro se pasa de lo disponible y usaría plata de anticipos, así que PUT /api/v0/retiros/{id} lo va a rechazar con 40990 mientras no llegue confirmado. Si no, informativa"
+          },
           "prolabore" : {
             "description" : "Lo que propone tomar como pro-labore",
             "format" : "int64",
             "type" : "integer"
           }
         },
-        "required" : [ "distribucion", "explicacion", "prolabore" ],
+        "required" : [ "cajaLibre", "distribucion", "explicacion", "lectura", "prolabore" ],
         "type" : "object"
       },
       "Documento" : {
-        "description" : "Un archivo que la API entrega: el desprendible, la cotización o la remisión. Viaja dentro del sobre, en data, como cualquier otra respuesta, y no como bytes crudos: así una misma ruta no tiene dos formas de contestar, una para cuando sale bien y otra para el 40300 o el 40400 (tarea 8.11). El contenido va en base64, que cuesta un 33% de tamaño, y por eso el tope es de 5 MB, el mismo del adjunto de subida",
+        "description" : "Un archivo que la API entrega: el desprendible, la cotización, la remisión o lo que muestra el Inicio. Viaja dentro del sobre, en data, como cualquier otra respuesta, y no como bytes crudos: así una misma ruta no tiene dos formas de contestar, una para cuando sale bien y otra para el 40300 o el 40400 (tarea 8.11). El contenido va en base64, que cuesta un 33% de tamaño, y por eso el tope es de 5 MB, el mismo del adjunto de subida",
         "properties" : {
           "bytes" : {
             "description" : "Cuánto pesa el archivo ya decodificado. Nunca más de 5.242.880",
@@ -1131,12 +1303,12 @@
             "type" : "string"
           },
           "nombre" : {
-            "description" : "El nombre con que conviene guardarlo, como desprendible-2026-09-marcela-rios.pdf",
+            "description" : "El nombre con que conviene guardarlo, como desprendible-2026-09-marcela-rios.pdf o inicio-2026-09.csv",
             "type" : "string"
           },
           "tipo" : {
-            "description" : "El tipo de contenido del archivo",
-            "enum" : [ "application/pdf" ],
+            "description" : "El tipo de contenido del archivo. El desprendible, la cotización y la remisión siempre bajan en PDF; la descarga del Inicio baja en el formato que se le pidió (RF-96, tarea 6.10)",
+            "enum" : [ "application/pdf", "text/csv" ],
             "type" : "string"
           }
         },
@@ -1653,6 +1825,97 @@
         },
         "type" : "object"
       },
+      "MesDelGrafico" : {
+        "description" : "Un punto del gráfico de doce meses del Inicio (tarea 6.4): la utilidad y la caja superpuestas",
+        "properties" : {
+          "anio" : {
+            "description" : "El año del punto",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "flujoCaja" : {
+            "description" : "Entradas menos salidas de ese mes. Puede ser negativo",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "mes" : {
+            "description" : "El mes del punto, de 1 a 12",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "utilidadCausada" : {
+            "description" : "La utilidad causada de ese mes. Puede ser negativa",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "anio", "flujoCaja", "mes", "utilidadCausada" ],
+        "type" : "object"
+      },
+      "MesDelReporte" : {
+        "description" : "Una fila de la tabla mes a mes de Reportes (10 §4.6). Los meses cerrados salen de cierres_mensuales y ya no cambian (RN-16); los abiertos se calculan al vuelo con lo que hay hasta hoy",
+        "properties" : {
+          "anio" : {
+            "description" : "El año de la fila",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "cerrado" : {
+            "description" : "Si el mes tiene su snapshot en cierres_mensuales. Con false las cifras todavía se pueden mover",
+            "type" : "boolean"
+          },
+          "costosDirectos" : {
+            "description" : "El costo de los pedidos entregados en el mes",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "gastosOperativos" : {
+            "description" : "Los gastos que no son costo directo, con el pro-labore y la nómina dentro",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "ingresosCausados" : {
+            "description" : "Las ventas de los pedidos entregados en el mes",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "margenNeto" : {
+            "description" : "Utilidad causada entre ingresos causados, en puntos y con dos decimales (05 §9.1). Ausente cuando el mes no tuvo ingresos: dividir entre cero no dice nada",
+            "type" : "number"
+          },
+          "margenSinProlabore" : {
+            "description" : "Lo que diría el margen si el trabajo de la gerencia no se cobrara, en puntos y con dos decimales. Ausente cuando el mes no tuvo ingresos. Es la otra mitad de la comparación de 05 §6.3, y está para que se vea de dónde sale la diferencia, no para usarla como resultado",
+            "type" : "number"
+          },
+          "mes" : {
+            "description" : "El mes de la fila, de 1 a 12",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "nomina" : {
+            "description" : "Lo pagado a las empleadas en el mes, que ya está dentro de gastosOperativos",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "prolabore" : {
+            "description" : "El pro-labore del mes, que ya está dentro de gastosOperativos (RN-08)",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "utilidadCausada" : {
+            "description" : "Margen bruto menos gastos operativos. Puede ser negativa",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "utilidadSinProlabore" : {
+            "description" : "La utilidad que daría el mismo mes sin descontar el pro-labore: la trampa del trabajo invisible de 05 §6.3, puesta al lado de la cifra buena para que se note. Nunca es la que manda",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "anio", "cerrado", "costosDirectos", "gastosOperativos", "ingresosCausados", "mes", "nomina", "prolabore", "utilidadCausada", "utilidadSinProlabore" ],
+        "type" : "object"
+      },
       "Motivo" : {
         "description" : "Los once formularios de motivo —«desactivacion-de-usuario», «reactivacion-de-usuario», «desactivacion-de-cargo», «desactivacion-de-producto», «reversion», «anulacion-de-pedido», «anulacion-de-cliente», «anulacion-de-movimiento», «anulacion-de-empleada», «anulacion-de-adelanto» y «anulacion-de-cotizacion»—: el mismo campo, con la etiqueta y los mensajes de cada uno",
         "properties" : {
@@ -2115,6 +2378,23 @@
         "required" : [ "cuentaId", "valor" ],
         "type" : "object"
       },
+      "NuevoCierre" : {
+        "description" : "El cuerpo de PUT /api/v0/cierres/{id}: solo el período. Las once cifras del snapshot las calcula la API en la misma transacción, porque mandarlas desde la pantalla sería dejar que el front decida el contenido de un registro que después nadie puede corregir (ADR-018, RN-16)",
+        "properties" : {
+          "anio" : {
+            "description" : "Fuera de 2020..2100 responde 42260",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "mes" : {
+            "description" : "De 1 a 12. Fuera de rango responde 42260",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "anio", "mes" ],
+        "type" : "object"
+      },
       "NuevoCliente" : {
         "description" : "El formulario «cliente». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"cliente\"}",
         "properties" : {
@@ -2267,6 +2547,10 @@
       "NuevoRetiro" : {
         "description" : "El formulario «retiro». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"retiro\"}",
         "properties" : {
+          "confirmado" : {
+            "description" : "Que quien retira ya vio el aviso y sigue adelante. Hace falta solo cuando el retiro se pasa de la caja libre (CU-16 A1, BDD-16-2): sin él responde 40990, y la cifra con la que avisar la da POST /api/v0/consultas/division-de-retiro. La API no lo pide nunca más: quien decide es la persona, no el front",
+            "type" : "boolean"
+          },
           "cuentaId" : {
             "description" : "De dónde salió la plata. Sale de POST /api/v0/consultas/cuentas, y una que no existe o está anulada responde 42291",
             "format" : "uuid",
@@ -2514,6 +2798,38 @@
         "required" : [ "anticipado", "anticipoPct", "clienteId", "estado", "estancado", "fechaPedido", "id", "lineas", "numero", "saldoPendiente", "valorTotal" ],
         "type" : "object"
       },
+      "Pendientes" : {
+        "description" : "Lo que queda por entregar y por cobrar, que es la última zona del Inicio (10 §4.1)",
+        "properties" : {
+          "anticiposAbiertos" : {
+            "description" : "Los anticipos ya cobrados de esos pedidos, que son deuda con el cliente hasta la entrega (RN-05)",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "cuentasPorCobrar" : {
+            "description" : "El saldo pendiente de los pedidos entregados y no cobrados del todo (RF-23)",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "pedidosEstancados" : {
+            "description" : "Cuántos de esos pedidos llevan 15 días o más con anticipo cobrado y sin entregar (RF-24)",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "pedidosPorEntregar" : {
+            "description" : "Cuántos pedidos vigentes siguen sin entregar",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "valorPorEntregar" : {
+            "description" : "Cuánto suman esos pedidos",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "anticiposAbiertos", "cuentasPorCobrar", "pedidosEstancados", "pedidosPorEntregar", "valorPorEntregar" ],
+        "type" : "object"
+      },
       "PeriodoDeNomina" : {
         "description" : "El mes que se liquida. Es único por año y mes: lo impone nomina_periodos_anio_mes_key",
         "properties" : {
@@ -2693,6 +3009,84 @@
         "required" : [ "horasMensuales", "id", "valorMensual", "vigenteDesde" ],
         "type" : "object"
       },
+      "PuntoDeEquilibrio" : {
+        "description" : "Desde cuánto vendido el mes deja de dar pérdida (RF-52, 05 §10). Lo calcula la API con los gastos fijos del mes y el margen de contribución del período",
+        "properties" : {
+          "gastosFijosMensuales" : {
+            "description" : "Los gastos fijos del mes, con el pro-labore dentro",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "margenDeContribucion" : {
+            "description" : "Ingresos menos costo directo, entre ingresos, en puntos y con dos decimales",
+            "type" : "number"
+          },
+          "pedidosNecesarios" : {
+            "description" : "Las ventas necesarias entre el ticket promedio, redondeado hacia arriba. Ausente si no hay ticket promedio",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "ticketPromedio" : {
+            "description" : "Ingresos entre número de pedidos entregados (05 §9.4). Ausente cuando no se entregó ninguno",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "ventasNecesarias" : {
+            "description" : "Los gastos fijos entre el margen de contribución: por debajo de esa cifra el mes da pérdida",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "gastosFijosMensuales", "margenDeContribucion", "ventasNecesarias" ],
+        "type" : "object"
+      },
+      "Reporte" : {
+        "description" : "La pantalla Reportes entera (10 §4.6, RF-44, RF-52, CU-14): el año mes a mes, el promedio de ganancias con su proyección y el punto de equilibrio. Todo lo calcula la API; el front no suma ni divide (ADR-018)",
+        "properties" : {
+          "anio" : {
+            "description" : "El año del reporte",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "lectura" : {
+            "$ref" : "#/components/schemas/Lectura",
+            "description" : "Qué dice el año en palabras, y en particular por qué falta el promedio o el punto de equilibrio cuando faltan. Siempre viaja"
+          },
+          "meses" : {
+            "description" : "Los meses del año con registro, de enero a diciembre. Un mes sin nada no sale",
+            "items" : {
+              "$ref" : "#/components/schemas/MesDelReporte"
+            },
+            "type" : "array"
+          },
+          "mesesCerrados" : {
+            "description" : "Cuántos meses del año tienen snapshot. Es el divisor del promedio, y por eso viaja: el front no lo cuenta",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "promedioMensual" : {
+            "description" : "Utilidad acumulada entre meses cerrados (05 §9.1). Ausente mientras no haya ningún mes cerrado, que es la precondición de CU-14: un promedio sobre meses a medio andar es una cifra falsa, y la lectura lo dice en palabras en vez de mandar un cero",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "proyeccionAnual" : {
+            "description" : "El promedio mensual por doce. Ausente cuando no hay promedio",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "puntoDeEquilibrio" : {
+            "$ref" : "#/components/schemas/PuntoDeEquilibrio",
+            "description" : "Ausente cuando el margen de contribución del año no es positivo: dividir entre cero o entre un margen negativo daría una cifra sin sentido, y la lectura lo explica"
+          },
+          "utilidadAcumulada" : {
+            "description" : "La suma de las utilidades causadas del año. Puede ser negativa",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "anio", "lectura", "meses", "mesesCerrados", "utilidadAcumulada" ],
+        "type" : "object"
+      },
       "Retiro" : {
         "description" : "Plata que la gerencia saca del negocio, partida en sus dos naturalezas (05 §6.3): las dos partes bajan la caja y el patrimonio, y solo el pro-labore baja la utilidad. Cada parte que no es cero es un movimiento y una fila de aportes_retiros",
         "properties" : {
@@ -2786,6 +3180,92 @@
           }
         },
         "required" : [ "posible", "texto" ],
+        "type" : "object"
+      },
+      "SaldoDeCuenta" : {
+        "description" : "Cuánta plata hay en una cuenta (tarea 3.12). Lo suma la API del libro, no el front (ADR-018)",
+        "properties" : {
+          "cuentaId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "nombre" : {
+            "description" : "El nombre de la cuenta, para pintar la fila sin pedir el catálogo",
+            "type" : "string"
+          },
+          "saldo" : {
+            "description" : "El saldo inicial más todo lo vigente que entró y salió. Puede ser negativo si se registró de más",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "tipo" : {
+            "description" : "banco, billetera o efectivo, como en POST /api/v0/consultas/cuentas",
+            "enum" : [ "banco", "billetera", "efectivo" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "cuentaId", "nombre", "saldo", "tipo" ],
+        "type" : "object"
+      },
+      "SaldoDeSobre" : {
+        "description" : "Uno de los cuatro sobres, con lo asignado contra lo usado (05 §11, tarea 7.8). El porcentaje sale de la configuración vigente y el reparto lo hace la API sobre lo que entró en el mes",
+        "properties" : {
+          "acumulado" : {
+            "description" : "Lo que lleva el sobre desde el primer registro, y solo lo trae reserva: es el avance hacia la meta",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "asignado" : {
+            "description" : "El porcentaje del sobre aplicado a lo entrado en el mes",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "disponible" : {
+            "description" : "Lo asignado menos lo usado. Puede ser negativo: el sobre se pasó",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "meta" : {
+            "description" : "A cuánto tiene que llegar el sobre, y solo lo tiene reserva: tres meses de gastos fijos (05 §11). Mientras no se alcance, el front pinta el avance con esta cifra y con acumulado",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "pct" : {
+            "description" : "El porcentaje vigente de este sobre, de la configuración de sobres_config",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "sobre" : {
+            "description" : "Cuál de los cuatro es",
+            "enum" : [ "costo_directo", "gastos_fijos", "reserva", "retiro" ],
+            "type" : "string"
+          },
+          "usado" : {
+            "description" : "Lo que de verdad se gastó en el mes con cargo a ese sobre",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "asignado", "disponible", "pct", "sobre", "usado" ],
+        "type" : "object"
+      },
+      "SaldosPorCuenta" : {
+        "description" : "Los saldos de las cuentas y su total (tarea 3.12). El total viaja calculado porque el front no suma plata (ADR-018), y es el primer término de la caja libre (05 §3.3)",
+        "properties" : {
+          "cuentas" : {
+            "description" : "Las cuentas sin anular, en el orden en que se pintan",
+            "items" : {
+              "$ref" : "#/components/schemas/SaldoDeCuenta"
+            },
+            "type" : "array"
+          },
+          "saldoTotal" : {
+            "description" : "La suma de los saldos de todas las cuentas",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "cuentas", "saldoTotal" ],
         "type" : "object"
       },
       "Seccion" : {
@@ -3055,6 +3535,25 @@
         "properties" : {
           "data" : {
             "$ref" : "#/components/schemas/Categoria",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreCierreMensual" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/CierreMensual",
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
           },
           "mensaje" : {
@@ -3411,6 +3910,28 @@
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver",
             "items" : {
               "$ref" : "#/components/schemas/Categoria"
+            },
+            "type" : "array"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreListCierreMensual" : {
+        "properties" : {
+          "data" : {
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver",
+            "items" : {
+              "$ref" : "#/components/schemas/CierreMensual"
             },
             "type" : "array"
           },
@@ -3815,10 +4336,48 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobreReporte" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Reporte",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreRetiro" : {
         "properties" : {
           "data" : {
             "$ref" : "#/components/schemas/Retiro",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreSaldosPorCuenta" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/SaldosPorCuenta",
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
           },
           "mensaje" : {
@@ -3857,6 +4416,25 @@
         "properties" : {
           "data" : {
             "$ref" : "#/components/schemas/SimulacionDeContratacion",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreTablero" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Tablero",
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
           },
           "mensaje" : {
@@ -3926,6 +4504,76 @@
           }
         },
         "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "Tablero" : {
+        "description" : "El Inicio entero, en una sola consulta (10 §4.1, RF-41 a RF-43, CU-13): las tres cifras del mes con la línea que las concilia, las alertas activas, los saldos, los cuatro sobres, los doce meses del gráfico y los pendientes. Va junto porque ninguna zona se explica sola —la conciliación necesita los anticipos y el panel de sobres necesita lo entrado en el mes— y repartirlo en seis llamadas dejaría al front juntándolas, que es decidir (ADR-018). Es el mismo criterio de POST /api/v0/consultas/patrimonio",
+        "properties" : {
+          "alertas" : {
+            "description" : "Solo las activas, en el orden en que se pintan. Vacío cuando no hay ninguna, que es lo normal",
+            "items" : {
+              "$ref" : "#/components/schemas/Alerta"
+            },
+            "type" : "array"
+          },
+          "anio" : {
+            "description" : "El año del mes que se está mirando",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "cajaLibre" : {
+            "description" : "Saldo total menos anticipos por devengar menos gastos fijos comprometidos del mes (05 §3.3, RF-43, BDD-13-1). Es la cifra con la que se decide, y puede ser negativa: entonces viaja la alerta caja_libre_negativa",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "conciliacion" : {
+            "description" : "La línea que explica por qué las tres cifras no coinciden, ya redactada: «La diferencia son $2.100.000 en anticipos» (10 §4.1, BDD-13-2). La arma la API con los montos dentro, porque un texto genérico no orienta (10 §6)",
+            "type" : "string"
+          },
+          "doceMeses" : {
+            "description" : "Los doce meses hasta el que se está mirando, del más viejo al más nuevo, para el gráfico de utilidad y caja superpuestas",
+            "items" : {
+              "$ref" : "#/components/schemas/MesDelGrafico"
+            },
+            "type" : "array"
+          },
+          "flujoCaja" : {
+            "description" : "Entradas menos salidas del mes (RF-42, 05 §9.2). Puede ser negativo",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "gastosFijosComprometidos" : {
+            "description" : "Los gastos fijos del mes que todavía no se han pagado, que es el tercer término de la caja libre",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "mes" : {
+            "description" : "El mes que se está mirando, de 1 a 12",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "pendientes" : {
+            "$ref" : "#/components/schemas/Pendientes",
+            "description" : "Los pedidos por entregar y las cuentas por cobrar"
+          },
+          "saldos" : {
+            "$ref" : "#/components/schemas/SaldosPorCuenta",
+            "description" : "Los mismos saldos que devuelve POST /api/v0/consultas/saldos, para no pedirlos dos veces"
+          },
+          "sobres" : {
+            "description" : "Los cuatro sobres con lo asignado contra lo usado. Vacío mientras no haya configuración de sobres: el panel no se pinta y nada se inventa",
+            "items" : {
+              "$ref" : "#/components/schemas/SaldoDeSobre"
+            },
+            "type" : "array"
+          },
+          "utilidadCausada" : {
+            "description" : "Ingresos causados menos costo directo menos gastos operativos del mes (RF-41, 05 §9.1). Solo cuenta lo entregado: un anticipo no es ingreso (RN-05). Puede ser negativa",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "alertas", "anio", "cajaLibre", "conciliacion", "doceMeses", "flujoCaja", "gastosFijosComprometidos", "mes", "pendientes", "saldos", "sobres", "utilidadCausada" ],
         "type" : "object"
       },
       "Usuario" : {
@@ -4027,7 +4675,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.16.0"
+    "version" : "0.17.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -4830,6 +5478,82 @@
         "tags" : [ "Categorías" ]
       }
     },
+    "/api/v0/cierres/{id}" : {
+      "put" : {
+        "description" : "Congela el mes en un snapshot que ya no cambia (RF-53, RN-16, 05 §8, CU-13). El cuerpo lleva el período y nada más: las once cifras las calcula la API en la misma transacción y las escribe en cierres_mensuales, que no admite UPDATE (04 §5.3). Cerrar dos veces el mismo mes lo rechaza cierres_mensuales_anio_mes_key con 40960, y cerrar el mes en curso o uno que todavía no llega responde 40961: el día de corte es en Bogotá (RNF-08). Desde el cierre, un movimiento con fecha de ese mes se sigue aceptando —nunca se pierde información—, se marca como ajuste de período anterior y aparece en el mes corriente, sin mover este reporte. El mismo id dos veces responde 40900 (ADR-020). Solo Gerencia, y lo rechaza la base con cierres_solo_gerencia (04 §7). Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 40960, 40961, 42200 con data.errores y 42260.",
+        "operationId" : "cerrarMes",
+        "parameters" : [ {
+          "description" : "El id del retiro, que genera quien lo registra",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevoCierre"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreCierreMensual"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Cerrar un mes con su snapshot inmutable",
+        "tags" : [ "Reportes" ]
+      }
+    },
     "/api/v0/clientes/{id}" : {
       "put" : {
         "description" : "Registra un cliente con nombre, contacto y notas (RF-18, CU-05). El id va en la ruta y no en el cuerpo: lo genera quien pide al decidir la acción, junto con la clave de idempotencia (ADR-020), así que reintentar la misma petición no crea dos clientes. Si ese id ya existe responde 40900. Solo el nombre es obligatorio: en el taller un cliente entra por teléfono y el correo llega después. El formulario es «cliente». Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40302, 40900, 40901, 40902 y 42200 con data.errores.",
@@ -5411,6 +6135,73 @@
         "tags" : [ "Categorías" ]
       }
     },
+    "/api/v0/consultas/cierres" : {
+      "post" : {
+        "description" : "Los snapshot de los meses cerrados, del más reciente al más viejo (RF-53, RN-16). Son las cifras que un reporte impreso tiene que seguir diciendo meses después, así que salen tal como se congelaron y no se recalculan. Solo Gerencia, y lo rechaza la base con cierres_solo_gerencia (04 §7): a Operación cierres_mensuales no le devuelve ninguna fila, así que le llega una lista vacía. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901, 40902 y 42260.",
+        "operationId" : "cierres",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeCierres"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreListCierreMensual"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Los meses ya cerrados",
+        "tags" : [ "Reportes" ]
+      }
+    },
     "/api/v0/consultas/clientes" : {
       "post" : {
         "description" : "Los clientes que todavía valen, ordenados por nombre; los anulados no salen. Es el origen del campo clienteId del formulario «pedido», así que quien registra un pedido elige de esta lista y no escribe el nombre a mano. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902.",
@@ -5604,7 +6395,7 @@
     },
     "/api/v0/consultas/cuentas" : {
       "post" : {
-        "description" : "Las cuentas de dinero sin anular, en el orden en que se pintan. Las piden los dos tipos de usuario: Operación elige por nombre la cuenta de un movimiento. Por eso no traen saldo: la caja es de Gerencia (01 §4) y los saldos tienen su propia consulta (tarea 3.12). Puede devolver 20000, 40100, 40101, 40102, 40103 y 40302.",
+        "description" : "Las cuentas de dinero sin anular, en el orden en que se pintan. Las piden los dos tipos de usuario: Operación elige por nombre la cuenta de un movimiento. Por eso no traen saldo: la caja es de Gerencia (01 §4) y los saldos tienen su propia consulta, POST /api/v0/consultas/saldos (tarea 3.12). Puede devolver 20000, 40100, 40101, 40102, 40103 y 40302.",
         "operationId" : "cuentas",
         "parameters" : [ {
           "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
@@ -5657,6 +6448,73 @@
         },
         "summary" : "Las cuentas de dinero, sin saldos",
         "tags" : [ "Cuentas" ]
+      }
+    },
+    "/api/v0/consultas/descarga" : {
+      "post" : {
+        "description" : "Saca en un archivo lo que el Inicio ya está mostrando, y nada más (RF-96, CU-37, 10 §4.1): las zonas que se marcaron, del mes que se pidió. Es la única acción de toda la pantalla, que por lo demás es de solo consulta (RF-95, BDD-13-4). Baja dentro del sobre, en un Documento con el contenido en base64, como el desprendible (tarea 8.11): así la ruta no tiene dos formas de contestar. Sin ninguna zona marcada responde 42261. No es el respaldo del RF-66, que exporta la base entera con manifiesto y todavía no tiene tarea. Solo Gerencia, y hoy lo niega la API con 40300, como el tablero. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902, 42260 y 42261.",
+        "operationId" : "descarga",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeDescarga"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreDocumento"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Lo que muestra el Inicio, en CSV o PDF",
+        "tags" : [ "Reportes" ]
       }
     },
     "/api/v0/consultas/desprendible" : {
@@ -5728,7 +6586,7 @@
     },
     "/api/v0/consultas/division-de-retiro" : {
       "post" : {
-        "description" : "La propuesta que el formulario de retiro pinta antes de guardar (CU-16, paso 3): cuánto del retiro sería pro-labore y cuánto distribución, con una explicación en palabras. Pro-labore hasta completar el del mes —el vigente en la fecha del retiro, menos lo que ya se retiró como pro-labore ese mes— y el resto distribución; sin pro-labore definido, todo es distribución. No escribe nada, y es lo mismo que hace PUT /api/v0/retiros/{id} cuando no se le dice cuánto es pro-labore. Solo Gerencia: sin la fila del pro-labore, que la base no le devuelve a Operación, la propuesta saldría equivocada. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902, 42200 con data.errores y 42290.",
+        "description" : "La propuesta que el formulario de retiro pinta antes de guardar (CU-16, paso 3): cuánto del retiro sería pro-labore y cuánto distribución, con una explicación en palabras. Pro-labore hasta completar el del mes —el vigente en la fecha del retiro, menos lo que ya se retiró como pro-labore ese mes— y el resto distribución; sin pro-labore definido, todo es distribución. No escribe nada, y es lo mismo que hace PUT /api/v0/retiros/{id} cuando no se le dice cuánto es pro-labore. Solo Gerencia: sin la fila del pro-labore, que la base no le devuelve a Operación, la propuesta saldría equivocada. Trae además la caja libre de hoy y su lectura, que es con lo que la pantalla avisa antes de un retiro que se pasa (CU-16 A1, BDD-16-2). Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902, 42200 con data.errores y 42290.",
         "operationId" : "divisionDeRetiro",
         "parameters" : [ {
           "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
@@ -6597,6 +7455,130 @@
         "tags" : [ "Capital" ]
       }
     },
+    "/api/v0/consultas/reporte" : {
+      "post" : {
+        "description" : "La pantalla Reportes entera (10 §4.6, RF-44, RF-52, CU-14, BDD-14-1): el año mes a mes con ingresos, costos, gastos, utilidad y margen; el promedio de ganancias con su proyección anual; y el punto de equilibrio en pesos y en pedidos. Los meses cerrados salen de cierres_mensuales y no se recalculan (RN-16); los abiertos se calculan con lo que hay hasta hoy. Cada mes trae además la utilidad sin descontar el pro-labore, que es la comparación de 05 §6.3 y lo que el contrato de capital cedió a esta tarea. El promedio falta mientras no haya un mes cerrado y el punto de equilibrio falta si el margen de contribución no es positivo: en los dos casos la lectura lo explica, en vez de mandar un cero que parece una cifra. Solo Gerencia (01 §4), y como el patrimonio lo niega hoy la API con 40300 y no la base: las cifras salen del libro, que leen los dos tipos. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902 y 42260.",
+        "operationId" : "reporte",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeReporte"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreReporte"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "El año mes a mes, con el promedio y el punto de equilibrio",
+        "tags" : [ "Reportes" ]
+      }
+    },
+    "/api/v0/consultas/saldos" : {
+      "post" : {
+        "description" : "Cuánta plata hay en cada cuenta y cuánta en total (tarea 3.12). Es la consulta que POST /api/v0/consultas/cuentas dice que existe: aquel devuelve el catálogo para elegir cuenta al registrar, y este las cifras. El total viaja calculado porque el front no suma plata (ADR-018), y es el primer término de la caja libre (05 §3.3). Solo Gerencia (01 §4), y hoy lo niega la API con 40300 y no la base, porque los saldos salen del libro, que leen los dos tipos: es la decisión pendiente que también tienen el patrimonio y el tablero. Puede devolver 20000, 40100, 40101, 40102, 40103, 40300, 40302, 40901 y 40902.",
+        "operationId" : "saldos",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreSaldosPorCuenta"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "El saldo de cada cuenta y el total",
+        "tags" : [ "Cuentas" ]
+      }
+    },
     "/api/v0/consultas/simulacion-de-contratacion" : {
       "post" : {
         "description" : "Responde con números si el negocio puede pagarle a alguien (RF-59 a RF-61, CU-18, BDD-18-1 a BDD-18-4). Parte de la utilidad operativa promedio de los últimos meses, obligatoriamente con el pro-labore ya descontado como gasto: usar la utilidad que no cuenta el trabajo propio es el error que lleva a contratar y quebrar (RN-09, 06 §3.2). Le resta la reserva de seguridad, compara contra el salario evaluado y, si falta, traduce el faltante a unidades de cada producto con el margen de contribución que excluye el costo del tiempo (RN-17, 06 §4.1) y propone las alternativas del 06 §5. Sin pro-labore definido no hay respuesta y se bloquea con 40950 (BDD-18-2). A Operación le responde lo mismo, y no un 40300: prolabore_config lleva RLS y le devuelve cero filas, así que desde la API los dos casos son indistinguibles y la API no vuelve a decidir un permiso que ya decide la base (ADR-006). El formulario es «simulacion». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901, 40902, 40950 y 42200 con data.errores.",
@@ -6666,7 +7648,7 @@
     },
     "/api/v0/consultas/sobres" : {
       "post" : {
-        "description" : "Los porcentajes que rigen hoy (RF-50, 05 §11). El historial se conserva en la base (RF-51) y no se lee: ninguna pantalla lo pinta. Lo asignado y lo usado de cada sobre es del panel del Inicio, que tiene su propio contrato (tareas 7.8 y 6.10). A una sesión de Operación la base no le devuelve la fila, por sobres_solo_gerencia (P-22), así que le llega data en null. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902.",
+        "description" : "Los porcentajes que rigen hoy (RF-50, 05 §11). El historial se conserva en la base (RF-51) y no se lee: ninguna pantalla lo pinta. Lo asignado y lo usado de cada sobre viaja en POST /api/v0/consultas/tablero, que es el panel del Inicio (tareas 7.8 y 6.10). A una sesión de Operación la base no le devuelve la fila, por sobres_solo_gerencia (P-22), así que le llega data en null. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902.",
         "operationId" : "sobres",
         "parameters" : [ {
           "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
@@ -6719,6 +7701,73 @@
         },
         "summary" : "Los cuatro sobres vigentes",
         "tags" : [ "Capital" ]
+      }
+    },
+    "/api/v0/consultas/tablero" : {
+      "post" : {
+        "description" : "Todo lo que pinta el Inicio de un mes, en una sola consulta (10 §4.1, RF-41 a RF-43, RF-95, CU-13, BDD-13-1 a BDD-13-4): las tres cifras con la línea que las concilia, las alertas activas de 05 §3.4, los saldos por cuenta, los cuatro sobres con lo asignado contra lo usado (tarea 7.8), los doce meses del gráfico (tarea 6.4) y los pendientes. Va junto y no en seis llamadas porque ninguna zona se explica sola y juntarlas sería que el front decidiera (ADR-018); es el mismo criterio de POST /api/v0/consultas/patrimonio. No escribe nada: el Inicio es de solo consulta (RF-95). Sin año y mes, el mes en curso en Bogotá (RNF-08). Solo Gerencia (01 §4), y como el patrimonio lo niega hoy la API con 40300 y no la base. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902 y 42260.",
+        "operationId" : "tablero",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeTablero"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreTablero"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "El Inicio entero: las tres cifras, las alertas y el resto del panel",
+        "tags" : [ "Reportes" ]
       }
     },
     "/api/v0/consultas/usuarios" : {
@@ -8835,7 +9884,7 @@
     },
     "/api/v0/retiros/{id}" : {
       "put" : {
-        "description" : "Registra plata que la gerencia saca del negocio, partida en sus dos naturalezas (RF-47, CU-16, RN-07, RN-08): el pro-labore paga el trabajo en el taller y baja la utilidad; la distribución reparte una ganancia ya generada y no la toca. Las dos bajan la caja y el patrimonio (BDD-16-1, BDD-25-1). Escribe en una sola transacción un movimiento —retiro_prolabore o retiro_distribucion— y una fila de aportes_retiros por cada parte que no sea cero. Sin prolabore en el cuerpo, la API parte sola: pro-labore hasta completar el del mes, vigente en la fecha del retiro, y el resto distribución; es lo mismo que propone POST /api/v0/consultas/division-de-retiro. El mismo id dos veces responde 40900 (ADR-020). Solo Gerencia, y lo rechaza la base con ret_solo_gerencia (04 §7). El formulario es «retiro»; la fecha futura, la cuenta que no sirve y un pro-labore mayor que el retiro no caben en el descriptor y responden 42290, 42291 y 42292. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 42200 con data.errores, 42290, 42291 y 42292.",
+        "description" : "Registra plata que la gerencia saca del negocio, partida en sus dos naturalezas (RF-47, CU-16, RN-07, RN-08): el pro-labore paga el trabajo en el taller y baja la utilidad; la distribución reparte una ganancia ya generada y no la toca. Las dos bajan la caja y el patrimonio (BDD-16-1, BDD-25-1). Escribe en una sola transacción un movimiento —retiro_prolabore o retiro_distribucion— y una fila de aportes_retiros por cada parte que no sea cero. Sin prolabore en el cuerpo, la API parte sola: pro-labore hasta completar el del mes, vigente en la fecha del retiro, y el resto distribución; es lo mismo que propone POST /api/v0/consultas/division-de-retiro. El mismo id dos veces responde 40900 (ADR-020). Solo Gerencia, y lo rechaza la base con ret_solo_gerencia (04 §7). Un retiro por encima de la caja libre responde 40990 mientras no llegue confirmado en el cuerpo (CU-16 A1, BDD-16-2); la cifra con la que se avisa la da POST /api/v0/consultas/division-de-retiro. El formulario es «retiro»; la fecha futura, la cuenta que no sirve y un pro-labore mayor que el retiro no caben en el descriptor y responden 42290, 42291 y 42292. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 40990, 42200 con data.errores, 42290, 42291 y 42292.",
         "operationId" : "registrarRetiro",
         "parameters" : [ {
           "description" : "El id del retiro, que genera quien lo registra",
@@ -9614,6 +10663,9 @@
     "description" : "El catálogo de lo que el taller vende, con su costo y su margen por hora",
     "name" : "Productos"
   }, {
+    "description" : "Las tres cifras, el año mes a mes, las alertas y el cierre de cada mes",
+    "name" : "Reportes"
+  }, {
     "description" : "Las personas con acceso, su tipo y su cargo",
     "name" : "Usuarios"
   }, {
@@ -10023,6 +11075,14 @@
     },
     "status" : 42240
   }, {
+    "cuando" : "Un retiro por encima de la caja libre que llega sin confirmado. El rango es el de capital porque quien lo emite es el retiro, no el reporte",
+    "http" : 409,
+    "mensaje" : "Ese retiro se pasa de la caja libre: usaría plata de anticipos de clientes. Confírmalo si aun así quieres hacerlo.",
+    "modulo" : "CAPITAL_Y_PATRIMONIO",
+    "nombre" : "RETIRO_SUPERA_CAJA_LIBRE",
+    "pendienteDeEmitir" : true,
+    "status" : 40990
+  }, {
     "cuando" : "La fecha de la compra de un activo, de un aporte o de un retiro es posterior a hoy en America/Bogota. El error va en data.errores, sobre fechaCompra o fecha",
     "http" : 422,
     "mensaje" : "Esa fecha todavía no llega. Aquí va cuándo ocurrió de verdad.",
@@ -10213,6 +11273,38 @@
     "nombre" : "CSV_SIN_FILAS_VALIDAS",
     "pendienteDeEmitir" : true,
     "status" : 42271
+  }, {
+    "cuando" : "Cerrar un mes que ya tiene su fila en cierres_mensuales. Lo rechaza cierres_mensuales_anio_mes_key, no un if",
+    "http" : 409,
+    "mensaje" : "Ese mes ya está cerrado.",
+    "modulo" : "REPORTES_Y_CIERRES",
+    "nombre" : "MES_YA_CERRADO",
+    "pendienteDeEmitir" : true,
+    "status" : 40960
+  }, {
+    "cuando" : "Cerrar el mes en curso o uno que todavía no llega, contado en America/Bogota",
+    "http" : 409,
+    "mensaje" : "Ese mes todavía no termina. Se cierra cuando pase el último día.",
+    "modulo" : "REPORTES_Y_CIERRES",
+    "nombre" : "MES_SIN_TERMINAR",
+    "pendienteDeEmitir" : true,
+    "status" : 40961
+  }, {
+    "cuando" : "El año o el mes de un tablero, un reporte, un cierre o una descarga están fuera de 2020..2100 o de 1..12. El error va en data.errores, sobre anio o mes",
+    "http" : 422,
+    "mensaje" : "Elige un mes entre enero y diciembre de un año válido.",
+    "modulo" : "REPORTES_Y_CIERRES",
+    "nombre" : "PERIODO_INVALIDO",
+    "pendienteDeEmitir" : true,
+    "status" : 42260
+  }, {
+    "cuando" : "La descarga del Inicio sin ninguna zona marcada. El error va en data.errores, sobre incluye",
+    "http" : 422,
+    "mensaje" : "Marca al menos una parte del Inicio para descargar.",
+    "modulo" : "REPORTES_Y_CIERRES",
+    "nombre" : "SELECCION_DE_DESCARGA_VACIA",
+    "pendienteDeEmitir" : true,
+    "status" : 42261
   }, {
     "cuando" : "Cualquier fallo no contemplado. Nunca expone la traza ni el texto de la excepción",
     "http" : 500,
