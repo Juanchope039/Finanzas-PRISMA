@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.9.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [7.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -297,7 +297,10 @@ punta a punta** ([3.4](docs/08-plan-de-desarrollo.md#tarea-3-4)): `PUT /api/v0/m
 libro, y la respuesta **se lee de la base después de escribir** —en la misma transacción— porque el
 contrato declara nombres que la petición no trae. **Y el andamio ya cabe en un celular**
 ([3.16](docs/08-plan-de-desarrollo.md#tarea-3-16)): de 760 px para abajo, como el mockup, el menú va arriba y de lado y la insignia
-baja al pie de la pantalla. Van 64 de las 140 tareas.
+baja al pie de la pantalla. **Y la base ya sabe guardar un soporte** ([3.14](docs/08-plan-de-desarrollo.md#tarea-3-14)): `adjuntos` estaba en
+el catálogo y en el diagrama desde el principio y no tenía `CREATE TABLE`, y ahora la tiene junto
+con el bucket privado `soportes`, que **impone el techo de 5 MB y los cuatro tipos de contenido
+antes de que los bytes se guarden**, no después. Van 65 de las 140 tareas.
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.

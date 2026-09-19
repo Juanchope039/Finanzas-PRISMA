@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -198,7 +198,7 @@ que hay que recordar y pasa a ser algo que el motor sabe.
 | `porcentaje` | `SMALLINT` | `0..100` | 5 | `pedidos.anticipo_pct`, los cuatro `pct_` de `sobres_config` |
 | `anio` | `SMALLINT` | `2020..2100` | 2 | `nomina_periodos.anio`, `cierres_mensuales.anio` |
 | `mes_del_anio` | `SMALLINT` | `1..12` | 2 | `nomina_periodos.mes`, `cierres_mensuales.mes` |
-| `motivo` | `TEXT` | `length(trim(…)) >= 5` | 15 | los doce `anulado_motivo`, `usuarios.desactivado_motivo`, `pedidos.cancelado_motivo` ([4.11](08-plan-de-desarrollo.md#tarea-4-11)) y `auditoria.motivo` ([2.21](08-plan-de-desarrollo.md#tarea-2-21)) |
+| `motivo` | `TEXT` | `length(trim(…)) >= 5` | 16 | los trece `anulado_motivo` —el de `adjuntos` entró con la [3.14](08-plan-de-desarrollo.md#tarea-3-14)—, `usuarios.desactivado_motivo`, `pedidos.cancelado_motivo` ([4.11](08-plan-de-desarrollo.md#tarea-4-11)) y `auditoria.motivo` ([2.21](08-plan-de-desarrollo.md#tarea-2-21)) |
 
 Son **nueve dominios**. Tres piden explicación, porque no son solo una mudanza de reglas ya
 escritas:
@@ -969,6 +969,117 @@ SELECT cron.schedule(
 > contraseña y hasta cuándo vale su token lo sigue decidiendo el proveedor ([ADR-010](adr/ADR-010-almacenamiento-contrasenas.md)). Aquí solo vive
 > lo que el proveedor no guarda y el canal firmado necesita: la clave con la que esa sesión firma.
 
+### 4.12 Adjuntos — el soporte de un movimiento o de un pedido
+
+```sql
+CREATE TABLE adjuntos (
+  id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+  -- De qué cuelga: de un movimiento o de un pedido, y de uno solo.
+  movimiento_id       UUID REFERENCES movimientos(id),
+  pedido_id           UUID REFERENCES pedidos(id),
+
+  nombre              TEXT NOT NULL,
+  tipo                TEXT NOT NULL,
+  bytes               BIGINT NOT NULL,
+  ruta                TEXT NOT NULL,
+
+  creado_por          UUID NOT NULL REFERENCES usuarios(id),
+  creado_en           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  dispositivo         TEXT,
+  ip                  INET,
+
+  anulado_en          TIMESTAMPTZ,
+  anulado_por         UUID REFERENCES usuarios(id),
+  anulado_motivo      motivo,
+  anulado_dispositivo TEXT,
+  anulado_ip          INET,
+
+  CONSTRAINT adjuntos_ruta_key UNIQUE (ruta),
+  CONSTRAINT adjunto_cuelga_de_una_sola_cosa
+    CHECK ((movimiento_id IS NOT NULL) <> (pedido_id IS NOT NULL)),
+  CONSTRAINT adjunto_de_tipo_permitido
+    CHECK (tipo IN ('image/jpeg', 'image/png', 'image/webp', 'application/pdf')),
+  CONSTRAINT adjunto_no_pasa_de_cinco_megas
+    CHECK (bytes <= 5 * 1024 * 1024),
+  CONSTRAINT anulacion_con_motivo
+    CHECK (anulado_en IS NULL OR (anulado_por IS NOT NULL AND anulado_motivo IS NOT NULL))
+);
+
+CREATE INDEX idx_adjuntos_movimiento ON adjuntos (movimiento_id)
+  WHERE movimiento_id IS NOT NULL AND anulado_en IS NULL;
+CREATE INDEX idx_adjuntos_pedido     ON adjuntos (pedido_id)
+  WHERE pedido_id IS NOT NULL AND anulado_en IS NULL;
+```
+
+**Esta tabla estaba en el catálogo y en el diagrama desde el principio, y no tenía definición.**
+El [16 §9](16-base-de-datos-y-snapshots.md#9-límites-conocidos-heredados-del-doc-04) la nombraba entre las que «no se inventaron: quedan pendientes de especificar antes de
+agregarlas a una migración», y ninguna tarea la creaba: la [3.6](08-plan-de-desarrollo.md#tarea-3-6) y la [4.8](08-plan-de-desarrollo.md#tarea-4-8) daban por hecho que
+existía. La escribe la [3.14](08-plan-de-desarrollo.md#tarea-3-14), después de que el contrato de movimientos dijera qué es un
+adjunto.
+
+**Va al final del [§4](#4-esquema-sql) y no junto a `movimientos`, que es donde le tocaría.** Los números de estas
+secciones se citan por todo el proyecto —`§4.9` son las claves de idempotencia en once sitios—, así
+que correr las ocho siguientes un puesto dejaría cada una de esas citas apuntando en silencio a
+otra sección. Las tablas nuevas se agregan al final desde que `sesiones` entró como [§4.11](#411-las-sesiones-abiertas).
+
+**Un adjunto es dos cosas: el objeto y su ficha.** El archivo vive en el bucket privado
+`soportes` de Supabase Storage y esta tabla dice qué es, de qué cuelga y quién lo subió. El
+[07 §1](07-arquitectura.md) manda que **el archivo pase por la API y nunca vaya directo al almacenamiento**, y por eso
+el bucket no es público: uno público es una URL que se lee sin sesión, o sea la vía directa que ese
+documento prohíbe.
+
+**Las dos reglas del contrato se imponen en los dos sitios.** `POST /api/v0/movimientos/{id}/adjuntos`
+acepta 5 MB como máximo —responde `40020`— y solo cuatro tipos de contenido —responde `40021`—, y
+esos dos límites están **a la vez** en el bucket, con `file_size_limit` y `allowed_mime_types`, y en
+la tabla, con `adjunto_no_pasa_de_cinco_megas` y `adjunto_de_tipo_permitido`. No es duplicación por
+descuido: el bucket impide que los bytes lleguen a guardarse, y el `CHECK` impide que se guarde una
+ficha que **miente** sobre lo que se guardó. Cada mitad tiene que poder defenderse sola ([ADR-015](adr/ADR-015-validacion-tres-capas.md)).
+
+**`tipo` es un `CHECK` con nombre y no un ENUM.** Los cuatro ENUM del [§4.1](#41-tipos-y-convenciones-comunes) son vocabulario del
+negocio; un tipo de contenido es un detalle de qué archivos aceptamos hoy, y un ENUM solo se amplía
+con `ALTER TYPE`, que es una migración entera para el día que un teléfono mande `image/heic`.
+
+**`bytes` tiene techo y no piso.** El contrato pone el máximo y no dice nada de un archivo vacío,
+así que aquí tampoco se decide nada sobre él.
+
+**`ruta` es dónde quedó el objeto, y la arma quien inserta:** `movimientos/<id del movimiento>/<id
+del adjunto>` o `pedidos/<id del pedido>/<id del adjunto>`. El id del adjunto lo pone quien pide, al
+decidir la acción ([ADR-020](adr/ADR-020-idempotencia.md)), así que dos intentos de la misma intención escriben el mismo objeto en
+vez de dejar copias sueltas. `adjuntos_ruta_key` es lo que sostiene eso: **un objeto, una ficha**.
+
+**`adjunto_cuelga_de_una_sola_cosa` exige exactamente una de las dos.** El diagrama del [§2](#2-diagrama-entidadrelación) dibuja
+las dos flechas y no dice qué pasa con las dos puestas: con las dos, la misma foto sería el soporte
+de dos cosas distintas y ninguna pantalla sabría de cuál quitarla.
+
+**No lleva RLS**, y es lo que el [§7](#7-seguridad-por-tipo-de-usuario-rls) ya decía al nombrarla entre las nueve tablas que siguen sin ella a
+propósito: los dos tipos de usuario trabajan con los soportes todo el día y no hay nada que separar.
+**Sí lleva trigger de auditoría**, el decimoquinto ([§5.4](#54-auditoría-por-triggers)): sin él, quitar un soporte sería el único
+cambio del libro que no deja rastro.
+
+**Quién alcanza un objeto del bucket lo deciden dos políticas sobre `storage.objects`**, y hablan de
+`authenticated`:
+
+```sql
+CREATE POLICY soportes_insercion ON storage.objects
+  FOR INSERT TO authenticated
+  WITH CHECK (bucket_id = 'soportes');
+
+CREATE POLICY soportes_lectura ON storage.objects
+  FOR SELECT TO authenticated
+  USING (bucket_id = 'soportes');
+```
+
+**`authenticated` y no `service_role`.** El [ADR-033](adr/ADR-033-service-role-solo-en-auth.md) acotó la clave de servicio a dos operaciones de
+GoTrue, así que Storage no puede ser la tercera. La API ya tiene el token de la sesión —lo acaba de
+comprobar— y con él Storage ve `authenticated`, que es el mismo rol bajo el que `ConIdentidad`
+escribe en `public`: **el permiso sigue viviendo en PostgreSQL** ([ADR-006](adr/ADR-006-rls-por-rol.md)) y no en una clave que salta
+RLS.
+
+**Dos políticas y no cuatro:** no hay `DELETE` ni `UPDATE`. Es el [ADR-004](adr/ADR-004-base-solo-escritura.md) aplicado al almacenamiento.
+Un soporte equivocado se anula en la ficha, con motivo, autor y fecha, y el objeto se queda donde
+está; reemplazar la foto sería cambiar el soporte sin que nada lo cuente.
+
 ---
 
 ## 5. Diseño de solo escritura
@@ -1103,7 +1214,8 @@ CREATE TRIGGER tr_auditar_movimientos
 
 El mismo trigger se registra sobre `pedidos`, `anticipos`, `productos`, `costos_producto`,
 `activos`, `aportes_retiros`, `prolabore_config`, `empleados`, `nomina_detalle`, `adelantos`,
-`sobres_config`, `cierres_mensuales` y `cargos`.
+`sobres_config`, `cierres_mensuales`, `cargos` y `adjuntos` ([§4.12](#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido)), que es el decimoquinto y
+entró con la [3.14](08-plan-de-desarrollo.md#tarea-3-14).
 
 > **`usuarios` necesita su propia variante del trigger.** `fn_auditar()` detecta la anulación
 > mirando `anulado_en`, y `usuarios` desactiva con `desactivado_en`. Auditar `usuarios` con la
@@ -2079,6 +2191,14 @@ y pasa a ser un rojo en la canalización.
 > `destino_distinto_del_origen` de la [3.15](08-plan-de-desarrollo.md#tarea-3-15), las dos bajo `42226`; `cancelacion_con_motivo` y
 > `destino_del_anticipo_valido` de la [4.11](08-plan-de-desarrollo.md#tarea-4-11)—, y la [2.22](08-plan-de-desarrollo.md#tarea-2-22) no agrega ninguna: reusa
 > `cargos_nombre_key`, que ya tiene la suya.
+>
+> **Las nueve de `adjuntos` ([§4.12](#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido)) ya están en la base y esperan su fila.** Las cuatro llaves
+> foráneas y `anulacion_con_motivo` reusan el código transversal de su clase; las otras cuatro son
+> `adjuntos_ruta_key`, `adjunto_cuelga_de_una_sola_cosa`, `adjunto_de_tipo_permitido` —que es el
+> `40021` del contrato— y `adjunto_no_pasa_de_cinco_megas` —el `40020`—. La [3.14](08-plan-de-desarrollo.md#tarea-3-14) no las pudo
+> agregar: es del carril Base y la tabla de traducción vive en `prisma_api`, así que las recoge la
+> [3.6](08-plan-de-desarrollo.md#tarea-3-6) con el esquema. **Mientras tanto, [C-01](12-pruebas-y-calidad.md#c-01) falla contra una base que ya tenga la
+> `0.4.0`**, que es exactamente lo que esa prueba está para hacer.
 
 Tres cosas que esta consulta no cubre, y hay que decirlas:
 
