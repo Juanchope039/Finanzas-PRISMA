@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -35,7 +35,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 16 | 2 | 1 | 3,5 |
-| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 16 | 0 | 4 | 5,5 |
+| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 17 | 0 | 3 | 4 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 20 | 13 | 0 | 7 | 7,5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 4 | 0 | 9 | 10,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 1 | 0 | 9 | 11 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 11 | 1 | 0 | 10 | 9,5 |
-| **Total** | **133** | **54** | **2** | **77** | **98** |
+| **Total** | **133** | **55** | **2** | **76** | **96,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -85,13 +85,14 @@ Es un arreglo suelto: no lleva número de tarea y no entra en las cuentas de aba
 variable en Railway**, que es lo único que el código no puede hacer solo.
 
 **Lo siguiente, en cuanto alguien lo tome:** cerrar la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) destrabó lo que la estaba
-esperando. En el carril API, con la identidad llegando ya a PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)), se abren la prueba
-de permisos con sesión real ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)) y la traducción de restricción a código del catálogo ([1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)) —que ya
-tiene de dónde salir: cada restricción se llama como la llama el [04](docs/04-modelo-de-datos.md)—. El filtro de idempotencia
+esperando. En el carril API, con la identidad llegando ya a PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)), se abre la prueba
+de permisos con sesión real ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)), que **conviene hacer seguida** de la traducción de restricción a
+código ([1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)): esa ya está hecha, y dejó una prueba —[C-01](docs/12-pruebas-y-calidad.md#c-01)— que hoy **nadie ejecuta en cada
+empuje**, porque necesita la base levantada y es la [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) la que la mete en la tubería. El filtro de idempotencia
 ([1.14](docs/08-plan-de-desarrollo.md#tarea-1-14)) ya salió de esa lista: necesitaba la transacción de la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) y la tabla de la [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13), y con las dos
 quedó hecho; detrás de él se abre la prueba de corte ([1.15](docs/08-plan-de-desarrollo.md#tarea-1-15)). En el carril Base, con
 `cargos` ([2.3](docs/08-plan-de-desarrollo.md#tarea-2-3)), la tabla de idempotencia ([1.13](docs/08-plan-de-desarrollo.md#tarea-1-13)), su purga ([1.16](docs/08-plan-de-desarrollo.md#tarea-1-16)) y la semilla reproducible
-([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)) cerradas, siguen la primera promoción a qa ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) y la tabla `usuarios` ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)). El
+([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)) y la primera promoción a qa ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) cerradas, sigue la tabla `usuarios` ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)). El
 carril Contrato, con los de los sprints 3 a 8. **El acceso está cerrado de punta a punta**: con la
 sesión de 30 días ([2.2](docs/08-plan-de-desarrollo.md#tarea-2-2)) se entra, se recarga la página y se sigue dentro, se sale por el menú de
 la sesión y quien entra con clave temporal la cambia y llega al tablero. Y con la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) **Gerencia ya
@@ -119,7 +120,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) · [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
+| **API** | [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) · [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
 | **Base** | [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) |
 | **Contrato** | [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
@@ -128,13 +129,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **79 tareas y 98 días de trabajo** de 133 tareas del plan.
+Quedan **78 tareas y 96,5 días de trabajo** de 133 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 14,7 semanas | **17,7 semanas** |
-| 2 | 8,3 semanas | **11,3 semanas** |
-| 3 | 6,7 semanas | **9,7 semanas** |
+| 1 | 14,5 semanas | **17,5 semanas** |
+| 2 | 8,1 semanas | **11,1 semanas** |
+| 3 | 6,6 semanas | **9,6 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -278,11 +279,13 @@ hasta aplicarlo y probarlo.
       rotas a propósito: sin el `true`, la identidad de una petición se quedaba pegada a la conexión
       y la siguiente veía lo que no debía. Las corre `./gradlew integracion`, no `build`
 - [ ] ⚡ [**1.7**](docs/08-plan-de-desarrollo.md#tarea-1-7) Prueba de permisos con sesión real, con y sin la comprobación de la API · API
-- [ ] ⚡ [**1.8**](docs/08-plan-de-desarrollo.md#tarea-1-8) Traducción restricción → código del catálogo · API
+- [x] [**1.8**](docs/08-plan-de-desarrollo.md#tarea-1-8) Traducción restricción → código del catálogo · API —
+      `TraduccionDeRestricciones` cruza `(objeto, restricción)` con el catálogo, y [C-01](docs/12-pruebas-y-calidad.md#c-01) la compara
+      con `pg_constraint` en las dos direcciones: renombrar una restricción falla las dos a la vez
 - [x] [**1.9**](docs/08-plan-de-desarrollo.md#tarea-1-9) `Dinero` en Java y en Dart · API, Front — en la API, sumas que fallan al desbordar,
       porcentaje `HALF_UP` y formato colombiano; en el front, un tipo sin operadores y su formato en
       `ui/formato/moneda.dart`. Pruebas con las cifras de los documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md), verificadas en negativo
-- [ ] 🔒 [**1.10**](docs/08-plan-de-desarrollo.md#tarea-1-10) Cuentas y categorías: endpoints y pantalla ([RF-97](docs/03-requisitos-y-bdd.md#rf-97)) · API, Front
+- [ ] ⚡ [**1.10**](docs/08-plan-de-desarrollo.md#tarea-1-10) Cuentas y categorías: endpoints y pantalla ([RF-97](docs/03-requisitos-y-bdd.md#rf-97)) · API, Front
 - [x] [**1.11**](docs/08-plan-de-desarrollo.md#tarea-1-11) Semilla reproducible para dev y qa · Base — ids y fechas escritos,
       re-ejecutable sin borrar nada, y con filas en toda tabla que leen [P-01](docs/12-pruebas-y-calidad.md#p-01) a [P-31](docs/12-pruebas-y-calidad.md#p-31), porque una tabla
       vacía hace pasar «no ve lo ajeno» por la razón equivocada. `scripts/db/sembrar.ps1` la lleva a
@@ -1000,10 +1003,11 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       cuándo sube el SemVer del esquema; el precedente de la [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) es no moverlo, y `prisma_api`
       declara `0.1.0` en su configuración, que no puede viajar en el mismo commit ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)). Cuándo y
       cómo se publica una versión nueva del esquema es lo que tiene que escribir la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)
-- [ ] **Los docs [07](docs/07-arquitectura.md) y [12](docs/12-pruebas-y-calidad.md) y el [ADR-015](docs/adr/ADR-015-validacion-tres-capas.md) nombran una restricción `movimientos_valor_positivo`
-      que no existe.** El [04](docs/04-modelo-de-datos.md), que es el que manda sobre el esquema, hace de esa regla un dominio: quien
-      rechaza un valor cero es `dinero_positivo_mayor_que_cero`. La tabla de traducción de la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)
-      tiene que salir del [04](docs/04-modelo-de-datos.md) y no de los ejemplos de los otros tres
+- [x] **Los docs [07](docs/07-arquitectura.md) y [12](docs/12-pruebas-y-calidad.md) nombraban una restricción `movimientos_valor_positivo` que no
+      existe.** El [04](docs/04-modelo-de-datos.md), que es el que manda sobre el esquema, hace de esa regla un dominio: quien
+      rechaza un valor cero es `dinero_positivo_mayor_que_cero`. Corregido en los dos por la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8), y
+      la tabla salió del [04](docs/04-modelo-de-datos.md). **El [ADR-015](docs/adr/ADR-015-validacion-tres-capas.md) se queda como estaba**: está reemplazado, y un
+      documento reemplazado «se conserva como historia» ([22 §4](docs/22-documentacion.md))
 - [ ] **La verificación de la base es un guion SQL** (`scripts/db/verificar-base.sql`) y no un marco
       de pruebas: `prisma_db` no tiene ninguno, y lo que hay que comprobar son respuestas de
       PostgreSQL a sesiones de verdad. Corre dentro de una transacción que termina en `ROLLBACK`
@@ -1322,12 +1326,11 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       trigger que congela la ficha propia. Los dos significan «no te alcanza» y salían como error
       del sistema. Que la API los traduzca no es que decida permisos: sigue sin mirar de qué tipo
       es nadie
-- [ ] **La traducción de restricción a código está escrita a mano en `UsuariosEnPostgres`**, y
-      desde la [3.3](docs/08-plan-de-desarrollo.md#tarea-3-3) también en `MovimientosEnPostgres`, que por ahora solo traduce el rechazo de
-      permisos. Mira el nombre de la restricción y el texto del `RAISE EXCEPTION`, que es lo que el [04](docs/04-modelo-de-datos.md)
-      permite al exigir nombres explícitos. La tabla general es la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8), y cuando exista estos
-      métodos se van con ella: con dos adaptadores buscando el mismo texto, cada uno que llegue antes
-      que ella lo copia otra vez
+- [x] **La traducción de restricción a código estaba escrita a mano en `UsuariosEnPostgres`**, y
+      desde la [3.3](docs/08-plan-de-desarrollo.md#tarea-3-3) también en `MovimientosEnPostgres`. Buscaban literales con `contains` sobre el
+      mensaje crudo, y `row-level security policy` estaba escrito dos veces. **Cerrado por la
+      [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)**: el texto se lee en un solo sitio, `RechazoDeLaBase`, que entrega el estado, la
+      restricción y la tabla por separado. Ningún adaptador busca texto ya
 
 **Del arreglo del alta de usuarios (`plan/23-el-alta-decia-algo-salio-mal.md`):**
 
@@ -1346,13 +1349,15 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       débil y el correo que no acepta: comprobado contra el GoTrue local, `weak_password` llegaba a
       Gerencia como «Ya hay alguien con ese usuario. Elige otro.» Si el cuerpo no trae `error_code`
       se decide por el estado, como antes
-- [ ] **Siguen cayendo al `50000` cuatro rechazos de `usuarios`** que `UsuariosEnPostgres.traducir`
-      no conoce: `usuarios_nombre_completo_minimo`, `usuarios_id_fkey`, `usuarios_pkey` y
-      `motivo_con_contenido`. Se dejaron fuera a propósito —se disparan con valores concretos y no
-      con cualquiera, así que no eran lo que tenía el alta caída— y los recoge la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)
-- [ ] **`@Size(min = 3)` sobre `nombreCompleto` no recorta y el `CHECK` de la base sí**, así que
-      `"  a"` pasa la validación del formulario y lo rechaza PostgreSQL. Alcanzable desde la
-      pantalla, y hoy sale como error del sistema
+- [x] **Ya no caen al `50000` los cuatro rechazos de `usuarios`**: `usuarios_nombre_completo_minimo`,
+      `usuarios_id_fkey`, `usuarios_pkey` y `motivo_con_contenido`. Los recogió la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) con el código
+      transversal de su clase —`42200` los tres primeros, `40900` el identificador repetido— y hay
+      cuatro pruebas de integración que los provocan contra PostgreSQL y miran qué sale
+- [x] **`@Size(min = 3)` sobre `nombreCompleto` no recorta y el `CHECK` de la base sí**, así que
+      `"  a"` pasa la validación del formulario y lo rechaza PostgreSQL. **Sigue siendo alcanzable
+      desde la pantalla**, y lo que cambió con la [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) es que sale como `42200` señalando
+      `nombreCompleto` en vez de como error del sistema. Que el formulario y la base recorten igual
+      es otra cosa, y no la arregla esa tarea
 
 **De dejar la integración continua en verde:**
 
@@ -1416,6 +1421,40 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       guardarlo así la habría perdido sin avisar
 - [ ] **`RegistrarMovimiento` todavía no está cableado.** El bean y su `Clock` los pone su primer
       consumidor, que es la [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4); el adaptador sí es un bean desde ya
+
+**De la tarea [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8):**
+
+- [ ] 🔒 **La tabla no la puede leer un adaptador, y el plan daba por hecho que sí.** Sus filas
+      nombran códigos del catálogo, que viven en `interfaz`, y `ReglaDeDependenciasTest` prohíbe
+      que `infraestructura` conozca esa capa ([07 §3](docs/07-arquitectura.md#3-regla-de-dependencias)). Así que los dos `traducir` no se fueron con
+      ella: lo que se fue es la búsqueda de texto, que era la duplicación real. Cada adaptador
+      sigue convirtiendo en excepción de dominio **lo que su puerto promete** —tres reglas de
+      `usuarios` y el rechazo de política— y el manejador global traduce todo lo demás con la
+      tabla. Que las dos digan lo mismo lo comprueba `TraduccionDeRestriccionesTest`, y sin esa
+      prueba se separarían sin que nadie lo notara
+- [ ] **Casi todas las filas comparten dos códigos, y no es pereza: es el formato.** Un rechazo de
+      llave foránea ocurre en cualquier módulo, y los dos dígitos de caso están repartidos por
+      módulo ([20 §2.4](docs/20-contrato-de-api.md#24-los-rangos-por-módulo)), así que un código propio afirmaría pertenecer a uno al que no pertenece.
+      Los transversales son los diez base, y el caso `00` de `422` y `409` ya está tomado. Quien
+      quiera un mensaje afinado para un módulo lo acuerda en el contrato de ese módulo
+- [ ] **El [04 §11](docs/04-modelo-de-datos.md#11-el-contrato-de-errores) promete más de lo que la tabla entrega en dos puntos.** Dice que un `NOT NULL`
+      se lee «Falta *campo*» y que el rechazo de un dominio se arma «con el campo de la petición y
+      el texto del dominio»; las dos frases son mensajes propios, y la fila lleva un código, nunca
+      un `String`. Hoy salen como `42200` señalando el campo cuando la base lo dice. Cumplirlo al
+      pie exige códigos nuevos —o el cuerpo de la petición en el manejador— y las dos cosas son
+      cambio de contrato
+- [ ] **El controlador de PostgreSQL pasó a ser dependencia de compilación**, y antes solo lo era
+      de ejecución. `PSQLException.getServerErrorMessage()` es lo único que entrega la restricción,
+      la tabla y la columna por separado; ningún tipo de `java.sql` los expone, y la alternativa
+      era volver a buscar texto
+- [ ] **La tabla enumera las 93 restricciones del filtro y las 26 llaves primarias, una por una.**
+      Una regla por clase habría bastado para responder, pero entonces agregar una restricción
+      nueva no rompería nada y nadie decidiría su mensaje, que es justo lo que el [04 §11](docs/04-modelo-de-datos.md#11-el-contrato-de-errores) quiere
+      impedir. El precio es que quien agregue una restricción tiene que agregar su fila
+- [ ] **A las llaves foráneas y a los `CHECK` de tabla no se les señala campo.** El rechazo de una
+      foránea trae la tabla y la restricción, no la columna, y deducirla del nombre sería adivinar;
+      un `CHECK` de tabla es una regla entre columnas y no tiene una sola a la que apuntar. Salen
+      como `42200` sin `data.errores`, hasta que el contrato de cada módulo diga a qué campo van
 
 ---
 

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Calidad](INDICE.md#etiqueta-calidad) |
+| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Calidad](INDICE.md#etiqueta-calidad) |
 
 ---
 
@@ -424,9 +424,10 @@ dejaron de entenderse. Estas cuatro pruebas son ese vigilante.
 
 ### <a id="c-01"></a>9.1 C-01 · Ninguna restricción sin mensaje
 
-La base no sabe hablar: rechaza con `23514 check_violation` sobre `movimientos_valor_positivo`, y
-eso no se le muestra a la dueña del taller. La API traduce **nombre de restricción → código HTTP +
-mensaje en español + campo del formulario**. [C-01](#c-01) recorre `pg_constraint` del ambiente y comprueba
+La base no sabe hablar: rechaza con `23514 check_violation` sobre
+`dinero_positivo_mayor_que_cero`, y eso no se le muestra a la dueña del taller. La API traduce
+**`(objeto, restricción)` → código de cinco dígitos + campo del formulario al que señala**, y el
+mensaje en español sale de ese código. [C-01](#c-01) recorre `pg_constraint` del ambiente y comprueba
 que cada restricción nombrada tenga su entrada en esa tabla. Es la prueba que sostiene la
 traducción de restricciones —de [`ADR-015`](adr/ADR-015-validacion-tres-capas.md), recogida después
 por [`ADR-018`](adr/ADR-018-front-sin-decisiones.md)— y la que verifica el **[RNF-25](03-requisitos-y-bdd.md#rnf-25)**.
@@ -439,6 +440,16 @@ Tres detalles deciden si la prueba sirve de algo:
   decir cuál, o el arreglo se vuelve una búsqueda a ciegas.
 - **También falla al revés.** Una entrada en la tabla de traducción que ya no corresponde a ninguna
   restricción es un mensaje muerto, y peor: esconde que la regla desapareció de la base.
+
+> **Renombrar una restricción falla las dos direcciones a la vez**, y por eso el
+> [04 §4.1](04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) dice que los nombres no se pueden mover: el nombre nuevo sale huérfano y el viejo,
+> muerto. Es el único cambio que la prueba denuncia por duplicado, y el que más falta hacía.
+
+**Corre con `./gradlew integracion`, no en cada empuje.** Necesita las restricciones *aplicadas* y
+no el archivo `.sql` ([ADR-029](adr/ADR-029-esquema-por-etiqueta.md)), así que hoy queda fuera de la compilación de siempre; quien la
+mete adentro es la tarea [1.7](08-plan-de-desarrollo.md#tarea-1-7), que descarga `prisma_db` por etiqueta y levanta Supabase. A cambio
+es la más barata de las de integración: se conecta como el dueño y **solo lee** el catálogo de
+PostgreSQL, sin RLS, sin identidad y sin semilla.
 
 En ejecución, la contraparte es la regla de `prisma_api`: un error de la base que no esté en la
 tabla se devuelve como 500 y se registra como defecto. [C-01](#c-01) existe para que eso nunca ocurra
