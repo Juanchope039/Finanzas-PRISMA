@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -1954,6 +1954,33 @@ es un rol que no puede borrar, no puede crear y no se salta RLS.
 La prueba que demuestra que esto funciona —entrar como Operación por la API y comprobar que la
 nómina, los usuarios y el patrimonio ajenos llegan vacíos **por decisión de la base**— vive en
 [ADR-012](adr/ADR-012-identidad-a-postgres.md) y se ejecuta en los cuatro ambientes.
+
+### 9.1 `anon` no toca nada
+
+Supabase crea dos roles que este modelo no usa: `anon`, el de quien no ha entrado, y
+`service_role`, que contra PostgreSQL no se usa nunca ([ADR-033](adr/ADR-033-service-role-solo-en-auth.md)). Y a `anon` le concede por
+defecto `SELECT`, `INSERT` y `UPDATE` sobre todo `public`. **Eso no es una puerta teórica:** su
+clave es pública por diseño, y con la Data API encendida cualquiera escribe en las tablas que el
+[§7](#7-seguridad-por-tipo-de-usuario-rls) deja sin RLS a propósito y lee las que tienen una política de lectura abierta, `movimientos`
+entre ellas. Nadie habla con la base salvo `prisma_api`: ni el front, que no sabe de Supabase
+([ADR-018](adr/ADR-018-front-sin-decisiones.md)), ni nada más.
+
+```sql
+-- Nada, ni ahora ni en lo que se cree después. El esquema se lo lleva a uat y a prod.
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM anon;
+REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM anon;
+REVOKE USAGE ON SCHEMA public FROM anon;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public REVOKE ALL ON TABLES FROM anon;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public REVOKE ALL ON SEQUENCES FROM anon;
+```
+
+**`authenticated` no se toca.** Es el rol que la API asume con `SET LOCAL ROLE` en cada
+transacción, y es el que evalúan las políticas del [§7](#7-seguridad-por-tipo-de-usuario-rls): quitarle sus permisos apagaría el
+producto entero.
+
+> **Apagar la Data API en la consola no sustituye a esto.** Cierra el agujero en el proyecto donde
+> se apaga y en ninguno más: una casilla de consola no viaja con el esquema, así que uat y prod
+> nacerían abiertos. La casilla y la revocación resuelven cosas distintas y van las dos.
 
 ---
 

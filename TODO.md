@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.8.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.9.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -25,7 +25,7 @@ Cada tarea dice su **carril**: **API** (`prisma_api`), **Base** (`prisma_db`), *
 
 ## 1. Hecho, en progreso y pendiente
 
-Las tres preguntas de siempre. Las secciones 2 a 6 enumeran **las 138 tareas del plan**, una por una
+Las tres preguntas de siempre. Las secciones 2 a 6 enumeran **las 139 tareas del plan**, una por una
 y con su marca; aquí está el resumen. Que no falte ninguna no depende de la memoria de nadie: la
 herramienta compara el tablero con el plan y la verificación falla si alguna no está.
 
@@ -35,7 +35,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 18 | 0 | 1 | 1 |
-| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 17 | 0 | 3 | 4 |
+| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 17 | 0 | 4 | 4,5 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 13 | 0 | 9 | 9,5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 15 | 5 | 0 | 10 | 11,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 2 | 0 | 9 | 11 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 11 | 1 | 0 | 10 | 9,5 |
-| **Total** | **138** | **61** | **0** | **77** | **96** |
+| **Total** | **139** | **61** | **0** | **78** | **96,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -125,7 +125,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
 | **API** | [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
-| **Base** | [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [2.21](docs/08-plan-de-desarrollo.md#tarea-2-21) · [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2) |
+| **Base** | [1.21](docs/08-plan-de-desarrollo.md#tarea-1-21) · [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [2.21](docs/08-plan-de-desarrollo.md#tarea-2-21) · [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2) |
 | **Front** | [3.5](docs/08-plan-de-desarrollo.md#tarea-3-5) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Contrato** | [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
@@ -134,13 +134,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **77 tareas y 96 días de trabajo** de 138 tareas del plan.
+Quedan **78 tareas y 96,5 días de trabajo** de 139 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 14,4 semanas | **17,4 semanas** |
-| 2 | 8,1 semanas | **11,1 semanas** |
-| 3 | 6,7 semanas | **9,7 semanas** |
+| 1 | 14,5 semanas | **17,5 semanas** |
+| 2 | 8,2 semanas | **11,2 semanas** |
+| 3 | 6,6 semanas | **9,6 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -369,6 +369,11 @@ hasta aplicarlo y probarlo.
       necesita en `prisma.esquema` y su integración continua descarga ese repositorio en esa etiqueta
       y levanta la base con el Supabase CLI. Las pruebas de integración llevan etiqueta de JUnit y no
       corren en la compilación normal, que es la única forma de trabajar sin Docker
+- [ ] ⚡ [**1.21**](docs/08-plan-de-desarrollo.md#tarea-1-21) `anon` no toca nada · Base — Supabase le concede `SELECT`, `INSERT` y `UPDATE`
+      sobre las veintiséis tablas, y su clave es pública. La migración se los revoca y deja
+      `ALTER DEFAULT PRIVILEGES` puesto ([04 §9.1](docs/04-modelo-de-datos.md#91-anon-no-toca-nada)). En dev y qa ya está apagada la Data API, que
+      tapa el agujero pero **no viaja al ambiente siguiente**: sin esta tarea, uat y prod nacen
+      abiertos
 
 ---
 
@@ -627,8 +632,8 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 | 5 | Remotos de los repositorios | Quien dirige | Integración continua | ✅ Los cuatro en GitHub |
 | 6 | Cómo consiguen la API y su CI el esquema de `prisma_db` | Carril API | Tareas [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7), [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) y [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) | ✅ Por etiqueta, con el Supabase CLI en la tubería ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) |
 | 7 | Quién trabaja cada carril, y quién sabe Flutter y Java para revisar el contrato | Quien dirige | Trabajar con más de un carril | ⬜ |
-| 8 | Contrato por etiqueta de git o como paquete publicado | Los dos lados | El primer cambio de contrato | ⬜ El documento [21](docs/21-trabajo-en-paralelo.md) se inclina por la etiqueta |
-| 9 | Quién desempata un cambio de contrato | Quien dirige | El primer desacuerdo | ⬜ |
+| 8 | Contrato por etiqueta de git o como paquete publicado | Los dos lados | El primer cambio de contrato | ✅ **Por etiqueta**: `contrato-vX.Y.Z` en cada fusión que cambie `openapi.json`, como se inclinaba el [21 §8](docs/21-trabajo-en-paralelo.md#8-qué-hay-que-decidir-antes-de-abrir-un-segundo-carril). Un paquete publicado pedía un registro y credenciales que no existen, para resolver dependencias que nadie tiene |
+| 9 | Quién desempata un cambio de contrato | Quien dirige | El primer desacuerdo | ✅ **Quien dirige**, que además es quien revisa los PR: partir las dos cosas dejaría a alguien decidiendo sobre lo que no lee |
 | 10 | Supuestos [S1](docs/01-vision-y-alcance.md#s1) a [S5](docs/01-vision-y-alcance.md#s5) de [01 §6](docs/01-vision-y-alcance.md#6-supuestos) | Gerencia | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) | ⬜ Por confirmar; el mockup ya está confirmado |
 | 11 | El dominio, del que dependen el correo sintético, la URL de la API y CORS | Gerencia | — | ✅ `prisma.com`: la API en `api.prisma.com` y `api-dev.prisma.com`, el correo sintético en `@usuarios.prisma.com`. Se cambió sin migrar nada porque todavía no existe ningún usuario real; desde el primero, «fijo de por vida» quiere decir exactamente eso ([ADR-009](docs/adr/ADR-009-login-por-usuario.md)) |
 | 12 | Plazos de conservación y registro de bases de datos personales (Ley 1581) | Un abogado | Go-live | ⬜ |
@@ -742,8 +747,14 @@ a `anon`.
   mientras la comprobación no esté marcada como obligatoria en la protección de `develop`. Lo que sí
   hace hoy en la API y el front, aunque se fusione en rojo, es parar el despliegue: el empuje a
   `develop` también la corre, y Railway no construye dev con la integración continua en rojo.
-  `prisma_db` no se despliega, así que ahí la única cerradura es esa casilla. Marcarla es
-  configuración de GitHub, y es de quien dirige.
+  `prisma_db` no se despliega, así que ahí la única cerradura es esa casilla. **Y esa casilla no
+  existe:** los tres repositorios de código son privados en el plan gratuito, y GitHub responde
+  *«Upgrade to GitHub Pro or make this repository public»* tanto a la protección de rama como a los
+  rulesets (comprobado el 2026-09-19 contra su API). No es que nadie la haya marcado: no está. Las
+  dos salidas cuestan algo —pagar el plan, o hacer públicos unos repositorios de los que `prisma_db`
+  lleva la semilla con nombres reales del equipo ([R-23](docs/11-riesgos-y-proteccion-de-datos.md))—, así que **se decidió dejarlo y escribirlo
+  aquí**: API y front quedan cubiertos de hecho por Railway, y el hueco real, el único, es que un PR
+  de `prisma_db` con la versión sin subir se puede fusionar.
 - **A `movimientos` le faltan dos restricciones con nombre.** La base exige cuenta de destino en una
   transferencia (`transferencia_con_destino`), pero no prohíbe que la traiga un gasto, ni que una
   transferencia vaya de una cuenta a sí misma: las dos cosas entrarían sin que nada avisara y
@@ -1048,9 +1059,14 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] Las cuatro vistas que nacieron sin `security_invoker` ya lo llevan, por el mismo motivo que
       [04 §5.6](docs/04-modelo-de-datos.md#56-la-bitácora-de-la-pantalla-es-una-vista-no-una-tabla-nueva) se lo exige a `v_bitacora_usuarios`. Hoy no cambia nada; el día que esas
       tablas restrinjan filas, la fuga habría sido silenciosa
-- [ ] **La Data API del proyecto expone `public`**, así que las seis tablas sin RLS se pueden leer
-      con la clave anónima. Nadie debe hablar con la base salvo `prisma_api`: lo coherente sería
-      apagar la Data API o revocarle el acceso a `anon`, y eso lo decide quien dirige
+- [x] **La Data API exponía `public`, y era más grande de lo que esta casilla decía.** No eran «las
+      seis tablas sin RLS»: `anon` tenía `SELECT`, `INSERT` y `UPDATE` sobre **las veintiséis**, y la
+      sonda con la clave anónima —que es pública por diseño— devolvía filas en las seis **y en
+      `movimientos`**, porque su política `mov_lectura` es `USING (true)`. O sea, **el libro del
+      taller entero**. Solo `usuarios` quedaba tapada. Se cerró el 2026-09-19 con las dos cosas que
+      hacían falta: `db_schema` pasó a vacío en dev y en qa —PostgREST contesta ahora `503
+      PGRST002`— y entra al plan la [1.21](docs/08-plan-de-desarrollo.md#tarea-1-21), que se lo revoca con una migración ([04 §9.1](docs/04-modelo-de-datos.md#91-anon-no-toca-nada)),
+      porque una casilla de consola no viaja a uat ni a prod
 - [ ] El proyecto firma los JWT con clave asimétrica **ES256**, no con un secreto compartido:
       `SUPABASE_JWT_SECRET` va vacío y la verificación del token ([2.1](docs/08-plan-de-desarrollo.md#tarea-2-1)) tendrá que ir contra el
       JWKS del proyecto
