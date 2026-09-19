@@ -2562,7 +2562,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.13.0"
+    "version" : "0.14.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -6635,10 +6635,6 @@
     "mensaje" : "Esa fecha todavía no llega. Aquí va cuándo ocurrió de verdad, no cuándo se va a pagar.",
     "modulo" : "MOVIMIENTOS_Y_CUENTAS",
     "nombre" : "FECHA_DEL_MOVIMIENTO_INVALIDA",
-    "pendienteDeEmitir" : {
-      "quien" : "Tarea 3.4: endpoints de movimientos",
-      "sprint" : 3
-    },
     "status" : 42223
   }, {
     "cuando" : "La cuenta del movimiento no existe o está anulada. El error va en data.errores, sobre cuentaId",
@@ -6646,10 +6642,6 @@
     "mensaje" : "Elige una cuenta del catálogo.",
     "modulo" : "MOVIMIENTOS_Y_CUENTAS",
     "nombre" : "CUENTA_NO_ASIGNABLE",
-    "pendienteDeEmitir" : {
-      "quien" : "Tarea 3.4: endpoints de movimientos",
-      "sprint" : 3
-    },
     "status" : 42224
   }, {
     "cuando" : "La categoría del movimiento no existe o está anulada. El error va en data.errores, sobre categoriaId",
@@ -6657,10 +6649,6 @@
     "mensaje" : "Elige una categoría del catálogo.",
     "modulo" : "MOVIMIENTOS_Y_CUENTAS",
     "nombre" : "CATEGORIA_NO_ASIGNABLE",
-    "pendienteDeEmitir" : {
-      "quien" : "Tarea 3.4: endpoints de movimientos",
-      "sprint" : 3
-    },
     "status" : 42225
   }, {
     "cuando" : "Una transferencia sin cuenta de destino, una con la misma de origen, o cualquier otro tipo que la traiga. El error va en data.errores, sobre cuentaDestinoId",
@@ -6668,10 +6656,6 @@
     "mensaje" : "Una transferencia va de una cuenta a otra distinta, y ningún otro movimiento tiene cuenta de destino.",
     "modulo" : "MOVIMIENTOS_Y_CUENTAS",
     "nombre" : "CUENTA_DE_DESTINO_QUE_NO_CORRESPONDE",
-    "pendienteDeEmitir" : {
-      "quien" : "Tarea 3.4: endpoints de movimientos",
-      "sprint" : 3
-    },
     "status" : 42226
   }, {
     "cuando" : "El anticipo, sumado a los ya cobrados del pedido, supera su valor total, o no es mayor que cero. El error va en data.errores, sobre valor",
