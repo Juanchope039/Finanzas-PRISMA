@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [7.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -278,7 +278,11 @@ RLS. Tenía 24 tareas detrás —el catálogo ([5.2](docs/08-plan-de-desarrollo.
 entrega ([4.5](docs/08-plan-de-desarrollo.md#tarea-4-5)) y casi todo el [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6)—. **Y el carril Base recuperó cuatro tareas que nadie
 había presupuestado** ([2.21](docs/08-plan-de-desarrollo.md#tarea-2-21), [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22), [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) y [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11)): reglas que el contrato ya promete y la base
 todavía no impone, y que tenían bloqueadas a la [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8), la [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9), la [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15), la [2.16](docs/08-plan-de-desarrollo.md#tarea-2-16) y la [4.9](docs/08-plan-de-desarrollo.md#tarea-4-9) sin
-figurar en ninguna parte. Van 58 de las 138 tareas.
+figurar en ninguna parte. **Y el contrato de capital es el quinto seguido** ([7.9](docs/08-plan-de-desarrollo.md#tarea-7-9)): diez operaciones para
+las inversiones, los aportes, el retiro partido en pro-labore y distribución, el pro-labore, los
+sobres y el patrimonio, en el rango `90`–`99`, que estaba reservado. A diferencia de los tres
+anteriores, **no transcribe un dominio construido**: sale de los documentos, y lo que decide está en el [`TODO.md`](TODO.md)
+[§10](TODO.md#10-decisiones-de-construcción-que-conviene-revisar), junto con que **sus formularios todavía no tienen pantalla**. Van 59 de las 138 tareas.
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.
