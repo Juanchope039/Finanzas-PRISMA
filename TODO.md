@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.15.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.16.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -35,7 +35,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 18 | 0 | 1 | 1 |
-| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 17 | 0 | 4 | 4,5 |
+| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 18 | 0 | 3 | 3 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 13 | 0 | 9 | 9,5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 16 | 9 | 0 | 7 | 7,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 2 | 0 | 9 | 11 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 1 | 0 | 11 | 16,5 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 11 | 1 | 0 | 10 | 9,5 |
-| **Total** | **141** | **66** | **0** | **75** | **93** |
+| **Total** | **141** | **67** | **0** | **74** | **91,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -125,7 +125,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.7](docs/08-plan-de-desarrollo.md#tarea-3-7) · [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) · [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.7](docs/08-plan-de-desarrollo.md#tarea-3-7) · [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) · [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [1.21](docs/08-plan-de-desarrollo.md#tarea-1-21) · [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [2.21](docs/08-plan-de-desarrollo.md#tarea-2-21) · [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) · [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2) |
 | **Front** | [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Contrato** | [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) |
@@ -135,12 +135,12 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **75 tareas y 93 días de trabajo** de 141 tareas del plan.
+Quedan **74 tareas y 91,5 días de trabajo** de 141 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 14,0 semanas | **17,0 semanas** |
-| 2 | 7,8 semanas | **10,8 semanas** |
+| 1 | 13,7 semanas | **16,7 semanas** |
+| 2 | 7,7 semanas | **10,7 semanas** |
 | 3 | 6,4 semanas | **9,4 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -330,7 +330,19 @@ hasta aplicarlo y probarlo.
 - [x] [**1.9**](docs/08-plan-de-desarrollo.md#tarea-1-9) `Dinero` en Java y en Dart · API, Front — en la API, sumas que fallan al desbordar,
       porcentaje `HALF_UP` y formato colombiano; en el front, un tipo sin operadores y su formato en
       `ui/formato/moneda.dart`. Pruebas con las cifras de los documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md), verificadas en negativo
-- [ ] ⚡ [**1.10**](docs/08-plan-de-desarrollo.md#tarea-1-10) Cuentas y categorías: endpoints y pantalla ([RF-97](docs/03-requisitos-y-bdd.md#rf-97)) · API, Front
+- [x] [**1.10**](docs/08-plan-de-desarrollo.md#tarea-1-10) Cuentas y categorías: endpoints y pantalla ([RF-97](docs/03-requisitos-y-bdd.md#rf-97)) · API, Front, Base —
+      salió de un rojo que se veía en dev: las tres listas del registro rápido decían «no se
+      pudieron cargar las opciones», y el aviso era cierto, porque las rutas que el formulario
+      «movimiento» nombra en `origen` estaban acordadas desde la [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) y no las servía nadie. Ahora
+      existen las cuatro operaciones: las cuentas **sin saldo**, para que Operación elija sin ver la
+      caja; el árbol de categorías con su naturaleza, su marca de fijo y su madre; y el alta de cada
+      una, que estrena `42220`, `42221` y `42222` y el tipo de campo `casilla`. El «solo Gerencia»
+      del contrato **lo impone ahora la base** —`cuentas_escritura` y `categorias_escritura`, con el
+      molde de `cargos`—, que era la decisión que el [§10](#10-decisiones-de-construcción-que-conviene-revisar) le dejó anotada a esta tarea: sin la
+      migración, Operación creaba las dos. En el front, el panel «Cuentas de dinero» vive dentro de
+      Movimientos y **se pinta solo si la navegación lo dice**, en el campo `puedeGestionarCuentas`
+      que estrena el contrato `0.16.0`. 133 comprobaciones de la base en `OK`, 701 pruebas y 12 de
+      integración en la API, y 317 en el front
 - [x] [**1.11**](docs/08-plan-de-desarrollo.md#tarea-1-11) Semilla reproducible para dev y qa · Base — ids y fechas escritos,
       re-ejecutable sin borrar nada, y con filas en toda tabla que leen [P-01](docs/12-pruebas-y-calidad.md#p-01) a [P-31](docs/12-pruebas-y-calidad.md#p-31), porque una tabla
       vacía hace pasar «no ve lo ajeno» por la razón equivocada. `scripts/db/sembrar.ps1` la lleva a
@@ -803,11 +815,14 @@ a `anon`.
   ([RNF-08](docs/03-requisitos-y-bdd.md#rnf-08)); pero la regla de la base es la que no se puede saltar ([ADR-015](docs/adr/ADR-015-validacion-tres-capas.md)), y hoy depende de
   quién se conecte. Se cierra en la base —comparando con `(now() AT TIME ZONE 'America/Bogota')::date`—
   o fijando el huso de la conexión; cualquiera de las dos es una decisión, y va primero al [04](docs/04-modelo-de-datos.md).
-- **`cuentas` no tiene RLS, y [RF-97](docs/03-requisitos-y-bdd.md#rf-97) dice que solo Gerencia crea cuentas.** [04 §7](docs/04-modelo-de-datos.md#7-seguridad-por-tipo-de-usuario-rls) la deja a
-  propósito sin política, porque los dos tipos trabajan con ella todo el día. Pero entonces el
-  «solo Gerencia» del contrato de la [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) no lo puede imponer la base, y quedaría en un `if` de
-  la API, que es justo lo que [ADR-006](docs/adr/ADR-006-rls-por-rol.md) evita. La [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) tiene que decidirlo: una política de
-  `INSERT` sobre `cuentas` —y otra sobre `categorias`— o dejar dicho por qué aquí sí basta la API.
+- **`cuentas` y `categorias` ya llevan RLS, y la decidió la [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10).** El [04 §7](docs/04-modelo-de-datos.md#7-seguridad-por-tipo-de-usuario-rls) las dejaba a
+  propósito sin política, y entonces el «solo Gerencia» del contrato de la [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) no lo imponía
+  nadie: **Operación podía crear las dos**. Se tomó la primera de las dos salidas —política, no
+  `if`— con el molde que el esquema inicial ya usaba para `cargos`: lectura `USING (TRUE)`, que es
+  lo que el [§7](#7-decisiones-pendientes) quería conservar, y escritura `FOR ALL` con `fn_es_gerencia()`. `FOR ALL` y no
+  `FOR INSERT` para que la anulación, que es un `UPDATE`, no quede abierta el día que exista ese
+  endpoint. Lo que queda por revisar es si alguna de las otras siete tablas sin RLS está en el
+  mismo caso.
 - **`fn_auditar` lee `OLD.anulado_en` en cinco tablas que no tienen esa columna**, y hay que
   comprobarlo contra una base antes de arreglarlo. Son `costos_producto`, `prolabore_config`,
   `nomina_detalle`, `sobres_config` y `cierres_mensuales`: leyendo la función, un `UPDATE` sobre
@@ -825,8 +840,8 @@ a `anon`.
   etiqueta de `cargos-asignables`, donde **el acordado es el que está mal** porque `cargos` la lee
   todo el mundo ([P-14](docs/12-pruebas-y-calidad.md#p-14)); y el `requestBody` de la navegación, que el acordado declara obligatorio y
   el código acepta ausente —cambiarlo es una decisión, porque el front vuelve a su vista pidiéndola
-  sin cuerpo—. Las del `DescriptorDeCampo` se cierran con los tipos que le faltan: `casilla` con la
-  [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) y `numero` con la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2). **Hasta que estén, la copia fijada no puede ser el acordado byte a
+  sin cuerpo—. Las del `DescriptorDeCampo` se cierran con los tipos que le faltan: `casilla` ya está, con la
+  [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) —lo estrena `esFijo` del formulario «categoria»—, y queda `numero`, de la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2). **Hasta que estén, la copia fijada no puede ser el acordado byte a
   byte**, que es lo que haría exigible la promesa del [21 §3.1](docs/21-trabajo-en-paralelo.md#31-el-punto-débil-de-tener-repositorios-separados-y-cómo-se-tapa).
 - **Las reglas del dominio todavía no tienen código del catálogo.** `Movimiento`, `Pedido` y
   `Costeo` rechazan lo que no se puede registrar con excepciones de Java, y hoy eso saldría como
@@ -2088,6 +2103,31 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **El esquema pasó a `0.4.0` y no a `0.3.1`**, como la `0.2.0` y la `0.3.0`: una tabla nueva es
       MINOR mientras todo siga en `0.y.z`. Qué cuenta como cada cosa en el esquema **sigue sin estar
       escrito en ningún documento**
+
+**De la tarea [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10):**
+
+- [ ] **El orden en que se pintan las categorías no lo dice ningún documento.** El contrato pide «el
+      árbol […] en el orden en que se pintan» y `categorias` no tiene columna `orden`, así que hubo
+      que elegirlo: primero los ingresos y después los gastos, luego por familia —el nombre de la
+      madre, o el propio si es principal— y dentro de cada una la madre antes que sus hijas,
+      alfabéticas. Así el front pinta la lista como llega y no reordena nada. **Los ingresos
+      primero se escribe con un `CASE`**: alfabéticamente «gasto» va antes que «ingreso», así que
+      `ORDER BY naturaleza` daría lo contrario de lo que el contrato enuncia
+- [ ] **Una cuenta nueva se pinta al final**, con `orden` = el mayor que haya más uno. El contrato
+      no le da campo `orden` al formulario «cuenta» y ningún documento dice qué lugar le toca a una
+      cuenta recién abierta. Reordenarlas es otra pantalla que nadie ha pedido
+- [ ] **El panel de categorías no tiene mockup.** El [10 §4.3](docs/10-ux-y-mockups.md) diseñó el de «Cuentas de dinero» y no
+      dijo nada del de categorías, que esta tarea también pide. Se hizo **el mismo panel con el otro
+      formulario**: inventarle una pantalla propia habría sido decidir diseño, y dejarlo fuera
+      habría dejado a Gerencia sin manera de crear una categoría, con lo que la lista del registro
+      rápido no podría crecer
+- [ ] **`prisma.contrato.version` se queda en `0.14.0` aunque el acordado vaya en `0.16.0`.** La API
+      ya emite el campo que estrena el `0.16.0`, pero **no implementa el `0.15.0`** —nómina y
+      cotizaciones—, así que subirla sería afirmar algo falso. Qué número declara un artefacto que
+      implementa partes sueltas de dos versiones no está escrito en ningún documento
+- [ ] **Un nombre de cuenta o de categoría no tiene largo máximo.** Se probó a ponerle uno y se
+      quitó: el contrato no lo declara y la columna es `TEXT`, así que el `@Size` habría sido una
+      regla inventada en el código. Si hace falta, se acuerda en el contrato primero
 
 ---
 

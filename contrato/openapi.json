@@ -1745,6 +1745,10 @@
       },
       "Navegacion" : {
         "properties" : {
+          "puedeGestionarCuentas" : {
+            "description" : "Si Movimientos lleva el panel «Cuentas de dinero», donde se crean las cuentas y las categorias (RF-97, 10 §4.3). Con false el panel no existe: ni atenuado ni deshabilitado. Cae a false en la vista previa, como puedeGestionarUsuarios",
+            "type" : "boolean"
+          },
           "puedeGestionarUsuarios" : {
             "description" : "Si el menú de la sesión lleva «Gestión de usuarios». Con false la entrada no existe: ni atenuada ni deshabilitada",
             "type" : "boolean"
@@ -1765,7 +1769,7 @@
             "description" : "Solo con vista=operacion: el aviso de la franja fija, que no se puede cerrar"
           }
         },
-        "required" : [ "puedeGestionarUsuarios", "puedeVerComoOperacion", "secciones" ],
+        "required" : [ "puedeGestionarCuentas", "puedeGestionarUsuarios", "puedeVerComoOperacion", "secciones" ],
         "type" : "object"
       },
       "NuevaCategoria" : {
@@ -4023,7 +4027,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.15.0"
+    "version" : "0.16.0"
   },
   "openapi" : "3.1.0",
   "paths" : {

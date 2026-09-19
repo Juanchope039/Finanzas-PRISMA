@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -1052,7 +1052,7 @@ vez de dejar copias sueltas. `adjuntos_ruta_key` es lo que sostiene eso: **un ob
 las dos flechas y no dice qué pasa con las dos puestas: con las dos, la misma foto sería el soporte
 de dos cosas distintas y ninguna pantalla sabría de cuál quitarla.
 
-**No lleva RLS**, y es lo que el [§7](#7-seguridad-por-tipo-de-usuario-rls) ya decía al nombrarla entre las nueve tablas que siguen sin ella a
+**No lleva RLS**, y es lo que el [§7](#7-seguridad-por-tipo-de-usuario-rls) ya decía al nombrarla entre las tablas que siguen sin ella a
 propósito: los dos tipos de usuario trabajan con los soportes todo el día y no hay nada que separar.
 **Sí lleva trigger de auditoría**, el decimoquinto ([§5.4](#54-auditoría-por-triggers)): sin él, quitar un soporte sería el único
 cambio del libro que no deja rastro.
@@ -1524,6 +1524,8 @@ WHERE a.devengado_en IS NULL
 ```sql
 ALTER TABLE usuarios         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cargos           ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cuentas          ENABLE ROW LEVEL SECURITY;
+ALTER TABLE categorias       ENABLE ROW LEVEL SECURITY;
 ALTER TABLE movimientos      ENABLE ROW LEVEL SECURITY;
 ALTER TABLE aportes_retiros  ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nomina_detalle   ENABLE ROW LEVEL SECURITY;
@@ -1560,6 +1562,17 @@ CREATE POLICY usuarios_actualizacion_propia ON usuarios FOR UPDATE
 -- El catálogo de cargos lo lee todo el mundo y lo escribe solo Gerencia.
 CREATE POLICY cargos_lectura  ON cargos FOR SELECT USING (TRUE);
 CREATE POLICY cargos_escritura ON cargos FOR ALL
+  USING (fn_es_gerencia()) WITH CHECK (fn_es_gerencia());
+
+-- Las cuentas de dinero y las categorías, igual: las lee todo el mundo porque los dos tipos
+-- registran movimientos, y las escribe solo Gerencia (RF-97, RF-17). La escritura va en FOR ALL
+-- y no en FOR INSERT: anular una es un UPDATE, y con una política de inserción sola la anulación
+-- quedaría abierta el día que exista ese endpoint.
+CREATE POLICY cuentas_lectura   ON cuentas FOR SELECT USING (TRUE);
+CREATE POLICY cuentas_escritura ON cuentas FOR ALL
+  USING (fn_es_gerencia()) WITH CHECK (fn_es_gerencia());
+CREATE POLICY categorias_lectura   ON categorias FOR SELECT USING (TRUE);
+CREATE POLICY categorias_escritura ON categorias FOR ALL
   USING (fn_es_gerencia()) WITH CHECK (fn_es_gerencia());
 
 -- Movimientos: ambos tipos registran; solo Gerencia anula
@@ -1911,11 +1924,11 @@ ninguna clave llegaría nunca a servir para un reintento.
 `DELETE` no lleva política, y por eso la purga del [§4.9](#49-claves-de-idempotencia) no corre como la aplicación: corre como el
 rol de migraciones, que es dueño de la tabla y tiene `BYPASSRLS`.
 
-Con esto, las dieciséis tablas que el [§3](#3-catálogo-de-entidades) marca como sensibles tienen política, y con `cargos` son
-diecisiete las que llevan RLS encendida. Las nueve restantes —`cuentas`, `categorias`, `adjuntos`,
-`pedidos`, `pedido_lineas`, `anticipos`, `productos`, `cotizaciones` y `cotizacion_lineas`—
-siguen sin RLS a propósito: los dos tipos trabajan con ellas todo el día y no hay nada que
-separar. El principio 6 del [§1](#1-principios-del-modelo) se lee así: **en cada tabla donde haya algo que proteger.**
+Con esto, las dieciséis tablas que el [§3](#3-catálogo-de-entidades) marca como sensibles tienen política, y con `cargos`,
+`cuentas` y `categorias` son diecinueve las que llevan RLS encendida. Las siete restantes
+—`adjuntos`, `pedidos`, `pedido_lineas`, `anticipos`, `productos`, `cotizaciones` y
+`cotizacion_lineas`— siguen sin RLS a propósito: los dos tipos trabajan con ellas todo el día y no
+hay nada que separar. El principio 6 del [§1](#1-principios-del-modelo) se lee así: **en cada tabla donde haya algo que proteger.**
 
 Las pruebas que ejercen estas políticas con una sesión real de tipo Operación son [P-16](12-pruebas-y-calidad.md#p-16) a [P-31](12-pruebas-y-calidad.md#p-31)
 de [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) [§3](12-pruebas-y-calidad.md#3-pruebas-de-permisos).
@@ -1939,6 +1952,8 @@ propósito: la segunda condición ya dice que
 ```sql
 -- Ni el dueño de la tabla se salta las políticas.
 ALTER TABLE cargos            FORCE ROW LEVEL SECURITY;
+ALTER TABLE cuentas           FORCE ROW LEVEL SECURITY;
+ALTER TABLE categorias        FORCE ROW LEVEL SECURITY;
 ALTER TABLE movimientos       FORCE ROW LEVEL SECURITY;
 ALTER TABLE aportes_retiros   FORCE ROW LEVEL SECURITY;
 ALTER TABLE nomina_detalle    FORCE ROW LEVEL SECURITY;
@@ -1956,7 +1971,7 @@ ALTER TABLE nonces_vistos         FORCE ROW LEVEL SECURITY;
 ALTER TABLE sesiones              FORCE ROW LEVEL SECURITY;
 ```
 
-Son **quince de las diecisiete tablas con RLS**. Las dos que faltan no son un olvido: el modelo,
+Son **diecisiete de las diecinueve tablas con RLS**. Las dos que faltan no son un olvido: el modelo,
 tal como está escrito, deja de funcionar si se les pone.
 
 | Tabla | Por qué no lleva `FORCE` | Qué la protege en su lugar |
@@ -2224,7 +2239,7 @@ mismas reglas que la base— solo aguanta si esta prueba corre en cada despliegu
 capas que deciden se separan y ninguna avisa.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.15.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-020](adr/ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.16.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-020](adr/ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
