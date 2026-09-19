@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -34,7 +34,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 <!-- generado:plan-tablero · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
-| [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 16 | 2 | 1 | 3,5 |
+| [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 18 | 0 | 1 | 1 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 17 | 0 | 3 | 4 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 13 | 0 | 9 | 9,5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 15 | 5 | 0 | 10 | 11,5 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 11 | 1 | 0 | 10 | 9,5 |
-| **Total** | **138** | **59** | **2** | **77** | **98,5** |
+| **Total** | **138** | **61** | **0** | **77** | **96** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -68,7 +68,7 @@ Lo que tiene su commit en `develop` con la integración continua en verde, que e
 | **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 24 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 61 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los catorce triggers de auditoría escribiendo y las 34 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. La semilla es fija, re-ejecutable y con filas en toda tabla que preguntan las pruebas de permisos, y `sembrar.ps1` la lleva a dev y a qa sin dejarla acercarse a uat ni a prod. Y esto ya no es solo dev: **qa quedó al día con la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)**, con sus 109 comprobaciones en `OK` y `schema_version` en `0.3.0` | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) · [2.4](docs/08-plan-de-desarrollo.md#tarea-2-4) |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
-**565 pruebas en verde en la API** —y 68 más contra la base local— y 229 en el front. El dominio se prueba con las cifras de los
+**604 pruebas en verde en la API** —y 87 más contra la base local— y 260 en el front. El dominio se prueba con las cifras de los
 documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md): si una prueba falla, o se rompió el código o el documento dice
 otra cosa.
 
@@ -76,13 +76,15 @@ otra cosa.
 
 Nada en las manos ahora mismo.
 
-**🚧 El alta de usuarios está caída en dev, y el arreglo espera revisión.** Crear a alguien responde
-«algo salió mal» con cualquier nombre de usuario: falta `SUPABASE_SERVICE_ROLE_KEY` en el despliegue
-de la API, y el fallo no sabía decirlo porque `ProveedorNoDisponible` no tenía código propio. Deja
-sin servir la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) recién terminada. Carril **API**, rama `feature/gestion-de-usuarios-arreglo`
-en los dos repositorios, anotado el 2026-09-18. El plan es `plan/23-el-alta-decia-algo-salio-mal.md`.
-Es un arreglo suelto: no lleva número de tarea y no entra en las cuentas de abajo. **Falta cargar la
-variable en Railway**, que es lo único que el código no puede hacer solo.
+**El alta de usuarios volvió a servir, y falta ejercitarla contra dev.** Crear a alguien respondía
+«algo salió mal» con cualquier nombre de usuario, porque faltaba `SUPABASE_SERVICE_ROLE_KEY` en el
+despliegue de la API y el fallo no sabía decirlo: `ProveedorNoDisponible` no tenía código propio.
+Dejaba sin servir la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) recién terminada. **El arreglo entró en los dos repositorios**
+—el `50300` que estrenó el contrato `0.9.0`— **y la variable ya está cargada en Railway**, que era lo
+único que el código no podía hacer solo. Es un arreglo suelto: no lleva número de tarea y no entra en
+las cuentas de abajo. Su plan es `plan/23-el-alta-decia-algo-salio-mal.md`, reconstruido el
+2026-09-19 ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). **Queda ejercitarlo contra dev** con una sesión de Gerencia: es lo
+único del arreglo que no se ve desde fuera.
 
 **Lo siguiente, en cuanto alguien lo tome:** cerrar la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) destrabó lo que la estaba
 esperando. En el carril API, con la identidad llegando ya a PostgreSQL ([1.6](docs/08-plan-de-desarrollo.md#tarea-1-6)), se abre la prueba
@@ -122,9 +124,9 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) · [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
-| **Base** | [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [2.21](docs/08-plan-de-desarrollo.md#tarea-2-21) · [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) |
-| **Front** | [3.5](docs/08-plan-de-desarrollo.md#tarea-3-5) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) |
+| **API** | [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **Base** | [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [2.21](docs/08-plan-de-desarrollo.md#tarea-2-21) · [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2) |
+| **Front** | [3.5](docs/08-plan-de-desarrollo.md#tarea-3-5) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Contrato** | [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
 <!-- /generado:plan-listas-ya -->
@@ -132,13 +134,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **79 tareas y 98,5 días de trabajo** de 138 tareas del plan.
+Quedan **77 tareas y 96 días de trabajo** de 138 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 14,8 semanas | **17,8 semanas** |
-| 2 | 8,3 semanas | **11,3 semanas** |
-| 3 | 7,0 semanas | **10,0 semanas** |
+| 1 | 14,4 semanas | **17,4 semanas** |
+| 2 | 8,1 semanas | **11,1 semanas** |
+| 3 | 6,7 semanas | **9,7 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -240,12 +242,15 @@ o indirectamente. No es el orden en que se descubrieron.
 - [x] [**0.6**](docs/08-plan-de-desarrollo.md#tarea-0-6) Secretos fuera del repositorio: variables de entorno en la API y `--dart-define` en el
       front · API, Front
 - [x] [**0.7**](docs/08-plan-de-desarrollo.md#tarea-0-7) Integración continua por proyecto: formato, análisis, pruebas y compilación · API, Front
-- [ ] 🚧⚡ [**0.8**](docs/08-plan-de-desarrollo.md#tarea-0-8) Imagen de la API arrancando **en dev**, en Railway ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)). El `Dockerfile` ya existía;
-      lo que faltaba era que la aplicación leyera el `PORT` que le inyectan —hoy lo ignora y queda
-      inalcanzable con el proceso vivo— y que la sonda de disponibilidad mirara la base en vez de
-      responder `UP` con ella caída. Los otros tres ambientes, en el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · API
-- [ ] 🚧🔒 [**0.9**](docs/08-plan-de-desarrollo.md#tarea-0-9) Entrega a dev al fusionar ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)), con la receta de construcción del front
-      —`Dockerfile`, `nginx` y `.dockerignore`— que hasta ahora no existía · API, Front
+- [x] [**0.8**](docs/08-plan-de-desarrollo.md#tarea-0-8) Imagen de la API arrancando **en dev**, en Railway ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)) · API — la aplicación
+      lee el `PORT` que le inyectan, y la sonda de disponibilidad mira la base en vez de responder
+      `UP` con ella caída: `/actuator/health/readiness` contesta `UP` en dev, así que arranca **y**
+      alcanza la base. Los otros tres ambientes, en el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9)
+- [x] [**0.9**](docs/08-plan-de-desarrollo.md#tarea-0-9) Entrega a dev al fusionar ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)), con la receta de construcción del front
+      —`Dockerfile`, `nginx` y `.dockerignore`— que hasta ahora no existía · API, Front — dev sirve
+      la `0.3.0`, que es lo último de `develop`, y los dos servicios tienen su último despliegue en
+      `SUCCESS`. Se marcó **al ver el despliegue en verde**, no al fusionar, como fijó `plan/15`: el
+      artefacto publicado ya trae `X-Prisma-Firma`
 - [x] [**0.10**](docs/08-plan-de-desarrollo.md#tarea-0-10) SemVer y migraciones con `schema_version` · Base — la tabla guarda una fila por
       versión publicada y hoy va por la `0.3.0`, con sus etiquetas de [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) puestas. Desde el
       [ADR-034](docs/adr/ADR-034-la-version-sube-en-cada-pr.md) la API la lee de la base, en vez de la variable `PRISMA_ESQUEMA`, y cada migración
@@ -598,16 +603,16 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       manifiesto en español con el tema del mockup, y la cola en IndexedDB que sobrevive a cerrar la
       aplicación: guarda la intención con su clave antes de enviarla, reintenta con la espera de
       [17 §5.2](docs/17-resiliencia-offline-y-cache.md#52-cuánto-se-espera-entre-reintentos) y deja «no sincronizada», con el mensaje de la API, lo que se rechazó con motivo
-- [ ] 🔒 [**9.2**](docs/08-plan-de-desarrollo.md#tarea-9-2) Ambiente uat con datos anonimizados y su semilla · Base, API
+- [ ] ⚡ [**9.2**](docs/08-plan-de-desarrollo.md#tarea-9-2) Ambiente uat con datos anonimizados y su semilla · Base, API
 - [ ] 🔒 [**9.3**](docs/08-plan-de-desarrollo.md#tarea-9-3) Promoción de uat a prod sin recompilar · API, Front
-- [ ] 🔒 [**9.4**](docs/08-plan-de-desarrollo.md#tarea-9-4) Reversión ensayada en qa, con el tiempo medido · API, Front
+- [ ] ⚡ [**9.4**](docs/08-plan-de-desarrollo.md#tarea-9-4) Reversión ensayada en qa, con el tiempo medido · API, Front
 - [ ] 🔒 [**9.5**](docs/08-plan-de-desarrollo.md#tarea-9-5) Prueba de permisos con sesión real en los cuatro ambientes · API
-- [ ] 🔒 [**9.6**](docs/08-plan-de-desarrollo.md#tarea-9-6) Pruebas de extremo a extremo de los flujos críticos en qa · API, Front
-- [ ] 🔒 [**9.7**](docs/08-plan-de-desarrollo.md#tarea-9-7) Rendimiento en celular real con 4G · Front
-- [ ] 🔒 [**9.8**](docs/08-plan-de-desarrollo.md#tarea-9-8) Repaso de secretos: nada en los repositorios y `service_role` solo en migraciones · API
-- [ ] 🔒 [**9.9**](docs/08-plan-de-desarrollo.md#tarea-9-9) El front rechaza de verdad un MAJOR de API distinto · Front
+- [ ] ⚡ [**9.6**](docs/08-plan-de-desarrollo.md#tarea-9-6) Pruebas de extremo a extremo de los flujos críticos en qa · API, Front
+- [ ] ⚡ [**9.7**](docs/08-plan-de-desarrollo.md#tarea-9-7) Rendimiento en celular real con 4G · Front
+- [ ] ⚡ [**9.8**](docs/08-plan-de-desarrollo.md#tarea-9-8) Repaso de secretos: nada en los repositorios y `service_role` solo en migraciones · API
+- [ ] ⚡ [**9.9**](docs/08-plan-de-desarrollo.md#tarea-9-9) El front rechaza de verdad un MAJOR de API distinto · Front
 - [ ] 🔒 [**9.10**](docs/08-plan-de-desarrollo.md#tarea-9-10) Etiquetar `1.0.0` del front y de la API · API, Front
-- [ ] 🔒 [**9.11**](docs/08-plan-de-desarrollo.md#tarea-9-11) Swagger detrás de autenticación en prod · API
+- [ ] ⚡ [**9.11**](docs/08-plan-de-desarrollo.md#tarea-9-11) Swagger detrás de autenticación en prod · API
 
 ---
 
@@ -732,11 +737,6 @@ a `anon`.
 
 ## 9. A vigilar
 
-- **Dev tiene las tablas de la `0.3.0` y su `schema_version` dice `0.2.0`.** La migración que publica
-  la `0.3.0` se aplicó en qa con la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12) y en dev no. Desde que la API lee la tabla ([ADR-034](docs/adr/ADR-034-la-version-sube-en-cada-pr.md)), «Acerca de»
-  dice en dev `0.2.0`, que es lo que esa base dice de sí misma. Se arregla aplicándole a dev lo que le
-  falta, con el CLI vinculado a dev, y no editando nada: es escribir en un ambiente remoto y lo hace
-  quien tiene las llaves.
 - **«La versión subió» avisa, pero todavía no bloquea el botón de fusionar.** Es un trabajo más de la
   integración continua de los tres repositorios de código, y GitHub deja fusionar un PR en rojo
   mientras la comprobación no esté marcada como obligatoria en la protección de `develop`. Lo que sí
@@ -1841,6 +1841,21 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **Las cadenas del guion de `prisma_db` van sin tildes.** Windows PowerShell 5.1 lee un `.ps1`
       sin BOM como ANSI, y una raya dentro de una cadena se vuelve una comilla tipográfica que cierra
       la cadena. Los demás guiones no llevan BOM, y ponérselo a uno solo sería una excepción más
+
+**De poner el tablero al día (`plan/24-el-tablero-alcanza-a-lo-hecho.md`):**
+
+- [ ] **El plan 23 se escribió después de su trabajo, y es el único del proyecto.**
+      `plan/23-el-alta-decia-algo-salio-mal.md` se cita en el [§1.3](#13--en-progreso), en este mismo [§10](#10-decisiones-de-construcción-que-conviene-revisar) y en
+      [`contrato/README.md`](contrato/README.md), y no estaba en disco. Se reconstruyó el 2026-09-19 del commit
+      `c004260` de `prisma_api` y del `209db9b` de esta especificación, que bastaban para escribirlo
+      fiel, y lo declara en su propia cabecera. **Contradice al [22 §10](docs/22-documentacion.md#planes)** —«lo que no vale es
+      implementar primero y escribir el plan después»—. La alternativa era borrar las tres
+      referencias y dejar el único cambio del proyecto sin plan, con un hueco de numeración que
+      `verificar` rechaza en cuanto se escriba el siguiente
+- [ ] 🔒 **La [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) y la [0.9](docs/08-plan-de-desarrollo.md#tarea-0-9) se marcaron sin PR de tarea propio.** Las dos llevaban 🚧 desde
+      el 2026-09-17 y su trabajo ya estaba fusionado; lo que faltaba era mirar si había surtido
+      efecto, y lo había. Se marcan en este PR de tablero y no en el de su tarea, como pide el
+      [21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración), porque esos PR entraron hace dos días
 
 ---
 
