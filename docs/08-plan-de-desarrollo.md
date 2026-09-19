@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [5.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -11,7 +11,7 @@ cuánto dura el desarrollo según cuántos carriles avancen a la vez. Un carril 
 persona, un equipo o una sesión de trabajo; al plan le da igual.
 
 <!-- generado:plan-resumen · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**27,6 semanas con 1 carril**, **16,7 semanas con 2 carriles** y **14,0 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
+**28,0 semanas con 1 carril**, **17,0 semanas con 2 carriles** y **14,1 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
 <!-- /generado:plan-resumen -->
 
 > **El plan de 7 sprints daba por hecho que no había backend.**
@@ -119,13 +119,13 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 ### 1.1 Cuánto dura con 1, 2 o 3 carriles activos
 
 <!-- generado:plan-calendario · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**163,5 días de trabajo en 134 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
+**166,5 días de trabajo en 138 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
 
 | Carriles activos | Desarrollo | Estabilización | Total | Frente a 1 carril |
 |:---:|---:|---:|---:|---:|
-| 1 | 24,6 semanas | 3 semanas | **27,6 semanas** | — |
-| 2 | 13,7 semanas | 3 semanas | **16,7 semanas** | −10,8 semanas |
-| 3 | 11,0 semanas | 3 semanas | **14,0 semanas** | −13,6 semanas |
+| 1 | 25,0 semanas | 3 semanas | **28,0 semanas** | — |
+| 2 | 14,0 semanas | 3 semanas | **17,0 semanas** | −11,0 semanas |
+| 3 | 11,1 semanas | 3 semanas | **14,1 semanas** | −13,9 semanas |
 
 | Hito | 1 carril | 2 carriles | 3 carriles |
 |---|:---:|:---:|:---:|
@@ -135,11 +135,11 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 | [H4](#h4) · Sprint 3 | semana 13 | semana 8 | semana 6 |
 | [H5](#h5) · Sprint 4 | semana 16 | semana 9 | semana 8 |
 | [H6](#h6) · Sprint 5 | semana 17 | semana 10 | semana 8 |
-| [H7](#h7) · Sprint 6 | semana 20 | semana 12 | semana 9 |
-| [H8](#h8) · Sprint 7 | semana 21 | semana 12 | semana 10 |
-| [H9](#h9) · Sprint 8 | semana 23 | semana 14 | semana 12 |
-| [H10](#h10) · Sprint 9 | semana 25 | semana 14 | semana 11 |
-| [H11](#h11) · go-live | semana 28 | semana 17 | semana 15 |
+| [H7](#h7) · Sprint 6 | semana 20 | semana 12 | semana 10 |
+| [H8](#h8) · Sprint 7 | semana 21 | semana 13 | semana 10 |
+| [H9](#h9) · Sprint 8 | semana 24 | semana 14 | semana 12 |
+| [H10](#h10) · Sprint 9 | semana 26 | semana 15 | semana 11 |
+| [H11](#h11) · go-live | semana 29 | semana 18 | semana 15 |
 <!-- /generado:plan-calendario -->
 
 **Cómo se calcula.** Se reparten las tareas en el tiempo respetando sus dependencias, siempre
@@ -179,53 +179,53 @@ gantt
     S0 :api0, 2026-09-15, 2026-10-05
     S1 :api1, 2026-09-22, 2026-10-07
     S2 :api2, 2026-10-07, 2026-10-24
-    S3 :api3, 2026-10-08, 2026-10-26
-    S4 :api4, 2026-10-14, 2026-11-04
-    S5 :api5, 2026-10-24, 2026-11-06
-    S6 :api6, 2026-11-02, 2026-11-12
-    S7 :api7, 2026-10-26, 2026-11-17
-    S8 :api8, 2026-10-27, 2026-12-01
-    S9 :api9, 2026-11-18, 2026-11-27
+    S3 :api3, 2026-10-09, 2026-10-26
+    S4 :api4, 2026-10-21, 2026-11-04
+    S5 :api5, 2026-10-24, 2026-11-05
+    S6 :api6, 2026-11-06, 2026-11-17
+    S7 :api7, 2026-10-28, 2026-11-19
+    S8 :api8, 2026-11-04, 2026-12-02
+    S9 :api9, 2026-11-19, 2026-11-28
 
     section Base
     S0 :base0, 2026-09-16, 2026-09-19
     S1 :base1, 2026-09-19, 2026-10-04
     S2 :base2, 2026-10-04, 2026-10-19
-    S3 :base3, 2026-10-12, 2026-10-14
-    S4 :base4, 2026-10-30, 2026-11-02
-    S5 :base5, 2026-10-28, 2026-10-30
-    S6 :base6, 2026-11-08, 2026-11-10
-    S8 :base8, 2026-11-15, 2026-11-18
-    S9 :base9, 2026-11-17, 2026-11-18
+    S3 :base3, 2026-10-14, 2026-10-21
+    S4 :base4, 2026-10-24, 2026-11-02
+    S5 :base5, 2026-10-30, 2026-10-31
+    S6 :base6, 2026-11-12, 2026-11-14
+    S8 :base8, 2026-11-08, 2026-11-10
+    S9 :base9, 2026-11-19, 2026-11-20
 
     section Front
     S0 :front0, 2026-09-15, 2026-10-03
-    S1 :front1, 2026-09-25, 2026-10-01
+    S1 :front1, 2026-09-27, 2026-10-01
     S2 :front2, 2026-10-06, 2026-10-20
-    S3 :front3, 2026-10-10, 2026-10-18
-    S5 :front5, 2026-11-04, 2026-11-05
-    S6 :front6, 2026-11-05, 2026-11-12
-    S7 :front7, 2026-11-14, 2026-11-16
-    S9 :front9, 2026-11-12, 2026-11-20
+    S3 :front3, 2026-10-12, 2026-10-18
+    S5 :front5, 2026-11-02, 2026-11-04
+    S6 :front6, 2026-11-10, 2026-11-16
+    S7 :front7, 2026-11-16, 2026-11-19
+    S9 :front9, 2026-11-05, 2026-11-22
 
     section Contrato
     S1 :contrato1, 2026-09-24, 2026-09-25
     S2 :contrato2, 2026-10-05, 2026-10-06
-    S3 :contrato3, 2026-10-09, 2026-10-10
-    S4 :contrato4, 2026-10-20, 2026-10-21
-    S5 :contrato5, 2026-10-25, 2026-10-26
+    S3 :contrato3, 2026-10-11, 2026-10-12
+    S4 :contrato4, 2026-10-23, 2026-10-24
+    S5 :contrato5, 2026-10-26, 2026-10-27
     S6 :contrato6, 2026-10-26, 2026-10-27
-    S7 :contrato7, 2026-10-26, 2026-10-27
-    S8 :contrato8, 2026-10-26, 2026-10-27
+    S7 :contrato7, 2026-10-27, 2026-10-28
+    S8 :contrato8, 2026-11-04, 2026-11-05
 
     section Decisión
     S0 :decisin0, 2026-09-15, 2026-09-16
     S1 :decisin1, 2026-09-15, 2026-09-16
 
     section Implantación
-    Estabilización y aprobación en UAT :est, 2026-12-01, 2026-12-15
-    Migración y capacitación :mig, 2026-12-15, 2026-12-22
-    Go-live :milestone, 2026-12-22, 0d
+    Estabilización y aprobación en UAT :est, 2026-12-02, 2026-12-16
+    Migración y capacitación :mig, 2026-12-16, 2026-12-23
+    Go-live :milestone, 2026-12-23, 0d
 ```
 <!-- /generado:plan-gantt -->
 
@@ -409,19 +409,21 @@ mismo `POST` enviado dos veces con la misma clave deja un solo movimiento.
 | <a id="tarea-2-5"></a>2.5 | Trigger `tg_proteger_ultima_gerencia`: no se puede desactivar ni degradar al último usuario de Gerencia | Base | [2.4](#tarea-2-4) | 0,5 |
 | <a id="tarea-2-6"></a>2.6 | Pantalla de acceso y cambio obligatorio de contraseña en el primer ingreso | Front | [1.18](#tarea-1-18), [2.19](#tarea-2-19) | 1,5 |
 | <a id="tarea-2-7"></a>2.7 | Gestión de usuarios: crear, editar, desactivar con motivo y restablecer clave | API, Front | [1.14](#tarea-1-14), [2.1](#tarea-2-1) | 1,5 |
-| <a id="tarea-2-8"></a>2.8 | Catálogo de cargos: crear, renombrar, reordenar y desactivar con motivo | API, Front | [2.1](#tarea-2-1), [2.3](#tarea-2-3) | 1 |
-| <a id="tarea-2-9"></a>2.9 | Registro de cada inicio de sesión con fecha, dispositivo e IP | API, Base | [2.1](#tarea-2-1) | 1 |
+| <a id="tarea-2-8"></a>2.8 | Catálogo de cargos: crear, renombrar, reordenar y desactivar con motivo | API, Front | [2.1](#tarea-2-1), [2.3](#tarea-2-3), [2.22](#tarea-2-22) | 1 |
+| <a id="tarea-2-9"></a>2.9 | Registro de cada inicio de sesión con fecha, dispositivo e IP | API, Base | [2.1](#tarea-2-1), [2.21](#tarea-2-21) | 1 |
 | <a id="tarea-2-10"></a>2.10 | Panel «Acerca de»: versión del front, de la API y del esquema, ambiente, fecha de compilación y referencia del commit ([RF-100](03-requisitos-y-bdd.md#rf-100)) | Front, API | [0.11](#tarea-0-11), [0.12](#tarea-0-12) | 0,5 |
 | <a id="tarea-2-11"></a>2.11 | La prueba de permisos del [Sprint 1](#sprint-1) se ejecuta también en qa, contra la base de qa | API | [1.7](#tarea-1-7), [1.12](#tarea-1-12) | 0,5 |
 | <a id="tarea-2-12"></a>2.12 | **Clave de firma de sesión**: la API la entrega al iniciar sesión y el front la guarda **solo en memoria**, nunca en disco ni en `localStorage` | API, Front | [2.1](#tarea-2-1) | 1 |
 | <a id="tarea-2-13"></a>2.13 | **Filtro de firma** en la API: HMAC del método, la ruta, la marca de tiempo, el nonce y el resumen del cuerpo; rechaza con `40101`, `40102` y `40103` según el caso | API | [2.12](#tarea-2-12), [2.20](#tarea-2-20) | 1,5 |
 | <a id="tarea-2-14"></a>2.14 | La API devuelve la navegación que esa sesión puede ver y el front la pinta sin decidir nada ([RF-103](03-requisitos-y-bdd.md#rf-103)) | API, Front | [2.1](#tarea-2-1) | 1 |
-| <a id="tarea-2-15"></a>2.15 | Tabla única de usuarios activos y desactivados, con el estado y la fecha y hora de desactivación en cada fila, y cambio de estado desde la propia tabla con confirmación y motivo escrito ([RF-84](03-requisitos-y-bdd.md#rf-84) … [RF-87](03-requisitos-y-bdd.md#rf-87)) | API, Front | [2.7](#tarea-2-7) | 1,5 |
-| <a id="tarea-2-16"></a>2.16 | Bitácora de todo cambio sobre usuarios y cargos —quién, cuándo y por qué— y reversión que escribe una entrada nueva sin borrar la original; se rechaza la reversión que dejaría el sistema sin Gerencia activa ([RF-88](03-requisitos-y-bdd.md#rf-88), [RF-89](03-requisitos-y-bdd.md#rf-89), [RF-91](03-requisitos-y-bdd.md#rf-91)) | Base, API, Front | [1.3](#tarea-1-3), [2.7](#tarea-2-7), [2.8](#tarea-2-8) | 2,5 |
+| <a id="tarea-2-15"></a>2.15 | Tabla única de usuarios activos y desactivados, con el estado y la fecha y hora de desactivación en cada fila, y cambio de estado desde la propia tabla con confirmación y motivo escrito ([RF-84](03-requisitos-y-bdd.md#rf-84) … [RF-87](03-requisitos-y-bdd.md#rf-87)) | API, Front | [2.7](#tarea-2-7), [2.21](#tarea-2-21) | 1,5 |
+| <a id="tarea-2-16"></a>2.16 | Bitácora de todo cambio sobre usuarios y cargos —quién, cuándo y por qué— y reversión que escribe una entrada nueva sin borrar la original; se rechaza la reversión que dejaría el sistema sin Gerencia activa ([RF-88](03-requisitos-y-bdd.md#rf-88), [RF-89](03-requisitos-y-bdd.md#rf-89), [RF-91](03-requisitos-y-bdd.md#rf-91)) | Base, API, Front | [1.3](#tarea-1-3), [2.7](#tarea-2-7), [2.8](#tarea-2-8), [2.21](#tarea-2-21) | 2,5 |
 | <a id="tarea-2-17"></a>2.17 | Cambio obligatorio de contraseña también al reactivar un usuario ([RF-90](03-requisitos-y-bdd.md#rf-90)) | API, Front | [2.7](#tarea-2-7) | 0,5 |
 | <a id="tarea-2-18"></a>2.18 | Vista previa de la interfaz de Operación para Gerencia, señalada de forma permanente y con salida a un clic, y la constancia de que **no sustituye la prueba de permisos con sesión real** ([RF-92](03-requisitos-y-bdd.md#rf-92) … [RF-94](03-requisitos-y-bdd.md#rf-94)) | Front, API | [2.14](#tarea-2-14) | 1,5 |
 | <a id="tarea-2-19"></a>2.19 | **Contrato de acceso, usuarios, cargos y canal firmado**: endpoints, cabeceras de firma y los códigos `40101` a `40103`, acordados antes de implementar | Contrato | [1.17](#tarea-1-17) | 1 |
 | <a id="tarea-2-20"></a>2.20 | **Tablas del canal firmado**: `sesiones`, donde vive del lado del servidor la clave que la [2.12](#tarea-2-12) entrega y hoy nadie guarda, y `nonces_vistos` ([04 §4.10](04-modelo-de-datos.md#410-los-nonce-vistos)), con sus políticas y la purga de la ventana | Base | [2.4](#tarea-2-4) | 0,5 |
+| <a id="tarea-2-21"></a>2.21 | **Auditoría de `usuarios` y eventos con nombre**: la variante `fn_auditar_usuarios`, que hoy no existe porque la genérica lee `anulado_en`; `fn_registrar_evento` con su firma, la columna `motivo` de `auditoria` y las cinco acciones que le faltan al `CHECK` ([04 §5.4](04-modelo-de-datos.md#54-auditoría-por-triggers)). Sin esto la bitácora solo enseña filas de `cargos` | Base | [1.3](#tarea-1-3), [2.4](#tarea-2-4) | 1,5 |
+| <a id="tarea-2-22"></a>2.22 | **`cargos`, dos reglas que el contrato ya promete**: el nombre único sin distinguir mayúsculas (`42214`, con `CITEXT` para conservar `cargos_nombre_key`) y el cargo con personas activas que no se desactiva (`40911`, con `tg_proteger_cargo_con_personas`). No agrega restricción nueva a la tabla de traducción | Base | [2.3](#tarea-2-3) | 0,5 |
 
 <!-- generado:plan-oleadas-2 · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **Qué puede ir a la vez en este sprint.** Cada oleada espera solo a las anteriores; dentro de una oleada, todo arranca junto.
@@ -429,8 +431,8 @@ mismo `POST` enviado dos veces con la misma clave deja un solo movimiento.
 | Oleada | Tareas | Carriles | Días |
 |:---:|---|---|---:|
 | 1 | [2.3](#tarea-2-3) · [2.10](#tarea-2-10) · [2.11](#tarea-2-11) · [2.19](#tarea-2-19) | Base, Front, API, Contrato | 3 |
-| 2 | [2.4](#tarea-2-4) · [2.6](#tarea-2-6) | Base, Front | 2,5 |
-| 3 | [2.1](#tarea-2-1) · [2.5](#tarea-2-5) · [2.20](#tarea-2-20) | API, Base | 2,5 |
+| 2 | [2.4](#tarea-2-4) · [2.6](#tarea-2-6) · [2.22](#tarea-2-22) | Base, Front | 3 |
+| 3 | [2.1](#tarea-2-1) · [2.5](#tarea-2-5) · [2.20](#tarea-2-20) · [2.21](#tarea-2-21) | API, Base | 4 |
 | 4 | [2.7](#tarea-2-7) · [2.8](#tarea-2-8) · [2.9](#tarea-2-9) · [2.12](#tarea-2-12) · [2.14](#tarea-2-14) | API | 5,5 |
 | 5 | [2.2](#tarea-2-2) · [2.13](#tarea-2-13) · [2.15](#tarea-2-15) · [2.16](#tarea-2-16) · [2.17](#tarea-2-17) · [2.18](#tarea-2-18) | API, Base, Front | 9 |
 <!-- /generado:plan-oleadas-2 -->
@@ -471,13 +473,14 @@ reenviada tal cual se rechaza por nonce repetido.
 | <a id="tarea-3-12"></a>3.12 | Cálculo de saldos por cuenta | API | [3.3](#tarea-3-3) | 1 |
 | <a id="tarea-3-13"></a>3.13 | **Contrato de movimientos**: registro, transferencias, anulación, adjuntos y filtros | Contrato | [2.19](#tarea-2-19) | 0,5 |
 | <a id="tarea-3-14"></a>3.14 | Tabla `adjuntos` y bucket de soportes: especificarla en el [04](04-modelo-de-datos.md) y escribir su migración | Base | [1.1](#tarea-1-1), [3.13](#tarea-3-13) | 1 |
+| <a id="tarea-3-15"></a>3.15 | **Las dos reglas de la cuenta de destino que solo vivían en el dominio** —`destino_solo_en_transferencia` y `destino_distinto_del_origen`, las dos bajo `42226`— y `fecha_no_futura` comparando contra el día de Bogotá y no contra el del huso de la sesión. Pide dos filas nuevas en la tabla de traducción de la API, **en el mismo PR** en que recoja el esquema | Base | [1.1](#tarea-1-1) | 0,5 |
 
 <!-- generado:plan-oleadas-3 · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **Qué puede ir a la vez en este sprint.** Cada oleada espera solo a las anteriores; dentro de una oleada, todo arranca junto.
 
 | Oleada | Tareas | Carriles | Días |
 |:---:|---|---|---:|
-| 1 | [3.1](#tarea-3-1) · [3.13](#tarea-3-13) | API, Contrato | 2 |
+| 1 | [3.1](#tarea-3-1) · [3.13](#tarea-3-13) · [3.15](#tarea-3-15) | API, Contrato, Base | 2,5 |
 | 2 | [3.2](#tarea-3-2) · [3.3](#tarea-3-3) · [3.5](#tarea-3-5) · [3.14](#tarea-3-14) | API, Front, Base | 5 |
 | 3 | [3.4](#tarea-3-4) · [3.11](#tarea-3-11) · [3.12](#tarea-3-12) | API | 2,5 |
 | 4 | [3.6](#tarea-3-6) · [3.7](#tarea-3-7) · [3.8](#tarea-3-8) · [3.9](#tarea-3-9) | Front, API | 5 |
@@ -507,15 +510,16 @@ segundos.
 | <a id="tarea-4-6"></a>4.6 | Listado ordenado por fecha con filtros | API, Front | [4.3](#tarea-4-3) | 1,5 |
 | <a id="tarea-4-7"></a>4.7 | Resaltado de pedidos estancados (15+ días con anticipo) | API, Front | [4.6](#tarea-4-6) | 1 |
 | <a id="tarea-4-8"></a>4.8 | Adjuntar factura al pedido | API, Front | [3.6](#tarea-3-6), [4.3](#tarea-4-3) | 0,5 |
-| <a id="tarea-4-9"></a>4.9 | Cancelación de pedido con destino del anticipo | API | [4.4](#tarea-4-4) | 1 |
+| <a id="tarea-4-9"></a>4.9 | Cancelación de pedido con destino del anticipo | API | [4.4](#tarea-4-4), [4.11](#tarea-4-11) | 1 |
 | <a id="tarea-4-10"></a>4.10 | **Contrato de clientes, pedidos y anticipos** | Contrato | [2.19](#tarea-2-19) | 0,5 |
+| <a id="tarea-4-11"></a>4.11 | **Dónde quedan el motivo de la cancelación y el destino del anticipo**: las cuatro columnas de `pedidos` que el contrato `0.10.0` ya declara y la tabla no tiene, con `cancelacion_con_motivo` y `destino_del_anticipo_valido`. Pide dos filas nuevas en la tabla de traducción de la API | Base | [1.1](#tarea-1-1) | 0,5 |
 
 <!-- generado:plan-oleadas-4 · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **Qué puede ir a la vez en este sprint.** Cada oleada espera solo a las anteriores; dentro de una oleada, todo arranca junto.
 
 | Oleada | Tareas | Carriles | Días |
 |:---:|---|---|---:|
-| 1 | [4.1](#tarea-4-1) · [4.10](#tarea-4-10) | API, Contrato | 2 |
+| 1 | [4.1](#tarea-4-1) · [4.10](#tarea-4-10) · [4.11](#tarea-4-11) | API, Contrato, Base | 2,5 |
 | 2 | [4.2](#tarea-4-2) · [4.4](#tarea-4-4) | API | 2,5 |
 | 3 | [4.3](#tarea-4-3) · [4.9](#tarea-4-9) | API | 3 |
 | 4 | [4.5](#tarea-4-5) · [4.6](#tarea-4-6) · [4.8](#tarea-4-8) | Base, API | 4 |
