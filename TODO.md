@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.16.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.17.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -786,6 +786,16 @@ a `anon`.
 ---
 
 ## 9. A vigilar
+
+- **La integración continua no corre [C-01](docs/12-pruebas-y-calidad.md#c-01), y por eso estuvo un día en rojo sin que nadie lo
+  viera.** El trabajo de CI de `prisma_api` corre `./gradlew build`, que **excluye la etiqueta
+  `integracion`** ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) [§4](docs/12-pruebas-y-calidad.md#4-juego-de-datos-de-prueba-oficial)), así que la prueba que cruza la tabla de traducción con `pg_constraint`
+  solo falla en la máquina de quien la corra a mano contra una base con el esquema puesto. Se
+  descubrió al hacer la [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10): la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) había fusionado la tabla `adjuntos` sin sus nueve filas,
+  y **su PR pudo fusionarse igual**. Lo arregló `plan/49-adjuntos-sin-mensaje.md`; lo que queda por
+  decidir es si [C-01](docs/12-pruebas-y-calidad.md#c-01) debe correr en la CI, que pide levantarle una base con el esquema y la
+  semilla. Mientras no corra, **toda promesa de las que solo miran las pruebas de integración
+  —[C-01](docs/12-pruebas-y-calidad.md#c-01) entre ellas— depende de que alguien se acuerde de correrlas**
 
 - **«La versión subió» avisa, pero todavía no bloquea el botón de fusionar.** Es un trabajo más de la
   integración continua de los tres repositorios de código, y GitHub deja fusionar un PR en rojo
@@ -2128,6 +2138,21 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **Un nombre de cuenta o de categoría no tiene largo máximo.** Se probó a ponerle uno y se
       quitó: el contrato no lo declara y la columna es `TEXT`, así que el `@Size` habría sido una
       regla inventada en el código. Si hace falta, se acuerda en el contrato primero
+
+**Del arreglo de los mensajes de `adjuntos` (`plan/49-adjuntos-sin-mensaje.md`):**
+
+- [ ] **El tamaño y el tipo de un adjunto salen por ahora como `42200`, no con su código.** El
+      contrato tiene `40020` para el archivo que pasa de 5 MB y `40021` para el que no es foto ni
+      PDF, y los dos están marcados como pendientes de emitir por la [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6), que es la que sube el
+      archivo. Se decidió **no adelantarlos**: emitirlos sin que ninguna ruta suba nada sería
+      afirmar algo que no pasa, y cambiaría la copia fijada del contrato. Lo que sí cambia es que
+      dejan de salir como `50000`. Es el mismo camino que siguieron los de `movimientos` entre la
+      [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) y la [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4)
+- [ ] **Las filas de una tabla nueva no tienen dueño mientras su tarea de API esté lejos.** El plan
+      de la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) dijo que las agregaría «`prisma_api` en el mismo PR en que recoja este esquema»,
+      y ese PR es el de la [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6), que está tres tareas más allá. Entre una cosa y otra, [C-01](docs/12-pruebas-y-calidad.md#c-01) queda
+      en rojo. **Conviene decidir si una tarea de Base que agrega tabla debe pedir sus filas en el
+      mismo sprint**, como ya hacen la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) y la [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) con las suyas
 
 ---
 
