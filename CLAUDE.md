@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [6.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -250,7 +250,9 @@ sigue dentro ([2.2](docs/08-plan-de-desarrollo.md#tarea-2-2))— y **Gerencia ya
 solo sabía hacer la semilla. **El [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) arrancó: el libro ya llega a PostgreSQL** ([3.3](docs/08-plan-de-desarrollo.md#tarea-3-3)), con el
 autor y el instante que puso el caso de uso y la base juzgando quién escribe. Y **qa dejó de ir
 atrás** ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)): se le aplicaron las cinco migraciones que le faltaban y su informe entero salió en
-`OK`, así que dev y qa vuelven a ser el mismo esquema. Van 53 de las 133 tareas, y lo que más
+`OK`, así que dev y qa vuelven a ser el mismo esquema. **Y Gerencia ya mira la pantalla como la ve
+la empleada** ([2.18](docs/08-plan-de-desarrollo.md#tarea-2-18)), sin que el front recorte nada: alternar el modo es volver a pedirle el menú
+a la API. Van 54 de las 133 tareas, y lo que más
 destraba ahora es el contrato de movimientos ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13)), medio día con 32 tareas detrás y lo único que
 les falta a los endpoints ([3.4](docs/08-plan-de-desarrollo.md#tarea-3-4)).
 

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [5.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -36,7 +36,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 16 | 2 | 1 | 3,5 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 16 | 0 | 4 | 5,5 |
-| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 20 | 12 | 0 | 8 | 9 |
+| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 20 | 13 | 0 | 7 | 7,5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 4 | 0 | 9 | 10,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 1 | 0 | 9 | 11 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 3 | 0 | 7 | 7 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 11 | 1 | 0 | 10 | 9,5 |
-| **Total** | **133** | **53** | **2** | **78** | **99,5** |
+| **Total** | **133** | **54** | **2** | **77** | **98** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -96,9 +96,10 @@ carril Contrato, con los de los sprints 3 a 8. **El acceso está cerrado de punt
 sesión de 30 días ([2.2](docs/08-plan-de-desarrollo.md#tarea-2-2)) se entra, se recarga la página y se sigue dentro, se sale por el menú de
 la sesión y quien entra con clave temporal la cambia y llega al tablero. Y con la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) **Gerencia ya
 puede dar de alta a alguien**, que era lo último que solo sabía hacer `seed.sql`. Lo que queda del
-[Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) es el catálogo de cargos ([2.8](docs/08-plan-de-desarrollo.md#tarea-2-8)), el registro de cada ingreso ([2.9](docs/08-plan-de-desarrollo.md#tarea-2-9)), la vista previa de
-Operación ([2.18](docs/08-plan-de-desarrollo.md#tarea-2-18)) y lo que cuelga de la pantalla de usuarios: su tabla completa ([2.15](docs/08-plan-de-desarrollo.md#tarea-2-15)), la bitácora
-([2.16](docs/08-plan-de-desarrollo.md#tarea-2-16)) y la clave obligatoria al reactivar ([2.17](docs/08-plan-de-desarrollo.md#tarea-2-17)). **Y el [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) arrancó por lo que más
+[Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) es el catálogo de cargos ([2.8](docs/08-plan-de-desarrollo.md#tarea-2-8)), el registro de cada ingreso ([2.9](docs/08-plan-de-desarrollo.md#tarea-2-9)) y lo que cuelga de
+la pantalla de usuarios: su tabla completa ([2.15](docs/08-plan-de-desarrollo.md#tarea-2-15)), la bitácora ([2.16](docs/08-plan-de-desarrollo.md#tarea-2-16)) y la clave
+obligatoria al reactivar ([2.17](docs/08-plan-de-desarrollo.md#tarea-2-17)). **Con la [2.18](docs/08-plan-de-desarrollo.md#tarea-2-18) el carril Front cerró su parte del sprint:**
+Gerencia ya mira la pantalla como la ve la empleada, y sale de ahí con un clic. **Y el [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) arrancó por lo que más
 destrababa: el libro ya llega a PostgreSQL** ([3.3](docs/08-plan-de-desarrollo.md#tarea-3-3)). A los endpoints de movimientos ([3.4](docs/08-plan-de-desarrollo.md#tarea-3-4)) ya solo les
 falta su contrato ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13)), medio día que además abre el registro rápido del front ([3.5](docs/08-plan-de-desarrollo.md#tarea-3-5)). La
 lista al día la calcula la herramienta, y está justo abajo.
@@ -120,7 +121,6 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 |---|---|
 | **API** | [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) · [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
 | **Base** | [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) |
-| **Front** | [2.18](docs/08-plan-de-desarrollo.md#tarea-2-18) |
 | **Contrato** | [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
 <!-- /generado:plan-listas-ya -->
@@ -128,13 +128,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **80 tareas y 99,5 días de trabajo** de 133 tareas del plan.
+Quedan **79 tareas y 98 días de trabajo** de 133 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 15,0 semanas | **18,0 semanas** |
+| 1 | 14,7 semanas | **17,7 semanas** |
 | 2 | 8,3 semanas | **11,3 semanas** |
-| 3 | 6,8 semanas | **9,8 semanas** |
+| 3 | 6,7 semanas | **9,7 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -403,7 +403,16 @@ hasta aplicarlo y probarlo.
 - [ ] ⚡ [**2.15**](docs/08-plan-de-desarrollo.md#tarea-2-15) Tabla única de usuarios activos y desactivados ([RF-84](docs/03-requisitos-y-bdd.md#rf-84) a [RF-87](docs/03-requisitos-y-bdd.md#rf-87)) · API, Front
 - [ ] 🔒 [**2.16**](docs/08-plan-de-desarrollo.md#tarea-2-16) Bitácora de cambios y reversión sin borrar ([RF-88](docs/03-requisitos-y-bdd.md#rf-88), [RF-89](docs/03-requisitos-y-bdd.md#rf-89), [RF-91](docs/03-requisitos-y-bdd.md#rf-91)) · Base, API, Front
 - [ ] ⚡ [**2.17**](docs/08-plan-de-desarrollo.md#tarea-2-17) Cambio de clave obligatorio al reactivar ([RF-90](docs/03-requisitos-y-bdd.md#rf-90)) · API, Front
-- [ ] ⚡ [**2.18**](docs/08-plan-de-desarrollo.md#tarea-2-18) Vista previa de Operación para Gerencia ([RF-92](docs/03-requisitos-y-bdd.md#rf-92) a [RF-94](docs/03-requisitos-y-bdd.md#rf-94)) · Front, API
+- [x] [**2.18**](docs/08-plan-de-desarrollo.md#tarea-2-18) Vista previa de Operación para Gerencia ([RF-92](docs/03-requisitos-y-bdd.md#rf-92) a [RF-94](docs/03-requisitos-y-bdd.md#rf-94)) · Front, API — el
+      contrato ya la declaraba entera y ahora el servidor la cumple: `vista=operacion` devuelve el
+      menú de Operación y el aviso de la franja, y **volver a mi vista es pedir la navegación con el
+      cuerpo vacío**, que por eso no tiene un `vista=gerencia`. **El front no recorta el menú: lo
+      vuelve a pedir** ([ADR-018](docs/adr/ADR-018-front-sin-decisiones.md)), y `frontera_test.dart` ya lo hacía imposible de otra forma. Las dos
+      banderas siguen saliendo del tipo **real**: `puedeGestionarUsuarios` cae ([A-17](docs/12-pruebas-y-calidad.md#a-17)) y
+      `puedeVerComoOperacion` no ([A-18](docs/12-pruebas-y-calidad.md#a-18)), o Gerencia quedaría atrapada. La franja no se cierra
+      ([A-19](docs/12-pruebas-y-calidad.md#a-19)), se apila con la de ambiente, y su texto lo redacta la API: el título y el párrafo del
+      [RF-94](docs/03-requisitos-y-bdd.md#rf-94) entraron al mapa de `frontera_test.dart`, así que escribirlos en `lib/` rompe la
+      compilación
 - [x] [**2.20**](docs/08-plan-de-desarrollo.md#tarea-2-20) Tablas del canal firmado: `sesiones` y `nonces_vistos` · Base — apareció al ir a
       hacer la [2.13](docs/08-plan-de-desarrollo.md#tarea-2-13): el filtro no tenía dónde leer la clave de firma que la [2.12](docs/08-plan-de-desarrollo.md#tarea-2-12) entrega
       y olvida, y `nonces_vistos` llevaba días especificada en el [04 §4.10](docs/04-modelo-de-datos.md#410-los-nonce-vistos) sin que ninguna
@@ -842,9 +851,10 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **El código `40302` entra al catálogo de la API.** El contrato acordado lo tenía desde la
       [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) marcado como pendiente de la [2.1](docs/08-plan-de-desarrollo.md#tarea-2-1), que no lo emitió. Lo emite esta tarea: quien entró con
       la contraseña temporal no recibe menú
-- [ ] **La operación no acepta `vista=operacion`**, que el contrato declara para la vista previa de
-      Gerencia. Es la [2.18](docs/08-plan-de-desarrollo.md#tarea-2-18), y declarar lo que no se emite es el error que esta misma lista ya
-      tiene anotado para la cookie de renovación
+- [x] **La operación ya acepta `vista=operacion`** — lo cerró la [2.18](docs/08-plan-de-desarrollo.md#tarea-2-18). Estuvo declarado sin
+      emitirse desde la [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19), que es el error que esta misma lista tenía anotado para la cookie de
+      renovación, y la copia fijada del contrato convergió hacia el acordado sin subirle la versión:
+      no se declaró nada nuevo, se empezó a cumplir lo que ya estaba escrito
 - [ ] **El menú pinta y no lleva a ninguna parte todavía.** Las pantallas de cada sección son de los
       sprints 3 a 8; la activa se marca y el contenido es un marcador de posición
 
@@ -1132,6 +1142,24 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       no cambió nada: uat y prod siguen esperando al [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) y no se contrató nada. Poner precio a lo
       ya decidido no es decidir de nuevo. Lo que sí apareció es que el [ADR-033](docs/adr/ADR-033-service-role-solo-en-auth.md) **no estaba en el índice
       de ADR**, que por eso contaba 32
+
+**De la vista previa de Operación (tarea [2.18](docs/08-plan-de-desarrollo.md#tarea-2-18)):**
+
+- [ ] **A Operación se le ignora el pedido de vista previa, en vez de rechazárselo.** Ningún
+      documento dice qué hacer con ese caso: el contrato declara la operación con un `40300` entre
+      sus códigos posibles y dice que «solo la pide Gerencia», pero no declara esa respuesta y
+      ninguna prueba la pide. Se decidió lo mínimo —quien no es Gerencia recibe su propio menú, sin
+      franja y sin interruptor—, porque pedirla sería pedir el menú que ya tiene y rechazarla
+      abriría un camino de error que nadie especificó. Si quien dirige prefiere el rechazo, es una
+      línea en `MenuDeLaSesion` y una prueba
+- [ ] **El [10 §2.1](docs/10-ux-y-mockups.md) nombra tres secciones que el contrato no tiene:** «Configuración», «Inicio» y
+      «Mi desprendible». No estorbaron a esta tarea —el [10 §5.6](docs/10-ux-y-mockups.md#56-vista-previa-de-operación) solo habla de Inversiones, Reportes y
+      Nómina, y esas tres sí están entre las ocho claves— pero o el documento sobra tres o el
+      contrato le faltan tres, y eso lo decide quien dirige y no el carril que pinta
+- [ ] **La mitad de la vista previa que no se pudo construir es la que no tiene pantalla.** El
+      [10 §5.6](docs/10-ux-y-mockups.md) también pide que «Productos deje de mostrar costos y márgenes» y que «Nómina quede
+      bloqueada»: las dos pantallas son de los sprints 5 y 8, así que hoy la sección simplemente no
+      viene en el menú, que es lo que sí se puede comprobar. Al construirlas hay que volver aquí
 
 **Del front (tareas [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19), [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19), [1.18](docs/08-plan-de-desarrollo.md#tarea-1-18), [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10) y [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1)):**
 
