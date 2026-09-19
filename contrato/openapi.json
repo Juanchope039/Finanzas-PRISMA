@@ -29,6 +29,86 @@
         "required" : [ "estado", "fechaCompra", "id", "nombre", "valorCompra" ],
         "type" : "object"
       },
+      "Adelanto" : {
+        "description" : "Plata entregada a cuenta del salario. Baja la caja, crea una cuenta por cobrar y no registra gasto: el gasto se reconoce entero en la liquidación (RN-11, 06 §7)",
+        "properties" : {
+          "antiguedadDias" : {
+            "description" : "Cuántos días lleva sin descontarse. Ausente cuando ya se descontó. Es lo que el panel muestra junto a la cuenta por cobrar viva (06 §7)",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "anulacion" : {
+            "$ref" : "#/components/schemas/Anulacion",
+            "description" : "Ausente mientras el adelanto esté vigente"
+          },
+          "cuenta" : {
+            "description" : "El nombre de la cuenta de donde salió",
+            "type" : "string"
+          },
+          "cuentaId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "descontadoEn" : {
+            "description" : "La liquidación que lo descontó. Ausente mientras siga pendiente: es lo que el índice parcial idx_adelantos_pendientes vigila para que no se descuente dos veces",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "descripcion" : {
+            "type" : "string"
+          },
+          "empleada" : {
+            "description" : "El nombre de la empleada, para pintar la fila sin pedir otra consulta",
+            "type" : "string"
+          },
+          "empleadaId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "fecha" : {
+            "description" : "El día en que se entregó",
+            "format" : "date",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "movimientoId" : {
+            "description" : "El movimiento de tipo adelanto_empleada que lo registró en el libro",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "valor" : {
+            "description" : "Pesos enteros, mayor que cero",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "empleadaId", "fecha", "id", "movimientoId", "valor" ],
+        "type" : "object"
+      },
+      "AdelantoDescontado" : {
+        "description" : "Un adelanto que esta liquidación canceló, con su fecha, que es como sale en el desprendible (06 §8)",
+        "properties" : {
+          "fecha" : {
+            "description" : null,
+            "format" : "date",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "valor" : {
+            "description" : null,
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "fecha", "id", "valor" ],
+        "type" : "object"
+      },
       "Adjunto" : {
         "description" : "Un soporte del movimiento: la foto del recibo o el PDF de la factura",
         "properties" : {
@@ -52,6 +132,75 @@
           }
         },
         "required" : [ "bytes", "id", "nombre", "tipo" ],
+        "type" : "object"
+      },
+      "AlternativaDeContratacion" : {
+        "description" : "Lo que el sistema propone cuando no alcanza, en vez de quedarse en «no» (06 §5)",
+        "properties" : {
+          "clave" : {
+            "description" : "Cuál de las cinco del 06 §5 es",
+            "enum" : [ "medio_tiempo", "por_obra", "aumentar_ventas", "subir_precios", "reducir_ocio" ],
+            "type" : "string"
+          },
+          "detalle" : {
+            "description" : "Los números de esa alternativa, no el consejo genérico",
+            "type" : "string"
+          },
+          "titulo" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "clave", "detalle", "titulo" ],
+        "type" : "object"
+      },
+      "AnticipoMinimo" : {
+        "description" : "Si el anticipo cubre el costo directo del pedido, y cuánto falta si no (RF-38, RF-39, CU-12, 05 §5). El front pinta la lectura y no calcula ninguna cifra (ADR-018)",
+        "properties" : {
+          "anticipoConfigurado" : {
+            "description" : "El porcentaje configurado sobre el valor total, en pesos",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "anticipoConfiguradoPct" : {
+            "description" : "El que traía la consulta",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "anticipoMinimoPct" : {
+            "description" : "Costo directo sobre valor total, en puntos",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "anticipoSugeridoPct" : {
+            "description" : "El mínimo redondeado hacia arriba a múltiplo de 5, con 5 puntos de holgura (05 §5.2)",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "costoDirecto" : {
+            "description" : "La suma del costo de las líneas: insumo, consumibles y tiempo, al costo vigente de cada producto",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "cubre" : {
+            "description" : "El anticipo configurado alcanza para el costo directo. Con true no hay advertencia (BDD-12-2)",
+            "type" : "boolean"
+          },
+          "faltante" : {
+            "description" : "Costo directo menos el anticipo configurado. Cero cuando cubre. Es la plata que el negocio pone de su bolsillo hasta la entrega",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "lectura" : {
+            "$ref" : "#/components/schemas/Lectura",
+            "description" : "El aviso con sus montos, como «Este pedido tiene 35% de margen. Con el 50% de anticipo pones $78.000 de tu bolsillo hasta la entrega. Anticipo sugerido: 70%.» (05 §5.3)"
+          },
+          "valorTotal" : {
+            "description" : "Pesos enteros. Sale de las líneas",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "anticipoConfigurado", "anticipoConfiguradoPct", "anticipoMinimoPct", "anticipoSugeridoPct", "costoDirecto", "cubre", "faltante", "lectura", "valorTotal" ],
         "type" : "object"
       },
       "Anulacion" : {
@@ -257,6 +406,30 @@
         "required" : [ "id", "nombre" ],
         "type" : "object"
       },
+      "ColumnaEsperada" : {
+        "description" : "Una de las columnas que el importador necesita. El front arma el mapeo con estas y con las del archivo, y no trae ninguna lista propia (ADR-018)",
+        "properties" : {
+          "clave" : {
+            "description" : "El campo del movimiento: tipo, valor, fechaMovimiento, cuenta, categoria o descripcion",
+            "type" : "string"
+          },
+          "etiqueta" : {
+            "description" : "Cómo se llama en pantalla",
+            "type" : "string"
+          },
+          "obligatoria" : {
+            "description" : "Sin ella el mapeo no sirve, y responde 42270",
+            "type" : "boolean"
+          },
+          "tipo" : {
+            "description" : "Cómo se lee lo que venga en esa columna",
+            "enum" : [ "texto", "dinero", "fecha", "lista" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "clave", "etiqueta", "obligatoria", "tipo" ],
+        "type" : "object"
+      },
       "ConfiguracionDeSobres" : {
         "description" : "Cómo se reparte cada peso que entra en efectivo (05 §11). No se sobrescribe: cada cambio es una fila de sobres_config con su vigencia, y así se conserva el historial (RF-51, 04 §4.8)",
         "properties" : {
@@ -287,6 +460,48 @@
           }
         },
         "required" : [ "id", "pctCostoDirecto", "pctGastosFijos", "pctReserva", "pctRetiro", "vigenteDesde" ],
+        "type" : "object"
+      },
+      "ConsultaDeAdelantos" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/adelantos. Todo es opcional: sin nada, los pendientes de descontar",
+        "properties" : {
+          "empleadaId" : {
+            "description" : "Solo los de esa persona",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "incluirAnulados" : {
+            "description" : "Con true salen también los anulados",
+            "type" : "boolean"
+          },
+          "incluirDescontados" : {
+            "description" : "Con true salen también los que ya se descontaron en una liquidación",
+            "type" : "boolean"
+          }
+        },
+        "type" : "object"
+      },
+      "ConsultaDeAnticipoMinimo" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/anticipo-minimo: las líneas que la persona lleva escritas y el anticipo que piensa cobrar, para que la API responda si alcanza. Se consulta desde el formulario de pedido y desde el cotizador, y se recalcula con cada línea, antes de que exista nada que guardar. Es la misma forma que POST /api/v0/consultas/costeo",
+        "properties" : {
+          "anticipoPct" : {
+            "default" : 50,
+            "description" : "El que se piensa cobrar. Sin él, 50, que es la política del negocio (05 §3.1)",
+            "format" : "int32",
+            "maximum" : 100,
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "lineas" : {
+            "description" : "Al menos una",
+            "items" : {
+              "$ref" : "#/components/schemas/LineaDePedido"
+            },
+            "minItems" : 1,
+            "type" : "array"
+          }
+        },
+        "required" : [ "lineas" ],
         "type" : "object"
       },
       "ConsultaDeBitacora" : {
@@ -338,6 +553,48 @@
         },
         "type" : "object"
       },
+      "ConsultaDeCotizaciones" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/cotizaciones. Todo es opcional: sin nada, las vigentes",
+        "properties" : {
+          "clienteId" : {
+            "description" : "Solo las de ese cliente",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "desde" : {
+            "description" : "Por fecha de emisión, incluida",
+            "format" : "date",
+            "type" : "string"
+          },
+          "estado" : {
+            "description" : "Solo las que están en ese estado",
+            "enum" : [ "vigente", "vencida", "aceptada", "anulada" ],
+            "type" : "string"
+          },
+          "hasta" : {
+            "description" : "Por fecha de emisión, incluida",
+            "format" : "date",
+            "type" : "string"
+          },
+          "incluirAnuladas" : {
+            "description" : "Con true salen también las anuladas",
+            "type" : "boolean"
+          }
+        },
+        "type" : "object"
+      },
+      "ConsultaDeDesprendible" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/desprendible",
+        "properties" : {
+          "liquidacionId" : {
+            "description" : "La liquidación de la que se quiere el desprendible. Una que no sea suya, a Operación le responde 40400: la política nom_lectura no se la devuelve, así que para la API no existe (ADR-006)",
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "liquidacionId" ],
+        "type" : "object"
+      },
       "ConsultaDeDivisionDeRetiro" : {
         "description" : "El cuerpo de POST /api/v0/consultas/division-de-retiro: lo que la persona lleva escrito en el formulario de retiro, para que la API proponga cómo partirlo sin que el front calcule nada (ADR-018)",
         "properties" : {
@@ -354,6 +611,20 @@
           }
         },
         "required" : [ "valor" ],
+        "type" : "object"
+      },
+      "ConsultaDeEmpleadas" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/empleados. Todo es opcional: sin nada, las que siguen en nómina",
+        "properties" : {
+          "incluirAnuladas" : {
+            "description" : "Con true salen también las fichas anuladas",
+            "type" : "boolean"
+          },
+          "incluirRetiradas" : {
+            "description" : "Con true salen también las que ya se retiraron",
+            "type" : "boolean"
+          }
+        },
         "type" : "object"
       },
       "ConsultaDeFormulario" : {
@@ -422,6 +693,32 @@
         },
         "type" : "object"
       },
+      "ConsultaDeNomina" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/nomina. Todo es opcional: sin nada, las liquidaciones del período abierto más reciente. A Operación, nomina_detalle solo le devuelve las suyas (RF-63)",
+        "properties" : {
+          "anio" : {
+            "description" : "Junto con mes, en vez de periodoId",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "empleadaId" : {
+            "description" : "Solo las de esa persona",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "mes" : {
+            "description" : "De 1 a 12",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "periodoId" : {
+            "description" : "El período que se quiere",
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
       "ConsultaDePedidos" : {
         "description" : "El cuerpo de POST /api/v0/consultas/pedidos. Todo es opcional: sin nada, los pedidos vigentes",
         "properties" : {
@@ -448,6 +745,37 @@
           "incluirAnulados" : {
             "description" : "Con true salen también los anulados, que es el panel de anulados del 10 §4.2",
             "type" : "boolean"
+          }
+        },
+        "type" : "object"
+      },
+      "ConsultaDePeriodosDeNomina" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/periodos-de-nomina. Todo es opcional: sin nada, los períodos abiertos",
+        "properties" : {
+          "anio" : {
+            "description" : "Solo los de ese año",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "incluirCerrados" : {
+            "description" : "Con true salen también los meses ya cerrados",
+            "type" : "boolean"
+          }
+        },
+        "type" : "object"
+      },
+      "ConsultaDeProductividad" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/productividad. Sin nada, el mes en curso en Bogotá (RNF-08)",
+        "properties" : {
+          "anio" : {
+            "description" : null,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "mes" : {
+            "description" : "De 1 a 12",
+            "format" : "int32",
+            "type" : "integer"
           }
         },
         "type" : "object"
@@ -535,6 +863,73 @@
           }
         },
         "required" : [ "costoUnitario", "lectura", "tarifaHora" ],
+        "type" : "object"
+      },
+      "Cotizacion" : {
+        "description" : "Lo que se le pasa al cliente antes de que haya pedido. Sus líneas son las mismas de un pedido, así que comparten esquema: LineaDePedido",
+        "properties" : {
+          "anticipoPct" : {
+            "description" : "El anticipo que se le propone al cliente",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "anulacion" : {
+            "$ref" : "#/components/schemas/Anulacion",
+            "description" : "Ausente mientras la cotización esté vigente"
+          },
+          "cliente" : {
+            "description" : "El nombre del cliente, para pintar la fila sin pedir otra consulta",
+            "type" : "string"
+          },
+          "clienteId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "estado" : {
+            "description" : "vigente mientras no venza; vencida cuando pasó validaHasta; aceptada cuando se convirtió en pedido; anulada cuando se anuló con motivo",
+            "enum" : [ "vigente", "vencida", "aceptada", "anulada" ],
+            "type" : "string"
+          },
+          "fechaEmision" : {
+            "description" : null,
+            "format" : "date",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "lineas" : {
+            "description" : null,
+            "items" : {
+              "$ref" : "#/components/schemas/LineaDePedido"
+            },
+            "type" : "array"
+          },
+          "notas" : {
+            "type" : "string"
+          },
+          "numero" : {
+            "description" : "El número visible, como C-0134. Lo pone la API y es único en toda la base",
+            "type" : "string"
+          },
+          "pedidoId" : {
+            "description" : "El pedido en que se convirtió. Ausente mientras no se acepte",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "validaHasta" : {
+            "description" : "Hasta cuándo se sostiene el precio. Ausente si no se dijo",
+            "format" : "date",
+            "type" : "string"
+          },
+          "valorTotal" : {
+            "description" : "Pesos enteros. Sale de las líneas",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "clienteId", "estado", "fechaEmision", "id", "lineas", "numero", "valorTotal" ],
         "type" : "object"
       },
       "Cuenta" : {
@@ -722,6 +1117,61 @@
         "required" : [ "distribucion", "explicacion", "prolabore" ],
         "type" : "object"
       },
+      "Documento" : {
+        "description" : "Un archivo que la API entrega: el desprendible, la cotización o la remisión. Viaja dentro del sobre, en data, como cualquier otra respuesta, y no como bytes crudos: así una misma ruta no tiene dos formas de contestar, una para cuando sale bien y otra para el 40300 o el 40400 (tarea 8.11). El contenido va en base64, que cuesta un 33% de tamaño, y por eso el tope es de 5 MB, el mismo del adjunto de subida",
+        "properties" : {
+          "bytes" : {
+            "description" : "Cuánto pesa el archivo ya decodificado. Nunca más de 5.242.880",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "contenido" : {
+            "description" : "El archivo entero en base64, sin saltos de línea ni prefijo de tipo",
+            "format" : "byte",
+            "type" : "string"
+          },
+          "nombre" : {
+            "description" : "El nombre con que conviene guardarlo, como desprendible-2026-09-marcela-rios.pdf",
+            "type" : "string"
+          },
+          "tipo" : {
+            "description" : "El tipo de contenido del archivo",
+            "enum" : [ "application/pdf" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "bytes", "contenido", "nombre", "tipo" ],
+        "type" : "object"
+      },
+      "EdicionDeEmpleada" : {
+        "description" : "El formulario «edicion-de-empleada». La fecha de ingreso no está: cambiarla movería de mes liquidaciones ya hechas",
+        "properties" : {
+          "documento" : {
+            "type" : "string"
+          },
+          "horasMensuales" : {
+            "description" : null,
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "nombre" : {
+            "type" : "string"
+          },
+          "salarioAcordado" : {
+            "description" : "El aumento se escribe encima: empleados no guarda historial de salario, a diferencia de costos_producto (04 §4.5). Las liquidaciones ya hechas conservan el suyo en nomina_detalle.salario_base",
+            "format" : "int64",
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "usuarioId" : {
+            "description" : "Con null se desconecta de su usuario",
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "horasMensuales", "nombre", "salarioAcordado" ],
+        "type" : "object"
+      },
       "EdicionDeUsuario" : {
         "description" : "El formulario «edicion-de-usuario». El usuario no está: es la identidad con la que la persona entra, y no se edita",
         "properties" : {
@@ -739,6 +1189,62 @@
           }
         },
         "required" : [ "cargoId", "nombreCompleto", "tipo" ],
+        "type" : "object"
+      },
+      "Empleada" : {
+        "description" : "Quien está en nómina. No es lo mismo que un usuario: se puede estar en nómina sin entrar al sistema y al revés (04 §4.2). usuarioId las conecta cuando son la misma persona",
+        "properties" : {
+          "activa" : {
+            "description" : "Sigue en nómina: no tiene fecha de retiro ni está anulada",
+            "type" : "boolean"
+          },
+          "anulacion" : {
+            "$ref" : "#/components/schemas/Anulacion",
+            "description" : "Ausente mientras la ficha esté vigente"
+          },
+          "documento" : {
+            "description" : "La cédula, si se registró. Sale en el desprendible (06 §8)",
+            "type" : "string"
+          },
+          "fechaIngreso" : {
+            "description" : "Desde cuándo trabaja",
+            "format" : "date",
+            "type" : "string"
+          },
+          "fechaRetiro" : {
+            "description" : "Desde cuándo dejó de estar en nómina. Ausente mientras siga",
+            "format" : "date",
+            "type" : "string"
+          },
+          "horasMensuales" : {
+            "description" : "Las horas pactadas al mes, con las que se calcula el valor de la hora ordinaria (06 §6.1). 192 por omisión",
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "nombre" : {
+            "description" : "La fuente de verdad para la nómina es esta, no el nombre del usuario (04 §4.2)",
+            "type" : "string"
+          },
+          "salarioAcordado" : {
+            "description" : "Pesos enteros, mayor que cero. Solo Gerencia lo ve de otra persona: empleados lleva RLS y cada quien alcanza su propia ficha (04 §7)",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "usuario" : {
+            "description" : "El nombre de usuario con que entra, si entra",
+            "type" : "string"
+          },
+          "usuarioId" : {
+            "description" : "El usuario al que corresponde, si alguno. Es UNIQUE: dos fichas no cuelgan del mismo usuario",
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "activa", "fechaIngreso", "horasMensuales", "id", "nombre", "salarioAcordado" ],
         "type" : "object"
       },
       "EntradaDeBitacora" : {
@@ -808,6 +1314,36 @@
         },
         "type" : "object"
       },
+      "FilaDeImportacion" : {
+        "description" : "Qué pasó con una fila del archivo. El informe las trae todas, no solo las malas (RF-65, BDD-21-2)",
+        "properties" : {
+          "campo" : {
+            "description" : "En qué columna está el problema, cuando el estado es invalida",
+            "type" : "string"
+          },
+          "estado" : {
+            "description" : "valida se puede escribir; invalida no; duplicada coincide con un movimiento que ya existe —misma fecha, valor, cuenta y descripción (BDD-21-3)—; escrita es lo que la confirmación guardó",
+            "enum" : [ "valida", "invalida", "duplicada", "escrita" ],
+            "type" : "string"
+          },
+          "motivo" : {
+            "description" : "Por qué se rechaza, en español y ya listo para mostrar",
+            "type" : "string"
+          },
+          "movimientoId" : {
+            "description" : "El movimiento que se escribió, cuando el estado es escrita; o el que ya existía, cuando es duplicada",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "numero" : {
+            "description" : "La línea del archivo, contando el encabezado como 1",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "estado", "numero" ],
+        "type" : "object"
+      },
       "Identidad" : {
         "description" : "Quién tiene la sesión abierta: lo que el topbar muestra todo el tiempo (RF-83)",
         "properties" : {
@@ -836,6 +1372,59 @@
           }
         },
         "required" : [ "debeCambiarClave", "id", "nombreCompleto", "tipo", "usuario" ],
+        "type" : "object"
+      },
+      "InformeDeImportacion" : {
+        "description" : "Lo que trae un CSV y qué pasaría —o qué pasó— con cada fila. La misma forma la devuelven la consulta, que no escribe nada, y la confirmación, que sí (CU-21)",
+        "properties" : {
+          "columnas" : {
+            "description" : "Las columnas que trae el archivo, en su orden, para que la persona las mapee (BDD-21-1)",
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "columnasEsperadas" : {
+            "description" : "Las que el importador necesita",
+            "items" : {
+              "$ref" : "#/components/schemas/ColumnaEsperada"
+            },
+            "type" : "array"
+          },
+          "duplicadas" : {
+            "description" : "Cuántas coinciden con un movimiento que ya existe",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "escritas" : {
+            "description" : "Cuántas se guardaron. Cero en la consulta, que no escribe nada",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "filas" : {
+            "description" : "Ausente mientras la consulta no traiga mapeo: sin él no hay nada que juzgar",
+            "items" : {
+              "$ref" : "#/components/schemas/FilaDeImportacion"
+            },
+            "type" : "array"
+          },
+          "invalidas" : {
+            "description" : null,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "total" : {
+            "description" : "Cuántas filas de datos trae el archivo, sin contar el encabezado",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "validas" : {
+            "description" : null,
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "columnas", "columnasEsperadas", "total" ],
         "type" : "object"
       },
       "Lectura" : {
@@ -905,6 +1494,130 @@
         "required" : [ "cantidad", "precioUnitario", "productoId" ],
         "type" : "object"
       },
+      "Liquidacion" : {
+        "description" : "Lo que se le liquida a una empleada en un período. Las cifras salen del 06 §6.1 y las escribe fn_liquidar_nomina en una sola transacción, junto con el movimiento del pago y la marca de los adelantos (04 §10)",
+        "properties" : {
+          "adelantosDescontados" : {
+            "description" : "Los adelantos que esta liquidación canceló. Cada uno se descuenta una sola vez (RN-11)",
+            "items" : {
+              "$ref" : "#/components/schemas/AdelantoDescontado"
+            },
+            "type" : "array"
+          },
+          "anio" : {
+            "description" : "El año del período",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "cuentaId" : {
+            "description" : "De dónde salió el pago",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "diasTrabajados" : {
+            "description" : "De 0 a 31",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "empleada" : {
+            "description" : "El nombre de la empleada",
+            "type" : "string"
+          },
+          "empleadaId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "fechaPago" : {
+            "description" : null,
+            "format" : "date",
+            "type" : "string"
+          },
+          "horasExtra" : {
+            "description" : "Las horas extra del período",
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "liquidadaEn" : {
+            "description" : null,
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "liquidadaPor" : {
+            "description" : "El nombre completo de quien la hizo",
+            "type" : "string"
+          },
+          "mes" : {
+            "description" : "El mes del período, para pintar la fila sin pedir otra consulta",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "movimientoId" : {
+            "description" : "El movimiento de tipo gasto que reconoce el gasto de personal, completo y una sola vez (06 §6.3)",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "netoPagado" : {
+            "description" : "Total devengado menos total de descuentos. Es lo que salió de la cuenta",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "otrosDescuentos" : {
+            "description" : null,
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "otrosDevengados" : {
+            "description" : null,
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "periodoId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "recargoExtraPct" : {
+            "description" : "El recargo con que se pagó la hora extra, en puntos",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "salarioBase" : {
+            "description" : "El salario del período, proporcional a los días trabajados",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "totalDescuentos" : {
+            "description" : "Adelantos descontados más otros descuentos",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "totalDevengado" : {
+            "description" : "Salario del período más el total de las horas extra más otros devengados. No suma las tarifas por hora: esas son el precio de una hora, no un monto que se devengue (06 §6.2)",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "valorHoraExtra" : {
+            "description" : "Valor de la hora ordinaria por uno más el recargo. Es una tarifa, no un devengo",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "valorHoraOrdinaria" : {
+            "description" : "Salario acordado dividido entre las horas mensuales pactadas. Es una tarifa, no un devengo",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "valorHorasExtra" : {
+            "description" : "Las horas extra por el valor de la hora extra. Esto sí se devenga",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "adelantosDescontados", "anio", "diasTrabajados", "empleadaId", "horasExtra", "id", "mes", "netoPagado", "otrosDescuentos", "otrosDevengados", "periodoId", "recargoExtraPct", "salarioBase", "totalDescuentos", "totalDevengado", "valorHoraExtra", "valorHoraOrdinaria", "valorHorasExtra" ],
+        "type" : "object"
+      },
       "Margenes" : {
         "description" : "Los tres márgenes de 05 §7.2: margen en pesos = precio − costo unitario; porcentual = margen en pesos ÷ precio; por hora = margen en pesos ÷ (minutos ÷ 60). El tercero es el que guía la decisión cuando hay más pedidos que tiempo",
         "properties" : {
@@ -941,7 +1654,7 @@
         "type" : "object"
       },
       "Motivo" : {
-        "description" : "Los ocho formularios de motivo —«desactivacion-de-usuario», «reactivacion-de-usuario», «desactivacion-de-cargo», «desactivacion-de-producto», «reversion», «anulacion-de-pedido», «anulacion-de-cliente» y «anulacion-de-movimiento»—: el mismo campo, con la etiqueta y los mensajes de cada uno",
+        "description" : "Los once formularios de motivo —«desactivacion-de-usuario», «reactivacion-de-usuario», «desactivacion-de-cargo», «desactivacion-de-producto», «reversion», «anulacion-de-pedido», «anulacion-de-cliente», «anulacion-de-movimiento», «anulacion-de-empleada», «anulacion-de-adelanto» y «anulacion-de-cotizacion»—: el mismo campo, con la etiqueta y los mensajes de cada uno",
         "properties" : {
           "motivo" : {
             "description" : "Qué pasó y por qué. Queda en la ficha, en la bitácora o junto al registro",
@@ -1113,6 +1826,47 @@
         "required" : [ "pctCostoDirecto", "pctGastosFijos", "pctReserva", "pctRetiro" ],
         "type" : "object"
       },
+      "NuevaCotizacion" : {
+        "description" : "El formulario «cotizacion». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"cotizacion\"}, salvo las líneas, que el descriptor no sabe expresar (20 §4.4)",
+        "properties" : {
+          "anticipoPct" : {
+            "description" : "Qué porcentaje se le propone al cliente. Que alcance para pagar el material lo responde POST /api/v0/consultas/anticipo-minimo",
+            "format" : "int32",
+            "maximum" : 100,
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "clienteId" : {
+            "description" : "Sale de POST /api/v0/consultas/clientes",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "fechaEmision" : {
+            "description" : "Sin ella, hoy en Bogotá (RNF-08)",
+            "format" : "date",
+            "type" : "string"
+          },
+          "lineas" : {
+            "description" : "Al menos una. Sin líneas la cotización no tiene valor, y responde 42280",
+            "items" : {
+              "$ref" : "#/components/schemas/LineaDePedido"
+            },
+            "minItems" : 1,
+            "type" : "array"
+          },
+          "notas" : {
+            "description" : "Opcional. Sale en el PDF",
+            "type" : "string"
+          },
+          "validaHasta" : {
+            "description" : "Anterior a la emisión responde 42281",
+            "format" : "date",
+            "type" : "string"
+          }
+        },
+        "required" : [ "clienteId", "lineas" ],
+        "type" : "object"
+      },
       "NuevaCuenta" : {
         "description" : "El formulario «cuenta». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"cuenta\"}",
         "properties" : {
@@ -1132,6 +1886,106 @@
           }
         },
         "required" : [ "nombre", "saldoInicial", "tipo" ],
+        "type" : "object"
+      },
+      "NuevaEmpleada" : {
+        "description" : "El formulario «empleada». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"empleada\"}",
+        "properties" : {
+          "documento" : {
+            "description" : "La cédula. Opcional",
+            "type" : "string"
+          },
+          "fechaIngreso" : {
+            "description" : "Desde cuándo trabaja",
+            "format" : "date",
+            "type" : "string"
+          },
+          "horasMensuales" : {
+            "default" : 192,
+            "description" : "Las horas pactadas al mes. Sin ella, 192",
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "nombre" : {
+            "description" : "Nombre y apellido",
+            "type" : "string"
+          },
+          "salarioAcordado" : {
+            "description" : "Pesos enteros, mayor que cero",
+            "format" : "int64",
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "usuarioId" : {
+            "description" : "El usuario con que entra al sistema, si entra. Uno que ya tiene ficha responde 42253",
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "fechaIngreso", "nombre", "salarioAcordado" ],
+        "type" : "object"
+      },
+      "NuevaLiquidacion" : {
+        "description" : "El formulario «liquidacion». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"liquidacion\"}",
+        "properties" : {
+          "cuentaId" : {
+            "description" : "De dónde sale el pago. Sale de POST /api/v0/consultas/cuentas",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "diasTrabajados" : {
+            "default" : 30,
+            "description" : "De 0 a 31. Sin ellos, 30",
+            "format" : "int32",
+            "maximum" : 31,
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "empleadaId" : {
+            "description" : "Sale de POST /api/v0/consultas/empleados. Liquidarla dos veces en el mismo período responde 40952",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "fechaPago" : {
+            "description" : "Sin ella, hoy en Bogotá (RNF-08)",
+            "format" : "date",
+            "type" : "string"
+          },
+          "horasExtra" : {
+            "default" : 0,
+            "description" : "Las horas extra del período. Sin ellas, cero",
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "otrosDescuentos" : {
+            "default" : 0,
+            "description" : "Pesos enteros. Los adelantos no van aquí: los toma la liquidación sola",
+            "format" : "int64",
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "otrosDevengados" : {
+            "default" : 0,
+            "description" : "Pesos enteros",
+            "format" : "int64",
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "periodoId" : {
+            "description" : "Sale de PUT /api/v0/nomina/periodos/{id}. Uno ya cerrado responde 40951",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "recargoExtraPct" : {
+            "default" : 25,
+            "description" : "Con cuánto recargo se paga la hora extra, en puntos. Sin él, 25, que es la cifra del ejemplo del 06 §6.2. Viaja aquí y no en la ficha porque empleados no tiene columna para él (tarea 8.11)",
+            "format" : "int32",
+            "maximum" : 200,
+            "minimum" : 0,
+            "type" : "integer"
+          }
+        },
+        "required" : [ "cuentaId", "empleadaId", "periodoId" ],
         "type" : "object"
       },
       "NuevaSesion" : {
@@ -1174,6 +2028,38 @@
           }
         },
         "required" : [ "nombre", "valorCompra" ],
+        "type" : "object"
+      },
+      "NuevoAdelanto" : {
+        "description" : "El formulario «adelanto». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"adelanto\"}",
+        "properties" : {
+          "cuentaId" : {
+            "description" : "De dónde sale la plata. Sale de POST /api/v0/consultas/cuentas",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "descripcion" : {
+            "description" : "Opcional",
+            "type" : "string"
+          },
+          "empleadaId" : {
+            "description" : "Sale de POST /api/v0/consultas/empleados",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "fecha" : {
+            "description" : "El día en que se entrega. Sin ella, hoy en Bogotá (RNF-08). Futura responde 42223, que es el CHECK fecha_no_futura del movimiento",
+            "format" : "date",
+            "type" : "string"
+          },
+          "valor" : {
+            "description" : "Pesos enteros, mayor que cero",
+            "format" : "int64",
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        },
+        "required" : [ "cuentaId", "empleadaId", "valor" ],
         "type" : "object"
       },
       "NuevoAnticipo" : {
@@ -1329,6 +2215,27 @@
           }
         },
         "required" : [ "clienteId", "lineas" ],
+        "type" : "object"
+      },
+      "NuevoPeriodoDeNomina" : {
+        "description" : "El formulario «periodo-de-nomina»",
+        "properties" : {
+          "anio" : {
+            "description" : "Entre 2020 y 2100",
+            "format" : "int32",
+            "maximum" : 2100,
+            "minimum" : 2020,
+            "type" : "integer"
+          },
+          "mes" : {
+            "description" : "De 1 a 12",
+            "format" : "int32",
+            "maximum" : 12,
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        },
+        "required" : [ "anio", "mes" ],
         "type" : "object"
       },
       "NuevoProlabore" : {
@@ -1603,6 +2510,105 @@
         "required" : [ "anticipado", "anticipoPct", "clienteId", "estado", "estancado", "fechaPedido", "id", "lineas", "numero", "saldoPendiente", "valorTotal" ],
         "type" : "object"
       },
+      "PeriodoDeNomina" : {
+        "description" : "El mes que se liquida. Es único por año y mes: lo impone nomina_periodos_anio_mes_key",
+        "properties" : {
+          "anio" : {
+            "description" : "Entre 2020 y 2100",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "cerrado" : {
+            "description" : "Ya no admite más liquidaciones",
+            "type" : "boolean"
+          },
+          "cerradoEn" : {
+            "description" : null,
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "cerradoPor" : {
+            "description" : "El nombre completo de quien lo cerró",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "liquidaciones" : {
+            "description" : "Cuántas empleadas se liquidaron en él",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "mes" : {
+            "description" : "De 1 a 12",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "anio", "cerrado", "id", "mes" ],
+        "type" : "object"
+      },
+      "Productividad" : {
+        "description" : "Horas pagadas contra horas facturadas, y lo que cuesta la diferencia (06 §9, CU-27)",
+        "properties" : {
+          "anio" : {
+            "description" : null,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "costoDelOcio" : {
+            "description" : "Horas ociosas por la tarifa de la hora",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "horasFacturadas" : {
+            "description" : "Los minutos por unidad de lo entregado en el mes, divididos entre 60",
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "horasOciosas" : {
+            "description" : "Pagadas menos facturadas",
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "horasPagadas" : {
+            "description" : "Nómina más pro-labore",
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "horasPagadasNomina" : {
+            "description" : "Las horas pactadas de quienes se liquidaron en el mes",
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "horasPagadasProlabore" : {
+            "description" : "Las horas del pro-labore vigente",
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "lectura" : {
+            "$ref" : "#/components/schemas/Lectura",
+            "description" : "Cuál de los tres tramos del 06 §9 es —menos del 15%, entre 15 y 35, o más de 35— y qué conviene hacer"
+          },
+          "mes" : {
+            "description" : null,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "porcentajeOcioso" : {
+            "description" : "Horas ociosas sobre horas pagadas, en puntos",
+            "type" : "number"
+          },
+          "tarifaHora" : {
+            "description" : "La que la API tomó del pro-labore vigente",
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "anio", "costoDelOcio", "horasFacturadas", "horasOciosas", "horasPagadas", "horasPagadasNomina", "horasPagadasProlabore", "lectura", "mes", "porcentajeOcioso", "tarifaHora" ],
+        "type" : "object"
+      },
       "Producto" : {
         "properties" : {
           "activo" : {
@@ -1721,6 +2727,18 @@
         "required" : [ "cuentaId", "distribucion", "fecha", "id", "prolabore", "valor" ],
         "type" : "object"
       },
+      "RetiroDeEmpleada" : {
+        "description" : "El formulario «retiro-de-empleada». No anula la ficha: la deja con sus liquidaciones y fuera de la nómina de los meses siguientes",
+        "properties" : {
+          "fechaRetiro" : {
+            "description" : "Anterior a la fecha de ingreso responde 42250",
+            "format" : "date",
+            "type" : "string"
+          }
+        },
+        "required" : [ "fechaRetiro" ],
+        "type" : "object"
+      },
       "RetiroDelMes" : {
         "description" : "Cómo se partió lo retirado en un mes: el bloque «Cómo se parte el retiro» de 10 §4.5",
         "properties" : {
@@ -1802,6 +2820,119 @@
         "required" : [ "claveDeFirma", "identidad", "token", "tokenExpiraEn" ],
         "type" : "object"
       },
+      "Simulacion" : {
+        "description" : "El formulario «simulacion». Es el primer descriptor que alimenta una lectura y no una escritura: sus tres controles tienen mínimos y máximos, y si no los manda la API los decide el front (ADR-018)",
+        "properties" : {
+          "horasMensuales" : {
+            "default" : 192,
+            "description" : "La jornada que se evalúa contratar, en horas al mes. Sin ella, 192",
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "mesesDeHistoria" : {
+            "default" : 6,
+            "description" : "Cuántos meses de utilidad se promedian. Sin ellos, 6, que es lo que dice el 06 §3.1",
+            "format" : "int32",
+            "maximum" : 24,
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "reservaPct" : {
+            "default" : 20,
+            "description" : "La reserva de seguridad, en puntos. Sin ella, 20, que es la del ejemplo del 06 §3.3",
+            "format" : "int32",
+            "maximum" : 90,
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "salarioTentativo" : {
+            "description" : "El salario mensual que se está evaluando, en pesos enteros",
+            "format" : "int64",
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        },
+        "required" : [ "salarioTentativo" ],
+        "type" : "object"
+      },
+      "SimulacionDeContratacion" : {
+        "description" : "La respuesta del simulador (06 §3 y §4). El front la pinta y no calcula ninguna de estas cifras (ADR-018)",
+        "properties" : {
+          "alternativas" : {
+            "description" : "Vacía cuando sí es viable",
+            "items" : {
+              "$ref" : "#/components/schemas/AlternativaDeContratacion"
+            },
+            "type" : "array"
+          },
+          "avisoDeHistoria" : {
+            "description" : "Presente cuando hay menos meses de los pedidos: la proyección es menos confiable (CU-18 A1)",
+            "type" : "string"
+          },
+          "diferencia" : {
+            "description" : "Presupuesto menos costo mensual. Positiva es lo que sobra; negativa, lo que falta",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "horasRequeridas" : {
+            "description" : "Cuánto trabajo piden las ventas adicionales, por el camino más barato",
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "lectura" : {
+            "$ref" : "#/components/schemas/Lectura",
+            "description" : "El veredicto, con sus montos. Cuando las horas requeridas son menos del 20% de la jornada evaluada, dice que la restricción no es la capacidad sino la demanda (06 §4.2)"
+          },
+          "mesesPedidos" : {
+            "description" : "Cuántos se pidieron",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "mesesUsados" : {
+            "description" : "Cuántos meses de historia se promediaron de verdad",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "presupuestoDisponible" : {
+            "description" : "Utilidad promedio menos la reserva. Es el presupuesto mensual para personal",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "reserva" : {
+            "description" : "Lo que se aparta",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "reservaPct" : {
+            "description" : "En puntos",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "salarioTentativo" : {
+            "description" : "El salario que se evaluó",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "utilidadPromedio" : {
+            "description" : "La utilidad operativa promedio del período, obligatoriamente con el pro-labore ya descontado como gasto (RN-09). Sin pro-labore definido no hay respuesta: es el 40950",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "ventasAdicionales" : {
+            "description" : "Vacía cuando sí es viable",
+            "items" : {
+              "$ref" : "#/components/schemas/VentaAdicional"
+            },
+            "type" : "array"
+          },
+          "viable" : {
+            "description" : "El presupuesto alcanza para el salario evaluado",
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "alternativas", "diferencia", "lectura", "mesesPedidos", "mesesUsados", "presupuestoDisponible", "reserva", "reservaPct", "salarioTentativo", "utilidadPromedio", "ventasAdicionales", "viable" ],
+        "type" : "object"
+      },
       "SobreActivo" : {
         "properties" : {
           "data" : {
@@ -1821,10 +2952,48 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobreAdelanto" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Adelanto",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreAdjunto" : {
         "properties" : {
           "data" : {
             "$ref" : "#/components/schemas/Adjunto",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreAnticipoMinimo" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/AnticipoMinimo",
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
           },
           "mensaje" : {
@@ -1954,6 +3123,25 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobreCotizacion" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Cotizacion",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreCuenta" : {
         "properties" : {
           "data" : {
@@ -2011,6 +3199,44 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobreDocumento" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Documento",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreEmpleada" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Empleada",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreEntradaDeBitacora" : {
         "properties" : {
           "data" : {
@@ -2049,12 +3275,72 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobreInformeDeImportacion" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/InformeDeImportacion",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreLiquidacion" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Liquidacion",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreListActivo" : {
         "properties" : {
           "data" : {
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver",
             "items" : {
               "$ref" : "#/components/schemas/Activo"
+            },
+            "type" : "array"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreListAdelanto" : {
+        "properties" : {
+          "data" : {
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver",
+            "items" : {
+              "$ref" : "#/components/schemas/Adelanto"
             },
             "type" : "array"
           },
@@ -2159,6 +3445,28 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobreListCotizacion" : {
+        "properties" : {
+          "data" : {
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver",
+            "items" : {
+              "$ref" : "#/components/schemas/Cotizacion"
+            },
+            "type" : "array"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreListCuenta" : {
         "properties" : {
           "data" : {
@@ -2181,12 +3489,78 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobreListEmpleada" : {
+        "properties" : {
+          "data" : {
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver",
+            "items" : {
+              "$ref" : "#/components/schemas/Empleada"
+            },
+            "type" : "array"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreListLiquidacion" : {
+        "properties" : {
+          "data" : {
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver",
+            "items" : {
+              "$ref" : "#/components/schemas/Liquidacion"
+            },
+            "type" : "array"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreListPedido" : {
         "properties" : {
           "data" : {
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver",
             "items" : {
               "$ref" : "#/components/schemas/Pedido"
+            },
+            "type" : "array"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreListPeriodoDeNomina" : {
+        "properties" : {
+          "data" : {
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver",
+            "items" : {
+              "$ref" : "#/components/schemas/PeriodoDeNomina"
             },
             "type" : "array"
           },
@@ -2361,6 +3735,44 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobrePeriodoDeNomina" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/PeriodoDeNomina",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreProductividad" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Productividad",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreProducto" : {
         "properties" : {
           "data" : {
@@ -2422,6 +3834,25 @@
         "properties" : {
           "data" : {
             "$ref" : "#/components/schemas/Sesion",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreSimulacionDeContratacion" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/SimulacionDeContratacion",
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
           },
           "mensaje" : {
@@ -2538,6 +3969,36 @@
         "required" : [ "activo", "debeCambiarClave", "id", "nombreCompleto", "tipo", "usuario" ],
         "type" : "object"
       },
+      "VentaAdicional" : {
+        "description" : "Cuánto hay que vender de un producto para cubrir el faltante. El margen de contribución no incluye el costo del tiempo: el tiempo es justo el gasto fijo que se trata de cubrir, y contarlo sería contarlo dos veces (RN-17, 06 §4.1)",
+        "properties" : {
+          "horas" : {
+            "description" : "Cuánto trabajo piden esas unidades",
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "margenContribucion" : {
+            "description" : "Precio menos insumo y consumibles",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "producto" : {
+            "description" : "El nombre del producto",
+            "type" : "string"
+          },
+          "productoId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "unidades" : {
+            "description" : "Cuántas unidades más al mes",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "horas", "margenContribucion", "producto", "productoId", "unidades" ],
+        "type" : "object"
+      },
       "Version" : {
         "properties" : {
           "ambiente" : {
@@ -2562,7 +4023,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.14.0"
+    "version" : "0.15.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -2640,6 +4101,158 @@
         },
         "summary" : "Registrar una inversión en un activo",
         "tags" : [ "Capital" ]
+      }
+    },
+    "/api/v0/adelantos/{id}" : {
+      "put" : {
+        "description" : "Entrega plata a cuenta del salario (RF-58, CU-26, BDD-26-1). Escribe en la misma transacción el adelanto y un movimiento de tipo adelanto_empleada, que baja la caja de esa cuenta, crea la cuenta por cobrar y no registra gasto: el gasto se reconoce entero en la liquidación, y registrarlo aquí contaría el mismo dinero dos veces (RN-11, 06 §6.3). El id va en la ruta por lo mismo que en movimientos (ADR-020): el mismo dos veces responde 40900. Solo Gerencia, y lo rechaza la base con adelantos_insercion. El formulario es «adelanto»; la fecha futura la rechaza el CHECK fecha_no_futura del movimiento con 42223, y la cuenta que no sirve, 42224. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 42200 con data.errores, 42223, 42224 y 42251.",
+        "operationId" : "registrarAdelanto",
+        "parameters" : [ {
+          "description" : "El id del adelanto, que genera quien lo registra",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevoAdelanto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreAdelanto"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Entregar un adelanto a una empleada",
+        "tags" : [ "Nómina" ]
+      }
+    },
+    "/api/v0/adelantos/{id}/anulacion" : {
+      "post" : {
+        "description" : "Anula el adelanto con motivo escrito y no borra nada (RN-13). Anula también el movimiento que lo registró, porque son el mismo hecho. Uno ya descontado en una liquidación no se puede anular y responde 40900: lo que haya que corregir después va por contra-asiento (04 §5.3). Solo Gerencia. El formulario es «anulacion-de-adelanto». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902 y 42200 con data.errores.",
+        "operationId" : "anularAdelanto",
+        "parameters" : [ {
+          "description" : "El id del adelanto",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Motivo"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreAdelanto"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Anular un adelanto",
+        "tags" : [ "Nómina" ]
       }
     },
     "/api/v0/aportes/{id}" : {
@@ -3422,6 +5035,140 @@
         "tags" : [ "Capital" ]
       }
     },
+    "/api/v0/consultas/adelantos" : {
+      "post" : {
+        "description" : "La cuenta por cobrar viva: los adelantos sin descontar, con su antigüedad en días (06 §7). Sin filtros, solo los pendientes. Lo que vuelve lo decide PostgreSQL: adelantos lleva RLS y la política adelantos_lectura le devuelve a cada persona los suyos —los que se le van a descontar— y a Gerencia, todos. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902.",
+        "operationId" : "adelantos",
+        "parameters" : [ {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeAdelantos"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreListAdelanto"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Los adelantos pendientes de descontar",
+        "tags" : [ "Nómina" ]
+      }
+    },
+    "/api/v0/consultas/anticipo-minimo" : {
+      "post" : {
+        "description" : "El validador que protege cada pedido (RF-38, RF-39, CU-12, BDD-12-1, BDD-12-2, 05 §5). Calcula el costo directo de las líneas al costo vigente de cada producto, lo divide entre el valor total y compara contra el anticipo que se piensa cobrar; si no alcanza, devuelve el faltante en pesos y el porcentaje sugerido, redondeado hacia arriba a múltiplo de 5 con 5 puntos de holgura. Es una consulta y no un campo de otra respuesta porque la piden dos pantallas —el formulario de pedido y el cotizador— y se recalcula con cada línea, antes de que exista nada que guardar. Un producto de las líneas sin costo registrado responde 40982: sin costo la cifra mentiría. Lo consultan los dos tipos de usuario, pero a Operación costos_producto no le devuelve nada y por eso también responde 40982 (ADR-006). Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901, 40902, 40982 y 42200 con data.errores.",
+        "operationId" : "anticipoMinimo",
+        "parameters" : [ {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeAnticipoMinimo"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreAnticipoMinimo"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Si el anticipo cubre el costo directo",
+        "tags" : [ "Cotizaciones" ]
+      }
+    },
     "/api/v0/consultas/bitacora" : {
       "post" : {
         "description" : "Los cambios de administración sobre usuarios y cargos, los más recientes primero, con cuándo, quién, sobre quién, qué pasó, el detalle y el motivo (RF-88, 10 §5.5). No trae los inicios de sesión. Cada entrada dice si hoy se puede revertir y, en palabras, qué pasaría o por qué no. Con limite trae solo las más recientes, y total dice cuántas hay. Es de Gerencia, y la base no le muestra la auditoría a nadie más (04 §7). Puede devolver 20000, 40100, 40101, 40102, 40103 y 40302.",
@@ -3784,6 +5531,73 @@
         "tags" : [ "Productos" ]
       }
     },
+    "/api/v0/consultas/cotizaciones" : {
+      "post" : {
+        "description" : "Las cotizaciones de más reciente a más antigua, con filtros por estado, cliente y fechas. Sin filtros, las vigentes. Como la de pedidos, no pagina: los filtros de fecha ya acotan lo que vuelve. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902.",
+        "operationId" : "cotizaciones",
+        "parameters" : [ {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeCotizaciones"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreListCotizacion"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Las cotizaciones por fecha",
+        "tags" : [ "Cotizaciones" ]
+      }
+    },
     "/api/v0/consultas/cuentas" : {
       "post" : {
         "description" : "Las cuentas de dinero sin anular, en el orden en que se pintan. Las piden los dos tipos de usuario: Operación elige por nombre la cuenta de un movimiento. Por eso no traen saldo: la caja es de Gerencia (01 §4) y los saldos tienen su propia consulta (tarea 3.12). Puede devolver 20000, 40100, 40101, 40102, 40103 y 40302.",
@@ -3839,6 +5653,73 @@
         },
         "summary" : "Las cuentas de dinero, sin saldos",
         "tags" : [ "Cuentas" ]
+      }
+    },
+    "/api/v0/consultas/desprendible" : {
+      "post" : {
+        "description" : "El desprendible de una liquidación, en PDF con el logo del negocio: encabezado, identificación, devengados con el detalle de las horas extra, descuentos con la fecha de cada adelanto, el neto en números y en letras, y el pie con la cuenta de origen (RF-57, 06 §8). Baja dentro del sobre, en data, como un Documento en base64 (tarea 8.11). Operación ve únicamente el suyo (RF-63, CU-20): la política nom_lectura no le devuelve la fila de otra persona, así que para la API esa liquidación no existe y responde 40400. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40400, 40901 y 40902.",
+        "operationId" : "desprendible",
+        "parameters" : [ {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeDesprendible"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreDocumento"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "El desprendible de pago en PDF",
+        "tags" : [ "Nómina" ]
       }
     },
     "/api/v0/consultas/division-de-retiro" : {
@@ -3908,6 +5789,73 @@
         "tags" : [ "Capital" ]
       }
     },
+    "/api/v0/consultas/empleados" : {
+      "post" : {
+        "description" : "Las fichas de nómina, por nombre. Lo que vuelve lo decide PostgreSQL y no la API: empleados lleva RLS y la política empleados_lectura le devuelve a cada persona su propia ficha y nada más; a Gerencia, todas (04 §7). Por eso una sesión de Operación recibe una lista de uno, o vacía si no está en nómina, y no un 40300 que la base nunca produce. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902.",
+        "operationId" : "empleados",
+        "parameters" : [ {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeEmpleadas"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreListEmpleada"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Las empleadas",
+        "tags" : [ "Nómina" ]
+      }
+    },
     "/api/v0/consultas/formularios" : {
       "post" : {
         "description" : "Qué campos tiene, en qué orden, y las reglas de cada uno como datos: obligatorio, mínimo, máximo y el texto que se muestra cuando no se cumplen. Ese texto es el mismo que devuelve data.errores cuando la regla falla en el servidor. Sin sesión solo responde el formulario «acceso»; los demás piden sesión y firma. Puede devolver 20000, 40100, 40101, 40102, 40103 y 40400.",
@@ -3973,6 +5921,93 @@
         },
         "summary" : "El descriptor de un formulario",
         "tags" : [ "Formularios" ]
+      }
+    },
+    "/api/v0/consultas/importacion" : {
+      "post" : {
+        "description" : "Lee el archivo y no escribe ni una fila (RF-64, RF-65, CU-21, BDD-21-1, BDD-21-2). Sin mapeo devuelve las columnas que trae el archivo y las que el importador necesita, para que la persona las relacione; con mapeo devuelve además el informe fila por fila, con las válidas, las que no sirven y por qué, y las que coinciden con un movimiento que ya existe (BDD-21-3). El cuerpo es multipart/form-data con dos partes, «archivo» y «mapeo», y el archivo pasa por la API igual que el adjunto (07 §1). Solo Gerencia. Más de 5 MB responde 40070 y un archivo que no es CSV, 40071. Puede devolver 20000, 40002, 40070, 40071, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902 y 42270.",
+        "operationId" : "analizarImportacion",
+        "parameters" : [ {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "encoding" : {
+                "mapeo" : {
+                  "contentType" : "application/json"
+                }
+              },
+              "schema" : {
+                "properties" : {
+                  "archivo" : {
+                    "description" : "El CSV del histórico, de 5 MB como máximo",
+                    "format" : "binary",
+                    "type" : "string"
+                  },
+                  "mapeo" : {
+                    "additionalProperties" : {
+                      "type" : "string"
+                    },
+                    "description" : "Qué columna del archivo es cada campo del movimiento: {\"clave del campo\": \"nombre de la columna\"}. Las claves salen de columnasEsperadas",
+                    "type" : "object"
+                  }
+                },
+                "required" : [ "archivo" ],
+                "type" : "object"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreInformeDeImportacion"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Leer un CSV sin escribir nada",
+        "tags" : [ "Importación" ]
       }
     },
     "/api/v0/consultas/movimientos" : {
@@ -4109,6 +6144,73 @@
         "tags" : [ "Navegación" ]
       }
     },
+    "/api/v0/consultas/nomina" : {
+      "post" : {
+        "description" : "Las liquidaciones del período, por nombre. Lo que vuelve lo decide PostgreSQL y no la API: nomina_detalle lleva RLS y la política nom_lectura le devuelve a cada persona solo la suya, que es el RF-63 impuesto desde la base y no desde la pantalla (ADR-006, CU-20). Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902.",
+        "operationId" : "nomina",
+        "parameters" : [ {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeNomina"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreListLiquidacion"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Las liquidaciones de un período",
+        "tags" : [ "Nómina" ]
+      }
+    },
     "/api/v0/consultas/patrimonio" : {
       "post" : {
         "description" : "Lo que se ha construido y lo que se ha sacado, como lo pinta 10 §4.5 (RF-48, RF-49, CU-16, CU-24): el patrimonio de 05 §6.4 —aportes menos distribuciones más utilidades acumuladas— con sus tres términos; las distribuciones y las utilidades de los últimos 12 meses, con la tasa de retiro que sale de ellas (05 §9.3); la lectura que la acompaña, que en nivel critica es la alerta de descapitalización; y cómo se partió el retiro del mes en curso. Todo lo calcula la API (ADR-018). Solo Gerencia (01 §4), pero esta vez no lo impide la base: las cifras salen del libro, que leen los dos tipos, y es la misma decisión pendiente que los saldos por cuenta. Hasta que se tome, lo rechaza la API con 40300. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901 y 40902.",
@@ -4233,6 +6335,140 @@
         "tags" : [ "Pedidos" ]
       }
     },
+    "/api/v0/consultas/periodos-de-nomina" : {
+      "post" : {
+        "description" : "Los meses de nómina, del más reciente al más antiguo, con cuántas liquidaciones lleva cada uno. Es de donde el formulario «liquidacion» saca su lista de meses. Sin filtros, los que siguen abiertos. Lo que vuelve lo decide PostgreSQL: nomina_periodos lleva RLS y la política nom_per_lectura le devuelve a cada persona solo los períodos en los que tiene desprendible propio; a Gerencia, todos (04 §7). Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902.",
+        "operationId" : "periodosDeNomina",
+        "parameters" : [ {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDePeriodosDeNomina"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreListPeriodoDeNomina"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Los meses de nómina",
+        "tags" : [ "Nómina" ]
+      }
+    },
+    "/api/v0/consultas/productividad" : {
+      "post" : {
+        "description" : "Cuánto tiempo pagado no se convirtió en ventas (RF-62, CU-27, BDD-27-1, 06 §9). Suma las horas de nómina y las del pro-labore, les resta las horas cargadas a lo entregado en el mes según el costeo, y pone precio a la diferencia. Es el contrapeso del simulador: antes de agregar horas pagadas conviene vender las que ya se pagan. Sin pro-labore definido responde 40950, por la misma razón que el simulador. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901, 40902 y 40950.",
+        "operationId" : "productividad",
+        "parameters" : [ {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeProductividad"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreProductividad"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Horas pagadas contra horas facturadas",
+        "tags" : [ "Nómina" ]
+      }
+    },
     "/api/v0/consultas/productos" : {
       "post" : {
         "description" : "El catálogo con su costeo vigente, sus tres márgenes y lo que dicen frente al resto del taller, en el orden que se pida (RF-28, RF-30, RF-31, CU-09). Es el cuadro de 10 §4.4, y quien lo ordena y quien lo lee es la API: el front no vuelve a ordenar ni decide qué pinta en rojo (ADR-018). A una sesión de Operación le llegan el nombre, el tipo, la unidad y el precio, y ni el costeo ni los márgenes ni la lectura, porque costos_producto lleva RLS y PostgreSQL no le devuelve esas filas (ADR-006, RF-34, BDD-02-2); por eso a Operación el catálogo le llega por nombre. Los desactivados no salen salvo que se pidan. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901, 40902 y 42200 con data.errores.",
@@ -4355,6 +6591,73 @@
         },
         "summary" : "El pro-labore vigente",
         "tags" : [ "Capital" ]
+      }
+    },
+    "/api/v0/consultas/simulacion-de-contratacion" : {
+      "post" : {
+        "description" : "Responde con números si el negocio puede pagarle a alguien (RF-59 a RF-61, CU-18, BDD-18-1 a BDD-18-4). Parte de la utilidad operativa promedio de los últimos meses, obligatoriamente con el pro-labore ya descontado como gasto: usar la utilidad que no cuenta el trabajo propio es el error que lleva a contratar y quebrar (RN-09, 06 §3.2). Le resta la reserva de seguridad, compara contra el salario evaluado y, si falta, traduce el faltante a unidades de cada producto con el margen de contribución que excluye el costo del tiempo (RN-17, 06 §4.1) y propone las alternativas del 06 §5. Sin pro-labore definido no hay respuesta y se bloquea con 40950 (BDD-18-2). A Operación le responde lo mismo, y no un 40300: prolabore_config lleva RLS y le devuelve cero filas, así que desde la API los dos casos son indistinguibles y la API no vuelve a decidir un permiso que ya decide la base (ADR-006). El formulario es «simulacion». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901, 40902, 40950 y 42200 con data.errores.",
+        "operationId" : "simulacionDeContratacion",
+        "parameters" : [ {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Simulacion"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreSimulacionDeContratacion"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Simular si se puede contratar, y por cuánto",
+        "tags" : [ "Nómina" ]
       }
     },
     "/api/v0/consultas/sobres" : {
@@ -4501,6 +6804,290 @@
         "tags" : [ "Versión" ]
       }
     },
+    "/api/v0/cotizaciones/{id}" : {
+      "put" : {
+        "description" : "Emite lo que se le pasa al cliente antes de que haya pedido (CU-11). Sus líneas son las mismas de un pedido y comparten esquema. El valor total lo calcula la API de las líneas: el front no calcula plata (ADR-018). El id va en la ruta por lo mismo que en movimientos (ADR-020): el mismo dos veces responde 40900. La emiten los dos tipos de usuario, como el pedido. El formulario es «cotizacion»; sin líneas responde 42280 y una validez anterior a la emisión, 42281. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40302, 40900, 40901, 40902, 42200 con data.errores, 42232, 42280 y 42281.",
+        "operationId" : "emitirCotizacion",
+        "parameters" : [ {
+          "description" : "El id de la cotización, que genera quien la emite",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevaCotizacion"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreCotizacion"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Emitir una cotización",
+        "tags" : [ "Cotizaciones" ]
+      }
+    },
+    "/api/v0/cotizaciones/{id}/aceptacion" : {
+      "post" : {
+        "description" : "El cliente la aceptó: crea el pedido con las mismas líneas, el mismo cliente y el mismo anticipo, sin volver a digitar nada (RF-40, CU-05). Devuelve el pedido creado, en estado en_proceso, y deja la cotización en aceptada con su pedidoId. Los precios son los de la cotización y no los del catálogo de hoy: es el precio que se le sostuvo al cliente. No tiene formulario: no hay nada que escribir. Una ya aceptada responde 40980, y una anulada o vencida, 40981. La aceptan los dos tipos de usuario, como el pedido. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40302, 40400, 40901, 40902, 40980 y 40981.",
+        "operationId" : "aceptarCotizacion",
+        "parameters" : [ {
+          "description" : "El id de la cotización",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobrePedido"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Convertir la cotización en pedido",
+        "tags" : [ "Cotizaciones" ]
+      }
+    },
+    "/api/v0/cotizaciones/{id}/anulacion" : {
+      "post" : {
+        "description" : "Anula la cotización con motivo escrito y no borra nada (RN-13). Una ya aceptada no se anula —lo que hay que corregir es el pedido— y responde 40980; una ya anulada, 40900. Solo Gerencia. El formulario es «anulacion-de-cotizacion». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902, 40980 y 42200 con data.errores.",
+        "operationId" : "anularCotizacion",
+        "parameters" : [ {
+          "description" : "El id de la cotización",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Motivo"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreCotizacion"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Anular una cotización",
+        "tags" : [ "Cotizaciones" ]
+      }
+    },
+    "/api/v0/cotizaciones/{id}/documento" : {
+      "post" : {
+        "description" : "El PDF con el logo del negocio, listo para pasarlo por WhatsApp (RF-36, CU-11). Baja dentro del sobre, en data, como un Documento en base64 (tarea 8.11). No lleva costos ni márgenes: es el papel del cliente. Una cotización anulada responde 40981. Lo generan los dos tipos de usuario. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40400, 40901, 40902 y 40981.",
+        "operationId" : "cotizacionEnPdf",
+        "parameters" : [ {
+          "description" : "El id de la cotización",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreDocumento"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "La cotización en PDF con el logo",
+        "tags" : [ "Cotizaciones" ]
+      }
+    },
     "/api/v0/cuentas" : {
       "post" : {
         "description" : "Crea una cuenta de dinero: efectivo, Nequi, Daviplata, un banco (RF-06). Solo Gerencia, y se crea desde Movimientos (RF-97, 10 §4.3). El saldo que se escribe entra como saldo inicial de la cuenta, no como ingreso, así que no afecta la utilidad del mes. El formulario es «cuenta». Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902 y 42200 con data.errores.",
@@ -4566,6 +7153,410 @@
         },
         "summary" : "Crear una cuenta de dinero",
         "tags" : [ "Cuentas" ]
+      }
+    },
+    "/api/v0/empleados/{id}" : {
+      "put" : {
+        "description" : "Da de alta a quien entra a nómina, con su salario acordado y su fecha de ingreso (RF-54, CU-19). No crea un usuario: se puede estar en nómina sin entrar al sistema, y por eso son dos tablas (04 §4.2). El id va en la ruta por lo mismo que en movimientos (ADR-020): el mismo dos veces responde 40900. Solo Gerencia, y lo rechaza la base con empleados_insercion (04 §7). El formulario es «empleada»; un usuario que ya tiene ficha responde 42253, que es empleados_usuario_id_key. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 42200 con data.errores y 42253.",
+        "operationId" : "registrarEmpleada",
+        "parameters" : [ {
+          "description" : "El id de la empleada, que genera quien la registra",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevaEmpleada"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreEmpleada"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Dar de alta a una empleada",
+        "tags" : [ "Nómina" ]
+      }
+    },
+    "/api/v0/empleados/{id}/anulacion" : {
+      "post" : {
+        "description" : "Anula la ficha con motivo escrito y no borra nada (RN-13): guarda cuándo, quién y por qué. No es retirar: se anula lo que no debió registrarse, y se retira a quien trabajó y dejó de hacerlo. Solo Gerencia. Una ficha ya anulada responde 40900. El formulario es «anulacion-de-empleada». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902 y 42200 con data.errores.",
+        "operationId" : "anularEmpleada",
+        "parameters" : [ {
+          "description" : "El id de la empleada",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Motivo"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreEmpleada"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Anular la ficha de una empleada",
+        "tags" : [ "Nómina" ]
+      }
+    },
+    "/api/v0/empleados/{id}/edicion" : {
+      "post" : {
+        "description" : "Cambia el nombre, el documento, el salario acordado, las horas pactadas o el usuario al que se conecta. La fecha de ingreso no se edita: moverla cambiaría de mes liquidaciones ya hechas. El aumento se escribe encima —empleados no guarda historial de salario, a diferencia de costos_producto— y las liquidaciones anteriores conservan el suyo en nomina_detalle.salario_base. Solo Gerencia, y lo rechaza la base con empleados_actualizacion. El formulario es «edicion-de-empleada». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40901, 40902, 42200 con data.errores y 42253.",
+        "operationId" : "editarEmpleada",
+        "parameters" : [ {
+          "description" : "El id de la empleada",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EdicionDeEmpleada"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreEmpleada"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Editar la ficha de una empleada",
+        "tags" : [ "Nómina" ]
+      }
+    },
+    "/api/v0/empleados/{id}/retiro" : {
+      "post" : {
+        "description" : "Pone la fecha de retiro: dejó de estar en nómina y no entra en las liquidaciones de los meses siguientes. No anula nada —sus liquidaciones y sus adelantos siguen ahí— y no es una liquidación definitiva de contrato, que este módulo no calcula (06 §1). Solo Gerencia. El formulario es «retiro-de-empleada»; una fecha anterior a la de ingreso responde 42250, y una ya retirada, 40900. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902, 42200 con data.errores y 42250.",
+        "operationId" : "retirarEmpleada",
+        "parameters" : [ {
+          "description" : "El id de la empleada",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RetiroDeEmpleada"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreEmpleada"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Retirar a una empleada de la nómina",
+        "tags" : [ "Nómina" ]
+      }
+    },
+    "/api/v0/importaciones/{id}" : {
+      "put" : {
+        "description" : "Escribe los movimientos de las filas válidas y devuelve el mismo informe con lo que entró (RF-64, RF-65, CU-21). No hay estado guardado entre el análisis y esta llamada: el archivo y el mapeo vuelven a viajar, y por eso no hace falta una tabla de importaciones (tarea 8.11). El id va en la ruta por lo mismo que en movimientos (ADR-020): el mismo archivo confirmado dos veces responde 40900, que es lo que impide cargarlo repetido. Un archivo con filas que coinciden con movimientos que ya existen responde 40970 y no escribe nada, hasta que se confirme con aceptarDuplicados (BDD-21-3). Solo Gerencia. Si no queda ni una fila válida responde 42271. Puede devolver 20100, 40002, 40070, 40071, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 40970, 42270 y 42271.",
+        "operationId" : "confirmarImportacion",
+        "parameters" : [ {
+          "description" : "El id de la importación, que genera quien la confirma",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "encoding" : {
+                "mapeo" : {
+                  "contentType" : "application/json"
+                }
+              },
+              "schema" : {
+                "properties" : {
+                  "aceptarDuplicados" : {
+                    "description" : "Con true entran también las filas que coinciden con un movimiento que ya existe. Sin él, un archivo con duplicados responde 40970 y no escribe nada (BDD-21-3)",
+                    "type" : "boolean"
+                  },
+                  "archivo" : {
+                    "description" : "El mismo CSV que se analizó, de 5 MB como máximo",
+                    "format" : "binary",
+                    "type" : "string"
+                  },
+                  "mapeo" : {
+                    "additionalProperties" : {
+                      "type" : "string"
+                    },
+                    "description" : "Qué columna del archivo es cada campo del movimiento: {\"clave del campo\": \"nombre de la columna\"}. Las claves salen de columnasEsperadas",
+                    "type" : "object"
+                  }
+                },
+                "required" : [ "archivo", "mapeo" ],
+                "type" : "object"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreInformeDeImportacion"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Confirmar la importación y escribir las filas válidas",
+        "tags" : [ "Importación" ]
       }
     },
     "/api/v0/movimientos/{id}" : {
@@ -4646,7 +7637,7 @@
     },
     "/api/v0/movimientos/{id}/adjuntos" : {
       "post" : {
-        "description" : "Sube la foto del recibo o el PDF de la factura y lo deja colgado del movimiento (RF-09, RF-12, CU-02). El archivo pasa por la API y nunca va directo al almacenamiento (07 §1). Máximo 5 MB, que responde 40020, y solo image/jpeg, image/png, image/webp o application/pdf, que responde 40021. Adjuntan los dos tipos de usuario. No tiene formulario: el cuerpo es multipart/form-data con una sola parte, «archivo». Devolver el archivo todavía no está acordado. Puede devolver 20100, 40002, 40020, 40021, 40100, 40101, 40102, 40103, 40302, 40400, 40901 y 40902.",
+        "description" : "Sube la foto del recibo o el PDF de la factura y lo deja colgado del movimiento (RF-09, RF-12, CU-02). El archivo pasa por la API y nunca va directo al almacenamiento (07 §1). Máximo 5 MB, que responde 40020, y solo image/jpeg, image/png, image/webp o application/pdf, que responde 40021. Adjuntan los dos tipos de usuario. No tiene formulario: el cuerpo es multipart/form-data con una sola parte, «archivo». Devolver el archivo sigue sin operación, pero la forma en que bajaría ya está acordada desde el 0.15.0: es el esquema Documento, dentro del sobre. La operación es de la tarea 3.6. Puede devolver 20100, 40002, 40020, 40021, 40100, 40101, 40102, 40103, 40302, 40400, 40901 y 40902.",
         "operationId" : "adjuntarSoporte",
         "parameters" : [ {
           "description" : "El id del movimiento al que se le adjunta el soporte",
@@ -4802,6 +7793,224 @@
         },
         "summary" : "Anular un movimiento",
         "tags" : [ "Movimientos" ]
+      }
+    },
+    "/api/v0/nomina/liquidaciones/{id}" : {
+      "put" : {
+        "description" : "Liquida el mes de una empleada (RF-55, RF-56, CU-19, BDD-26-2). La API no rehace los pasos: llama a fn_liquidar_nomina, que en una sola transacción escribe la fila de nomina_detalle, marca con descontado_en los adelantos pendientes de esa persona y escribe el movimiento de tipo gasto que reconoce el gasto de personal completo (04 §10, 06 §6.3). Las cifras son las del 06 §6.1: el valor de la hora ordinaria sale del salario acordado entre las horas pactadas, la extra lleva el recargo, y al devengado solo entran el salario del período y el total de las horas extra, no las tarifas por hora. El id va en la ruta por lo mismo que en movimientos (ADR-020): el mismo dos veces responde 40900. Solo Gerencia, y lo rechaza la base con nom_escritura. El formulario es «liquidacion»; un período cerrado responde 40951 y una empleada ya liquidada en él, 40952, que es nomina_detalle_periodo_empleado_key. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 40951, 40952, 42200 con data.errores, 42223, 42224 y 42251.",
+        "operationId" : "liquidarNomina",
+        "parameters" : [ {
+          "description" : "El id de la liquidación, que genera quien la hace",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevaLiquidacion"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreLiquidacion"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Liquidar la nómina de una empleada",
+        "tags" : [ "Nómina" ]
+      }
+    },
+    "/api/v0/nomina/periodos/{id}" : {
+      "put" : {
+        "description" : "Abre el mes que se va a liquidar. Es único por año y mes: el segundo con la misma pareja responde 42252, que es nomina_periodos_anio_mes_key. No es el cierre mensual del negocio, que es otra tabla y otro sprint. Solo Gerencia, y lo rechaza la base con nom_per_insercion. El formulario es «periodo-de-nomina». Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 42200 con data.errores y 42252.",
+        "operationId" : "abrirPeriodoDeNomina",
+        "parameters" : [ {
+          "description" : "El id del período, que genera quien lo abre",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevoPeriodoDeNomina"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobrePeriodoDeNomina"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Abrir el período de nómina de un mes",
+        "tags" : [ "Nómina" ]
+      }
+    },
+    "/api/v0/nomina/periodos/{id}/cierre" : {
+      "post" : {
+        "description" : "Cierra el mes: guarda cuándo y quién, y desde ahí no admite más liquidaciones —una más responde 40951—. No tiene formulario: no hay nada que escribir. Un período ya cerrado responde 40900. Solo Gerencia, y lo rechaza la base con nom_per_actualizacion. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901 y 40902.",
+        "operationId" : "cerrarPeriodoDeNomina",
+        "parameters" : [ {
+          "description" : "El id del período",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobrePeriodoDeNomina"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Cerrar el período de nómina",
+        "tags" : [ "Nómina" ]
       }
     },
     "/api/v0/pedidos/{id}" : {
@@ -5182,6 +8391,72 @@
         },
         "summary" : "Entregar el pedido y cobrar el saldo",
         "tags" : [ "Pedidos" ]
+      }
+    },
+    "/api/v0/pedidos/{id}/remision" : {
+      "post" : {
+        "description" : "El papel de lo que se entregó, en PDF con el logo (RF-37, CU-11). Cuelga del pedido y no de la cotización porque lo entregado es un pedido: una cotización puede no haberse aceptado nunca. Baja dentro del sobre, en data, como un Documento en base64 (tarea 8.11). Un pedido anulado responde 40900. La generan los dos tipos de usuario. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40400, 40900, 40901 y 40902.",
+        "operationId" : "remisionEnPdf",
+        "parameters" : [ {
+          "description" : "El id del pedido",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreDocumento"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "La remisión de entrega en PDF",
+        "tags" : [ "Cotizaciones" ]
       }
     },
     "/api/v0/productos/{id}" : {
@@ -6308,17 +9583,26 @@
     "description" : "A quién se le entrega: nombre, contacto y notas",
     "name" : "Clientes"
   }, {
+    "description" : "Lo que se le entrega al cliente en papel: la cotización que se le pasa por WhatsApp y la remisión de lo entregado",
+    "name" : "Cotizaciones"
+  }, {
     "description" : "Las cuentas de dinero donde se registra cada movimiento",
     "name" : "Cuentas"
   }, {
     "description" : "Los campos de cada formulario y sus reglas, como datos",
     "name" : "Formularios"
   }, {
+    "description" : "El histórico que entra desde un CSV, con su mapeo de columnas y su informe fila por fila",
+    "name" : "Importación"
+  }, {
     "description" : "El libro único: lo que entra, lo que sale y lo que solo cambia de cuenta",
     "name" : "Movimientos"
   }, {
     "description" : "Lo que la sesión puede ver, dictado por la API",
     "name" : "Navegación"
+  }, {
+    "description" : "Las empleadas, sus adelantos, la liquidación del mes y el simulador que responde si se puede contratar",
+    "name" : "Nómina"
   }, {
     "description" : "Los pedidos del taller, y la entrega que causa la venta",
     "name" : "Pedidos"
@@ -6789,6 +10073,142 @@
       "sprint" : 7
     },
     "status" : 42294
+  }, {
+    "cuando" : "El simulador o la productividad, cuando no hay pro-labore vigente. También es lo que recibe Operación, a quien prolabore_config no le devuelve ninguna fila",
+    "http" : 409,
+    "mensaje" : "Define primero el pro-labore de la gerencia. Sin él, el simulador daría una cifra inflada.",
+    "modulo" : "NOMINA_Y_ADELANTOS",
+    "nombre" : "SIN_PROLABORE_DEFINIDO",
+    "pendienteDeEmitir" : true,
+    "status" : 40950
+  }, {
+    "cuando" : "Liquidar o volver a cerrar un período que ya tiene cerrado_en",
+    "http" : 409,
+    "mensaje" : "Ese mes de nómina ya está cerrado.",
+    "modulo" : "NOMINA_Y_ADELANTOS",
+    "nombre" : "PERIODO_DE_NOMINA_CERRADO",
+    "pendienteDeEmitir" : true,
+    "status" : 40951
+  }, {
+    "cuando" : "nomina_detalle_periodo_empleado_key: la segunda liquidación de la misma pareja",
+    "http" : 409,
+    "mensaje" : "Esa persona ya está liquidada en ese mes.",
+    "modulo" : "NOMINA_Y_ADELANTOS",
+    "nombre" : "EMPLEADA_YA_LIQUIDADA",
+    "pendienteDeEmitir" : true,
+    "status" : 40952
+  }, {
+    "cuando" : "Retirar a una empleada con una fecha anterior a su fecha_ingreso",
+    "http" : 422,
+    "mensaje" : "La fecha de retiro no puede ser anterior a la de ingreso.",
+    "modulo" : "NOMINA_Y_ADELANTOS",
+    "nombre" : "FECHA_DE_RETIRO_ANTERIOR_AL_INGRESO",
+    "pendienteDeEmitir" : true,
+    "status" : 42250
+  }, {
+    "cuando" : "La llave foránea empleado_id de adelantos o de nomina_detalle: no existe, está anulada o ya se retiró",
+    "http" : 422,
+    "mensaje" : "Esa persona no está en nómina.",
+    "modulo" : "NOMINA_Y_ADELANTOS",
+    "nombre" : "EMPLEADA_NO_ASIGNABLE",
+    "pendienteDeEmitir" : true,
+    "status" : 42251
+  }, {
+    "cuando" : "nomina_periodos_anio_mes_key: ya hay un período con ese año y ese mes",
+    "http" : 422,
+    "mensaje" : "Ese mes de nómina ya está abierto.",
+    "modulo" : "NOMINA_Y_ADELANTOS",
+    "nombre" : "PERIODO_DE_NOMINA_YA_EXISTE",
+    "pendienteDeEmitir" : true,
+    "status" : 42252
+  }, {
+    "cuando" : "empleados_usuario_id_key: dos fichas no cuelgan del mismo usuario",
+    "http" : 422,
+    "mensaje" : "Ese usuario ya tiene ficha de nómina.",
+    "modulo" : "NOMINA_Y_ADELANTOS",
+    "nombre" : "EMPLEADA_YA_TIENE_USUARIO",
+    "pendienteDeEmitir" : true,
+    "status" : 42253
+  }, {
+    "cuando" : "Aceptar o anular una cotización que ya tiene pedidoId",
+    "http" : 409,
+    "mensaje" : "Esa cotización ya se convirtió en pedido.",
+    "modulo" : "COTIZACIONES",
+    "nombre" : "COTIZACION_YA_ACEPTADA",
+    "pendienteDeEmitir" : true,
+    "status" : 40980
+  }, {
+    "cuando" : "Aceptar o pedir el PDF de una cotización anulada o vencida",
+    "http" : 409,
+    "mensaje" : "Esa cotización ya no está vigente.",
+    "modulo" : "COTIZACIONES",
+    "nombre" : "COTIZACION_YA_ESTA_CERRADA",
+    "pendienteDeEmitir" : true,
+    "status" : 40981
+  }, {
+    "cuando" : "El validador de anticipo mínimo cuando una línea apunta a un producto sin fila en costos_producto. También es lo que recibe Operación, a quien esa tabla no le devuelve nada",
+    "http" : 409,
+    "mensaje" : "Uno de los productos no tiene costo registrado, así que no hay de dónde sacar el anticipo mínimo.",
+    "modulo" : "COTIZACIONES",
+    "nombre" : "PRODUCTO_SIN_COSTO",
+    "pendienteDeEmitir" : true,
+    "status" : 40982
+  }, {
+    "cuando" : "Emitir una cotización sin líneas, o con una línea de cantidad o precio que no sirve",
+    "http" : 422,
+    "mensaje" : "La cotización necesita al menos un producto con cantidad y precio.",
+    "modulo" : "COTIZACIONES",
+    "nombre" : "LINEAS_DE_LA_COTIZACION_INVALIDAS",
+    "pendienteDeEmitir" : true,
+    "status" : 42280
+  }, {
+    "cuando" : "validaHasta anterior a fechaEmision",
+    "http" : 422,
+    "mensaje" : "La cotización no puede vencer antes de emitirse.",
+    "modulo" : "COTIZACIONES",
+    "nombre" : "FECHA_DE_LA_COTIZACION_INVALIDA",
+    "pendienteDeEmitir" : true,
+    "status" : 42281
+  }, {
+    "cuando" : "El CSV que se sube a importar supera el tope",
+    "http" : 400,
+    "mensaje" : "El archivo pesa más de 5 MB.",
+    "modulo" : "EXPORTACION_IMPORTACION_Y_RESPALDO",
+    "nombre" : "ARCHIVO_DE_IMPORTACION_DEMASIADO_GRANDE",
+    "pendienteDeEmitir" : true,
+    "status" : 40070
+  }, {
+    "cuando" : "El archivo que se sube a importar no es text/csv",
+    "http" : 400,
+    "mensaje" : "Solo se puede importar un archivo CSV.",
+    "modulo" : "EXPORTACION_IMPORTACION_Y_RESPALDO",
+    "nombre" : "ARCHIVO_DE_IMPORTACION_NO_ES_CSV",
+    "pendienteDeEmitir" : true,
+    "status" : 40071
+  }, {
+    "cuando" : "Confirmar una importación con filas que coinciden con movimientos existentes, sin aceptarDuplicados",
+    "http" : 409,
+    "mensaje" : "El archivo trae movimientos que ya están registrados. Confirma si quieres cargarlos de todos modos.",
+    "modulo" : "EXPORTACION_IMPORTACION_Y_RESPALDO",
+    "nombre" : "IMPORTACION_CON_DUPLICADOS",
+    "pendienteDeEmitir" : true,
+    "status" : 40970
+  }, {
+    "cuando" : "El mapeo no cubre alguna de las columnas obligatorias",
+    "http" : 422,
+    "mensaje" : "Falta decir qué columna del archivo es cada dato.",
+    "modulo" : "EXPORTACION_IMPORTACION_Y_RESPALDO",
+    "nombre" : "MAPEO_DE_COLUMNAS_INCOMPLETO",
+    "pendienteDeEmitir" : true,
+    "status" : 42270
+  }, {
+    "cuando" : "Confirmar una importación en la que todas las filas quedaron inválidas",
+    "http" : 422,
+    "mensaje" : "Ninguna fila del archivo se puede importar.",
+    "modulo" : "EXPORTACION_IMPORTACION_Y_RESPALDO",
+    "nombre" : "CSV_SIN_FILAS_VALIDAS",
+    "pendienteDeEmitir" : true,
+    "status" : 42271
   }, {
     "cuando" : "Cualquier fallo no contemplado. Nunca expone la traza ni el texto de la excepción",
     "http" : 500,
