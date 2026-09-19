@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -38,13 +38,13 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 20 | 17 | 0 | 3 | 4 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 20 | 13 | 0 | 7 | 7,5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 13 | 4 | 0 | 9 | 10,5 |
-| [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 1 | 0 | 9 | 11 |
+| [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 10 | 2 | 0 | 8 | 10,5 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 3 | 0 | 7 | 7 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 0 | 0 | 10 | 15 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 0 | 0 | 9 | 12,5 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 11 | 1 | 0 | 10 | 9,5 |
-| **Total** | **133** | **55** | **2** | **76** | **96,5** |
+| **Total** | **133** | **56** | **2** | **75** | **96** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -120,22 +120,22 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) · [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
+| **API** | [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) · [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) |
 | **Base** | [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) |
-| **Contrato** | [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
+| **Contrato** | [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **78 tareas y 96,5 días de trabajo** de 133 tareas del plan.
+Quedan **77 tareas y 96 días de trabajo** de 133 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 14,5 semanas | **17,5 semanas** |
+| 1 | 14,4 semanas | **17,4 semanas** |
 | 2 | 8,1 semanas | **11,1 semanas** |
-| 3 | 6,6 semanas | **9,6 semanas** |
+| 3 | 6,4 semanas | **9,4 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -148,6 +148,11 @@ o indirectamente. No es el orden en que se descubrieron.
       endpoints** ([3.4](docs/08-plan-de-desarrollo.md#tarea-3-4)). Un contrato se acuerda **antes** de implementarlo
       ([21 §3.2](docs/21-trabajo-en-paralelo.md#32-contrato-acordado-y-contrato-generado-no-se-contradicen)): escribirlo tarde deja al carril Front esperando al API, que es justo lo que
       el paralelismo quiere evitar.
+- [x] **El contrato de pedidos** ([4.10](docs/08-plan-de-desarrollo.md#tarea-4-10)) — hecho: tenía **22 tareas detrás**, una directa —la
+      gestión de clientes ([4.2](docs/08-plan-de-desarrollo.md#tarea-4-2))— y 21 indirectas, y la [4.5](docs/08-plan-de-desarrollo.md#tarea-4-5) está en el camino crítico. El
+      `v0.10.0` estrena el rango `30`–`39`, que estaba entero libre. **Dejó una pregunta para
+      Gerencia y una migración sin tarea:** el mockup no tiene pantalla de clientes y `pedidos` no
+      tiene dónde guardar el motivo de la cancelación, las dos en el [§10](#10-decisiones-de-construcción-que-conviene-revisar).
 - [x] **Poner qa al día** ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) — hecho: **dev y qa vuelven a ser el mismo esquema**, y con eso se
       destraba la prueba de permisos contra qa ([2.11](docs/08-plan-de-desarrollo.md#tarea-2-11)). El retrato de antes desmintió al tablero en
       lo que más importaba: qa **sí** rechazaba ya el saldo negativo, el sobre del 120 % y el motivo
@@ -510,7 +515,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 - [x] [**4.1**](docs/08-plan-de-desarrollo.md#tarea-4-1) Dominio `Pedido`, estados y transiciones · API — los cinco estados y los siete pasos
       que existen entre ellos; entregado y cancelado son finales, y anular no es cancelar
-- [ ] 🔒 [**4.2**](docs/08-plan-de-desarrollo.md#tarea-4-2) Gestión de clientes · API, Front
+- [ ] ⚡ [**4.2**](docs/08-plan-de-desarrollo.md#tarea-4-2) Gestión de clientes · API, Front
 - [ ] 🔒 [**4.3**](docs/08-plan-de-desarrollo.md#tarea-4-3) Pedido con líneas de producto · API, Front
 - [ ] ⚡ [**4.4**](docs/08-plan-de-desarrollo.md#tarea-4-4) `CobrarAnticipo`: crea pasivo, no ingreso · API
 - [ ] 🔒 [**4.5**](docs/08-plan-de-desarrollo.md#tarea-4-5) Función en la base que entrega el pedido y causa la venta en una transacción · Base
@@ -518,7 +523,9 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [ ] 🔒 [**4.7**](docs/08-plan-de-desarrollo.md#tarea-4-7) Resaltado de pedidos estancados · API, Front
 - [ ] 🔒 [**4.8**](docs/08-plan-de-desarrollo.md#tarea-4-8) Factura adjunta al pedido · API, Front
 - [ ] 🔒 [**4.9**](docs/08-plan-de-desarrollo.md#tarea-4-9) Cancelación con destino del anticipo · API
-- [ ] ⚡ [**4.10**](docs/08-plan-de-desarrollo.md#tarea-4-10) Contrato de clientes, pedidos y anticipos · Contrato
+- [x] [**4.10**](docs/08-plan-de-desarrollo.md#tarea-4-10) Contrato de clientes, pedidos y anticipos · Contrato — v0.10.0:
+      nueve operaciones, catorce esquemas y nueve códigos que estrenan el rango `30`–`39`. La entrega
+      recibe lo que recibe `fn_entregar_pedido` y nada más; cancelar y anular son dos operaciones
 
 **[Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Cotizador**
 
@@ -1421,6 +1428,46 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       guardarlo así la habría perdido sin avisar
 - [ ] **`RegistrarMovimiento` todavía no está cableado.** El bean y su `Clock` los pone su primer
       consumidor, que es la [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4); el adaptador sí es un bean desde ya
+
+**De la tarea [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10):**
+
+- [ ] 🔒 **El mockup no tiene pantalla de clientes, y el contrato acaba de acordar tres operaciones
+      de cliente.** En el prototipo que Gerencia aprobó, el campo «Cliente» del formulario de pedido
+      es **texto libre**: no hay lista, ni pantalla donde darlos de alta, ni panel de anulados. Pero
+      la [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) es «Gestión de clientes · API **y** Front» y cuelga de este contrato, así que no
+      declarar nada la dejaba bloqueada. Se acordó el mínimo que esa tarea necesita —crear,
+      consultar y anular, con los cuatro campos del [RF-18](docs/03-requisitos-y-bdd.md#rf-18)—, y **queda por decidir si se diseña la
+      pantalla o si el cliente se sigue escribiendo a mano**. Si se decide lo segundo, sobran tres
+      operaciones y un formulario
+- [ ] **Nueve códigos y no dieciséis, porque los de campo se agrupan.** Los rechazos que las reglas
+      justifican dan, uno por uno, muchos más `422` de los que caben con sentido en un módulo, y el
+      [20 §2.4](docs/20-contrato-de-api.md#24-los-rangos-por-módulo) dice que cuando eso pasa «varios de ellos merecían un estado más preciso». Una
+      pregunta sobre un campo es un código y el texto concreto viaja en `data.errores`; lo que lleva
+      código propio es lo que choca con el **estado** del pedido, porque ahí no hay campo que
+      corregir. Quedan libres `42236` a `42239` y `40933` a `40939`
+- [ ] 🔒 **`pedidos` no tiene dónde guardar el motivo de la cancelación ni el destino del anticipo.**
+      El contrato ya declara `POST /api/v0/pedidos/{id}/cancelacion` con los dos campos, y el dominio
+      de la [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1) lo había anotado: «el modelo todavía no tiene dónde guardarlo». La [4.9](docs/08-plan-de-desarrollo.md#tarea-4-9) necesita
+      una migración que no está en ninguna tarea, igual que le pasó a `adjuntos` con el [plan 22](plan/22-el-contrato-de-movimientos.md)
+- [ ] **El número visible del pedido lo pone la API, y ningún documento decía quién.** El mockup los
+      pinta como `P-0287`, así que existen y son correlativos. Por eso `numero` no está en
+      `NuevoPedido` y `pedidos_numero_key` se quedó sin código: el cliente no puede provocar ese
+      choque. Con qué regla se genera la serie es de la [4.3](docs/08-plan-de-desarrollo.md#tarea-4-3)
+- [ ] **El `precioUnitario` viaja en cada línea en vez de leerse del catálogo.** Es lo que hace que
+      un pedido de septiembre siga valiendo lo que valía cuando el precio del producto cambie en
+      noviembre, y es la razón de que `pedido_lineas.precio_unitario` sea una columna y no un `JOIN`.
+      El front lo toma del catálogo al pintar; el contrato no adivina de dónde salió
+- [ ] **La consulta de pedidos no pagina, y el listado de bitácora sí.** El [RF-20](docs/03-requisitos-y-bdd.md#rf-20) pide orden por
+      fecha y filtros por estado y cliente, no páginas, y los filtros de fecha ya acotan lo que
+      vuelve. Si el taller acumula años de pedidos habrá que paginarla, y entonces cambia el contrato
+- [ ] **La entrega parcial entra como estado y no como operación.** Es prioridad C ([RF-25](docs/03-requisitos-y-bdd.md#rf-25)) y el
+      [CU-07](docs/02-casos-de-uso.md#cu-07) A2 la describe como una variante de la entrega, no como otra cosa. `parcial` está en el
+      ENUM y en el contrato; `en_proceso → parcial` es el único paso del dominio sin operación que lo
+      dé, junto con `cotizado → en_proceso`, que es del cotizador
+- [ ] **El anticipo mínimo y el adjunto de la factura se cedieron por nombre.** El anticipo mínimo
+      ([RF-38](docs/03-requisitos-y-bdd.md#rf-38), [RF-39](docs/03-requisitos-y-bdd.md#rf-39), [CU-12](docs/02-casos-de-uso.md#cu-12)) el mockup lo pinta dentro del formulario de pedido, pero su fórmula es
+      del costeo y su operación es del cotizador: va con la [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11). El adjunto ([RF-27](docs/03-requisitos-y-bdd.md#rf-27)) depende de
+      la tabla `adjuntos`, que no existe, y su tarea es la [4.8](docs/08-plan-de-desarrollo.md#tarea-4-8)
 
 **De la tarea [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8):**
 
