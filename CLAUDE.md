@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [7.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -308,7 +308,13 @@ estrenan a la vez **los tres rangos que quedaban vacíos**, con lo que los diez 
 tienen el suyo. Lo que decide es **cómo baja un archivo**: dentro del sobre, en base64 y con tope de
 5 MB, para que ninguna ruta tenga dos formas de contestar. Y con él entró al plan la [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12), las
 tablas del cotizador, que estaban en el catálogo del [04](docs/04-modelo-de-datos.md) sin `CREATE TABLE` y que ninguna tarea
-creaba. Van 66 de las 141 tareas.
+creaba. **Y las tres listas del registro rápido ya se llenan** ([1.10](docs/08-plan-de-desarrollo.md#tarea-1-10)): decían «no se pudieron
+cargar las opciones» y era cierto —el formulario «movimiento» nombraba dos rutas que nadie servía—,
+y ahora existen las cuatro operaciones de cuentas y categorías, con las cuentas **sin saldo** para
+que Operación elija sin ver la caja. El «solo Gerencia» que el contrato promete desde la [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17)
+**lo impone por fin la base**, con el molde de `cargos`: hasta esa migración, Operación creaba las
+dos. En el front, el panel «Cuentas de dinero» vive dentro de Movimientos y se pinta solo si la
+navegación lo dice. Van 67 de las 141 tareas.
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.
