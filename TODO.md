@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -25,7 +25,7 @@ Cada tarea dice su **carril**: **API** (`prisma_api`), **Base** (`prisma_db`), *
 
 ## 1. Hecho, en progreso y pendiente
 
-Las tres preguntas de siempre. Las secciones 2 a 6 enumeran **las 139 tareas del plan**, una por una
+Las tres preguntas de siempre. Las secciones 2 a 6 enumeran **las 140 tareas del plan**, una por una
 y con su marca; aquí está el resumen. Que no falte ninguna no depende de la memoria de nadie: la
 herramienta compara el tablero con el plan y la verificación falla si alguna no está.
 
@@ -37,14 +37,14 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 18 | 0 | 1 | 1 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 17 | 0 | 4 | 4,5 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 13 | 0 | 9 | 9,5 |
-| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 15 | 6 | 0 | 9 | 9,5 |
+| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 16 | 6 | 0 | 10 | 10,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 2 | 0 | 9 | 11 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 4 | 0 | 6 | 6,5 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 0 | 0 | 10 | 15 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 11 | 1 | 0 | 10 | 9,5 |
-| **Total** | **139** | **62** | **0** | **77** | **94,5** |
+| **Total** | **140** | **62** | **0** | **78** | **95,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -126,7 +126,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 |---|---|
 | **API** | [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [1.21](docs/08-plan-de-desarrollo.md#tarea-1-21) · [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [2.21](docs/08-plan-de-desarrollo.md#tarea-2-21) · [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2) |
-| **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
+| **Front** | [3.16](docs/08-plan-de-desarrollo.md#tarea-3-16) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Contrato** | [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
 <!-- /generado:plan-listas-ya -->
@@ -134,13 +134,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **77 tareas y 94,5 días de trabajo** de 139 tareas del plan.
+Quedan **78 tareas y 95,5 días de trabajo** de 140 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 14,2 semanas | **17,2 semanas** |
-| 2 | 8,0 semanas | **11,0 semanas** |
-| 3 | 6,7 semanas | **9,7 semanas** |
+| 1 | 14,3 semanas | **17,3 semanas** |
+| 2 | 8,1 semanas | **11,1 semanas** |
+| 3 | 6,5 semanas | **9,5 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -509,6 +509,9 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [ ] ⚡ [**3.15**](docs/08-plan-de-desarrollo.md#tarea-3-15) `movimientos`: destino solo en transferencias, origen distinto del destino y la
       fecha contra el día de Bogotá · Base — las dos primeras solo las rechaza hoy el dominio de la
       API, y una transferencia a la misma cuenta **baja el saldo** en `v_saldos_cuenta`
+- [ ] ⚡ [**3.16**](docs/08-plan-de-desarrollo.md#tarea-3-16) El andamio en el celular · Front — por debajo de
+      760 px la barra lateral pasa a ser una barra superior fija y el menú se desplaza de lado,
+      como el mockup; sin ella el [H4](docs/08-plan-de-desarrollo.md#h4) no se puede cronometrar en un celular
 
 **[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
 
@@ -1888,6 +1891,24 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       el 2026-09-17 y su trabajo ya estaba fusionado; lo que faltaba era mirar si había surtido
       efecto, y lo había. Se marcan en este PR de tablero y no en el de su tarea, como pide el
       [21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración), porque esos PR entraron hace dos días
+
+**De la 3.16 (`plan/40-la-3-16-entra-al-plan.md`):**
+
+- [ ] ⚡ **Entró una tarea nueva al plan, la [3.16](docs/08-plan-de-desarrollo.md#tarea-3-16), y el total pasa de 139 a 140.** El
+      [H4](docs/08-plan-de-desarrollo.md#h4) se cronometra en un celular y el front no tiene diseño para uno: la barra
+      lateral mide 224 px en cualquier pantalla. El mockup sí lo diseñó —por debajo de 760 px la barra
+      pasa arriba y el menú se desplaza de lado—, así que era trabajo real que no estaba en ninguna
+      parte, como le pasó a la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) y a las cuatro tareas de Base
+- [ ] 🔒 **Una tarea propia y no parte de la [3.5](docs/08-plan-de-desarrollo.md#tarea-3-5).** El registro rápido es de Movimientos; el
+      diseño para celular toca el andamio de **todas** las pantallas —la barra, el topbar, las dos
+      franjas y el botón flotante—, y meterlo dentro habría hecho dos cosas en un commit, que es lo
+      que el [ADR-028](docs/adr/ADR-028-un-commit-por-tarea.md) prohíbe
+- [ ] 🔒 **La [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6) pasa a depender de ella y la [3.5](docs/08-plan-de-desarrollo.md#tarea-3-5) no.** El cronómetro del
+      [M-01](docs/12-pruebas-y-calidad.md#m-01) se corre con la 3.6 —el gasto con foto— en un celular de verdad, así que sin la
+      3.16 el [H4](docs/08-plan-de-desarrollo.md#h4) no se puede medir. El registro rápido, en cambio, se construye y se prueba en
+      escritorio, y hacerlo esperar lo habría frenado sin que el [H4](docs/08-plan-de-desarrollo.md#h4) ganara nada
+- [ ] **En el [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) y no en el [9](docs/08-plan-de-desarrollo.md#sprint-9)**, donde están la PWA y el endurecimiento. El [H4](docs/08-plan-de-desarrollo.md#h4) es
+      del [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3), y esperar al 9 para ver la aplicación en un celular sería medirlo meses después
 
 **De la 3.5 (`plan/44-el-registro-rapido-de-movimientos.md`):**
 
