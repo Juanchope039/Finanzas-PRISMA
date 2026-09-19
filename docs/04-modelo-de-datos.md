@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -198,7 +198,7 @@ que hay que recordar y pasa a ser algo que el motor sabe.
 | `porcentaje` | `SMALLINT` | `0..100` | 5 | `pedidos.anticipo_pct`, los cuatro `pct_` de `sobres_config` |
 | `anio` | `SMALLINT` | `2020..2100` | 2 | `nomina_periodos.anio`, `cierres_mensuales.anio` |
 | `mes_del_anio` | `SMALLINT` | `1..12` | 2 | `nomina_periodos.mes`, `cierres_mensuales.mes` |
-| `motivo` | `TEXT` | `length(trim(…)) >= 5` | 13 | los doce `anulado_motivo` y `usuarios.desactivado_motivo` |
+| `motivo` | `TEXT` | `length(trim(…)) >= 5` | 15 | los doce `anulado_motivo`, `usuarios.desactivado_motivo`, `pedidos.cancelado_motivo` ([4.11](08-plan-de-desarrollo.md#tarea-4-11)) y `auditoria.motivo` ([2.21](08-plan-de-desarrollo.md#tarea-2-21)) |
 
 Son **nueve dominios**. Tres piden explicación, porque no son solo una mudanza de reglas ya
 escritas:
@@ -241,7 +241,7 @@ y no una casualidad. Las que de verdad cambiaban —y por eso eran el riesgo— 
 ```sql
 CREATE TABLE cargos (
   id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  nombre         TEXT NOT NULL CONSTRAINT cargos_nombre_key UNIQUE,
+  nombre         CITEXT NOT NULL CONSTRAINT cargos_nombre_key UNIQUE,   -- tarea 2.22
   descripcion    TEXT,
   orden          SMALLINT NOT NULL DEFAULT 0,
   activo         BOOLEAN NOT NULL DEFAULT TRUE,
@@ -264,6 +264,19 @@ usuarios históricos que lo tuvieron conservan sentido.
 `desactivacion_con_motivo` las amarra. Sin ella se podía apagar un cargo dejando `anulado_en`
 vacío, y el `CHECK` de motivo —que solo se activa cuando hay `anulado_en`— no se enteraba: un
 cargo desactivado sin explicación, justo lo que el modelo no permite en ninguna otra tabla.
+
+**`nombre` es `CITEXT` y no `TEXT`**, por lo mismo que `usuarios.usuario`: el contrato responde
+`42214` cuando un cargo se crea o se renombra con el nombre de otro **sin distinguir mayúsculas**
+([20 §3](20-contrato-de-api.md#3-el-catálogo)), y con `TEXT` «Domiciliaria» y «domiciliaria» son dos cargos distintos. Se
+resuelve con el tipo y no con un índice sobre `lower(nombre)` para **conservar el nombre
+`cargos_nombre_key`**, del que ya cuelga ese código en la tabla de traducción de la API ([§11](#11-el-contrato-de-errores)).
+
+**Y un cargo que todavía tienen personas activas no se desactiva.** Es el `40911` del contrato, y
+lo impone `tg_proteger_cargo_con_personas`, un trigger `BEFORE UPDATE` sobre `cargos` que dispara
+cuando `activo` pasa de `TRUE` a `FALSE` y existe alguna fila activa de `usuarios` con ese
+`cargo_id`. Va en la base y no en la API por lo mismo que los otros tres guardianes de [§7](#7-seguridad-por-tipo-de-usuario-rls): un
+`UPDATE` directo se la saltaría. Como no es una restricción con nombre sino un `RAISE EXCEPTION`,
+la API lo reconoce por su texto, igual que `tg_proteger_ultima_gerencia` ([§11](#11-el-contrato-de-errores)).
 
 `cargos` y `usuarios` se referencian mutuamente. Por eso `cargos` se crea **sin** las dos llaves
 foráneas hacia `usuarios` y se agregan con `ALTER TABLE` en cuanto `usuarios` existe. Dejarlas
@@ -427,9 +440,15 @@ CREATE TABLE movimientos (
   anulado_dispositivo TEXT,
   anulado_ip        INET,
 
-  CONSTRAINT fecha_no_futura CHECK (fecha_movimiento <= CURRENT_DATE),
+  -- tarea 3.15: el día de Bogotá, no el del huso con que se conecte la sesión
+  CONSTRAINT fecha_no_futura
+    CHECK (fecha_movimiento <= (NOW() AT TIME ZONE 'America/Bogota')::date),
   CONSTRAINT transferencia_con_destino
     CHECK (tipo <> 'transferencia' OR cuenta_destino_id IS NOT NULL),
+  CONSTRAINT destino_solo_en_transferencia                                   -- tarea 3.15
+    CHECK (tipo = 'transferencia' OR cuenta_destino_id IS NULL),
+  CONSTRAINT destino_distinto_del_origen                                     -- tarea 3.15
+    CHECK (cuenta_destino_id IS NULL OR cuenta_destino_id <> cuenta_id),
   CONSTRAINT anulacion_con_motivo
     CHECK (anulado_en IS NULL OR (anulado_por IS NOT NULL AND anulado_motivo IS NOT NULL))
 );
@@ -460,6 +479,21 @@ la utilidad, la caja, el patrimonio o ninguno:
 
 > Esta tabla es la traducción exacta de las reglas [RN-03](03-requisitos-y-bdd.md#rn-03) a [RN-11](03-requisitos-y-bdd.md#rn-11). Cualquier duda sobre cómo
 > registrar algo se responde aquí.
+
+**Las tres reglas de la cuenta de destino son tres restricciones, y las tres responden `42226`.**
+`transferencia_con_destino` exige el destino cuando el tipo lo pide; `destino_solo_en_transferencia`
+lo prohíbe cuando no; y `destino_distinto_del_origen` impide la transferencia de una cuenta a sí
+misma, que además **bajaba el saldo** en `v_saldos_cuenta` ([§6](#6-vistas-de-cálculo-financiero)), porque la vista resta la salida y
+suma la entrada por separado. Las tres son la misma pregunta sobre el mismo campo, así que comparten
+código y lo que cambia es el texto de `data.errores`. El dominio de la API ya las rechazaba las tres;
+hasta la tarea [3.15](08-plan-de-desarrollo.md#tarea-3-15) las dos últimas dependían de que se preguntara por la API, que es lo que
+[ADR-015](adr/ADR-015-validacion-tres-capas.md) no acepta como única defensa.
+
+**`fecha_no_futura` compara contra el día de Bogotá y no contra `CURRENT_DATE`.** `CURRENT_DATE` es
+el día del huso con que esté conectada la sesión, así que una conexión en UTC acepta desde las 19:00
+un movimiento fechado mañana. La zona del negocio es del modelo y no de la configuración ([RNF-08](03-requisitos-y-bdd.md#rnf-08)),
+y es la misma que el dominio usa para decidir a qué día —y con eso a qué mes— pertenece un registro.
+Responde `42223`.
 
 ### 4.4 Pedidos, líneas y anticipos
 
@@ -494,8 +528,18 @@ CREATE TABLE pedidos (
   anulado_en         TIMESTAMPTZ,
   anulado_por        UUID REFERENCES usuarios(id),
   anulado_motivo     motivo,
+  -- tarea 4.11: la cancelación, que no es la anulación
+  cancelado_en       TIMESTAMPTZ,
+  cancelado_por      UUID REFERENCES usuarios(id),
+  cancelado_motivo   motivo,
+  destino_del_anticipo TEXT CONSTRAINT destino_del_anticipo_valido
+                         CHECK (destino_del_anticipo IN ('devolucion','ingreso')),
   CONSTRAINT entregado_con_fecha
-    CHECK (estado <> 'entregado' OR fecha_entrega_real IS NOT NULL)
+    CHECK (estado <> 'entregado' OR fecha_entrega_real IS NOT NULL),
+  CONSTRAINT cancelacion_con_motivo                                          -- tarea 4.11
+    CHECK (estado <> 'cancelado' OR (cancelado_en      IS NOT NULL
+                                 AND cancelado_por     IS NOT NULL
+                                 AND cancelado_motivo  IS NOT NULL))
 );
 
 CREATE INDEX idx_pedidos_fecha  ON pedidos (fecha_pedido DESC) WHERE anulado_en IS NULL;
@@ -530,6 +574,20 @@ CREATE INDEX idx_anticipos_pendientes ON anticipos (pedido_id)
 
 `devengado_en IS NULL` identifica los **anticipos por devengar**: la plata que está en la cuenta
 pero todavía no es del negocio. Es el insumo directo del cálculo de caja libre.
+
+**Cancelar no es anular, y por eso son columnas distintas.** Anular es sacar de las cuentas un
+registro que no debió existir ([RN-13](03-requisitos-y-bdd.md#rn-13)); cancelar es un paso del pedido, el que dice que el trabajo
+no se va a hacer, y arrastra una pregunta que solo existe ahí: **qué pasó con el anticipo ya
+cobrado** ([RF-26](03-requisitos-y-bdd.md#rf-26), [CU-07](02-casos-de-uso.md#cu-07) A3). Si compartieran las columnas `anulado_*`, un pedido cancelado y luego
+anulado perdería una de las dos historias. `cancelacion_con_motivo` amarra el estado con las tres
+columnas, como `desactivacion_con_motivo` hace en `usuarios`: no hay cancelación muda.
+
+`destino_del_anticipo` es un `TEXT` con `CHECK` y no un ENUM, como `aportes_retiros.clase`: los ENUM
+de este modelo son los que viajan por varias tablas —`tipo_movimiento`, `estado_pedido`,
+`tipo_item`, `tipo_usuario`—, y de un ENUM no se quita un valor. Queda en `NULL` cuando el pedido no
+tenía anticipos por devengar, que es cuando el contrato dice que el campo «sobra»; que sea
+obligatorio o no **depende del pedido y no del campo**, así que eso lo comprueba la API y responde
+`42235`, no la base.
 
 ### 4.5 Productos, costeo y cotizaciones
 
@@ -980,10 +1038,14 @@ CREATE TABLE auditoria (
                   'usuario_creado','usuario_desactivado',
                   'clave_restablecida','clave_cambiada',
                   'cargo_creado','cargo_desactivado',
-                  'usuario_reactivado','cambio_revertido')),   -- ver §5.7
+                  'usuario_reactivado','cambio_revertido',    -- ver §5.7
+                  -- tarea 2.21: los cinco que la pantalla distingue y un UPDATE no
+                  'nombre_cambiado','cargo_cambiado','tipo_cambiado',
+                  'cargo_renombrado','cargo_reactivado')),
   usuario_id    UUID,
   tipo          tipo_usuario,
   fecha_hora    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  motivo        motivo,   -- tarea 2.21: por qué, cuando el cambio lo pedía
   dispositivo   TEXT,
   ip            INET,
   datos_antes   JSONB,
@@ -1047,6 +1109,19 @@ El mismo trigger se registra sobre `pedidos`, `anticipos`, `productos`, `costos_
 > mirando `anulado_en`, y `usuarios` desactiva con `desactivado_en`. Auditar `usuarios` con la
 > función genérica falla.
 
+Esa variante es `fn_auditar_usuarios()`, con el trigger `tr_auditar_usuarios` (tarea
+[2.21](08-plan-de-desarrollo.md#tarea-2-21)). Hace lo mismo que la genérica y solo cambia en qué columna mira para decidir que un
+`UPDATE` fue una baja: `desactivado_en` en vez de `anulado_en`. **Escribe la historia de la fila
+—`INSERT`, `UPDATE` y `ANULAR`— y nada más**; los eventos con nombre son de la función de abajo, por
+las dos razones que se explican ahí.
+
+> **`fn_auditar()` lee `OLD.anulado_en` sin preguntar si la columna existe**, y cinco de las tablas
+> que audita no la tienen: `costos_producto`, `prolabore_config`, `nomina_detalle`, `sobres_config`
+> y `cierres_mensuales`. Un `UPDATE` sobre cualquiera de ellas falla con `42703`, que además es un
+> error que la API no sabe traducir. Nada lo caza hoy: `verificar-base.sql` solo actualiza `cargos`,
+> y la semilla corre con los triggers apagados. Está anotado en [`TODO.md`](../TODO.md) [§9](../TODO.md#9-a-vigilar) con lo que hay que correr
+> para confirmarlo; el arreglo lleva migración propia y su comprobación por tabla auditada.
+
 Además de los cambios de fila, la bitácora registra los eventos de acceso y de administración
 de personas:
 
@@ -1062,16 +1137,60 @@ de personas:
 | `clave_cambiada` | La propia persona cambia su contraseña |
 | `cargo_creado` | Gerencia agrega un cargo al catálogo |
 | `cargo_desactivado` | Gerencia desactiva un cargo, con motivo |
+| `nombre_cambiado` | Gerencia le cambia el nombre completo a una persona |
+| `cargo_cambiado` | Gerencia le cambia el cargo a una persona |
+| `tipo_cambiado` | Gerencia le cambia el tipo a una persona: Gerencia u Operación |
+| `cargo_renombrado` | Gerencia renombra un cargo del catálogo |
+| `cargo_reactivado` | Gerencia devuelve un cargo al catálogo |
 
 `registro_id` admite `NULL` por culpa de `inicio_sesion_fallido`: si el usuario tecleado no
 existe, no hay ninguna fila a la que apuntar.
 
-Estos diez eventos **no los escribe un trigger de fila**. Un trigger de fila solo sabe decir
+**Los cinco últimos entran con la tarea [2.21](08-plan-de-desarrollo.md#tarea-2-21)**, y no son un adorno: son los que el contrato
+promete en `EntradaDeBitacora.evento` y el mockup pinta en la columna «Qué pasó». Sin ellos, cambiar
+el nombre y renombrar un cargo llegan a la bitácora como `UPDATE`, que es exactamente lo que no
+distingue una cosa de la otra.
+
+Estos quince eventos **no los escribe un trigger de fila**. Un trigger de fila solo sabe decir
 `INSERT`, `UPDATE` o `ANULAR`: no distingue si ese `UPDATE` fue una desactivación, una
 reactivación o un restablecimiento de clave, y en un intento fallido no hay fila que mirar. Los
 escribe una función `SECURITY DEFINER` que llama la aplicación, dentro de la misma transacción del
 cambio. Tiene que ser así: en un intento fallido todavía no hay sesión abierta, y `auditoria`
 tiene RLS sin política de `INSERT` ([§7](#7-seguridad-por-tipo-de-usuario-rls)), de modo que un `INSERT` directo se rechaza.
+
+Esa función es `fn_registrar_evento`, y esta es su firma (tarea [2.21](08-plan-de-desarrollo.md#tarea-2-21)):
+
+```sql
+CREATE OR REPLACE FUNCTION fn_registrar_evento(
+  p_accion        TEXT,
+  p_tabla         TEXT,
+  p_registro_id   UUID    DEFAULT NULL,   -- nulo solo en inicio_sesion_fallido
+  p_motivo        motivo  DEFAULT NULL,   -- cuando el cambio lo pedía
+  p_dispositivo   TEXT    DEFAULT NULL,
+  p_ip            INET    DEFAULT NULL,
+  p_datos_antes   JSONB   DEFAULT NULL,
+  p_datos_despues JSONB   DEFAULT NULL,
+  p_revierte_a    BIGINT  DEFAULT NULL    -- solo en cambio_revertido, §5.7
+) RETURNS BIGINT
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
+```
+
+Devuelve el `id` de la entrada escrita, que es lo que necesita una reversión para apuntar a la que
+deshace. El autor y su tipo no son parámetros: los pone la función con `auth.uid()`, que sigue
+valiendo dentro de un `SECURITY DEFINER` porque sale de la sesión y no del dueño.
+
+> **El dispositivo y la IP viajan como parámetros, y en `fn_auditar()` no.** El trigger los saca de
+> `current_setting('request.headers')` y de `inet_client_addr()`, que sirven cuando quien escribe es
+> PostgREST; con `prisma_api` de por medio, el primero está vacío y el segundo es la dirección **de
+> la API**, no la de quien hizo el cambio. Quien conoce el dispositivo real es quien recibió la
+> petición, así que los manda.
+
+**Una entrada por campo cambiado.** Un `UPDATE` que cambia a la vez el nombre y el cargo de una
+persona deja **dos** entradas, `nombre_cambiado` y `cargo_cambiado`, cada una con su «de → a». Es lo
+que pintan el contrato y el mockup —una fila por cambio, con una sola etiqueta— y es la segunda
+razón por la que estos eventos no pueden salir del trigger de fila: un trigger `FOR EACH ROW` deja
+una sola entrada por `UPDATE`, y ahí ya no hay forma de decir cuál de los dos cambios revierte quien
+pulse «Revertir».
 
 `usuario_desactivado` y `usuario_reactivado` recorren el mismo camino y llenan las mismas
 columnas. El porqué está en [§5.7](#57-reactivar-y-revertir-escrituras-compensatorias).
@@ -1113,6 +1232,7 @@ SELECT a.id,
        a.tabla,
        a.accion,
        a.registro_id,
+       a.motivo,
        a.usuario_id              AS autor_id,
        autor.nombre_completo     AS autor,
        afectado.nombre_completo  AS sobre_quien,
@@ -1175,6 +1295,13 @@ La reactivación se registra **igual que la desactivación**, con quién, cuánd
 motivo. Si solo se anotara una de las dos, la historia quedaría coja justo en el caso que más se
 consulta: el de la persona que se fue y volvió.
 
+> **El motivo de una reactivación solo puede vivir en `auditoria`**, y por eso esa tabla tiene su
+> propia columna `motivo` desde la tarea [2.21](08-plan-de-desarrollo.md#tarea-2-21). El de una desactivación queda en
+> `usuarios.desactivado_motivo` y la bitácora lo encuentra dentro de `datos_despues`; pero reactivar
+> deja esas tres columnas en `NULL`, así que el porqué de la vuelta no tiene fila donde quedarse.
+> Escribirlo dentro del JSON habría obligado a la API a buscarlo en un sitio distinto según la
+> acción, y el contrato lo declara como un campo de la entrada.
+
 ```sql
 -- Desactivar. El estado guarda quién, cuándo y por qué. La restricción
 -- desactivacion_con_motivo (§4.2) exige las tres columnas: no hay desactivación muda.
@@ -1200,13 +1327,17 @@ clave vieja, porque nadie sabe quién la conoció mientras tanto. La clave tempo
 persona, como en [CU-31](02-casos-de-uso.md#cu-31).
 
 ```sql
--- Revertir. Lo escribe la misma función SECURITY DEFINER del §5.4: `auditoria` no tiene
--- política de INSERT, de modo que un INSERT directo de la aplicación se rechaza.
-INSERT INTO auditoria (tabla, registro_id, accion, usuario_id, tipo,
-                       dispositivo, ip, revierte_a, datos_antes, datos_despues)
-VALUES ('usuarios', :usuario_afectado, 'cambio_revertido', auth.uid(),
-        (SELECT tipo FROM usuarios WHERE id = auth.uid()),
-        :dispositivo, :ip, :entrada_original, :antes, :despues);
+-- Revertir. Lo escribe fn_registrar_evento, la función SECURITY DEFINER del §5.4: `auditoria`
+-- no tiene política de INSERT, de modo que un INSERT directo de la aplicación se rechaza.
+SELECT fn_registrar_evento(
+         p_accion        => 'cambio_revertido',
+         p_tabla         => 'usuarios',
+         p_registro_id   => :usuario_afectado,
+         p_dispositivo   => :dispositivo,
+         p_ip            => :ip,
+         p_datos_antes   => :antes,
+         p_datos_despues => :despues,
+         p_revierte_a    => :entrada_original);
 ```
 
 La restricción `reversion_con_origen` amarra las dos mitades: una fila `cambio_revertido` sin
@@ -1913,6 +2044,14 @@ ORDER BY objeto, restriccion;
 Cada fila que salga de ahí y no tenga entrada en la tabla de traducción **hace fallar la prueba**.
 Agregar una restricción y olvidar el mensaje deja de ser un descubrimiento del día de producción
 y pasa a ser un rojo en la canalización.
+
+> **La prueba mira en las dos direcciones, y eso fija el orden de los PR.** Una restricción sin
+> fila rompe, y una fila sin restricción también. Así que la fila **no se puede poner antes** de que
+> la migración exista: la API la agrega en el mismo PR en que recoge el esquema nuevo. Las cuatro
+> restricciones que faltan por escribir lo dicen en su tarea —`destino_solo_en_transferencia` y
+> `destino_distinto_del_origen` de la [3.15](08-plan-de-desarrollo.md#tarea-3-15), las dos bajo `42226`; `cancelacion_con_motivo` y
+> `destino_del_anticipo_valido` de la [4.11](08-plan-de-desarrollo.md#tarea-4-11)—, y la [2.22](08-plan-de-desarrollo.md#tarea-2-22) no agrega ninguna: reusa
+> `cargos_nombre_key`, que ya tiene la suya.
 
 Tres cosas que esta consulta no cubre, y hay que decirlas:
 
