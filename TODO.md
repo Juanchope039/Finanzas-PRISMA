@@ -707,9 +707,10 @@ a `anon`.
 - **«La versión subió» avisa, pero todavía no bloquea el botón de fusionar.** Es un trabajo más de la
   integración continua de los tres repositorios de código, y GitHub deja fusionar un PR en rojo
   mientras la comprobación no esté marcada como obligatoria en la protección de `develop`. Lo que sí
-  hace hoy, aunque se fusione en rojo, es parar el despliegue: el empuje a `develop` también la corre,
-  y Railway no construye dev con la integración continua en rojo. Marcarla es configuración de GitHub,
-  y es de quien dirige.
+  hace hoy en la API y el front, aunque se fusione en rojo, es parar el despliegue: el empuje a
+  `develop` también la corre, y Railway no construye dev con la integración continua en rojo.
+  `prisma_db` no se despliega, así que ahí la única cerradura es esa casilla. Marcarla es
+  configuración de GitHub, y es de quien dirige.
 - **A `movimientos` le faltan dos restricciones con nombre.** La base exige cuenta de destino en una
   transferencia (`transferencia_con_destino`), pero no prohíbe que la traiga un gasto, ni que una
   transferencia vaya de una cuenta a sí misma: las dos cosas entrarían sin que nada avisara y
