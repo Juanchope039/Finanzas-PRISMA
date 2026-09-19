@@ -1448,7 +1448,8 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] 🔒 **`pedidos` no tiene dónde guardar el motivo de la cancelación ni el destino del anticipo.**
       El contrato ya declara `POST /api/v0/pedidos/{id}/cancelacion` con los dos campos, y el dominio
       de la [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1) lo había anotado: «el modelo todavía no tiene dónde guardarlo». La [4.9](docs/08-plan-de-desarrollo.md#tarea-4-9) necesita
-      una migración que no está en ninguna tarea, igual que le pasó a `adjuntos` con el [plan 22](plan/22-el-contrato-de-movimientos.md)
+      una migración que no está en ninguna tarea, igual que le pasó a la tabla `adjuntos` con el
+      contrato de movimientos ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13))
 - [ ] **El número visible del pedido lo pone la API, y ningún documento decía quién.** El mockup los
       pinta como `P-0287`, así que existen y son correlativos. Por eso `numero` no está en
       `NuevoPedido` y `pedidos_numero_key` se quedó sin código: el cliente no puede provocar ese
