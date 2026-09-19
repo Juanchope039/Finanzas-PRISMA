@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -37,14 +37,14 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 18 | 0 | 1 | 1 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 17 | 0 | 4 | 4,5 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 13 | 0 | 9 | 9,5 |
-| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 16 | 5 | 0 | 11 | 12,5 |
+| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 16 | 6 | 0 | 10 | 10,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 2 | 0 | 9 | 11 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 4 | 0 | 6 | 6,5 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 0 | 0 | 10 | 15 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 11 | 0 | 0 | 11 | 16 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 11 | 1 | 0 | 10 | 9,5 |
-| **Total** | **140** | **61** | **0** | **79** | **97,5** |
+| **Total** | **140** | **62** | **0** | **78** | **95,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -126,7 +126,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 |---|---|
 | **API** | [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) · [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) · [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [1.21](docs/08-plan-de-desarrollo.md#tarea-1-21) · [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [2.21](docs/08-plan-de-desarrollo.md#tarea-2-21) · [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2) |
-| **Front** | [3.5](docs/08-plan-de-desarrollo.md#tarea-3-5) · [3.16](docs/08-plan-de-desarrollo.md#tarea-3-16) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
+| **Front** | [3.16](docs/08-plan-de-desarrollo.md#tarea-3-16) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Contrato** | [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
 | **Decisión** | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) |
 <!-- /generado:plan-listas-ya -->
@@ -134,12 +134,12 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **79 tareas y 97,5 días de trabajo** de 140 tareas del plan.
+Quedan **78 tareas y 95,5 días de trabajo** de 140 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 14,7 semanas | **17,7 semanas** |
-| 2 | 8,3 semanas | **11,3 semanas** |
+| 1 | 14,3 semanas | **17,3 semanas** |
+| 2 | 8,1 semanas | **11,1 semanas** |
 | 3 | 6,5 semanas | **9,5 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -489,7 +489,11 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       guarda por `ConIdentidad` el autor y el instante que puso el caso de uso, y la base juzga:
       registrar a nombre de otra persona lo rechaza `mov_insercion`
 - [ ] ⚡ [**3.4**](docs/08-plan-de-desarrollo.md#tarea-3-4) Endpoints de movimientos con sus códigos del catálogo · API
-- [ ] ⚡ [**3.5**](docs/08-plan-de-desarrollo.md#tarea-3-5) Formulario de registro rápido para celular, pintado del descriptor · Front
+- [x] [**3.5**](docs/08-plan-de-desarrollo.md#tarea-3-5) Formulario de registro rápido para celular, pintado del descriptor · Front —
+      **la primera pantalla de sección**: el formulario «movimiento» lo describe la API, el registro
+      es un `PUT` a su propio id —generado con la clave de idempotencia— y la intención se encola
+      antes de salir a la red, así que sin señal queda «Pendiente de sincronizar». `prisma_front` en
+      `0.4.0+4`, con 276 pruebas
 - [ ] 🔒 [**3.6**](docs/08-plan-de-desarrollo.md#tarea-3-6) Foto del recibo comprimida, subida a través de la API · Front, API
 - [ ] 🔒 [**3.7**](docs/08-plan-de-desarrollo.md#tarea-3-7) Transferencias entre cuentas · API
 - [ ] 🔒 [**3.8**](docs/08-plan-de-desarrollo.md#tarea-3-8) Listado con filtros · API, Front
@@ -1895,7 +1899,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       lateral mide 224 px en cualquier pantalla. El mockup sí lo diseñó —por debajo de 760 px la barra
       pasa arriba y el menú se desplaza de lado—, así que era trabajo real que no estaba en ninguna
       parte, como le pasó a la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) y a las cuatro tareas de Base
-- [ ] ⚡ **Una tarea propia y no parte de la [3.5](docs/08-plan-de-desarrollo.md#tarea-3-5).** El registro rápido es de Movimientos; el
+- [ ] 🔒 **Una tarea propia y no parte de la [3.5](docs/08-plan-de-desarrollo.md#tarea-3-5).** El registro rápido es de Movimientos; el
       diseño para celular toca el andamio de **todas** las pantallas —la barra, el topbar, las dos
       franjas y el botón flotante—, y meterlo dentro habría hecho dos cosas en un commit, que es lo
       que el [ADR-028](docs/adr/ADR-028-un-commit-por-tarea.md) prohíbe
@@ -1905,6 +1909,34 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       escritorio, y hacerlo esperar lo habría frenado sin que el [H4](docs/08-plan-de-desarrollo.md#h4) ganara nada
 - [ ] **En el [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) y no en el [9](docs/08-plan-de-desarrollo.md#sprint-9)**, donde están la PWA y el endurecimiento. El [H4](docs/08-plan-de-desarrollo.md#h4) es
       del [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3), y esperar al 9 para ver la aplicación en un celular sería medirlo meses después
+
+**De la 3.5 (`plan/44-el-registro-rapido-de-movimientos.md`):**
+
+- [ ] **La clave de una sección solo puede escribirse en un archivo, y es una excepción nombrada en
+      la prueba de la frontera.** El contrato pide las dos cosas a la vez —el menú lo dicta la API
+      ([RF-103](docs/03-requisitos-y-bdd.md#rf-103)) y «una clave que el front no conoce no se pinta»—, así que el front tiene que
+      conocer las claves de las pantallas que sabe pintar. Con `registro_de_secciones.dart` exento
+      por nombre, qué secciones existen y cómo se llaman lo sigue decidiendo el servidor, y la
+      prueba sigue cazando a quien escriba una clave en cualquier otro sitio. Es el patrón con el
+      que ya conviven `http` y `crypto`. **La primera sección la necesitaba: sacarla a una tarea
+      aparte habría dejado la 3.5 esperando por algo que ella misma estrena**
+- [ ] **El botón flotante pregunta por la posición, no por la clave.** El [10 §4.3](docs/10-ux-y-mockups.md#43-movimientos) dice que flota
+      sobre todas las pantallas menos el Inicio, porque el Inicio no escribe; cuál es el Inicio ya lo
+      decide la API desde la [2.14](docs/08-plan-de-desarrollo.md#tarea-2-14) —es la primera sección que manda, y la que se abre al entrar—.
+      Preguntar «es la primera» en vez de «se llama dashboard» cumple el 10 sin que el andamio sepa
+      cómo se llama ninguna sección
+- [ ] **Se encola siempre, también con señal.** `encolar` guarda la intención y **después** intenta
+      enviarla, así que el camino es el mismo con red y sin ella y no hay dos rutas de escritura que
+      mantener. Un `null` no es un fallo: es «se guardó y se sigue intentando»
+- [ ] **El botón dice «Guardar movimiento» y el mockup decía «Guardar gasto»**, por lo mismo que la
+      [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) adaptó los textos: el formulario cubre los tres tipos. **Y el aviso de «Pendiente de
+      sincronizar» no tiene diseño en el mockup**: se pintó como píldora dentro del panel, que es el
+      componente que el [17](docs/17-resiliencia-offline-y-cache.md) pide y el sistema de diseño ya tiene
+- [ ] ⚡ **La pantalla todavía no se ha visto contra la API de verdad**, porque el formulario
+      «movimiento» lo emite la [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) y no está fusionada. Se probó contra un descriptor de fixture
+      copiado del contrato y, en el navegador, el camino de «el servidor respondió y no mandó
+      formulario». **Queda por hacer en cuanto la 3.4 llegue a `develop`**, y antes del cronómetro
+      del [M-01](docs/12-pruebas-y-calidad.md#m-01)
 
 ---
 
