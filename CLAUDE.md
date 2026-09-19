@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [6.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-18 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -252,7 +252,9 @@ autor y el instante que puso el caso de uso y la base juzgando quién escribe. Y
 atrás** ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)): se le aplicaron las cinco migraciones que le faltaban y su informe entero salió en
 `OK`, así que dev y qa vuelven a ser el mismo esquema. **Y Gerencia ya mira la pantalla como la ve
 la empleada** ([2.18](docs/08-plan-de-desarrollo.md#tarea-2-18)), sin que el front recorte nada: alternar el modo es volver a pedirle el menú
-a la API. Van 54 de las 133 tareas, y lo que más
+a la API. **Y la base ya no rechaza en jerga** ([1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)): una tabla cruza `(objeto, restricción)` con
+el catálogo de códigos, y [C-01](docs/12-pruebas-y-calidad.md#c-01) la compara con `pg_constraint` en las dos direcciones, así que
+agregar una restricción y olvidar su mensaje pasa a ser un rojo. Van 55 de las 133 tareas, y lo que más
 destraba ahora es el contrato de movimientos ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13)), medio día con 32 tareas detrás y lo único que
 les falta a los endpoints ([3.4](docs/08-plan-de-desarrollo.md#tarea-3-4)).
 

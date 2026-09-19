@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
+| [5.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
 
 Tres partes —un front en Flutter multiplataforma, una API en Java 25 con Spring Boot y una capa
 de datos PostgreSQL siempre en línea—. Arquitectura hexagonal (puertos y adaptadores) sobre Clean
@@ -732,10 +732,12 @@ La base y la API validan lo mismo dos veces a propósito. El riesgo real es que 
 se separen con el tiempo y digan cosas distintas. Se ataca así:
 
 1. **Toda restricción de la base lleva nombre explícito.** Nada de nombres generados por
-   PostgreSQL. `CONSTRAINT movimientos_valor_positivo CHECK (valor > 0)`.
-2. **Existe una tabla única de traducción** en `prisma_api`: nombre de restricción → código de
-   cinco dígitos + mensaje en español + campo del formulario al que señala. Un solo archivo,
-   revisable de un vistazo, alimentado por el mismo catálogo de códigos de [§9.1](#91-el-sobre-de-respuesta).
+   PostgreSQL. `CONSTRAINT transferencia_con_destino CHECK (tipo <> 'transferencia' OR cuenta_destino_id IS NOT NULL)`.
+2. **Existe una tabla única de traducción** en `prisma_api`, `interfaz/error/TraduccionDeRestricciones`:
+   `(objeto, restricción)` → código de cinco dígitos + campo del formulario al que señala, y el
+   mensaje sale de ese código. Un solo archivo, alimentado por el mismo catálogo de códigos de
+   [§9.1](#91-el-sobre-de-respuesta). Lleva el objeto y no el nombre solo porque PostgreSQL permite repetirlo entre
+   tablas ([04 §11](04-modelo-de-datos.md#11-el-contrato-de-errores)).
 3. **Si la API recibe un error de la base que no está en esa tabla, responde `50000` y lo registra
    como defecto.** Significa que hay una regla en la base que la API no conocía: eso es
    exactamente lo que hay que descubrir, no esconder.
