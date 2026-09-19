@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Contrato | Etiquetas |
 |---|---|---|---|---|---|
-| [3.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/contrato/README.md "Historial de cambios") | [✅ Vigente](../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [0.13.0](openapi.json) | [Contrato](../docs/INDICE.md#etiqueta-contrato) · [API](../docs/INDICE.md#etiqueta-api) · [Front](../docs/INDICE.md#etiqueta-front) |
+| [3.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/contrato/README.md "Historial de cambios") | [✅ Vigente](../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [0.13.0](openapi.json) | [Contrato](../docs/INDICE.md#etiqueta-contrato) · [API](../docs/INDICE.md#etiqueta-api) · [Front](../docs/INDICE.md#etiqueta-front) |
 
 Este es **el contrato entre `prisma_front` y `prisma_api`**: lo que viaja por el cable, dicho en
 un solo archivo. Vive aquí, y no en ninguno de los repositorios de código, porque no le pertenece
@@ -411,7 +411,7 @@ controladores. Si difieren, la compilación falla y dice en qué línea
 | **Versión** | `0.13.0` |
 | **Rutas** | Todas bajo `/api/v0`, y **ninguna usa GET** ([ADR-030](../docs/adr/ADR-030-contrato-sin-get.md)): las diecinueve lecturas cuelgan de `/api/v0/consultas/…` y las treinta y seis escrituras, de su recurso. 55 operaciones en 55 rutas |
 | **Códigos** | 53: los 10 genéricos, 9 en cada uno de los cuatro módulos que ya tenían contrato —sesión y transporte, usuarios y cargos, movimientos y cuentas, y pedidos y clientes—, 2 de productos y costeo y 5 de capital y patrimonio, que estrena el rango `90`–`99`. 29 siguen marcados como pendientes de emitir |
-| **Copia fijada en `prisma_api`** | Va en `0.9.0` y sirve **trece** de las 55 operaciones: la versión, el descriptor, la navegación, las cuatro de `/sesiones`, las cinco de `/usuarios` y los cargos asignables. **No declara que las implemente todas**: declara contra qué versión del contrato está escrita, y `0.2.0` dejó de existir el día en que sus dos rutas cambiaron de verbo y de ruta. Saltarse el número habría sido peor: dos contratos distintos con el mismo `0.2.0` |
+| **Copia fijada en `prisma_api`** | Va en `0.13.0` y sirve **trece** de las 55 operaciones: la versión, el descriptor, la navegación, las cuatro de `/sesiones`, las cinco de `/usuarios` y los cargos asignables. **No declara que las implemente todas**: declara contra qué versión del contrato está escrita, y `0.2.0` dejó de existir el día en que sus dos rutas cambiaron de verbo y de ruta. Saltarse el número habría sido peor: dos contratos distintos con el mismo `0.2.0` |
 | **Origen** | Las dos versiones se generaron del esqueleto de la API durante el [Sprint 0](../docs/08-plan-de-desarrollo.md#sprint-0) y se revisaron antes de fijarlas. De aquí en adelante el orden es el inverso: primero se acuerda aquí, después se implementa |
 
 ---
