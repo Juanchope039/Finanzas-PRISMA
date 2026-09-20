@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.20.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.21.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -91,8 +91,9 @@ las cuentas de abajo. Su plan es `plan/23-el-alta-decia-algo-salio-mal.md`, reco
 esperando. En el carril API **la prueba de permisos con sesión real ya está** ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)), y con ella
 la tubería que corre lo que habla con la base: [C-01](docs/12-pruebas-y-calidad.md#c-01) y las demás **por fin gatean un PR**, que era el
 agujero por el que la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) fusionó `adjuntos` sin sus mensajes y nadie lo vio en días. Le falta lo
-único que el código no puede poner solo: **el secreto `PRISMA_DB_TOKEN`** en `prisma_api`, porque
-`prisma_db` es privado ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). El filtro de idempotencia
+**Y en su primera corrida encontró dos rojos que nadie veía**: una prueba de la propia [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) que daba
+por hecho que el reloj del ejecutor está en Bogotá, y dos de la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) que se apoyaban en una política
+de contraseñas que ningún archivo declaraba ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). El filtro de idempotencia
 ([1.14](docs/08-plan-de-desarrollo.md#tarea-1-14)) ya salió de esa lista: necesitaba la transacción de la [1.6](docs/08-plan-de-desarrollo.md#tarea-1-6) y la tabla de la [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13), y con las dos
 quedó hecho; detrás de él se abre la prueba de corte ([1.15](docs/08-plan-de-desarrollo.md#tarea-1-15)). En el carril Base, con
 `cargos` ([2.3](docs/08-plan-de-desarrollo.md#tarea-2-3)), la tabla de idempotencia ([1.13](docs/08-plan-de-desarrollo.md#tarea-1-13)), su purga ([1.16](docs/08-plan-de-desarrollo.md#tarea-1-16)) y la semilla reproducible
@@ -2279,6 +2280,27 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       **Conviene decidir quién etiqueta y cuándo**: el ADR dice que una migración fusionada sin
       etiquetar no existe para nadie más, pero ninguna tarea del plan lo tiene como paso, y por eso se
       saltaron dos seguidas
+
+**De la primera corrida de la tubería de integración (tarea [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)):**
+
+- [ ] 🔒 **Dos pruebas de la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) se apoyaban en un número que ningún archivo decía.** Crean un usuario con
+      la contraseña `x` y esperan que GoTrue la rechace por débil. En esta máquina el contenedor
+      trae `GOTRUE_PASSWORD_MIN_LENGTH=6` y pasaban; en la tubería el alta **se aceptó** y salieron
+      rojas, porque `config.toml` no declaraba `minimum_password_length` y cada versión del CLI
+      pone la suya. Quedó escrito en `prisma_db`, con el 6 que ya había. **Una política que nadie
+      escribe es una política que cambia sola**, y llevaba desde la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) sin que se notara porque
+      nadie corría esas pruebas fuera de esta máquina
+- [ ] **Un cambio de `config.toml` no llega a la tubería hasta que se publique una versión nueva del
+      esquema.** El [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) manda descargar `prisma_db` **en la etiqueta**, y la etiqueta lleva el número
+      de `schema_version`; pero `config.toml` no es esquema y subir ese número por un cambio de
+      configuración sería afirmar algo falso. Hoy el arreglo de la contraseña queda escrito y sin
+      llegar. **Conviene decidir cómo viajan los cambios que no son de esquema**: que la próxima
+      migración los arrastre, o que la etiqueta deje de ser lo único que la tubería sabe pedir
+- [ ] **Una prueba con `LocalDate.now()` depende de en qué huso corre.** [P-08](docs/12-pruebas-y-calidad.md#p-08) registraba un
+      movimiento con la fecha del reloj de la máquina, y el ejecutor va en UTC: entre las 7 de la
+      noche y la medianoche de Bogotá le mandaba mañana, y la API la rechazaba con `42223`, que es
+      lo correcto. Arreglado con `ZonaDelNegocio`, pero **conviene revisar si hay más pruebas que
+      leen la fecha del reloj** en vez de la del negocio ([RNF-08](docs/03-requisitos-y-bdd.md#rnf-08))
 
 ---
 
