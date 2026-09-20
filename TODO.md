@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.29.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-20 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.30.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-20 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -497,7 +497,14 @@ hasta aplicarlo y probarlo.
 - [ ] ⚡ [**2.9**](docs/08-plan-de-desarrollo.md#tarea-2-9) Registro de cada inicio de sesión con fecha, dispositivo e IP · API, Base
 - [x] [**2.10**](docs/08-plan-de-desarrollo.md#tarea-2-10) Panel «Acerca de» ([RF-100](docs/03-requisitos-y-bdd.md#rf-100)) · Front, API — los seis datos de [19 §5.3](docs/19-ambientes-y-entrega.md#53-el-panel-acerca-de), y lo que
       no se pudo consultar lo dice en vez de inventarlo
-- [ ] ⚡ [**2.11**](docs/08-plan-de-desarrollo.md#tarea-2-11) La prueba de permisos del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1), también contra la base de qa · API
+- [ ] ✏️⚡ [**2.11**](docs/08-plan-de-desarrollo.md#tarea-2-11) La prueba de permisos del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1), también contra la base de qa · API —
+      escrita y probada **fuera de esta máquina**, pero todavía no contra qa: `PermisosConSesionReal`
+      ya sabía apuntar a donde le digan y se negaba a salir del `localhost`. Ahora la guarda pregunta
+      **por la semilla y no por el anfitrión** —es lo único que existe solo donde se puede borrar—,
+      con un segundo cerrojo para salir de la máquina, y deja de ponerle contraseña al rol cuando se
+      la dan. El trabajo `permisos-en-qa` la lanza en cada empuje a `develop` y **se salta con aviso**
+      si faltan secretos. Lleva ✏️ porque en qa el rol `prisma_api` está **sin contraseña a
+      propósito** y los seis secretos no existen: eso se hace en ese proyecto, no aquí
 - [x] [**2.12**](docs/08-plan-de-desarrollo.md#tarea-2-12) Clave de firma de sesión, solo en memoria en el front · API, Front — la API ya la entregaba; ahora el front **firma con ella**: `Authorization` y las tres cabeceras del [20 §6.1](docs/20-contrato-de-api.md#61-las-tres-cabeceras) en cada petición con sesión, y ninguna en las dos rutas exentas
 - [x] [**2.13**](docs/08-plan-de-desarrollo.md#tarea-2-13) Filtro de firma: HMAC, nonce y marca de tiempo (`40101` a `40103`) · API — el
       canal firmado existe por fin de los dos lados: desde la [2.12](docs/08-plan-de-desarrollo.md#tarea-2-12) el front mandaba las tres
@@ -2489,6 +2496,27 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **Una comprobación se mudó del bloque 1.4 al 2.5.** La degradación masiva ya estaba probada,
       pero colgando de la tarea de las políticas RLS en vez de la del guardián. Se movió entera,
       con su porqué; el conteo total no cambia por eso
+
+**De la 2.11 (`plan/59-la-prueba-de-permisos-sale-de-esta-maquina.md`):**
+
+- [ ] **La guarda pregunta por la semilla y no por el anfitrión.** «Es `localhost`» no quiere decir
+      «es mío»: un túnel o un reenvío de puertos lo vuelven falso sin avisar. «Están los usuarios de
+      la semilla» sí quiere decir algo, porque la semilla existe **solo** donde se puede borrar —sus
+      contraseñas son conocidas a propósito y por eso no viaja a uat ni a prod—. Se pregunta con la
+      conexión del dueño y **antes** del `ALTER ROLE`, que es lo único de esa clase que dejaría
+      rastro en un ambiente equivocado. El cerrojo del anfitrión se queda igual, como segundo
+- [ ] **La prueba dejó de tocar la configuración del ambiente.** El `ALTER ROLE ... PASSWORD` tiene
+      sentido en una base que se levanta y se tira; contra qa sería cambiarle la contraseña a un rol
+      que está sin ninguna a propósito. Si viene dada en `PRISMA_PRUEBAS_BASE_CLAVE_API`, se usa y
+      no se ejecuta ningún `ALTER`. Comprobado comparando el hash del rol antes y después
+- [ ] **El trabajo de la tubería se salta, no falla, cuando no hay secretos.** Este repositorio es
+      público: un PR de fuera no puede leerlos, y un trabajo rojo por eso enseñaría a ignorar el
+      rojo. Se salta con un aviso que dice cuál falta y dónde se carga, como ya hace el de
+      integración con `PRISMA_DB_TOKEN`
+- [ ] **En uat esta prueba no va a poder correr tal como está.** El [12 §1.1](docs/12-pruebas-y-calidad.md#11-dónde-corre-cada-nivel) dice que [P-01](docs/12-pruebas-y-calidad.md#p-01) a
+      [P-39](docs/12-pruebas-y-calidad.md#p-39) corren también en uat, con datos «realistas y anonimizados» —o sea, sin semilla—, y
+      esta clase entra como Marcela con la contraseña de la semilla. O uat tiene sus propias
+      credenciales de prueba, o esas pruebas no son las mismas. La [9.5](docs/08-plan-de-desarrollo.md#tarea-9-5) se lo va a encontrar
 
 ---
 

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.21.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-20 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [7.22.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-20 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -358,7 +358,12 @@ escritos** ([2.5](docs/08-plan-de-desarrollo.md#tarea-2-5)): son lo único que i
 —no hay `CHECK`, ni política, ni columna detrás—, y de los tres caminos que el [04 §7](docs/04-modelo-de-datos.md#7-seguridad-por-tipo-de-usuario-rls) nombra
 solo uno estaba probado. El segundo guardián, además, **no se disparaba nunca**: el de fila se le
 adelanta siempre, así que el guion lo apaga dentro de su transacción para verlo trabajar. 176
-comprobaciones en `OK`, y rota a propósito saca 25 rojas. Van 76 de las 142 tareas.
+comprobaciones en `OK`, y rota a propósito saca 25 rojas. **Y la prueba de permisos aprendió a
+salir de esta máquina** ([2.11](docs/08-plan-de-desarrollo.md#tarea-2-11)): la guarda que la ataba a `localhost` pasa a preguntar por la
+semilla —lo único que existe solo donde se puede borrar— y deja de ponerle contraseña al rol cuando
+se la dan, y un trabajo nuevo de la tubería la lanza contra qa en cada empuje a `develop`. Queda
+✏️ y no hecha: en qa ese rol está **sin contraseña a propósito** y los seis secretos se cargan en
+ese proyecto, no aquí. Van 76 de las 142 tareas.
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.
