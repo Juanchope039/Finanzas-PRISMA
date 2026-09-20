@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-20 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-20 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -1197,8 +1197,8 @@ BEGIN
     v_accion,
     auth.uid(),
     (SELECT tipo FROM usuarios WHERE id = auth.uid()),
-    current_setting('request.headers', true)::json ->> 'user-agent',
-    inet_client_addr(),
+    fn_cabeceras_de_la_peticion() ->> 'user-agent',   -- tarea 2.9
+    fn_ip_de_la_peticion(),                           -- tarea 2.9
     CASE WHEN TG_OP = 'INSERT' THEN NULL ELSE to_jsonb(OLD) END,
     to_jsonb(NEW)
   );
@@ -1216,6 +1216,48 @@ El mismo trigger se registra sobre `pedidos`, `anticipos`, `productos`, `costos_
 `activos`, `aportes_retiros`, `prolabore_config`, `empleados`, `nomina_detalle`, `adelantos`,
 `sobres_config`, `cierres_mensuales`, `cargos` y `adjuntos` ([§4.12](#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido)), que es el decimoquinto y
 entró con la [3.14](08-plan-de-desarrollo.md#tarea-3-14).
+
+**De dónde salen el dispositivo y la IP lo dicen dos funciones**, y no dos expresiones escritas en
+dos sitios (tarea [2.9](08-plan-de-desarrollo.md#tarea-2-9)):
+
+```sql
+CREATE OR REPLACE FUNCTION fn_cabeceras_de_la_peticion() RETURNS JSONB
+LANGUAGE plpgsql STABLE SET search_path = public, pg_temp AS $fn$
+BEGIN
+  RETURN nullif(current_setting('request.headers', true), '')::jsonb;
+EXCEPTION WHEN OTHERS THEN
+  RETURN NULL;
+END;
+$fn$;
+
+CREATE OR REPLACE FUNCTION fn_ip_de_la_peticion() RETURNS INET
+LANGUAGE plpgsql STABLE SET search_path = public, pg_temp AS $fn$
+BEGIN
+  RETURN COALESCE((fn_cabeceras_de_la_peticion() ->> 'x-real-ip')::inet,
+                  inet_client_addr());
+EXCEPTION WHEN OTHERS THEN
+  RETURN inet_client_addr();
+END;
+$fn$;
+```
+
+`request.headers` la llena la API en **cada** transacción, junto a los claims y en el mismo sitio
+que ellos ([ADR-012](adr/ADR-012-identidad-a-postgres.md)); antes de la [2.9](08-plan-de-desarrollo.md#tarea-2-9) solo la llenaba PostgREST, así que con la API de por
+medio el dispositivo quedaba vacío en las quince tablas. La dirección se lee de `x-real-ip` y no de
+`x-forwarded-for` porque la segunda es una **cadena** de direcciones —la del cliente y la de cada
+proxy por el que pasó— y esta columna es un `INET`, que admite una sola. Sin cabecera se vuelve a
+`inet_client_addr()`, que es lo que la columna tenía antes.
+
+> **Las dos atrapan el error, y no es exceso de cuidado.** Leen algo que viene de afuera: la
+> cabecera podría no ser JSON, y `x-real-ip` podría no ser una dirección. Un fallo ahí no deja una
+> entrada de bitácora sin escribir: **tumba la escritura que se estaba auditando**, porque el
+> trigger corre dentro de esa transacción. Nadie debería quedarse sin poder registrar un movimiento
+> porque alguien mandó una cabecera torcida.
+>
+> Y el caso que lo obliga es cotidiano: una variable fijada con `set_config(…, true)` no vuelve a
+> «no existe» al cerrar la transacción, vuelve a **la cadena vacía**, y eso es lo que encuentra la
+> transacción siguiente de esa misma conexión del pool. `''::json` falla con «The input string ended
+> unexpectedly».
 
 > **`usuarios` necesita su propia variante del trigger.** `fn_auditar()` detecta la anulación
 > mirando `anulado_en`, y `usuarios` desactiva con `desactivado_en`. Auditar `usuarios` con la
@@ -1291,11 +1333,11 @@ Devuelve el `id` de la entrada escrita, que es lo que necesita una reversión pa
 deshace. El autor y su tipo no son parámetros: los pone la función con `auth.uid()`, que sigue
 valiendo dentro de un `SECURITY DEFINER` porque sale de la sesión y no del dueño.
 
-> **El dispositivo y la IP viajan como parámetros, y en `fn_auditar()` no.** El trigger los saca de
-> `current_setting('request.headers')` y de `inet_client_addr()`, que sirven cuando quien escribe es
-> PostgREST; con `prisma_api` de por medio, el primero está vacío y el segundo es la dirección **de
-> la API**, no la de quien hizo el cambio. Quien conoce el dispositivo real es quien recibió la
-> petición, así que los manda.
+> **El dispositivo y la IP viajan como parámetros, y en `fn_auditar()` no.** El trigger los saca él
+> mismo de la petición, con las dos funciones del [§5.4](#54-auditoría-por-triggers); aquí los manda quien llama, porque un
+> evento con nombre lo escribe la aplicación y no un trigger, y en un intento de ingreso fallido no
+> hay ni fila que auditar. Las dos vías terminan en el mismo dato y por la misma razón: **quien
+> conoce el aparato y la dirección de verdad es quien recibió la petición**, no la base.
 
 **Una entrada por campo cambiado.** Un `UPDATE` que cambia a la vez el nombre y el cargo de una
 persona deja **dos** entradas, `nombre_cambiado` y `cargo_cambiado`, cada una con su «de → a». Es lo
