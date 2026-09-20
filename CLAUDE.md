@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.18.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-20 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [7.19.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-20 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -343,7 +343,13 @@ matándole la conexión sin avisar— y cuenta las filas de las dos tablas. **Y 
 de abrir el libro** ([1.21](docs/08-plan-de-desarrollo.md#tarea-1-21)): `anon` leía las 352 filas de `movimientos` de la base local, y ya
 no alcanza ni una tabla, ni la secuencia, ni las cinco funciones; lo que se cree después nace
 cerrado. Esquema `0.7.0`, y con eso **el [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) queda cerrado entero**, el primero que lo
-está. Van 73 de las 142 tareas.
+está. **Y desactivar a alguien ya deja rastro** ([2.21](docs/08-plan-de-desarrollo.md#tarea-2-21)): `usuarios` era la única tabla de
+negocio sin auditar —la genérica busca la baja en `anulado_en` y ahí se da de baja con
+`desactivado_en`—, así que la bitácora de la pantalla solo sabía enseñar filas de `cargos`. Con su
+trigger entran la columna `motivo`, las cinco acciones con nombre que el contrato ya prometía y
+`fn_registrar_evento`, que es lo único que puede escribir un evento en una tabla con RLS y sin
+política de inserción. Esquema `0.8.0`, y detrás se destraban la [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9), la [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) y la [2.16](docs/08-plan-de-desarrollo.md#tarea-2-16).
+Van 74 de las 142 tareas.
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.
