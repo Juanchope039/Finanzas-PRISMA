@@ -154,7 +154,7 @@ siempre en pantalla qué versión es y contra qué ambiente está hablando. El d
 | Documentación y plan | ✅ Completo |
 | Mockup navegable | ✅ Completo |
 | Validación del mockup con la gerencia | ✅ Confirmado en reunión el 16/09/2026 |
-| **[Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0)** · proyectos, ambientes y contrato | 🔄 **En curso** |
+| **[Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2)** · proyectos, ambientes y contrato | 🔄 **En curso** |
 | Desarrollo MVP (Sprints 1 a 9) | 🔄 **Iniciado**: la tarea [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9), `Dinero`, está hecha |
 | Implantación | ⬜ No iniciado |
 
