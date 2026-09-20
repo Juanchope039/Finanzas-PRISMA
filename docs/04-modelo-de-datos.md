@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -440,14 +440,14 @@ CREATE TABLE movimientos (
   anulado_dispositivo TEXT,
   anulado_ip        INET,
 
-  -- tarea 3.15: el día de Bogotá, no el del huso con que se conecte la sesión
+  -- el día de Bogotá, no el del huso con que se conecte la sesión
   CONSTRAINT fecha_no_futura
     CHECK (fecha_movimiento <= (NOW() AT TIME ZONE 'America/Bogota')::date),
   CONSTRAINT transferencia_con_destino
     CHECK (tipo <> 'transferencia' OR cuenta_destino_id IS NOT NULL),
-  CONSTRAINT destino_solo_en_transferencia                                   -- tarea 3.15
+  CONSTRAINT destino_solo_en_transferencia
     CHECK (tipo = 'transferencia' OR cuenta_destino_id IS NULL),
-  CONSTRAINT destino_distinto_del_origen                                     -- tarea 3.15
+  CONSTRAINT destino_distinto_del_origen
     CHECK (cuenta_destino_id IS NULL OR cuenta_destino_id <> cuenta_id),
   CONSTRAINT anulacion_con_motivo
     CHECK (anulado_en IS NULL OR (anulado_por IS NOT NULL AND anulado_motivo IS NOT NULL))
@@ -2201,9 +2201,8 @@ y pasa a ser un rojo en la canalización.
 
 > **La prueba mira en las dos direcciones, y eso fija el orden de los PR.** Una restricción sin
 > fila rompe, y una fila sin restricción también. Así que la fila **no se puede poner antes** de que
-> la migración exista: la API la agrega en el mismo PR en que recoge el esquema nuevo. Las cuatro
-> restricciones que faltan por escribir lo dicen en su tarea —`destino_solo_en_transferencia` y
-> `destino_distinto_del_origen` de la [3.15](08-plan-de-desarrollo.md#tarea-3-15), las dos bajo `42226`; `cancelacion_con_motivo` y
+> la migración exista: la API la agrega en el mismo PR en que recoge el esquema nuevo. Las dos
+> restricciones que faltan por escribir lo dicen en su tarea —`cancelacion_con_motivo` y
 > `destino_del_anticipo_valido` de la [4.11](08-plan-de-desarrollo.md#tarea-4-11)—, y la [2.22](08-plan-de-desarrollo.md#tarea-2-22) no agrega ninguna: reusa
 > `cargos_nombre_key`, que ya tiene la suya.
 >
@@ -2214,6 +2213,15 @@ y pasa a ser un rojo en la canalización.
 > agregar: es del carril Base y la tabla de traducción vive en `prisma_api`, así que las recoge la
 > [3.6](08-plan-de-desarrollo.md#tarea-3-6) con el esquema. **Mientras tanto, [C-01](12-pruebas-y-calidad.md#c-01) falla contra una base que ya tenga la
 > `0.4.0`**, que es exactamente lo que esa prueba está para hacer.
+>
+> **Y las dos del destino de un movimiento ([§4.3](#43-movimientos--el-libro-único)), desde la
+> [3.15](08-plan-de-desarrollo.md#tarea-3-15).** `destino_solo_en_transferencia` y `destino_distinto_del_origen` están en la
+> base desde el esquema `0.6.0`, y las recoge el PR de la API que suba su `prisma.esquema`, por lo
+> mismo que las de `adjuntos`: la 3.15 es del carril Base. Ese PR **revisa también la fila de
+> `transferencia_con_destino`**, que hoy cuelga del código transversal de su clase: las tres reglas
+> del destino responden `42226` ([§4.3](#43-movimientos--el-libro-único)) y las tres tienen que decirlo.
+> **Mientras tanto, [C-01](12-pruebas-y-calidad.md#c-01) también falla contra una base que ya tenga la
+> `0.6.0`.**
 
 Tres cosas que esta consulta no cubre, y hay que decirlas:
 
