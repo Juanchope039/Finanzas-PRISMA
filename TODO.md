@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.30.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-20 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.31.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-20 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -36,7 +36,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 19 | 0 | 0 | 0 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
-| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 16 | 0 | 6 | 7 |
+| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 17 | 0 | 5 | 6 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 16 | 10 | 0 | 6 | 7 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 2 | 0 | 9 | 11 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 4 | 0 | 6 | 6,5 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 1 | 0 | 11 | 16,5 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 12 | 1 | 0 | 11 | 10 |
-| **Total** | **142** | **76** | **0** | **66** | **84,5** |
+| **Total** | **142** | **77** | **0** | **65** | **83,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -129,7 +129,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.7](docs/08-plan-de-desarrollo.md#tarea-3-7) · [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) · [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.7](docs/08-plan-de-desarrollo.md#tarea-3-7) · [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) · [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
 | **Front** | [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) |
@@ -138,13 +138,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **66 tareas y 84,5 días de trabajo** de 142 tareas del plan.
+Quedan **65 tareas y 83,5 días de trabajo** de 142 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 12,8 semanas | **15,8 semanas** |
-| 2 | 7,2 semanas | **10,2 semanas** |
-| 3 | 6,0 semanas | **9,0 semanas** |
+| 1 | 12,6 semanas | **15,6 semanas** |
+| 2 | 7,1 semanas | **10,1 semanas** |
+| 3 | 5,9 semanas | **8,9 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -494,7 +494,19 @@ hasta aplicarlo y probarlo.
       de Gerencia lo rechaza un trigger que estaba puesto desde el esquema inicial. El descriptor
       estrena `opciones` y `origen`, que el contrato declaraba y ningún formulario usaba
 - [ ] ⚡ [**2.8**](docs/08-plan-de-desarrollo.md#tarea-2-8) Catálogo de cargos · API, Front
-- [ ] ⚡ [**2.9**](docs/08-plan-de-desarrollo.md#tarea-2-9) Registro de cada inicio de sesión con fecha, dispositivo e IP · API, Base
+- [x] [**2.9**](docs/08-plan-de-desarrollo.md#tarea-2-9) Registro de cada inicio de sesión con fecha, dispositivo e IP · API, Base —
+      el contrato lo prometía desde el `0.4.0` y **la API no escribía ninguno de los tres**: ni
+      `inicio_sesion`, ni `inicio_sesion_fallido`, ni `cierre_sesion`. Ahora los escribe
+      `fn_registrar_evento`, que es lo único que puede —`auditoria` tiene RLS y ninguna política de
+      inserción—, y el fallido va desde una transacción **autenticada y sin nadie adentro**, porque
+      cuando el usuario no existe no hay `sub` que poner. Del intento se guarda el usuario tecleado
+      **solo si tiene forma de nombre de usuario** ([RNF-18](docs/03-requisitos-y-bdd.md#rnf-18)). La otra mitad es de Base: `fn_auditar`
+      deja de sacar el dispositivo de una variable que nadie llenaba y la IP de `inet_client_addr()`,
+      que era **la de la API**, y las toma de las cabeceras que ahora publica `ConIdentidad`. De paso
+      desactiva una mina que llevaba puesta desde la migración inicial: `''::json`. `schema_version`
+      publica `0.10.0`, la API pasa a exigir la `0.8.0` —y con eso **[C-01](docs/12-pruebas-y-calidad.md#c-01) vuelve a verde**, porque
+      entran las dos filas de traducción que la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) dejó pedidas—, y `verificar-base.sql` va en
+      **181 comprobaciones en `OK`**, cinco de ellas suyas
 - [x] [**2.10**](docs/08-plan-de-desarrollo.md#tarea-2-10) Panel «Acerca de» ([RF-100](docs/03-requisitos-y-bdd.md#rf-100)) · Front, API — los seis datos de [19 §5.3](docs/19-ambientes-y-entrega.md#53-el-panel-acerca-de), y lo que
       no se pudo consultar lo dice en vez de inventarlo
 - [ ] ✏️⚡ [**2.11**](docs/08-plan-de-desarrollo.md#tarea-2-11) La prueba de permisos del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1), también contra la base de qa · API —
@@ -1683,14 +1695,13 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       `creado_en` es el instante con que `RegistrarMovimiento` decidió qué día era hoy, y no el
       `DEFAULT NOW()`: con dos relojes, el movimiento devuelto y la fila guardada podrían caer en días
       distintos cerca de la medianoche
-- [ ] **La bitácora de lo que escribe la API no sabe desde dónde.** `fn_auditar` saca el
-      dispositivo de `request.headers`, que llenaba PostgREST y la API no llena, y la IP de
-      `inet_client_addr()`, que con la API en medio es la conexión de la API. Cada movimiento queda
-      auditado con la persona correcta, **la IP de la API y ningún dispositivo**, y el [ADR-005](docs/adr/ADR-005-auditoria-por-triggers.md) promete
-      los dos. La fila tampoco los tiene: `dispositivo` e `ip` de `movimientos` quedan vacíos, porque
-      el dominio no los trae y ningún documento dice de dónde salen. El sitio natural es
-      `ConIdentidad`, que pondría las cabeceras de la petición junto a los claims, con la [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9), que
-      es la tarea que trae dispositivo e IP. Toca Base y API, y no se inventa aquí
+- [x] **La bitácora de lo que escribe la API ya sabe desde dónde.** Lo arregló la [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) donde decía
+      esta nota que había que arreglarlo: `ConIdentidad` publica las cabeceras de la petición junto a
+      los claims, y `fn_auditar` las prefiere —`user-agent` para el aparato y `x-real-ip` para la
+      dirección— en vez de leer una variable vacía y `inet_client_addr()`, que con la API en medio
+      era la conexión **de la API**. Lo que sigue abierto es la fila: `dispositivo` e `ip` de
+      `movimientos` siguen vacíos, porque el dominio no los trae y ningún documento dice de dónde
+      salen en la fila. La bitácora sí los tiene, que es lo que promete el [ADR-005](docs/adr/ADR-005-auditoria-por-triggers.md)
 - [x] **Los rechazos de `movimientos` ya no caen todos al código transversal.** La [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4) les cambió
       el código a las cinco filas que ya estaban: `fecha_no_futura` al `42223`,
       `transferencia_con_destino` y la foránea de la cuenta de destino al `42226`, y las de cuenta
@@ -2517,6 +2528,40 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       [P-39](docs/12-pruebas-y-calidad.md#p-39) corren también en uat, con datos «realistas y anonimizados» —o sea, sin semilla—, y
       esta clase entra como Marcela con la contraseña de la semilla. O uat tiene sus propias
       credenciales de prueba, o esas pruebas no son las mismas. La [9.5](docs/08-plan-de-desarrollo.md#tarea-9-5) se lo va a encontrar
+
+**De la 2.9 (`plan/60-quien-entro-y-desde-donde.md`):**
+
+- [ ] **El usuario tecleado de un intento fallido va en `datos_despues`, y no en una columna suya.**
+      No hay ninguna donde quepa: `auditoria` guarda quién hizo el cambio, y en un intento fallido
+      nadie lo hizo. Sin el nombre, la entrada diría que alguien intentó entrar sin decir como quién,
+      que es la mitad de lo que el [04 §5.4](docs/04-modelo-de-datos.md#54-auditoría-por-triggers) pide guardar. Se guarda como `{"usuario": "..."}`
+- [ ] **Y solo si lo tecleado tiene forma de nombre de usuario.** La casilla del usuario y la de la
+      contraseña están una encima de la otra: quien teclee la segunda en la primera dejaría su
+      contraseña escrita en la tabla que nunca se borra y que Gerencia lee entera. El formato que la
+      base ya exige es el filtro, y lo que no lo cumple se anota **como intento sin nombre**. Es
+      [RNF-18](docs/03-requisitos-y-bdd.md#rnf-18) llevado hasta el final, y ningún documento lo pedía así
+- [ ] **El intento fallido se anota desde una transacción `authenticated` y sin `sub`.** No hay
+      ninguno que poner. Quedarse en `prisma_api` habría sido una puerta **más ancha**: ese rol tiene
+      `SELECT`, `INSERT` y `UPDATE` sobre todas las tablas y las políticas del [04 §7](docs/04-modelo-de-datos.md#7-seguridad-por-tipo-de-usuario-rls) no llevan
+      cláusula `TO`, así que se le aplican igual. Con `authenticated` y `auth.uid()` nulo, toda
+      política que pregunte por la persona deniega. Es el segundo método de apertura de
+      `ConIdentidad`, y la regla de arquitectura que enumera quién abre transacciones pasa a mirar
+      los dos nombres: mirar solo el viejo era el agujero que su propio comentario anunciaba
+- [ ] **Si el rastro no se puede escribir, no se entra.** [RF-05](docs/03-requisitos-y-bdd.md#rf-05) dice «cada inicio de sesión», y una
+      bitácora que se rinde cuando estorba es la que no está el día que hace falta. El precio es que
+      una base caída deja de responder `40104` y responde `50000`, que es lo mismo que ya pasa con
+      todo lo demás
+- [ ] **El rastro del ingreso va en su propia transacción, aparte de la que guarda la sesión.** En la
+      ruta exenta ya había dos —leer la ficha y guardar la sesión—; esta es la tercera. Unirlas
+      obligaba a escribir la bitácora dentro del repositorio de sesiones, y entonces dejaría de tener
+      puerto propio. Lo que se pierde es que un corte entre las dos deje una sesión sin su entrada
+- [ ] **Una variable de sesión vacía tumbaba la escritura auditada, y nadie lo sabía.** `set_config(…,
+      true)` no devuelve la variable a «no existe» al cerrar la transacción: la devuelve a **la
+      cadena vacía**, y `''::json` —que es lo que hacía `fn_auditar`— falla. La mina llevaba puesta
+      desde la migración inicial y no se disparó porque nadie llenaba `request.headers`; la llenó la
+      2.9. Se arregló en los dos lados: la API publica `{}` cuando no sabe nada, y el trigger lee con
+      un `nullif` dentro de funciones que atrapan el error. **Vale la pena mirar si hay más
+      `current_setting(...)::` sin `nullif` el día que algo más publique variables**
 
 ---
 

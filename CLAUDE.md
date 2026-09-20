@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.22.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-20 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [7.23.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-20 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -363,7 +363,11 @@ salir de esta máquina** ([2.11](docs/08-plan-de-desarrollo.md#tarea-2-11)): la 
 semilla —lo único que existe solo donde se puede borrar— y deja de ponerle contraseña al rol cuando
 se la dan, y un trabajo nuevo de la tubería la lanza contra qa en cada empuje a `develop`. Queda
 ✏️ y no hecha: en qa ese rol está **sin contraseña a propósito** y los seis secretos se cargan en
-ese proyecto, no aquí. Van 76 de las 142 tareas.
+ese proyecto, no aquí. **Y la bitácora ya sabe desde dónde** ([2.9](docs/08-plan-de-desarrollo.md#tarea-2-9)): entrar, no poder entrar y salir
+dejan fila con la fecha, el aparato y la dirección, que el contrato prometía desde el `0.4.0` y la
+API no escribía; y `fn_auditar` deja de anotar la IP de la API en todo lo demás, porque
+`ConIdentidad` le publica las cabeceras de la petición. Con eso la API sube a la `0.8.0` del esquema
+—iba cuatro tareas atrás— y **[C-01](docs/12-pruebas-y-calidad.md#c-01) vuelve a verde**. Van 77 de las 142 tareas.
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.
