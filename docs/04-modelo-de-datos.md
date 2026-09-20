@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-20 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-20 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -241,7 +241,7 @@ y no una casualidad. Las que de verdad cambiaban —y por eso eran el riesgo— 
 ```sql
 CREATE TABLE cargos (
   id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  nombre         CITEXT NOT NULL CONSTRAINT cargos_nombre_key UNIQUE,   -- tarea 2.22
+  nombre         CITEXT NOT NULL CONSTRAINT cargos_nombre_key UNIQUE,
   descripcion    TEXT,
   orden          SMALLINT NOT NULL DEFAULT 0,
   activo         BOOLEAN NOT NULL DEFAULT TRUE,
