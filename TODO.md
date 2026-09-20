@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.25.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.26.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-20 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -35,7 +35,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 19 | 0 | 0 | 0 |
-| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 20 | 0 | 1 | 0,5 |
+| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 13 | 0 | 9 | 9,5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 16 | 10 | 0 | 6 | 7 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 2 | 0 | 9 | 11 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 1 | 0 | 11 | 16,5 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 12 | 1 | 0 | 11 | 10 |
-| **Total** | **142** | **72** | **0** | **70** | **87,5** |
+| **Total** | **142** | **73** | **0** | **69** | **87** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -130,7 +130,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
 | **API** | [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.7](docs/08-plan-de-desarrollo.md#tarea-3-7) · [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) · [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
-| **Base** | [1.21](docs/08-plan-de-desarrollo.md#tarea-1-21) · [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [2.21](docs/08-plan-de-desarrollo.md#tarea-2-21) · [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
+| **Base** | [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [2.21](docs/08-plan-de-desarrollo.md#tarea-2-21) · [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
 | **Front** | [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) |
 <!-- /generado:plan-listas-ya -->
@@ -138,12 +138,12 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **70 tareas y 87,5 días de trabajo** de 142 tareas del plan.
+Quedan **69 tareas y 87 días de trabajo** de 142 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 13,2 semanas | **16,2 semanas** |
-| 2 | 7,4 semanas | **10,4 semanas** |
+| 1 | 13,1 semanas | **16,1 semanas** |
+| 2 | 7,3 semanas | **10,3 semanas** |
 | 3 | 6,1 semanas | **9,1 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -427,11 +427,14 @@ hasta aplicarlo y probarlo.
       necesita en `prisma.esquema` y su integración continua descarga ese repositorio en esa etiqueta
       y levanta la base con el Supabase CLI. Las pruebas de integración llevan etiqueta de JUnit y no
       corren en la compilación normal, que es la única forma de trabajar sin Docker
-- [ ] ⚡ [**1.21**](docs/08-plan-de-desarrollo.md#tarea-1-21) `anon` no toca nada · Base — Supabase le concede `SELECT`, `INSERT` y `UPDATE`
-      sobre las veintiséis tablas, y su clave es pública. La migración se los revoca y deja
-      `ALTER DEFAULT PRIVILEGES` puesto ([04 §9.1](docs/04-modelo-de-datos.md#91-anon-no-toca-nada)). En dev y qa ya está apagada la Data API, que
-      tapa el agujero pero **no viaja al ambiente siguiente**: sin esta tarea, uat y prod nacen
-      abiertos
+- [x] [**1.21**](docs/08-plan-de-desarrollo.md#tarea-1-21) `anon` no toca nada · Base — la migración escribe el bloque del
+      [04 §9.1](docs/04-modelo-de-datos.md#91-anon-no-toca-nada) y le suma el `EXECUTE` de las cinco funciones, que ese bloque no nombra.
+      No era teórico: contra la base local, `anon` —cuya clave es pública— leía **las 352 filas de
+      `movimientos`**, miraba la secuencia de la auditoría y ejecutaba `fn_es_gerencia`. Apagar la
+      Data API lo tapa en el proyecto donde se apaga y en ninguno más, así que **uat y prod nacerían
+      abiertos**; el `ALTER DEFAULT PRIVILEGES` es lo que hace que la próxima tabla nazca cerrada.
+      `schema_version` publica `0.7.0`, y `verificar-base.sql` lo pregunta volviéndose `anon` en vez
+      de mirar el catálogo: **150 comprobaciones en `OK`**, nueve suyas
 
 ---
 
@@ -1169,7 +1172,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       `movimientos`**, porque su política `mov_lectura` es `USING (true)`. O sea, **el libro del
       taller entero**. Solo `usuarios` quedaba tapada. Se cerró el 2026-09-19 con las dos cosas que
       hacían falta: `db_schema` pasó a vacío en dev y en qa —PostgREST contesta ahora `503
-      PGRST002`— y entra al plan la [1.21](docs/08-plan-de-desarrollo.md#tarea-1-21), que se lo revoca con una migración ([04 §9.1](docs/04-modelo-de-datos.md#91-anon-no-toca-nada)),
+      PGRST002`— y entró al plan la [1.21](docs/08-plan-de-desarrollo.md#tarea-1-21), **ya escrita**, que se lo revoca con una migración ([04 §9.1](docs/04-modelo-de-datos.md#91-anon-no-toca-nada)),
       porque una casilla de consola no viaja a uat ni a prod
 - [ ] El proyecto firma los JWT con clave asimétrica **ES256**, no con un secreto compartido:
       `SUPABASE_JWT_SECRET` va vacío y la verificación del token ([2.1](docs/08-plan-de-desarrollo.md#tarea-2-1)) tendrá que ir contra el
@@ -2368,6 +2371,39 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       esa hora. **Es la tercera vez que aparece la misma trampa** —[P-08](docs/12-pruebas-y-calidad.md#p-08) en la [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7), una
       fila de `verificar-base.sql` en la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) y estas nueve—, y las tres se vieron solo
       porque alguien corrió las pruebas en otro huso
+
+**De la 1.21 (`plan/55-anon-no-toca-nada.md`):**
+
+- [ ] **El `EXECUTE` de las cinco funciones entra en la migración, y el bloque del [04 §9.1](docs/04-modelo-de-datos.md#91-anon-no-toca-nada) no lo
+      nombra.** El documento revoca tablas y secuencias, y deja fuera `fn_es_gerencia`,
+      `fn_auditar`, `fn_congelar_ficha_propia`, `fn_proteger_ultima_gerencia` y
+      `fn_verificar_gerencia_restante`, las cinco `SECURITY DEFINER` y dueñas de `postgres`. Hoy no
+      filtran nada —`fn_es_gerencia()` con `anon` devuelve `false`, porque `auth.uid()` viene nulo,
+      y las otras cuatro devuelven `trigger`, que PostgreSQL no deja llamar directamente—, pero el
+      título de la tarea es «`anon` no toca nada». Mismo criterio que la [1.2](docs/08-plan-de-desarrollo.md#tarea-1-2), que revocó el
+      borrado a tres roles y no solo al que el [04 §5.1](docs/04-modelo-de-datos.md#51-revocación-real-del-borrado) alcanzaba a nombrar
+- [ ] **Y ahí apareció la trampa: `prisma_api` tenía ese `EXECUTE` por `PUBLIC` y no por una
+      concesión suya.** Quitárselo a `anon` obliga a revocárselo a `PUBLIC`, y eso se lo quita
+      también al rol con el que se conecta la API; la migración se lo vuelve a conceder en la
+      sentencia siguiente. Aplicada sin ese `GRANT` —a propósito, para verla fallar—, la prueba de
+      integración «sin identidad no se ve nada: la base falla cerrado» responde
+      `permission denied for function fn_es_gerencia`: lo que se rompe son las consultas que la API
+      hace **sin** asumir identidad, porque las que hacen `SET LOCAL ROLE authenticated` sí tienen
+      concesión propia. **Le puede volver a pasar a cualquier revocación a `PUBLIC`**, y nada lo
+      avisa: `prisma_api` no figura en los `GRANT` de las funciones del esquema inicial
+- [ ] **`REVOKE USAGE ON SCHEMA public FROM anon` no le quita el `USAGE`, y la migración lo escribe
+      igual.** El esquema se lo concede dos veces, a `anon` y a `PUBLIC`, y la segunda sobrevive:
+      después de la migración `has_schema_privilege('anon','public','USAGE')` sigue diciendo `t`. No
+      importa —entrar a un esquema donde no se tiene permiso sobre ninguna tabla, ninguna secuencia
+      y ninguna función no alcanza para nada— y por eso ninguna fila de `verificar-base.sql` lo
+      pregunta. Cerrarlo de verdad sería revocarle el `USAGE` a `PUBLIC`, que le pega a roles que
+      esta tarea no tiene por qué tocar, `authenticator` entre ellos
+- [ ] **`service_role` se queda con exactamente los permisos que tenía `anon`**: `SELECT`, `INSERT`,
+      `UPDATE`, `REFERENCES` y `TRIGGER` sobre las 32 relaciones de `public`. El [ADR-033](docs/adr/ADR-033-service-role-solo-en-auth.md) dice que
+      contra PostgreSQL no se usa nunca, así que le sobran todos. No entró en esta migración porque
+      su clave es un secreto del despliegue y no una clave pública: no es el mismo riesgo ni la
+      misma tarea, y toca el camino por el que Gerencia da de alta a alguien ([2.7](docs/08-plan-de-desarrollo.md#tarea-2-7)). Queda para que
+      lo decida quien dirige
 
 ---
 
