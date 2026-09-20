@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.22.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.23.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -2290,12 +2290,15 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       pone la suya. Quedó escrito en `prisma_db`, con el 6 que ya había. **Una política que nadie
       escribe es una política que cambia sola**, y llevaba desde la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) sin que se notara porque
       nadie corría esas pruebas fuera de esta máquina
-- [ ] **Un cambio de `config.toml` no llega a la tubería hasta que se publique una versión nueva del
+- [x] **Un cambio de `config.toml` no llega a la tubería hasta que se publique una versión nueva del
       esquema.** El [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) manda descargar `prisma_db` **en la etiqueta**, y la etiqueta lleva el número
       de `schema_version`; pero `config.toml` no es esquema y subir ese número por un cambio de
-      configuración sería afirmar algo falso. Hoy el arreglo de la contraseña queda escrito y sin
-      llegar. **Conviene decidir cómo viajan los cambios que no son de esquema**: que la próxima
-      migración los arrastre, o que la etiqueta deje de ser lo único que la tubería sabe pedir
+      configuración sería afirmar algo falso. **Decidido: lo arrastra la próxima migración**, que es
+      la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) —la que esta misma corrida acabó de probar que hace falta—. Al publicarse el
+      esquema siguiente, su etiqueta ya lleva el `config.toml` escrito, y el [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) se queda
+      como está. De ahí sale el orden: la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) publica y se etiqueta, y **el PR de la API que suba
+      su `prisma.esquema` a esa versión** es el que pone verdes las dos pruebas de GoTrue y el que
+      lleva las dos filas de traducción que la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) pide. Hasta entonces esas dos siguen rojas
 - [ ] **Una prueba con `LocalDate.now()` depende de en qué huso corre.** [P-08](docs/12-pruebas-y-calidad.md#p-08) registraba un
       movimiento con la fecha del reloj de la máquina, y el ejecutor va en UTC: entre las 7 de la
       noche y la medianoche de Bogotá le mandaba mañana, y la API la rechazaba con `42223`, que es
