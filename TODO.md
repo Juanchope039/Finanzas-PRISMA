@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.21.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.22.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -90,7 +90,7 @@ las cuentas de abajo. Su plan es `plan/23-el-alta-decia-algo-salio-mal.md`, reco
 **Lo siguiente, en cuanto alguien lo tome:** cerrar la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) destrabó lo que la estaba
 esperando. En el carril API **la prueba de permisos con sesión real ya está** ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)), y con ella
 la tubería que corre lo que habla con la base: [C-01](docs/12-pruebas-y-calidad.md#c-01) y las demás **por fin gatean un PR**, que era el
-agujero por el que la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) fusionó `adjuntos` sin sus mensajes y nadie lo vio en días. Le falta lo
+agujero por el que la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) fusionó `adjuntos` sin sus mensajes y nadie lo vio en días.
 **Y en su primera corrida encontró dos rojos que nadie veía**: una prueba de la propia [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) que daba
 por hecho que el reloj del ejecutor está en Bogotá, y dos de la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) que se apoyaban en una política
 de contraseñas que ningún archivo declaraba ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). El filtro de idempotencia
@@ -2299,8 +2299,14 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **Una prueba con `LocalDate.now()` depende de en qué huso corre.** [P-08](docs/12-pruebas-y-calidad.md#p-08) registraba un
       movimiento con la fecha del reloj de la máquina, y el ejecutor va en UTC: entre las 7 de la
       noche y la medianoche de Bogotá le mandaba mañana, y la API la rechazaba con `42223`, que es
-      lo correcto. Arreglado con `ZonaDelNegocio`, pero **conviene revisar si hay más pruebas que
-      leen la fecha del reloj** en vez de la del negocio ([RNF-08](docs/03-requisitos-y-bdd.md#rnf-08))
+      lo correcto. Arreglado con `ZonaDelNegocio`, y **buscadas las demás**: en `prisma_api` no
+      queda ninguna —`src/main` no lee el reloj sin huso, y las dos lecturas que hay en las
+      pruebas pasan `ZonaDelNegocio.BOGOTA`—, y en `prisma_front` el calendario toma el reloj del
+      aparato solo para saber hasta dónde se puede desplazar, que no es la regla de qué fecha vale.
+      **Donde sigue es en la base**: `fecha_no_futura` compara contra `CURRENT_DATE`, que va en el
+      huso de la sesión, y la sesión va en `UTC` —a las ocho de la noche del 19 en Bogotá, la base
+      local contesta `2026-09-20`—, así que acepta el mañana que la API rechaza con `42223`. Eso
+      ya es la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15), y esta es la comprobación de que hace falta ([RNF-08](docs/03-requisitos-y-bdd.md#rnf-08))
 
 ---
 
