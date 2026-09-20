@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.26.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-20 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.27.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-20 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -36,7 +36,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 19 | 0 | 0 | 0 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
-| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 13 | 0 | 9 | 9,5 |
+| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 14 | 0 | 8 | 8 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 16 | 10 | 0 | 6 | 7 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 2 | 0 | 9 | 11 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 4 | 0 | 6 | 6,5 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 1 | 0 | 11 | 16,5 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 12 | 1 | 0 | 11 | 10 |
-| **Total** | **142** | **73** | **0** | **69** | **87** |
+| **Total** | **142** | **74** | **0** | **68** | **85,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -129,8 +129,8 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.7](docs/08-plan-de-desarrollo.md#tarea-3-7) · [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) · [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
-| **Base** | [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [2.21](docs/08-plan-de-desarrollo.md#tarea-2-21) · [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
+| **API** | [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9) · [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.7](docs/08-plan-de-desarrollo.md#tarea-3-7) · [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) · [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **Base** | [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) · [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
 | **Front** | [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) |
 <!-- /generado:plan-listas-ya -->
@@ -138,13 +138,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **69 tareas y 87 días de trabajo** de 142 tareas del plan.
+Quedan **68 tareas y 85,5 días de trabajo** de 142 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 13,1 semanas | **16,1 semanas** |
+| 1 | 12,9 semanas | **15,9 semanas** |
 | 2 | 7,3 semanas | **10,3 semanas** |
-| 3 | 6,1 semanas | **9,1 semanas** |
+| 3 | 6,0 semanas | **9,0 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -487,7 +487,7 @@ hasta aplicarlo y probarlo.
       de Gerencia lo rechaza un trigger que estaba puesto desde el esquema inicial. El descriptor
       estrena `opciones` y `origen`, que el contrato declaraba y ningún formulario usaba
 - [ ] 🔒 [**2.8**](docs/08-plan-de-desarrollo.md#tarea-2-8) Catálogo de cargos · API, Front
-- [ ] 🔒 [**2.9**](docs/08-plan-de-desarrollo.md#tarea-2-9) Registro de cada inicio de sesión con fecha, dispositivo e IP · API, Base
+- [ ] ⚡ [**2.9**](docs/08-plan-de-desarrollo.md#tarea-2-9) Registro de cada inicio de sesión con fecha, dispositivo e IP · API, Base
 - [x] [**2.10**](docs/08-plan-de-desarrollo.md#tarea-2-10) Panel «Acerca de» ([RF-100](docs/03-requisitos-y-bdd.md#rf-100)) · Front, API — los seis datos de [19 §5.3](docs/19-ambientes-y-entrega.md#53-el-panel-acerca-de), y lo que
       no se pudo consultar lo dice en vez de inventarlo
 - [ ] ⚡ [**2.11**](docs/08-plan-de-desarrollo.md#tarea-2-11) La prueba de permisos del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1), también contra la base de qa · API
@@ -502,7 +502,7 @@ hasta aplicarlo y probarlo.
       prueba de frontera falla si alguien escribe una en `lib/`. Y con ella el filtro de firma
       **publica la identidad**, que es lo que destraba el registro de idempotencia: llevaba desde
       la [1.14](docs/08-plan-de-desarrollo.md#tarea-1-14) escrito y sin usarse porque ninguna petición traía identidad
-- [ ] 🔒 [**2.15**](docs/08-plan-de-desarrollo.md#tarea-2-15) Tabla única de usuarios activos y desactivados ([RF-84](docs/03-requisitos-y-bdd.md#rf-84) a [RF-87](docs/03-requisitos-y-bdd.md#rf-87)) · API, Front
+- [ ] ⚡ [**2.15**](docs/08-plan-de-desarrollo.md#tarea-2-15) Tabla única de usuarios activos y desactivados ([RF-84](docs/03-requisitos-y-bdd.md#rf-84) a [RF-87](docs/03-requisitos-y-bdd.md#rf-87)) · API, Front
 - [ ] 🔒 [**2.16**](docs/08-plan-de-desarrollo.md#tarea-2-16) Bitácora de cambios y reversión sin borrar ([RF-88](docs/03-requisitos-y-bdd.md#rf-88), [RF-89](docs/03-requisitos-y-bdd.md#rf-89), [RF-91](docs/03-requisitos-y-bdd.md#rf-91)) · Base, API, Front
 - [ ] ⚡ [**2.17**](docs/08-plan-de-desarrollo.md#tarea-2-17) Cambio de clave obligatorio al reactivar ([RF-90](docs/03-requisitos-y-bdd.md#rf-90)) · API, Front
 - [x] [**2.18**](docs/08-plan-de-desarrollo.md#tarea-2-18) Vista previa de Operación para Gerencia ([RF-92](docs/03-requisitos-y-bdd.md#rf-92) a [RF-94](docs/03-requisitos-y-bdd.md#rf-94)) · Front, API — el
@@ -524,8 +524,16 @@ hasta aplicarlo y probarlo.
       `/navegacion`, `/usuarios`, `/cargos` y `/bitacora`, siete formularios más y los códigos `40100`
       a `40104`, `40301`, `40302`, `40910` a `40913` y `42210` a `42214`. El canal firmado va con sus
       tres cabeceras `X-Prisma-`; cómo se arma la firma, al byte, vive en [20 §6.2](docs/20-contrato-de-api.md#62-cómo-se-arma-la-firma) y no se copia aquí
-- [ ] ⚡ [**2.21**](docs/08-plan-de-desarrollo.md#tarea-2-21) Auditoría de `usuarios` y eventos con nombre · Base — sin ella la bitácora
-      solo puede enseñar filas de `cargos`, y la esperan la [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9), la [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) y la [2.16](docs/08-plan-de-desarrollo.md#tarea-2-16)
+- [x] [**2.21**](docs/08-plan-de-desarrollo.md#tarea-2-21) Auditoría de `usuarios` y eventos con nombre · Base — `usuarios` era la
+      única tabla de negocio **sin auditar**, y no por olvido: la genérica decide que un `UPDATE`
+      fue una baja mirando `anulado_en`, y ahí se da de baja con `desactivado_en`. Con eso,
+      desactivar a una persona no dejaba rastro. Entran las cuatro piezas que el
+      [04 §5.4](docs/04-modelo-de-datos.md#54-auditoría-por-triggers) ya tenía escritas: `fn_auditar_usuarios` con su trigger, la columna
+      `auditoria.motivo` —el único sitio donde cabe el porqué de una **reactivación**, que deja las
+      tres columnas de estado en `NULL`—, las cinco acciones que le faltaban al `CHECK` y
+      `fn_registrar_evento`, lo único que puede escribir un evento en una tabla con RLS y sin
+      política de inserción. `schema_version` publica `0.8.0` y `verificar-base.sql` va en
+      **161 comprobaciones en `OK`**, once suyas. Destraba la [2.9](docs/08-plan-de-desarrollo.md#tarea-2-9), la [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) y la [2.16](docs/08-plan-de-desarrollo.md#tarea-2-16)
 - [ ] ⚡ [**2.22**](docs/08-plan-de-desarrollo.md#tarea-2-22) `cargos`: nombre único sin mayúsculas y el cargo que no se desactiva · Base — dos
       códigos que el contrato promete desde el `0.4.0` y que hoy no tienen regla en la base
 
@@ -2404,6 +2412,32 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       su clave es un secreto del despliegue y no una clave pública: no es el mismo riesgo ni la
       misma tarea, y toca el camino por el que Gerencia da de alta a alguien ([2.7](docs/08-plan-de-desarrollo.md#tarea-2-7)). Queda para que
       lo decida quien dirige
+
+**De la 2.21 (`plan/56-la-bitacora-con-nombre.md`):**
+
+- [ ] **Toda función nueva nace abierta a `PUBLIC`, y a partir de aquí es una regla y no una
+      anécdota.** PostgreSQL le concede el `EXECUTE` a `PUBLIC` por omisión, así que
+      `fn_registrar_evento` —que escribe en `auditoria` corriendo como el dueño— habría quedado al
+      alcance de `anon` sin figurar en ningún `GRANT`: cualquiera con la clave pública escribiendo
+      una bitácora falsa, que es lo último que debería poder falsificarse. El `ALTER DEFAULT
+      PRIVILEGES` que dejó la [1.21](docs/08-plan-de-desarrollo.md#tarea-1-21) cubre a `anon`, **pero no a `PUBLIC`**: eso hay que escribirlo en
+      cada migración que cree una función. No hizo falta acordarse: aplicada sin la revocación, la
+      fila de la [1.21](docs/08-plan-de-desarrollo.md#tarea-1-21) que cuenta las funciones que `anon` alcanza se puso roja diciendo dos
+- [ ] **El contrato y la base no llaman igual a tres de los eventos.** `EntradaDeBitacora.evento`
+      dice `desactivado`, `reactivado` y `reversion`; `auditoria.accion` dice
+      `usuario_desactivado`, `usuario_reactivado` y `cambio_revertido`. Los otros nueve coinciden
+      letra por letra. La base se queda con los nombres del [04](docs/04-modelo-de-datos.md), que es el que manda sobre el
+      esquema, así que **la traducción le toca a la API**, como ya le toca la de restricciones. No
+      estaba escrito en ninguna parte y la [2.16](docs/08-plan-de-desarrollo.md#tarea-2-16) se lo va a encontrar
+- [ ] **Lo que la migración deja sin imponer, a propósito.** El [04 §5.4](docs/04-modelo-de-datos.md#54-auditoría-por-triggers) dice que `registro_id` es
+      nulo «solo en `inicio_sesion_fallido`», y ninguna restricción lo amarra; y cualquier sesión
+      `authenticated` que alcance `fn_registrar_evento` puede escribir una entrada de algo que no
+      pasó. Las dos se sostienen hoy porque **nadie habla con la base salvo `prisma_api`**
+      ([ADR-018](docs/adr/ADR-018-front-sin-decisiones.md)) y porque la [1.21](docs/08-plan-de-desarrollo.md#tarea-1-21) cerró la puerta pública. Apretarlas es su propia decisión
+- [ ] **La vista se tira y se vuelve a crear en vez de reemplazarse.** `CREATE OR REPLACE VIEW`
+      solo deja agregar columnas al final, y el [04 §5.6](docs/04-modelo-de-datos.md#56-la-bitácora-de-la-pantalla-es-una-vista-no-una-tabla-nueva) pone `motivo` entre `registro_id` y
+      `autor_id`. Es el camino que ya tomó la migración de los dominios con las otras cuatro
+      vistas, y los permisos vuelven solos por el `ALTER DEFAULT PRIVILEGES` del esquema
 
 ---
 

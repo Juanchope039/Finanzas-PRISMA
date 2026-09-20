@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-20 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -198,7 +198,7 @@ que hay que recordar y pasa a ser algo que el motor sabe.
 | `porcentaje` | `SMALLINT` | `0..100` | 5 | `pedidos.anticipo_pct`, los cuatro `pct_` de `sobres_config` |
 | `anio` | `SMALLINT` | `2020..2100` | 2 | `nomina_periodos.anio`, `cierres_mensuales.anio` |
 | `mes_del_anio` | `SMALLINT` | `1..12` | 2 | `nomina_periodos.mes`, `cierres_mensuales.mes` |
-| `motivo` | `TEXT` | `length(trim(…)) >= 5` | 16 | los trece `anulado_motivo` —el de `adjuntos` entró con la [3.14](08-plan-de-desarrollo.md#tarea-3-14)—, `usuarios.desactivado_motivo`, `pedidos.cancelado_motivo` ([4.11](08-plan-de-desarrollo.md#tarea-4-11)) y `auditoria.motivo` ([2.21](08-plan-de-desarrollo.md#tarea-2-21)) |
+| `motivo` | `TEXT` | `length(trim(…)) >= 5` | 16 | los trece `anulado_motivo` —el de `adjuntos` entró con la [3.14](08-plan-de-desarrollo.md#tarea-3-14)—, `usuarios.desactivado_motivo`, `pedidos.cancelado_motivo` ([4.11](08-plan-de-desarrollo.md#tarea-4-11)) y `auditoria.motivo`, que entró con la [2.21](08-plan-de-desarrollo.md#tarea-2-21) |
 
 Son **nueve dominios**. Tres piden explicación, porque no son solo una mudanza de reglas ya
 escritas:
@@ -1150,13 +1150,13 @@ CREATE TABLE auditoria (
                   'clave_restablecida','clave_cambiada',
                   'cargo_creado','cargo_desactivado',
                   'usuario_reactivado','cambio_revertido',    -- ver §5.7
-                  -- tarea 2.21: los cinco que la pantalla distingue y un UPDATE no
+                  -- los cinco que la pantalla distingue y un UPDATE no
                   'nombre_cambiado','cargo_cambiado','tipo_cambiado',
                   'cargo_renombrado','cargo_reactivado')),
   usuario_id    UUID,
   tipo          tipo_usuario,
   fecha_hora    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  motivo        motivo,   -- tarea 2.21: por qué, cuando el cambio lo pedía
+  motivo        motivo,   -- por qué, cuando el cambio lo pedía
   dispositivo   TEXT,
   ip            INET,
   datos_antes   JSONB,
