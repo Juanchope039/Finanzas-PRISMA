@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.16.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [7.17.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-19 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 **El idioma del proyecto es el español**, incluidos el código, los nombres de clase, los comentarios,
 los mensajes de commit y las pruebas. `Movimiento`, `aporteAUtilidad`, `esRegistroTardio`.
@@ -337,7 +337,10 @@ demás **por fin gatean un PR**. **Y el libro dejó de aceptar lo que la API rec
 ([3.15](docs/08-plan-de-desarrollo.md#tarea-3-15)): `movimientos` impone las tres reglas de la cuenta de destino —falta, sobra, o es la
 misma de origen, que además le **bajaba el saldo** a esa cuenta— y su fecha se juzga con el día de
 Bogotá y no con el huso de la sesión, que de siete a doce de la noche dejaba entrar el mañana.
-Esquema `0.6.0`. Van 71 de las 142 tareas.
+Esquema `0.6.0`. **Y la idempotencia dejó de ser decorado** ([1.15](docs/08-plan-de-desarrollo.md#tarea-1-15)): [I-02](docs/12-pruebas-y-calidad.md#i-02) corta la
+petición en los tres sitios donde puede caer —entre las dos escrituras, después del efecto y
+matándole la conexión sin avisar— y cuenta las filas de las dos tablas. Van 72 de las 142
+tareas.
 
 Mientras no exista el ambiente qa —hasta el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9), por [ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)—, «terminado» quiere decir
 fusionado a `develop` con la integración continua en verde.
