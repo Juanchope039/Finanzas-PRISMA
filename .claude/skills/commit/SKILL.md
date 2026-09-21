@@ -34,13 +34,8 @@ Verifica: 746 en verde; sin el filtro, 3 rojas.
   el plan.
 - **Todo en español sin tildes**, y sin `§`, ni eñes, ni emojis: cada uno de esos caracteres cuenta
   como dos bytes.
-- **El tope es de 256, contando asunto, cuerpo y trailers.** Mídelo **antes** de commitear:
-
-  ```bash
-  printf '%s' "$(cat mensaje.txt)" | wc -c        # tiene que dar 256 o menos
-  ```
-
-  Si da más, se acorta y se vuelve a medir. Solo cuando cabe, se hace el commit.
+- **No agregar al comentario**
+  - `Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>`
 
 ## 3. El commit y el empuje
 

@@ -2,7 +2,7 @@
 name: tarea
 description: Prepara una tarea del plan de desarrollo de PRISMA. Lee su fila del 08, comprueba que se pueda empezar, abre la rama en cada repositorio del carril y deja escrito el plan. Se invoca a mano con el id de la tarea.
 argument-hint: "[id de la tarea, p. ej. 3.4]"
-disable-model-invocation: true
+model: opus
 ---
 
 # Empezar la tarea $ARGUMENTS
