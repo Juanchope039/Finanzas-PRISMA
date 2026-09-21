@@ -896,7 +896,7 @@ function revisarMensajesDeCommit(base, errores) {
     errores.push({
       ruta: `(commit ${sha.slice(0, 7)})`,
       texto: `el mensaje mide ${largo} caracteres y el tope son ${cfg.TOPE_DE_COMMIT}: «${asunto}»`,
-      motivo: 'lo que no cabe va al plan de plan/',
+      motivo: 'lo que no cabe va al plan de trabajo',
     });
   }
 }
