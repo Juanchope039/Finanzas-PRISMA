@@ -3,7 +3,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/README.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Negocio](docs/INDICE.md#etiqueta-negocio) · [Plan](docs/INDICE.md#etiqueta-plan) |
+| [1.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/README.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-13 | 2026-09-21 | [Negocio](docs/INDICE.md#etiqueta-negocio) · [Plan](docs/INDICE.md#etiqueta-plan) |
 
 > **PRISMA** = **P**lataforma de **R**egistro, **I**nversión, **S**eguimiento, **M**árgenes y **A**dministración.
 > Un solo lugar para saber cuánto entra, cuánto sale, cuánto queda y cuánto se puede pagar.
@@ -55,7 +55,7 @@ PRISMA existe para responder esas tres preguntas con números, no con intuición
 | 20 | [Contrato de API](docs/20-contrato-de-api.md) | El sobre `{status, mensaje, data}`, los códigos de 5 dígitos, la idempotencia y el canal firmado |
 | 21 | [Trabajo en paralelo](docs/21-trabajo-en-paralelo.md) | Cómo avanzan varios carriles a la vez sin bloquearse: repartos, repositorios y reglas de convivencia |
 | 22 | [Documentación](docs/22-documentacion.md) | Versiones, estados, fechas, etiquetas y referencias enlazadas de todos los documentos |
-| — | [ADRs](docs/adr/) | Las 32 decisiones de arquitectura registradas |
+| — | [ADRs](docs/adr/) | Las decisiones de arquitectura registradas, con su porqué |
 | — | [Contrato de la API](contrato/) | El `openapi.json` acordado entre front y API, con el catálogo de códigos dentro |
 | — | [Tareas](TODO.md) | Lo hecho y lo pendiente, tarea por tarea, y qué se puede avanzar en paralelo |
 
@@ -109,18 +109,20 @@ El mockup es un archivo HTML suelto y se abre con doble clic. El sistema de verd
 > Storage: todo pasa por `prisma_api`. Meter el cliente de Supabase dentro del código Flutter
 > también se rechaza en revisión.
 
-**Cada pieza vive en su propio repositorio** ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)):
-este repositorio guarda la documentación, el mockup y el contrato; `prisma_api` guarda la API;
-`prisma_db`, las migraciones y la semilla de la base; `prisma_front`, el front.
+**Cada pieza vive en su propio repositorio** ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), y los cuatro son hermanos dentro de una
+carpeta de trabajo ([ADR-035](docs/adr/ADR-035-repositorios-hermanos.md)): este repositorio guarda la documentación, el mockup y el contrato;
+`prisma_api` guarda la API; `prisma_db`, las migraciones y la semilla de la base; `prisma_front`,
+el front.
 
-| Repositorio | En disco |
+| Repositorio | En disco, dentro de la carpeta de trabajo |
 |---|---|
+| `Finanzas-PRISMA`, este | `repositories/documentation` |
 | `prisma_api` | `repositories/backend-api` |
 | `prisma_db` | `repositories/backend-db` |
 | `prisma_front` | `repositories/frontend-flutter` |
 
-`repositories/` está en el `.gitignore` de este repositorio **a propósito**: cada carpeta de
-adentro es un repositorio git con su propia historia, y este no la versiona.
+Ninguno contiene a otro: cada carpeta es un repositorio git con su propia historia, y la carpeta de
+trabajo que los junta no es un repositorio.
 
 Separar la base de la API tiene un precio: **una función que necesita una columna nueva son dos
 commits, en dos repositorios y en orden.** Primero la migración, compatible con la API que ya

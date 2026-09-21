@@ -2,7 +2,11 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-031-commit-de-256-caracteres.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-17 | 2026-09-17 | — |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-031-commit-de-256-caracteres.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-17 | 2026-09-21 | — |
+
+> **Los planes de trabajo ya no se citan.** Desde el [ADR-035](ADR-035-repositorios-hermanos.md) viven fuera de todo repositorio, no se
+> versionan y ningún documento los nombra. Las menciones de abajo a su carpeta son de cuando vivían
+> dentro de la especificación: el porqué largo sigue yendo al plan, y el plan ya no se enlaza.
 
 ## Contexto
 
@@ -115,5 +119,5 @@ la decisión. Cuando no se sabe, no sale; y que no salga es la señal, no el pro
 ---
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](../22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-028](ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-034](ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [CLAUDE](../../CLAUDE.md "CLAUDE.md") · [README](../../scripts/docs/README.md "Herramienta de documentación")
+**🔗 Referenciado desde:** [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](../22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-028](ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-034](ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [ADR-035](ADR-035-repositorios-hermanos.md "ADR-035 · Los cuatro repositorios, hermanos en una carpeta de trabajo") · [CLAUDE](../../CLAUDE.md "CLAUDE.md") · [README](../../scripts/docs/README.md "Herramienta de documentación")
 <!-- /generado:referenciado-desde -->

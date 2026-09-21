@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.2.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-19 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [3.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-21 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 > **Construcción: construido y corriendo contra dev y contra qa**, donde el esquema está aplicado y
 > verificado línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5), [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5) y [1.13](08-plan-de-desarrollo.md#tarea-1-13)). **qa quedó al día** con el
@@ -14,7 +14,7 @@
 > ### 📍 Estos archivos viven en `prisma_db`, no aquí
 >
 > Desde el [ADR-025](adr/ADR-025-cuatro-repositorios.md), `supabase/` y `scripts/db/` tienen
-> repositorio propio, `prisma_db`, que en disco va en `repositories/backend-db`. **Todas las rutas
+> repositorio propio, `prisma_db`, que en disco va en `backend-db`, al lado de esta especificación. **Todas las rutas
 > de este documento son relativas a `prisma_db`.** Antes vivieron dentro de `prisma_api`
 > ([ADR-023](adr/ADR-023-tres-repositorios.md)).
 >
