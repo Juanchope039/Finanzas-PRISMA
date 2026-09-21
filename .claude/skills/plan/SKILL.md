@@ -1,6 +1,7 @@
 ---
 name: plan
 description: Escribe el plan de trabajo numerado de PRISMA antes de tocar código. Úsala al empezar cualquier tarea del 08, cualquier arreglo suelto y cualquier cambio de herramientas, antes de editar el primer archivo.
+model: opus
 ---
 
 # Escribir el plan de trabajo

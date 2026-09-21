@@ -1,8 +1,8 @@
 ---
 name: commit
-description: Hace el commit de PRISMA con el formato del proyecto y empuja la rama. El asunto lleva sprint y número, el cuerpo tres líneas Hace/Decide/Verifica, sin tildes y con 256 caracteres o menos. Se invoca a mano.
+description: Hace el commit de PRISMA con el formato del proyecto y empuja la rama. El asunto lleva sprint y número, el cuerpo tres líneas Hace/Decide/Verifica. Se invoca a mano.
 argument-hint: "[repositorio]"
-disable-model-invocation: true
+model: sonnet
 ---
 
 # Hacer el commit
@@ -50,6 +50,4 @@ git push -u origin feature/<id>     # siempre, desde el primer commit, sin pregu
   los toques: haz el commit con `git commit -F mensaje.txt -- <rutas>`, que solo se lleva esas
   rutas.
 - **Nunca empujes a `develop`, `main`, `qa`, `uat` ni `prod`.**
-- **Si un commit ya empujado se pasó de 256**, se rehace: `git commit --amend -F mensaje.txt` si es
-  el último, o `git rebase -i` si no. Después se empuja con `git push --force-with-lease`, y solo en
-  tu rama `feature/`.
+
