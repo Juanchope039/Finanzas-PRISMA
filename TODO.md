@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.31.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-20 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.32.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-20 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -36,7 +36,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 19 | 0 | 0 | 0 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
-| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 17 | 0 | 5 | 6 |
+| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 18 | 0 | 4 | 5 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 16 | 10 | 0 | 6 | 7 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 2 | 0 | 9 | 11 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 4 | 0 | 6 | 6,5 |
@@ -44,7 +44,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 1 | 0 | 11 | 16,5 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 12 | 1 | 0 | 11 | 10 |
-| **Total** | **142** | **77** | **0** | **65** | **83,5** |
+| **Total** | **142** | **78** | **0** | **64** | **82,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -129,8 +129,8 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8) · [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.7](docs/08-plan-de-desarrollo.md#tarea-3-7) · [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) · [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
-| **Base** | [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
+| **API** | [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11) · [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) · [3.7](docs/08-plan-de-desarrollo.md#tarea-3-7) · [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) · [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **Base** | [2.16](docs/08-plan-de-desarrollo.md#tarea-2-16) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
 | **Front** | [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) |
 <!-- /generado:plan-listas-ya -->
@@ -138,13 +138,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **65 tareas y 83,5 días de trabajo** de 142 tareas del plan.
+Quedan **64 tareas y 82,5 días de trabajo** de 142 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 12,6 semanas | **15,6 semanas** |
-| 2 | 7,1 semanas | **10,1 semanas** |
-| 3 | 5,9 semanas | **8,9 semanas** |
+| 1 | 12,4 semanas | **15,4 semanas** |
+| 2 | 7,0 semanas | **10,0 semanas** |
+| 3 | 5,6 semanas | **8,6 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -493,7 +493,17 @@ hasta aplicarlo y probarlo.
       en la API**: quien decide si Gerencia puede crear es `usuarios_insercion`, y al último usuario
       de Gerencia lo rechaza un trigger que estaba puesto desde el esquema inicial. El descriptor
       estrena `opciones` y `origen`, que el contrato declaraba y ningún formulario usaba
-- [ ] ⚡ [**2.8**](docs/08-plan-de-desarrollo.md#tarea-2-8) Catálogo de cargos · API, Front
+- [x] [**2.8**](docs/08-plan-de-desarrollo.md#tarea-2-8) Catálogo de cargos: crear, renombrar, reordenar y desactivar con motivo · API, Front —
+      las seis operaciones estaban acordadas desde el contrato `0.4.0` y **ninguna existía**: las
+      seis rutas respondían 404. Ahora existen, con los dos códigos que el contrato promete y que
+      la API no sabía emitir —el `42214` del nombre repetido y el `40911` del cargo que todavía
+      tienen personas—, y **los dos los decide la base**: el primero es `cargos_nombre_key` sobre la
+      columna `CITEXT` de la [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) y el segundo es su trigger, reconocido por el texto de su
+      `RAISE` como ya se hacía con el último usuario de Gerencia. `asignables()` se muda al puerto
+      de cargos, que es donde vive el catálogo desde hoy. En el front, el **bloque B** de Gestión
+      de usuarios, con dos flechas para mover un cargo. La API sube a la `0.9.0` del esquema, que
+      es lo que estas dos reglas necesitan. **744 pruebas y 140 de integración** en la API y **323**
+      en el front. Destraba la [2.16](docs/08-plan-de-desarrollo.md#tarea-2-16), que era la última 🔒 del sprint
 - [x] [**2.9**](docs/08-plan-de-desarrollo.md#tarea-2-9) Registro de cada inicio de sesión con fecha, dispositivo e IP · API, Base —
       el contrato lo prometía desde el `0.4.0` y **la API no escribía ninguno de los tres**: ni
       `inicio_sesion`, ni `inicio_sesion_fallido`, ni `cierre_sesion`. Ahora los escribe
@@ -529,7 +539,7 @@ hasta aplicarlo y probarlo.
       **publica la identidad**, que es lo que destraba el registro de idempotencia: llevaba desde
       la [1.14](docs/08-plan-de-desarrollo.md#tarea-1-14) escrito y sin usarse porque ninguna petición traía identidad
 - [ ] ⚡ [**2.15**](docs/08-plan-de-desarrollo.md#tarea-2-15) Tabla única de usuarios activos y desactivados ([RF-84](docs/03-requisitos-y-bdd.md#rf-84) a [RF-87](docs/03-requisitos-y-bdd.md#rf-87)) · API, Front
-- [ ] 🔒 [**2.16**](docs/08-plan-de-desarrollo.md#tarea-2-16) Bitácora de cambios y reversión sin borrar ([RF-88](docs/03-requisitos-y-bdd.md#rf-88), [RF-89](docs/03-requisitos-y-bdd.md#rf-89), [RF-91](docs/03-requisitos-y-bdd.md#rf-91)) · Base, API, Front
+- [ ] ⚡ [**2.16**](docs/08-plan-de-desarrollo.md#tarea-2-16) Bitácora de cambios y reversión sin borrar ([RF-88](docs/03-requisitos-y-bdd.md#rf-88), [RF-89](docs/03-requisitos-y-bdd.md#rf-89), [RF-91](docs/03-requisitos-y-bdd.md#rf-91)) · Base, API, Front
 - [ ] ⚡ [**2.17**](docs/08-plan-de-desarrollo.md#tarea-2-17) Cambio de clave obligatorio al reactivar ([RF-90](docs/03-requisitos-y-bdd.md#rf-90)) · API, Front
 - [x] [**2.18**](docs/08-plan-de-desarrollo.md#tarea-2-18) Vista previa de Operación para Gerencia ([RF-92](docs/03-requisitos-y-bdd.md#rf-92) a [RF-94](docs/03-requisitos-y-bdd.md#rf-94)) · Front, API — el
       contrato ya la declaraba entera y ahora el servidor la cumple: `vista=operacion` devuelve el
@@ -1599,7 +1609,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       pero tienen etiquetas y mensajes distintos. Aquí se declara el de desactivar una persona;
       como `@Formulario` es por clase, las tareas [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8), [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) y [2.16](docs/08-plan-de-desarrollo.md#tarea-2-16) van a necesitar una clase cada
       una, y entonces sus esquemas en el OpenAPI dejarán de llamarse todos `Motivo`
-- [ ] ⚡ **`cargos-asignables` entra con esta tarea y no con la [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8)**, que es la del catálogo de
+- [ ] 🔒 **`cargos-asignables` entra con esta tarea y no con la [2.8](docs/08-plan-de-desarrollo.md#tarea-2-8)**, que es la del catálogo de
       cargos. Es el `origen` declarado del campo `cargoId`: sin ella el formulario de alta no se
       puede pintar, y esperar a la 2.8 habría dejado la 2.7 sin desplegable
 - [ ] **El tipo de campo `lista` pasa a admitir `UUID` además de `String`.** Hay dos clases de
@@ -2562,6 +2572,44 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       2.9. Se arregló en los dos lados: la API publica `{}` cuando no sabe nada, y el trigger lee con
       un `nullif` dentro de funciones que atrapan el error. **Vale la pena mirar si hay más
       `current_setting(...)::` sin `nullif` el día que algo más publique variables**
+
+**De la 2.8 (`plan/61-el-catalogo-de-cargos.md`):**
+
+- [ ] **Reordenar el catálogo son dos flechas por fila, y el mockup no dice nada.** El [10 §5.4](docs/10-ux-y-mockups.md#54-gestión-de-usuarios) dice
+      que un cargo «se agrega, se renombra y se desactiva con motivo» y no menciona moverlo, aunque
+      el contrato declare `PUT /api/v0/cargos/orden` y la tarea lo nombre. Se eligió lo mínimo que
+      funciona con teclado, con lector de pantalla y en un celular sin arrastrar nada. Si el diseño
+      quería arrastrar, esto se cambia sin tocar la API: lo que viaja es el catálogo entero
+- [ ] **El botón de sacar un cargo del catálogo no se esconde aunque la fila diga que lo tienen dos
+      personas.** Quien rechaza es la base, y su aviso trae el número. Esconderlo sería decidir un
+      permiso en el front con un dato que puede estar viejo ([ADR-018](docs/adr/ADR-018-front-sin-decisiones.md)), y dejaría a quien
+      administra sin entender por qué no puede
+- [ ] **`POST /api/v0/consultas/cargos` no responde `40300`, y el contrato dice que puede.** El
+      catálogo lo lee todo el mundo porque `cargos_lectura` es `USING (TRUE)`, y tiene que ser así:
+      el desplegable de un formulario lo necesita. Lo que sí le queda recortado a una sesión de
+      Operación es `personasActivas`, porque la subconsulta que lo cuenta corre bajo
+      `usuarios_lectura`. Es lo mismo que ya pasa con la consulta de personas, y la salida —si se
+      quiere una— es de Base, no de un `if` en la API
+- [ ] **Los cuatro eventos con nombre de cargos siguen sin escribirse.** `cargo_creado`,
+      `cargo_renombrado`, `cargo_desactivado` y `cargo_reactivado` son valores válidos de `accion`
+      desde la [2.21](docs/08-plan-de-desarrollo.md#tarea-2-21), y la descripción de la reactivación los promete. No los escribe la 2.8 a
+      propósito: los de **personas** tampoco están —la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) es anterior a `fn_registrar_evento`— y
+      escribir la mitad dejaría una bitácora que cuenta los cargos y no las personas. Son de la
+      [2.16](docs/08-plan-de-desarrollo.md#tarea-2-16), que es «la bitácora de todo cambio sobre usuarios y cargos». El trigger genérico sí
+      deja su `INSERT`, `UPDATE` o `ANULAR`, que es lo que había
+- [ ] **La copia fijada del contrato se desvió del acordado, y nada los compara.** [C-04](docs/12-pruebas-y-calidad.md#c-04) compara el
+      OpenAPI generado con la copia de `prisma_api`, y quien compara esa copia con el original de
+      este repositorio es una persona. Hoy difieren en las palabras clave de validación que salen de
+      las anotaciones —`minLength`, `maxLength`, `minItems`—, que el original no tiene porque se
+      escribió antes que el código, y en dos descripciones, la de `Desactivacion` y la de `Motivo`.
+      Las **rutas** sí coinciden byte a byte, y eso se comprobó una por una en esta tarea. Una
+      prueba que cruce los dos documentos es barata y no existe
+- [ ] **El formulario «desactivacion-de-cargo» tiene sus etiquetas y no sus mensajes.** El contrato
+      usa **un solo esquema** de cuerpo, `Motivo`, para los once formularios de motivo, y
+      `@Formulario` es por clase: si la clase del cargo apareciera en la firma del controlador, el
+      OpenAPI generado traería un esquema que el contrato no tiene. Así que el cuerpo que se valida
+      es el de desactivar a una persona, y un motivo en blanco al sacar un cargo se rechaza con el
+      mensaje de esa otra. Lo que la pantalla pinta sí es propio
 
 ---
 
