@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.35.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-21 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.36.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-21 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -2543,6 +2543,28 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       anotar un evento con nombre, `anotar(CambioAnotado)`, y la reactivación pasa por ella como las
       demás. Dos caminos para lo mismo era lo que hacía que la vuelta guardara menos datos que la
       baja, y sin el motivo de entonces no se puede deshacer
+
+**Del arreglo del huso en el front:**
+
+- [ ] **El front era el único de los tres que no cumplía [RNF-08](docs/03-requisitos-y-bdd.md#rnf-08).** Pintaba con `toLocal()`, o sea con
+      el reloj de quien mira, cuando [R6](docs/01-vision-y-alcance.md) y el [04 §1](docs/04-modelo-de-datos.md#1-principios-del-modelo) dicen que todas las fechas se manejan en
+      `America/Bogota`. La base lo arregló en la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) y la API lo tiene en `ZonaDelNegocio`. Lo
+      destapó la integración continua: una prueba de la [2.15](docs/08-plan-de-desarrollo.md#tarea-2-15) que pasaba en la máquina de quien la
+      escribió —en Bogotá— y fallaba en el runner, que corre en UTC. **La prueba tenía razón y el
+      código no**, así que se arregló el código
+- [ ] **El desplazamiento es fijo, de cinco horas, y no un paquete de husos.** Colombia no tiene
+      horario de verano desde 1993 y su huso es `−05:00` sin excepciones, así que restar cinco es
+      exacto para siempre. Se descartó el paquete `timezone`: trae la base de datos de husos entera
+      para resolver algo que no cambia nunca. **Si algún día Colombia cambiara de huso, esto es lo
+      que hay que tocar**
+- [ ] **Convertir no es un paso público, y eso costó una prueba para descubrirlo.** La primera
+      versión exponía un `enBogota` que los modelos llamaban al leer el JSON; una prueba de
+      idempotencia lo cazó: aplicado dos veces resta **diez** horas, porque lo que vuelve sigue
+      marcado en UTC y restar otra vez es legal. Ahora solo existen `fechaYHoraEnBogota` y
+      `fechaCortaEnBogota`, que convierten al pintar, y los modelos guardan el instante tal como
+      llegó
+- [ ] **La fecha de compilación del panel «Acerca de» se queda en el reloj de quien mira.** No es
+      una fecha del negocio: es cuándo se compiló el artefacto
 
 **De la 2.22:**
 
