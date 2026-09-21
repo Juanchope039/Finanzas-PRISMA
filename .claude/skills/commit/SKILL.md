@@ -35,7 +35,7 @@ Verifica: 746 en verde; sin el filtro, 3 rojas.
 - **Todo en español sin tildes**, y sin `§`, ni eñes, ni emojis: cada uno de esos caracteres cuenta
   como dos bytes.
 - **No agregar al comentario**
-  - `Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>`
+   - `Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>`
 
 ## 3. El commit y el empuje
 
@@ -49,5 +49,10 @@ git push -u origin feature/<id>     # siempre, desde el primer commit, sin pregu
 - **Si en el índice hay cambios que no son tuyos** (un `.env`, cosas a medias de otra persona), no
   los toques: haz el commit con `git commit -F mensaje.txt -- <rutas>`, que solo se lleva esas
   rutas.
-- **Nunca empujes a `develop`, `main`, `qa`, `uat` ni `prod`.**
+- **Nunca empujar a las siguientes ramas.**
+   - `develop`
+   - `main`
+   - `qa`
+   - `uat`
+   - `prod`
 
