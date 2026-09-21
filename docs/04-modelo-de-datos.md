@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-20 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.7.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-21 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -1498,9 +1498,15 @@ La restricción `reversion_con_origen` amarra las dos mitades: una fila `cambio_
 `revierte_a` no entra, y ninguna otra acción puede traer `revierte_a`. Sin ella cabía una
 reversión huérfana, que es una entrada que dice «se deshizo algo» sin decir qué.
 
-**Que la entrada original no se pueda editar ni borrar no depende de la aplicación.** `auditoria`
-tiene una sola política y es de `SELECT` ([§7](#7-seguridad-por-tipo-de-usuario-rls)), así que un `UPDATE` sobre la bitácora se rechaza; y
-`DELETE` está revocado en el motor ([§5.1](#51-revocación-real-del-borrado)). La promesa de «nada se borra» la sostiene PostgreSQL.
+**Que la entrada original no se pueda editar ni borrar no depende de la aplicación.** La promesa de
+«nada se borra» la sostiene PostgreSQL, y **las dos mitades no se defienden igual**:
+
+- **Borrar se rechaza.** `DELETE` está revocado en el motor ([§5.1](#51-revocación-real-del-borrado)), así que la sentencia falla con
+  `42501`.
+- **Editar no se rechaza: no alcanza ninguna fila.** `authenticated` sí tiene el permiso de `UPDATE`
+  sobre la tabla; lo que lo para es que `auditoria` tiene una sola política y es de `SELECT` ([§7](#7-seguridad-por-tipo-de-usuario-rls)),
+  de modo que el `UPDATE` termina bien habiendo cambiado **cero filas**. El efecto es el mismo —la
+  entrada no se toca— y quien lo compruebe tiene que mirar la fila después, no el código de error.
 
 Revertir una reversión es legal: la fila nueva apunta con `revierte_a` a la fila
 `cambio_revertido` anterior y la cadena queda completa. El índice único impide revertir dos veces
