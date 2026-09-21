@@ -1,5 +1,10 @@
-.claude/
-plan/
+# La configuración local de los agentes no se versiona; las skills del proyecto, sí (ADR-035).
+.claude/*
+!.claude/skills/
+
+# Los planes de trabajo viven fuera de los repositorios (ADR-035): si alguien crea uno aquí por
+# costumbre, no se sube.
+/plan/
 
 # Snapshots de la base de datos (se generan a demanda, no se versionan)
 /snapshots/
@@ -12,7 +17,6 @@ install.cmd
 .env.*
 !.env.example
 
-# Los repositorios de código: prisma_api en backend-api, prisma_db en backend-db y prisma_front
-# en frontend-flutter. Viven aquí adentro, pero cada uno es un repositorio git con su propia
-# historia, y este no los versiona (ADR-025).
-repositories/
+# Con el acomodo del ADR-025 los repositorios de código vivían aquí adentro. Desde el ADR-035 son
+# hermanos de este, y la regla se queda para que una copia vieja no se suba por error.
+/repositories/
