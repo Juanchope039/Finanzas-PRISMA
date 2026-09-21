@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/scripts/docs/README.md "Historial de cambios") | [✅ Vigente](../../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](../../docs/INDICE.md#etiqueta-proceso) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/scripts/docs/README.md "Historial de cambios") | [✅ Vigente](../../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-21 | [Proceso](../../docs/INDICE.md#etiqueta-proceso) |
 
 Pone y verifica los encabezados, las anclas, los enlaces y los bloques generados de toda la
 documentación de PRISMA. Las reglas que hace cumplir están en [`docs/22-documentacion.md`](../../docs/22-documentacion.md), y la
@@ -18,9 +18,10 @@ node scripts/docs/documentar.mjs verificar --base <commit>   # y exige subir la 
                                                              # y que ningún commit pase de 256 caracteres
 ```
 
-Necesita Node 20 o más y no tiene dependencias. Se corre desde la raíz de `Finanzas-PRISMA`. Si los
-repositorios de código están en `repositories/`, también revisa sus README. De `plan/` no revisa el
-contenido —los planes no se versionan— pero sí el nombre y la numeración ([22 §10](../../docs/22-documentacion.md#planes)).
+Necesita Node 20 o más y no tiene dependencias, y se puede correr desde cualquier carpeta: la raíz la
+calcula el propio script. Si los repositorios de código están al lado —`../backend-api`,
+`../backend-db` y `../frontend-flutter`, como en la carpeta de trabajo del [ADR-035](../../docs/adr/ADR-035-repositorios-hermanos.md)—, también revisa
+sus README, sus `CLAUDE.md` y sus `AGENTS.md`.
 
 ## Archivos
 
@@ -42,6 +43,4 @@ contenido —los planes no se versionan— pero sí el nombre y la numeración (
 | «el plan se bloquea» o «hay un ciclo de dependencias» | Revisar la columna «Depende de» de las tablas del plan |
 | «no enumera N tareas del plan» | El plan tiene una tarea que el tablero no lista: agregarla a su sprint en [`TODO.md`](../../TODO.md) |
 | «enumera tareas que el plan no tiene» | Al revés: una tarea del tablero no existe en el plan. Lo nuevo entra primero al plan ([08 §6](../../docs/08-plan-de-desarrollo.md#6-backlog-priorizado)) |
-| «un plan se llama NN-titulo-en-minusculas.md» | Un archivo de `plan/` no sigue el formato: renombrarlo ([22 §10](../../docs/22-documentacion.md#planes)) |
-| «el mensaje mide N caracteres y el tope son 256» | Un commit se pasó del tope ([ADR-031](../../docs/adr/ADR-031-commit-de-256-caracteres.md)): rehacerlo con `git rebase -i` y llevar lo que sobra al plan de `plan/`. La rama ya está empujada ([21 §6.5](../../docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)), así que el empuje siguiente va con `--force-with-lease` |
-| «falta el plan NN» o «dos planes no comparten número» | La numeración de `plan/` saltó o se repitió: renumerar el que llegó después |
+| «el mensaje mide N caracteres y el tope son 256» | Un commit se pasó del tope ([ADR-031](../../docs/adr/ADR-031-commit-de-256-caracteres.md)): rehacerlo con `git rebase -i` y llevar lo que sobra al plan de trabajo. La rama ya está empujada ([21 §6.5](../../docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)), así que el empuje siguiente va con `--force-with-lease` |

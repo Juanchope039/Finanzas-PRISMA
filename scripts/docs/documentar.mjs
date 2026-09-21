@@ -20,6 +20,8 @@ import * as plan from './plan.mjs';
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const ESPEC = 'especificacion';
 const URL_ESPEC = `${cfg.ESPECIFICACION.github}/blob/${cfg.ESPECIFICACION.rama}/`;
+// Cómo se llama esta especificación vista desde un repositorio hermano (ADR-035).
+const HERMANA = `../${path.basename(RAIZ)}/`;
 
 // ---------------------------------------------------------------------------------------------
 // Archivos
@@ -112,7 +114,10 @@ function construirContexto(archivos) {
     }
     if (/^[a-z]+:/i.test(destino)) return null;
     if (camino === '') return { ruta: desde.ruta, ancla: ancla ? decodeURIComponent(ancla) : null };
-    const ruta = path.posix.normalize(path.posix.join(path.posix.dirname(desde.ruta), decodeURIComponent(camino)));
+    let ruta = path.posix.normalize(path.posix.join(path.posix.dirname(desde.ruta), decodeURIComponent(camino)));
+    // Desde un repositorio hermano, la especificación es `../documentation/…`: se trata como suya,
+    // para que `enlazar` lo reescriba a GitHub en vez de dejar un enlace que allá no existe.
+    if (ruta.startsWith(HERMANA)) ruta = ruta.slice(HERMANA.length);
     return { ruta, ancla: ancla ? decodeURIComponent(ancla) : null };
   };
   return ctx;
@@ -432,6 +437,10 @@ function enlazarArchivo(archivo, ctx, noResueltos) {
 // Encabezados
 // ---------------------------------------------------------------------------------------------
 
+// La columna Código va solo en los README de código (22 §2): un CLAUDE.md o un AGENTS.md que la
+// llevara cambiaría con cada subida de versión aunque su texto siguiera igual.
+const esReadme = (archivo) => path.posix.basename(archivo.ruta) === 'README.md';
+
 const slugDeEtiqueta = (etiqueta) => Object.entries(cfg.ETIQUETAS).find(([, v]) => v === etiqueta)?.[0] ?? null;
 
 function versionDelCodigo(archivo) {
@@ -463,7 +472,7 @@ export function renderizarEncabezado(archivo, meta, ctx) {
     : '—';
   const columnas = ['Versión', 'Estado', 'Creado', 'Actualizado'];
   const valores = [`[${meta.version}](${historial} "Historial de cambios")`, estado, meta.creado, meta.actualizado];
-  if (!espec) {
+  if (!espec && esReadme(archivo)) {
     columnas.push('Código');
     const version = versionDelCodigo(archivo);
     const fuente = archivo.repo.version
@@ -792,7 +801,7 @@ function revisarEncabezados(archivos, errores) {
     if (fechaValida(meta.creado) && fechaValida(meta.actualizado) && meta.creado > meta.actualizado) error('se actualizó antes de crearse');
     if (fechaValida(meta.actualizado) && meta.actualizado > diaSiguiente(hoy)) error(`la actualización (${meta.actualizado}) está en el futuro`);
     for (const e of meta.etiquetas) if (!slugDeEtiqueta(e)) error(`la etiqueta «${e}» no está en el vocabulario de 22-documentacion.md`);
-    if (!esEspec(a) && a.repo.version) {
+    if (!esEspec(a) && a.repo.version && esReadme(a)) {
       const real = versionDelCodigo(a);
       if (meta.codigo !== real) error(`la columna Código dice ${meta.codigo} y ${a.repo.version.archivo} dice ${real}`);
     }
@@ -861,40 +870,6 @@ function revisarVersionesSubidas(archivos, base, errores) {
 }
 
 /**
- * Los planes de trabajo de `plan/`. No son documentación versionada —viven en una carpeta
- * excluida—, así que lo único que se les exige es el nombre: dos dígitos, un guion y un título en
- * minúsculas. La numeración arranca en 01, no salta y no se repite, porque es la que dice en qué
- * orden se fueron decidiendo las cosas; si se pudiera saltar, dos planes a la vez se pisarían el
- * número sin que nadie se enterara.
- */
-function revisarPlanes(errores) {
-  const carpeta = path.join(RAIZ, cfg.CARPETA_DE_PLANES);
-  if (!fs.existsSync(carpeta)) return;
-  const duenos = new Map();
-  for (const nombre of fs.readdirSync(carpeta).filter((n) => !n.startsWith('.')).sort()) {
-    const ruta = `${cfg.CARPETA_DE_PLANES}/${nombre}`;
-    const coincide = cfg.NOMBRE_DE_PLAN.exec(nombre);
-    if (!coincide) {
-      errores.push({ ruta, texto: 'un plan se llama NN-titulo-en-minusculas.md: dos dígitos, un guion y el título' });
-      continue;
-    }
-    const numero = Number(coincide[1]);
-    if (duenos.has(numero)) {
-      errores.push({ ruta, texto: `el número ${coincide[1]} ya es de ${duenos.get(numero)}: dos planes no comparten número` });
-      continue;
-    }
-    duenos.set(numero, ruta);
-  }
-  const numeros = [...duenos.keys()].sort((a, b) => a - b);
-  for (let i = 0; i < numeros.length; i += 1) {
-    if (numeros[i] === i + 1) continue;
-    const falta = String(i + 1).padStart(2, '0');
-    errores.push({ ruta: duenos.get(numeros[i]), texto: `falta el plan ${falta}: la numeración arranca en 01 y no salta` });
-    break;
-  }
-}
-
-/**
  * El tope del mensaje de commit: 256 caracteres contando asunto, cuerpo y trailers (ADR-031). Se
  * mide sobre `%B` sin los saltos de línea del final, que es lo mismo que cuenta
  * `printf '%s' "$(git log -1 --pretty=%B)" | wc -c`.
@@ -921,7 +896,7 @@ function revisarMensajesDeCommit(base, errores) {
     errores.push({
       ruta: `(commit ${sha.slice(0, 7)})`,
       texto: `el mensaje mide ${largo} caracteres y el tope son ${cfg.TOPE_DE_COMMIT}: «${asunto}»`,
-      motivo: 'lo que no cabe va al plan de plan/',
+      motivo: 'lo que no cabe va al plan de trabajo',
     });
   }
 }
@@ -968,7 +943,6 @@ function main() {
 
   revisarEncabezados(archivos, errores);
   revisarEnlaces(archivos, ctx, errores);
-  revisarPlanes(errores);
   for (const a of cambiados) {
     errores.push({ ruta: a.ruta, texto: 'faltan anclas, enlaces o bloques generados: corre `node scripts/docs/documentar.mjs enlazar`' });
   }

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.32.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-20 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.33.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-21 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -83,8 +83,7 @@ despliegue de la API y el fallo no sabía decirlo: `ProveedorNoDisponible` no te
 Dejaba sin servir la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) recién terminada. **El arreglo entró en los dos repositorios**
 —el `50300` que estrenó el contrato `0.9.0`— **y la variable ya está cargada en Railway**, que era lo
 único que el código no podía hacer solo. Es un arreglo suelto: no lleva número de tarea y no entra en
-las cuentas de abajo. Su plan es `plan/23-el-alta-decia-algo-salio-mal.md`, reconstruido el
-2026-09-19 ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). **Queda ejercitarlo contra dev** con una sesión de Gerencia: es lo
+las cuentas de abajo. **Queda ejercitarlo contra dev** con una sesión de Gerencia: es lo
 único del arreglo que no se ve desde fuera.
 
 **Lo siguiente, en cuanto alguien lo tome:** cerrar la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) destrabó lo que la estaba
@@ -278,7 +277,7 @@ o indirectamente. No es el orden en que se descubrieron.
 - [x] [**0.9**](docs/08-plan-de-desarrollo.md#tarea-0-9) Entrega a dev al fusionar ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)), con la receta de construcción del front
       —`Dockerfile`, `nginx` y `.dockerignore`— que hasta ahora no existía · API, Front — dev sirve
       la `0.3.0`, que es lo último de `develop`, y los dos servicios tienen su último despliegue en
-      `SUCCESS`. Se marcó **al ver el despliegue en verde**, no al fusionar, como fijó `plan/15`: el
+      `SUCCESS`. Se marcó **al ver el despliegue en verde**, no al fusionar: el
       artefacto publicado ya trae `X-Prisma-Firma`
 - [x] [**0.10**](docs/08-plan-de-desarrollo.md#tarea-0-10) SemVer y migraciones con `schema_version` · Base — la tabla guarda una fila por
       versión publicada y hoy va por la `0.3.0`, con sus etiquetas de [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) puestas. Desde el
@@ -889,7 +888,7 @@ a `anon`.
   `integracion`** ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) [§4](docs/12-pruebas-y-calidad.md#4-juego-de-datos-de-prueba-oficial)), así que la prueba que cruza la tabla de traducción con `pg_constraint`
   solo falla en la máquina de quien la corra a mano contra una base con el esquema puesto. Se
   descubrió al hacer la [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10): la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) había fusionado la tabla `adjuntos` sin sus nueve filas,
-  y **su PR pudo fusionarse igual**. Lo arregló `plan/49-adjuntos-sin-mensaje.md`; lo que queda por
+  y **su PR pudo fusionarse igual**. Ya está arreglado; lo que queda por
   decidir es si [C-01](docs/12-pruebas-y-calidad.md#c-01) debe correr en la CI, que pide levantarle una base con el esquema y la
   semilla. Mientras no corra, **toda promesa de las que solo miran las pruebas de integración
   —[C-01](docs/12-pruebas-y-calidad.md#c-01) entre ellas— depende de que alguien se acuerde de correrlas**
@@ -1440,10 +1439,10 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       arranque en frío sin distinguir cuál: ahora acepta el de después de desplegar y no el de la
       inactividad, que es el que cuesta dinero
 - [ ] **La tarea de los cuatro proyectos de Supabase se partió en dos, y así es como acabó
-      marcada.** El plan 25 decía marcarla y la sesión que lo ejecutó no lo hizo: pedía «los cuatro»
+      marcada.** Estaba previsto marcarla y no se hizo: pedía «los cuatro»
       y uat y prod no existen, así que marcarla habría sido escribir en el tablero algo que no es
       cierto, que es justo lo que costó trabajo descubrir en qa. Lo que resolvió el desacuerdo fue
-      partirla —`plan/50`—: los dos gratuitos se quedan en la [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4), hecha, y los dos de pago son la
+      partirla: los dos gratuitos se quedan en la [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4), hecha, y los dos de pago son la
       [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12), en el [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9). La fila 3 del [§7](#7-decisiones-pendientes) sigue 🟡 y ahora bloquea a la 9.12: lo que está
       listo es el expediente, no la decisión
 - [ ] **No se escribió ningún ADR nuevo, y esa también es una decisión.** El plan pedía uno solo si algo
@@ -1637,7 +1636,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8)**: el texto se lee en un solo sitio, `RechazoDeLaBase`, que entrega el estado, la
       restricción y la tabla por separado. Ningún adaptador busca texto ya
 
-**Del arreglo del alta de usuarios (`plan/23-el-alta-decia-algo-salio-mal.md`):**
+**Del arreglo del alta de usuarios:**
 
 - [ ] 🔒 **El alta estuvo caída en dev desde el día en que se publicó la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7), y nadie lo supo.**
       Faltaba `SUPABASE_SERVICE_ROLE_KEY` en el servicio de la API. Esa variable la lista el
@@ -2039,8 +2038,8 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       resolvió igual. La [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) pasa a depender de ella
 - [ ] 🔒 **La [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) no cabía en el medio día que el [08](docs/08-plan-de-desarrollo.md) le calcula, y no se recortó.** Son cuatro
       módulos y 25 operaciones, contra las 9 de pedidos y las 6 de productos, y como la [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) sale de los
-      documentos en vez de transcribir un dominio ya construido. La cifra del plan no se corrige
-      —es la estimación con que se planificó—; queda dicha en `plan/47-el-contrato-de-nomina-y-cotizaciones.md`
+      documentos en vez de transcribir un dominio ya construido. La cifra del plan no se corrige:
+      es la estimación con que se planificó
 - [ ] **El [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) dice cubrir hasta el [RF-69](docs/03-requisitos-y-bdd.md#rf-69) y este contrato llega al [RF-65](docs/03-requisitos-y-bdd.md#rf-65).** Los cuatro que
       faltan no son suyos: la exportación ([RF-66](docs/03-requisitos-y-bdd.md#rf-66)) es de la [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10), la bitácora ([RF-67](docs/03-requisitos-y-bdd.md#rf-67)) ya está en el
       contrato desde el `0.4.0`, «ver anulados» ([RF-68](docs/03-requisitos-y-bdd.md#rf-68)) viaja como `incluirAnulados` en cada consulta,
@@ -2141,22 +2140,14 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       sin BOM como ANSI, y una raya dentro de una cadena se vuelve una comilla tipográfica que cierra
       la cadena. Los demás guiones no llevan BOM, y ponérselo a uno solo sería una excepción más
 
-**De poner el tablero al día (`plan/24-el-tablero-alcanza-a-lo-hecho.md`):**
+**De poner el tablero al día:**
 
-- [ ] **El plan 23 se escribió después de su trabajo, y es el único del proyecto.**
-      `plan/23-el-alta-decia-algo-salio-mal.md` se cita en el [§1.3](#13--en-progreso), en este mismo [§10](#10-decisiones-de-construcción-que-conviene-revisar) y en
-      [`contrato/README.md`](contrato/README.md), y no estaba en disco. Se reconstruyó el 2026-09-19 del commit
-      `c004260` de `prisma_api` y del `209db9b` de esta especificación, que bastaban para escribirlo
-      fiel, y lo declara en su propia cabecera. **Contradice al [22 §10](docs/22-documentacion.md#planes)** —«lo que no vale es
-      implementar primero y escribir el plan después»—. La alternativa era borrar las tres
-      referencias y dejar el único cambio del proyecto sin plan, con un hueco de numeración que
-      `verificar` rechaza en cuanto se escriba el siguiente
 - [ ] 🔒 **La [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) y la [0.9](docs/08-plan-de-desarrollo.md#tarea-0-9) se marcaron sin PR de tarea propio.** Las dos llevaban 🚧 desde
       el 2026-09-17 y su trabajo ya estaba fusionado; lo que faltaba era mirar si había surtido
       efecto, y lo había. Se marcan en este PR de tablero y no en el de su tarea, como pide el
       [21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración), porque esos PR entraron hace dos días
 
-**De la 3.16 (`plan/40-la-3-16-entra-al-plan.md`):**
+**De la entrada de la 3.16 al 08:**
 
 - [ ] 🔒 **Entró una tarea nueva al plan, la [3.16](docs/08-plan-de-desarrollo.md#tarea-3-16), y el total pasa de 139 a 140.** El
       [H4](docs/08-plan-de-desarrollo.md#h4) se cronometra en un celular y el front no tiene diseño para uno: la barra
@@ -2174,7 +2165,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **En el [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) y no en el [9](docs/08-plan-de-desarrollo.md#sprint-9)**, donde están la PWA y el endurecimiento. El [H4](docs/08-plan-de-desarrollo.md#h4) es
       del [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3), y esperar al 9 para ver la aplicación en un celular sería medirlo meses después
 
-**De la 3.5 (`plan/44-el-registro-rapido-de-movimientos.md`):**
+**De la 3.5:**
 
 - [ ] **La clave de una sección solo puede escribirse en un archivo, y es una excepción nombrada en
       la prueba de la frontera.** El contrato pide las dos cosas a la vez —el menú lo dicta la API
@@ -2202,7 +2193,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       formulario». **Queda por hacer en cuanto la 3.4 llegue a `develop`**, y antes del cronómetro
       del [M-01](docs/12-pruebas-y-calidad.md#m-01)
 
-**De la 3.16 (`plan/45-el-andamio-en-el-celular.md`):**
+**De la 3.16:**
 
 - [ ] **El corte es 760, y 760 ya es celular.** Es el `@media (max-width:760px)` del mockup, y
       `max-width` incluye su valor. Se pregunta en un solo sitio, `disposicion.dart`, para que el
@@ -2229,7 +2220,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       pruebas, y en el navegador con la vista de celular a 375 contra una API simulada. **Queda por
       hacer en un teléfono**, antes del cronómetro del [M-01](docs/12-pruebas-y-calidad.md#m-01)
 
-**De la 3.14 (`plan/46-la-tabla-de-adjuntos.md`):**
+**De la 3.14:**
 
 - [ ] ⚡ **Ningún documento decía con qué credencial habla la API con Storage.** El [07 §1](docs/07-arquitectura.md) dice que
       el archivo pasa por la API y nunca va directo al almacenamiento, y ahí se acaba. Se decidió
@@ -2287,7 +2278,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       quitó: el contrato no lo declara y la columna es `TEXT`, así que el `@Size` habría sido una
       regla inventada en el código. Si hace falta, se acuerda en el contrato primero
 
-**Del arreglo de los mensajes de `adjuntos` (`plan/49-adjuntos-sin-mensaje.md`):**
+**Del arreglo de los mensajes de `adjuntos`:**
 
 - [ ] **El tamaño y el tipo de un adjunto salen por ahora como `42200`, no con su código.** El
       contrato tiene `40020` para el archivo que pasa de 5 MB y `40021` para el que no es foto ni
@@ -2302,7 +2293,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       en rojo. **Conviene decidir si una tarea de Base que agrega tabla debe pedir sus filas en el
       mismo sprint**, como ya hacen la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) y la [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) con las suyas
 
-**De partir la 0.4 (`plan/50-la-0-4-se-cierra-en-dev-y-qa.md`):**
+**De partir la 0.4:**
 
 - [ ] **El rol `prisma_api` sigue prometiendo cuatro ambientes y solo existe en dos.** La tarea que
       lo crea ([0.5](docs/08-plan-de-desarrollo.md#tarea-0-5)) dice «en los cuatro», lleva marcada desde el primer día y el rol vive solo en
@@ -2377,7 +2368,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       ya es la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15), y esta es la comprobación de que hace falta ([RNF-08](docs/03-requisitos-y-bdd.md#rnf-08)).
       **Hecha**: desde el esquema `0.6.0` la restricción compara contra el día de Bogotá
 
-**De la 3.15 (`plan/53-el-destino-y-la-fecha-de-bogota.md`):**
+**De la 3.15:**
 
 - [ ] **La zona del negocio va escrita en la restricción, no en la sesión.** `fecha_no_futura`
       compara contra `(NOW() AT TIME ZONE 'America/Bogota')::date`. La alternativa era ponerle la
@@ -2404,7 +2395,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       con la transferencia a la misma cuenta imposible en el origen deja de tener con qué
       equivocarse. Reescribirla sería arreglar un síntoma que ya no puede ocurrir
 
-**De la 1.15 (`plan/54-la-prueba-de-corte.md`):**
+**De la 1.15:**
 
 - [ ] **El corte de verdad se hace matando la conexión, y lo mata el dueño.** El [12 §10.1](docs/12-pruebas-y-calidad.md#101-i-02--el-corte-es-lo-que-hace-real-la-idempotencia) pide
       inyectar un fallo y no dice cómo. Una excepción de Java prueba el camino amable: la atiende
@@ -2421,7 +2412,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       fila de `verificar-base.sql` en la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) y estas nueve—, y las tres se vieron solo
       porque alguien corrió las pruebas en otro huso
 
-**De la 1.21 (`plan/55-anon-no-toca-nada.md`):**
+**De la 1.21:**
 
 - [ ] **El `EXECUTE` de las cinco funciones entra en la migración, y el bloque del [04 §9.1](docs/04-modelo-de-datos.md#91-anon-no-toca-nada) no lo
       nombra.** El documento revoca tablas y secuencias, y deja fuera `fn_es_gerencia`,
@@ -2454,7 +2445,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       misma tarea, y toca el camino por el que Gerencia da de alta a alguien ([2.7](docs/08-plan-de-desarrollo.md#tarea-2-7)). Queda para que
       lo decida quien dirige
 
-**De la 2.21 (`plan/56-la-bitacora-con-nombre.md`):**
+**De la 2.21:**
 
 - [ ] **Toda función nueva nace abierta a `PUBLIC`, y a partir de aquí es una regla y no una
       anécdota.** PostgreSQL le concede el `EXECUTE` a `PUBLIC` por omisión, así que
@@ -2480,7 +2471,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       `autor_id`. Es el camino que ya tomó la migración de los dominios con las otras cuatro
       vistas, y los permisos vuelven solos por el `ALTER DEFAULT PRIVILEGES` del esquema
 
-**De la 2.22 (`plan/57-el-cargo-unico-y-el-que-no-se-apaga.md`):**
+**De la 2.22:**
 
 - [ ] **El texto del `RAISE EXCEPTION` es contrato, y nada lo comprueba.** La API reconoce los
       rechazos de trigger **por su texto** —`RechazoDeLaBase` guarda `"último usuario de Gerencia"`
@@ -2498,7 +2489,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       ignora las mayúsculas **toda** comparación contra esa columna y no solo la unicidad, que es
       lo que alguien espera de un catálogo. Es lo que ya se hizo con `usuarios.usuario`
 
-**De la 2.5 (`plan/58-los-dos-guardianes-de-gerencia.md`):**
+**De la 2.5:**
 
 - [ ] **El segundo guardián no se dispara nunca por el camino para el que se escribió.** Apagar a
       todas las gerencias de un `UPDATE` lo rechaza **el de fila**, no el de sentencia: cuando le
@@ -2518,7 +2509,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       pero colgando de la tarea de las políticas RLS en vez de la del guardián. Se movió entera,
       con su porqué; el conteo total no cambia por eso
 
-**De la 2.11 (`plan/59-la-prueba-de-permisos-sale-de-esta-maquina.md`):**
+**De la 2.11:**
 
 - [ ] **La guarda pregunta por la semilla y no por el anfitrión.** «Es `localhost`» no quiere decir
       «es mío»: un túnel o un reenvío de puertos lo vuelven falso sin avisar. «Están los usuarios de
@@ -2539,7 +2530,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       esta clase entra como Marcela con la contraseña de la semilla. O uat tiene sus propias
       credenciales de prueba, o esas pruebas no son las mismas. La [9.5](docs/08-plan-de-desarrollo.md#tarea-9-5) se lo va a encontrar
 
-**De la 2.9 (`plan/60-quien-entro-y-desde-donde.md`):**
+**De la 2.9:**
 
 - [ ] **El usuario tecleado de un intento fallido va en `datos_despues`, y no en una columna suya.**
       No hay ninguna donde quepa: `auditoria` guarda quién hizo el cambio, y en un intento fallido
@@ -2573,7 +2564,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       un `nullif` dentro de funciones que atrapan el error. **Vale la pena mirar si hay más
       `current_setting(...)::` sin `nullif` el día que algo más publique variables**
 
-**De la 2.8 (`plan/61-el-catalogo-de-cargos.md`):**
+**De la 2.8:**
 
 - [ ] **Reordenar el catálogo son dos flechas por fila, y el mockup no dice nada.** El [10 §5.4](docs/10-ux-y-mockups.md#54-gestión-de-usuarios) dice
       que un cargo «se agrega, se renombra y se desactiva con motivo» y no menciona moverlo, aunque
@@ -2621,7 +2612,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
   pruebas. Dos tareas no van en un mismo commit aunque toquen la misma clase. Así `git log
   --oneline` es esta misma lista, en el orden en que se hizo.
 - **Y el mensaje entero cabe en 256 caracteres** ([ADR-031](docs/adr/ADR-031-commit-de-256-caracteres.md)), trailers incluidos, para que
-  `git log` se lea de corrido. El porqué largo va en el plan de `plan/`, que no tiene tope y se
+  `git log` se lea de corrido. El porqué largo va en el plan de trabajo, que no tiene tope y se
   escribió antes; `verificar --base` lo comprueba en cada PR.
 - Una tarea se marca `[x]` cuando su commit está en `develop` con la integración continua en verde
   ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)). La marca viaja en el PR de la especificación de esa misma tarea, que se

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
+| [5.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-21 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
 
 Tres partes —un front en Flutter multiplataforma, una API en Java 25 con Spring Boot y una capa
 de datos PostgreSQL siempre en línea—. Arquitectura hexagonal (puertos y adaptadores) sobre Clean
@@ -136,8 +136,9 @@ Dart en `prisma_front`.
 
 La base de datos tiene un tercer repositorio, `prisma_db`, con las migraciones, la semilla y sus
 scripts. No es una aplicación sino la receta del esquema, y la escribe el carril API
-([ADR-025](adr/ADR-025-cuatro-repositorios.md)). En disco, los tres van dentro de
-`Finanzas-PRISMA/repositories/`: `backend-api`, `backend-db` y `frontend-flutter`.
+([ADR-025](adr/ADR-025-cuatro-repositorios.md)). En disco, los cuatro repositorios son hermanos dentro de una
+carpeta de trabajo: `documentation` —esta especificación—, `backend-api`, `backend-db` y
+`frontend-flutter` ([ADR-035](adr/ADR-035-repositorios-hermanos.md)).
 
 ```
 prisma_api/

@@ -12,23 +12,24 @@ export const ESPECIFICACION = {
   rama: 'main',
 };
 
-// Los repositorios de código viven dentro de repositories/, que la especificación ignora
-// (ADR-025). Si no están en disco —como en la CI de este repositorio— simplemente no se revisan.
+// Los repositorios de código son hermanos de esta especificación en la carpeta de trabajo (ADR-035):
+// las rutas van desde la raíz de este repositorio. Si no están en disco —como en la CI de este
+// repositorio— simplemente no se revisan.
 export const REPOS_DE_CODIGO = [
   {
-    carpeta: 'repositories/backend-api',
+    carpeta: '../backend-api',
     nombre: 'prisma_api',
     github: `${GITHUB}/Finanzas-PRISMA-API`,
     version: { archivo: 'build.gradle.kts', patron: /^version = "([^"]+)"/m },
   },
   {
-    carpeta: 'repositories/backend-db',
+    carpeta: '../backend-db',
     nombre: 'prisma_db',
     github: `${GITHUB}/Finanzas-PRISMA-DB`,
     version: null,
   },
   {
-    carpeta: 'repositories/frontend-flutter',
+    carpeta: '../frontend-flutter',
     nombre: 'prisma_front',
     github: `${GITHUB}/Finanzas-PRISMA-Front`,
     version: { archivo: 'pubspec.yaml', patron: /^version: ([0-9][^+\s]*)/m },
@@ -47,26 +48,18 @@ export const VERSIONES_EXTRA = {
 
 // Archivos Markdown que no son documentación del proyecto: plantillas de terceros.
 export const EXCLUIDOS = new Set([
-  'repositories/frontend-flutter/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md',
+  '../frontend-flutter/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md',
 ]);
 
-// Carpetas cuyo Markdown no es documentación del proyecto y no se versiona con ADR-027:
-// `.claude` y `.agents` traen habilidades y configuración de agentes que quien las instala no
-// escribe, así que pedirles encabezado sería pedirle a la herramienta que edite algo de otro; y
-// `plan` guarda planes de trabajo, que son el registro de lo que se decidió antes de escribir el
-// código y no se corrigen después. De `plan` sí se verifica el nombre, aquí abajo.
-export const CARPETAS_EXCLUIDAS = ['.claude', '.agents', 'plan'];
-
-// Los planes de trabajo: uno por cada plan que se escribe antes de tocar código, numerado en el
-// orden en que se decidieron. La numeración arranca en 01, no salta y no se repite, porque de ella
-// sale ese orden; `verificar` lo comprueba. Las reglas están en docs/22-documentacion.md §10.
-export const CARPETA_DE_PLANES = 'plan';
-export const NOMBRE_DE_PLAN = /^(\d{2,})-[a-z0-9]+(?:-[a-z0-9]+)*\.md$/;
+// Carpetas cuyo Markdown no es documentación del proyecto y no se versiona con ADR-027: `.claude` y
+// `.agents` traen habilidades y configuración de agentes. Las que instala alguien no las escribe el
+// proyecto, y las que sí escribe son instrucciones para un agente, no documentos.
+export const CARPETAS_EXCLUIDAS = ['.claude', '.agents'];
 
 // El tope del mensaje de commit, entero: asunto, cuerpo y trailers (ADR-031). Sale de restar: el
 // asunto se lleva unos 46, el trailer Co-Authored-By exactamente 53 y los saltos de línea 4, así
 // que quedan unos 152 para las tres líneas del cuerpo, unos 50 cada una. Lo que no cabe va al plan
-// de `plan/`, que no tiene tope. `verificar --base` lo comprueba.
+// de trabajo, que no tiene tope. `verificar --base` lo comprueba.
 export const TOPE_DE_COMMIT = 256;
 
 export const ZONA_HORARIA = 'America/Bogota';
