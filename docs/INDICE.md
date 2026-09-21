@@ -166,7 +166,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 5.0.0 | ✅ Vigente | 2026-09-19 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
 | [20 · Contrato de la API](20-contrato-de-api.md) | 2.9.0 | ✅ Vigente | 2026-09-19 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) | 4.3.0 | ✅ Vigente | 2026-09-21 | [Paralelo](#etiqueta-paralelo) · [Proceso](#etiqueta-proceso) |
-| [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 1.6.0 | ✅ Vigente | 2026-09-17 | [Proceso](#etiqueta-proceso) |
+| [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 2.0.0 | ✅ Vigente | 2026-09-21 | [Proceso](#etiqueta-proceso) |
 | [Contrato de la API · v0.17.0](../contrato/README.md) | 3.8.0 | ✅ Vigente | 2026-09-19 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [Decisiones de arquitectura (ADR)](adr/README.md) | 1.8.0 | 🔄 Vivo | 2026-09-21 | [Arquitectura](#etiqueta-arquitectura) |
 | [ADR-001 · Stack tecnológico](adr/ADR-001-stack.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) |
@@ -205,7 +205,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige](adr/ADR-034-la-version-sube-en-cada-pr.md) | 1.0.0 | ✅ Aceptado | 2026-09-19 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) · [Calidad](#etiqueta-calidad) |
 | [ADR-035 · Los cuatro repositorios, hermanos en una carpeta de trabajo](adr/ADR-035-repositorios-hermanos.md) | 1.0.0 | ✅ Aceptado | 2026-09-21 | [Proceso](#etiqueta-proceso) · [Paralelo](#etiqueta-paralelo) |
 | [CLAUDE.md](../CLAUDE.md) | 7.24.0 | 🔄 Vivo | 2026-09-20 | [Proceso](#etiqueta-proceso) |
-| [Herramienta de documentación](../scripts/docs/README.md) | 1.4.0 | ✅ Vigente | 2026-09-17 | [Proceso](#etiqueta-proceso) |
+| [Herramienta de documentación](../scripts/docs/README.md) | 2.0.0 | ✅ Vigente | 2026-09-21 | [Proceso](#etiqueta-proceso) |
 <!-- /generado:estado-de-la-documentacion -->
 
 ---

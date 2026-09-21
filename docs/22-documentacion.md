@@ -2,10 +2,10 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/22-documentacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-17 | [Proceso](INDICE.md#etiqueta-proceso) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/22-documentacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-21 | [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se escribe, se versiona y se enlaza la documentación de PRISMA: la de este repositorio y los
-README de los tres repositorios de código. La decisión y su porqué están en [ADR-027](adr/ADR-027-documentacion-versionada.md); aquí están las
+README, `CLAUDE.md` y `AGENTS.md` de los tres repositorios de código. La decisión y su porqué están en [ADR-027](adr/ADR-027-documentacion-versionada.md); aquí están las
 reglas.
 
 > **Las reglas no dependen de que alguien se acuerde.** `scripts/docs/documentar.mjs` pone las
@@ -18,14 +18,16 @@ reglas.
 
 - **Todo archivo Markdown de este repositorio:** `README.md`, [`TODO.md`](../TODO.md), `docs/`, `docs/adr/`,
   `contrato/README.md` y `scripts/docs/README.md`.
-- **Los README de `prisma_api`, `prisma_db` y `prisma_front`**, y el de la copia fijada del
-  contrato dentro de `prisma_api`.
+- **Los README, los `CLAUDE.md` y los `AGENTS.md` de `prisma_api`, `prisma_db` y `prisma_front`**, y
+  el README de la copia fijada del contrato dentro de `prisma_api`. La herramienta los encuentra al
+  lado de esta especificación, en la carpeta de trabajo ([ADR-035](adr/ADR-035-repositorios-hermanos.md)).
 - **Fuera quedan las plantillas de terceros**, como el README que Flutter pone dentro de
   `ios/Runner/Assets.xcassets/`: no las escribió el proyecto. La lista vive en
   `scripts/docs/config.mjs`.
 - **Fuera quedan también las carpetas de herramientas** —`.claude/` y `.agents/`, con las
-  habilidades que alguien instale en cualquiera de los cuatro repositorios—. Traen su propio
-  Markdown, no lo escribe el proyecto y actualizarlo sería editar algo de otro.
+  habilidades y la configuración de agentes de cualquiera de los cuatro repositorios—. Las que
+  instala alguien no las escribe el proyecto, y las que sí escribe son instrucciones para un
+  agente, no documentos.
 - **Fuera queda `plan/`**, con los planes de trabajo: son el registro de lo que se decidió antes de
   escribir el código y no se corrigen después, así que no se versionan. Lo suyo es el [§10](#planes).
 
@@ -45,8 +47,9 @@ Debajo del título, todo documento lleva la misma tabla:
 
 Dos columnas más, donde corresponde:
 
-- **Código**, en los README de código: la versión SemVer del proyecto, leída de `build.gradle.kts`
-  o de `pubspec.yaml`. `prisma_db` no tiene todavía dónde guardarla (tarea [0.10](08-plan-de-desarrollo.md#tarea-0-10)) y lleva «—».
+- **Código**, solo en los README de código: la versión SemVer del proyecto, leída de
+  `build.gradle.kts` o de `pubspec.yaml`. Los `CLAUDE.md` y los `AGENTS.md` no la llevan: cambiarían
+  con cada subida de versión aunque su texto siguiera igual ([ADR-035](adr/ADR-035-repositorios-hermanos.md)). `prisma_db` no tiene todavía dónde guardarla (tarea [0.10](08-plan-de-desarrollo.md#tarea-0-10)) y lleva «—».
 - **Contrato**, en `contrato/README.md`: la versión de `contrato/openapi.json`.
 
 > **La versión del documento y la del código son dos números distintos, y la columna lo dice.** El
@@ -211,14 +214,15 @@ node scripts/docs/documentar.mjs verificar
 
 Falla si un documento no tiene encabezado o lo tiene mal; si un estado no corresponde a su versión;
 si un enlace apunta a un archivo o a un ancla que no existe; si una referencia no lleva a ningún
-sitio; si el plan tiene dependencias rotas o en ciclo; si un plan de trabajo de `plan/` está mal
-nombrado o se saltó un número; o si falta correr `enlazar`. Con
+sitio; si el plan tiene dependencias rotas o en ciclo; o si falta correr `enlazar`. Con
 `--base <commit>` exige además que todo documento cuyo contenido cambió desde ese commit haya subido
 su versión y no haya retrocedido su fecha. Es lo que corre la integración continua en cada push y en
 cada PR.
 
-Necesita Node 20 o más y no tiene dependencias. Si los repositorios de código están en
-`repositories/`, también revisa sus README.
+Necesita Node 20 o más y no tiene dependencias. Si los repositorios de código están al lado, en la
+carpeta de trabajo —`../backend-api`, `../backend-db` y `../frontend-flutter`—, también revisa sus
+README, sus `CLAUDE.md` y sus `AGENTS.md`, y un enlace relativo que escriban hacia
+`../documentation/…` lo reescribe a GitHub, donde los repositorios no están juntos.
 
 ---
 
