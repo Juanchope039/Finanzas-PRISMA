@@ -205,9 +205,9 @@ Qué significa cada estado y cuándo sube una versión está en
 | [ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige](adr/ADR-034-la-version-sube-en-cada-pr.md) | 1.0.0 | ✅ Aceptado | 2026-09-19 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) · [Calidad](#etiqueta-calidad) |
 | [ADR-035 · Los cuatro repositorios, hermanos en una carpeta de trabajo](adr/ADR-035-repositorios-hermanos.md) | 1.0.0 | ✅ Aceptado | 2026-09-21 | [Proceso](#etiqueta-proceso) · [Paralelo](#etiqueta-paralelo) |
 | [ADR-036 · El mensaje de commit no tiene limite de longitud](adr/ADR-036-sin-limite-en-el-commit.md) | 1.0.0 | ✅ Aceptado | 2026-09-21 | — |
-| [AGENTS.md](../AGENTS.md) | 1.0.0 | ✅ Vigente | 2026-09-21 | [Proceso](#etiqueta-proceso) |
-| [CLAUDE.md](../CLAUDE.md) | 8.0.0 | ✅ Vigente | 2026-09-21 | [Proceso](#etiqueta-proceso) |
-| [Herramienta de documentación](../scripts/docs/README.md) | 2.0.0 | ✅ Vigente | 2026-09-21 | [Proceso](#etiqueta-proceso) |
+| [AGENTS.md](../AGENTS.md) | 1.0.1 | ✅ Vigente | 2026-09-21 | [Proceso](#etiqueta-proceso) |
+| [CLAUDE.md](../CLAUDE.md) | 9.0.0 | ✅ Vigente | 2026-09-21 | [Proceso](#etiqueta-proceso) |
+| [Herramienta de documentación](../scripts/docs/README.md) | 2.0.1 | ✅ Vigente | 2026-09-21 | [Proceso](#etiqueta-proceso) |
 <!-- /generado:estado-de-la-documentacion -->
 
 ---
