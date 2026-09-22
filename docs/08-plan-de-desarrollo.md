@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-22 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [5.8.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-22 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -520,7 +520,7 @@ segundos.
 | <a id="tarea-4-8"></a>4.8 | Adjuntar factura al pedido | API, Front | [3.6](#tarea-3-6), [4.3](#tarea-4-3) | 0,5 |
 | <a id="tarea-4-9"></a>4.9 | Cancelación de pedido con destino del anticipo | API | [4.4](#tarea-4-4), [4.11](#tarea-4-11) | 1 |
 | <a id="tarea-4-10"></a>4.10 | **Contrato de clientes, pedidos y anticipos** | Contrato | [2.19](#tarea-2-19) | 0,5 |
-| <a id="tarea-4-11"></a>4.11 | **Dónde quedan el motivo de la cancelación y el destino del anticipo**: las cuatro columnas de `pedidos` que el contrato `0.10.0` ya declara y la tabla no tiene, con `cancelacion_con_motivo` y `destino_del_anticipo_valido`. Pide dos filas nuevas en la tabla de traducción de la API | Base | [1.1](#tarea-1-1) | 0,5 |
+| <a id="tarea-4-11"></a>4.11 | **Dónde quedan el motivo de la cancelación y el destino del anticipo**: las cuatro columnas de `pedidos` que el contrato `0.10.0` ya declara y la tabla no tiene, con `cancelacion_con_motivo` y `destino_del_anticipo_valido`. Pide tres filas nuevas en la tabla de traducción de la API: esas dos y la foránea de `cancelado_por` | Base | [1.1](#tarea-1-1) | 0,5 |
 
 <!-- generado:plan-oleadas-4 · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **Qué puede ir a la vez en este sprint.** Cada oleada espera solo a las anteriores; dentro de una oleada, todo arranca junto.
