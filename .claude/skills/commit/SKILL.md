@@ -2,6 +2,7 @@
 name: commit
 description: Hace el commit de PRISMA con el formato del proyecto y empuja la rama. El asunto lleva sprint y número, el cuerpo tres líneas Hace/Decide/Verifica. Se invoca a mano.
 argument-hint: "[repositorio]"
+disable-model-invocation: true
 model: sonnet
 ---
 
