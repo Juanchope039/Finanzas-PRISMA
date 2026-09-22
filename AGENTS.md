@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/AGENTS.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-21 | 2026-09-21 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [1.0.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/AGENTS.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-21 | 2026-09-21 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 Guía para los agentes de código que trabajan en la especificación de PRISMA. **Las reglas están en
 [`CLAUDE.md`](CLAUDE.md)**, tanto las del proceso como las de la arquitectura y las de este
@@ -32,7 +32,7 @@ Los repositorios de código están al lado, en `../backend-api`, `../backend-db`
 node scripts/docs/documentar.mjs enlazar                        # pone anclas, enlaces y bloques generados
 node scripts/docs/documentar.mjs enlazar --en-seco              # muestra lo que cambiaría, sin escribir
 node scripts/docs/documentar.mjs verificar                      # falla si algo quedó roto o sin enlazar
-node scripts/docs/documentar.mjs verificar --base origin/main   # además: versiones subidas y commits de 256
+node scripts/docs/documentar.mjs verificar --base origin/main   # además: versiones subidas
 ```
 
 - Se corre desde cualquier carpeta, **cada vez** que cambia un `.md`: primero `enlazar` y después

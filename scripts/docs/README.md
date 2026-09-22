@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/scripts/docs/README.md "Historial de cambios") | [✅ Vigente](../../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-21 | [Proceso](../../docs/INDICE.md#etiqueta-proceso) |
+| [2.0.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/scripts/docs/README.md "Historial de cambios") | [✅ Vigente](../../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-21 | [Proceso](../../docs/INDICE.md#etiqueta-proceso) |
 
 Pone y verifica los encabezados, las anclas, los enlaces y los bloques generados de toda la
 documentación de PRISMA. Las reglas que hace cumplir están en [`docs/22-documentacion.md`](../../docs/22-documentacion.md), y la
@@ -43,4 +43,3 @@ sus README, sus `CLAUDE.md` y sus `AGENTS.md`.
 | «el plan se bloquea» o «hay un ciclo de dependencias» | Revisar la columna «Depende de» de las tablas del plan |
 | «no enumera N tareas del plan» | El plan tiene una tarea que el tablero no lista: agregarla a su sprint en [`TODO.md`](../../TODO.md) |
 | «enumera tareas que el plan no tiene» | Al revés: una tarea del tablero no existe en el plan. Lo nuevo entra primero al plan ([08 §6](../../docs/08-plan-de-desarrollo.md#6-backlog-priorizado)) |
-| «el mensaje mide N caracteres y el tope son 256» | Un commit se pasó del tope ([ADR-031](../../docs/adr/ADR-031-commit-de-256-caracteres.md)): rehacerlo con `git rebase -i` y llevar lo que sobra al plan de trabajo. La rama ya está empujada ([21 §6.5](../../docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)), así que el empuje siguiente va con `--force-with-lease` |
