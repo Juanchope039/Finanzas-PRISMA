@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.7.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-21 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.7.2](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-22 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -2254,22 +2254,19 @@ y pasa a ser un rojo en la canalización.
 > `destino_del_anticipo_valido` de la [4.11](08-plan-de-desarrollo.md#tarea-4-11)—, y la [2.22](08-plan-de-desarrollo.md#tarea-2-22) no agrega ninguna: reusa
 > `cargos_nombre_key`, que ya tiene la suya.
 >
-> **Las nueve de `adjuntos` ([§4.12](#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido)) ya están en la base y esperan su fila.** Las cuatro llaves
-> foráneas y `anulacion_con_motivo` reusan el código transversal de su clase; las otras cuatro son
-> `adjuntos_ruta_key`, `adjunto_cuelga_de_una_sola_cosa`, `adjunto_de_tipo_permitido` —que es el
-> `40021` del contrato— y `adjunto_no_pasa_de_cinco_megas` —el `40020`—. La [3.14](08-plan-de-desarrollo.md#tarea-3-14) no las pudo
-> agregar: es del carril Base y la tabla de traducción vive en `prisma_api`, así que las recoge la
-> [3.6](08-plan-de-desarrollo.md#tarea-3-6) con el esquema. **Mientras tanto, [C-01](12-pruebas-y-calidad.md#c-01) falla contra una base que ya tenga la
-> `0.4.0`**, que es exactamente lo que esa prueba está para hacer.
+> **Las nueve de `adjuntos` ([§4.12](#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido)) ya están, y tres no llevan el código de su clase.** Las escribió
+> la [3.6](08-plan-de-desarrollo.md#tarea-3-6), que es la que sube el primer archivo: `adjunto_no_pasa_de_cinco_megas` responde el
+> `40020` del contrato, `adjunto_de_tipo_permitido` el `40021` y `adjuntos_movimiento_id_fkey` el
+> `40400` —colgar un soporte de un movimiento que no existe **es** que no se encontró lo que se
+> buscaba, y no un dato inválido de un formulario que ahí no hay—. Las otras seis reusan el
+> transversal de su clase, porque ninguna pantalla las pregunta. **Ninguna de las tres lleva
+> campo**: el adjunto no tiene formulario, así que no hay dónde pintar el aviso, y por eso sus dos
+> rechazos son `400` y no `422`.
 >
-> **Y las dos del destino de un movimiento ([§4.3](#43-movimientos--el-libro-único)), desde la
-> [3.15](08-plan-de-desarrollo.md#tarea-3-15).** `destino_solo_en_transferencia` y `destino_distinto_del_origen` están en la
-> base desde el esquema `0.6.0`, y las recoge el PR de la API que suba su `prisma.esquema`, por lo
-> mismo que las de `adjuntos`: la 3.15 es del carril Base. Ese PR **revisa también la fila de
-> `transferencia_con_destino`**, que hoy cuelga del código transversal de su clase: las tres reglas
-> del destino responden `42226` ([§4.3](#43-movimientos--el-libro-único)) y las tres tienen que decirlo.
-> **Mientras tanto, [C-01](12-pruebas-y-calidad.md#c-01) también falla contra una base que ya tenga la
-> `0.6.0`.**
+> **Y las dos del destino de un movimiento ([§4.3](#43-movimientos--el-libro-único)) también están**, desde que la API recogió el
+> esquema `0.6.0` que las creó ([3.15](08-plan-de-desarrollo.md#tarea-3-15)): `destino_solo_en_transferencia`,
+> `destino_distinto_del_origen` y `transferencia_con_destino` responden las tres el `42226` sobre
+> `cuentaDestinoId`, porque las tres reglas del destino dicen lo mismo con otras palabras.
 
 Tres cosas que esta consulta no cubre, y hay que decirlas:
 
@@ -2295,7 +2292,7 @@ mismas reglas que la base— solo aguanta si esta prueba corre en cada despliegu
 capas que deciden se separan y ninguna avisa.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.17.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-020](adr/ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.18.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-020](adr/ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
