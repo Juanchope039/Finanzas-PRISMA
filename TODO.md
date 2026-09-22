@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -37,14 +37,14 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 19 | 0 | 0 | 0 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
-| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 16 | 11 | 1 | 4 | 5,5 |
+| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 16 | 12 | 1 | 3 | 4,5 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 2 | 0 | 9 | 11 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 4 | 0 | 6 | 6,5 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 1 | 0 | 11 | 16,5 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **143** | **83** | **1** | **59** | **76,5** |
+| **Total** | **143** | **84** | **1** | **58** | **75,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -60,6 +60,7 @@ Lo que tiene su commit en `develop` con la integración continua en verde, que e
 | **API · los permisos** | **Ya no se suponen: se prueban con una sesión de verdad.** Marcela entra por HTTP con su usuario y su contraseña, y de esa sesión de Operación salen [P-01](docs/12-pruebas-y-calidad.md#p-01) a [P-32](docs/12-pruebas-y-calidad.md#p-32): el patrimonio, los costos, la auditoría y las cuatro tablas de Gerencia llegan vacías; el desprendible propio llega y el ajeno no; y ascenderse sola, crear un usuario, tocar el catálogo de cargos o registrarse un adelanto los rechaza PostgreSQL, con el `42501` de una política o el `P0001` de un trigger en el fallo. [P-32](docs/12-pruebas-y-calidad.md#p-32) repite la lectura **sin capa de aplicación en medio** y el resultado no cambia. **Y la tubería por fin las corre**: un trabajo descarga `prisma_db` por etiqueta y levanta Supabase ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) [§3](#3-sprint-1--base-rls-identidad-e-idempotencia)), así que [C-01](docs/12-pruebas-y-calidad.md#c-01) y las demás gatean un PR | [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) |
 | **API · el acceso** | Las cuatro operaciones de `/sesiones` contra Supabase Auth, el **canal firmado** comprobando cada petición y la navegación que dicta qué ve cada sesión. La sesión dura 30 días en la cookie `prisma_renovacion` —`HttpOnly`, así que el front no la ve—, cada renovación estrena token y clave de firma, y un token vencido responde `40100` para que el cliente renueve en vez de mandar a la pantalla de acceso | [2.1](docs/08-plan-de-desarrollo.md#tarea-2-1) · [2.2](docs/08-plan-de-desarrollo.md#tarea-2-2) · [2.12](docs/08-plan-de-desarrollo.md#tarea-2-12) · [2.13](docs/08-plan-de-desarrollo.md#tarea-2-13) · [2.14](docs/08-plan-de-desarrollo.md#tarea-2-14) |
 | **API y Front · el soporte del movimiento** | **La foto del recibo ya llega al bucket, y pasa por la API** ([3.6](docs/08-plan-de-desarrollo.md#tarea-3-6), [07 §1](docs/07-arquitectura.md)). En el celular se elige con la cámara y **se encoge en el navegador** —1600 px de lado mayor, JPEG— antes de salir, que es lo que se ahorra del plan de datos de quien registra. `POST /api/v0/movimientos/{id}/adjuntos` es **la primera ruta que recibe archivos**: el cuerpo es `multipart/form-data` de una sola parte y la API lo lee de los bytes que el canal firmado ya retuvo, porque `MultipartFile` habría llegado tarde. **El id del adjunto es la clave de idempotencia** ([04 §4.12](docs/04-modelo-de-datos.md#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido), [ADR-020](docs/adr/ADR-020-idempotencia.md)), así que dos intentos escriben el mismo objeto en vez de dejar copias sueltas. Sube como `authenticated`, con el token de la sesión y nunca con la clave de servicio ([ADR-033](docs/adr/ADR-033-service-role-solo-en-auth.md)), y **primero el objeto y después la ficha**, para que ninguna fila prometa un archivo que no está. Estrena los códigos `40020` y `40021`, y **el bucket los vuelve a imponer por su cuenta**: con Storage levantado en la pila local, un PDF de 6 MB y un GIF los para el servicio y no un `if` ([ADR-015](docs/adr/ADR-015-validacion-tres-capas.md)) | [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6) |
+| **API · los saldos** | **La caja ya dice cuánta plata hay en cada cuenta, y cuánta en total.** `POST /api/v0/consultas/saldos` suma en el dominio —el saldo inicial más el `aporteACaja` de cada movimiento vigente, sin un `if` por tipo— y deja `v_saldos_cuenta` de segunda opinión, como pide el [04 §6](docs/04-modelo-de-datos.md#6-vistas-de-cálculo-financiero): una prueba contra la base las enfrenta fila por fila. El total viaja sumado, porque el front no suma plata ([ADR-018](docs/adr/ADR-018-front-sin-decisiones.md)). **Solo Gerencia, y sin un `if` de tipos**: la tabla la leen los dos, así que el adaptador le pregunta a la base `fn_es_gerencia()` antes de leer los saldos, y a Operación le responde `40300`. La copia fijada del contrato pasa a `0.18.0` | [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) |
 | **API y Front · las personas** | **Quién entra al sistema, administrado desde el sistema**: crear con clave temporal, editar el nombre, el cargo y el tipo, desactivar con motivo escrito y restablecer la contraseña —que además corta las sesiones abiertas—. **Ni un permiso vive en la API**: crear lo autoriza `usuarios_insercion`, y al último usuario activo de Gerencia lo rechaza un trigger que estaba puesto desde el esquema inicial. La identidad se crea contra GoTrue con la clave de servicio, acotada a eso por el [ADR-033](docs/adr/ADR-033-service-role-solo-en-auth.md) y vigilada por una prueba que rompe la compilación si aparece en otro archivo. **Y desde la [2.16](docs/08-plan-de-desarrollo.md#tarea-2-16) esos cambios se leen y se deshacen**: los doce eventos con nombre, la bitácora redactada por la API —qué pasó, sobre quién, el «de → a» y qué pasaría al revertir— y la reversión, que escribe un cambio nuevo y deja la entrada original intacta. **Y con la [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) el cambio de clave obligatorio lo impone la API y no la pantalla**: quien no ha creado la suya alcanza seis rutas y en las otras 80 lee «Crea tu contraseña para continuar.» | [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) · [2.16](docs/08-plan-de-desarrollo.md#tarea-2-16) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) |
 | **Front** | El proyecto Flutter con su integración continua, la insignia de versión y ambiente, el bloqueo por MAJOR incompatible y `Dinero` en Dart | [0.3](docs/08-plan-de-desarrollo.md#tarea-0-3) · [0.12](docs/08-plan-de-desarrollo.md#tarea-0-12) · [0.13](docs/08-plan-de-desarrollo.md#tarea-0-13) · [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9) |
 | **Front · sistema de diseño** | La tabla, el panel de confirmación en línea, la píldora de estado y los formatos colombianos de fecha y porcentaje; el cliente HTTP con clave de idempotencia; y el panel «Acerca de» | [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19) · [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19) · [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10) |
@@ -70,7 +71,7 @@ Lo que tiene su commit en `develop` con la integración continua en verde, que e
 | **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 25 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 62 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los quince triggers de auditoría escribiendo y las 34 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. La semilla es fija, re-ejecutable y con filas en toda tabla que preguntan las pruebas de permisos, y `sembrar.ps1` la lleva a dev y a qa sin dejarla acercarse a uat ni a prod. Y esto ya no es solo dev: **qa quedó al día con la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)**, con sus 109 comprobaciones en `OK` y `schema_version` en `0.3.0`. Y con la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) el esquema estrena la tabla `adjuntos` —la ficha del soporte, con su trigger y sus dos flechas excluyentes— y el **bucket privado `soportes`**, que impone el techo de 5 MB y los cuatro tipos de contenido **antes** de que los bytes se guarden: son 123 comprobaciones en `OK` contra la base local, y `0.4.0` **todavía sin promover a dev ni a qa**. Y con la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) el libro impone al fin **las tres reglas de la cuenta de destino** —un gasto ya no llega con destino, y una transferencia ya no va de una cuenta a sí misma, que además le **bajaba el saldo** a esa cuenta— y **la fecha se juzga con el día de Bogotá y no con el huso de la sesión**, que de siete a doce de la noche aceptaba el mañana que la API rechaza: 141 comprobaciones en `OK`, y la `0.6.0` esperando promoción como la `0.4.0` | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) · [2.4](docs/08-plan-de-desarrollo.md#tarea-2-4) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
-**852 pruebas en verde en la API** —y 165 más contra la base local, que desde la [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) sí corre la tubería— y 370 en el front. El dominio se prueba con las cifras de los
+**891 pruebas en verde en la API** —y 178 más contra la base local, que desde la [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) sí corre la tubería— y 370 en el front. El dominio se prueba con las cifras de los
 documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md): si una prueba falla, o se rompió el código o el documento dice
 otra cosa.
 
@@ -117,8 +118,8 @@ endpoints ([3.4](docs/08-plan-de-desarrollo.md#tarea-3-4)) y el registro rápido
 registra hoy de punta a punta. Con el contrato entró también una tarea nueva: **la tabla
 `adjuntos` no existía y ninguna tarea la creaba** ([3.14](docs/08-plan-de-desarrollo.md#tarea-3-14)). **Y con la [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6) el gasto ya se
 registra con su foto**, que era lo último que el sprint tenía pendiente de las dos puntas: quedan
-las transferencias ([3.7](docs/08-plan-de-desarrollo.md#tarea-3-7)), el listado ([3.8](docs/08-plan-de-desarrollo.md#tarea-3-8)), la anulación ([3.9](docs/08-plan-de-desarrollo.md#tarea-3-9)) y los saldos por
-cuenta ([3.12](docs/08-plan-de-desarrollo.md#tarea-3-12)). La lista al día la calcula la herramienta, y está justo abajo.
+las transferencias ([3.7](docs/08-plan-de-desarrollo.md#tarea-3-7)), el listado ([3.8](docs/08-plan-de-desarrollo.md#tarea-3-8)) y la anulación ([3.9](docs/08-plan-de-desarrollo.md#tarea-3-9)); **los saldos por
+cuenta ([3.12](docs/08-plan-de-desarrollo.md#tarea-3-12)) ya están**. La lista al día la calcula la herramienta, y está justo abajo.
 
 > **El [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) está cerrado.** La base existe, tiene dueño distinto del de la API y **RLS ya
 > juzga**: conectada como `prisma_api`, la misma consulta devuelve cero filas de `usuarios` y las
@@ -135,7 +136,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [3.7](docs/08-plan-de-desarrollo.md#tarea-3-7) · [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) · [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) · [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [3.7](docs/08-plan-de-desarrollo.md#tarea-3-7) · [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) · [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
 | **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
@@ -144,13 +145,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **60 tareas y 76,5 días de trabajo** de 143 tareas del plan.
+Quedan **59 tareas y 75,5 días de trabajo** de 143 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 11,5 semanas | **14,5 semanas** |
-| 2 | 6,4 semanas | **9,4 semanas** |
-| 3 | 5,5 semanas | **8,5 semanas** |
+| 1 | 11,3 semanas | **14,3 semanas** |
+| 2 | 6,3 semanas | **9,3 semanas** |
+| 3 | 5,1 semanas | **8,1 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -671,7 +672,11 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [ ] 🔒 [**3.10**](docs/08-plan-de-desarrollo.md#tarea-3-10) Corrección por contra-asiento · API
 - [x] [**3.11**](docs/08-plan-de-desarrollo.md#tarea-3-11) Marca de registro tardío · API — más de 7 días entre lo que ocurrió y lo que se
       digitó, contados en días de Bogotá
-- [ ] ⚡ [**3.12**](docs/08-plan-de-desarrollo.md#tarea-3-12) Saldos por cuenta · API
+- [x] [**3.12**](docs/08-plan-de-desarrollo.md#tarea-3-12) Saldos por cuenta · API — `POST /api/v0/consultas/saldos`: cada
+      cuenta sin anular con su saldo y el total sumado. **La suma es del dominio** y la vista
+      `v_saldos_cuenta` queda de contraste; a Operación le responde `40300` lo que dice
+      `fn_es_gerencia()`. `prisma_api` en `0.13.0`, copia fijada del contrato en `0.18.0`; 891
+      pruebas en la API y 178 contra la base
 - [x] [**3.13**](docs/08-plan-de-desarrollo.md#tarea-3-13) Contrato de movimientos · Contrato — registrar con `PUT` a su propio id,
       anular con motivo, adjuntar el soporte y el libro con filtros; ocho esquemas, el formulario
       `movimiento` y seis códigos del rango 20-29. Contrato `0.11.0`
@@ -1114,6 +1119,34 @@ a `anon`.
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
 
+**De la [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12), los saldos por cuenta:**
+
+- [ ] **El `40300` lo decide `fn_es_gerencia()`, y no un `if` sobre el tipo de usuario.** El acordado
+      dice que los saldos los niega la API y no la base, porque salen del libro y el libro lo leen
+      los dos tipos; y la API no decide permisos. Las dos cosas se cumplen preguntándole a la base con
+      la función de sus trece políticas: el adaptador corre `SELECT fn_es_gerencia()` en la
+      transacción de la petición y traduce el `false` a `SinPermiso`, como un `42501`. La API sigue
+      sin mirar de qué tipo es nadie, y el día que la base sepa negar los saldos sola, se borra esa
+      pregunta. El patrimonio y el tablero, que tienen la misma decisión pendiente, pueden ir igual
+- [ ] **La cifra que manda es la del dominio, y `v_saldos_cuenta` es la segunda opinión.** Es el
+      [04 §6](docs/04-modelo-de-datos.md#6-vistas-de-cálculo-financiero) al pie de la letra, y evita escribir la clasificación de los nueve tipos por
+      segunda vez, que ya se desincronizó una vez ([3.15](docs/08-plan-de-desarrollo.md#tarea-3-15)). La vista no se toca: una prueba de
+      integración enfrenta las dos fila por fila, también después de transferir y de anular
+- [ ] **La copia fijada del contrato declara `0.18.0` con 30 de 86 rutas, y así queda la regla**: el
+      número dice de qué versión del acordado sale cada letra de la copia —la más nueva de la que
+      trae texto—, y la cobertura la dice `contrato/README.md` de la API. La operación de saldos solo
+      existe desde el `0.17.0` y la descripción del adjunto de la [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6) ya era del `0.18.0`, así que
+      quedarse en `0.16.0` era falso en dos sitios. Responde lo que dejaron abierto la [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) y la
+      3.6, más abajo
+- [ ] **`40302` está declarado y no se emite**, igual que en `/consultas/cuentas`: saber si alguien
+      entró con la clave temporal pide leer su ficha, y ninguna consulta lo hace salvo la navegación
+- [ ] **Una cuenta anulada no sale, y su plata tampoco está en el total.** El contrato pide «las
+      cuentas sin anular» y la vista hace lo mismo. Que esa plata desaparezca de la caja es del
+      modelo: anular una cuenta todavía no tiene ni pantalla ni operación
+- [ ] **Cada consulta lee el libro vigente entero**, ocho columnas y sin `JOIN`. Hoy son pocas filas;
+      el día que pese, lo que hay que traer es el corte del cierre mensual (`cierres_mensuales`), y
+      se cambia un método detrás del puerto sin tocar ni el dominio ni el contrato
+
 **Del arreglo de las conexiones de las pruebas:**
 
 - [ ] **Las pruebas que caían al correr la suite entera no eran cosa de GoTrue ni de la semilla: la
@@ -1175,7 +1208,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       implementa lo que esta versión agrega, pero no los reportes del `0.17.0`, así que declarar
       `0.18.0` afirmaría algo falso. **Sigue sin estar escrito** qué número declara un artefacto que
       implementa partes sueltas de dos versiones: es la misma decisión que quedó anotada en la
-      [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10), y van dos veces
+      [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10), y van dos veces. **La respondió la [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12)**, más arriba
 - [ ] **La pila local levanta Storage desde esta tarea** (`[storage] enabled = true`). Sin el
       servicio, el techo del bucket y sus cuatro tipos solo se podían comprobar leyendo
       `storage.buckets`: se veía la configuración y nunca el comportamiento
@@ -1485,7 +1518,8 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       y no dice nada de las categorías
 - [ ] `casilla` es un quinto tipo de campo del descriptor, para el `BOOLEAN` de `es_fijo`
 - [ ] Una lista trae `opciones` —fijas— o `origen` —la ruta que las da—, y nunca las dos
-- [ ] ⚡ `POST /api/v0/consultas/cuentas` no devuelve saldos, ni a Gerencia: los saldos son la [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12)
+- [ ] 🔒 `POST /api/v0/consultas/cuentas` no devuelve saldos, ni a Gerencia: los saldos son la [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12),
+      que los dio en su propia ruta, `POST /api/v0/consultas/saldos`
 - [ ] Tres códigos nuevos para las reglas que no caben en el descriptor: `42220`, `42221` y `42222`
 - [ ] Editar y anular cuentas y categorías no entran al contrato todavía, porque ningún requisito
       las pide
@@ -2402,7 +2436,8 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **`prisma.contrato.version` se queda en `0.14.0` aunque el acordado vaya en `0.16.0`.** La API
       ya emite el campo que estrena el `0.16.0`, pero **no implementa el `0.15.0`** —nómina y
       cotizaciones—, así que subirla sería afirmar algo falso. Qué número declara un artefacto que
-      implementa partes sueltas de dos versiones no está escrito en ningún documento
+      implementa partes sueltas de dos versiones no está escrito en ningún documento. **Lo respondió
+      la [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12)**, al principio de esta sección
 - [ ] **Un nombre de cuenta o de categoría no tiene largo máximo.** Se probó a ponerle uno y se
       quitó: el contrato no lo declara y la columna es `TEXT`, así que el `@Size` habría sido una
       regla inventada en el código. Si hace falta, se acuerda en el contrato primero
