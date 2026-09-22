@@ -1,6 +1,6 @@
 ---
 name: pr
-description: Deja listo y abre el PR de PRISMA. Recorre la lista de terminado del 08 §4 en cada repositorio que tocó la tarea, empuja, abre el PR contra develop o main y recuerda que hay que esperar a que lo acepten. Se invoca a mano.
+description: Abre el PR de PRISMA cuando quien dirige lo pide, y solo entonces (ADR-037). Comprueba que la rama esté al día con su base y sin conflictos, recorre la lista de terminado del 08 §4, empuja, abre el PR contra develop o main y recuerda que hay que esperar a que lo acepten. Se invoca a mano.
 argument-hint: "[repositorio o id de la tarea]"
 disable-model-invocation: true
 model: sonnet
@@ -10,21 +10,38 @@ model: sonnet
 
 Rutas relativas a la carpeta de trabajo, la que contiene `repositories/`.
 
+> **Esta skill se corre cuando quien dirige pide el PR, nunca por cuenta propia** ([ADR-037](https://github.com/Juanchope039/Finanzas-PRISMA/blob/main/docs/adr/ADR-037-el-pr-se-abre-a-pedido.md)).
+> Terminar una tarea no incluye abrir su PR: incluye dejar la rama lista, empujarla y avisar. Si
+> llegaste aquí porque acabas de terminar algo y nadie te lo pidió, lo que toca es la skill
+> `sin-conflictos` y después avisar.
+
+## 0. La rama tiene que estar al día y sin conflictos
+
+**Primero la skill `sin-conflictos`**, en cada repositorio que toca la tarea. Si la base se movió
+desde la última vez que se corrió —y basta un PR de otro carril—, se corre otra vez. Un PR que llega
+con conflictos le deja a quien revisa una pelea que no es suya.
+
+La promesa, por repositorio:
+
+```bash
+git -C repositories/<repo> fetch --all
+git -C repositories/<repo> merge-tree --write-tree origin/<base> HEAD >/dev/null && echo 'fusiona limpio'
+```
+
 ## 1. La lista de terminado, por repositorio
 
 | Repositorio | Lo que tiene que pasar |
 |---|---|
-| `documentation` | La rama al día con `main` (`git merge origin/main` si se movió) y `node scripts/docs/documentar.mjs verificar --base origin/main` en verde |
-| `backend-api` | `./gradlew build`; `./gradlew integracion`, aparte, si la tarea toca la base; y `./gradlew laVersionSubio --args=origin/develop` |
-| `frontend-flutter` | `dart format --set-exit-if-changed .`, `dart analyze --fatal-infos`, `flutter test` y `dart run tool/la_version_subio.dart origin/develop` |
-| `backend-db` | `./scripts/db/la-version-subio.ps1 -Base origin/develop`, y `verificar-base.sql` en `OK` contra la base local reseteada |
+| `documentation` | `node scripts/docs/documentar.mjs verificar --base origin/main` en verde |
+| `api` | `./gradlew build`; `./gradlew integracion`, aparte, si la tarea toca la base; y `./gradlew laVersionSubio --args=origin/develop` |
+| `front-end` | `dart format --set-exit-if-changed .`, `dart analyze --fatal-infos`, `flutter test` y `dart run tool/la_version_subio.dart origin/develop` |
+| `database` | `./scripts/db/la-version-subio.sh origin/develop`, y `verificar-base.sql` en `OK` contra la base local reseteada |
 
 Y lo que pide 08 §4:
 
 - la versión subió un paso, si la tarea cambió lo que se publica;
 - el README está al día y su versión subió;
-- la tarea va marcada `[x]` en `TODO.md` en el PR de la especificación;
-- cada commit tiene 256 caracteres o menos.
+- la tarea va marcada `[x]` en `TODO.md` en el PR de la especificación.
 
 Si algo no pasa, no se abre el PR. Se dice qué falló, con la salida.
 
@@ -53,7 +70,7 @@ Si algo no pasa, no se abre el PR. Se dice qué falló, con la salida.
 
 - **Se espera a que lo acepten.** No se empieza otra tarea hasta entonces, salvo una ⚡ que no toque
   lo mismo (21 §6.5).
-- **Si dos PR de la especificación chocan en `TODO.md` o `docs/INDICE.md`**, se resuelve con la
-  receta de su `AGENTS.md`: se trae `main`, `git add` y después `enlazar`.
+- **Si la base se mueve mientras el PR espera**, se vuelve a correr `sin-conflictos` y se empuja. Un
+  PR que empezó fusionable deja de serlo sin que nadie lo toque.
 - **Cuando lo acepten**, cada repositorio vuelve a su base: `git switch <base>` y
   `git pull --ff-only`.

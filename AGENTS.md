@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/AGENTS.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-21 | 2026-09-21 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/AGENTS.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-21 | 2026-09-22 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 Guía para los agentes de código que trabajan en la especificación de PRISMA. **Las reglas están en
 [`CLAUDE.md`](CLAUDE.md)**, tanto las del proceso como las de la arquitectura y las de este
@@ -37,8 +37,8 @@ node scripts/docs/documentar.mjs verificar --base origin/main   # además: versi
 
 - Se corre desde cualquier carpeta, **cada vez** que cambia un `.md`: primero `enlazar` y después
   `verificar`.
-- `verificar --base` es lo que corre la integración continua en cada PR. Antes de abrir el tuyo,
-  córrelo con la rama al día con `main`.
+- `verificar --base` es lo que corre la integración continua en cada PR. Antes de avisar que la
+  rama está lista, córrelo con `main` ya traído a la rama.
 - Qué hacer con cada mensaje de error está en `scripts/docs/README.md`.
 
 ---
@@ -116,7 +116,10 @@ documento nuevo arranca en 0.1.0 como 📝 Borrador, o en 1.0.0 si nace ✅ Vige
 
 ## 7. Si dos PR chocan
 
-Casi siempre chocan en [`TODO.md`](TODO.md) y [`docs/INDICE.md`](docs/INDICE.md), dentro de bloques generados:
+La receta entera —para los cuatro repositorios y para las clases de conflicto que git no ve— es la
+skill `sin-conflictos`, y se corre **antes de avisar que la rama está lista**, no cuando GitHub se
+queja ([ADR-037](https://github.com/Juanchope039/Finanzas-PRISMA/blob/main/docs/adr/ADR-037-el-pr-se-abre-a-pedido.md)). Aquí, casi siempre chocan en [`TODO.md`](TODO.md) y [`docs/INDICE.md`](docs/INDICE.md), dentro de
+bloques generados:
 
 1. Se trae `main` a la rama con `git merge --no-commit origin/main`.
 2. En esos dos archivos se toma el lado de `main` y se vuelve a poner encima lo de la rama. La versión
