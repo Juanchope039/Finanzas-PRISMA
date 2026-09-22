@@ -4675,7 +4675,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.17.0"
+    "version" : "0.18.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -8690,7 +8690,7 @@
     },
     "/api/v0/movimientos/{id}/adjuntos" : {
       "post" : {
-        "description" : "Sube la foto del recibo o el PDF de la factura y lo deja colgado del movimiento (RF-09, RF-12, CU-02). El archivo pasa por la API y nunca va directo al almacenamiento (07 §1). Máximo 5 MB, que responde 40020, y solo image/jpeg, image/png, image/webp o application/pdf, que responde 40021. Adjuntan los dos tipos de usuario. No tiene formulario: el cuerpo es multipart/form-data con una sola parte, «archivo». Devolver el archivo sigue sin operación, pero la forma en que bajaría ya está acordada desde el 0.15.0: es el esquema Documento, dentro del sobre. La operación es de la tarea 3.6. Puede devolver 20100, 40002, 40020, 40021, 40100, 40101, 40102, 40103, 40302, 40400, 40901 y 40902.",
+        "description" : "Sube la foto del recibo o el PDF de la factura y lo deja colgado del movimiento (RF-09, RF-12, CU-02). El archivo pasa por la API y nunca va directo al almacenamiento (07 §1). Máximo 5 MB, que responde 40020, y solo image/jpeg, image/png, image/webp o application/pdf, que responde 40021. Adjuntan los dos tipos de usuario. No tiene formulario: el cuerpo es multipart/form-data con una sola parte, «archivo». El id del adjunto es la clave de idempotencia de la petición, así que dos intentos de la misma intención escriben el mismo objeto (04 §4.12, ADR-020). Devolver el archivo sigue sin operación, pero la forma en que bajaría ya está acordada desde el 0.15.0: es el esquema Documento, dentro del sobre. Puede devolver 20100, 40002, 40020, 40021, 40100, 40101, 40102, 40103, 40302, 40400, 40901 y 40902.",
         "operationId" : "adjuntarSoporte",
         "parameters" : [ {
           "description" : "El id del movimiento al que se le adjunta el soporte",
@@ -10920,10 +10920,6 @@
     "mensaje" : "Esa foto pesa demasiado. El máximo son 5 MB.",
     "modulo" : "MOVIMIENTOS_Y_CUENTAS",
     "nombre" : "ADJUNTO_DEMASIADO_GRANDE",
-    "pendienteDeEmitir" : {
-      "quien" : "Tarea 3.6: adjuntar la foto del recibo",
-      "sprint" : 3
-    },
     "status" : 40020
   }, {
     "cuando" : "El archivo que se adjunta no es image/jpeg, image/png, image/webp ni application/pdf",
@@ -10931,10 +10927,6 @@
     "mensaje" : "Solo se pueden adjuntar fotos o archivos PDF.",
     "modulo" : "MOVIMIENTOS_Y_CUENTAS",
     "nombre" : "ADJUNTO_NO_ES_FOTO_NI_PDF",
-    "pendienteDeEmitir" : {
-      "quien" : "Tarea 3.6: adjuntar la foto del recibo",
-      "sprint" : 3
-    },
     "status" : 40021
   }, {
     "cuando" : "Se crea una categoría dentro de otra que no existe o que fue anulada. El error va en data.errores, sobre padreId",

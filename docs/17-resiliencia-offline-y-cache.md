@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/17-resiliencia-offline-y-cache.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-16 | [Front](INDICE.md#etiqueta-front) · [API](INDICE.md#etiqueta-api) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/17-resiliencia-offline-y-cache.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-22 | [Front](INDICE.md#etiqueta-front) · [API](INDICE.md#etiqueta-api) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 > **Construcción: diseñado, no construido.** Este documento define cómo la aplicación tolerará los
 > cortes de red y trabajará sin conexión. Se escribe antes de programar para que la arquitectura
@@ -174,6 +174,21 @@ la cola hasta que la API la acepte, hasta que la rechace con un motivo ([§8](#8
 persona la descarte a propósito ([§7](#7-purga-de-la-caché-por-el-usuario)). Es la promesa del [§1.1](#11-la-promesa-sin-letra-pequeña), escrita en el comportamiento.
 
 ---
+
+### 5.3 La foto del recibo va en la cola, con sus bytes
+
+**Un archivo adjunto es parte de la intención, no algo que se suba aparte cuando haya señal.** El
+papel se bota al salir del almacén, así que una foto que solo viviera en memoria se perdería en
+cuanto la pantalla se cierre. Por eso la intención de adjuntar se guarda como cualquier otra —con
+su clave— y **los bytes se guardan con ella**, ya comprimidos por el dispositivo. Ocupan un tercio
+más de lo que pesan, porque se guardan como texto en la misma tabla que el resto.
+
+**Y espera a la suya.** Registrar el movimiento y colgarle el soporte son dos operaciones del
+contrato, y la segunda nombra el id de la primera: mandarla antes sería pedirle a la API que
+cuelgue algo de un movimiento que todavía no conoce, y el `40400` que respondería sacaría la foto
+de la cola por un motivo que no es de nadie. Así que una intención puede declarar que va **detrás
+de otra**: no sale hasta que la primera esté confirmada, y si a la primera la rechazan con motivo,
+la segunda queda rechazada con ese mismo motivo, guardada y a la vista ([§8](#8-conflictos-y-su-resolución)).
 
 ## 6. Detección de conexión y reconexión
 
