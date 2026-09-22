@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/scripts/docs/README.md "Historial de cambios") | [✅ Vigente](../../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-21 | [Proceso](../../docs/INDICE.md#etiqueta-proceso) |
+| [2.0.2](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/scripts/docs/README.md "Historial de cambios") | [✅ Vigente](../../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Proceso](../../docs/INDICE.md#etiqueta-proceso) |
 
 Pone y verifica los encabezados, las anclas, los enlaces y los bloques generados de toda la
 documentación de PRISMA. Las reglas que hace cumplir están en [`docs/22-documentacion.md`](../../docs/22-documentacion.md), y la
@@ -15,7 +15,6 @@ node scripts/docs/documentar.mjs enlazar             # escribe anclas, enlaces y
 node scripts/docs/documentar.mjs enlazar --en-seco   # muestra lo que cambiaría, sin escribir
 node scripts/docs/documentar.mjs verificar           # falla si algo está roto o sin enlazar
 node scripts/docs/documentar.mjs verificar --base <commit>   # y exige subir la versión de lo que cambió
-                                                             # y que ningún commit pase de 256 caracteres
 ```
 
 Necesita Node 20 o más y no tiene dependencias, y se puede correr desde cualquier carpeta: la raíz la
