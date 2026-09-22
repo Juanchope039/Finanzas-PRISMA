@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-21 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [5.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-22 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -762,9 +762,9 @@ Una tarea no está terminada hasta que cumple **todo** lo siguiente:
       el número de la tarea; el cuerpo son tres líneas —`Hace:`, `Decide:` y `Verifica:`—, la
       última con el conteo de pruebas y qué se rompió a propósito para verlas fallar. Dos tareas no
       van en un mismo commit aunque toquen la misma clase.
-- [ ] **El mensaje entero cabe en 256 caracteres** ([ADR-031](adr/ADR-031-commit-de-256-caracteres.md)), asunto, cuerpo y trailers
-      incluidos. El porqué largo no va ahí: va en el plan de trabajo ([22 §10](22-documentacion.md#planes)), que se escribió antes
-      y no tiene tope.
+- [ ] **El mensaje no tiene tope de longitud** ([ADR-036](adr/ADR-036-sin-limite-en-el-commit.md)): la brevedad es una guía y la
+      aplica quien escribe, no una cifra que mida la herramienta. El porqué largo sigue sin ir ahí:
+      va en el plan de trabajo ([22 §10](22-documentacion.md#planes)), que se escribió antes.
 - [ ] **El tablero quedó al día en el mismo empuje:** la tarea marcada `[x]` en [`TODO.md`](../TODO.md) y
       `node scripts/docs/documentar.mjs enlazar` corrido, que rehace las marcas ⚡ y 🔒, lo que puede
       empezar hoy y cuánto falta.

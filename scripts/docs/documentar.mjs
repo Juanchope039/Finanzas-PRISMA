@@ -4,7 +4,7 @@
 //   node scripts/docs/documentar.mjs enlazar              escribe anclas, enlaces y bloques generados
 //   node scripts/docs/documentar.mjs verificar            falla si algo está roto o sin enlazar
 //   node scripts/docs/documentar.mjs verificar --base SHA además exige subir la versión de lo que
-//                                                        cambió y que ningún commit pase de 256
+//                                                        cambió
 //
 // Las reglas están en docs/22-documentacion.md.
 
