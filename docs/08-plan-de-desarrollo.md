@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.5.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-21 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [5.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-21 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -119,7 +119,7 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 ### 1.1 Cuánto dura con 1, 2 o 3 carriles activos
 
 <!-- generado:plan-calendario · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**169 días de trabajo en 142 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
+**169,5 días de trabajo en 143 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
 
 | Carriles activos | Desarrollo | Estabilización | Total | Frente a 1 carril |
 |:---:|---:|---:|---:|---:|
@@ -221,7 +221,7 @@ gantt
     section Decisión
     S0 :decisin0, 2026-09-15, 2026-09-16
     S1 :decisin1, 2026-09-15, 2026-09-16
-    S9 :decisin9, 2026-09-16, 2026-09-17
+    S9 :decisin9, 2026-09-16, 2026-10-02
 
     section Implantación
     Estabilización y aprobación en UAT :est, 2026-12-02, 2026-12-16
@@ -697,7 +697,7 @@ pro-labore sí.
 | <a id="tarea-9-2"></a>9.2 | Ambiente uat en pie: datos realistas **anonimizados** y su propia semilla | Base, API | [0.9](#tarea-0-9), [1.11](#tarea-1-11), [9.12](#tarea-9-12) | 1 |
 | <a id="tarea-9-3"></a>9.3 | Promoción del artefacto aprobado de uat a prod **sin recompilar**, con la misma versión | API, Front | [9.2](#tarea-9-2) | 1 |
 | <a id="tarea-9-4"></a>9.4 | Procedimiento de reversión ensayado en qa: volver la API y el front a la versión anterior y medir cuánto tarda | API, Front | [0.9](#tarea-0-9) | 1,5 |
-| <a id="tarea-9-5"></a>9.5 | La prueba de permisos con sesión real corre en los cuatro ambientes, no solo en dev | API | [1.7](#tarea-1-7), [9.2](#tarea-9-2) | 1 |
+| <a id="tarea-9-5"></a>9.5 | La prueba de permisos con sesión real corre en los cuatro ambientes, no solo en dev | API | [1.7](#tarea-1-7), [9.2](#tarea-9-2), [9.13](#tarea-9-13) | 1 |
 | <a id="tarea-9-6"></a>9.6 | Pruebas de extremo a extremo de los flujos críticos, ejecutadas en qa | API, Front | [0.9](#tarea-0-9) | 2 |
 | <a id="tarea-9-7"></a>9.7 | Rendimiento en celular real con 4G ([RNF-01](03-requisitos-y-bdd.md#rnf-01)) | Front | [0.9](#tarea-0-9) | 1 |
 | <a id="tarea-9-8"></a>9.8 | Repaso de secretos: nada en el repositorio y `service_role` solo en migraciones | API | [0.9](#tarea-0-9) | 0,5 |
@@ -705,13 +705,14 @@ pro-labore sí.
 | <a id="tarea-9-10"></a>9.10 | Etiquetar `1.0.0` del front y de la API para el go-live | API, Front | [9.1](#tarea-9-1), [9.3](#tarea-9-3), [9.4](#tarea-9-4), [9.5](#tarea-9-5), [9.6](#tarea-9-6), [9.7](#tarea-9-7), [9.8](#tarea-9-8), [9.9](#tarea-9-9), [9.11](#tarea-9-11) | 0,5 |
 | <a id="tarea-9-11"></a>9.11 | Swagger abierto en `/docs` en dev, qa y uat, y **detrás de autenticación en prod**: el catálogo de endpoints es un mapa del sistema | API | [0.9](#tarea-0-9) | 0,5 |
 | <a id="tarea-9-12"></a>9.12 | **Los proyectos uat y prod de Supabase, que son los dos de pago** ([19 §8.1](19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no)): contratados, cada uno con su base, sus claves y su almacenamiento. Lo que falta no es trabajo sino la firma de Gerencia, que es el paso 2 del [09 §3.1](09-plan-de-implantacion.md#31-alistamiento-técnico-de-los-ambientes) | Decisión | [0.4](#tarea-0-4) | 0,5 |
+| <a id="tarea-9-13"></a>9.13 | **Contraseña del rol `prisma_api` en qa y los seis secretos de GitHub** para `permisos-en-qa` ([2.11](#tarea-2-11)): la configuración del ambiente que no es código y que el trabajo del CI ya espera; sin ella el trabajo se salta con aviso | Decisión | [0.4](#tarea-0-4), [1.7](#tarea-1-7) | 0,5 |
 
 <!-- generado:plan-oleadas-9 · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **Qué puede ir a la vez en este sprint.** Cada oleada espera solo a las anteriores; dentro de una oleada, todo arranca junto.
 
 | Oleada | Tareas | Carriles | Días |
 |:---:|---|---|---:|
-| 1 | [9.1](#tarea-9-1) · [9.4](#tarea-9-4) · [9.6](#tarea-9-6) · [9.7](#tarea-9-7) · [9.8](#tarea-9-8) · [9.9](#tarea-9-9) · [9.11](#tarea-9-11) · [9.12](#tarea-9-12) | Front, API, Decisión | 8,5 |
+| 1 | [9.1](#tarea-9-1) · [9.4](#tarea-9-4) · [9.6](#tarea-9-6) · [9.7](#tarea-9-7) · [9.8](#tarea-9-8) · [9.9](#tarea-9-9) · [9.11](#tarea-9-11) · [9.12](#tarea-9-12) · [9.13](#tarea-9-13) | Front, API, Decisión | 9 |
 | 2 | [9.2](#tarea-9-2) | Base | 1 |
 | 3 | [9.3](#tarea-9-3) · [9.5](#tarea-9-5) | API | 2 |
 | 4 | [9.10](#tarea-9-10) | API | 0,5 |
