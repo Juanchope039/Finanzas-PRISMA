@@ -32,7 +32,7 @@ Los repositorios de código están al lado, en `../backend-api`, `../backend-db`
 node scripts/docs/documentar.mjs enlazar                        # pone anclas, enlaces y bloques generados
 node scripts/docs/documentar.mjs enlazar --en-seco              # muestra lo que cambiaría, sin escribir
 node scripts/docs/documentar.mjs verificar                      # falla si algo quedó roto o sin enlazar
-node scripts/docs/documentar.mjs verificar --base origin/main   # además: versiones subidas y commits de 256
+node scripts/docs/documentar.mjs verificar --base origin/main   # además: versiones subidas
 ```
 
 - Se corre desde cualquier carpeta, **cada vez** que cambia un `.md`: primero `enlazar` y después

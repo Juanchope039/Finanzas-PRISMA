@@ -63,11 +63,6 @@ ni referencias de proyectos, ni nombres de clientes.
   número.
 - Los mensajes van **en español sin tildes**.
 
-**El mensaje entero no pasa de 256 caracteres** ([ADR-031](docs/adr/ADR-031-commit-de-256-caracteres.md)), contando asunto, cuerpo y trailers.
-- Se mide con `printf '%s' "$(git log -1 --pretty=%B)" | wc -c`, que cuenta bytes.
-- Quedan unos 50 caracteres por línea.
-- El porqué largo va en el plan.
-
 **La versión del proyecto sube un paso en cada PR que cambia lo que se publica** ([ADR-034](docs/adr/ADR-034-la-version-sube-en-cada-pr.md)).
 - Es el PATCH, el MINOR o el MAJOR siguiente de la versión de `develop`. En el front, el `+BUILD`
   sube uno.
