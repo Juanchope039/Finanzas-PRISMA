@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.41.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -1114,6 +1114,31 @@ a `anon`.
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
 
+**Del arreglo de las conexiones de las pruebas:**
+
+- [ ] **Las pruebas que caían al correr la suite entera no eran cosa de GoTrue ni de la semilla: la
+      suite agotaba las conexiones de la base.** Cada clase de integración levanta su propio
+      contexto de Spring —el `@DynamicPropertySource` de la clase entra en la llave con la que
+      Spring los cachea, así que dos clases no comparten nada—, quince al medirlo, y un contexto
+      cacheado no se cierra hasta que termina el JVM. Cada uno traía el `maximum-pool-size` de
+      producción y, sin `minimum-idle`, que Hikari iguala al máximo, sostenía diez conexiones aunque
+      su clase hubiera terminado hacía medio minuto. Medido con `pg_stat_activity`, pico de 104
+      conexiones —96 de ellas ociosas— contra las 64 que la base local deja libres. Pasado el techo,
+      PostgreSQL responde `remaining connection slots are reserved…` y el pool que la pedía se cae
+      entero antes de su primera consulta, así que **cuál prueba se pone roja depende del orden y
+      del instante**: 4, 10 y 3 en tres corridas seguidas, y aislada no falla ninguna. El síntoma
+      era un `50000` con `data` en null al entrar
+- [ ] **Se acotó el arnés y no se tocó ninguna prueba.** `minimum-idle` en 1, como propiedad del
+      sistema en la tarea de Gradle y no en el `application.yml`, que viajaría al artefacto y le
+      pondría a producción un pool dimensionado para que quepan quince contextos de prueba. Un
+      contexto parado pasa a sostener una conexión y no diez, así que el total crece de a una por
+      clase nueva. **El máximo se queda en el de producción**, para que ninguna prueba cambie de
+      concurrencia por esto
+- [ ] **Queda sin hacer la raíz: un contexto por clase para atender una petición a la vez.** Que
+      todas compartan uno arreglaría el consumo de frente y dejaría la suite mucho más rápida, pero
+      toca cada clase y cambia qué cableado ve cada prueba. No es trabajo de un arreglo suelto:
+      **hace falta decidir si entra como tarea del plan**
+
 **De la [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6), la foto del recibo:**
 
 - [ ] ⚡ **El id del adjunto es la clave de idempotencia de la petición.** El [04 §4.12](docs/04-modelo-de-datos.md#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido) manda que lo
@@ -1151,10 +1176,6 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       `0.18.0` afirmaría algo falso. **Sigue sin estar escrito** qué número declara un artefacto que
       implementa partes sueltas de dos versiones: es la misma decisión que quedó anotada en la
       [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10), y van dos veces
-- [ ] ⚡ **Tres pruebas de integración de la sesión fallan cuando se corre la suite entera**, y
-      aisladas pasan: `InicioDeSesionEnElSobreTest` se queda sin `data` al entrar. **Viene de antes
-      de esta tarea** —se comprobó corriendo la suite sin la prueba nueva— y huele a que otra prueba
-      le deja algo puesto a GoTrue. Nadie lo ha mirado
 - [ ] **La pila local levanta Storage desde esta tarea** (`[storage] enabled = true`). Sin el
       servicio, el techo del bucket y sus cuatro tipos solo se podían comprobar leyendo
       `storage.buckets`: se veía la configuración y nunca el comportamiento
