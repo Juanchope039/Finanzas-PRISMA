@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.7.2](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-22 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.8.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-22 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -1370,6 +1370,15 @@ La aplicación consulta **siempre** las vistas. El modo *ver anulados* consulta 
 está restringido al tipo Gerencia y se presenta visualmente diferenciado para que nunca se
 confunda con la vista normal.
 
+**El `SELECT *` se congela el día en que se crea la vista.** PostgreSQL expande el asterisco a las
+columnas que la tabla tiene en ese momento, así que una columna que se le agregue después a
+`movimientos` o a `pedidos` queda en la tabla y **no aparece en su vista**, sin que nada falle. La
+migración que agrega la columna vuelve a crear la vista con el mismo texto: `CREATE OR REPLACE VIEW`
+puede agregar columnas al final sin tirar las vistas que cuelgan de ella, y hay que repetirle
+`security_invoker`, porque la lista de opciones se reemplaza entera. Así lo hizo la [4.11](08-plan-de-desarrollo.md#tarea-4-11) con
+`v_pedidos`, y desde entonces la verificación de la base pregunta si a esa vista le falta alguna
+columna de su tabla.
+
 ### 5.6 La bitácora de la pantalla es una vista, no una tabla nueva
 
 La pantalla **Gestión de usuarios** muestra una bitácora de cambios: quién cambió qué, cuándo y
@@ -2249,10 +2258,12 @@ y pasa a ser un rojo en la canalización.
 
 > **La prueba mira en las dos direcciones, y eso fija el orden de los PR.** Una restricción sin
 > fila rompe, y una fila sin restricción también. Así que la fila **no se puede poner antes** de que
-> la migración exista: la API la agrega en el mismo PR en que recoge el esquema nuevo. Las dos
-> restricciones que faltan por escribir lo dicen en su tarea —`cancelacion_con_motivo` y
-> `destino_del_anticipo_valido` de la [4.11](08-plan-de-desarrollo.md#tarea-4-11)—, y la [2.22](08-plan-de-desarrollo.md#tarea-2-22) no agrega ninguna: reusa
-> `cargos_nombre_key`, que ya tiene la suya.
+> la migración exista: la API la agrega en el mismo PR en que recoge el esquema nuevo. Las de la
+> [4.11](08-plan-de-desarrollo.md#tarea-4-11) ya están escritas, en el esquema `0.11.0`, y la API todavía no las recoge. **Son tres
+> filas y no dos**: `cancelacion_con_motivo`, `destino_del_anticipo_valido` y la foránea
+> `pedidos_cancelado_por_fkey`, que esta consulta cuenta igual que las demás. Van en el PR que suba
+> su `prisma.esquema` a esa versión. La [2.22](08-plan-de-desarrollo.md#tarea-2-22) no agrega ninguna: reusa `cargos_nombre_key`, que ya
+> tiene la suya.
 >
 > **Las nueve de `adjuntos` ([§4.12](#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido)) ya están, y tres no llevan el código de su clase.** Las escribió
 > la [3.6](08-plan-de-desarrollo.md#tarea-3-6), que es la que sube el primer archivo: `adjunto_no_pasa_de_cinco_megas` responde el

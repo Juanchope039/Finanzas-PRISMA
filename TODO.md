@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -38,13 +38,13 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 16 | 13 | 1 | 2 | 3,5 |
-| [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 2 | 0 | 9 | 11 |
+| [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 3 | 0 | 8 | 10,5 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 4 | 0 | 6 | 6,5 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 1 | 0 | 11 | 16,5 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **143** | **85** | **1** | **57** | **74,5** |
+| **Total** | **143** | **86** | **1** | **56** | **74** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -68,7 +68,7 @@ Lo que tiene su commit en `develop` con la integración continua en verde, que e
 | **Front · la sesión** | **La puerta**: sin sesión se ve «Entra con tu usuario», y quien entra con una clave temporal va a «Crea tu contraseña» en vez de al tablero —que ni siquiera se construye hasta que la cambie—. Los dos formularios los manda la API, y los rechazos también: el «Usuario o contraseña incorrectos» que se lee en pantalla no está escrito en ninguna parte del front. **Recargar la página ya no saca a nadie**: lo primero que hace la aplicación al abrirse es renovar con la cookie, y si un token vence a media jornada el cliente lo repone y reintenta sin que se note. Arriba, la identidad con su menú de la sesión; a la izquierda, el menú que dicta la API | [2.6](docs/08-plan-de-desarrollo.md#tarea-2-6) · [2.2](docs/08-plan-de-desarrollo.md#tarea-2-2) · [2.12](docs/08-plan-de-desarrollo.md#tarea-2-12) · [2.14](docs/08-plan-de-desarrollo.md#tarea-2-14) |
 | **Front · sin conexión** | La PWA con su manifiesto en español y la cola local en IndexedDB: cada intención se guarda con su clave **antes** de intentar enviarse, y se reintenta con la espera de [17 §5.2](docs/17-resiliencia-offline-y-cache.md#52-cuánto-se-espera-entre-reintentos) hasta que la API la acepte o la rechace con motivo | [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) |
 | **Contrato** | El contrato v0.17.0 en [`contrato/openapi.json`](contrato/openapi.json), **entero**: el sobre, el descriptor con sus listas, cuentas y categorías, y **los sprints [2](docs/08-plan-de-desarrollo.md#sprint-2), [3](docs/08-plan-de-desarrollo.md#sprint-3), [4](docs/08-plan-de-desarrollo.md#sprint-4), [5](docs/08-plan-de-desarrollo.md#sprint-5), [6](docs/08-plan-de-desarrollo.md#sprint-6), [7](docs/08-plan-de-desarrollo.md#sprint-7) y [8](docs/08-plan-de-desarrollo.md#sprint-8) acordados antes de implementarlos** —`/sesiones`, `/usuarios`, `/cargos`, `/bitacora`, `/navegacion` y las tres cabeceras del canal firmado; los movimientos con su registro, su anulación, su adjunto y su libro con filtros; los clientes, los pedidos y sus anticipos; los productos con su costeo, su cuadro de márgenes y lo que Operación no recibe; y el capital: las inversiones, los aportes, el retiro partido en pro-labore y distribución, el pro-labore, los sobres y el patrimonio; y la nómina entera con el simulador, el cotizador y el importador; y los reportes: el Inicio en una sola consulta —las tres cifras, las alertas, los saldos, los sobres, los doce meses y los pendientes—, el año mes a mes con el promedio de ganancias y el punto de equilibrio, el cierre mensual y la descarga en CSV o PDF— | [0.15](docs/08-plan-de-desarrollo.md#tarea-0-15) · [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) · [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) · [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) · [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
-| **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 25 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 62 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los quince triggers de auditoría escribiendo y las 34 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. La semilla es fija, re-ejecutable y con filas en toda tabla que preguntan las pruebas de permisos, y `sembrar.ps1` la lleva a dev y a qa sin dejarla acercarse a uat ni a prod. Y esto ya no es solo dev: **qa quedó al día con la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)**, con sus 109 comprobaciones en `OK` y `schema_version` en `0.3.0`. Y con la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) el esquema estrena la tabla `adjuntos` —la ficha del soporte, con su trigger y sus dos flechas excluyentes— y el **bucket privado `soportes`**, que impone el techo de 5 MB y los cuatro tipos de contenido **antes** de que los bytes se guarden: son 123 comprobaciones en `OK` contra la base local, y `0.4.0` **todavía sin promover a dev ni a qa**. Y con la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) el libro impone al fin **las tres reglas de la cuenta de destino** —un gasto ya no llega con destino, y una transferencia ya no va de una cuenta a sí misma, que además le **bajaba el saldo** a esa cuenta— y **la fecha se juzga con el día de Bogotá y no con el huso de la sesión**, que de siete a doce de la noche aceptaba el mañana que la API rechaza: 141 comprobaciones en `OK`, y la `0.6.0` esperando promoción como la `0.4.0` | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) · [2.4](docs/08-plan-de-desarrollo.md#tarea-2-4) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) |
+| **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 25 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 64 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los quince triggers de auditoría escribiendo y las 34 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. La semilla es fija, re-ejecutable y con filas en toda tabla que preguntan las pruebas de permisos, y `sembrar.ps1` la lleva a dev y a qa sin dejarla acercarse a uat ni a prod. Y esto ya no es solo dev: **qa quedó al día con la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)**, con sus 109 comprobaciones en `OK` y `schema_version` en `0.3.0`. Y con la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) el esquema estrena la tabla `adjuntos` —la ficha del soporte, con su trigger y sus dos flechas excluyentes— y el **bucket privado `soportes`**, que impone el techo de 5 MB y los cuatro tipos de contenido **antes** de que los bytes se guarden: son 123 comprobaciones en `OK` contra la base local, y `0.4.0` **todavía sin promover a dev ni a qa**. Y con la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) el libro impone al fin **las tres reglas de la cuenta de destino** —un gasto ya no llega con destino, y una transferencia ya no va de una cuenta a sí misma, que además le **bajaba el saldo** a esa cuenta— y **la fecha se juzga con el día de Bogotá y no con el huso de la sesión**, que de siete a doce de la noche aceptaba el mañana que la API rechaza: 141 comprobaciones en `OK`, y la `0.6.0` esperando promoción como la `0.4.0`. Y con la [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) **`pedidos` tiene dónde guardar la cancelación**, que el contrato prometía desde el `0.10.0`: cuándo, quién, por qué y qué pasó con el anticipo, sin cancelación muda y sin reusar las columnas de la anulación —un pedido cancelado y después anulado perdería una de las dos historias—. 199 comprobaciones en `OK`, y la `0.11.0` tampoco está promovida | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) · [2.4](docs/08-plan-de-desarrollo.md#tarea-2-4) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
 **891 pruebas en verde en la API** —y 178 más contra la base local, que desde la [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) sí corre la tubería— y 370 en el front. El dominio se prueba con las cifras de los
@@ -138,7 +138,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
 | **API** | [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) · [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
-| **Base** | [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
+| **Base** | [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
 | **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -146,13 +146,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **58 tareas y 74,5 días de trabajo** de 143 tareas del plan.
+Quedan **57 tareas y 74 días de trabajo** de 143 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 11,2 semanas | **14,2 semanas** |
+| 1 | 11,1 semanas | **14,1 semanas** |
 | 2 | 6,2 semanas | **9,2 semanas** |
-| 3 | 5,0 semanas | **8,0 semanas** |
+| 3 | 5,3 semanas | **8,3 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -781,8 +781,15 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [x] [**4.10**](docs/08-plan-de-desarrollo.md#tarea-4-10) Contrato de clientes, pedidos y anticipos · Contrato — v0.10.0:
       nueve operaciones, catorce esquemas y nueve códigos que estrenan el rango `30`–`39`. La entrega
       recibe lo que recibe `fn_entregar_pedido` y nada más; cancelar y anular son dos operaciones
-- [ ] ⚡ [**4.11**](docs/08-plan-de-desarrollo.md#tarea-4-11) `pedidos`: el motivo de la cancelación y el destino del anticipo · Base — el
-      contrato los declara desde el `0.10.0` y la tabla no tiene dónde guardarlos; la [4.9](docs/08-plan-de-desarrollo.md#tarea-4-9) los espera
+- [x] [**4.11**](docs/08-plan-de-desarrollo.md#tarea-4-11) `pedidos`: el motivo de la cancelación y el destino del anticipo · Base — las
+      cuatro columnas que el contrato declaraba desde el `0.10.0` y la tabla no tenía.
+      `cancelacion_con_motivo` no deja cancelar sin decir cuándo, quién y por qué, y
+      `destino_del_anticipo_valido` solo admite devolución o ingreso. **Cancelar no es anular**, así
+      que no reusa las columnas `anulado_*`. Y `v_pedidos` se volvió a crear, porque su `SELECT *` se
+      congeló al crearla y no veía las columnas nuevas. Esquema `0.11.0`, con 199 comprobaciones en
+      `OK` contra la base local. **Le deja tres filas a la API, y no dos**: la foránea de
+      `cancelado_por` también la cuenta [C-01](docs/12-pruebas-y-calidad.md#c-01). Van en el PR que suba su `prisma.esquema`, y **falta
+      promoverla a dev y a qa**
 
 **[Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Cotizador**
 
@@ -1129,6 +1136,27 @@ a `anon`.
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
 
+**Del arreglo de Storage en la tubería:**
+
+- [ ] **La tubería no levantaba el servicio que la 3.6 encendió, y se supo contando las rojas.** El
+      flujo de la API excluía `storage-api` de `supabase start` desde la 1.7, con un comentario que
+      decía la verdad de entonces: que ninguna prueba lo miraba. La 3.6 encendió
+      `[storage] enabled = true` en `prisma_db` —para que el techo del bucket y sus cuatro tipos se
+      pudieran comprobar de verdad— y escribió las primeras pruebas que sí lo miran; el flujo se
+      quedó con la lista vieja. Sin nadie detrás de `/storage/v1` el gateway contesta **503**, y las
+      cuatro de `SoportesIntegracionTest` caen con `ProveedorNoDisponible`. **Decidido: sale de la
+      lista de exclusión**, que es una línea. Marcarlas como «solo en esta máquina» habría dejado
+      sin cubrir en la tubería justo la mitad del [ADR-015](docs/adr/ADR-015-validacion-tres-capas.md) que la 3.6 vino a comprobar, y es el mismo
+      error que la 1.7 ya pagó con las dos de GoTrue. `imgproxy` sigue fuera: solo transforma
+      imágenes, que ninguna prueba pide, y Storage arranca sano sin él
+- [ ] **Dos pruebas llevaban desde la 3.6 en verde sin comprobar nada, y eso no se veía.** Las del
+      bucket que se defiende solo afirman que la respuesta **no es 200** y que el objeto no quedó en
+      `storage.objects`: con el servicio apagado, el 503 cumple lo primero y no haber subido nada
+      cumple lo segundo. Pasaban igual si el bucket no tuviera ni techo ni tipos, que es justo lo
+      que el [ADR-015](docs/adr/ADR-015-validacion-tres-capas.md) les manda vigilar. Se comprobó parando el contenedor: las cuatro rojas y esas
+      dos verdes. Con el servicio arriba vuelven a comprobar lo que dicen, y con eso basta para este
+      arreglo; **queda por decidir si además deben exigir un código concreto** en vez de «cualquier
+      cosa que no sea 200». Eso ya es cambiar una prueba y no entra en un arreglo suelto
 **De la [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12), los saldos por cuenta:**
 
 - [ ] **El `40300` lo decide `fn_es_gerencia()`, y no un `if` sobre el tipo de usuario.** El acordado
@@ -2090,7 +2118,11 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] ⚡ **Tres de las cuatro le dejan trabajo a la API el mismo día.** La [C-01](docs/12-pruebas-y-calidad.md#c-01) cruza `pg_constraint`
       con la tabla de traducción **en las dos direcciones**, así que la fila no se puede poner antes
       de que exista la migración ni después: va en el mismo PR en que la API recoja el esquema. Son
-      dos filas por la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) y dos por la [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11); la [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) no pide ninguna
+      dos filas por la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) y **tres por la [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11), no dos**; la [2.22](docs/08-plan-de-desarrollo.md#tarea-2-22) no pide ninguna. La
+      tercera es la foránea `pedidos_cancelado_por_fkey`: [C-01](docs/12-pruebas-y-calidad.md#c-01) filtra
+      `contype IN ('c','u','f','x')`, así que las foráneas también cuentan, y el plan solo había
+      contado los dos `CHECK`. Corrida contra el esquema `0.11.0`, la prueba nombra esas tres y
+      ninguna otra
 
 **De la tarea [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9):**
 
