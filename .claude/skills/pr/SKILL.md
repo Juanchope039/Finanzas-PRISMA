@@ -2,6 +2,7 @@
 name: pr
 description: Deja listo y abre el PR de PRISMA. Recorre la lista de terminado del 08 §4 en cada repositorio que tocó la tarea, empuja, abre el PR contra develop o main y recuerda que hay que esperar a que lo acepten. Se invoca a mano.
 argument-hint: "[repositorio o id de la tarea]"
+disable-model-invocation: true
 model: sonnet
 ---
 
