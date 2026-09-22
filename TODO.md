@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -668,7 +668,16 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [ ] 🚧⚡ [**3.8**](docs/08-plan-de-desarrollo.md#tarea-3-8) Listado con filtros · API, Front — **la mitad de la API
       está hecha**: `POST /api/v0/consultas/movimientos` devuelve el libro con sus filtros, lo más
       reciente primero y con el total aparte. Falta la pantalla
-- [ ] ⚡ [**3.9**](docs/08-plan-de-desarrollo.md#tarea-3-9) Anulación con motivo obligatorio · API, Front
+- [ ] ⚡ [**3.9**](docs/08-plan-de-desarrollo.md#tarea-3-9) Anulación con motivo obligatorio · API, Front — **la
+      API está hecha**: `POST /api/v0/movimientos/{id}/anulacion` saca el movimiento de las cuentas
+      con motivo escrito y **no borra nada** —la fila se queda entera y solo estrena sus tres
+      columnas de anulación—, y desde ese momento no suma en ninguna cifra. **El «no» a Operación lo
+      dice PostgreSQL** con `mov_anulacion`, no un `if`, y la prueba lo afirma contra la base
+      ([BDD-03-4](docs/03-requisitos-y-bdd.md#bdd-03-4)); la auditoría la escribe el trigger con su acción propia, `ANULAR`. Anular dos
+      veces responde `40900` y **no pisa el motivo del primero**, que es lo que explica por qué se
+      sacó de las cuentas: lo sostiene el `WHERE anulado_en IS NULL` del `UPDATE`, no una pregunta
+      previa. `prisma_api` en `0.14.0`; 896 pruebas en la API y 181 contra la base. **Falta el
+      botón**, que vive en la tabla de la [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) y no tiene pantalla aprobada en `mockup/`
 - [ ] 🔒 [**3.10**](docs/08-plan-de-desarrollo.md#tarea-3-10) Corrección por contra-asiento · API
 - [x] [**3.11**](docs/08-plan-de-desarrollo.md#tarea-3-11) Marca de registro tardío · API — más de 7 días entre lo que ocurrió y lo que se
       digitó, contados en días de Bogotá
