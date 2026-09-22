@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.38.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-21 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.39.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -37,14 +37,14 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 19 | 0 | 0 | 0 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
-| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 16 | 10 | 0 | 6 | 7 |
+| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 16 | 10 | 1 | 5 | 7 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 2 | 0 | 9 | 11 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 4 | 0 | 6 | 6,5 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 1 | 0 | 11 | 16,5 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **143** | **82** | **0** | **61** | **78** |
+| **Total** | **143** | **82** | **1** | **60** | **78** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -75,7 +75,11 @@ otra cosa.
 
 ### 1.3 🚧 En progreso
 
-Nada en las manos ahora mismo.
+**El libro con filtros ([3.8](docs/08-plan-de-desarrollo.md#tarea-3-8)), por la mitad de la API.** `POST /api/v0/consultas/movimientos`
+ya devuelve el libro recortado por rango de fechas, tipos, cuenta y categoría, lo más reciente
+primero y con el total aparte del límite. **Los permisos siguen siendo de la base**: el libro
+vigente se lee de `v_movimientos`, y pedir los anulados consulta la tabla con `fn_es_gerencia()`
+decidiendo. Falta la pantalla, que es el otro carril de la misma tarea, así que no se marca `[x]`.
 
 **El alta de usuarios volvió a servir, y falta ejercitarla contra dev.** Crear a alguien respondía
 «algo salió mal» con cualquier nombre de usuario, porque faltaba `SUPABASE_SERVICE_ROLE_KEY` en el
@@ -651,7 +655,9 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       `0.4.0+4`, con 276 pruebas
 - [ ] ⚡ [**3.6**](docs/08-plan-de-desarrollo.md#tarea-3-6) Foto del recibo comprimida, subida a través de la API · Front, API
 - [ ] ⚡ [**3.7**](docs/08-plan-de-desarrollo.md#tarea-3-7) Transferencias entre cuentas · API
-- [ ] ⚡ [**3.8**](docs/08-plan-de-desarrollo.md#tarea-3-8) Listado con filtros · API, Front
+- [ ] 🚧⚡ [**3.8**](docs/08-plan-de-desarrollo.md#tarea-3-8) Listado con filtros · API, Front — **la mitad de la API
+      está hecha**: `POST /api/v0/consultas/movimientos` devuelve el libro con sus filtros, lo más
+      reciente primero y con el total aparte. Falta la pantalla
 - [ ] ⚡ [**3.9**](docs/08-plan-de-desarrollo.md#tarea-3-9) Anulación con motivo obligatorio · API, Front
 - [ ] 🔒 [**3.10**](docs/08-plan-de-desarrollo.md#tarea-3-10) Corrección por contra-asiento · API
 - [x] [**3.11**](docs/08-plan-de-desarrollo.md#tarea-3-11) Marca de registro tardío · API — más de 7 días entre lo que ocurrió y lo que se
@@ -2733,6 +2739,34 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       [2.14](docs/08-plan-de-desarrollo.md#tarea-2-14) en `ConsultarNavegacion` y sigue ahí: protege también a quien llame al caso de uso sin
       pasar por HTTP. El precio es que esa ruta responde `40302` por dos caminos, así que la prueba
       de punta a punta usa otra —la de cuentas—, o diría que el cerrojo existe aunque no existiera
+
+**De la 3.8:**
+
+- [ ] **Quien registró un movimiento se dice «Otra persona» cuando la sesión no alcanza a verlo.**
+      `mov_lectura` le enseña el libro entero a los dos tipos, pero `usuarios_lectura` solo deja ver
+      la ficha propia y, a Gerencia, todas ([P-10](docs/12-pruebas-y-calidad.md#p-10)). Con el `JOIN` interno que usaba la ficha de la
+      [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4), el libro de Operación **habría perdido en silencio** cada movimiento que registró
+      otra persona; con `LEFT JOIN` la fila se queda y lo que falta es el nombre, que el contrato
+      declara obligatorio. Se eligió un texto que no identifica a nadie sobre inventar que lo
+      registró quien pregunta. **Arreglarlo de verdad es de la base**: que los dos tipos puedan leer
+      el nombre de una persona sin ver su ficha entera, que es una migración y otra tarea
+- [ ] **Pedir los anulados sin ser Gerencia devuelve el libro vigente, no un rechazo.** El [04 §5.5](docs/04-modelo-de-datos.md#55-vistas-limpias-por-defecto)
+      dice que el modo «ver anulados» es de Gerencia, y el contrato **no declara `40300`** para esta
+      operación. Así que la consulta le pregunta a la base con `fn_es_gerencia()` —la misma función
+      de las políticas— en vez de comprobarlo en la API, y a Operación le vuelve lo que sí puede ver.
+      Es lo mismo que ya hace la bitácora, que a Operación le llega vacía
+- [ ] ⚡ **El libro lee las columnas de la anulación, que escribe la [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9).** Un `incluirAnulados` que
+      trajera los anulados sin decir que lo están no sería pedir nada. Leer es de esta tarea y
+      escribir de la suya; la ficha gana el nombre de quien anuló, con la misma regla de arriba
+- [ ] **Un tipo de movimiento que no existe sale como `42200` sobre el campo `tipos`.** Es el molde
+      de `TipoDeUsuarioDesconocido` y `TipoDeCuentaDesconocido`: los nueve están en el contrato, así
+      que un décimo quiere decir que la petición no la armó la pantalla. Leído de una columna sigue
+      siendo un fallo del sistema, que no es lo mismo
+- [ ] **La copia fijada del contrato describe la cabecera `Idempotency-Key` de esta ruta como una
+      consulta, y el original la describe como una escritura.** La API elige el texto sola según la
+      ruta sea de lectura o de escritura, así que dice lo mismo que en las otras nueve consultas; el
+      original le dejó a esta el texto de una escritura. **No cambia nada de lo que alguien hace**,
+      pero el original y la copia no dicen lo mismo hasta que alguien decida cuál se corrige
 
 ---
 
