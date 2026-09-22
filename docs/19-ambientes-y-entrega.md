@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-19 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [5.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-21 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -170,7 +170,8 @@ dentro del artefacto.
 | `SUPABASE_JWT_SECRET` | Verificar el token que llega en cada petición | Secreto |
 | `SUPABASE_SERVICE_ROLE_KEY` | Migraciones, y crear identidades contra GoTrue | **Jamás contra PostgreSQL** ([ADR-033](adr/ADR-033-service-role-solo-en-auth.md)). Secreto aparte, con acceso aparte |
 | `DOMINIO_CORREO_SINTETICO` | Armar el correo interno del login ([ADR-009](adr/ADR-009-login-por-usuario.md)) | Fijo de por vida. El front nunca lo ve |
-| `ORIGENES_PERMITIDOS` | CORS: el dominio del front de ese ambiente, y solo ese | prod no acepta al front de qa |
+| `ORIGENES_PERMITIDOS` | CORS: el dominio del front de ese ambiente, y solo ese | prod no acepta al front de qa. Varios se separan con comas |
+| `PUERTO_FRONT` | En una máquina no hay dominio: hay un puerto. De él salen los dos orígenes que la API acepta, `http://localhost` y `http://127.0.0.1`, que para el navegador **no son el mismo** | `8080` por defecto, el del `--web-port` del front. Solo se toca si ese puerto está ocupado. Donde hay dominio manda `ORIGENES_PERMITIDOS` y este número no se usa |
 | `SERVER_PORT` | Dónde escucha | Spring Boot la lee tal cual, sin código de por medio |
 | `SPRING_PROFILES_ACTIVE` | Qué perfil de configuración carga | Uno por ambiente. El perfil no trae secretos: trae qué se activa y qué no |
 | `JAVA_TOOL_OPTIONS` | Ajustes de la JVM, empezando por `-XX:MaxRAMPercentage=75` | Ver [§2.4](#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro). Sin esto la JVM reserva según la máquina anfitriona |
