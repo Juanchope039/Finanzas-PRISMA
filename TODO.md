@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -1144,6 +1144,35 @@ a `anon`.
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**Del arreglo de las lecturas rechazadas:**
+
+- [ ] **El texto de «sin respuesta» no es el mismo en todas las pantallas, y el 10 solo da el de
+      Acceso.** El [10 §5.1](docs/10-ux-y-mockups.md#51-acceso) escribe «No se pudo conectar con el servidor. Revisa tu conexión e
+      intenta de nuevo.» para cuando los campos de acceso no llegan, y el front lo usa ahí y en el
+      formulario de la contraseña. «Gestión de usuarios», el panel de cuentas y categorías, el
+      registro rápido y los desplegables dicen otra cosa, que no está en ningún documento: «No se
+      pudo hablar con el servidor. Revisa la conexión y vuelve a intentarlo.», con sus variantes para
+      la lista —«No se pudo cargar la lista…»— y para las opciones —«No se pudieron cargar las
+      opciones…»—. Con el de «no llegó el formulario» pasa lo mismo: el 10 dice «No se pudo cargar el
+      formulario. Intenta de nuevo en un momento.» y las otras pantallas «El servidor respondió, pero
+      no mandó el formulario…». **Conviene decidir si los textos del [10 §5.1](docs/10-ux-y-mockups.md#51-acceso) valen para toda la
+      aplicación** —y entonces el front tiene uno de cada uno— o si cada pantalla necesita el suyo en
+      el 10. Este arreglo no cambió ninguna redacción: cada pantalla le pasa su texto al aviso, así
+      que unificarlos es cambiar una constante
+- [ ] **Una lectura rechazada se pinta con el mensaje del sobre, y ya no se lee como falta de red.**
+      Las seis lecturas que traen una lista —personas, cargos, bitácora, cuentas, categorías y las
+      opciones de un desplegable— devolvían `null` para todo lo que no fuera un éxito, y por eso el
+      `404` de la API vieja de dev, el que cuenta el bloque de GoTrue más abajo, se leía «No se pudo
+      hablar con el servidor». Lo que llega sin la forma del contrato —la página de un proxy, o un
+      éxito con datos que no se dejan leer— **reusa el aviso que el front ya tenía para eso**: «El
+      servidor respondió algo que esta versión no entiende. Intenta de nuevo.», el de la sesión que
+      no se puede leer (tarea [2.6](docs/08-plan-de-desarrollo.md#tarea-2-6)). Se descartaron el de «sin respuesta», que es el que confundía, y
+      uno nuevo para las listas, que sería otro texto del front sin documento
+- [ ] **«Reintentar» se queda también ante un rechazo**, como estaba. La navegación no lo ofrece,
+      porque ahí el rechazo es un `40302` que no cambia reintentando; aquí el caso que lo destapó es
+      una API vieja, y la ruta que le falta llega con el despliegue siguiente: el botón la trae sin
+      recargar la página
 
 **Del arreglo de GoTrue en la tubería:**
 
