@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.41.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [6.42.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -1113,6 +1113,28 @@ a `anon`.
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**Del arreglo de Storage en la tubería:**
+
+- [ ] **La tubería no levantaba el servicio que la 3.6 encendió, y se supo contando las rojas.** El
+      flujo de la API excluía `storage-api` de `supabase start` desde la 1.7, con un comentario que
+      decía la verdad de entonces: que ninguna prueba lo miraba. La 3.6 encendió
+      `[storage] enabled = true` en `prisma_db` —para que el techo del bucket y sus cuatro tipos se
+      pudieran comprobar de verdad— y escribió las primeras pruebas que sí lo miran; el flujo se
+      quedó con la lista vieja. Sin nadie detrás de `/storage/v1` el gateway contesta **503**, y las
+      cuatro de `SoportesIntegracionTest` caen con `ProveedorNoDisponible`. **Decidido: sale de la
+      lista de exclusión**, que es una línea. Marcarlas como «solo en esta máquina» habría dejado
+      sin cubrir en la tubería justo la mitad del [ADR-015](docs/adr/ADR-015-validacion-tres-capas.md) que la 3.6 vino a comprobar, y es el mismo
+      error que la 1.7 ya pagó con las dos de GoTrue. `imgproxy` sigue fuera: solo transforma
+      imágenes, que ninguna prueba pide, y Storage arranca sano sin él
+- [ ] **Dos pruebas llevaban desde la 3.6 en verde sin comprobar nada, y eso no se veía.** Las del
+      bucket que se defiende solo afirman que la respuesta **no es 200** y que el objeto no quedó en
+      `storage.objects`: con el servicio apagado, el 503 cumple lo primero y no haber subido nada
+      cumple lo segundo. Pasaban igual si el bucket no tuviera ni techo ni tipos, que es justo lo
+      que el [ADR-015](docs/adr/ADR-015-validacion-tres-capas.md) les manda vigilar. Se comprobó parando el contenedor: las cuatro rojas y esas
+      dos verdes. Con el servicio arriba vuelven a comprobar lo que dicen, y con eso basta para este
+      arreglo; **queda por decidir si además deben exigir un código concreto** en vez de «cualquier
+      cosa que no sea 200». Eso ya es cambiar una prueba y no entra en un arreglo suelto
 
 **De la [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6), la foto del recibo:**
 
