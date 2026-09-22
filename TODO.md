@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -678,7 +678,16 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [ ] 🚧⚡ [**3.8**](docs/08-plan-de-desarrollo.md#tarea-3-8) Listado con filtros · API, Front — **la mitad de la API
       está hecha**: `POST /api/v0/consultas/movimientos` devuelve el libro con sus filtros, lo más
       reciente primero y con el total aparte. Falta la pantalla
-- [ ] ⚡ [**3.9**](docs/08-plan-de-desarrollo.md#tarea-3-9) Anulación con motivo obligatorio · API, Front
+- [ ] ⚡ [**3.9**](docs/08-plan-de-desarrollo.md#tarea-3-9) Anulación con motivo obligatorio · API, Front — **la
+      API está hecha**: `POST /api/v0/movimientos/{id}/anulacion` saca el movimiento de las cuentas
+      con motivo escrito y **no borra nada** —la fila se queda entera y solo estrena sus tres
+      columnas de anulación—, y desde ese momento no suma en ninguna cifra. **El «no» a Operación lo
+      dice PostgreSQL** con `mov_anulacion`, no un `if`, y la prueba lo afirma contra la base
+      ([BDD-03-4](docs/03-requisitos-y-bdd.md#bdd-03-4)); la auditoría la escribe el trigger con su acción propia, `ANULAR`. Anular dos
+      veces responde `40900` y **no pisa el motivo del primero**, que es lo que explica por qué se
+      sacó de las cuentas: lo sostiene el `WHERE anulado_en IS NULL` del `UPDATE`, no una pregunta
+      previa. `prisma_api` en `0.14.0`; 896 pruebas en la API y 181 contra la base. **Falta el
+      botón**, que vive en la tabla de la [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) y no tiene pantalla aprobada en `mockup/`
 - [ ] 🔒 [**3.10**](docs/08-plan-de-desarrollo.md#tarea-3-10) Corrección por contra-asiento · API
 - [x] [**3.11**](docs/08-plan-de-desarrollo.md#tarea-3-11) Marca de registro tardío · API — más de 7 días entre lo que ocurrió y lo que se
       digitó, contados en días de Bogotá
@@ -1135,6 +1144,27 @@ a `anon`.
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**De la 3.9, la anulación con motivo:**
+
+- [ ] **La tarea entra en dos pasos, y el botón se queda para el segundo.** El 08 le da carril «API,
+      Front», pero el botón de anular vive dentro de la tabla del libro, que es la 3.8 y está en
+      progreso, y `mockup/` tiene escrita la regla y **no la pantalla**. Construirlo ahora sería
+      adelantarlo sin mockup y editar el mismo archivo que otra rama. **Decidido: esta entrega es la
+      API entera**, que es lo que el front necesita para existir; el botón entra cuando haya
+      pantalla aprobada. **Conviene decidir si eso es una tarea nueva del 08** o la misma 3.9 en dos
+      PR
+- [ ] **La anulación no entra en la bitácora de cambios reversibles.** Los eventos de
+      `EventoDeBitacora` son de usuarios y cargos, y agregar uno de movimiento pediría un ámbito
+      nuevo y un valor nuevo del ENUM de la base, o sea una migración y dos PR. **Ningún documento
+      pide que anular sea reversible**: el [04 §5.3](docs/04-modelo-de-datos.md#53-corrección-por-contra-asiento) dice lo contrario, que lo que haya que corregir
+      va por contra-asiento. La huella queda igual, porque **la auditoría la escribe el trigger**
+      con su acción propia `ANULAR` ([ADR-005](docs/adr/ADR-005-auditoria-por-triggers.md))
+- [ ] **`anulado_dispositivo` y `anulado_ip` se quedan vacías.** [RN-13](docs/03-requisitos-y-bdd.md#rn-13) pide motivo, autor, fecha
+      **y dispositivo**, y las columnas existen en la tabla desde el principio; pero ni el contrato
+      declara de dónde saldría el dispositivo ni la petición lo trae, y la IP no la ve la API detrás
+      del proxy. Se escriben las tres que sí se tienen y **no se inventa la cuarta**. Queda para
+      quien dirige: o el contrato lo declara, o [RN-13](docs/03-requisitos-y-bdd.md#rn-13) se ajusta a lo que de verdad se guarda
 
 **Del arreglo de Storage en la tubería:**
 
