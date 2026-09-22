@@ -142,7 +142,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | Documento | Versión | Estado | Actualizado | Etiquetas |
 |---|:---:|---|:---:|---|
 | [PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) | 1.3.0 | ✅ Vigente | 2026-09-21 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
-| [Tareas de PRISMA](../TODO.md) | 6.37.0 | 🔄 Vivo | 2026-09-21 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
+| [Tareas de PRISMA](../TODO.md) | 6.38.0 | 🔄 Vivo | 2026-09-21 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
 | [Índice navegable de la documentación](INDICE.md) | 1.3.0 | 🔄 Vivo | 2026-09-21 | — |
 | [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Finanzas](#etiqueta-finanzas) · [Plan](#etiqueta-plan) |
 | [01 · Visión y alcance](01-vision-y-alcance.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Requisitos](#etiqueta-requisitos) |
@@ -152,7 +152,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [05 · Reglas financieras y KPIs](05-reglas-financieras.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Finanzas](#etiqueta-finanzas) · [Negocio](#etiqueta-negocio) |
 | [06 · Nómina y capacidad de pago](06-nomina-y-capacidad-de-pago.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Nómina](#etiqueta-nomina) · [Finanzas](#etiqueta-finanzas) · [Negocio](#etiqueta-negocio) |
 | [07 · Arquitectura técnica](07-arquitectura.md) | 5.1.0 | ✅ Vigente | 2026-09-21 | [Arquitectura](#etiqueta-arquitectura) · [API](#etiqueta-api) · [Front](#etiqueta-front) · [Base de datos](#etiqueta-base-de-datos) · [Seguridad](#etiqueta-seguridad) |
-| [08 · Plan de desarrollo](08-plan-de-desarrollo.md) | 5.5.1 | ✅ Vigente | 2026-09-21 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
+| [08 · Plan de desarrollo](08-plan-de-desarrollo.md) | 5.6.0 | ✅ Vigente | 2026-09-21 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
 | [09 · Plan de implantación](09-plan-de-implantacion.md) | 5.0.0 | ✅ Vigente | 2026-09-18 | [Plan](#etiqueta-plan) · [Entrega](#etiqueta-entrega) · [Negocio](#etiqueta-negocio) |
 | [10 · Diseño de experiencia y mockups](10-ux-y-mockups.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [UX](#etiqueta-ux) · [Front](#etiqueta-front) |
 | [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) | 2.0.0 | ✅ Vigente | 2026-09-18 | [Seguridad](#etiqueta-seguridad) · [Datos personales](#etiqueta-datos-personales) · [Negocio](#etiqueta-negocio) |

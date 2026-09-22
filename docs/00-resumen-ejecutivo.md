@@ -171,7 +171,7 @@ que van en cadena y la puesta en marcha no se parte.
 **En qué semana llega cada hito**, según cuántos carriles avancen a la vez:
 
 <!-- generado:plan-calendario · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**169 días de trabajo en 142 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
+**169,5 días de trabajo en 143 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
 
 | Carriles activos | Desarrollo | Estabilización | Total | Frente a 1 carril |
 |:---:|---:|---:|---:|---:|
