@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-22 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -77,6 +77,8 @@ con la de la API?} -->|No| VI[Versión incompatible · no hay salida]
 
   M --> MR[Registro rápido]
   M --> MA[Anular con motivo]
+  M --> MV[Ver anulados]
+  M --> MT[Cómo se ve cada tipo]
 
   N --> NS[Simulador de capacidad]
   N --> NL[Liquidación mensual]
@@ -94,10 +96,14 @@ con la de la API?} -->|No| VI[Versión incompatible · no hay salida]
   style I fill:#fde68a
   style CF fill:#fde68a
   style U fill:#fde68a
+  style MA fill:#fde68a
+  style MV fill:#fde68a
+  style MT fill:#fde68a
   style VI fill:#fecaca
 ```
 
-Las pantallas en amarillo son **exclusivas de Gerencia**.
+Lo que va en amarillo es **exclusivo de Gerencia**: pantallas enteras, y dentro de Movimientos,
+anular, ver los anulados y decidir cómo se ve cada tipo.
 
 **Gestión de usuarios cuelga aparte a propósito.** No está en el menú lateral: se abre desde el
 menú de la sesión, el que aparece al pulsar el nombre en el topbar. Administrar quién entra no
@@ -140,6 +146,9 @@ El color tiene significado funcional, no decorativo.
 
 > **El morado para anticipos es deliberado.** Es la categoría que más se confunde, y darle un
 > color propio —ni verde de ingreso ni gris de neutro— ayuda a recordar que es una tercera cosa.
+
+**En el libro de movimientos, Gerencia elige el color de cada tipo entre estos seis** ([§4.3](#43-movimientos)).
+Cambia qué color lleva un tipo, no lo que significa cada color: por eso no hay un selector libre.
 
 ### 3.2 Tipografía y jerarquía
 
@@ -237,14 +246,78 @@ valor total, anticipo y saldo.
 
 Registro rápido en un panel que se abre con el botón flotante, y ese botón flota sobre todas las
 pantallas menos el Inicio: valor, tipo, categoría, cuenta, fecha (hoy por defecto), foto. El
-Inicio queda fuera porque no escribe ([principio 8](#principio-8)). Lista con filtros, marca de registro tardío
-y acción de anular con motivo obligatorio.
+Inicio queda fuera porque no escribe ([principio 8](#principio-8)). Debajo va **el libro**: la lista con filtros,
+la marca de registro tardío y la acción de anular con motivo obligatorio.
+
+**El libro.** Una tabla por mes, con lo más reciente primero, ordenada por la fecha en que ocurrió
+cada movimiento y no por la de digitación ([RN-01](03-requisitos-y-bdd.md#rn-01)). De arriba abajo:
+
+| Zona | Contenido |
+|---|---|
+| Encabezado | `‹ Septiembre 2026 ›`: las flechas cambian de mes, y la de adelante no pasa del mes en curso. Al lado, **Otro rango**, que abre «Desde» y «Hasta» con el mes ya puesto y un botón «Volver al mes» |
+| Filtros | **Todos · Ingresos · Gastos**, la categoría, la cuenta —solo con los nombres, sin saldos— y, para Gerencia, el interruptor **Ver anulados** |
+| Tabla | Fecha, concepto, categoría, cuenta, valor, tipo y la marca de registro tardío. El valor lleva el signo de lo que el movimiento le hace a la caja y el color de su tipo. Una transferencia dice «Nequi → Bancolombia», va sin signo y sale al filtrar por cualquiera de sus dos cuentas |
+| Pie | **Por página: 10 · 25 · 50** y «‹ Anterior · 1–10 de 14 · Siguiente ›» |
+
+Si no queda ninguna fila, la tabla dice «No hay movimientos con estos filtros».
+
+**La fila abierta.** Tocar una fila la abre debajo, como en Pedidos. Dice quién registró el
+movimiento, cuándo se digitó y con qué registro va —el pedido de un anticipo, el activo de una
+inversión—, y enseña el soporte: la foto del recibo, que se agranda al tocarla, o el PDF. Para
+Gerencia trae además **Anular movimiento**. La cierran «Cerrar» y Escape.
+
+**Anular.** Pide el motivo antes de confirmar, en un panel debajo de la fila. El panel dice que el
+movimiento sale de todas las cifras sin borrarse y que, si lo que está mal es el valor, se corrige
+con un contra-asiento. Si el movimiento va junto con otro registro —el anticipo de un pedido, un
+activo, un aporte, un retiro o un adelanto—, dice también que ese registro se anula con él, en la
+misma transacción. Una vez anulado, el movimiento sale del libro y se ve con **Ver anulados**.
+
+**Ver anulados.** Con el interruptor puesto el panel cambia de aspecto —borde ámbar y, encima de
+la tabla, «Estás viendo también los anulados · no suman en ninguna cifra»—, para que ese modo
+nunca se confunda con el libro de siempre ([04 §5.5](04-modelo-de-datos.md#55-vistas-limpias-por-defecto)). Los anulados salen en su fecha, apagados,
+con el valor tachado, la marca «Anulado» y debajo el motivo, quién y cuándo. El mes y los
+filtros valen igual.
+
+**Lo que dicta la API.** El libro no decide nada ([principio 9](#principio-9)):
+
+| Lo dicta la API | Lo hace la pantalla |
+|---|---|
+| El nombre, el color y el signo de cada tipo, y si cuenta en «Ingresos», en «Gastos» o en ninguno | Pinta la píldora y el valor tal como llegan |
+| El mes en curso, que es el de Bogotá | Apaga la flecha de adelante ahí |
+| Cuántos movimientos caben por página como máximo: lo lee de una variable de entorno, y son 50 si no está | Ofrece 10, 25 y 50 sin pasar del máximo, y arranca en el máximo |
+| Si quien mira puede anular y ver los anulados | Pinta el botón y el interruptor solo si se lo dicen |
+| Con qué registro va cada movimiento, y el aviso de que se anula con él | Los muestra en la fila abierta y en el panel de anular |
+| La foto o el PDF, en base64 dentro del sobre | Los enseña |
+
+| Decisión | Por qué |
+|---|---|
+| El libro va por meses, con flechas | El negocio razona por meses: el reporte y el cierre son mensuales. «Otro rango» cubre lo demás sin volver pesado lo de todos los días |
+| «Ingresos» y «Gastos» son un filtro del libro, no una cifra | Que Gerencia ponga el anticipo en «Ingresos» cambia en qué filtro sale, no lo que es: sigue siendo un pasivo ([RN-05](03-requisitos-y-bdd.md#rn-05)), y las tres cifras siguen el [05 §2](05-reglas-financieras.md#2-naturaleza-de-cada-movimiento) |
+| El signo es el de la caja | Dice si la plata entró a las cuentas o salió. Con el de la utilidad, el anticipo —que es lo que más se confunde— se quedaría sin signo |
+| «Ver anulados» es un interruptor y no un filtro más | Cambia qué libro se lee, no cuánto de él. Por eso cambia también el aspecto del panel |
+| Lo anulado se apaga con color y no con transparencia | Con transparencia el motivo quedaba por debajo del contraste AA ([§3.3](#33-accesibilidad)) |
+| «Anular» vive en la fila abierta y no en un botón al final de cada fila | En el celular la última columna queda fuera de la vista hasta desplazar la tabla. La fila abierta se ve entera |
+| Anular un movimiento anula también su registro hermano | Anular solo el movimiento dejaría el anticipo, el activo o el adelanto contando una plata que ya no suma |
 
 Aloja además el panel **«Cuentas de dinero»**, exclusivo de Gerencia, que es donde se crean las
 cuentas: efectivo, Nequi, Daviplata, banco. Vive aquí y no en el Inicio porque una cuenta es el
 recipiente de un movimiento: quien crea una cuenta está pensando dónde va a registrar la plata, y
 esta pantalla ya es esa. El `<select>` de cuenta del registro rápido debe mostrar solo nombres,
 sin saldos, para que Operación pueda elegir una cuenta sin ver la caja.
+
+**Cómo se ve cada tipo.** Es un bloque del panel «Cuentas de dinero», así que solo lo ve
+Gerencia. Lista los nueve tipos, cada uno con el nombre que se lee en el libro, el color de su
+píldora y el grupo del filtro en que cuenta, y **Editar** abre debajo un panel con una píldora de
+muestra, para verla antes de guardarla. Lo que cada tipo le hace a la utilidad, a la caja y al
+patrimonio **no se configura**: lo fija el [05 §2](05-reglas-financieras.md#2-naturaleza-de-cada-movimiento), y de ahí sale el signo del valor. Los colores
+son los seis de [§3.1](#31-color). Arranca con lo que el libro ya pintaba: «Ingreso» en verde, «Gasto» en
+rojo —también el pro-labore, que es gasto—, «Anticipo · pasivo» en morado, «No afecta utilidad»
+en gris para la distribución y el adelanto, y la transferencia, la inversión y el aporte en gris,
+con su nombre.
+
+> **En el prototipo, anular solo cambia el libro, y el PDF no se abre.** Las cifras de las otras
+> pantallas son de ejemplo y no se recalculan. En el sistema real, la API saca el movimiento de
+> las tres cifras y anula el registro hermano en la misma transacción.
 
 ### 4.4 Productos y servicios
 
@@ -575,6 +648,9 @@ ejemplo, igual que todo lo demás. Sin eso no estarían aprobadas, y sin aprobar
 | La fecha del movimiento por defecto es hoy, pero siempre visible y editable | El 90% de los registros son del día; el 10% restante no debe quedar mal por descuido |
 | El botón de registro rápido flota sobre todas las pantallas menos el Inicio | Si hay que navegar para registrar, no se registra. El Inicio queda fuera porque no escribe ([principio 8](#principio-8)) |
 | Anular pide el motivo **antes** de confirmar, no después | Obliga a pensar, y el texto queda mejor escrito |
+| La flecha de adelante del libro no pasa del mes en curso | No hay movimientos del futuro ([RF-16](03-requisitos-y-bdd.md#rf-16)): un mes que no ha llegado siempre saldría vacío |
+| Lo anulado no se reactiva: no hay «Reactivar» en «Ver anulados» | Lo que hay que arreglar se corrige con un contra-asiento, y el original queda intacto ([RF-15](03-requisitos-y-bdd.md#rf-15)) |
+| El libro no ofrece ningún tamaño de página por encima del máximo que dice la API | El máximo existe para que una consulta no traiga el libro entero: ofrecer más sería prometer lo que la API no va a dar |
 | Los anticipos tienen su propio color en todas las pantallas | Es el concepto que más se confunde |
 | El simulador se bloquea sin pro-labore definido, con explicación | Un resultado inflado es peor que ningún resultado |
 | Las alertas muestran el monto exacto, no solo el aviso | "Caja libre en −$340.000" orienta; "revisa tu caja" no |

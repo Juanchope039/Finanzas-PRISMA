@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.8.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.9.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -83,6 +83,9 @@ ya devuelve el libro recortado por rango de fechas, tipos, cuenta y categoría, 
 primero y con el total aparte del límite. **Los permisos siguen siendo de la base**: el libro
 vigente se lee de `v_movimientos`, y pedir los anulados consulta la tabla con `fn_es_gerencia()`
 decidiendo. Falta la pantalla, que es el otro carril de la misma tarea, así que no se marca `[x]`.
+**Y la pantalla ya está dibujada** en el mockup, con el mes y sus flechas, los filtros, la
+paginación, los anulados y el botón de anular de la [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9): antes de construirla, el contrato y la
+API tienen que dar lo que el dibujo pide, que está en el [§10](#10-decisiones-de-construcción-que-conviene-revisar).
 
 **El alta de usuarios volvió a servir, y falta ejercitarla contra dev.** Crear a alguien respondía
 «algo salió mal» con cualquier nombre de usuario, porque faltaba `SUPABASE_SERVICE_ROLE_KEY` en el
@@ -678,7 +681,9 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       891 pruebas en la API y 175 contra la base, sin una sola línea nueva
 - [ ] 🚧⚡ [**3.8**](docs/08-plan-de-desarrollo.md#tarea-3-8) Listado con filtros · API, Front — **la mitad de la API
       está hecha**: `POST /api/v0/consultas/movimientos` devuelve el libro con sus filtros, lo más
-      reciente primero y con el total aparte. Falta la pantalla
+      reciente primero y con el total aparte. Falta la pantalla, que ya está dibujada en el
+      mockup: antes de construirla, el contrato y la API tienen que dar lo que el dibujo pide
+      ([§10](#10-decisiones-de-construcción-que-conviene-revisar))
 - [ ] ⚡ [**3.9**](docs/08-plan-de-desarrollo.md#tarea-3-9) Anulación con motivo obligatorio · API, Front — **la
       API está hecha**: `POST /api/v0/movimientos/{id}/anulacion` saca el movimiento de las cuentas
       con motivo escrito y **no borra nada** —la fila se queda entera y solo estrena sus tres
@@ -688,7 +693,8 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       veces responde `40900` y **no pisa el motivo del primero**, que es lo que explica por qué se
       sacó de las cuentas: lo sostiene el `WHERE anulado_en IS NULL` del `UPDATE`, no una pregunta
       previa. `prisma_api` en `0.14.0`; 896 pruebas en la API y 181 contra la base. **Falta el
-      botón**, que vive en la tabla de la [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) y no tiene pantalla aprobada en `mockup/`
+      botón**, que vive en la fila abierta del libro de la [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) y ya está dibujado en `mockup/`, igual
+      que «Ver anulados»
 - [ ] 🔒 [**3.10**](docs/08-plan-de-desarrollo.md#tarea-3-10) Corrección por contra-asiento · API
 - [x] [**3.11**](docs/08-plan-de-desarrollo.md#tarea-3-11) Marca de registro tardío · API — más de 7 días entre lo que ocurrió y lo que se
       digitó, contados en días de Bogotá
@@ -1095,7 +1101,9 @@ a `anon`.
   pedido sigue contando. La [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) tiene que decidir si rechaza anular desde el libro lo que
   pertenece a otro registro, para que se anule desde su pantalla, o si arrastra ese registro en la
   misma transacción. Cualquiera de las dos cambia una operación del `0.11.0`, así que pasa primero
-  por el contrato.
+  por el contrato. **Lo decidió quien dirige el 2026-09-22: se anula desde el libro y arrastra su
+  registro** en la misma transacción. Ya está dibujado en el mockup, y lo que pide al contrato y a
+  la base está en el [§10](#10-decisiones-de-construcción-que-conviene-revisar).
 - **El patrimonio empezaría en cero el día del corte.** El [09 §4.1](docs/09-plan-de-implantacion.md#41-qué-se-migra-y-qué-no) pide migrar los aportes de
   capital históricos «como base del patrimonio», y no tienen por dónde entrar:
   `aportes_retiros.movimiento_id` no admite nulo, así que todo aporte es un movimiento, y uno de antes
@@ -1159,6 +1167,45 @@ a `anon`.
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**Del dibujo del libro de movimientos:**
+
+- [ ] **El dibujo pide al contrato cosas que todavía no tiene**, y van en un MINOR antes de
+      construir la mitad Front de la [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) y de la [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9), porque el contrato se acuerda antes de
+      implementarse ([21 §3.2](docs/21-trabajo-en-paralelo.md#32-contrato-acordado-y-contrato-generado-no-se-contradicen)):
+      - **cómo se ve cada tipo**: el nombre que se lee, el color —uno de los seis del [10 §3.1](docs/10-ux-y-mockups.md#31-color)—, el
+        grupo del filtro y el signo del valor, que sale del [05 §2](docs/05-reglas-financieras.md#2-naturaleza-de-cada-movimiento) y no se configura;
+      - **el filtro por grupo** en `POST /api/v0/consultas/movimientos`, que hoy filtra por `tipos`;
+      - **las páginas**: hoy la consulta trae los `limite` más recientes y el `total`, pero no puede
+        pedir la segunda página. Falta también el máximo por página, que la API lee de una
+        variable de entorno y es 50 si no está, y el mes en curso, que es el de Bogotá;
+      - **la bandera de Gerencia para «Anular» y «Ver anulados»**, como `puedeGestionarCuentas`: sin
+        ella, el front tendría que mirar el tipo de la sesión;
+      - **con qué registro va cada movimiento** —el pedido de un anticipo, el activo de una
+        inversión—, que la fila abierta dice y el esquema `Movimiento` no trae;
+      - **leer y editar cómo se ve cada tipo**;
+      - **bajar un adjunto**, en base64 dentro del sobre como decidió la [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11), y quién puede verlo;
+      - y que **anular arrastre al registro hermano**, que cambia la operación del `0.11.0`.
+- [ ] **Y a la base, una tabla y unas políticas.** La tabla es la de cómo se ve cada tipo, con su
+      semilla —lo que el libro ya pintaba—, su RLS —la leen los dos tipos y la escribe Gerencia—,
+      su trigger de auditoría y sus restricciones con nombre. Las políticas son las que dejen a
+      Gerencia anular, en la misma transacción, la fila de `anticipos`, `activos`,
+      `aportes_retiros` o `adelantos` que va con el movimiento
+- [ ] **Hay reglas que ningún documento escribe todavía, y el dibujo no las decide.** No se sabe
+      qué pasa al anular el anticipo de un pedido ya entregado, un adelanto ya descontado en una
+      nómina liquidada o una de las dos mitades de un retiro partido en pro-labore y distribución.
+      Y el [CU-03](docs/02-casos-de-uso.md#cu-03) A3 dice que en un mes cerrado no se anula, sino que se corrige con un
+      contra-asiento, así que la API tendrá que decir fila por fila cuál de las dos acciones
+      ofrece. Hoy eso no importa: sin el cierre mensual ([6.8](docs/08-plan-de-desarrollo.md#tarea-6-8)), ningún mes está cerrado
+- [ ] **Las tareas entran al 08 en el PR siguiente, con el dibujo ya aprobado**: el contrato, la
+      tabla, la API y el bloque de Front de «Cómo se ve cada tipo», con el requisito en el [03](docs/03-requisitos-y-bdd.md) y la
+      tabla en el [04](docs/04-modelo-de-datos.md). La [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) y la [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9) pasan a depender de ellas. Mientras tanto
+      siguen marcadas como que pueden empezar hoy, y no pueden
+- [ ] **El panel de confirmar de Pedidos salía apretado en una sola columna.** `abrirPanelFila()`
+      le daba al panel tantas columnas como celdas tenía la fila, y la fila de acciones de un
+      pedido es una sola celda: el panel de anular un pedido medía 303 px dentro de una tabla de
+      970. Ahora cuenta las columnas que abarca la fila. Lo destapó el libro, que abre su panel
+      desde una fila igual; es el único cambio de este PR fuera de Movimientos
 
 **De la tarea [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4):**
 
