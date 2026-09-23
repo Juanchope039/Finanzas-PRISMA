@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -662,6 +662,7 @@ CREATE TABLE aportes_retiros (
   fecha          DATE NOT NULL,
   movimiento_id  UUID NOT NULL REFERENCES movimientos(id),
   nota           TEXT,
+  retiro_id      UUID,   -- une las dos mitades de un retiro partido
   anulado_en     TIMESTAMPTZ,
   anulado_por    UUID REFERENCES usuarios(id),
   anulado_motivo motivo
@@ -680,6 +681,12 @@ CREATE TABLE prolabore_config (
 
 `clase` separa los tres conceptos que hoy se confunden en uno solo: **aporte** de capital,
 **pro-labore** (gasto) y **distribución** de utilidades (no gasto).
+
+**`retiro_id` une las dos mitades de un retiro partido** en pro-labore y distribución: cada mitad
+es un movimiento con su fila, y las dos llevan el mismo. Es el id del retiro en el contrato, el de
+`PUT /api/v0/retiros/{id}`, y no apunta a ninguna tabla porque el retiro no tiene una propia. Queda
+vacío en un aporte, y en un retiro escrito antes de que la columna existiera. Con él,
+`fn_anular_movimiento` anula el retiro entero ([§10](#10-funciones-de-negocio-atómicas), [CU-03](02-casos-de-uso.md#cu-03) A8).
 
 ### 4.7 Personal y nómina
 
@@ -1204,7 +1211,7 @@ exige que el texto esté; el otro, que diga algo.
 aporte o un retiro y un adelanto tienen su propia fila, que apunta al movimiento con
 `movimiento_id`. Anular solo el movimiento dejaría esa fila contando una plata que ya no suma en
 ninguna cifra. Los dos se anulan en la misma transacción, con el mismo motivo, y lo hace
-`fn_anular_movimiento` ([§10](#10-funciones-de-negocio-atómicas)), que entra con la tarea [3.20](08-plan-de-desarrollo.md#tarea-3-20).
+`fn_anular_movimiento` ([§10](#10-funciones-de-negocio-atómicas)), que escribió la tarea [3.20](08-plan-de-desarrollo.md#tarea-3-20).
 
 ### 5.3 Corrección por contra-asiento
 
@@ -2308,21 +2315,39 @@ La tercera **ya está en este documento**: es la misma función del [§5.4](#54-
 acceso y administración. No se duplica aquí; se nombra para dejar claro que pertenece a esta
 lista y obedece las mismas reglas.
 
-**La cuarta la escribe la tarea [3.20](08-plan-de-desarrollo.md#tarea-3-20)**, y dos cosas de ella ya están decididas:
-- **Anula primero el movimiento.** Así `mov_anulacion` juzga antes de tocar nada más, y con una
-  sesión de Operación la transacción cae entera ahí.
-- **No necesita políticas nuevas.** `activos` y `aportes_retiros` ya dejan escribir a Gerencia con
-  sus políticas `FOR ALL`, `adelantos` tiene `adelantos_actualizacion` y `anticipos` no lleva RLS
-  ([§7](#7-seguridad-por-tipo-de-usuario-rls)).
+**La cuarta la escribió la tarea [3.20](08-plan-de-desarrollo.md#tarea-3-20)**, y hace esto, en este orden:
+1. **Toma el movimiento con `SELECT … FOR UPDATE`**, que pasa por la política de `UPDATE` además
+   de la de lectura: así `mov_anulacion` juzga antes de tocar nada, y dos anulaciones del mismo
+   movimiento no corren a la vez. Si la fila existe y la política se la esconde —una sesión de
+   Operación—, responde `42501`, porque un `UPDATE` que la política no deja no revienta: no alcanza
+   ninguna fila. Si ya está anulado, o no existe, lo dice y no toca nada.
+2. **Anula primero el movimiento**, con el motivo, el autor de la sesión, el instante de la
+   transacción, el dispositivo y la dirección.
+3. **Busca el registro hermano por `movimiento_id` en cada tabla**, y no por el tipo del
+   movimiento: el pago de una nómina es un gasto que solo se reconoce por estar en `nomina_detalle`.
+   Lo anula con el mismo motivo, el mismo autor y el mismo instante ([§5.2](#52-anulación-lógica-con-trazabilidad)), y si es una mitad de
+   un retiro con `retiro_id`, anula también la otra mitad y su movimiento.
+4. **Devuelve una fila por cada cosa que anuló**, `(tabla, registro_id)`, para que la API diga qué
+   más se anuló.
+
+**No necesita políticas nuevas.** `activos` y `aportes_retiros` ya dejan escribir a Gerencia con sus
+políticas `FOR ALL`, `adelantos` tiene `adelantos_actualizacion` y `anticipos` no lleva RLS
+([§7](#7-seguridad-por-tipo-de-usuario-rls)).
 
 Lo que hace cuando el registro ya siguió su vida **lo decide el [CU-03](02-casos-de-uso.md#cu-03)**, que lo recibió del contrato
-de la tarea [3.17](08-plan-de-desarrollo.md#tarea-3-17) con la aprobación de quien dirige. En corto:
-- **no anula nada** si el movimiento es el anticipo de un pedido entregado o cancelado, la venta que
-  causó una entrega, un adelanto ya descontado o el pago de una nómina, ni si es de un mes cerrado.
-  Cada caso responde su código del contrato, y se corrige con contra-asiento ([§5.3](#53-corrección-por-contra-asiento));
-- **anula las dos mitades** de un retiro partido en pro-labore y distribución, con sus dos filas de
-  `aportes_retiros`. Para eso la base tiene que saber cuáles son las dos mitades de un mismo
-  retiro, y si hoy no lo sabe, la columna que las une es un PR de base antes de la [3.20](08-plan-de-desarrollo.md#tarea-3-20).
+de la tarea [3.17](08-plan-de-desarrollo.md#tarea-3-17) con la aprobación de quien dirige. **No anula nada**, y la transacción cae
+entera, si el movimiento es:
+
+| El movimiento es… | Cómo lo reconoce la función | El código del contrato |
+|---|---|---|
+| El anticipo de un pedido entregado o cancelado, o ya devengado | Su fila de `anticipos` tiene `devengado_en`, o su pedido está `entregado` o `cancelado` | `40920` |
+| La venta que causó una entrega | Es un `ingreso` con `pedido_id` | `40921` |
+| Un adelanto ya descontado | Su fila de `adelantos` tiene `descontado_en` | `40922` |
+| El pago de una nómina | Una fila de `nomina_detalle` lo tiene por `movimiento_id` | `40923` |
+| De un mes cerrado | `cierres_mensuales` tiene su año y su mes | `40960` |
+
+Cada uno se corrige con contra-asiento ([§5.3](#53-corrección-por-contra-asiento)). **El rechazo es un `RAISE` con un texto en español, y
+ese texto es contrato**: la API lo reconoce por él, como los de los triggers.
 
 Tres reglas que valen para las cuatro:
 
