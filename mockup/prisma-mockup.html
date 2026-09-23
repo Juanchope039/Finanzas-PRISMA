@@ -379,6 +379,51 @@ input[type=number],select{
   border-color:var(--accent); outline:none; box-shadow:0 0 0 2px var(--accent-soft);
 }
 
+/* ============ LIBRO DE MOVIMIENTOS ============ */
+/* El período es el título del panel: el mes con sus dos flechas, o el rango que se eligió. */
+.periodo{display:flex; align-items:center; gap:6px}
+.flecha{padding:2px 10px; font-size:1rem; line-height:1.3}
+.flecha:disabled,.pie-libro .ghost:disabled{opacity:.35; cursor:default}
+.flecha:disabled:hover,.pie-libro .ghost:disabled:hover{border-color:var(--line); color:var(--muted)}
+.rango-libro,.filtros-libro{display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; margin-bottom:14px}
+.rango-libro{padding:12px; border:1px dashed var(--line-strong); border-radius:9px; background:var(--surface-2)}
+/* 130 px y no más: a 375 px caben dos desplegables en una línea y el interruptor baja solo. */
+.rango-libro .campo,.filtros-libro .campo{flex:1 1 130px; max-width:240px; min-width:0}
+.rango-libro input,.filtros-libro select{
+  font:inherit; font-size:.85rem; width:100%; min-width:0; color:var(--text);
+  background:var(--surface); border:1px solid var(--line); border-radius:7px; padding:7px 10px;
+}
+.rango-libro input:focus,.filtros-libro select:focus{
+  border-color:var(--accent); outline:none; box-shadow:0 0 0 2px var(--accent-soft);
+}
+.rango-libro .capa-error{flex-basis:100%; margin:0; font-size:.78rem; color:var(--neg)}
+.interruptor{
+  display:inline-flex; align-items:center; gap:8px; padding:7px 0; cursor:pointer;
+  font-size:.84rem; font-weight:600; color:var(--muted);
+}
+.interruptor input{accent-color:var(--warn); width:16px; height:16px; margin:0}
+/* «Ver anulados» no se puede confundir con la vista normal (04 §5.5): mientras está puesto, el
+   panel cambia de borde y un aviso lo dice arriba de la tabla. */
+#panel-libro.modo-anulados{border-color:var(--warn); box-shadow:inset 3px 0 0 var(--warn)}
+#panel-libro .alerta{margin-bottom:14px}
+/* Como en la bitácora: .tw se come el relleno de abajo para pegarse al borde, y aquí hay pie. */
+#panel-libro .tw{margin-bottom:0}
+td.tachado{text-decoration:line-through}
+.mov-anulacion{display:block; margin-top:3px; font-size:.7rem; line-height:1.4; color:var(--faint); max-width:46ch}
+.vacio td{padding:26px 0; text-align:center; color:var(--faint); border-bottom:0}
+tbody tr.vacio:hover{background:none}
+.pie-libro{
+  display:flex; align-items:center; gap:10px 16px; flex-wrap:wrap; margin-top:14px; padding-top:12px;
+  border-top:1px solid var(--line); font-size:.8rem; color:var(--muted);
+}
+.pie-libro .grow{flex:1}
+.pie-libro .seg button{padding:3px 10px}
+.pie-libro .ghost{padding:4px 10px}
+.paginas{display:flex; align-items:center; gap:10px; font-variant-numeric:tabular-nums}
+/* Cómo se ve cada tipo: el formulario vive en «Cuentas de dinero» y tiene tres campos. */
+.campos-tipo{grid-template-columns:1.4fr 1fr 1fr}
+@media (max-width:900px){ .campos-tipo{grid-template-columns:1fr 1fr} }
+
 /* ============ DESCARGA DEL INICIO ============ */
 /* El Inicio no escribe nada, así que lo único que puede ofrecer es llevarse lo que muestra. */
 .descarga{display:flex; flex-direction:column; gap:9px; margin-top:12px}
@@ -1206,15 +1251,59 @@ tbody tr.bit-foco,tbody tr.bit-foco:hover{background:var(--accent-soft)}
           </div>
         </div>
 
-        <div class="panel">
+        <!-- El libro: el período, los filtros, la tabla y su pie. Lo que aquí se filtra y se
+             pagina en el navegador, en la aplicación lo filtra y lo pagina la API (10 §4.3). -->
+        <div class="panel" id="panel-libro">
           <div class="panel-head">
-            <h2 class="grow">Septiembre 2026</h2>
-            <div class="seg"><button aria-pressed="true">Todos</button><button aria-pressed="false">Ingresos</button><button aria-pressed="false">Gastos</button></div>
+            <div class="periodo">
+              <button type="button" class="ghost flecha" id="mv-mes-ant" aria-label="Mes anterior">‹</button>
+              <h2 id="mv-periodo" aria-live="polite">Septiembre 2026</h2>
+              <button type="button" class="ghost flecha" id="mv-mes-sig" aria-label="Mes siguiente">›</button>
+            </div>
+            <button type="button" class="ghost" id="mv-otro-rango" aria-expanded="false" aria-controls="mv-rango">Otro rango</button>
+            <span class="grow"></span>
+            <span class="eyebrow" data-ger>Toca un movimiento para anularlo</span>
+            <div class="seg" id="mv-grupo" role="group" aria-label="Qué movimientos se ven"><button type="button" aria-pressed="true" data-grupo="">Todos</button><button type="button" aria-pressed="false" data-grupo="ingresos">Ingresos</button><button type="button" aria-pressed="false" data-grupo="gastos">Gastos</button></div>
           </div>
+
+          <div class="rango-libro" id="mv-rango" hidden>
+            <div class="campo"><label for="mv-desde">Desde</label>
+              <input type="date" id="mv-desde"></div>
+            <div class="campo"><label for="mv-hasta">Hasta</label>
+              <input type="date" id="mv-hasta"></div>
+            <button type="button" class="cta" id="mv-ver-rango">Ver este rango</button>
+            <button type="button" class="ghost" id="mv-volver-mes">Volver al mes</button>
+            <p class="capa-error" id="mv-rango-error" role="alert" aria-live="polite" hidden></p>
+          </div>
+
+          <div class="filtros-libro">
+            <div class="campo"><label for="mv-f-categoria">Categoría</label>
+              <select id="mv-f-categoria"></select></div>
+            <div class="campo"><label for="mv-f-cuenta">Cuenta</label>
+              <select id="mv-f-cuenta"></select></div>
+            <label class="interruptor" data-ger><input type="checkbox" id="mv-ver-anulados"> Ver anulados</label>
+          </div>
+
+          <!-- Sin data-ger a propósito: el barrido de aplicarRol() lo mostraría con el modo
+               apagado. Lo enciende y lo apaga tablaMovs(), según el modo y el rol. -->
+          <div class="alerta a-alta" id="mv-aviso-anulados" hidden>
+            <span class="tag">ANULADOS</span>
+            <div><b>Estás viendo también lo anulado</b>
+            <span>Lo anulado no suma en ninguna cifra. Sale en su fecha, atenuado y con su motivo,
+            para saber qué se sacó de las cuentas, quién lo hizo y por qué.</span></div>
+          </div>
+
           <div class="tw"><table>
             <thead><tr><th>Fecha mov.</th><th>Concepto</th><th>Categoría</th><th>Cuenta</th><th class="r r-mid">Valor</th><th>Tipo</th><th></th></tr></thead>
             <tbody id="tb-movs"></tbody>
           </table></div>
+
+          <div class="pie-libro">
+            <span>Por página</span>
+            <div class="seg" id="mv-por-pagina" role="group" aria-label="Movimientos por página"></div>
+            <span class="grow"></span>
+            <div class="paginas" id="mv-paginas" aria-live="polite"></div>
+          </div>
         </div>
 
         <!-- Crear cuentas vivía en el Inicio y era su única acción de escritura. Se mudó aquí:
@@ -1256,6 +1345,48 @@ tbody tr.bit-foco,tbody tr.bit-foco:hover{background:var(--accent-soft)}
             Cada movimiento se registra contra una cuenta. Aquí se crean; los saldos se leen en
             el Inicio, que es la pantalla que solo informa.
           </p>
+
+          <!-- Cómo se lee cada tipo en el libro. Gerencia cambia el nombre, el color y en qué
+               botón cuenta; lo que el tipo le hace a las cifras es la regla del 05 §2 y aquí solo
+               se muestra. -->
+          <div class="panel-head" style="margin:24px 0 8px">
+            <h3 class="grow">Cómo se ve cada tipo de movimiento</h3>
+            <span class="eyebrow">Lo que hace con las cifras no se cambia</span>
+          </div>
+          <p class="bajada" style="margin:0 0 14px">
+            El nombre y el color son los que se leen en el libro, y «Cuenta en» dice qué trae cada
+            botón de «Ingresos» y «Gastos». Lo que cada tipo le hace a la utilidad, la caja y el
+            patrimonio es la regla del negocio: se ve aquí para saberlo, pero no se toca.
+          </p>
+
+          <div class="formulario" id="form-tipo" hidden>
+            <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px; flex-wrap:wrap">
+              <h3 class="grow" id="tf-titulo">Cómo se ve</h3>
+              <span id="tf-muestra"></span>
+            </div>
+            <div class="campos-form campos-tipo">
+              <div class="campo"><label for="t-nombre">Nombre en el libro</label>
+                <input type="text" id="t-nombre" maxlength="30"></div>
+              <div class="campo"><label for="t-color">Color</label>
+                <select id="t-color"></select></div>
+              <div class="campo"><label for="t-grupo">Cuenta en</label>
+                <select id="t-grupo">
+                  <option value="ingresos">Ingresos</option>
+                  <option value="gastos">Gastos</option>
+                  <option value="">Ninguno de los dos</option>
+                </select></div>
+            </div>
+            <p class="capa-error" id="tf-error" role="alert" aria-live="polite" hidden style="margin-top:14px"></p>
+            <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; align-items:center">
+              <button class="cta" id="tf-guardar">Guardar cambios</button>
+              <button class="ghost" id="tf-cancelar">Cancelar</button>
+            </div>
+          </div>
+
+          <div class="tw"><table>
+            <thead><tr><th>Tipo</th><th>Se lee así</th><th>Cuenta en</th><th>Utilidad</th><th>Caja</th><th>Patrimonio</th><th class="r"></th></tr></thead>
+            <tbody id="tb-tipos"></tbody>
+          </table></div>
         </div>
 
         <div class="panel" data-ger>
@@ -1267,6 +1398,13 @@ tbody tr.bit-foco,tbody tr.bit-foco:hover{background:var(--accent-soft)}
             Para corregir un valor equivocado se crea un contra-asiento: el original permanece intacto.</span></div>
           </div>
         </div>
+
+        <p class="nota-mock">
+          En el prototipo el libro se filtra y se pagina en el navegador. En la aplicación lo hace la
+          API: ella dice qué trae cada botón, con qué signo, nombre y color se pinta cada tipo, y
+          cuántos movimientos caben como máximo en una página —lo lee de su variable de entorno, y
+          son 50 si no está—.
+        </p>
       </section>
 
       <!-- ===== 4 · PRODUCTOS ===== -->
@@ -1945,18 +2083,91 @@ var PEDIDOS = [
    prodId:1, cant:35, anticipo:      0, estado:'entregado', baja:null}
 ];
 
+/* El libro, con los nueve tipos del 04 §4.3 y no con cuatro «clases»: la clase era cómo se ve el
+   tipo, y eso ahora lo configura Gerencia (TIPOS_MOV, justo abajo). El valor va siempre positivo,
+   como lo manda la API, y el signo lo pone lo que el tipo le hace a la caja. Las diez filas de
+   septiembre que ya estaban conservan su fecha, su concepto, su cuenta y su valor; las demás
+   están para que se vean la paginación, agosto, una transferencia y un anulado. */
 var MOVS = [
-  ['28 sep','Saldo pedido P-0279','Estampado','Bancolombia', 1080000,'ingreso',''],
-  ['26 sep','Anticipo pedido P-0287','Anticipo','Nequi',      516000,'anticipo',''],
-  ['24 sep','Transferencias DTF · 50 m','Insumos','Nequi',    -840000,'gasto',''],
-  ['22 sep','Anticipo pedido P-0286','Anticipo','Nequi',      720000,'anticipo',''],
-  ['18 sep','Arriendo del taller','Arriendo · fijo','Bancolombia',-800000,'gasto',''],
-  ['14 sep','Compra de 120 mugs','Insumos','Efectivo',        -504000,'gasto','tardio'],
-  ['12 sep','Adelanto a Ana María','Adelanto','Nequi',        -300000,'neutro',''],
-  ['10 sep','Servicios públicos','Servicios · fijo','Daviplata',-180000,'gasto',''],
-  ['05 sep','Retiro · pro-labore','Pro-labore','Bancolombia',-1500000,'gasto',''],
-  ['05 sep','Retiro · distribución','Distribución','Bancolombia',-400000,'neutro','']
+  {id: 1, fecha:'2026-09-28', concepto:'Saldo pedido P-0279',               categoria:'Estampado',        cuenta:'Bancolombia', valor:1080000, tipo:'ingreso'},
+  {id: 2, fecha:'2026-09-26', concepto:'Anticipo pedido P-0287',            categoria:'Anticipo',         cuenta:'Nequi',       valor: 516000, tipo:'anticipo_recibido'},
+  {id: 3, fecha:'2026-09-24', concepto:'Transferencias DTF · 50 m',         categoria:'Insumos',          cuenta:'Nequi',       valor: 840000, tipo:'gasto'},
+  {id: 4, fecha:'2026-09-22', concepto:'Anticipo pedido P-0286',            categoria:'Anticipo',         cuenta:'Nequi',       valor: 720000, tipo:'anticipo_recibido'},
+  {id: 5, fecha:'2026-09-20', concepto:'Paso de Nequi al banco',            categoria:'',                 cuenta:'Nequi',       valor: 600000, tipo:'transferencia', destino:'Bancolombia'},
+  {id: 6, fecha:'2026-09-18', concepto:'Arriendo del taller',               categoria:'Arriendo · fijo',  cuenta:'Bancolombia', valor: 800000, tipo:'gasto'},
+  {id: 7, fecha:'2026-09-16', concepto:'Venta de mostrador · 6 camisetas',  categoria:'Estampado',        cuenta:'Efectivo',    valor: 210000, tipo:'ingreso'},
+  {id: 8, fecha:'2026-09-15', concepto:'Tintas para sublimación',           categoria:'Insumos',          cuenta:'Nequi',       valor: 265000, tipo:'gasto'},
+  {id: 9, fecha:'2026-09-15', concepto:'Tintas para sublimación',           categoria:'Insumos',          cuenta:'Nequi',       valor: 265000, tipo:'gasto',
+   anulacion:{en:new Date(2026, 8, 16, 9, 20), por:'Yuliana Martínez Ríos',
+              motivo:'Se digitó dos veces: es la misma compra de tintas del 15.'}},
+  {id:10, fecha:'2026-09-14', concepto:'Compra de 120 mugs',                categoria:'Insumos',          cuenta:'Efectivo',    valor: 504000, tipo:'gasto', tardio:true},
+  {id:11, fecha:'2026-09-12', concepto:'Adelanto a Ana María',              categoria:'Adelanto',         cuenta:'Nequi',       valor: 300000, tipo:'adelanto_empleada'},
+  {id:12, fecha:'2026-09-10', concepto:'Servicios públicos',                categoria:'Servicios · fijo', cuenta:'Daviplata',   valor: 180000, tipo:'gasto'},
+  {id:13, fecha:'2026-09-08', concepto:'Domicilios de la semana',           categoria:'Transporte',       cuenta:'Efectivo',    valor:  48000, tipo:'gasto'},
+  {id:14, fecha:'2026-09-05', concepto:'Retiro · distribución',             categoria:'Distribución',     cuenta:'Bancolombia', valor: 400000, tipo:'retiro_distribucion'},
+  {id:15, fecha:'2026-09-05', concepto:'Retiro · pro-labore',               categoria:'Pro-labore',       cuenta:'Bancolombia', valor:1500000, tipo:'retiro_prolabore'},
+  {id:16, fecha:'2026-09-03', concepto:'Mantenimiento de la plancha',       categoria:'Mantenimiento',    cuenta:'Daviplata',   valor:  95000, tipo:'gasto'},
+  {id:17, fecha:'2026-09-02', concepto:'Saldo pedido P-0271',               categoria:'Estampado',        cuenta:'Bancolombia', valor: 640000, tipo:'ingreso'},
+  {id:18, fecha:'2026-08-29', concepto:'Saldo pedido P-0266',               categoria:'Estampado',        cuenta:'Bancolombia', valor: 920000, tipo:'ingreso'},
+  {id:19, fecha:'2026-08-26', concepto:'Prensa térmica 40 × 60',            categoria:'',                 cuenta:'Bancolombia', valor:1450000, tipo:'inversion'},
+  {id:20, fecha:'2026-08-25', concepto:'Aporte de la socia para la prensa', categoria:'',                 cuenta:'Bancolombia', valor:1500000, tipo:'aporte'},
+  {id:21, fecha:'2026-08-18', concepto:'Arriendo del taller',               categoria:'Arriendo · fijo',  cuenta:'Bancolombia', valor: 800000, tipo:'gasto'},
+  {id:22, fecha:'2026-08-12', concepto:'Vinilo textil · 10 m',              categoria:'Insumos',          cuenta:'Nequi',       valor: 230000, tipo:'gasto'},
+  {id:23, fecha:'2026-08-05', concepto:'Retiro · pro-labore',               categoria:'Pro-labore',       cuenta:'Bancolombia', valor:1500000, tipo:'retiro_prolabore'}
 ];
+var secuenciaMov = 23;
+
+/* Los nueve tipos, en el orden del 04 §4.3. Lo que cada uno le hace a la utilidad (u), la caja (c)
+   y el patrimonio (p) es la regla del 05 §2 y NO se configura: en la aplicación lo dice la API,
+   que lo tiene en TipoDeMovimiento. Lo que sí configura Gerencia, en «Cuentas de dinero», es cómo
+   se ve en el libro: el nombre, el color y en qué botón cuenta. La vista de fábrica es la del
+   dibujo aprobado: el pro-labore se lee «Gasto» y lo que no toca la utilidad, «No afecta utilidad». */
+var ORDEN_TIPOS = ['ingreso', 'gasto', 'transferencia', 'inversion', 'aporte',
+  'retiro_prolabore', 'retiro_distribucion', 'anticipo_recibido', 'adelanto_empleada'];
+var TIPOS_MOV = {
+  ingreso:             {fijo:'Ingreso',                     u:'sube', c:'sube',   p:'sube',
+                        nombre:'Ingreso',            color:'verde',  grupo:'ingresos'},
+  gasto:               {fijo:'Gasto',                       u:'baja', c:'baja',   p:'baja',
+                        nombre:'Gasto',              color:'rojo',   grupo:'gastos'},
+  transferencia:       {fijo:'Transferencia entre cuentas', u:'no',   c:'neutra', p:'no',
+                        nombre:'No afecta utilidad', color:'gris',   grupo:''},
+  inversion:           {fijo:'Inversión en activos',        u:'no',   c:'baja',   p:'no',
+                        nombre:'No afecta utilidad', color:'gris',   grupo:''},
+  aporte:              {fijo:'Aporte de capital',           u:'no',   c:'sube',   p:'sube',
+                        nombre:'No afecta utilidad', color:'gris',   grupo:''},
+  retiro_prolabore:    {fijo:'Retiro de pro-labore',        u:'baja', c:'baja',   p:'baja',
+                        nombre:'Gasto',              color:'rojo',   grupo:'gastos'},
+  retiro_distribucion: {fijo:'Retiro de distribución',      u:'no',   c:'baja',   p:'baja',
+                        nombre:'No afecta utilidad', color:'gris',   grupo:''},
+  anticipo_recibido:   {fijo:'Anticipo recibido',           u:'no',   c:'sube',   p:'no',
+                        nombre:'Anticipo · pasivo',  color:'morado', grupo:''},
+  adelanto_empleada:   {fijo:'Adelanto a empleada',         u:'no',   c:'baja',   p:'no',
+                        nombre:'No afecta utilidad', color:'gris',   grupo:''}
+};
+/* Cuatro colores y no cinco: el ámbar es de las advertencias (10 §3.1), y la marca de registro
+   tardío ya es ámbar. Un tipo ámbar se leería como un aviso. */
+var COLORES_TIPO = {
+  verde : {pill:'p-ok',  tinta:'var(--pos)',      etiqueta:'Verde · positivo'},
+  rojo  : {pill:'p-neg', tinta:'var(--neg)',      etiqueta:'Rojo · negativo'},
+  morado: {pill:'p-ant', tinta:'var(--anticipo)', etiqueta:'Morado · anticipo'},
+  gris  : {pill:'p-mut', tinta:'var(--muted)',    etiqueta:'Gris · neutro'}
+};
+var GRUPOS_MOV = {ingresos:'Ingresos', gastos:'Gastos'};
+var EFECTOS = {sube:'▲ sube', baja:'▼ baja', neutra:'↔ neutra', no:'—'};
+
+/* Lo que se está mirando del libro. El prototipo vive en septiembre de 2026, como todos sus
+   datos; la aplicación toma el mes en curso del día de Bogotá. */
+var MES_EN_CURSO = {a:2026, m:9};
+var LIBRO = {modo:'mes', a:2026, m:9, desde:'', hasta:'', rangoAbierto:false,
+             grupo:'', categoria:'', cuenta:'', verAnulados:false, porPagina:50, pagina:0};
+/* El máximo por página lo lee la API de su variable de entorno, y es 50 si no está. El front no
+   lo decide: lo recibe, y no ofrece ningún tamaño por encima. */
+var MAX_POR_PAGINA = 50;
+var TAMANOS_PAGINA = [10, 25, 50];
+var movSeleccionado = null;
+var avisoLibro = null;
+var avisoTipos = null;
+var editandoTipo = null;
 
 var REPORTE = [
   ['Enero',    5200000, 2860000, 1700000,  640000],
@@ -2062,8 +2273,12 @@ function aplicarRol(){
   var bl = $('#nomina-bloqueo'), co = $('#nomina-contenido');
   if (bl && co){ bl.hidden = (rol === 'gerencia'); co.hidden = (rol !== 'gerencia'); }
   pedidoSeleccionado = null;   /* la selección no sobrevive a un cambio de rol */
+  movSeleccionado = null;
+  /* Ver anulados es de Gerencia: con otro rol el modo se apaga, no se queda escondido y puesto. */
+  if (rol !== 'gerencia') LIBRO.verAnulados = false;
   tablaProductos();
   tablaPedidos();
+  tablaMovs();
   kpisPedidos();
   pintarCuentas();
   cerrarDescarga();   /* el barrido de data-ger abriría el panel de descarga: se cierra aquí */
@@ -2541,24 +2756,432 @@ function kpisPedidos(){
   if (k3) k3.textContent = vivos().filter(function(p){ return p.estado === 'entregado'; }).length + ' pedidos';
 }
 
-function tablaMovs(){
-  var col = {ingreso:'var(--pos)', gasto:'var(--neg)', anticipo:'var(--anticipo)', neutro:'var(--muted)'};
-  var tag = {
-    ingreso : '<span class="pill p-ok">Ingreso</span>',
-    gasto   : '<span class="pill p-neg">Gasto</span>',
-    anticipo: '<span class="pill p-ant">Anticipo · pasivo</span>',
-    neutro  : '<span class="pill p-mut">No afecta utilidad</span>'
-  };
-  /* La columna Cuenta ya no es dato fijo del prototipo: sale del nombre que alguien escribió
-     en «Cuentas de dinero». Se escapa, igual que en todas las demás tablas. */
-  $('#tb-movs').innerHTML = MOVS.map(function(m){
-    return '<tr><td class="mono">' + m[0] + '</td><td>' + enTexto(m[1]) +
-      '</td><td style="color:var(--muted)">' + enTexto(m[2]) + '</td><td class="mono" style="color:var(--muted)">' + enTexto(m[3]) +
-      '</td><td class="r r-mid" style="color:' + col[m[5]] + '; font-weight:600">' + fmt(m[4]) +
-      '</td><td>' + tag[m[5]] + '</td><td>' +
-      (m[6] === 'tardio' ? '<span class="pill p-warn">Registro tardío</span>' : '') + '</td></tr>';
-  }).join('');
+/* ---------- el libro de movimientos (tareas 3.8 y 3.9) ---------- */
+function movPorId(id){ return MOVS.filter(function(m){ return m.id === id; })[0]; }
+function cuentaPorNombre(n){ return CUENTAS.filter(function(c){ return c.n === n; })[0]; }
+
+/* La píldora es la vista que configuró Gerencia; el nombre lo escribe una persona y se escapa. */
+function pildoraTipo(tipo){
+  var t = TIPOS_MOV[tipo];
+  return '<span class="pill ' + COLORES_TIPO[t.color].pill + '">' + enTexto(t.nombre) + '</span>';
 }
+/* El signo dice qué le hizo el movimiento a la caja: entró, salió o, en una transferencia, solo
+   cambió de bolsillo. Sale de la regla fija del tipo, no de la vista, así que renombrar un tipo
+   no le cambia el signo a nadie. */
+function signoCaja(m){
+  var c = TIPOS_MOV[m.tipo].c;
+  return c === 'sube' ? 1 : (c === 'baja' ? -1 : 0);
+}
+function valorMov(m){ return fmt(signoCaja(m) < 0 ? -m.valor : m.valor); }
+
+function isoDia(a, m, d){ return a + '-' + String(m).padStart(2, '0') + '-' + String(d).padStart(2, '0'); }
+function limitesLibro(){
+  if (LIBRO.modo === 'rango') return {desde:LIBRO.desde, hasta:LIBRO.hasta};
+  return {desde:isoDia(LIBRO.a, LIBRO.m, 1),
+          hasta:isoDia(LIBRO.a, LIBRO.m, new Date(LIBRO.a, LIBRO.m, 0).getDate())};
+}
+function enElMesEnCurso(){ return LIBRO.a === MES_EN_CURSO.a && LIBRO.m === MES_EN_CURSO.m; }
+function diaConAno(iso){ var t = iso.split('-'); return (+t[2]) + ' ' + MESES_CORTOS[+t[1] - 1] + ' ' + t[0]; }
+function tituloPeriodo(){
+  if (LIBRO.modo === 'rango') return diaConAno(LIBRO.desde) + ' – ' + diaConAno(LIBRO.hasta);
+  var mes = MESES_LARGOS[LIBRO.m - 1];
+  return mes.charAt(0).toUpperCase() + mes.slice(1) + ' ' + LIBRO.a;
+}
+function textoPeriodo(){
+  if (LIBRO.modo === 'rango') return 'entre el ' + fechaLarga(LIBRO.desde) + ' y el ' + fechaLarga(LIBRO.hasta);
+  return 'en ' + MESES_LARGOS[LIBRO.m - 1] + ' de ' + LIBRO.a;
+}
+function hayFiltros(){ return !!(LIBRO.grupo || LIBRO.categoria || LIBRO.cuenta); }
+
+/* Lo que la API devolvería con estos filtros. El período es por la fecha del movimiento y no por
+   la de digitación: un gasto del 14 registrado hoy no puede quedar encima de uno del 28. El botón
+   va por cómo está configurado cada tipo, la cuenta por el origen o por el destino, y lo anulado
+   sale solo si Gerencia lo pidió. Lo más reciente primero. */
+function movsDelLibro(){
+  var lim = limitesLibro();
+  var conAnulados = (rol === 'gerencia' && LIBRO.verAnulados);
+  return MOVS.filter(function(m){
+    if (m.fecha < lim.desde || m.fecha > lim.hasta) return false;
+    if (m.anulacion && !conAnulados) return false;
+    if (LIBRO.grupo && TIPOS_MOV[m.tipo].grupo !== LIBRO.grupo) return false;
+    if (LIBRO.categoria && m.categoria !== LIBRO.categoria) return false;
+    if (LIBRO.cuenta && m.cuenta !== LIBRO.cuenta && m.destino !== LIBRO.cuenta) return false;
+    return true;
+  }).sort(function(a, b){
+    if (a.fecha !== b.fecha) return a.fecha < b.fecha ? 1 : -1;
+    return b.id - a.id;
+  });
+}
+
+/* Las categorías del filtro son las mismas del registro rápido, más las que traiga el libro. */
+function categoriasDelLibro(){
+  var nombres = [];
+  CATEGORIAS_MOV.map(function(c){ return c.v; })
+    .concat(MOVS.map(function(m){ return m.categoria; }))
+    .forEach(function(n){ if (n && nombres.indexOf(n) < 0) nombres.push(n); });
+  return nombres;
+}
+function llenarFiltroLibro(selector, todas, nombres, elegido){
+  var sel = $(selector);
+  sel.innerHTML = '<option value="">' + todas + '</option>' + nombres.map(function(n){
+    return '<option value="' + enAtributo(n) + '">' + enTexto(n) + '</option>';
+  }).join('');
+  sel.value = elegido;
+  if (sel.value !== elegido) sel.value = '';
+}
+
+function pintarControlesLibro(ger){
+  var enRango = (LIBRO.modo === 'rango');
+  $('#mv-periodo').textContent = tituloPeriodo();
+  $('#mv-mes-ant').hidden = enRango;
+  $('#mv-mes-sig').hidden = enRango;
+  $('#mv-mes-sig').disabled = enElMesEnCurso();
+  $('#mv-otro-rango').hidden = enRango;
+  $('#mv-otro-rango').setAttribute('aria-expanded', LIBRO.rangoAbierto ? 'true' : 'false');
+  $('#mv-rango').hidden = !(enRango || LIBRO.rangoAbierto);
+  $$('#mv-grupo [data-grupo]').forEach(function(b){
+    b.setAttribute('aria-pressed', b.getAttribute('data-grupo') === LIBRO.grupo ? 'true' : 'false');
+  });
+  llenarFiltroLibro('#mv-f-categoria', 'Todas las categorías', categoriasDelLibro(), LIBRO.categoria);
+  llenarFiltroLibro('#mv-f-cuenta', 'Todas las cuentas',
+    CUENTAS.map(function(c){ return c.n; }), LIBRO.cuenta);
+  var modo = ger && LIBRO.verAnulados;
+  $('#mv-ver-anulados').checked = modo;
+  $('#panel-libro').classList.toggle('modo-anulados', modo);
+  $('#mv-aviso-anulados').hidden = !modo;
+}
+
+/* Un anulado sale atenuado y tachado, con quién, cuándo y por qué: se ve para saber qué se sacó
+   de las cuentas, no para volver a sumarlo. No se toca: anular no tiene vuelta, y lo que haya que
+   corregir va por contra-asiento (04 §5.3). */
+function filaMov(m, ger){
+  var t   = TIPOS_MOV[m.tipo];
+  var anu = m.anulacion;
+  var tocable = ger && !anu;
+  var sel = tocable && movSeleccionado === m.id;
+  return '<tr data-mov="' + m.id + '"' + (anu ? ' class="fila-baja"' : '') +
+    (tocable ? ' tabindex="0" role="button" aria-expanded="' + (sel ? 'true' : 'false') +
+      '" style="cursor:pointer' + (sel ? '; background:var(--accent-soft)' : '') + '"' : '') + '>' +
+    '<td class="mono">' + fechaCorta(m.fecha) + '</td>' +
+    '<td>' + enTexto(m.concepto || '—') +
+      (anu ? '<span class="mov-anulacion">Anulado el ' + fmtFechaHora(anu.en) + ' por ' +
+             enTexto(anu.por) + ': ' + enTexto(anu.motivo) + '</span>' : '') + '</td>' +
+    '<td style="color:var(--muted)">' + enTexto(m.categoria || '—') + '</td>' +
+    '<td class="mono" style="color:var(--muted); white-space:nowrap">' + enTexto(m.cuenta) +
+      (m.destino ? ' → ' + enTexto(m.destino) : '') + '</td>' +
+    '<td class="r r-mid' + (anu ? ' tachado' : '') + '" style="color:' + COLORES_TIPO[t.color].tinta +
+      '; font-weight:600">' + valorMov(m) + '</td>' +
+    '<td>' + pildoraTipo(m.tipo) + '</td>' +
+    '<td style="white-space:nowrap">' + (anu ? '<span class="pill p-neg">Anulado</span> ' : '') +
+      (m.tardio ? '<span class="pill p-warn">Registro tardío</span>' : '') + '</td>' +
+    '</tr>' + (sel ? filaAccionesMov(m) : '');
+}
+
+/* Como en Pedidos: se toca la fila y sale su barra. Aquí la única acción es anular. */
+function filaAccionesMov(m){
+  return '<tr class="acciones-mov"><td colspan="7" style="background:var(--accent-soft); padding:10px 12px">' +
+    '<div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">' +
+    '<span style="font-size:.82rem"><b>' + fechaCorta(m.fecha) + '</b> · ' + enTexto(m.concepto || '—') +
+    ' · ' + valorMov(m) + '</span>' +
+    '<span style="flex:1"></span>' +
+    '<button type="button" class="ghost" data-mov-anular="' + m.id + '" style="color:var(--neg)">Anular movimiento</button>' +
+    '<button type="button" class="ghost" data-mov-cerrar="1">Cerrar</button>' +
+    '</div></td></tr>';
+}
+
+/* El pie dice cuántos hay. Las flechas de página salen solo si no caben todos en una: con todo a
+   la vista no hay nada que pasar, y prometerlo sería un botón muerto. */
+function pintarPieLibro(total, inicio, cuantos, paginas){
+  var tamanos = TAMANOS_PAGINA.filter(function(n){ return n < MAX_POR_PAGINA; }).concat([MAX_POR_PAGINA]);
+  $('#mv-por-pagina').innerHTML = tamanos.map(function(n){
+    return '<button type="button" data-por-pagina="' + n + '" aria-pressed="' +
+      (n === LIBRO.porPagina ? 'true' : 'false') + '">' + n + '</button>';
+  }).join('');
+  var pie = $('#mv-paginas');
+  if (total > LIBRO.porPagina){
+    pie.innerHTML =
+      '<button type="button" class="ghost" data-pagina="-1"' + (LIBRO.pagina === 0 ? ' disabled' : '') +
+        '>‹ Anterior</button>' +
+      '<span>' + (inicio + 1) + '–' + (inicio + cuantos) + ' de ' + total + '</span>' +
+      '<button type="button" class="ghost" data-pagina="1"' + (LIBRO.pagina >= paginas - 1 ? ' disabled' : '') +
+        '>Siguiente ›</button>';
+  } else {
+    pie.innerHTML = total ? '<span>' + total + (total === 1 ? ' movimiento' : ' movimientos') + '</span>' : '';
+  }
+}
+
+function tablaMovs(){
+  var cuerpo = document.getElementById('tb-movs');
+  if (!cuerpo) return;
+  var ger = (rol === 'gerencia');
+  /* Igual que en las demás tablas: el innerHTML se rehace y el panel abierto se va con él. */
+  if (filaAbierta && cuerpo.contains(filaAbierta)) filaAbierta = null;
+  pintarControlesLibro(ger);
+
+  var lista   = movsDelLibro();
+  var total   = lista.length;
+  var paginas = Math.max(1, Math.ceil(total / LIBRO.porPagina));
+  if (LIBRO.pagina > paginas - 1) LIBRO.pagina = paginas - 1;
+  var inicio  = LIBRO.pagina * LIBRO.porPagina;
+  var pagina  = lista.slice(inicio, inicio + LIBRO.porPagina);
+  var aviso   = avisoLibro;
+  avisoLibro  = null;
+
+  /* La columna Cuenta sale del nombre que alguien escribió en «Cuentas de dinero», y el concepto
+     y el motivo también los escribe una persona: todo se escapa, como en las demás tablas. */
+  cuerpo.innerHTML = filaAviso(aviso, 7) + (pagina.length
+    ? pagina.map(function(m){ return filaMov(m, ger); }).join('')
+    : '<tr class="vacio"><td colspan="7">No hay movimientos ' + textoPeriodo() +
+      (hayFiltros() ? ' con estos filtros' : '') + '.</td></tr>');
+  pintarPieLibro(total, inicio, pagina.length, paginas);
+  if (ger) conectarFilasMov();
+}
+
+function conectarFilasMov(){
+  $$('#tb-movs tr[data-mov][tabindex]').forEach(function(fila){
+    var abrir = function(e){
+      if (e.target.closest('button')) return;
+      var id = +fila.getAttribute('data-mov');
+      movSeleccionado = (movSeleccionado === id) ? null : id;
+      tablaMovs();
+      /* El foco sigue a lo que se abrió, o vuelve a la fila que se cerró: el innerHTML se rehízo. */
+      var sigue = movSeleccionado
+        ? $('#tb-movs [data-mov-anular]')
+        : $('#tb-movs tr[data-mov="' + id + '"]');
+      if (sigue) sigue.focus();
+    };
+    fila.addEventListener('click', abrir);
+    fila.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); abrir(e); }
+    });
+  });
+  $$('#tb-movs [data-mov-cerrar]').forEach(function(b){
+    b.addEventListener('click', function(){ movSeleccionado = null; tablaMovs(); });
+  });
+  $$('#tb-movs [data-mov-anular]').forEach(function(b){
+    b.addEventListener('click', function(){ pedirMotivoAnularMov(+b.getAttribute('data-mov-anular'), b); });
+  });
+}
+
+/* Anular saca el movimiento de las cuentas: la API suma solo lo vigente, así que la cuenta vuelve a
+   como estaba sin él. Aquí se devuelve a mano porque CUENTAS guarda el saldo ya sumado. */
+function devolverALasCuentas(m){
+  var origen  = cuentaPorNombre(m.cuenta);
+  var destino = m.destino ? cuentaPorNombre(m.destino) : null;
+  if (m.tipo === 'transferencia'){
+    if (origen)  origen.s  += m.valor;
+    if (destino) destino.s -= m.valor;
+    return;
+  }
+  if (origen) origen.s -= signoCaja(m) * m.valor;
+}
+
+/* El mismo camino que pedirMotivoAnular de Pedidos: confirmación en línea, motivo obligatorio. */
+function pedirMotivoAnularMov(id, boton){
+  var m = movPorId(id);
+  if (!m) return;
+  var extra = abrirPanelFila(boton,
+    '<div class="confirma"><b>¿Anular este movimiento?</b>' +
+    '<p>' + fechaCorta(m.fecha) + ' · ' + enTexto(m.concepto || '—') + ' · ' + valorMov(m) + '</p>' +
+    '<p>Deja de sumar en todas las cifras, pero no se borra: queda con el motivo, quién lo anuló y cuándo.</p>' +
+    '<div class="campo"><label for="am-motivo">Motivo</label>' +
+    '<input type="text" id="am-motivo" placeholder="Se digitó dos veces, era de otra cuenta…"></div>' +
+    '<p class="capa-error" role="alert" aria-live="polite" hidden></p>' +
+    '<div class="botones"><button type="button" class="cta" data-ok>Sí, anular</button>' +
+    '<button type="button" class="ghost" data-no>Cancelar</button></div></div>');
+  if (!extra) return;
+
+  var campo = extra.querySelector('input');
+  var error = extra.querySelector('.capa-error');
+  campo.focus();
+  extra.querySelector('[data-no]').addEventListener('click', cerrarPanelFila);
+  extra.querySelector('[data-ok]').addEventListener('click', function(){
+    var motivo = (campo.value || '').trim();
+    if (!motivo){
+      error.textContent = 'Escribe el motivo. Sin motivo escrito no se anula ningún movimiento.';
+      error.hidden = false;
+      campo.focus();
+      return;
+    }
+    m.anulacion = {en:new Date(), por:(sesion ? sesion.nombreCompleto : 'Gerencia'), motivo:motivo};
+    devolverALasCuentas(m);
+    movSeleccionado = null;
+    avisoLibro = {tono:'info', titulo:'Movimiento anulado',
+      texto:'Ya no suma en ninguna cifra, y su cuenta volvió al saldo que tenía sin él. ' +
+            'Con «Ver anulados» se ve con su motivo.'};
+    tablaMovs();
+    pintarCuentas();
+  });
+}
+
+(function initLibro(){
+  if (!document.getElementById('panel-libro')) return;
+  /* Cambiar lo que se mira vuelve a la primera página y cierra la barra de la fila. */
+  function volverAPintar(){ LIBRO.pagina = 0; movSeleccionado = null; tablaMovs(); }
+
+  $('#mv-mes-ant').addEventListener('click', function(){
+    LIBRO.m -= 1;
+    if (LIBRO.m < 1){ LIBRO.m = 12; LIBRO.a -= 1; }
+    volverAPintar();
+  });
+  $('#mv-mes-sig').addEventListener('click', function(){
+    if (enElMesEnCurso()) return;
+    LIBRO.m += 1;
+    if (LIBRO.m > 12){ LIBRO.m = 1; LIBRO.a += 1; }
+    volverAPintar();
+  });
+
+  $('#mv-otro-rango').addEventListener('click', function(){
+    LIBRO.rangoAbierto = !LIBRO.rangoAbierto;
+    avisoCampo('mv-rango-error', '');
+    if (LIBRO.rangoAbierto){
+      var lim = limitesLibro();
+      $('#mv-desde').value = lim.desde;
+      $('#mv-hasta').value = lim.hasta;
+    }
+    tablaMovs();
+    if (LIBRO.rangoAbierto) $('#mv-desde').focus();
+  });
+  $('#mv-ver-rango').addEventListener('click', function(){
+    var desde = $('#mv-desde').value, hasta = $('#mv-hasta').value;
+    if (!desde || !hasta){
+      avisoCampo('mv-rango-error', 'Elige las dos fechas: desde cuándo y hasta cuándo.');
+      return;
+    }
+    if (desde > hasta){
+      avisoCampo('mv-rango-error', '«Desde» tiene que ir antes de «Hasta».');
+      return;
+    }
+    avisoCampo('mv-rango-error', '');
+    LIBRO.modo = 'rango';
+    LIBRO.desde = desde;
+    LIBRO.hasta = hasta;
+    volverAPintar();
+  });
+  /* Vuelve al mes que se estaba mirando antes del rango, no al mes en curso. */
+  $('#mv-volver-mes').addEventListener('click', function(){
+    LIBRO.modo = 'mes';
+    LIBRO.rangoAbierto = false;
+    avisoCampo('mv-rango-error', '');
+    volverAPintar();
+    $('#mv-otro-rango').focus();
+  });
+
+  $('#mv-grupo').addEventListener('click', function(e){
+    var b = e.target.closest('[data-grupo]');
+    if (!b) return;
+    LIBRO.grupo = b.getAttribute('data-grupo');
+    volverAPintar();
+  });
+  $('#mv-f-categoria').addEventListener('change', function(e){ LIBRO.categoria = e.target.value; volverAPintar(); });
+  $('#mv-f-cuenta').addEventListener('change', function(e){ LIBRO.cuenta = e.target.value; volverAPintar(); });
+  $('#mv-ver-anulados').addEventListener('change', function(e){ LIBRO.verAnulados = e.target.checked; volverAPintar(); });
+
+  $('#mv-por-pagina').addEventListener('click', function(e){
+    var b = e.target.closest('[data-por-pagina]');
+    if (!b) return;
+    LIBRO.porPagina = Math.min(+b.getAttribute('data-por-pagina'), MAX_POR_PAGINA);
+    volverAPintar();
+  });
+  $('#mv-paginas').addEventListener('click', function(e){
+    var b = e.target.closest('[data-pagina]');
+    if (!b || b.disabled) return;
+    var paso = b.getAttribute('data-pagina');
+    LIBRO.pagina += +paso;
+    movSeleccionado = null;
+    tablaMovs();
+    /* El foco se queda en la flecha que se pulsó; si ya no lleva a ningún lado, pasa a la otra. */
+    var misma = $('#mv-paginas [data-pagina="' + paso + '"]');
+    var otra  = $('#mv-paginas [data-pagina="' + (-paso) + '"]');
+    if (misma && !misma.disabled) misma.focus();
+    else if (otra) otra.focus();
+  });
+})();
+
+/* ---------- cómo se ve cada tipo, en «Cuentas de dinero» ---------- */
+function tablaTipos(){
+  var cuerpo = document.getElementById('tb-tipos');
+  if (!cuerpo) return;
+  var aviso = avisoTipos;
+  avisoTipos = null;
+  cuerpo.innerHTML = filaAviso(aviso, 7) + ORDEN_TIPOS.map(function(tipo){
+    var t = TIPOS_MOV[tipo];
+    var fijo = '<td class="mono" style="color:var(--muted); white-space:nowrap">';
+    return '<tr><td style="font-weight:500">' + t.fijo + '</td>' +
+      '<td>' + pildoraTipo(tipo) + '</td>' +
+      '<td style="color:var(--muted)">' + (GRUPOS_MOV[t.grupo] || '—') + '</td>' +
+      fijo + EFECTOS[t.u] + '</td>' + fijo + EFECTOS[t.c] + '</td>' + fijo + EFECTOS[t.p] + '</td>' +
+      '<td class="r"><button type="button" class="ghost" style="padding:3px 9px" data-t-cambiar="' +
+      tipo + '" aria-label="Cambiar cómo se ve «' + t.fijo + '»">Cambiar</button></td></tr>';
+  }).join('');
+  $$('#tb-tipos [data-t-cambiar]').forEach(function(b){
+    b.addEventListener('click', function(){ abrirFormTipo(b.getAttribute('data-t-cambiar')); });
+  });
+}
+
+function muestraTipo(){
+  var nombre = ($('#t-nombre').value || '').trim() || '—';
+  var color  = COLORES_TIPO[$('#t-color').value] || COLORES_TIPO.gris;
+  $('#tf-muestra').innerHTML = '<span class="pill ' + color.pill + '">' + enTexto(nombre) + '</span>';
+}
+
+function abrirFormTipo(tipo){
+  var t = TIPOS_MOV[tipo];
+  if (!t) return;
+  editandoTipo = tipo;
+  $('#tf-titulo').textContent = 'Cómo se ve «' + t.fijo + '»';
+  $('#t-nombre').value = t.nombre;
+  $('#t-color').value  = t.color;
+  $('#t-grupo').value  = t.grupo;
+  avisoCampo('tf-error', '');
+  muestraTipo();
+  $('#form-tipo').hidden = false;
+  $('#form-tipo').scrollIntoView({block:'nearest'});
+  $('#t-nombre').focus();
+}
+
+function cerrarFormTipo(){
+  $('#form-tipo').hidden = true;
+  editandoTipo = null;
+  avisoCampo('tf-error', '');
+}
+
+/* Solo cambia cómo se ve. Lo que el tipo le hace a las cifras sigue igual, y el aviso lo dice:
+   es lo primero que alguien se pregunta después de renombrar «Gasto». */
+function guardarTipo(){
+  var t = TIPOS_MOV[editandoTipo];
+  if (!t) return;
+  var nombre = ($('#t-nombre').value || '').trim();
+  if (!nombre){
+    avisoCampo('tf-error', 'El tipo necesita un nombre para leerse en el libro.');
+    $('#t-nombre').focus();
+    return;
+  }
+  var antes = t.nombre;
+  t.nombre = nombre;
+  t.color  = $('#t-color').value;
+  t.grupo  = $('#t-grupo').value;
+  avisoTipos = {tono:'info',
+    titulo: antes === nombre ? '«' + t.fijo + '» se ve como elegiste'
+                             : '«' + t.fijo + '» se lee ahora «' + nombre + '»',
+    texto: 'El libro ya lo pinta así' +
+      (t.grupo ? ', y sale con «' + GRUPOS_MOV[t.grupo] + '»' : ', y no sale ni con «Ingresos» ni con «Gastos»') +
+      '. Lo que le hace a la utilidad, la caja y el patrimonio no cambió.'};
+  cerrarFormTipo();
+  tablaTipos();
+  tablaMovs();
+}
+
+(function initTipos(){
+  if (!document.getElementById('form-tipo')) return;
+  $('#t-color').innerHTML = Object.keys(COLORES_TIPO).map(function(k){
+    return '<option value="' + k + '">' + COLORES_TIPO[k].etiqueta + '</option>';
+  }).join('');
+  $('#t-nombre').addEventListener('input', muestraTipo);
+  $('#t-color').addEventListener('change', muestraTipo);
+  $('#tf-guardar').addEventListener('click', guardarTipo);
+  $('#tf-cancelar').addEventListener('click', cerrarFormTipo);
+})();
 
 var ordenPorHora = true;
 function tablaProductos(){
@@ -3189,6 +3812,7 @@ function pintarCuentas(){
     campo.value = '';
     document.getElementById('q-saldo').value = 0;
     pintarCuentas();
+    tablaMovs();   /* y en el filtro de cuentas del libro */
     cerrar();
   });
 })();
@@ -3240,20 +3864,6 @@ function notaFechaMov(){
     : 'Falta la fecha en que ocurrió: es la que manda en los reportes.';
 }
 
-/* La tabla se lee por fecha del movimiento, no por orden de digitación: un gasto del día 14
-   registrado hoy no puede quedar encima de uno del 28. La clave sale del «28 sep» que ya
-   guardan las filas sembradas, que es lo único que tienen. */
-function claveMov(etiqueta){
-  var t = String(etiqueta).split(' ');
-  var m = MESES_CORTOS.indexOf(t[1]);
-  return (m < 0 ? 0 : m) * 100 + (+t[0] || 0);
-}
-function insertarMov(fila){
-  var i = 0;
-  while (i < MOVS.length && claveMov(MOVS[i][0]) >= claveMov(fila[0])) i += 1;
-  MOVS.splice(i, 0, fila);
-}
-
 function avisoMov(texto, clase){
   var el = document.getElementById('mv-aviso');
   if (!el) return;
@@ -3296,7 +3906,10 @@ function guardarMovimiento(){
   /* El gasto sale de la cuenta elegida. El saldo baja aquí y el Inicio lo lee de CUENTAS:
      Operación registra contra un saldo que no ve en ninguna pantalla. */
   cuenta.s = cuenta.s - valor;
-  insertarMov([fechaCorta(iso), cat.concepto, cat.v, cuenta.n, -valor, 'gasto', '']);
+  /* Entra al final: el libro se ordena por la fecha del movimiento cada vez que se pinta. */
+  secuenciaMov += 1;
+  MOVS.push({id:secuenciaMov, fecha:iso, concepto:cat.concepto, categoria:cat.v, cuenta:cuenta.n,
+             valor:valor, tipo:'gasto'});
   tablaMovs();
   pintarCuentas();
   /* El valor se limpia: si se quedara puesto, un segundo clic sin querer registraría el mismo
@@ -4287,7 +4900,7 @@ function cerrarPanelFila(){
   filaAbierta = null;
   /* El foco vuelve a la fila que lo abrió; si no, se pierde al final del documento. */
   if (fila){
-    var b = fila.querySelector('[data-u-estado], [data-u-clave], [data-bit-revertir], [data-bit-ver], [data-c-baja], [data-anular], [data-baja]');
+    var b = fila.querySelector('[data-u-estado], [data-u-clave], [data-bit-revertir], [data-bit-ver], [data-c-baja], [data-anular], [data-mov-anular], [data-baja]');
     if (b) b.focus();
   }
 }
@@ -4835,6 +5448,7 @@ tablaPedidos();
 kpisPedidos();
 pintarCuentas();
 tablaMovs();
+tablaTipos();
 tablaProductos();
 tablaReporte();
 grafico();

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-22 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -237,14 +237,60 @@ valor total, anticipo y saldo.
 
 Registro rápido en un panel que se abre con el botón flotante, y ese botón flota sobre todas las
 pantallas menos el Inicio: valor, tipo, categoría, cuenta, fecha (hoy por defecto), foto. El
-Inicio queda fuera porque no escribe ([principio 8](#principio-8)). Lista con filtros, marca de registro tardío
-y acción de anular con motivo obligatorio.
+Inicio queda fuera porque no escribe ([principio 8](#principio-8)).
+
+Debajo va **el libro**: los movimientos, lo más reciente primero por la fecha en que ocurrieron.
+
+| Zona | Contenido |
+|---|---|
+| Período | El mes, con dos flechas; la de adelante no pasa del mes en curso. «Otro rango» abre *Desde* y *Hasta*: con un rango puesto, el título dice las dos fechas, las flechas se van y «Volver al mes» regresa |
+| Filtros | *Todos · Ingresos · Gastos*, la categoría y la cuenta. La cuenta encuentra una transferencia por su origen y por su destino |
+| Tabla | Fecha del movimiento, concepto, categoría, cuenta —«Nequi → Bancolombia» en una transferencia—, valor, tipo y la marca de registro tardío. Lo que no tiene dato se escribe «—» |
+| Pie | Cuántos son y, si no caben en una página, «‹ Anterior · 1–10 de 16 · Siguiente ›». Por página se eligen 10, 25 o 50, y se abre en 50 |
+| Sin resultados | Una línea: «No hay movimientos en septiembre de 2026 con estos filtros.» |
+
+**El signo del valor y el tipo los dice la API.** El signo es lo que el movimiento le hizo a la
+caja: entra, sale o, en una transferencia, cambia de bolsillo y va sin signo. Eso es la regla del
+[05 §2](05-reglas-financieras.md#2-naturaleza-de-cada-movimiento) y no se configura. **Cómo se ve cada tipo sí lo configura Gerencia**:
+- el nombre de su píldora;
+- el color, que es verde, rojo, morado o gris, porque el ámbar es de las advertencias;
+- si cuenta en «Ingresos», en «Gastos» o en ninguno.
+
+La vista de fábrica es la del dibujo aprobado:
+- el pro-labore se lee «Gasto» y cuenta en «Gastos»;
+- el anticipo se lee «Anticipo · pasivo»;
+- lo que no toca la utilidad se lee «No afecta utilidad».
+
+El valor toma el color de su tipo. El front pinta lo que llega, y no sabe por qué.
+
+**Cuántos caben por página también lo dice la API.** Nunca pasa de un máximo, que la API lee de su
+variable de entorno y que es 50 si no está. El front no ofrece ningún tamaño por encima.
+
+**Solo Gerencia anula.**
+- Se toca un movimiento, sale su barra con «Anular movimiento», y la confirmación en línea pide el
+  motivo. Sin motivo escrito no se anula.
+- Anular no borra ([RN-13](03-requisitos-y-bdd.md#rn-13)) y no tiene vuelta: lo que haya que corregir va por contra-asiento
+  ([04 §5.3](04-modelo-de-datos.md#53-corrección-por-contra-asiento)).
+
+**Solo Gerencia ve lo anulado.**
+- El interruptor «Ver anulados» los pone en su fecha, atenuados, con el valor tachado, la píldora
+  «Anulado» y quién, cuándo y por qué.
+- Mientras está puesto, el panel cambia de borde y un aviso lo dice, para que nunca se confunda con
+  la vista normal ([04 §5.5](04-modelo-de-datos.md#55-vistas-limpias-por-defecto)).
+
+Operación ve el libro, el período, los filtros y el pie, y no ve el interruptor ni la barra: lo que
+no puede hacer no se le ofrece ([principio 6](#principio-6)).
 
 Aloja además el panel **«Cuentas de dinero»**, exclusivo de Gerencia, que es donde se crean las
 cuentas: efectivo, Nequi, Daviplata, banco. Vive aquí y no en el Inicio porque una cuenta es el
 recipiente de un movimiento: quien crea una cuenta está pensando dónde va a registrar la plata, y
 esta pantalla ya es esa. El `<select>` de cuenta del registro rápido debe mostrar solo nombres,
 sin saldos, para que Operación pueda elegir una cuenta sin ver la caja.
+
+En el mismo panel está **«Cómo se ve cada tipo de movimiento»**:
+- los nueve tipos, cada uno con su nombre fijo, su píldora tal como se lee y en qué botón cuenta;
+- lo que cada tipo le hace a la utilidad, la caja y el patrimonio, a la vista y sin poderse editar;
+- «Cambiar», que abre el nombre, el color y «Cuenta en».
 
 ### 4.4 Productos y servicios
 
