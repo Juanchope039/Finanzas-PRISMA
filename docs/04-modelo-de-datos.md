@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.8.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-22 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.9.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -36,6 +36,7 @@ erDiagram
     CATEGORIAS ||--o{ CATEGORIAS : contiene
     MOVIMIENTOS ||--o{ ADJUNTOS : tiene
     MOVIMIENTOS ||--o| MOVIMIENTOS : corrige
+    PRESENTACION_TIPOS ||--o{ MOVIMIENTOS : dice_como_se_lee
 
     CLIENTES ||--o{ PEDIDOS : solicita
     PEDIDOS ||--|{ PEDIDO_LINEAS : contiene
@@ -91,6 +92,7 @@ erDiagram
 | 25 | `peticiones_idempotentes` | Claves de idempotencia y la respuesta que devolvió cada una | ✅ |
 | 26 | `nonces_vistos` | Nonce ya usados por el canal firmado, dentro de su ventana | ✅ |
 | 27 | `sesiones` | La clave de firma de cada sesión abierta, del lado del servidor | ✅ |
+| 28 | `presentacion_tipos` | Cómo se lee cada tipo de movimiento en el libro: el nombre, el color y el grupo del filtro | |
 
 *Sensible = el acceso a la tabla está restringido por Row Level Security ([§7](#7-seguridad-por-tipo-de-usuario-rls)). En la mayoría eso
 significa «solo Gerencia», pero no en todas: en `usuarios`, `empleados`, `nomina_periodos`,
@@ -109,6 +111,10 @@ usaron, para que nadie reenvíe una petición capturada ([§4.10](#410-los-nonce
 sesión, que es contra lo que se comprueban esos envíos ([§4.11](#411-las-sesiones-abiertas)). Están en el catálogo porque son
 tablas más del esquema y hay que poder contarlas, y no están en el diagrama del [§2](#2-diagrama-entidadrelación) por la misma
 razón por la que sí pueden borrarse: no son entidades del taller, son mecanismos de transporte.
+
+La entidad **28**, `presentacion_tipos`, la crea la tarea [3.19](08-plan-de-desarrollo.md#tarea-3-19): es lo que Gerencia elige de cómo se
+lee cada tipo en el libro ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)). Se une a `movimientos` por el valor de `tipo` y no por una llave
+foránea, así que su línea del diagrama dice de qué habla la tabla, no que haya un `REFERENCES`.
 
 ---
 
@@ -479,6 +485,10 @@ la utilidad, la caja, el patrimonio o ninguno:
 
 > Esta tabla es la traducción exacta de las reglas [RN-03](03-requisitos-y-bdd.md#rn-03) a [RN-11](03-requisitos-y-bdd.md#rn-11). Cualquier duda sobre cómo
 > registrar algo se responde aquí.
+
+**Cómo se lee cada tipo en el libro no está en esta tabla, y ella no se configura.** El nombre con
+que se lee, el color de su píldora y el grupo del filtro los elige Gerencia en `presentacion_tipos`
+([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)); lo que cada tipo le hace a las tres cifras es esto, y no cambia.
 
 **Las tres reglas de la cuenta de destino son tres restricciones, y las tres responden `42226`.**
 `transferencia_con_destino` exige el destino cuando el tipo lo pide; `destino_solo_en_transferencia`
@@ -1080,6 +1090,77 @@ RLS.
 Un soporte equivocado se anula en la ficha, con motivo, autor y fecha, y el objeto se queda donde
 está; reemplazar la foto sería cambiar el soporte sin que nada lo cuente.
 
+### 4.13 Cómo se ve cada tipo de movimiento
+
+```sql
+CREATE TABLE presentacion_tipos (
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  tipo        tipo_movimiento NOT NULL
+                CONSTRAINT presentacion_tipos_tipo_key UNIQUE,
+  se_lee_como TEXT NOT NULL
+                CONSTRAINT presentacion_tipos_se_lee_como_legible
+                  CHECK (length(trim(se_lee_como)) BETWEEN 1 AND 30),
+  color       TEXT NOT NULL
+                CONSTRAINT presentacion_tipos_color_valido
+                  CHECK (color IN ('verde', 'rojo', 'morado', 'gris')),
+  grupo       TEXT NOT NULL
+                CONSTRAINT presentacion_tipos_grupo_valido
+                  CHECK (grupo IN ('ingresos', 'gastos', 'ninguno'))
+);
+
+-- Lo que el libro ya pintaba. Las nueve filas las escribe la migración y no seed.sql: sin ellas
+-- el libro no sabe pintar ningún tipo, en ningún ambiente.
+INSERT INTO presentacion_tipos (tipo, se_lee_como, color, grupo) VALUES
+  ('ingreso',             'Ingreso',            'verde',  'ingresos'),
+  ('gasto',               'Gasto',              'rojo',   'gastos'),
+  ('transferencia',       'Transferencia',      'gris',   'ninguno'),
+  ('inversion',           'Inversión',          'gris',   'ninguno'),
+  ('aporte',              'Aporte de capital',  'gris',   'ninguno'),
+  ('retiro_prolabore',    'Gasto',              'rojo',   'gastos'),
+  ('retiro_distribucion', 'No afecta utilidad', 'gris',   'ninguno'),
+  ('anticipo_recibido',   'Anticipo · pasivo',  'morado', 'ninguno'),
+  ('adelanto_empleada',   'No afecta utilidad', 'gris',   'ninguno');
+
+CREATE TRIGGER tr_auditar_presentacion_tipos
+  AFTER INSERT OR UPDATE ON presentacion_tipos
+  FOR EACH ROW EXECUTE FUNCTION fn_auditar();
+```
+
+**Es lo que Gerencia cambia del libro, y nada más** ([RF-104](03-requisitos-y-bdd.md#rf-104)). Cada tipo se lee con un nombre, lleva
+una píldora de un color y cuenta en un grupo del filtro «Todos · Ingresos · Gastos» ([10 §4.3](10-ux-y-mockups.md#43-movimientos)). **Lo
+que le hace a la utilidad, a la caja y al patrimonio no está aquí**: es la tabla del [§4.3](#43-movimientos--el-libro-único), que
+sale del [05 §2](05-reglas-financieras.md#2-naturaleza-de-cada-movimiento) y vive en el dominio de la API, y de ahí sale también el signo del valor. Una
+columna de efecto en esta tabla sería una segunda copia de la regla, y además editable.
+
+**Una fila por tipo, y las pone la migración.** `presentacion_tipos_tipo_key` impide dos lecturas
+del mismo tipo, y nadie más inserta: no hay política de `INSERT` ([§7](#7-seguridad-por-tipo-de-usuario-rls)). Un tipo nuevo es un valor
+nuevo del ENUM, y la migración que lo agrega trae su fila.
+
+**Cambiar cómo se lee es un `UPDATE`, como renombrar un cargo.** No lleva una fila por cambio como
+`sobres_config` ([§4.8](#48-sobres-y-cierres)): ahí la historia hace falta porque cada mes se calcula con los porcentajes
+de su fecha, y aquí no hay nada que calcular con la lectura de antes, porque el libro pinta todo con
+la de hoy, también lo de meses pasados. Quién la cambió y cuándo lo guarda la bitácora, con el
+trigger, que es el decimosexto ([§5.4](#54-auditoría-por-triggers)). **Por eso la tabla llega después de la tarea [3.18](08-plan-de-desarrollo.md#tarea-3-18)**: no tiene
+`anulado_en`, porque un tipo no se anula, y hasta esa tarea `fn_auditar()` lee la columna sin
+preguntar si existe.
+
+**Dos tipos pueden leerse igual**, y por eso `se_lee_como` no es único: el pro-labore se lee
+«Gasto», como el gasto, y la distribución y el adelanto se leen «No afecta utilidad».
+
+**`se_lee_como` va de 1 a 30 caracteres.** El mockup no deja guardarlo vacío y no le pone techo, y
+sin techo una píldora podría llevar un párrafo. Treinta dejan holgura sobre el nombre más largo de
+los nueve tipos en el mockup, «Transferencia entre cuentas», que tiene 27.
+
+**`color` es uno de los cuatro que el [10 §3.1](10-ux-y-mockups.md#31-color) deja para un tipo**, y `grupo` es un filtro del libro
+y no una cifra: poner el anticipo en `ingresos` cambia en qué filtro sale, no lo que es ([RN-05](03-requisitos-y-bdd.md#rn-05)). Los
+dos son `TEXT` con `CHECK` y no ENUM, como `destino_del_anticipo` ([§4.4](#44-pedidos-líneas-y-anticipos)): son listas cortas de una
+sola tabla, y un `CHECK` se amplía con un `ALTER`. `grupo` lleva `ninguno` escrito y no un nulo,
+porque «Cuenta en: Ninguno» es una elección del formulario y no la falta de una.
+
+**La leen los dos tipos de usuario y la cambia solo Gerencia** ([§7](#7-seguridad-por-tipo-de-usuario-rls)). Operación pinta el mismo
+libro, así que la necesita. Lleva RLS aunque no sea sensible, como `cargos`, `cuentas` y
+`categorias`: lo que se restringe es quién la cambia, no quién la ve.
+
 ---
 
 ## 5. Diseño de solo escritura
@@ -1118,6 +1199,12 @@ aplicación, PostgreSQL lo rechaza.
 La restricción `anulacion_con_motivo` de cada tabla hace imposible anular sin explicar por qué, y
 el dominio `motivo` ([§4.1](#41-tipos-y-convenciones-comunes)) hace imposible que esa explicación sea un espacio en blanco. Una
 exige que el texto esté; el otro, que diga algo.
+
+**Un movimiento que va con otro registro se anula con él.** El anticipo de un pedido, un activo, un
+aporte o un retiro y un adelanto tienen su propia fila, que apunta al movimiento con
+`movimiento_id`. Anular solo el movimiento dejaría esa fila contando una plata que ya no suma en
+ninguna cifra. Los dos se anulan en la misma transacción, con el mismo motivo, y lo hace
+`fn_anular_movimiento` ([§10](#10-funciones-de-negocio-atómicas)), que entra con la tarea [3.20](08-plan-de-desarrollo.md#tarea-3-20).
 
 ### 5.3 Corrección por contra-asiento
 
@@ -1181,9 +1268,10 @@ DECLARE
 BEGIN
   IF TG_OP = 'INSERT' THEN
     v_accion := 'INSERT';
+  -- tarea 3.18: la columna se lee del JSON, que da nulo en las tablas que no la tienen
   ELSIF TG_OP = 'UPDATE'
-        AND OLD.anulado_en IS NULL
-        AND NEW.anulado_en IS NOT NULL THEN
+        AND (to_jsonb(OLD) ->> 'anulado_en') IS NULL
+        AND (to_jsonb(NEW) ->> 'anulado_en') IS NOT NULL THEN
     v_accion := 'ANULAR';
   ELSE
     v_accion := 'UPDATE';
@@ -1215,7 +1303,7 @@ CREATE TRIGGER tr_auditar_movimientos
 El mismo trigger se registra sobre `pedidos`, `anticipos`, `productos`, `costos_producto`,
 `activos`, `aportes_retiros`, `prolabore_config`, `empleados`, `nomina_detalle`, `adelantos`,
 `sobres_config`, `cierres_mensuales`, `cargos` y `adjuntos` ([§4.12](#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido)), que es el decimoquinto y
-entró con la [3.14](08-plan-de-desarrollo.md#tarea-3-14).
+entró con la [3.14](08-plan-de-desarrollo.md#tarea-3-14). El decimosexto es el de `presentacion_tipos` ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)), que llega con la tarea [3.19](08-plan-de-desarrollo.md#tarea-3-19).
 
 **De dónde salen el dispositivo y la IP lo dicen dos funciones**, y no dos expresiones escritas en
 dos sitios (tarea [2.9](08-plan-de-desarrollo.md#tarea-2-9)):
@@ -1260,8 +1348,8 @@ proxy por el que pasó— y esta columna es un `INET`, que admite una sola. Sin 
 > unexpectedly».
 
 > **`usuarios` necesita su propia variante del trigger.** `fn_auditar()` detecta la anulación
-> mirando `anulado_en`, y `usuarios` desactiva con `desactivado_en`. Auditar `usuarios` con la
-> función genérica falla.
+> mirando `anulado_en`, y `usuarios` desactiva con `desactivado_en`: con la función genérica, una
+> baja quedaría en la bitácora como un `UPDATE` más.
 
 Esa variante es `fn_auditar_usuarios()`, con el trigger `tr_auditar_usuarios` (tarea
 [2.21](08-plan-de-desarrollo.md#tarea-2-21)). Hace lo mismo que la genérica y solo cambia en qué columna mira para decidir que un
@@ -1269,12 +1357,15 @@ Esa variante es `fn_auditar_usuarios()`, con el trigger `tr_auditar_usuarios` (t
 —`INSERT`, `UPDATE` y `ANULAR`— y nada más**; los eventos con nombre son de la función de abajo, por
 las dos razones que se explican ahí.
 
-> **`fn_auditar()` lee `OLD.anulado_en` sin preguntar si la columna existe**, y cinco de las tablas
-> que audita no la tienen: `costos_producto`, `prolabore_config`, `nomina_detalle`, `sobres_config`
-> y `cierres_mensuales`. Un `UPDATE` sobre cualquiera de ellas falla con `42703`, que además es un
-> error que la API no sabe traducir. Nada lo caza hoy: `verificar-base.sql` solo actualiza `cargos`,
-> y la semilla corre con los triggers apagados. Está anotado en [`TODO.md`](../TODO.md) [§9](../TODO.md#9-a-vigilar) con lo que hay que correr
-> para confirmarlo; el arreglo lleva migración propia y su comprobación por tabla auditada.
+> **La versión que corre hoy lee `OLD.anulado_en` sin preguntar si la columna existe**, y cinco de
+> las tablas que audita no la tienen: `costos_producto`, `prolabore_config`, `nomina_detalle`,
+> `sobres_config` y `cierres_mensuales`. Un `UPDATE` sobre cualquiera de ellas falla con `42703`,
+> que además es un error que la API no sabe traducir. Nada lo caza hoy: `verificar-base.sql` solo
+> actualiza `cargos`, y la semilla corre con los triggers apagados. **Lo arregla la tarea [3.18](08-plan-de-desarrollo.md#tarea-3-18)** con
+> lo que está escrito arriba: la columna se lee de `to_jsonb(OLD)` y de `to_jsonb(NEW)`, que dan nulo
+> cuando la tabla no la tiene, así que en esas tablas todo cambio queda como `UPDATE`. La tarea lo
+> comprueba contra una base antes de arreglarlo, y deja en `verificar-base.sql` un `UPDATE` por tabla
+> auditada. `presentacion_tipos` ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)) la espera, porque tampoco tiene `anulado_en`.
 
 Además de los cambios de fila, la bitácora registra los eventos de acceso y de administración
 de personas:
@@ -1981,8 +2072,26 @@ ninguna clave llegaría nunca a servir para un reintento.
 `DELETE` no lleva política, y por eso la purga del [§4.9](#49-claves-de-idempotencia) no corre como la aplicación: corre como el
 rol de migraciones, que es dueño de la tabla y tiene `BYPASSRLS`.
 
+**Y `presentacion_tipos`**, la entidad 28 ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)), que no es sensible y lleva RLS por lo mismo que
+`cargos`: lo que se restringe es quién la cambia, no quién la ve.
+
+```sql
+-- Cómo se ve cada tipo: la leen los dos tipos, porque los dos pintan el libro, y la cambia solo
+-- Gerencia (RF-104). No hay política de INSERT: las nueve filas las pone la migración.
+CREATE POLICY presentacion_lectura ON presentacion_tipos FOR SELECT USING (TRUE);
+CREATE POLICY presentacion_actualizacion ON presentacion_tipos FOR UPDATE
+  USING (fn_es_gerencia()) WITH CHECK (fn_es_gerencia());
+
+ALTER TABLE presentacion_tipos ENABLE ROW LEVEL SECURITY;
+```
+
+**`FOR UPDATE` y no `FOR ALL`**, que es lo que llevan `cuentas` y `categorias`. Allí la escritura
+abarca crear y anular; aquí no hay nada que crear, y un `FOR ALL` dejaría a Gerencia insertar filas
+que no corresponden a ningún tipo o, si `presentacion_tipos_tipo_key` no estuviera, una segunda
+lectura del mismo.
+
 Con esto, las dieciséis tablas que el [§3](#3-catálogo-de-entidades) marca como sensibles tienen política, y con `cargos`,
-`cuentas` y `categorias` son diecinueve las que llevan RLS encendida. Las siete restantes
+`cuentas`, `categorias` y `presentacion_tipos` son veinte las que llevan RLS encendida. Las siete restantes
 —`adjuntos`, `pedidos`, `pedido_lineas`, `anticipos`, `productos`, `cotizaciones` y
 `cotizacion_lineas`— siguen sin RLS a propósito: los dos tipos trabajan con ellas todo el día y no
 hay nada que separar. El principio 6 del [§1](#1-principios-del-modelo) se lee así: **en cada tabla donde haya algo que proteger.**
@@ -2026,9 +2135,10 @@ ALTER TABLE cierres_mensuales FORCE ROW LEVEL SECURITY;
 ALTER TABLE peticiones_idempotentes FORCE ROW LEVEL SECURITY;
 ALTER TABLE nonces_vistos         FORCE ROW LEVEL SECURITY;
 ALTER TABLE sesiones              FORCE ROW LEVEL SECURITY;
+ALTER TABLE presentacion_tipos    FORCE ROW LEVEL SECURITY;
 ```
 
-Son **diecisiete de las diecinueve tablas con RLS**. Las dos que faltan no son un olvido: el modelo,
+Son **dieciocho de las veinte tablas con RLS**. Las dos que faltan no son un olvido: el modelo,
 tal como está escrito, deja de funcionar si se les pone.
 
 | Tabla | Por qué no lleva `FORCE` | Qué la protege en su lugar |
@@ -2044,7 +2154,8 @@ tal como está escrito, deja de funcionar si se les pone.
 **El orden importa, como en el bloque anterior.** Este `ALTER TABLE` va después de las semillas,
 nunca antes: con `FORCE` ya puesto, el `INSERT` de los seis cargos del [§4.2](#42-cargos-usuarios-y-cuentas) chocaría con
 `cargos_escritura`, que exige `fn_es_gerencia()`, y durante una migración no hay `auth.uid()` a
-quien preguntarle. Lo mismo vale para las semillas de `sobres_config`. En el script real este
+quien preguntarle. Lo mismo vale para las semillas de `sobres_config` y para las nueve filas de
+`presentacion_tipos`, que además no tiene política de `INSERT` para nadie. En el script real este
 bloque es **lo último**: corre cuando ya están creadas las tablas, escritas las políticas,
 encendida la RLS y sembrados los datos iniciales del [§8](#8-datos-iniciales).
 
@@ -2066,9 +2177,13 @@ inicial, aun así, no depende de ese atributo: se ordena bien y listo.
 | `categorias` gasto variable | Insumos · Transferencias DTF · Mugs · Llaveros · Transporte · Mantenimiento · Publicidad |
 | `productos` | Mug estampado · Camiseta DTF · Llavero acrílico · Rompecabezas A4 · Bordado (servicio) |
 | `sobres_config` | 45% costo directo · 25% gastos fijos · 10% reserva · 20% retiro |
+| `presentacion_tipos` | Una fila por tipo, con lo que el libro ya pintaba: «Ingreso» en verde; «Gasto» en rojo, también el pro-labore; «Anticipo · pasivo» en morado; y los otros cinco en gris |
 
 Los porcentajes iniciales de los sobres son una **sugerencia de arranque**, no una imposición:
 se ajustan desde la configuración y cada cambio queda registrado con su fecha de vigencia.
+
+**Las nueve filas de `presentacion_tipos` las escribe su migración, como los seis cargos**, y no
+`seed.sql`: sin ellas el libro no pinta ningún tipo, en ningún ambiente ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)).
 
 ---
 
@@ -2184,12 +2299,25 @@ pagada sin descontar el adelanto.
 | `fn_entregar_pedido(p_pedido UUID, p_fecha DATE, p_cuenta UUID)` | Marca el pedido `entregado` con su `fecha_entrega_real`, devenga sus anticipos (`devengado_en`) y escribe el movimiento que causa la venta | Un pedido entregado cuyo anticipo sigue contando como pasivo en la caja libre |
 | `fn_liquidar_nomina(p_periodo UUID, p_empleado UUID, …)` | Escribe la fila de `nomina_detalle`, marca con `descontado_en` los adelantos pendientes de esa persona y escribe el movimiento del pago | Que un adelanto se descuente dos veces, o ninguna ([RN-11](03-requisitos-y-bdd.md#rn-11)) |
 | La función `SECURITY DEFINER` del [§5.4](#54-auditoría-por-triggers), usada en el [§5.7](#57-reactivar-y-revertir-escrituras-compensatorias) | Aplica el `UPDATE` que deshace un cambio y escribe la fila `cambio_revertido` con su `revierte_a` | Una bitácora que anota una reversión que no ocurrió, o al revés |
+| `fn_anular_movimiento(p_movimiento UUID, p_motivo motivo)` | Anula el movimiento y el registro que va con él —el anticipo, el activo, el aporte o el retiro, o el adelanto—, los dos con el mismo motivo, el mismo autor y el mismo instante ([§5.2](#52-anulación-lógica-con-trazabilidad)) | Un anticipo, un activo o un adelanto que siguen contando una plata que ya salió de las cifras, o una anulación que se queda a medias |
 
 La tercera **ya está en este documento**: es la misma función del [§5.4](#54-auditoría-por-triggers) que escribe los eventos de
 acceso y administración. No se duplica aquí; se nombra para dejar claro que pertenece a esta
 lista y obedece las mismas reglas.
 
-Tres reglas que valen para las tres:
+**La cuarta la escribe la tarea [3.20](08-plan-de-desarrollo.md#tarea-3-20)**, y dos cosas de ella ya están decididas:
+- **Anula primero el movimiento.** Así `mov_anulacion` juzga antes de tocar nada más, y con una
+  sesión de Operación la transacción cae entera ahí.
+- **No necesita políticas nuevas.** `activos` y `aportes_retiros` ya dejan escribir a Gerencia con
+  sus políticas `FOR ALL`, `adelantos` tiene `adelantos_actualizacion` y `anticipos` no lleva RLS
+  ([§7](#7-seguridad-por-tipo-de-usuario-rls)).
+
+Lo que hace cuando el registro ya siguió su vida —el anticipo de un pedido entregado, un adelanto
+descontado en una nómina liquidada, una de las dos mitades de un retiro partido— **no lo decide
+todavía este documento**. Lo propone el contrato de la tarea [3.17](08-plan-de-desarrollo.md#tarea-3-17), lo aprueba quien dirige y queda
+escrito en el [CU-03](02-casos-de-uso.md#cu-03) antes de que la función lo imponga.
+
+Tres reglas que valen para las cuatro:
 
 1. **La API las llama; no rehace sus pasos.** Si `prisma_api` escribe por su cuenta los tres
    `UPDATE` de una entrega, ya hay dos versiones del procedimiento y solo una se prueba.
@@ -2278,6 +2406,11 @@ y pasa a ser un rojo en la canalización.
 > esquema `0.6.0` que las creó ([3.15](08-plan-de-desarrollo.md#tarea-3-15)): `destino_solo_en_transferencia`,
 > `destino_distinto_del_origen` y `transferencia_con_destino` responden las tres el `42226` sobre
 > `cuentaDestinoId`, porque las tres reglas del destino dicen lo mismo con otras palabras.
+>
+> **Las cuatro de `presentacion_tipos` ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)) todavía no existen**: `presentacion_tipos_tipo_key`,
+> `presentacion_tipos_se_lee_como_legible`, `presentacion_tipos_color_valido` y
+> `presentacion_tipos_grupo_valido`. Las crea la tarea [3.19](08-plan-de-desarrollo.md#tarea-3-19), y la API les pone su fila en el PR en
+> que recoja ese esquema. Qué código responde cada una lo acuerda el contrato de la tarea [3.17](08-plan-de-desarrollo.md#tarea-3-17).
 
 Tres cosas que esta consulta no cubre, y hay que decirlas:
 
