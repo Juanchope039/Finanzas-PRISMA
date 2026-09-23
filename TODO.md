@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.8.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -981,7 +981,9 @@ a `anon`.
   `GoTrueIntegracionTest` que esperan un `weak_password` salen rojas. Pasa también en `develop`, sin
   ningún cambio de por medio, aunque `config.toml` declara `minimum_password_length = 6` justo para
   que no dependa de la versión. Se vio al correr la suite de integración en la máquina del worker-1
-  para la [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4). Queda por saber si la tubería, con su propio CLI, tiene el mismo comportamiento
+  para la [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4). Queda por saber si la tubería, con su propio CLI, tiene el mismo comportamiento.
+  **Ya se sabe que sí**: la tubería tenía las mismas dos rojas, y no las causa el `config.toml` sino
+  la versión de GoTrue que trae el CLI. Está en «Del arreglo de GoTrue en la tubería»
 
 - **La integración continua no corre [C-01](docs/12-pruebas-y-calidad.md#c-01), y por eso estuvo un día en rojo sin que nadie lo
   viera.** El trabajo de CI de `prisma_api` corre `./gradlew build`, que **excluye la etiqueta
@@ -1186,6 +1188,59 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       el detalle del pedido y el prototipo solo pinta el anticipo dentro del pedido nuevo, así que las
       etiquetas y la ayuda —valor, cuenta y fecha, con «hoy viene puesta»— salen del [CU-06](docs/02-casos-de-uso.md#cu-06) y del
       contrato, no de una pantalla aprobada
+
+**Del arreglo de las lecturas rechazadas:**
+
+- [ ] **El texto de «sin respuesta» no es el mismo en todas las pantallas, y el 10 solo da el de
+      Acceso.** El [10 §5.1](docs/10-ux-y-mockups.md#51-acceso) escribe «No se pudo conectar con el servidor. Revisa tu conexión e
+      intenta de nuevo.» para cuando los campos de acceso no llegan, y el front lo usa ahí y en el
+      formulario de la contraseña. «Gestión de usuarios», el panel de cuentas y categorías, el
+      registro rápido y los desplegables dicen otra cosa, que no está en ningún documento: «No se
+      pudo hablar con el servidor. Revisa la conexión y vuelve a intentarlo.», con sus variantes para
+      la lista —«No se pudo cargar la lista…»— y para las opciones —«No se pudieron cargar las
+      opciones…»—. Con el de «no llegó el formulario» pasa lo mismo: el 10 dice «No se pudo cargar el
+      formulario. Intenta de nuevo en un momento.» y las otras pantallas «El servidor respondió, pero
+      no mandó el formulario…». **Conviene decidir si los textos del [10 §5.1](docs/10-ux-y-mockups.md#51-acceso) valen para toda la
+      aplicación** —y entonces el front tiene uno de cada uno— o si cada pantalla necesita el suyo en
+      el 10. Este arreglo no cambió ninguna redacción: cada pantalla le pasa su texto al aviso, así
+      que unificarlos es cambiar una constante
+- [ ] **Una lectura rechazada se pinta con el mensaje del sobre, y ya no se lee como falta de red.**
+      Las seis lecturas que traen una lista —personas, cargos, bitácora, cuentas, categorías y las
+      opciones de un desplegable— devolvían `null` para todo lo que no fuera un éxito, y por eso el
+      `404` de la API vieja de dev, el que cuenta el bloque de GoTrue más abajo, se leía «No se pudo
+      hablar con el servidor». Lo que llega sin la forma del contrato —la página de un proxy, o un
+      éxito con datos que no se dejan leer— **reusa el aviso que el front ya tenía para eso**: «El
+      servidor respondió algo que esta versión no entiende. Intenta de nuevo.», el de la sesión que
+      no se puede leer (tarea [2.6](docs/08-plan-de-desarrollo.md#tarea-2-6)). Se descartaron el de «sin respuesta», que es el que confundía, y
+      uno nuevo para las listas, que sería otro texto del front sin documento
+- [ ] **«Reintentar» se queda también ante un rechazo**, como estaba. La navegación no lo ofrece,
+      porque ahí el rechazo es un `40302` que no cambia reintentando; aquí el caso que lo destapó es
+      una API vieja, y la ruta que le falta llega con el despliegue siguiente: el botón la trae sin
+      recargar la página
+
+**Del arreglo de GoTrue en la tubería:**
+
+- [ ] **Las dos rojas de GoTrue no eran el `config.toml`: era la versión de GoTrue.** Lo que se anotó
+      en la primera corrida de la tubería, la de la tarea [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) —que faltaba escribir
+      `minimum_password_length`, y que la etiqueta que lo llevara las pondría verdes— no se cumplió: la etiqueta
+      `esquema-v0.9.0` ya lleva el 6, y `GoTrueIntegracionTest` siguió con las mismas dos rojas en
+      cada corrida de `develop`. **La v2.196.0 de GoTrue no mira la clave mínima en el alta por
+      administración**, y es la que trae la última versión publicada del CLI de Supabase; la v2.197.0
+      es la primera que la exige, y es la que corre dev. En esta máquina las dos pasaban porque
+      `supabase link` deja fijada la versión del proyecto remoto en `supabase/.temp/gotrue-version`.
+      **Decidido: la tubería escribe ahí la versión de la nube** antes de `supabase start`, y después
+      comprueba que es la que quedó corriendo. Solo GoTrue: Postgres, PostgREST y Storage también van
+      distintos de lo que fijó el vínculo con la nube, pero hoy ninguna prueba cambia por eso. Se
+      descartó tocar las pruebas, que dicen la verdad de lo que corre en dev. **El número va escrito
+      a mano en el flujo, y hay que subirlo cuando Supabase actualice los proyectos**
+- [ ] **Con `develop` en rojo, dev no se desplegó durante tres días y nada lo avisó.** Railway solo
+      despliega con la integración continua en verde ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)), así que la API de dev se quedó en la
+      0.5.1, la del 2026-09-19, mientras el front de dev iba en la 0.11.0. En «Gestión de usuarios»,
+      la bitácora y el catálogo de cargos le pedían rutas que esa API no tenía: respondía 404 con su
+      sobre, y la pantalla decía «No se pudo hablar con el servidor». En esos tres días entraron
+      veinte fusiones con «Probar contra la base» en rojo. **Conviene decidir si ese trabajo pasa a
+      ser obligatorio para fusionar**, con una regla de protección de `develop`: una roja que se deja
+      pasar enseña a ignorar el rojo, y esta dejó a dev con una API vieja sin que nadie lo viera
 
 **De la 3.9, la anulación con motivo:**
 
@@ -2622,7 +2677,9 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       rojas, porque `config.toml` no declaraba `minimum_password_length` y cada versión del CLI
       pone la suya. Quedó escrito en `prisma_db`, con el 6 que ya había. **Una política que nadie
       escribe es una política que cambia sola**, y llevaba desde la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) sin que se notara porque
-      nadie corría esas pruebas fuera de esta máquina
+      nadie corría esas pruebas fuera de esta máquina.
+      **No era eso**: con el 6 ya escrito siguieron rojas. Lo que cambiaba era la versión de GoTrue,
+      y está en «Del arreglo de GoTrue en la tubería»
 - [x] **Un cambio de `config.toml` no llega a la tubería hasta que se publique una versión nueva del
       esquema.** El [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) manda descargar `prisma_db` **en la etiqueta**, y la etiqueta lleva el número
       de `schema_version`; pero `config.toml` no es esquema y subir ese número por un cambio de
@@ -2631,7 +2688,9 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       esquema siguiente, su etiqueta ya lleva el `config.toml` escrito, y el [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) se queda
       como está. De ahí sale el orden: la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) publica y se etiqueta, y **el PR de la API que suba
       su `prisma.esquema` a esa versión** es el que pone verdes las dos pruebas de GoTrue y el que
-      lleva las dos filas de traducción que la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) pide. Hasta entonces esas dos siguen rojas
+      lleva las dos filas de traducción que la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) pide. Hasta entonces esas dos siguen rojas.
+      **No las puso verdes**: la API ya pide el esquema `0.9.0` y seguían rojas; ver «Del arreglo de
+      GoTrue en la tubería»
 - [x] **Una prueba con `LocalDate.now()` depende de en qué huso corre.** [P-08](docs/12-pruebas-y-calidad.md#p-08) registraba un
       movimiento con la fecha del reloj de la máquina, y el ejecutor va en UTC: entre las 7 de la
       noche y la medianoche de Bogotá le mandaba mañana, y la API la rechazaba con `42223`, que es
@@ -2659,7 +2718,9 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       lista, y la 3.15 es del carril Base: la tabla vive en `prisma_api`. **Mientras tanto,
       [C-01](docs/12-pruebas-y-calidad.md#c-01) sale roja contra cualquier base que ya tenga la `0.6.0`**, igual que pasó con la
       [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14). Ese mismo PR es el que pone verdes las dos pruebas de GoTrue que esperaban el
-      `config.toml`, porque la etiqueta `esquema-v0.6.0` es la que por fin lo lleva
+      `config.toml`, porque la etiqueta `esquema-v0.6.0` es la que por fin lo lleva.
+      **Eso último no pasó**: la etiqueta lo llevó y las dos de GoTrue siguieron rojas; ver «Del
+      arreglo de GoTrue en la tubería»
 - [ ] **El esquema pasó a `0.6.0` y no a `0.5.1`.** Apretar una regla es MINOR mientras todo siga
       en `0.y.z`: lo que estas restricciones rechazan es lo que el dominio de la API ya rechazaba,
       así que ninguna API que hoy corra se queda sin escribir algo que escribía. Qué cuenta como
