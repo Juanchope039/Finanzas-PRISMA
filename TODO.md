@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.9.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-23 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -1173,9 +1173,12 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **El dibujo pide al contrato cosas que todavía no tiene**, y van en un MINOR antes de
       construir la mitad Front de la [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) y de la [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9), porque el contrato se acuerda antes de
       implementarse ([21 §3.2](docs/21-trabajo-en-paralelo.md#32-contrato-acordado-y-contrato-generado-no-se-contradicen)):
-      - **cómo se ve cada tipo**: el nombre que se lee, el color —uno de los seis del [10 §3.1](docs/10-ux-y-mockups.md#31-color)—, el
-        grupo del filtro y el signo del valor, que sale del [05 §2](docs/05-reglas-financieras.md#2-naturaleza-de-cada-movimiento) y no se configura;
+      - **cómo se ve cada tipo**: el nombre que se lee, el color —uno de los cuatro que el [10 §3.1](docs/10-ux-y-mockups.md#31-color)
+        deja para un tipo—, el grupo del filtro y lo que le hace a la utilidad, la caja y el
+        patrimonio, que sale del [05 §2](docs/05-reglas-financieras.md#2-naturaleza-de-cada-movimiento), no se configura y da el signo del valor;
       - **el filtro por grupo** en `POST /api/v0/consultas/movimientos`, que hoy filtra por `tipos`;
+      - **qué responde esa consulta a un rango sin una de sus fechas, o al revés**, y con qué
+        mensaje: el libro pinta ese rechazo donde iría la tabla, y hoy el contrato no lo dice;
       - **las páginas**: hoy la consulta trae los `limite` más recientes y el `total`, pero no puede
         pedir la segunda página. Falta también el máximo por página, que la API lee de una
         variable de entorno y es 50 si no está, y el mes en curso, que es el de Bogotá;

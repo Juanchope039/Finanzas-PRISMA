@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-22 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -147,8 +147,13 @@ El color tiene significado funcional, no decorativo.
 > **El morado para anticipos es deliberado.** Es la categoría que más se confunde, y darle un
 > color propio —ni verde de ingreso ni gris de neutro— ayuda a recordar que es una tercera cosa.
 
-**En el libro de movimientos, Gerencia elige el color de cada tipo entre estos seis** ([§4.3](#43-movimientos)).
-Cambia qué color lleva un tipo, no lo que significa cada color: por eso no hay un selector libre.
+**En el libro de movimientos, Gerencia elige el color de cada tipo entre cuatro de estos: verde,
+rojo, morado y gris** ([§4.3](#43-movimientos)). Cambia qué color lleva un tipo, no lo que significa cada color: por eso
+no hay un selector libre. Quedan fuera los otros dos:
+- el ámbar es de las advertencias, y «Registro tardío» y «Anulado» ya son ámbar en la misma fila;
+- el índigo es de la marca y las acciones.
+
+Un tipo de esos colores se leería como un aviso o como un botón.
 
 ### 3.2 Tipografía y jerarquía
 
@@ -259,7 +264,12 @@ cada movimiento y no por la de digitación ([RN-01](03-requisitos-y-bdd.md#rn-01
 | Tabla | Fecha, concepto, categoría, cuenta, valor, tipo y la marca de registro tardío. El valor lleva el signo de lo que el movimiento le hace a la caja y el color de su tipo. Una transferencia dice «Nequi → Bancolombia», va sin signo y sale al filtrar por cualquiera de sus dos cuentas |
 | Pie | **Por página: 10 · 25 · 50** y «‹ Anterior · 1–10 de 14 · Siguiente ›» |
 
-Si no queda ninguna fila, la tabla dice «No hay movimientos con estos filtros».
+Si no queda ninguna fila, la tabla lo dice con el período: «No hay movimientos en julio de 2026.»
+Si hay algún filtro puesto, agrega «con estos filtros», y nunca lo dice sin filtros: mandaría a
+buscar uno que no existe.
+
+Un rango que no se puede pedir no deja la tabla en blanco. Si le falta una fecha o está al revés,
+en lugar de la tabla va el aviso, en rojo, como se pinta una lectura que la API rechaza.
 
 **La fila abierta.** Tocar una fila la abre debajo, como en Pedidos. Dice quién registró el
 movimiento, cuándo se digitó y con qué registro va —el pedido de un anticipo, el activo de una
@@ -285,6 +295,7 @@ filtros valen igual.
 | El nombre, el color y el signo de cada tipo, y si cuenta en «Ingresos», en «Gastos» o en ninguno | Pinta la píldora y el valor tal como llegan |
 | El mes en curso, que es el de Bogotá | Apaga la flecha de adelante ahí |
 | Cuántos movimientos caben por página como máximo: lo lee de una variable de entorno, y son 50 si no está | Ofrece 10, 25 y 50 sin pasar del máximo, y arranca en el máximo |
+| Que un rango sin una de sus fechas, o al revés, no se puede pedir, y con qué palabras | Pinta el aviso donde iría la tabla |
 | Si quien mira puede anular y ver los anulados | Pinta el botón y el interruptor solo si se lo dicen |
 | Con qué registro va cada movimiento, y el aviso de que se anula con él | Los muestra en la fila abierta y en el panel de anular |
 | La foto o el PDF, en base64 dentro del sobre | Los enseña |
@@ -306,14 +317,24 @@ esta pantalla ya es esa. El `<select>` de cuenta del registro rápido debe mostr
 sin saldos, para que Operación pueda elegir una cuenta sin ver la caja.
 
 **Cómo se ve cada tipo.** Es un bloque del panel «Cuentas de dinero», así que solo lo ve
-Gerencia. Lista los nueve tipos, cada uno con el nombre que se lee en el libro, el color de su
-píldora y el grupo del filtro en que cuenta, y **Editar** abre debajo un panel con una píldora de
-muestra, para verla antes de guardarla. Lo que cada tipo le hace a la utilidad, a la caja y al
-patrimonio **no se configura**: lo fija el [05 §2](05-reglas-financieras.md#2-naturaleza-de-cada-movimiento), y de ahí sale el signo del valor. Los colores
-son los seis de [§3.1](#31-color). Arranca con lo que el libro ya pintaba: «Ingreso» en verde, «Gasto» en
-rojo —también el pro-labore, que es gasto—, «Anticipo · pasivo» en morado, «No afecta utilidad»
-en gris para la distribución y el adelanto, y la transferencia, la inversión y el aporte en gris,
-con su nombre.
+Gerencia. Lista los nueve tipos, y de cada uno dice:
+- el nombre que se lee en el libro, el color de su píldora y el grupo del filtro en que cuenta,
+  que es lo que Gerencia cambia;
+- lo que le hace a la utilidad, a la caja y al patrimonio, en tres columnas: «▲ sube», «▼ baja»,
+  «↔ neutra» o «—».
+
+Esas tres columnas **no se configuran**: las fija el [05 §2](05-reglas-financieras.md#2-naturaleza-de-cada-movimiento), y de la caja sale el signo del valor.
+Están a la vista para que quien cambia cómo se lee un tipo vea, en el mismo renglón, lo que ese
+cambio no toca. **Editar** abre debajo un panel con una píldora de muestra, para verla antes de
+guardarla. Los colores son los cuatro que el [§3.1](#31-color) deja para un tipo. Cada «Editar» dice, para un
+lector de pantalla, de qué tipo es: «Editar cómo se lee «Retiro · pro-labore»» ([§3.3](#33-accesibilidad)).
+
+Arranca con lo que el libro ya pintaba:
+- «Ingreso» en verde;
+- «Gasto» en rojo, también el pro-labore, que es gasto;
+- «Anticipo · pasivo» en morado;
+- «No afecta utilidad» en gris para la distribución y el adelanto;
+- la transferencia, la inversión y el aporte en gris, con su nombre.
 
 > **En el prototipo, anular solo cambia el libro, y el PDF no se abre.** Las cifras de las otras
 > pantallas son de ejemplo y no se recalculan. En el sistema real, la API saca el movimiento de
