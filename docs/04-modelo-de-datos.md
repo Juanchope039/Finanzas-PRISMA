@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.10.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -112,7 +112,7 @@ sesión, que es contra lo que se comprueban esos envíos ([§4.11](#411-las-sesi
 tablas más del esquema y hay que poder contarlas, y no están en el diagrama del [§2](#2-diagrama-entidadrelación) por la misma
 razón por la que sí pueden borrarse: no son entidades del taller, son mecanismos de transporte.
 
-La entidad **28**, `presentacion_tipos`, la crea la tarea [3.19](08-plan-de-desarrollo.md#tarea-3-19): es lo que Gerencia elige de cómo se
+La entidad **28**, `presentacion_tipos`, la creó la tarea [3.19](08-plan-de-desarrollo.md#tarea-3-19), en el esquema `0.13.0`: es lo que Gerencia elige de cómo se
 lee cada tipo en el libro ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)). Se une a `movimientos` por el valor de `tipo` y no por una llave
 foránea, así que su línea del diagrama dice de qué habla la tabla, no que haya un `REFERENCES`.
 
@@ -1303,7 +1303,7 @@ CREATE TRIGGER tr_auditar_movimientos
 El mismo trigger se registra sobre `pedidos`, `anticipos`, `productos`, `costos_producto`,
 `activos`, `aportes_retiros`, `prolabore_config`, `empleados`, `nomina_detalle`, `adelantos`,
 `sobres_config`, `cierres_mensuales`, `cargos` y `adjuntos` ([§4.12](#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido)), que es el decimoquinto y
-entró con la [3.14](08-plan-de-desarrollo.md#tarea-3-14). El decimosexto es el de `presentacion_tipos` ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)), que llega con la tarea [3.19](08-plan-de-desarrollo.md#tarea-3-19).
+entró con la [3.14](08-plan-de-desarrollo.md#tarea-3-14). El decimosexto es el de `presentacion_tipos` ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)), que llegó con la tarea [3.19](08-plan-de-desarrollo.md#tarea-3-19), en el esquema `0.13.0`.
 
 **De dónde salen el dispositivo y la IP lo dicen dos funciones**, y no dos expresiones escritas en
 dos sitios (tarea [2.9](08-plan-de-desarrollo.md#tarea-2-9)):
@@ -2414,10 +2414,13 @@ y pasa a ser un rojo en la canalización.
 > `destino_distinto_del_origen` y `transferencia_con_destino` responden las tres el `42226` sobre
 > `cuentaDestinoId`, porque las tres reglas del destino dicen lo mismo con otras palabras.
 >
-> **Las cuatro de `presentacion_tipos` ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)) todavía no existen**: `presentacion_tipos_tipo_key`,
-> `presentacion_tipos_se_lee_como_legible`, `presentacion_tipos_color_valido` y
-> `presentacion_tipos_grupo_valido`. Las crea la tarea [3.19](08-plan-de-desarrollo.md#tarea-3-19), y la API les pone su fila en el PR en
-> que recoja ese esquema. Qué código responde cada una lo acuerda el contrato de la tarea [3.17](08-plan-de-desarrollo.md#tarea-3-17).
+> **Las cuatro de `presentacion_tipos` ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)) ya existen, y la API todavía no las recoge**:
+> `presentacion_tipos_tipo_key`, `presentacion_tipos_se_lee_como_legible`,
+> `presentacion_tipos_color_valido` y `presentacion_tipos_grupo_valido`. Las creó la tarea [3.19](08-plan-de-desarrollo.md#tarea-3-19), en el
+> esquema `0.13.0`, y van en el PR que suba su `prisma.esquema` a esa versión. Las tres de formato
+> responden el `42200` sobre su campo —`seLeeComo`, `color` y `grupo`—, como acordó el contrato de la
+> tarea [3.17](08-plan-de-desarrollo.md#tarea-3-17): el formulario `presentacion-de-tipo` no tiene códigos propios. La unicidad va con el
+> transversal de su clase, el `40900`, porque ninguna ruta inserta en la tabla.
 
 Tres cosas que esta consulta no cubre, y hay que decirlas:
 
