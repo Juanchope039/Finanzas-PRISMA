@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.8.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-22 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [5.9.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -11,7 +11,7 @@ cuánto dura el desarrollo según cuántos carriles avancen a la vez. Un carril 
 persona, un equipo o una sesión de trabajo; al plan le da igual.
 
 <!-- generado:plan-resumen · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**28,4 semanas con 1 carril**, **17,2 semanas con 2 carriles** y **14,2 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
+**29,6 semanas con 1 carril**, **17,8 semanas con 2 carriles** y **14,6 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
 <!-- /generado:plan-resumen -->
 
 > **El plan de 7 sprints daba por hecho que no había backend.**
@@ -119,27 +119,27 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 ### 1.1 Cuánto dura con 1, 2 o 3 carriles activos
 
 <!-- generado:plan-calendario · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**169,5 días de trabajo en 143 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
+**177,5 días de trabajo en 151 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
 
 | Carriles activos | Desarrollo | Estabilización | Total | Frente a 1 carril |
 |:---:|---:|---:|---:|---:|
-| 1 | 25,4 semanas | 3 semanas | **28,4 semanas** | — |
-| 2 | 14,2 semanas | 3 semanas | **17,2 semanas** | −11,3 semanas |
-| 3 | 11,2 semanas | 3 semanas | **14,2 semanas** | −14,2 semanas |
+| 1 | 26,6 semanas | 3 semanas | **29,6 semanas** | — |
+| 2 | 14,8 semanas | 3 semanas | **17,8 semanas** | −11,8 semanas |
+| 3 | 11,6 semanas | 3 semanas | **14,6 semanas** | −15,1 semanas |
 
 | Hito | 1 carril | 2 carriles | 3 carriles |
 |---|:---:|:---:|:---:|
 | [H1](#h1) · Sprint 0 | semana 4 | semana 3 | semana 3 |
 | [H2](#h2) · Sprint 1 | semana 7 | semana 5 | semana 4 |
 | [H3](#h3) · Sprint 2 | semana 11 | semana 7 | semana 6 |
-| [H4](#h4) · Sprint 3 | semana 14 | semana 8 | semana 6 |
-| [H5](#h5) · Sprint 4 | semana 16 | semana 10 | semana 8 |
-| [H6](#h6) · Sprint 5 | semana 17 | semana 10 | semana 8 |
-| [H7](#h7) · Sprint 6 | semana 20 | semana 12 | semana 10 |
-| [H8](#h8) · Sprint 7 | semana 22 | semana 13 | semana 10 |
-| [H9](#h9) · Sprint 8 | semana 24 | semana 15 | semana 12 |
-| [H10](#h10) · Sprint 9 | semana 26 | semana 15 | semana 11 |
-| [H11](#h11) · go-live | semana 29 | semana 18 | semana 15 |
+| [H4](#h4) · Sprint 3 | semana 15 | semana 9 | semana 7 |
+| [H5](#h5) · Sprint 4 | semana 17 | semana 10 | semana 8 |
+| [H6](#h6) · Sprint 5 | semana 19 | semana 11 | semana 8 |
+| [H7](#h7) · Sprint 6 | semana 22 | semana 12 | semana 10 |
+| [H8](#h8) · Sprint 7 | semana 23 | semana 13 | semana 11 |
+| [H9](#h9) · Sprint 8 | semana 25 | semana 15 | semana 12 |
+| [H10](#h10) · Sprint 9 | semana 27 | semana 15 | semana 12 |
+| [H11](#h11) · go-live | semana 30 | semana 18 | semana 15 |
 <!-- /generado:plan-calendario -->
 
 **Cómo se calcula.** Se reparten las tareas en el tiempo respetando sus dependencias, siempre
@@ -179,54 +179,54 @@ gantt
     S0 :api0, 2026-09-15, 2026-10-05
     S1 :api1, 2026-09-22, 2026-10-07
     S2 :api2, 2026-10-07, 2026-10-24
-    S3 :api3, 2026-10-09, 2026-10-26
-    S4 :api4, 2026-10-21, 2026-11-04
-    S5 :api5, 2026-10-25, 2026-11-06
-    S6 :api6, 2026-11-07, 2026-11-18
-    S7 :api7, 2026-10-28, 2026-11-18
-    S8 :api8, 2026-11-04, 2026-12-02
-    S9 :api9, 2026-11-20, 2026-11-30
+    S3 :api3, 2026-10-09, 2026-11-02
+    S4 :api4, 2026-10-24, 2026-11-06
+    S5 :api5, 2026-10-26, 2026-11-08
+    S6 :api6, 2026-11-12, 2026-11-23
+    S7 :api7, 2026-11-08, 2026-11-26
+    S8 :api8, 2026-11-08, 2026-12-02
+    S9 :api9, 2026-11-26, 2026-12-05
 
     section Base
     S0 :base0, 2026-09-16, 2026-09-18
     S1 :base1, 2026-09-18, 2026-10-04
-    S2 :base2, 2026-10-04, 2026-10-20
-    S3 :base3, 2026-10-14, 2026-10-21
-    S4 :base4, 2026-10-24, 2026-11-03
-    S5 :base5, 2026-10-30, 2026-10-31
-    S6 :base6, 2026-11-12, 2026-11-14
-    S8 :base8, 2026-11-06, 2026-11-10
-    S9 :base9, 2026-11-19, 2026-11-20
+    S2 :base2, 2026-10-04, 2026-10-22
+    S3 :base3, 2026-10-16, 2026-10-24
+    S4 :base4, 2026-10-25, 2026-11-05
+    S5 :base5, 2026-11-04, 2026-11-06
+    S6 :base6, 2026-11-18, 2026-11-20
+    S8 :base8, 2026-11-08, 2026-11-14
+    S9 :base9, 2026-11-25, 2026-11-26
 
     section Front
     S0 :front0, 2026-09-15, 2026-10-03
     S1 :front1, 2026-09-26, 2026-09-30
-    S2 :front2, 2026-10-06, 2026-10-18
-    S3 :front3, 2026-10-12, 2026-10-20
-    S5 :front5, 2026-11-03, 2026-11-04
-    S6 :front6, 2026-11-10, 2026-11-17
-    S7 :front7, 2026-11-16, 2026-11-19
-    S9 :front9, 2026-11-18, 2026-11-23
+    S2 :front2, 2026-10-06, 2026-10-16
+    S3 :front3, 2026-10-12, 2026-10-24
+    S5 :front5, 2026-11-06, 2026-11-07
+    S6 :front6, 2026-11-16, 2026-11-22
+    S7 :front7, 2026-11-22, 2026-11-25
+    S9 :front9, 2026-11-09, 2026-11-28
 
     section Contrato
     S1 :contrato1, 2026-09-24, 2026-09-25
     S2 :contrato2, 2026-10-05, 2026-10-06
-    S3 :contrato3, 2026-10-11, 2026-10-12
-    S4 :contrato4, 2026-10-23, 2026-10-24
-    S5 :contrato5, 2026-10-26, 2026-10-27
-    S6 :contrato6, 2026-10-27, 2026-10-28
-    S7 :contrato7, 2026-10-28, 2026-10-29
-    S8 :contrato8, 2026-10-28, 2026-10-29
+    S3 :contrato3, 2026-10-11, 2026-10-18
+    S4 :contrato4, 2026-10-24, 2026-10-25
+    S5 :contrato5, 2026-10-28, 2026-10-29
+    S6 :contrato6, 2026-11-06, 2026-11-07
+    S7 :contrato7, 2026-11-07, 2026-11-08
+    S8 :contrato8, 2026-11-07, 2026-11-08
 
     section Decisión
     S0 :decisin0, 2026-09-15, 2026-09-16
     S1 :decisin1, 2026-09-15, 2026-09-16
-    S9 :decisin9, 2026-09-16, 2026-10-02
+    S9 :decisin9, 2026-09-16, 2026-10-04
 
     section Implantación
-    Estabilización y aprobación en UAT :est, 2026-12-02, 2026-12-16
-    Migración y capacitación :mig, 2026-12-16, 2026-12-23
-    Go-live :milestone, 2026-12-23, 0d
+    Estabilización y aprobación en UAT :est, 2026-12-05, 2026-12-19
+    Migración y capacitación :mig, 2026-12-19, 2026-12-26
+    Go-live :milestone, 2026-12-26, 0d
 ```
 <!-- /generado:plan-gantt -->
 
@@ -462,7 +462,7 @@ reenviada tal cual se rechaza por nonce repetido.
 | | |
 |---|---|
 | **Objetivo** | Registrar plata que entra y sale en menos de 30 segundos |
-| **Requisitos** | [RF-08](03-requisitos-y-bdd.md#rf-08) … [RF-16](03-requisitos-y-bdd.md#rf-16) |
+| **Requisitos** | [RF-08](03-requisitos-y-bdd.md#rf-08) … [RF-16](03-requisitos-y-bdd.md#rf-16), [RF-104](03-requisitos-y-bdd.md#rf-104) |
 
 | # | Tarea | Carril | Depende de | Días |
 |---|---|---|---|---:|
@@ -473,8 +473,8 @@ reenviada tal cual se rechaza por nonce repetido.
 | <a id="tarea-3-5"></a>3.5 | Formulario de registro rápido optimizado para celular, pintado del descriptor que envía la API | Front | [1.18](#tarea-1-18), [1.19](#tarea-1-19), [3.13](#tarea-3-13) | 2 |
 | <a id="tarea-3-6"></a>3.6 | Adjuntar foto del recibo con compresión previa; el archivo sube **a través de la API**, nunca directo al almacenamiento | Front, API | [3.4](#tarea-3-4), [3.5](#tarea-3-5), [3.14](#tarea-3-14), [3.16](#tarea-3-16) | 1,5 |
 | <a id="tarea-3-7"></a>3.7 | Transferencias entre cuentas | API | [3.4](#tarea-3-4) | 1 |
-| <a id="tarea-3-8"></a>3.8 | Listado con filtros por fecha, tipo, categoría y cuenta | API, Front | [3.4](#tarea-3-4) | 1,5 |
-| <a id="tarea-3-9"></a>3.9 | Anulación con motivo obligatorio | API, Front | [3.4](#tarea-3-4) | 1 |
+| <a id="tarea-3-8"></a>3.8 | Listado con filtros por fecha, tipo, categoría y cuenta | API, Front | [3.4](#tarea-3-4), [3.21](#tarea-3-21) | 1,5 |
+| <a id="tarea-3-9"></a>3.9 | Anulación con motivo obligatorio | API, Front | [3.4](#tarea-3-4), [3.8](#tarea-3-8), [3.23](#tarea-3-23) | 1 |
 | <a id="tarea-3-10"></a>3.10 | Corrección por contra-asiento | API | [3.9](#tarea-3-9) | 1 |
 | <a id="tarea-3-11"></a>3.11 | Marca de registro tardío | API | [3.2](#tarea-3-2) | 0,5 |
 | <a id="tarea-3-12"></a>3.12 | Cálculo de saldos por cuenta | API | [3.3](#tarea-3-3) | 1 |
@@ -482,18 +482,43 @@ reenviada tal cual se rechaza por nonce repetido.
 | <a id="tarea-3-14"></a>3.14 | Tabla `adjuntos` y bucket de soportes: especificarla en el [04](04-modelo-de-datos.md) y escribir su migración | Base | [1.1](#tarea-1-1), [3.13](#tarea-3-13) | 1 |
 | <a id="tarea-3-15"></a>3.15 | **Las dos reglas de la cuenta de destino que solo vivían en el dominio** —`destino_solo_en_transferencia` y `destino_distinto_del_origen`, las dos bajo `42226`— y `fecha_no_futura` comparando contra el día de Bogotá y no contra el del huso de la sesión. Pide dos filas nuevas en la tabla de traducción de la API, **en el mismo PR** en que recoja el esquema | Base | [1.1](#tarea-1-1) | 0,5 |
 | <a id="tarea-3-16"></a>3.16 | **El andamio en el celular**: por debajo de 760 px la barra lateral pasa a ser una barra superior fija y el menú se desplaza de lado, como el mockup | Front | [0.19](#tarea-0-19), [2.14](#tarea-2-14) | 1 |
+| <a id="tarea-3-17"></a>3.17 | **Contrato del libro que dibujó el mockup** ([10 §4.3](10-ux-y-mockups.md#43-movimientos)): cómo se ve cada tipo —leerlo y cambiarlo—, el filtro por grupo, las páginas con su máximo y el mes en curso, el rango que no se puede pedir, las banderas de Gerencia para anular y ver anulados, con qué registro va cada movimiento, bajar el soporte y **la anulación que arrastra al registro hermano**, con lo que pasa cuando ese registro ya siguió su vida. Esas reglas no las escribe ningún documento: las propone el contrato, las aprueba quien dirige y quedan en el [CU-03](02-casos-de-uso.md#cu-03) | Contrato | [3.13](#tarea-3-13) | 1 |
+| <a id="tarea-3-18"></a>3.18 | **`fn_auditar` deja de leer `anulado_en` donde no existe**: hoy un `UPDATE` sobre `costos_producto`, `prolabore_config`, `nomina_detalle`, `sobres_config` o `cierres_mensuales` falla con `42703` dentro del trigger, y sobre `presentacion_tipos` fallaría igual. Se comprueba contra una base antes de arreglarlo, y queda una comprobación por tabla auditada ([04 §5.4](04-modelo-de-datos.md#54-auditoría-por-triggers)) | Base | [2.9](#tarea-2-9) | 0,5 |
+| <a id="tarea-3-19"></a>3.19 | **Cómo se ve cada tipo, en la base**: la tabla `presentacion_tipos` ([04 §4.13](04-modelo-de-datos.md#413-cómo-se-ve-cada-tipo-de-movimiento)), con una fila por tipo que escribe la migración, que la leen los dos tipos de usuario y la cambia solo Gerencia, con su trigger de auditoría y sus restricciones con nombre. Pide cuatro filas nuevas en la tabla de traducción de la API, **en el mismo PR** en que recoja el esquema | Base | [3.18](#tarea-3-18) | 0,5 |
+| <a id="tarea-3-20"></a>3.20 | **`fn_anular_movimiento`**: anula el movimiento y el registro que va con él —el anticipo, el activo, el aporte o el retiro, el adelanto— en una sola transacción, con lo que el contrato de la tarea [3.17](#tarea-3-17) decida para el registro que ya siguió su vida ([04 §10](04-modelo-de-datos.md#10-funciones-de-negocio-atómicas)) | Base | [1.1](#tarea-1-1), [3.17](#tarea-3-17) | 1 |
+| <a id="tarea-3-21"></a>3.21 | **El libro que dibujó el mockup, en la API**: cada movimiento con cómo se ve su tipo y con qué registro va, el filtro por grupo, las páginas, el rango que no se puede pedir, las banderas de Gerencia y el soporte en base64 dentro del sobre | API | [3.4](#tarea-3-4), [3.6](#tarea-3-6), [3.17](#tarea-3-17), [3.19](#tarea-3-19) | 2 |
+| <a id="tarea-3-22"></a>3.22 | **Cómo se ve cada tipo: leerlo y cambiarlo** ([RF-104](03-requisitos-y-bdd.md#rf-104)): los nueve, con lo que cada uno le hace a las tres cifras, que no se configura, y el formulario con que Gerencia cambia el nombre con que se lee, el color y el grupo | API | [3.17](#tarea-3-17), [3.19](#tarea-3-19) | 1 |
+| <a id="tarea-3-23"></a>3.23 | **Anular arrastra al registro hermano**: la anulación de la tarea [3.9](#tarea-3-9) pasa a llamar a `fn_anular_movimiento` y dice qué más se anuló | API | [3.17](#tarea-3-17), [3.20](#tarea-3-20) | 1 |
+| <a id="tarea-3-24"></a>3.24 | **«Cómo se ve cada tipo»**, el bloque de Gerencia en «Cuentas de dinero» ([RF-104](03-requisitos-y-bdd.md#rf-104), [10 §4.3](10-ux-y-mockups.md#43-movimientos)): los nueve tipos con su efecto a la vista, y el panel que los cambia con la píldora de muestra | Front | [1.10](#tarea-1-10), [3.17](#tarea-3-17) | 1 |
 
 <!-- generado:plan-oleadas-3 · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **Qué puede ir a la vez en este sprint.** Cada oleada espera solo a las anteriores; dentro de una oleada, todo arranca junto.
 
 | Oleada | Tareas | Carriles | Días |
 |:---:|---|---|---:|
-| 1 | [3.1](#tarea-3-1) · [3.13](#tarea-3-13) · [3.15](#tarea-3-15) · [3.16](#tarea-3-16) | API, Contrato, Base, Front | 3,5 |
-| 2 | [3.2](#tarea-3-2) · [3.3](#tarea-3-3) · [3.5](#tarea-3-5) · [3.14](#tarea-3-14) | API, Front, Base | 5 |
-| 3 | [3.4](#tarea-3-4) · [3.11](#tarea-3-11) · [3.12](#tarea-3-12) | API | 2,5 |
-| 4 | [3.6](#tarea-3-6) · [3.7](#tarea-3-7) · [3.8](#tarea-3-8) · [3.9](#tarea-3-9) | Front, API | 5 |
-| 5 | [3.10](#tarea-3-10) | API | 1 |
+| 1 | [3.1](#tarea-3-1) · [3.13](#tarea-3-13) · [3.15](#tarea-3-15) · [3.16](#tarea-3-16) · [3.18](#tarea-3-18) | API, Contrato, Base, Front | 4 |
+| 2 | [3.2](#tarea-3-2) · [3.3](#tarea-3-3) · [3.5](#tarea-3-5) · [3.14](#tarea-3-14) · [3.17](#tarea-3-17) · [3.19](#tarea-3-19) | API, Front, Base, Contrato | 6,5 |
+| 3 | [3.4](#tarea-3-4) · [3.11](#tarea-3-11) · [3.12](#tarea-3-12) · [3.20](#tarea-3-20) · [3.22](#tarea-3-22) · [3.24](#tarea-3-24) | API, Base, Front | 5,5 |
+| 4 | [3.6](#tarea-3-6) · [3.7](#tarea-3-7) · [3.23](#tarea-3-23) | Front, API | 3,5 |
+| 5 | [3.21](#tarea-3-21) | API | 2 |
+| 6 | [3.8](#tarea-3-8) | API | 1,5 |
+| 7 | [3.9](#tarea-3-9) | API | 1 |
+| 8 | [3.10](#tarea-3-10) | API | 1 |
 <!-- /generado:plan-oleadas-3 -->
+
+> **El dibujo del libro le sumó al sprint las tareas [3.17](#tarea-3-17) a [3.24](#tarea-3-24).** El mockup aprobado pinta un
+> libro que el contrato del `0.11.0` no sabe servir: cómo se ve cada tipo, las páginas, el registro
+> que va con cada movimiento y la anulación que lo arrastra. Pinta también una tabla que la base no
+> tiene. Son tres cadenas, y las tres salen del mismo contrato, el de la [3.17](#tarea-3-17):
+> - **el libro**: la tabla ([3.19](#tarea-3-19)), con la [3.18](#tarea-3-18) debajo porque sin ella no se puede auditar, la API
+>   ([3.21](#tarea-3-21)) y la pantalla de la 3.8;
+> - **cómo se ve cada tipo**, que es [RF-104](03-requisitos-y-bdd.md#rf-104): la misma tabla, la API ([3.22](#tarea-3-22)) y el bloque de
+>   Gerencia ([3.24](#tarea-3-24));
+> - **la anulación que arrastra**: la función de la base ([3.20](#tarea-3-20)), la API ([3.23](#tarea-3-23)) y el botón de la 3.9.
+>
+> La [3.8](#tarea-3-8) y la [3.9](#tarea-3-9) ya tienen hecha su mitad API y se quedan con la del Front, que ahora espera
+> a lo nuevo: la 3.8 a la [3.21](#tarea-3-21), y la 3.9 a la [3.8](#tarea-3-8) y a la [3.23](#tarea-3-23). **Lo nuevo no depende de ellas**,
+> porque sería un ciclo: lo que el dibujo le suma a su mitad API va en su propia tarea.
 
 **Terminado cuando** — se cronometra el registro de un gasto real con foto y toma menos de 30
 segundos.
@@ -797,19 +822,21 @@ Una tarea no está terminada hasta que cumple **todo** lo siguiente:
 ## 6. Backlog priorizado
 
 Recuento hecho sobre [`03-requisitos-y-bdd.md`](03-requisitos-y-bdd.md), fila por fila, el día de
-esta edición: **103 requisitos funcionales**, [RF-01](03-requisitos-y-bdd.md#rf-01) a [RF-103](03-requisitos-y-bdd.md#rf-103).
+esta edición: **104 requisitos funcionales**, [RF-01](03-requisitos-y-bdd.md#rf-01) a [RF-104](03-requisitos-y-bdd.md#rf-104).
 
 | Prioridad | Alcance |
 |---|---|
 | **M** · Imprescindible | 79 requisitos. Sin ellos el sistema no responde las tres preguntas |
-| **S** · Importante | 22 requisitos. Mejoran el uso diario; si un sprint se atrasa, se negocian |
+| **S** · Importante | 23 requisitos. Mejoran el uso diario; si un sprint se atrasa, se negocian |
 | **C** · Deseable | 2 requisitos. Entran solo si hay holgura |
-| **Total** | **103** |
+| **Total** | **104** |
 
-Los dos últimos son los que agrega este cambio —**[RF-102](03-requisitos-y-bdd.md#rf-102)** (descriptor de formulario) y **[RF-103](03-requisitos-y-bdd.md#rf-103)**
-(navegación dictada por la API)—, ambos **M** por decisión del documento [03](03-requisitos-y-bdd.md), y quedan en los
-sprints 0 y 2. La prioridad la fija ese documento, no este plan: aquí solo se dice dónde se
-construyen.
+**[RF-102](03-requisitos-y-bdd.md#rf-102)** (descriptor de formulario) y **[RF-103](03-requisitos-y-bdd.md#rf-103)** (navegación dictada por la API) los agregó el
+paso a una API propia, los dos **M** por decisión del documento [03](03-requisitos-y-bdd.md), y quedan en los sprints 0
+y 2. **[RF-104](03-requisitos-y-bdd.md#rf-104)** —que Gerencia elija cómo se ve cada tipo en el libro— lo agregó el dibujo del libro
+de movimientos: es **S** y queda en el [Sprint 3](#sprint-3), con las tareas [3.22](#tarea-3-22) y [3.24](#tarea-3-24). La [3.8](#tarea-3-8) no espera a ninguna
+de las dos, así que negociarlo no frena el libro. La prioridad la fija el documento [03](03-requisitos-y-bdd.md), no este
+plan: aquí solo se dice dónde se construyen.
 
 Lo que surja durante el desarrollo y no esté en esta lista **va al roadmap**, no al sprint en
 curso. Esa es la única defensa efectiva contra el crecimiento descontrolado del alcance.
