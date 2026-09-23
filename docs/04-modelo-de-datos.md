@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.10.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -1357,15 +1357,18 @@ Esa variante es `fn_auditar_usuarios()`, con el trigger `tr_auditar_usuarios` (t
 —`INSERT`, `UPDATE` y `ANULAR`— y nada más**; los eventos con nombre son de la función de abajo, por
 las dos razones que se explican ahí.
 
-> **La versión que corre hoy lee `OLD.anulado_en` sin preguntar si la columna existe**, y cinco de
-> las tablas que audita no la tienen: `costos_producto`, `prolabore_config`, `nomina_detalle`,
-> `sobres_config` y `cierres_mensuales`. Un `UPDATE` sobre cualquiera de ellas falla con `42703`,
-> que además es un error que la API no sabe traducir. Nada lo caza hoy: `verificar-base.sql` solo
-> actualiza `cargos`, y la semilla corre con los triggers apagados. **Lo arregla la tarea [3.18](08-plan-de-desarrollo.md#tarea-3-18)** con
-> lo que está escrito arriba: la columna se lee de `to_jsonb(OLD)` y de `to_jsonb(NEW)`, que dan nulo
-> cuando la tabla no la tiene, así que en esas tablas todo cambio queda como `UPDATE`. La tarea lo
-> comprueba contra una base antes de arreglarlo, y deja en `verificar-base.sql` un `UPDATE` por tabla
-> auditada. `presentacion_tipos` ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)) la espera, porque tampoco tiene `anulado_en`.
+> **Hasta la tarea [3.18](08-plan-de-desarrollo.md#tarea-3-18), la función leía `OLD.anulado_en` sin preguntar si la columna existe**,
+> y cinco de las tablas que audita no la tienen: `costos_producto`, `prolabore_config`,
+> `nomina_detalle`, `sobres_config` y `cierres_mensuales`. Se comprobó contra una base antes de
+> arreglarlo: un `UPDATE` sobre cualquiera de ellas se caía con `42703` dentro del trigger, que
+> además es un error que la API no sabe traducir. Nada lo cazaba porque `verificar-base.sql` solo
+> editaba `cargos` y la semilla corre con los triggers apagados. **Desde el esquema `0.12.0` corre lo
+> que está escrito arriba**: la columna se lee de `to_jsonb(OLD)` y de `to_jsonb(NEW)`, que dan nulo
+> cuando la tabla no la tiene, así que en esas tablas todo cambio queda como `UPDATE`. Y
+> `verificar-base.sql` edita una fila de cada tabla auditada y compara esa lista con los triggers que
+> llaman a `fn_auditar`, así que `presentacion_tipos` ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)), que tampoco tiene `anulado_en`, no
+> puede entrar sin su comprobación. `nomina_detalle` la edita el dueño y no una sesión, porque no
+> tiene política de `UPDATE` ([§7](#7-seguridad-por-tipo-de-usuario-rls)): la escribe `fn_liquidar_nomina`, que es `SECURITY DEFINER`.
 
 Además de los cambios de fila, la bitácora registra los eventos de acceso y de administración
 de personas:
