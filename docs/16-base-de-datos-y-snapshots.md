@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-21 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [3.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/16-base-de-datos-y-snapshots.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-23 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 > **Construcción: construido y corriendo contra dev y contra qa**, donde el esquema está aplicado y
 > verificado línea por línea (tareas [0.4](08-plan-de-desarrollo.md#tarea-0-4), [0.5](08-plan-de-desarrollo.md#tarea-0-5), [1.1](08-plan-de-desarrollo.md#tarea-1-1) a [1.5](08-plan-de-desarrollo.md#tarea-1-5) y [1.13](08-plan-de-desarrollo.md#tarea-1-13)). **qa quedó al día** con el
@@ -307,13 +307,11 @@ que sea limpio y rápido; los reactiva al final.
 
 ## 9. Límites conocidos (heredados del doc 04)
 
-- **Tablas sin `CREATE TABLE` en la doc:** `cotizaciones` y `cotizacion_lineas`
-  aparecen en el catálogo y el diagrama del doc [04](04-modelo-de-datos.md) pero no tienen definición escrita. **No se
-  inventaron**, y desde la [8.11](08-plan-de-desarrollo.md#tarea-8-11) **ya tienen dueño**: las especifica y las migra la
-  [8.12](08-plan-de-desarrollo.md#tarea-8-12), que entró al plan con el contrato que las promete, igual que la [3.14](08-plan-de-desarrollo.md#tarea-3-14) entró
-  con el de movimientos. Hasta que se haga, el cotizador no tiene dónde guardar. **`adjuntos`
-  salió de esta lista** con la [3.14](08-plan-de-desarrollo.md#tarea-3-14): la especifica el [04 §4.12](04-modelo-de-datos.md#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido) y la crea una
-  migración, junto con el bucket privado en el que vive el archivo.
+- **Ya no queda ninguna tabla sin `CREATE TABLE` en la doc.** Las del catálogo y el diagrama del
+  doc [04](04-modelo-de-datos.md) que no tenían definición escrita no se inventaron: cada una entró al plan con el contrato que
+  la prometía y se escribió en su tarea. `adjuntos` salió de esta lista con la [3.14](08-plan-de-desarrollo.md#tarea-3-14), que la
+  especifica en el [04 §4.12](04-modelo-de-datos.md#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido), y `cotizaciones` y `cotizacion_lineas` con la [8.12](08-plan-de-desarrollo.md#tarea-8-12), que las especifica en
+  el [04 §4.5](04-modelo-de-datos.md#45-productos-costeo-y-cotizaciones) y las crea en el esquema `0.15.0`.
 - **Auditoría de `usuarios`:** el doc [04](04-modelo-de-datos.md) [§5.4](04-modelo-de-datos.md#54-auditoría-por-triggers) dice que necesita una variante propia del trigger
   (detecta `desactivado_en`, no `anulado_en`) y no la especifica. Por eso `usuarios` aún no
   tiene trigger de auditoría de fila.
