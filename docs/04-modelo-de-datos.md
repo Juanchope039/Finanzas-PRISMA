@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.13.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -47,6 +47,8 @@ erDiagram
 
     COTIZACIONES ||--|{ COTIZACION_LINEAS : contiene
     CLIENTES ||--o{ COTIZACIONES : recibe
+    PRODUCTOS ||--o{ COTIZACION_LINEAS : aparece_en
+    COTIZACIONES |o--o| PEDIDOS : se_convierte_en
 
     ACTIVOS ||--o{ MOVIMIENTOS : origina
     APORTES_RETIROS ||--o{ MOVIMIENTOS : origina
@@ -116,6 +118,11 @@ La entidad **28**, `presentacion_tipos`, la creó la tarea [3.19](08-plan-de-des
 lee cada tipo en el libro ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)). Se une a `movimientos` por el valor de `tipo` y no por una llave
 foránea, así que su línea del diagrama dice de qué habla la tabla, no que haya un `REFERENCES`.
 
+Las entidades **12** y **13**, `cotizaciones` y `cotizacion_lineas`, estuvieron en este catálogo y en el
+diagrama desde el principio sin `CREATE TABLE`, y las escribió la tarea [8.12](08-plan-de-desarrollo.md#tarea-8-12), en el esquema `0.15.0`
+([§4.5](#45-productos-costeo-y-cotizaciones)). No son sensibles y aun así llevan RLS, como `cargos`: lo que se restringe es quién las
+anula, no quién las ve ([§7](#7-seguridad-por-tipo-de-usuario-rls)).
+
 ---
 
 ## 4. Esquema SQL
@@ -184,27 +191,27 @@ PostgreSQL: sin `CREATE EXTENSION IF NOT EXISTS citext;` la tabla no se crea.
 > `1.500.000` se almacena como `1500000`. Nunca decimales: el peso colombiano no usa centavos
 > en la práctica y los errores de redondeo de punto flotante se acumulan de forma invisible.
 
-**Por qué dominios y no un `CHECK` en cada columna.** El modelo tiene **32 columnas de dinero** y
-solo **9** traían un `CHECK` escrito a mano. Las otras 23 quedaban a merced de que nadie
-insertara un negativo. Ese es el problema de copiar la regla columna por columna: no es que
-cueste escribirla, es que no hay forma de saber en cuáles falta. Con el dominio la regla vive en
-un solo `CREATE DOMAIN` y la columna solo declara qué es; agregar una columna monetaria nueva ya
-no requiere acordarse de nada.
+**Por qué dominios y no un `CHECK` en cada columna.** Cuando se escribieron los dominios, el modelo
+tenía **32 columnas de dinero** y solo **9** traían un `CHECK` escrito a mano. Las otras 23 quedaban
+a merced de que nadie insertara un negativo. Ese es el problema de copiar la regla columna por
+columna: no es que cueste escribirla, es que no hay forma de saber en cuáles falta. Con el dominio
+la regla vive en un solo `CREATE DOMAIN` y la columna solo declara qué es; agregar una columna
+monetaria nueva ya no requiere acordarse de nada.
 
 Los dominios son además tipos de PostgreSQL, no comentarios: `ADR-003` deja de ser una convención
 que hay que recordar y pasa a ser algo que el motor sabe.
 
 | Dominio | Tipo base | Regla | Columnas | Dónde |
 |---|---|---|:---:|---|
-| `dinero` | `BIGINT` | `>= 0` | 22 | `cuentas.saldo_inicial`, `pedidos.costo_directo`, `pedido_lineas` (2), `productos.precio_actual`, `costos_producto` (4), `prolabore_config.valor_mensual`, `nomina_detalle` (6), `cierres_mensuales` (6) |
-| `dinero_positivo` | `BIGINT` | `> 0` | 7 | `movimientos.valor`, `pedidos.valor_total`, `anticipos.valor`, `activos.valor_compra`, `aportes_retiros.valor`, `empleados.salario_acordado`, `adelantos.valor` |
+| `dinero` | `BIGINT` | `>= 0` | 23 | `cuentas.saldo_inicial`, `pedidos.costo_directo`, `pedido_lineas` (2), `productos.precio_actual`, `costos_producto` (4), `cotizacion_lineas.precio_unitario`, `prolabore_config.valor_mensual`, `nomina_detalle` (6), `cierres_mensuales` (6) |
+| `dinero_positivo` | `BIGINT` | `> 0` | 8 | `movimientos.valor`, `pedidos.valor_total`, `anticipos.valor`, `cotizaciones.valor_total`, `activos.valor_compra`, `aportes_retiros.valor`, `empleados.salario_acordado`, `adelantos.valor` |
 | `dinero_con_signo` | `BIGINT` | ninguna | 3 | `cierres_mensuales.utilidad_causada`, `.flujo_caja`, `.caja_libre_cierre` |
 | `horas` | `NUMERIC(6,2)` | `>= 0` | 5 | `pedidos.horas_trabajo`, `pedido_lineas.horas_unitarias`, `prolabore_config.horas_mensuales`, `empleados.horas_mensuales`, `nomina_detalle.horas_extra` |
 | `minutos` | `NUMERIC(6,2)` | `>= 0` | 2 | `costos_producto.minutos_trabajo` y `.minutos_maquina` |
-| `porcentaje` | `SMALLINT` | `0..100` | 5 | `pedidos.anticipo_pct`, los cuatro `pct_` de `sobres_config` |
+| `porcentaje` | `SMALLINT` | `0..100` | 6 | `pedidos.anticipo_pct`, `cotizaciones.anticipo_pct`, los cuatro `pct_` de `sobres_config` |
 | `anio` | `SMALLINT` | `2020..2100` | 2 | `nomina_periodos.anio`, `cierres_mensuales.anio` |
 | `mes_del_anio` | `SMALLINT` | `1..12` | 2 | `nomina_periodos.mes`, `cierres_mensuales.mes` |
-| `motivo` | `TEXT` | `length(trim(…)) >= 5` | 16 | los trece `anulado_motivo` —el de `adjuntos` entró con la [3.14](08-plan-de-desarrollo.md#tarea-3-14)—, `usuarios.desactivado_motivo`, `pedidos.cancelado_motivo` ([4.11](08-plan-de-desarrollo.md#tarea-4-11)) y `auditoria.motivo`, que entró con la [2.21](08-plan-de-desarrollo.md#tarea-2-21) |
+| `motivo` | `TEXT` | `length(trim(…)) >= 5` | 17 | los catorce `anulado_motivo` —el de `adjuntos` entró con la [3.14](08-plan-de-desarrollo.md#tarea-3-14) y el de `cotizaciones` con la [8.12](08-plan-de-desarrollo.md#tarea-8-12)—, `usuarios.desactivado_motivo`, `pedidos.cancelado_motivo` ([4.11](08-plan-de-desarrollo.md#tarea-4-11)) y `auditoria.motivo`, que entró con la [2.21](08-plan-de-desarrollo.md#tarea-2-21) |
 
 Son **nueve dominios**. Tres piden explicación, porque no son solo una mudanza de reglas ya
 escritas:
@@ -637,6 +644,112 @@ vigencia. Así un pedido antiguo conserva el costo que tenía cuando se produjo.
 
 `minutos_maquina` es lo que permite costear el **bordado** por tiempo de máquina en lugar de
 por unidad de producto.
+
+**Las dos tablas del cotizador las escribió la tarea [8.12](08-plan-de-desarrollo.md#tarea-8-12)**, en el esquema `0.15.0`. Estaban en el
+catálogo y en el diagrama desde el principio sin `CREATE TABLE`, y el contrato de la tarea [8.11](08-plan-de-desarrollo.md#tarea-8-11) ya
+prometía emitir una cotización, aceptarla y anularla ([RF-36](03-requisitos-y-bdd.md#rf-36) a [RF-40](03-requisitos-y-bdd.md#rf-40), [CU-11](02-casos-de-uso.md#cu-11)). Van aquí, y no al final
+del [§4](#4-esquema-sql) como `adjuntos` y `presentacion_tipos`: el título de esta sección ya las anunciaba, y
+meterlas en ella no renumera ninguna otra.
+
+```sql
+CREATE TABLE cotizaciones (
+  id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  numero              TEXT NOT NULL CONSTRAINT cotizaciones_numero_key UNIQUE,
+  cliente_id          UUID NOT NULL REFERENCES clientes(id),
+  fecha_emision       DATE NOT NULL,
+  valida_hasta        DATE,
+  valor_total         dinero_positivo NOT NULL,
+  anticipo_pct        porcentaje NOT NULL DEFAULT 50,
+  notas               TEXT,
+  pedido_id           UUID REFERENCES pedidos(id)      -- el pedido en que se convirtió
+                        CONSTRAINT cotizaciones_pedido_id_key UNIQUE,
+  creado_por          UUID NOT NULL REFERENCES usuarios(id),
+  creado_en           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  anulado_en          TIMESTAMPTZ,
+  anulado_por         UUID REFERENCES usuarios(id),
+  anulado_motivo      motivo,
+  anulado_dispositivo TEXT,
+  anulado_ip          INET,
+  CONSTRAINT no_vence_antes_de_emitirse
+    CHECK (valida_hasta IS NULL OR valida_hasta >= fecha_emision),
+  CONSTRAINT aceptada_no_se_anula
+    CHECK (pedido_id IS NULL OR anulado_en IS NULL),
+  CONSTRAINT anulacion_con_motivo
+    CHECK (anulado_en IS NULL OR (anulado_por IS NOT NULL AND anulado_motivo IS NOT NULL))
+);
+
+CREATE TABLE cotizacion_lineas (
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  cotizacion_id   UUID NOT NULL REFERENCES cotizaciones(id),
+  producto_id     UUID NOT NULL REFERENCES productos(id),
+  cantidad        INTEGER NOT NULL CONSTRAINT cotizacion_lineas_cantidad_positiva
+                    CHECK (cantidad > 0),
+  precio_unitario dinero NOT NULL
+);
+
+CREATE INDEX idx_cotizaciones_fecha ON cotizaciones (fecha_emision DESC)
+  WHERE anulado_en IS NULL;
+CREATE INDEX idx_cotizacion_lineas_cotizacion ON cotizacion_lineas (cotizacion_id);
+
+CREATE TRIGGER tr_auditar_cotizaciones
+  AFTER INSERT OR UPDATE ON cotizaciones
+  FOR EACH ROW EXECUTE FUNCTION fn_auditar();
+```
+
+**Una cotización es lo que se le pasa al cliente antes de que haya pedido**, y sus líneas son las del
+pedido: el contrato les da el mismo esquema, y por eso aceptarla no vuelve a digitar nada ([RF-40](03-requisitos-y-bdd.md#rf-40)).
+`precio_unitario` es el que se le sostuvo al cliente, no el del catálogo de hoy, que puede haber
+cambiado.
+
+**`numero` es el visible, como `C-0119`, y lo pone la API**, igual que el del pedido: es único en toda
+la base, y con qué regla se genera la serie es de la tarea [8.8](08-plan-de-desarrollo.md#tarea-8-8).
+
+**`anticipo_pct` viene en 50**, como en el pedido: es el que propone el formulario `cotizacion` y el que
+compara el [CU-12](02-casos-de-uso.md#cu-12). Si ese porcentaje alcanza para pagar el material lo responde otra consulta, la del
+anticipo mínimo (tarea [8.9](08-plan-de-desarrollo.md#tarea-8-9)), y no esta columna.
+
+**`pedido_id` es la aceptación**: el pedido en que se convirtió. Es único porque cada aceptación crea
+su pedido, y sin eso dos cotizaciones podrían decir que son el mismo.
+
+**El estado no es una columna.** El contrato pinta cuatro, y se leen de tres columnas:
+
+| Estado | Cuándo |
+|---|---|
+| `anulada` | `anulado_en` tiene fecha |
+| `aceptada` | `pedido_id` tiene pedido |
+| `vencida` | `valida_hasta` ya pasó en el día de Bogotá |
+| `vigente` | ninguna de las tres |
+
+«Vencida» cambia sola con el calendario: guardarla pediría una tarea programada que la mantuviera al
+día. Y una aceptada que después vence sigue aceptada, porque venció cuando ya era un pedido.
+
+**Tres reglas en la base, con el nombre de lo que dicen.** `no_vence_antes_de_emitirse` es el `42281`
+del contrato, y el mismo día sí se puede. `aceptada_no_se_anula` impide las dos cosas a la vez: anular
+una aceptada, que es el `40980` —lo que hay que corregir es el pedido—, y aceptar una anulada. Y
+`anulacion_con_motivo`, la misma de toda tabla que se anula.
+
+**Lo que la base no impone, a propósito**, y lo sostiene la API como en el pedido: que haya al menos
+una línea (`42280`), que `valor_total` sea la suma de las líneas y que una vencida no se acepte
+(`40981`). La tercera depende del día, y un `CHECK` con la fecha de hoy rechazaría, al restaurar un
+respaldo, la cotización que venció después de aceptarse.
+
+**Las líneas no guardan costo ni horas**, a diferencia de `pedido_lineas`. El contrato no los trae, el
+PDF no lleva costos, el costo del pedido sale del costeo vigente al aceptarla, como en cualquier
+pedido, y Operación lee esta tabla ([RF-34](03-requisitos-y-bdd.md#rf-34)). Tampoco llevan orden de renglón, igual que las del pedido.
+
+**Una cotización no se edita: se anula y se emite otra**, como decidió la tarea [8.11](08-plan-de-desarrollo.md#tarea-8-11). La base lo
+sostiene a medias, y lo dice: las líneas no tienen política de `UPDATE` ([§7](#7-seguridad-por-tipo-de-usuario-rls)), así que no las
+cambia nadie; y en la cotización, a una sesión de Operación solo le deja aceptar. Lo que se cambie de
+más en esa misma sentencia no lo mira nadie, porque RLS filtra filas y no columnas, y no hay un
+trigger que congele la fila: ninguna tabla hermana lo tiene.
+
+**Llevan RLS sin ser sensibles** ([§7](#7-seguridad-por-tipo-de-usuario-rls)): la leen y la emiten los dos tipos, la aceptan los dos y la
+anula solo Gerencia. **Y la cotización lleva auditoría**: `tr_auditar_cotizaciones` es el decimoséptimo
+trigger de `fn_auditar()` ([§5.4](#54-auditoría-por-triggers)). Las líneas no, como `pedido_lineas`: nacen con la cotización, cuyo
+`INSERT` sí queda en la bitácora, y no cambian nunca.
+
+**De la creación no guarda `dispositivo` ni `ip`**: el [§4.1](#41-tipos-y-convenciones-comunes) pide en toda tabla de negocio las
+cinco columnas de anulación, y dónde se emitió lo anota la bitácora con el `INSERT`.
 
 ### 4.6 Inversiones, capital y pro-labore
 
@@ -1310,7 +1423,8 @@ CREATE TRIGGER tr_auditar_movimientos
 El mismo trigger se registra sobre `pedidos`, `anticipos`, `productos`, `costos_producto`,
 `activos`, `aportes_retiros`, `prolabore_config`, `empleados`, `nomina_detalle`, `adelantos`,
 `sobres_config`, `cierres_mensuales`, `cargos` y `adjuntos` ([§4.12](#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido)), que es el decimoquinto y
-entró con la [3.14](08-plan-de-desarrollo.md#tarea-3-14). El decimosexto es el de `presentacion_tipos` ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)), que llegó con la tarea [3.19](08-plan-de-desarrollo.md#tarea-3-19), en el esquema `0.13.0`.
+entró con la [3.14](08-plan-de-desarrollo.md#tarea-3-14). El decimosexto es el de `presentacion_tipos` ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)), que llegó con la tarea [3.19](08-plan-de-desarrollo.md#tarea-3-19), en el esquema `0.13.0`. Y el decimoséptimo, el de `cotizaciones` ([§4.5](#45-productos-costeo-y-cotizaciones)), que llegó con la tarea [8.12](08-plan-de-desarrollo.md#tarea-8-12), en
+el esquema `0.15.0`; sus líneas no lo llevan, como las del pedido, porque nacen con ella y no cambian.
 
 **De dónde salen el dispositivo y la IP lo dicen dos funciones**, y no dos expresiones escritas en
 dos sitios (tarea [2.9](08-plan-de-desarrollo.md#tarea-2-9)):
@@ -2100,11 +2214,63 @@ abarca crear y anular; aquí no hay nada que crear, y un `FOR ALL` dejaría a Ge
 que no corresponden a ningún tipo o, si `presentacion_tipos_tipo_key` no estuviera, una segunda
 lectura del mismo.
 
+**Y las dos del cotizador**, las entidades 12 y 13 ([§4.5](#45-productos-costeo-y-cotizaciones)), que tampoco son sensibles. Este
+documento las contaba entre las que no necesitaban RLS, porque los dos tipos cotizan y no había nada
+que separar; lo que separó fue el contrato de la tarea [8.11](08-plan-de-desarrollo.md#tarea-8-11), que le dio a la anulación un «solo
+Gerencia» con `40300`. Sin política, eso lo tendría que decidir un `if` de la API ([ADR-006](adr/ADR-006-rls-por-rol.md)): es el
+mismo caso que resolvió la tarea [1.10](08-plan-de-desarrollo.md#tarea-1-10) con `cuentas` y `categorias`, y la misma salida. Las escribió la
+tarea [8.12](08-plan-de-desarrollo.md#tarea-8-12), en el esquema `0.15.0`.
+
+```sql
+-- Las leen y las emiten los dos tipos, porque los dos cotizan (01 §4); cada quien a nombre propio,
+-- como un movimiento.
+CREATE POLICY cotizaciones_lectura ON cotizaciones FOR SELECT USING (TRUE);
+CREATE POLICY cotizaciones_insercion ON cotizaciones FOR INSERT
+  WITH CHECK (creado_por = auth.uid());
+
+-- Aceptarla es de los dos tipos: de vigente y sin aceptar, a aceptada y sin anular.
+CREATE POLICY cotizaciones_aceptacion ON cotizaciones FOR UPDATE
+  USING (anulado_en IS NULL AND pedido_id IS NULL)
+  WITH CHECK (anulado_en IS NULL AND pedido_id IS NOT NULL);
+
+-- Anularla es solo de Gerencia.
+CREATE POLICY cotizaciones_anulacion ON cotizaciones FOR UPDATE
+  USING (fn_es_gerencia()) WITH CHECK (fn_es_gerencia());
+
+-- Las líneas las lee todo el mundo y las escribe quien emitió su cotización. Sin política de
+-- UPDATE: no las cambia nadie, ni Gerencia.
+CREATE POLICY cotizacion_lineas_lectura ON cotizacion_lineas FOR SELECT USING (TRUE);
+CREATE POLICY cotizacion_lineas_insercion ON cotizacion_lineas FOR INSERT
+  WITH CHECK (EXISTS (SELECT 1 FROM cotizaciones c
+                       WHERE c.id = cotizacion_lineas.cotizacion_id
+                         AND c.creado_por = auth.uid()));
+
+ALTER TABLE cotizaciones      ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cotizacion_lineas ENABLE ROW LEVEL SECURITY;
+```
+
+**Dos políticas de `UPDATE` y no un `FOR ALL` de Gerencia**, que es lo que llevan `cuentas` y
+`categorias`: allí solo escribe Gerencia, y aquí Operación también acepta. PostgreSQL suma con `OR`
+las políticas del mismo comando, así que a Operación le queda justo aceptar: una ya aceptada o
+anulada no la alcanza, y si intenta anular una vigente, su fila nueva no pasa el `WITH CHECK` de
+ninguna de las dos y **la base responde `42501`**, que es un error y no un `UPDATE` que no alcanzó
+nada. La política de Gerencia no mira columnas: lo que ni ella puede hacer —anular una aceptada, que
+es el `40980`— lo dice `aceptada_no_se_anula`.
+
+**Las líneas se escriben en dos sentencias, después de la cotización.** Su política busca la
+cotización para saber quién la emitió, y dentro de una sola sentencia no la vería.
+
 Con esto, las dieciséis tablas que el [§3](#3-catálogo-de-entidades) marca como sensibles tienen política, y con `cargos`,
-`cuentas`, `categorias` y `presentacion_tipos` son veinte las que llevan RLS encendida. Las siete restantes
-—`adjuntos`, `pedidos`, `pedido_lineas`, `anticipos`, `productos`, `cotizaciones` y
-`cotizacion_lineas`— siguen sin RLS a propósito: los dos tipos trabajan con ellas todo el día y no
-hay nada que separar. El principio 6 del [§1](#1-principios-del-modelo) se lee así: **en cada tabla donde haya algo que proteger.**
+`cuentas`, `categorias`, `presentacion_tipos`, `cotizaciones` y `cotizacion_lineas` son veintidós las
+que llevan RLS encendida. Las cinco restantes —`adjuntos`, `pedidos`, `pedido_lineas`, `anticipos` y
+`productos`— siguen sin RLS a propósito: los dos tipos trabajan con ellas todo el día y no hay nada que
+separar. El principio 6 del [§1](#1-principios-del-modelo) se lee así: **en cada tabla donde haya algo que proteger.**
+
+> **Dos de esas cinco ya tienen algo que separar.** El contrato le da a `pedidos` una anulación de
+> «solo Gerencia» y a `productos` el alta, la edición, la desactivación y la reactivación, también
+> de «solo Gerencia», y sin política nadie lo impone en la base: es el caso de `cuentas` y
+> `categorias` en la tarea [1.10](08-plan-de-desarrollo.md#tarea-1-10), y ahora el del cotizador. Queda en el [TODO §10](../TODO.md#10-decisiones-de-construcción-que-conviene-revisar) para quien
+> dirige, antes de que la tarea [5.2](08-plan-de-desarrollo.md#tarea-5-2) y las del pedido lo resuelvan con un `if`.
 
 Las pruebas que ejercen estas políticas con una sesión real de tipo Operación son [P-16](12-pruebas-y-calidad.md#p-16) a [P-31](12-pruebas-y-calidad.md#p-31)
 de [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) [§3](12-pruebas-y-calidad.md#3-pruebas-de-permisos).
@@ -2146,9 +2312,11 @@ ALTER TABLE peticiones_idempotentes FORCE ROW LEVEL SECURITY;
 ALTER TABLE nonces_vistos         FORCE ROW LEVEL SECURITY;
 ALTER TABLE sesiones              FORCE ROW LEVEL SECURITY;
 ALTER TABLE presentacion_tipos    FORCE ROW LEVEL SECURITY;
+ALTER TABLE cotizaciones          FORCE ROW LEVEL SECURITY;
+ALTER TABLE cotizacion_lineas     FORCE ROW LEVEL SECURITY;
 ```
 
-Son **dieciocho de las veinte tablas con RLS**. Las dos que faltan no son un olvido: el modelo,
+Son **veinte de las veintidós tablas con RLS**. Las dos que faltan no son un olvido: el modelo,
 tal como está escrito, deja de funcionar si se les pone.
 
 | Tabla | Por qué no lleva `FORCE` | Qué la protege en su lugar |
@@ -2446,6 +2614,16 @@ y pasa a ser un rojo en la canalización.
 > responden el `42200` sobre su campo —`seLeeComo`, `color` y `grupo`—, como acordó el contrato de la
 > tarea [3.17](08-plan-de-desarrollo.md#tarea-3-17): el formulario `presentacion-de-tipo` no tiene códigos propios. La unicidad va con el
 > transversal de su clase, el `40900`, porque ninguna ruta inserta en la tabla.
+>
+> **Las doce del cotizador ([§4.5](#45-productos-costeo-y-cotizaciones)) ya existen, y la API todavía no las recoge.** Las creó
+> la tarea [8.12](08-plan-de-desarrollo.md#tarea-8-12), en el esquema `0.15.0`. En `cotizaciones` son `no_vence_antes_de_emitirse`,
+> `aceptada_no_se_anula`, `anulacion_con_motivo`, `cotizaciones_numero_key`,
+> `cotizaciones_pedido_id_key` y las cuatro foráneas —la del cliente, la del pedido, la de quien la
+> emitió y la de quien la anuló—; en `cotizacion_lineas`, `cotizacion_lineas_cantidad_positiva` y sus
+> dos foráneas. Van en el PR que suba su `prisma.esquema` a esa versión. Tres ya tienen código en el
+> contrato de la tarea [8.11](08-plan-de-desarrollo.md#tarea-8-11): la validez responde el `42281` sobre `validaHasta`, la aceptada que se
+> anula el `40980`, y la foránea del cliente el `42232` sobre `clienteId`, como en el pedido. Las demás
+> van con el transversal de su clase.
 
 Tres cosas que esta consulta no cubre, y hay que decirlas:
 
