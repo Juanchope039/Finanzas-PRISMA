@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/02-casos-de-uso.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [1.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/02-casos-de-uso.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 Los 37 casos de uso del MVP. Cada uno indica el **rol autorizado**, y esa autorización se
 implementa en la base de datos, no en la pantalla.
@@ -118,8 +118,11 @@ de alta, consulta y modificación descrito en la tabla maestra.
 3. Gerencia escribe el motivo y confirma.
 4. El sistema marca `anulado_en`, `anulado_por`, `anulado_motivo`, `anulado_dispositivo` e
    `anulado_ip`. **El registro no se borra.**
-5. Se recalculan los saldos excluyendo el movimiento anulado.
-6. El trigger de auditoría guarda el estado anterior y el posterior en formato JSON.
+5. Si el movimiento va con otro registro —el anticipo de un pedido, un activo, un aporte, un
+   retiro o un adelanto—, **ese registro se anula con él**, con el mismo motivo y en la misma
+   transacción ([04 §5.2](04-modelo-de-datos.md#52-anulación-lógica-con-trazabilidad)). La tabla de abajo dice cuándo se puede.
+6. Se recalculan los saldos excluyendo el movimiento anulado.
+7. El trigger de auditoría guarda el estado anterior y el posterior en formato JSON.
 
 **Flujos alternativos**
 
@@ -128,9 +131,38 @@ de alta, consulta y modificación descrito en la tabla maestra.
 | A1 | Quien intenta anular es de tipo Operación | La base de datos rechaza la operación, no solo la pantalla |
 | A2 | El movimiento ya está anulado | Se informa y no se hace nada |
 | A3 | El movimiento pertenece a un mes cerrado | Se exige contra-asiento ([CU-04](#cu-04)) en lugar de anulación |
+| A4 | Es el anticipo de un pedido ya entregado o cancelado | No se anula nada: ese anticipo ya se volvió venta, o ya se decidió si se devolvía. Se corrige con contra-asiento |
+| A5 | Es el ingreso con que se causó la venta de un pedido entregado | No se anula nada: el pedido quedaría entregado sin venta. Se corrige con contra-asiento |
+| A6 | Es un adelanto que ya se descontó en una nómina liquidada | No se anula nada: la nómina ya lo cobró ([RN-11](03-requisitos-y-bdd.md#rn-11)). Se corrige con contra-asiento |
+| A7 | Es el pago de una nómina | No se anula nada: la liquidación no tiene cómo anularse. Se corrige con contra-asiento |
+| A8 | Es una de las dos mitades de un retiro partido en pro-labore y distribución | Se anulan las dos mitades y sus dos registros de retiro |
+
+**Qué pasa con el registro que va con el movimiento**
+
+| El movimiento va con… | Al anularlo |
+|---|---|
+| Nada: un ingreso, un gasto o una transferencia del libro | Se anula solo |
+| El anticipo de un pedido en proceso | Se anula con él |
+| El anticipo de un pedido entregado o cancelado | No se anula (A4) |
+| La venta que causó la entrega de un pedido | No se anula (A5) |
+| Un activo o un aporte | Se anula con él |
+| Una mitad de un retiro partido | Se anulan las dos mitades y sus dos registros (A8) |
+| Un adelanto sin descontar | Se anula con él |
+| Un adelanto ya descontado | No se anula (A6) |
+| El pago de una nómina | No se anula (A7) |
+
+- **El retiro se anula entero** porque fue una sola decisión: anular una mitad cambiaría cuánto fue
+  pro-labore y cuánto distribución, y eso lo decide la regla del mes ([CU-16](#cu-16)), no una anulación.
+- **Lo que no se anula no se deshace en cascada.** Una anulación de movimiento no deshace una
+  entrega ni una liquidación, que tienen su propia pantalla y su propio flujo.
+- **El libro lo dice antes de intentar.** Cada fila trae si se deja anular y, si no, por qué, con
+  las mismas palabras con que respondería la anulación ([10 §4.3](10-ux-y-mockups.md#43-movimientos)).
+
+Estas reglas las propuso el contrato de la tarea [3.17](08-plan-de-desarrollo.md#tarea-3-17) y las aprobó quien dirige. Las impone
+`fn_anular_movimiento` ([04 §10](04-modelo-de-datos.md#10-funciones-de-negocio-atómicas)).
 
 **Postcondición** — Movimiento invisible en reportes, visible en el modo *ver anulados*,
-íntegro en la base de datos.
+íntegro en la base de datos. Su registro hermano, si lo tiene, queda anulado con él.
 
 ---
 
@@ -724,7 +756,7 @@ de los dos quede mal descrito. Tampoco agrega tablas: reutiliza `exportaciones` 
 puntos 2.1 y 8).
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [15](15-glosario.md "15 · Glosario") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.18.0") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades")
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [15](15-glosario.md "15 · Glosario") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.19.0") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades")
 <!-- /generado:referenciado-desde -->
 
 ---
