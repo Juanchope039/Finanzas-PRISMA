@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.9.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [5.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -11,7 +11,7 @@ cuánto dura el desarrollo según cuántos carriles avancen a la vez. Un carril 
 persona, un equipo o una sesión de trabajo; al plan le da igual.
 
 <!-- generado:plan-resumen · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**29,6 semanas con 1 carril**, **17,8 semanas con 2 carriles** y **14,6 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
+**30,0 semanas con 1 carril**, **18,1 semanas con 2 carriles** y **14,8 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
 <!-- /generado:plan-resumen -->
 
 > **El plan de 7 sprints daba por hecho que no había backend.**
@@ -119,13 +119,13 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 ### 1.1 Cuánto dura con 1, 2 o 3 carriles activos
 
 <!-- generado:plan-calendario · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**177,5 días de trabajo en 151 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
+**180 días de trabajo en 152 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
 
 | Carriles activos | Desarrollo | Estabilización | Total | Frente a 1 carril |
 |:---:|---:|---:|---:|---:|
-| 1 | 26,6 semanas | 3 semanas | **29,6 semanas** | — |
-| 2 | 14,8 semanas | 3 semanas | **17,8 semanas** | −11,8 semanas |
-| 3 | 11,6 semanas | 3 semanas | **14,6 semanas** | −15,1 semanas |
+| 1 | 27,0 semanas | 3 semanas | **30,0 semanas** | — |
+| 2 | 15,1 semanas | 3 semanas | **18,1 semanas** | −11,9 semanas |
+| 3 | 11,8 semanas | 3 semanas | **14,8 semanas** | −15,3 semanas |
 
 | Hito | 1 carril | 2 carriles | 3 carriles |
 |---|:---:|:---:|:---:|
@@ -133,13 +133,13 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 | [H2](#h2) · Sprint 1 | semana 7 | semana 5 | semana 4 |
 | [H3](#h3) · Sprint 2 | semana 11 | semana 7 | semana 6 |
 | [H4](#h4) · Sprint 3 | semana 15 | semana 9 | semana 7 |
-| [H5](#h5) · Sprint 4 | semana 17 | semana 10 | semana 8 |
-| [H6](#h6) · Sprint 5 | semana 19 | semana 11 | semana 8 |
-| [H7](#h7) · Sprint 6 | semana 22 | semana 12 | semana 10 |
-| [H8](#h8) · Sprint 7 | semana 23 | semana 13 | semana 11 |
-| [H9](#h9) · Sprint 8 | semana 25 | semana 15 | semana 12 |
-| [H10](#h10) · Sprint 9 | semana 27 | semana 15 | semana 12 |
-| [H11](#h11) · go-live | semana 30 | semana 18 | semana 15 |
+| [H5](#h5) · Sprint 4 | semana 18 | semana 11 | semana 8 |
+| [H6](#h6) · Sprint 5 | semana 19 | semana 11 | semana 9 |
+| [H7](#h7) · Sprint 6 | semana 22 | semana 13 | semana 10 |
+| [H8](#h8) · Sprint 7 | semana 23 | semana 13 | semana 10 |
+| [H9](#h9) · Sprint 8 | semana 26 | semana 15 | semana 12 |
+| [H10](#h10) · Sprint 9 | semana 28 | semana 16 | semana 12 |
+| [H11](#h11) · go-live | semana 31 | semana 19 | semana 15 |
 <!-- /generado:plan-calendario -->
 
 **Cómo se calcula.** Se reparten las tareas en el tiempo respetando sus dependencias, siempre
@@ -180,43 +180,43 @@ gantt
     S1 :api1, 2026-09-22, 2026-10-07
     S2 :api2, 2026-10-07, 2026-10-24
     S3 :api3, 2026-10-09, 2026-11-02
-    S4 :api4, 2026-10-24, 2026-11-06
-    S5 :api5, 2026-10-26, 2026-11-08
-    S6 :api6, 2026-11-12, 2026-11-23
-    S7 :api7, 2026-11-08, 2026-11-26
-    S8 :api8, 2026-11-08, 2026-12-02
-    S9 :api9, 2026-11-26, 2026-12-05
+    S4 :api4, 2026-10-25, 2026-11-08
+    S5 :api5, 2026-10-28, 2026-11-11
+    S6 :api6, 2026-11-11, 2026-11-22
+    S7 :api7, 2026-11-04, 2026-11-22
+    S8 :api8, 2026-11-09, 2026-12-06
+    S9 :api9, 2026-11-25, 2026-12-04
 
     section Base
     S0 :base0, 2026-09-16, 2026-09-18
     S1 :base1, 2026-09-18, 2026-10-04
     S2 :base2, 2026-10-04, 2026-10-22
-    S3 :base3, 2026-10-16, 2026-10-24
-    S4 :base4, 2026-10-25, 2026-11-05
-    S5 :base5, 2026-11-04, 2026-11-06
-    S6 :base6, 2026-11-18, 2026-11-20
-    S8 :base8, 2026-11-08, 2026-11-14
-    S9 :base9, 2026-11-25, 2026-11-26
+    S3 :base3, 2026-10-16, 2026-10-27
+    S4 :base4, 2026-10-28, 2026-11-07
+    S5 :base5, 2026-11-02, 2026-11-04
+    S6 :base6, 2026-11-17, 2026-11-19
+    S8 :base8, 2026-11-12, 2026-11-24
+    S9 :base9, 2026-11-24, 2026-11-25
 
     section Front
     S0 :front0, 2026-09-15, 2026-10-03
     S1 :front1, 2026-09-26, 2026-09-30
     S2 :front2, 2026-10-06, 2026-10-16
-    S3 :front3, 2026-10-12, 2026-10-24
-    S5 :front5, 2026-11-06, 2026-11-07
-    S6 :front6, 2026-11-16, 2026-11-22
-    S7 :front7, 2026-11-22, 2026-11-25
-    S9 :front9, 2026-11-09, 2026-11-28
+    S3 :front3, 2026-10-12, 2026-10-25
+    S5 :front5, 2026-11-07, 2026-11-08
+    S6 :front6, 2026-11-14, 2026-11-21
+    S7 :front7, 2026-11-21, 2026-11-24
+    S9 :front9, 2026-11-24, 2026-11-28
 
     section Contrato
     S1 :contrato1, 2026-09-24, 2026-09-25
     S2 :contrato2, 2026-10-05, 2026-10-06
     S3 :contrato3, 2026-10-11, 2026-10-18
-    S4 :contrato4, 2026-10-24, 2026-10-25
-    S5 :contrato5, 2026-10-28, 2026-10-29
-    S6 :contrato6, 2026-11-06, 2026-11-07
-    S7 :contrato7, 2026-11-07, 2026-11-08
-    S8 :contrato8, 2026-11-07, 2026-11-08
+    S4 :contrato4, 2026-10-27, 2026-10-28
+    S5 :contrato5, 2026-10-30, 2026-10-31
+    S6 :contrato6, 2026-10-31, 2026-11-01
+    S7 :contrato7, 2026-11-01, 2026-11-02
+    S8 :contrato8, 2026-11-08, 2026-11-09
 
     section Decisión
     S0 :decisin0, 2026-09-15, 2026-09-16
@@ -224,9 +224,9 @@ gantt
     S9 :decisin9, 2026-09-16, 2026-10-04
 
     section Implantación
-    Estabilización y aprobación en UAT :est, 2026-12-05, 2026-12-19
-    Migración y capacitación :mig, 2026-12-19, 2026-12-26
-    Go-live :milestone, 2026-12-26, 0d
+    Estabilización y aprobación en UAT :est, 2026-12-06, 2026-12-20
+    Migración y capacitación :mig, 2026-12-20, 2026-12-27
+    Go-live :milestone, 2026-12-27, 0d
 ```
 <!-- /generado:plan-gantt -->
 
@@ -490,13 +490,14 @@ reenviada tal cual se rechaza por nonce repetido.
 | <a id="tarea-3-22"></a>3.22 | **Cómo se ve cada tipo: leerlo y cambiarlo** ([RF-104](03-requisitos-y-bdd.md#rf-104)): los nueve, con lo que cada uno le hace a las tres cifras, que no se configura, y el formulario con que Gerencia cambia el nombre con que se lee, el color y el grupo | API | [3.17](#tarea-3-17), [3.19](#tarea-3-19) | 1 |
 | <a id="tarea-3-23"></a>3.23 | **Anular arrastra al registro hermano**: la anulación de la tarea [3.9](#tarea-3-9) pasa a llamar a `fn_anular_movimiento` y dice qué más se anuló | API | [3.17](#tarea-3-17), [3.20](#tarea-3-20) | 1 |
 | <a id="tarea-3-24"></a>3.24 | **«Cómo se ve cada tipo»**, el bloque de Gerencia en «Cuentas de dinero» ([RF-104](03-requisitos-y-bdd.md#rf-104), [10 §4.3](10-ux-y-mockups.md#43-movimientos)): los nueve tipos con su efecto a la vista, y el panel que los cambia con la píldora de muestra | Front | [1.10](#tarea-1-10), [3.17](#tarea-3-17) | 1 |
+| <a id="tarea-3-25"></a>3.25 | **La pila local en contenedores, orquestada desde `prisma_db`**: cada repositorio de código trae su receta de contenedor —la API parte de la imagen de la [0.8](#tarea-0-8) y el front de la receta de la [0.9](#tarea-0-9)— y `prisma_db`, que ya levanta la base local, las junta con un solo comando. **Cada receta y cada puerto se apuntan desde el `.env` de la orquestación**, no con rutas escritas: da igual cómo se llame cada carpeta, y cada carril levanta su pila sin copiar `config.toml` a mano ([21 §6.4](21-trabajo-en-paralelo.md#64-ambientes)). La base sigue siendo la de Supabase —`auth` y sus roles, GoTrue, Storage y `pg_cron`—, no un PostgreSQL suelto, y ninguna clave se versiona. Con su ADR | Base, API, Front | [0.8](#tarea-0-8), [0.9](#tarea-0-9), [1.11](#tarea-1-11) | 2,5 |
 
 <!-- generado:plan-oleadas-3 · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **Qué puede ir a la vez en este sprint.** Cada oleada espera solo a las anteriores; dentro de una oleada, todo arranca junto.
 
 | Oleada | Tareas | Carriles | Días |
 |:---:|---|---|---:|
-| 1 | [3.1](#tarea-3-1) · [3.13](#tarea-3-13) · [3.15](#tarea-3-15) · [3.16](#tarea-3-16) · [3.18](#tarea-3-18) | API, Contrato, Base, Front | 4 |
+| 1 | [3.1](#tarea-3-1) · [3.13](#tarea-3-13) · [3.15](#tarea-3-15) · [3.16](#tarea-3-16) · [3.18](#tarea-3-18) · [3.25](#tarea-3-25) | API, Contrato, Base, Front | 6,5 |
 | 2 | [3.2](#tarea-3-2) · [3.3](#tarea-3-3) · [3.5](#tarea-3-5) · [3.14](#tarea-3-14) · [3.17](#tarea-3-17) · [3.19](#tarea-3-19) | API, Front, Base, Contrato | 6,5 |
 | 3 | [3.4](#tarea-3-4) · [3.11](#tarea-3-11) · [3.12](#tarea-3-12) · [3.20](#tarea-3-20) · [3.22](#tarea-3-22) · [3.24](#tarea-3-24) | API, Base, Front | 5,5 |
 | 4 | [3.6](#tarea-3-6) · [3.7](#tarea-3-7) · [3.23](#tarea-3-23) | Front, API | 3,5 |
@@ -519,6 +520,15 @@ reenviada tal cual se rechaza por nonce repetido.
 > La [3.8](#tarea-3-8) y la [3.9](#tarea-3-9) ya tienen hecha su mitad API y se quedan con la del Front, que ahora espera
 > a lo nuevo: la 3.8 a la [3.21](#tarea-3-21), y la 3.9 a la [3.8](#tarea-3-8) y a la [3.23](#tarea-3-23). **Lo nuevo no depende de ellas**,
 > porque sería un ciclo: lo que el dibujo le suma a su mitad API va en su propia tarea.
+
+> **La [3.25](#tarea-3-25) entró a pedido de quien dirige, y no es de Movimientos.** La API y el front
+> ya tienen su receta de contenedor desde el [Sprint 0](#sprint-0) y la base ya corre en Docker con
+> `supabase start`, pero nada levanta las tres juntas: cada carril arma su pila a mano y reparte los
+> puertos copiando un `config.toml` que no se versiona. Va en este sprint y no en el roadmap, adonde
+> el [§6](#6-backlog-priorizado) manda lo que surge, porque no agrega alcance al producto y ninguna tarea la espera.
+> **La lleva Base porque la orquestación vive en `prisma_db`**, que ya es quien levanta la base
+> local: su versión solo se mueve con las migraciones y desde ahí no se despliega nada. Las demás
+> recetas las encuentra por su `.env`, y la tarea trae su ADR.
 
 **Terminado cuando** — se cronometra el registro de un gasto real con foto y toma menos de 30
 segundos.

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-23 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-23 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -25,7 +25,7 @@ Cada tarea dice su **carril**: **API** (`prisma_api`), **Base** (`prisma_db`), *
 
 ## 1. Hecho, en progreso y pendiente
 
-Las tres preguntas de siempre. Las secciones 2 a 6 enumeran **las 151 tareas del plan**, una por una
+Las tres preguntas de siempre. Las secciones 2 a 6 enumeran **las 152 tareas del plan**, una por una
 y con su marca; aquí está el resumen. Que no falte ninguna no depende de la memoria de nadie: la
 herramienta compara el tablero con el plan y la verificación falla si alguna no está.
 
@@ -37,14 +37,14 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 19 | 0 | 0 | 0 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
-| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 24 | 13 | 1 | 10 | 11,5 |
+| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 25 | 13 | 1 | 11 | 14 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 4 | 0 | 7 | 9 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 4 | 0 | 6 | 6,5 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 1 | 0 | 11 | 16,5 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **151** | **87** | **1** | **63** | **80,5** |
+| **Total** | **152** | **87** | **1** | **64** | **83** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -144,7 +144,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
 | **API** | [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.9](docs/08-plan-de-desarrollo.md#tarea-4-9) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
-| **Base** | [3.18](docs/08-plan-de-desarrollo.md#tarea-3-18) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
+| **Base** | [3.18](docs/08-plan-de-desarrollo.md#tarea-3-18) · [3.25](docs/08-plan-de-desarrollo.md#tarea-3-25) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
 | **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Contrato** | [3.17](docs/08-plan-de-desarrollo.md#tarea-3-17) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
@@ -153,13 +153,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **64 tareas y 80,5 días de trabajo** de 151 tareas del plan.
+Quedan **65 tareas y 83 días de trabajo** de 152 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 12,1 semanas | **15,1 semanas** |
-| 2 | 6,7 semanas | **9,7 semanas** |
-| 3 | 5,5 semanas | **8,5 semanas** |
+| 1 | 12,4 semanas | **15,4 semanas** |
+| 2 | 7,0 semanas | **10,0 semanas** |
+| 3 | 5,6 semanas | **8,6 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -751,6 +751,9 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [ ] 🔒 [**3.22**](docs/08-plan-de-desarrollo.md#tarea-3-22) Cómo se ve cada tipo: leerlo y cambiarlo ([RF-104](docs/03-requisitos-y-bdd.md#rf-104)) · API
 - [ ] 🔒 [**3.23**](docs/08-plan-de-desarrollo.md#tarea-3-23) Anular arrastra al registro hermano · API
 - [ ] 🔒 [**3.24**](docs/08-plan-de-desarrollo.md#tarea-3-24) «Cómo se ve cada tipo», el bloque de Gerencia ([RF-104](docs/03-requisitos-y-bdd.md#rf-104)) · Front
+- [ ] ⚡ [**3.25**](docs/08-plan-de-desarrollo.md#tarea-3-25) La pila local en contenedores · Base, API, Front — cada
+      repositorio de código con su receta, y `prisma_db` las levanta juntas con un solo comando; cada
+      receta y cada puerto se apuntan desde el `.env` de la orquestación, y la base sigue en Supabase
 
 **[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
 
@@ -909,6 +912,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 | 13 | Qué objetivos nativos se publican | Gerencia | Nada hoy: no hay disparador | ⬜ |
 | 14 | Una sola licencia para los cuatro repositorios | Quien dirige | Nada técnico | ✅ **AGPL-3.0 en los cuatro**: PRISMA se sirve por la red y no se distribuye, y la sección 13 es lo único que obliga a publicar lo que alguien modifique de un servicio |
 | 15 | Encabezado de licencia en cada archivo fuente | Quien dirige | Nada técnico | ⬜ Hoy no lo lleva ninguno. La AGPL lo recomienda, pero son cientos de archivos en tres lenguajes y el `LICENSE` del repositorio ya dice cuál rige |
+| 16 | Dónde vive la orquestación de la pila local, y cómo encuentra cada receta | Quien dirige | Tarea [3.25](docs/08-plan-de-desarrollo.md#tarea-3-25) | ✅ **En `prisma_db`**, el repositorio más idóneo: ya levanta la base local y reparte sus puertos ([21 §6.4](docs/21-trabajo-en-paralelo.md#64-ambientes)). Cada receta de contenedor y cada puerto se apuntan desde el `.env` de la orquestación, no con rutas escritas. La especificación no va en un contenedor. El ADR lo escribe la propia tarea |
 
 **Lo que el modelo de datos todavía no define** ([`04-modelo-de-datos.md`](docs/04-modelo-de-datos.md)):
 
@@ -1199,6 +1203,27 @@ a `anon`.
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**De la entrada de la 3.25 al 08:**
+
+- [ ] ⚡ **Entró una tarea nueva al plan, la [3.25](docs/08-plan-de-desarrollo.md#tarea-3-25), y el total pasa de 151 a 152.** La
+      pidió quien dirige para agilizar y homogeneizar lo local. Lo que ya había —la imagen de la API,
+      la receta del front y `supabase start`— no se levanta junto, y cada carril reparte sus puertos
+      copiando a mano un `config.toml` que no se versiona ([21 §6.4](docs/21-trabajo-en-paralelo.md#64-ambientes))
+- [ ] **La orquestación va en `prisma_db`, y no en la especificación ni en la API.** Quien dirige pidió
+      el repositorio más idóneo ([§7](#7-decisiones-pendientes), decisión 16), y lo es por lo que ya hace: levanta la base
+      local y guarda ese `config.toml`, así que lo difícil —Supabase con los puertos de cada carril—
+      se queda donde ya vive. Su versión solo se mueve con las migraciones ([C-05](docs/12-pruebas-y-calidad.md#c-05)) y desde ahí no se
+      despliega nada. La especificación es pública, su integración continua no construye código y
+      dejaría de ser solo documentos y contrato; en la API o en el front, cada archivo nuevo pide
+      versión, y la API tendría que conocer al front, que depende de ella y no al revés
+- [ ] **En el [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) y no en el roadmap**, adonde el [08 §6](docs/08-plan-de-desarrollo.md#6-backlog-priorizado) manda lo que surge. No agrega alcance al
+      producto —no hay requisito detrás— y ninguna tarea pasa a depender de ella. La lleva Base aunque
+      en ese sprint ya tenga la 3.18, la 3.19 y la 3.20, porque la orquestación vive en `prisma_db`
+- [ ] **La receta de la base no es una imagen de PostgreSQL.** RLS lee `auth` y los roles de Supabase,
+      el acceso pasa por GoTrue, los soportes por Storage y la purga por `pg_cron`: con otra base, lo
+      que pasa en local fallaría en dev. La integración continua ya levanta Supabase con el CLI
+      ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)), y la pila local tiene que ser la misma
 
 **Del dibujo del libro de movimientos:**
 
