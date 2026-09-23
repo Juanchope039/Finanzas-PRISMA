@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-23 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.13.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-23 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -37,14 +37,14 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 19 | 0 | 0 | 0 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
-| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 25 | 13 | 1 | 11 | 14 |
+| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 25 | 14 | 1 | 10 | 13 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 4 | 0 | 7 | 9 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 4 | 0 | 6 | 6,5 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 1 | 0 | 11 | 16,5 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **152** | **87** | **1** | **64** | **83** |
+| **Total** | **152** | **88** | **1** | **63** | **82** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -110,7 +110,7 @@ quedó hecho; detrás de él se abre la prueba de corte ([1.15](docs/08-plan-de-
 `cargos` ([2.3](docs/08-plan-de-desarrollo.md#tarea-2-3)), la tabla de idempotencia ([1.13](docs/08-plan-de-desarrollo.md#tarea-1-13)), su purga ([1.16](docs/08-plan-de-desarrollo.md#tarea-1-16)) y la semilla reproducible
 ([1.11](docs/08-plan-de-desarrollo.md#tarea-1-11)) y la primera promoción a qa ([1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)) cerradas, sigue la tabla `usuarios` ([2.4](docs/08-plan-de-desarrollo.md#tarea-2-4)). El
 carril Contrato acordó con la [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) los diez módulos del plan, **y lo reabre el dibujo del libro**:
-la tarea [3.17](docs/08-plan-de-desarrollo.md#tarea-3-17) acuerda lo que el libro pide y el contrato del `0.11.0` no sabe servir. **El acceso está cerrado de punta a punta**: con la
+la tarea [3.17](docs/08-plan-de-desarrollo.md#tarea-3-17) ya acordó en el `v0.19.0` lo que el libro pide y el contrato del `0.11.0` no sabía servir. **El acceso está cerrado de punta a punta**: con la
 sesión de 30 días ([2.2](docs/08-plan-de-desarrollo.md#tarea-2-2)) se entra, se recarga la página y se sigue dentro, se sale por el menú de
 la sesión y quien entra con clave temporal la cambia y llega al tablero. Y con la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) **Gerencia ya
 puede dar de alta a alguien**, que era lo último que solo sabía hacer `seed.sql`. **Con la [2.16](docs/08-plan-de-desarrollo.md#tarea-2-16) la pantalla de Gestión de usuarios queda entera**: arriba las personas, en medio
@@ -144,22 +144,21 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
 | **API** | [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.9](docs/08-plan-de-desarrollo.md#tarea-4-9) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
-| **Base** | [3.18](docs/08-plan-de-desarrollo.md#tarea-3-18) · [3.25](docs/08-plan-de-desarrollo.md#tarea-3-25) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
-| **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
-| **Contrato** | [3.17](docs/08-plan-de-desarrollo.md#tarea-3-17) |
+| **Base** | [3.18](docs/08-plan-de-desarrollo.md#tarea-3-18) · [3.20](docs/08-plan-de-desarrollo.md#tarea-3-20) · [3.25](docs/08-plan-de-desarrollo.md#tarea-3-25) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
+| **Front** | [3.24](docs/08-plan-de-desarrollo.md#tarea-3-24) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **65 tareas y 83 días de trabajo** de 152 tareas del plan.
+Quedan **64 tareas y 82 días de trabajo** de 152 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 12,4 semanas | **15,4 semanas** |
-| 2 | 7,0 semanas | **10,0 semanas** |
-| 3 | 5,6 semanas | **8,6 semanas** |
+| 1 | 12,3 semanas | **15,3 semanas** |
+| 2 | 6,9 semanas | **9,9 semanas** |
+| 3 | 5,9 semanas | **8,9 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -167,14 +166,14 @@ Quedan **65 tareas y 83 días de trabajo** de 152 tareas del plan.
 El orden sale de las dependencias del [plan](docs/08-plan-de-desarrollo.md): cuántas tareas pendientes cuelgan de cada una, directa
 o indirectamente. No es el orden en que se descubrieron.
 
-- [ ] ⚡ **El contrato del libro que dibujó el mockup** ([3.17](docs/08-plan-de-desarrollo.md#tarea-3-17)) · Contrato — tiene **ocho tareas detrás**
+- [x] **El contrato del libro que dibujó el mockup** ([3.17](docs/08-plan-de-desarrollo.md#tarea-3-17)) — hecho en el `v0.19.0`. Tenía **ocho tareas detrás**
       por un día de trabajo. Cinco son directas: la función que anula con el registro hermano
       ([3.20](docs/08-plan-de-desarrollo.md#tarea-3-20)), el libro en la API ([3.21](docs/08-plan-de-desarrollo.md#tarea-3-21)), leer y cambiar cómo se ve cada tipo ([3.22](docs/08-plan-de-desarrollo.md#tarea-3-22)), la anulación
       que arrastra ([3.23](docs/08-plan-de-desarrollo.md#tarea-3-23)) y el bloque de Gerencia ([3.24](docs/08-plan-de-desarrollo.md#tarea-3-24)). Tres son indirectas: el libro ([3.8](docs/08-plan-de-desarrollo.md#tarea-3-8)), su
       botón de anular ([3.9](docs/08-plan-de-desarrollo.md#tarea-3-9)) y el contra-asiento ([3.10](docs/08-plan-de-desarrollo.md#tarea-3-10)). **Reabre el carril Contrato**, que la [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10)
       había cerrado con los diez módulos, y es el primero que no sale de los documentos sino de un
-      dibujo aprobado. **Las reglas del registro que ya siguió su vida las propone él**, y las aprueba
-      quien dirige al revisarlo
+      dibujo aprobado. **Las reglas del registro que ya siguió su vida las propuso él**, y quien dirige
+      las aprobó: están en el [CU-03](docs/02-casos-de-uso.md#cu-03)
 - [ ] ⚡ **Que `fn_auditar` deje de leer `anulado_en` donde no existe** ([3.18](docs/08-plan-de-desarrollo.md#tarea-3-18)) · Base — tiene **seis
       tareas detrás** por medio día. La directa es la tabla de cómo se ve cada tipo ([3.19](docs/08-plan-de-desarrollo.md#tarea-3-19)), y detrás
       de ella vienen el libro en la API, leer y cambiar cada tipo, el libro, su botón y el
@@ -740,17 +739,20 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       mockup, **el menú va arriba y de lado**: el logo y las pestañas en una barra fija, el topbar
       debajo a todo el ancho y la insignia al pie de la pantalla. Girar el celular no borra lo que
       se estaba escribiendo. `prisma_front` en `0.5.0+5`, con 296 pruebas
-- [ ] ⚡ [**3.17**](docs/08-plan-de-desarrollo.md#tarea-3-17) Contrato del libro que dibujó el mockup · Contrato — lo que el libro pide y el
-      `0.11.0` no sirve, con las reglas del registro que ya siguió su vida, que propone él y aprueba
-      quien dirige
+- [x] [**3.17**](docs/08-plan-de-desarrollo.md#tarea-3-17) Contrato del libro que dibujó el mockup · Contrato — **hecho en el
+      `v0.19.0`**: cada fila del libro dice cómo se pinta su tipo, con qué registro va y si se deja
+      anular; la consulta pagina, filtra por grupo y rechaza el rango con una sola fecha (`42227`);
+      Gerencia lee y cambia cómo se ve cada tipo, y el soporte baja en base64. **Las reglas del
+      registro que ya siguió su vida las aprobó quien dirige** y están en el [CU-03](docs/02-casos-de-uso.md#cu-03), A4 a A8, con
+      sus cuatro 409, `40920` a `40923`
 - [ ] ⚡ [**3.18**](docs/08-plan-de-desarrollo.md#tarea-3-18) `fn_auditar` deja de leer `anulado_en` donde no existe · Base
 - [ ] 🔒 [**3.19**](docs/08-plan-de-desarrollo.md#tarea-3-19) Cómo se ve cada tipo, en la base: `presentacion_tipos` · Base
-- [ ] 🔒 [**3.20**](docs/08-plan-de-desarrollo.md#tarea-3-20) `fn_anular_movimiento`: el movimiento y su registro hermano en una sola
+- [ ] ⚡ [**3.20**](docs/08-plan-de-desarrollo.md#tarea-3-20) `fn_anular_movimiento`: el movimiento y su registro hermano en una sola
       transacción · Base
 - [ ] 🔒 [**3.21**](docs/08-plan-de-desarrollo.md#tarea-3-21) El libro que dibujó el mockup, en la API · API
 - [ ] 🔒 [**3.22**](docs/08-plan-de-desarrollo.md#tarea-3-22) Cómo se ve cada tipo: leerlo y cambiarlo ([RF-104](docs/03-requisitos-y-bdd.md#rf-104)) · API
 - [ ] 🔒 [**3.23**](docs/08-plan-de-desarrollo.md#tarea-3-23) Anular arrastra al registro hermano · API
-- [ ] 🔒 [**3.24**](docs/08-plan-de-desarrollo.md#tarea-3-24) «Cómo se ve cada tipo», el bloque de Gerencia ([RF-104](docs/03-requisitos-y-bdd.md#rf-104)) · Front
+- [ ] ⚡ [**3.24**](docs/08-plan-de-desarrollo.md#tarea-3-24) «Cómo se ve cada tipo», el bloque de Gerencia ([RF-104](docs/03-requisitos-y-bdd.md#rf-104)) · Front
 - [ ] ⚡ [**3.25**](docs/08-plan-de-desarrollo.md#tarea-3-25) La pila local en contenedores · Base, API, Front — cada
       repositorio de código con su receta, y `prisma_db` las levanta juntas con un solo comando; cada
       receta y cada puerto se apuntan desde el `.env` de la orquestación, y la base sigue en Supabase
@@ -1227,7 +1229,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 
 **Del dibujo del libro de movimientos:**
 
-- [ ] **El dibujo pide al contrato cosas que todavía no tiene**, y van en un MINOR antes de
+- [x] **El dibujo pide al contrato cosas que todavía no tiene**, y van en un MINOR antes de
       construir la mitad Front de la [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) y de la [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9), porque el contrato se acuerda antes de
       implementarse ([21 §3.2](docs/21-trabajo-en-paralelo.md#32-contrato-acordado-y-contrato-generado-no-se-contradicen)):
       - **cómo se ve cada tipo**: el nombre que se lee, el color —uno de los cuatro que el [10 §3.1](docs/10-ux-y-mockups.md#31-color)
@@ -1247,7 +1249,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       - **bajar un adjunto**, en base64 dentro del sobre como decidió la [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11), y quién puede verlo;
       - y que **anular arrastre al registro hermano**, que cambia la operación del `0.11.0`.
 
-      **Ya es la tarea [3.17](docs/08-plan-de-desarrollo.md#tarea-3-17)**, que lo acuerda todo en un solo MINOR.
+      **Lo acordó todo la tarea [3.17](docs/08-plan-de-desarrollo.md#tarea-3-17)**, en un solo MINOR: el `v0.19.0`.
 - [ ] **Y a la base, una tabla y una función; políticas nuevas, ninguna.** La tabla es la de cómo
       se ve cada tipo, `presentacion_tipos`, con lo que el libro ya pintaba, su RLS —la leen los dos
       tipos y la cambia Gerencia—, su trigger de auditoría y sus restricciones con nombre ([04 §4.13](docs/04-modelo-de-datos.md#413-cómo-se-ve-cada-tipo-de-movimiento)).
@@ -1256,7 +1258,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       `adelantos_actualizacion` y `anticipos` no lleva RLS. Lo que falta es anular los dos en una
       sola transacción, que el [04 §10](docs/04-modelo-de-datos.md#10-funciones-de-negocio-atómicas) manda hacer en la base, y que la tabla nueva se pueda auditar,
       que pide arreglar antes `fn_auditar`. Son las tareas [3.18](docs/08-plan-de-desarrollo.md#tarea-3-18), [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19) y [3.20](docs/08-plan-de-desarrollo.md#tarea-3-20)
-- [ ] **Hay reglas que ningún documento escribe todavía, y el dibujo no las decide.** No se sabe
+- [x] **Hay reglas que ningún documento escribe todavía, y el dibujo no las decide.** No se sabe
       qué pasa al anular el anticipo de un pedido ya entregado, un adelanto ya descontado en una
       nómina liquidada o una de las dos mitades de un retiro partido en pro-labore y distribución.
       Y el [CU-03](docs/02-casos-de-uso.md#cu-03) A3 dice que en un mes cerrado no se anula, sino que se corrige con un
@@ -1268,6 +1270,35 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       dirige al revisarlo**, como el contrato de capital decidió cómo se parte un retiro cuando nadie
       lo dice. Quedan escritas en el [CU-03](docs/02-casos-de-uso.md#cu-03) antes de que la [3.20](docs/08-plan-de-desarrollo.md#tarea-3-20) las imponga. Se descartó una
       tarea de Decisión aparte, que habría detenido el contrato igual
+- [x] **Las reglas las aprobó quien dirige el 2026-09-23** y están en el [CU-03](docs/02-casos-de-uso.md#cu-03), A4 a A8: el
+      anticipo de un pedido en proceso, un activo, un aporte y un adelanto sin descontar se anulan
+      con su movimiento; **un retiro partido se anula entero**, las dos mitades, porque anular una
+      sola cambiaría cuánto fue pro-labore sin que la regla del mes lo decidiera; y el anticipo de
+      un pedido entregado o cancelado, la venta de una entrega, un adelanto ya descontado y el pago
+      de una nómina **no se anulan**, y se corrigen con contra-asiento. Se descartó anular en
+      cascada la entrega o la liquidación: tienen su propia pantalla y su propio flujo
+- [ ] **Los cuatro rechazos son 409 y no 422**, `40920` a `40923`: no es un dato mal escrito sino el
+      estado del registro, como `40932`. Estrenan el 409 del rango de movimientos. **El mes cerrado
+      reutiliza `40960 MES_YA_CERRADO`** en vez de estrenar otro, con su «cuándo» ampliado: su
+      mensaje, «Ese mes ya está cerrado», dice poco al anular, y la fila lo completa con `porQueNo`
+- [ ] **Para anular el retiro entero, la base tiene que saber cuáles son sus dos mitades.** El
+      `Retiro` del contrato tiene un id y cada mitad es un movimiento con su fila de
+      `aportes_retiros`, pero el [04 §4.6](docs/04-modelo-de-datos.md#46-inversiones-capital-y-pro-labore) no escribe ninguna columna que las una. Si la migración de capital
+      no la trae, es un PR de base antes de la [3.20](docs/08-plan-de-desarrollo.md#tarea-3-20), y una columna nueva son dos PR ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md))
+- [ ] **Sin `limite`, el libro trae el máximo por página y ya no todo.** Es un cambio de
+      comportamiento dentro de un MINOR, y se aceptó porque ninguna pantalla pide todavía el libro:
+      su mitad Front es la de la [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8), que no está hecha. `limite` pasó a ser el tamaño de página en
+      vez de estrenar `porPagina`, y uno por encima del máximo responde `42200` en vez de recortarse
+      en silencio. **Lo mismo el rango**: `desde` sola ya no vale, y responde `42227`
+- [ ] **La presentación del tipo viaja en cada fila y no una vez por página**, y la consulta de los
+      nueve tipos es solo de Gerencia. Con 50 filas como máximo, repetirla cuesta poco y el front
+      no cruza nada. Se descartó mandar los nueve en la página
+- [ ] **Cada fila dice si se deja anular, además de la bandera de la página.** `puedeAnular` dice
+      si quien mira es Gerencia; `sePuedeAnular` y `porQueNo`, si ese movimiento en concreto se deja.
+      Es lo que el [CU-03](docs/02-casos-de-uso.md#cu-03) A3 pedía, fila por fila, y lo que evita que el botón falle al tocarlo
+- [ ] **El `Documento` suma tres tipos de foto** para bajar el soporte, y es un enum de respuesta
+      que crece. Se llamó adición compatible, como en el `0.15.0` y el `0.17.0`: un cliente que
+      trate como error un tipo que no conoce es el que tiene que cambiar
 - [x] **Las tareas entraron al 08 el 2026-09-23, con el dibujo ya aprobado**, y son ocho y no
       las cuatro que decía esta línea: el contrato ([3.17](docs/08-plan-de-desarrollo.md#tarea-3-17)), tres de Base ([3.18](docs/08-plan-de-desarrollo.md#tarea-3-18), [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19) y
       [3.20](docs/08-plan-de-desarrollo.md#tarea-3-20)), tres de API ([3.21](docs/08-plan-de-desarrollo.md#tarea-3-21), [3.22](docs/08-plan-de-desarrollo.md#tarea-3-22) y [3.23](docs/08-plan-de-desarrollo.md#tarea-3-23)) y el bloque de Gerencia ([3.24](docs/08-plan-de-desarrollo.md#tarea-3-24)). La [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) y la
