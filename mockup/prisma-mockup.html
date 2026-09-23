@@ -743,6 +743,9 @@ tbody tr.fila-detalle:hover{background:none}
 .marcas{white-space:nowrap}
 .marcas .pill + .pill{margin-left:4px}
 .libro-vacio{padding:26px 0; text-align:center; color:var(--faint); font-size:.85rem}
+/* Un rango que no se puede pedir no es un libro vacío: es un rechazo, y se lee en rojo, donde
+   iría la tabla, como el front pinta una lectura rechazada. */
+.libro-vacio.rechazo{color:var(--neg)}
 /* La fila abierta: quién y cuándo, el soporte y las acciones. En el celular la tabla es más ancha
    que la pantalla, así que la caja se pega al borde visible, como el panel de confirmar. */
 .fila-detalle > td{padding:0 0 12px}
@@ -766,9 +769,6 @@ tbody tr.fila-detalle:hover{background:none}
 .libro-pie .grow{flex:1}
 .libro-tamano,.libro-paginas{display:flex; align-items:center; gap:8px}
 .libro-cuantos{font-size:.76rem; color:var(--muted); min-width:96px; text-align:center}
-/* La píldora de índigo: el sexto color del 10 §3.1, el de la marca. Solo existe para que Gerencia
-   pueda elegirlo en «Cómo se ve cada tipo». */
-.p-acc{background:var(--accent-soft); color:var(--accent)}
 .tipos-mov{margin-top:18px; padding-top:16px; border-top:1px solid var(--line)}
 .tipos-mov h3{margin-bottom:6px}
 .tipos-mov .bajada{margin:0 0 12px}
@@ -1401,14 +1401,15 @@ tbody tr.fila-detalle:hover{background:none}
 
           <!-- Cómo se lee cada tipo en el libro. Gerencia cambia la palabra, el color y el grupo
                del filtro; lo que el tipo le hace a las tres cifras es del 05 §2 y no se toca
-               aquí. Los colores son los seis del 10 §3.1, cada uno con su significado. -->
+               aquí, pero se ve: las tres últimas columnas. Los colores son cuatro de los seis del
+               10 §3.1: el ámbar es de las advertencias y el índigo, de la marca y las acciones. -->
           <div class="tipos-mov">
             <h3>Cómo se ve cada tipo</h3>
             <p class="bajada">Aquí cambia cómo se lee cada tipo en el libro, no cómo cuenta: lo que
-            cada uno le hace a la utilidad, a la caja y al patrimonio es fijo. «Cuenta en» dice si
-            sale al filtrar por Ingresos o por Gastos.</p>
+            cada uno le hace a la utilidad, a la caja y al patrimonio es fijo, y se ve en las tres
+            últimas columnas. «Cuenta en» dice si sale al filtrar por Ingresos o por Gastos.</p>
             <div class="tw"><table>
-              <thead><tr><th>Tipo</th><th>Se lee como</th><th>Cuenta en</th><th class="r"></th></tr></thead>
+              <thead><tr><th>Tipo</th><th>Se lee como</th><th>Cuenta en</th><th>Utilidad</th><th>Caja</th><th>Patrimonio</th><th class="r"></th></tr></thead>
               <tbody id="tb-tipos-mov"></tbody>
             </table></div>
           </div>
@@ -2191,31 +2192,34 @@ var MOVS = [
 ];
 
 /* Cómo se ve cada tipo en el libro. Lo configura Gerencia en «Cuentas de dinero»: el nombre que
-   se lee, el color de la píldora y en qué grupo del filtro cuenta. «caja» NO se configura: es lo
-   que el tipo le hace a la caja según el 05 §2 —▲ entra, ▼ sale, ↔ se queda—, y de ahí sale el
-   signo del valor. Los valores de arranque son los que el libro ya pintaba. El orden es el del
-   ENUM del contrato. */
+   se lee, el color de la píldora y en qué grupo del filtro cuenta. «utilidad», «caja» y
+   «patrimonio» NO se configuran: son lo que el tipo le hace a cada cifra según el 04 §4.3 y el
+   05 §2 —1 sube, −1 baja, 0 no la toca; en la caja, el 0 de la transferencia es que la plata solo
+   cambia de bolsillo—. De la caja sale el signo del valor, y las tres se ven en la tabla de
+   configuración, para que quede a la vista lo que no cambia. Los valores de arranque son los que
+   el libro ya pintaba. El orden es el del ENUM del contrato. */
 var TIPOS_MOV = {
-  ingreso            :{nombre:'Ingreso',                     lee:'Ingreso',            tono:'verde',  grupo:'ingresos', caja: 1},
-  gasto              :{nombre:'Gasto',                       lee:'Gasto',              tono:'rojo',   grupo:'gastos',   caja:-1},
-  transferencia      :{nombre:'Transferencia entre cuentas', lee:'Transferencia',      tono:'gris',   grupo:'ninguno',  caja: 0},
-  inversion          :{nombre:'Inversión en un activo',      lee:'Inversión',          tono:'gris',   grupo:'ninguno',  caja:-1},
-  aporte             :{nombre:'Aporte de capital',           lee:'Aporte de capital',  tono:'gris',   grupo:'ninguno',  caja: 1},
-  retiro_prolabore   :{nombre:'Retiro · pro-labore',         lee:'Gasto',              tono:'rojo',   grupo:'gastos',   caja:-1},
-  retiro_distribucion:{nombre:'Retiro · distribución',       lee:'No afecta utilidad', tono:'gris',   grupo:'ninguno',  caja:-1},
-  anticipo_recibido  :{nombre:'Anticipo recibido',           lee:'Anticipo · pasivo',  tono:'morado', grupo:'ninguno',  caja: 1},
-  adelanto_empleada  :{nombre:'Adelanto a la empleada',      lee:'No afecta utilidad', tono:'gris',   grupo:'ninguno',  caja:-1}
+  ingreso            :{nombre:'Ingreso',                     lee:'Ingreso',            tono:'verde',  grupo:'ingresos', utilidad: 1, caja: 1, patrimonio: 1},
+  gasto              :{nombre:'Gasto',                       lee:'Gasto',              tono:'rojo',   grupo:'gastos',   utilidad:-1, caja:-1, patrimonio:-1},
+  transferencia      :{nombre:'Transferencia entre cuentas', lee:'Transferencia',      tono:'gris',   grupo:'ninguno',  utilidad: 0, caja: 0, patrimonio: 0},
+  inversion          :{nombre:'Inversión en un activo',      lee:'Inversión',          tono:'gris',   grupo:'ninguno',  utilidad: 0, caja:-1, patrimonio: 0},
+  aporte             :{nombre:'Aporte de capital',           lee:'Aporte de capital',  tono:'gris',   grupo:'ninguno',  utilidad: 0, caja: 1, patrimonio: 1},
+  retiro_prolabore   :{nombre:'Retiro · pro-labore',         lee:'Gasto',              tono:'rojo',   grupo:'gastos',   utilidad:-1, caja:-1, patrimonio:-1},
+  retiro_distribucion:{nombre:'Retiro · distribución',       lee:'No afecta utilidad', tono:'gris',   grupo:'ninguno',  utilidad: 0, caja:-1, patrimonio:-1},
+  anticipo_recibido  :{nombre:'Anticipo recibido',           lee:'Anticipo · pasivo',  tono:'morado', grupo:'ninguno',  utilidad: 0, caja: 1, patrimonio: 0},
+  adelanto_empleada  :{nombre:'Adelanto a la empleada',      lee:'No afecta utilidad', tono:'gris',   grupo:'ninguno',  utilidad: 0, caja:-1, patrimonio: 0}
 };
 
-/* Los seis colores del 10 §3.1, cada uno con lo que significa. Gerencia elige entre estos y no
-   entre cualquiera: el color dice algo en todo el sistema y tiene que leerse en los dos temas. */
+/* Los cuatro colores que el 10 §3.1 deja para un tipo, cada uno con lo que significa. Gerencia
+   elige entre estos y no entre cualquiera: el color dice algo en todo el sistema y tiene que
+   leerse en los dos temas. No están los otros dos: el ámbar es de las advertencias —«Registro
+   tardío» y «Anulado» ya son ámbar— y el índigo, de la marca y las acciones. Un tipo de esos
+   colores se leería como un aviso o como un botón. */
 var TONOS = {
   verde : {nombre:'Verde · positivo',    pill:'p-ok',   color:'var(--pos)'},
   rojo  : {nombre:'Rojo · negativo',     pill:'p-neg',  color:'var(--neg)'},
-  ambar : {nombre:'Ámbar · advertencia', pill:'p-warn', color:'var(--warn)'},
   gris  : {nombre:'Gris · neutro',       pill:'p-mut',  color:'var(--muted)'},
-  morado: {nombre:'Morado · anticipo',   pill:'p-ant',  color:'var(--anticipo)'},
-  indigo: {nombre:'Índigo · marca',      pill:'p-acc',  color:'var(--accent)'}
+  morado: {nombre:'Morado · anticipo',   pill:'p-ant',  color:'var(--anticipo)'}
 };
 var GRUPOS_MOV = {ingresos:'Ingresos', gastos:'Gastos', ninguno:'Ninguno'};
 
@@ -2842,6 +2846,26 @@ function tituloLibro(){
     ' – ' + (+h[2]) + ' ' + MESES_CORTOS[+h[1] - 1] + ' ' + h[0];
 }
 
+/* Un rango sin una de sus fechas, o al revés, no se puede pedir: la API lo rechaza con su mensaje
+   y el libro lo pinta donde iría la tabla, en vez de dejarla en blanco sin decir por qué. Qué
+   responde la API todavía no lo dice el contrato; estas palabras son de ejemplo. */
+function rechazoDelRango(){
+  if (libro.modo !== 'rango') return '';
+  if (!libro.desde || !libro.hasta) return 'Elige las dos fechas: desde cuándo y hasta cuándo.';
+  if (libro.desde > libro.hasta) return '«Desde» tiene que ir antes de «Hasta».';
+  return '';
+}
+
+/* El libro vacío dice de qué período y si hay filtros puestos: «con estos filtros» sin ninguno
+   puesto manda a buscar un filtro que no existe. */
+function libroVacio(){
+  var filtros = libro.grupo !== 'todos' || libro.categoria || libro.cuenta;
+  var periodo = libro.modo === 'mes'
+    ? 'en ' + MESES_LARGOS[libro.mes] + ' de ' + libro.anio
+    : 'entre el ' + fechaLarga(libro.desde) + ' y el ' + fechaLarga(libro.hasta);
+  return 'No hay movimientos ' + periodo + (filtros ? ' con estos filtros' : '') + '.';
+}
+
 /* Lo que el libro le pide a la API: el período por la fecha en que ocurrió cada movimiento
    (RN-01), el grupo, la categoría, la cuenta —la de origen o la de destino— y, solo si quien mira
    es Gerencia, también los anulados. Lo más reciente primero. */
@@ -2948,7 +2972,9 @@ function tablaMovs(){
   if (filaAbierta && cuerpo.contains(filaAbierta)) filaAbierta = null;
 
   cuerpo.innerHTML = filaAviso(aviso, 7) + (vista.length ? vista.map(filaMov).join('')
-    : '<tr><td colspan="7" class="libro-vacio">No hay movimientos con estos filtros.</td></tr>');
+    : (rechazoDelRango()
+      ? '<tr><td colspan="7" class="libro-vacio rechazo" role="alert">' + rechazoDelRango() + '</td></tr>'
+      : '<tr><td colspan="7" class="libro-vacio">' + libroVacio() + '</td></tr>'));
 
   $$('#tb-movs tr.fila-mov').forEach(function(fila){
     var id = +fila.getAttribute('data-mov');
@@ -3934,17 +3960,33 @@ function guardarMovimiento(){
 })();
 
 /* ---------- cómo se ve cada tipo (Gerencia, en «Cuentas de dinero») ---------- */
+/* Lo que un tipo le hace a una cifra, como lo escribe el 05 §2. En la caja, el 0 es la
+   transferencia: la plata no entra ni sale, cambia de bolsillo. En las otras dos, es que no la toca. */
+function efectoTipo(n, enLaCaja){
+  if (n > 0) return '▲ sube';
+  if (n < 0) return '▼ baja';
+  return enLaCaja ? '↔ neutra' : '—';
+}
+
 function tablaTiposMov(){
   var cuerpo = document.getElementById('tb-tipos-mov');
   if (!cuerpo) return;
   if (filaAbierta && cuerpo.contains(filaAbierta)) filaAbierta = null;
+  /* Las tres últimas columnas no se editan: están para que quien cambia cómo se lee un tipo vea,
+     en el mismo renglón, lo que ese cambio no toca. */
+  var fijo = '<td class="mono" style="color:var(--muted); white-space:nowrap">';
   cuerpo.innerHTML = Object.keys(TIPOS_MOV).map(function(clave){
     var t = TIPOS_MOV[clave];
     return '<tr><td style="font-weight:500">' + enTexto(t.nombre) + '</td>' +
       '<td><span class="pill ' + TONOS[t.tono].pill + '">' + enTexto(t.lee) + '</span></td>' +
       '<td>' + GRUPOS_MOV[t.grupo] + '</td>' +
+      fijo + efectoTipo(t.utilidad, false) + '</td>' +
+      fijo + efectoTipo(t.caja, true) + '</td>' +
+      fijo + efectoTipo(t.patrimonio, false) + '</td>' +
+      /* Nueve botones que dicen lo mismo no le sirven a un lector de pantalla: cada uno dice de
+         qué tipo es, como «Desactivar a …» en Gestión de usuarios (10 §3.3). */
       '<td class="r"><button type="button" class="ghost" style="padding:3px 9px" data-tipo-editar="' +
-      clave + '">Editar</button></td></tr>';
+      clave + '" aria-label="Editar cómo se lee «' + enAtributo(t.nombre) + '»">Editar</button></td></tr>';
   }).join('');
   $$('#tb-tipos-mov [data-tipo-editar]').forEach(function(b){
     b.addEventListener('click', function(){ editarTipoMov(b.getAttribute('data-tipo-editar'), b); });
