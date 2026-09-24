@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.26.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.27.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -82,8 +82,8 @@ otra cosa.
 ([3.21](docs/08-plan-de-desarrollo.md#tarea-3-21)), lo pinta la pantalla ([3.8](docs/08-plan-de-desarrollo.md#tarea-3-8)), el botón de anular vive en la fila abierta ([3.9](docs/08-plan-de-desarrollo.md#tarea-3-9)),
 anular se lleva el registro hermano ([3.23](docs/08-plan-de-desarrollo.md#tarea-3-23)) y lo que no se puede anular se corrige con un
 contra-asiento sin tocar el original ([3.10](docs/08-plan-de-desarrollo.md#tarea-3-10)). Lo que falta decidir está en el
-[§10](#10-decisiones-de-construcción-que-conviene-revisar), y lo que hay que vigilar —las etiquetas
-del esquema, que no existen— en el [§9](#9-a-vigilar).
+[§10](#10-decisiones-de-construcción-que-conviene-revisar), y lo que hay que vigilar —las ocho etiquetas
+del esquema que faltan, y que desde ahora pone una tubería— en el [§9](#9-a-vigilar).
 
 **El alta de usuarios volvió a servir, y falta ejercitarla contra dev.** Crear a alguien respondía
 «algo salió mal» con cualquier nombre de usuario, porque faltaba `SUPABASE_SERVICE_ROLE_KEY` en el
@@ -1228,17 +1228,20 @@ a `anon`.
   diciendo cuál; pero **construir la imagen de la API y la del front quedó sin ejercitar**, porque
   Docker Hub responde `429` a la máquina donde se escribió. Es lo primero que hay que correr en una
   máquina con cuota: `./scripts/db/pila-local.ps1`, y ver las tres piezas arriba
-- **A `prisma_db` le faltan seis etiquetas `esquema-vX.Y.Z`, y la CI de la API depende de ellas.**
-  El [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) dice que la API descarga la base en la etiqueta de su `prisma.esquema`.
+- **A `prisma_db` le faltan ocho etiquetas `esquema-vX.Y.Z`, y por eso la CI de `develop` de la API
+  está en rojo.** El [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) dice que la API descarga la base en la etiqueta de su `prisma.esquema`.
   Están la `esquema-v0.1.0` y de la `0.3.0` a la `0.10.0`; **faltan la `0.2.0` y de la `0.11.0` a
-  la `0.15.0`**, aunque sus migraciones estén fusionadas en `develop`. **Con `prisma.esquema` en
-  `0.14.0`, el trabajo «Probar contra la base» no puede correr.** Cada una va sobre el commit con
-  que se fusionó su PR, como las que ya existen: `0.2.0` en `15dce67`, `0.11.0` en `89982e6`,
-  `0.12.0` en `2dd0e11`, `0.13.0` en `f24cf39`, `0.14.0` en `1c337b2` y `0.15.0` en `ca14398`; la
-  `0.16.0`, sobre el commit con que se fusione el PR de la [3.10](docs/08-plan-de-desarrollo.md#tarea-3-10). **Hasta que existan, la API no
-  puede subir su `prisma.esquema`**, y con ella se quedan esperando las doce filas de traducción
-  que le dejó la [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) y la política del contra-asiento de la [3.10](docs/08-plan-de-desarrollo.md#tarea-3-10), cuya prueba de permiso
-  se salta mientras tanto en vez de pasar en verde sin mirar
+  la `0.17.0`**, aunque sus migraciones estén fusionadas en `develop`. La [3.21](docs/08-plan-de-desarrollo.md#tarea-3-21) subió
+  `prisma.esquema` a `0.14.0` antes de que su etiqueta existiera, y desde entonces el trabajo «Probar
+  contra la base» falla al traer `prisma_db`: ya estaba en rojo en el PR que la llevó a `develop`, y
+  se fusionó igual, porque ese trabajo avisa pero no frena. **Las pone el flujo
+  `etiquetas-del-esquema.yml` de `prisma_db`**, que en su primera corrida pone las ocho, cada una
+  sobre el commit con que se fusionó su PR —`0.2.0` en `15dce67`, `0.11.0` en `89982e6`, `0.12.0` en
+  `2dd0e11`, `0.13.0` en `f24cf39`, `0.14.0` en `1c337b2`, `0.15.0` en `ca14398`, `0.16.0` en
+  `e916e85` y `0.17.0` en `6d5d5af`—, y desde ahí una por fusión. **Hasta que ese PR se fusione, la
+  API no puede subir su `prisma.esquema`**, y con él esperan las doce filas de traducción que le dejó
+  la [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12), las dos de la [5.11](docs/08-plan-de-desarrollo.md#tarea-5-11) y la política del contra-asiento de la [3.10](docs/08-plan-de-desarrollo.md#tarea-3-10), cuya prueba
+  de permiso se salta mientras tanto en vez de pasar en verde sin mirar
 - **Una comprobación de la [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) se pone en rojo con dos personas de Gerencia activas.** El
   informe espera que, con el guardián de fila apagado, la desactivación masiva la atrape el de
   sentencia; lo que responde es el trigger de permisos —«Solo Gerencia cambia el tipo, el cargo…»—,
@@ -1350,6 +1353,23 @@ a `anon`.
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**Del arreglo de las etiquetas del esquema:**
+
+- [ ] **Las etiquetas `esquema-vX.Y.Z` las pone la tubería, no una persona.** Es la respuesta a
+      «quién etiqueta y cuándo», que quedó abierta en la [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7): a mano se saltaron ocho seguidas, y una
+      sesión de Claude en la nube no puede ponerlas, porque recibe `403` al empujar una etiqueta
+      aunque sí pueda empujar una rama. El flujo `etiquetas-del-esquema.yml` de `prisma_db` corre en
+      cada empuje a `develop` con permiso de escritura, y es lo único de ese repositorio que lo tiene.
+      **Si las reglas del repositorio no dejan escribir etiquetas a la tubería**, la primera corrida
+      falla y lo dice
+- [ ] **La etiqueta va sobre el commit más viejo de la primera línea de `develop` que tocó el
+      `…_publica_version_X_Y_Z.sql`.** Es el commit con que se fusionó el PR, y da el mismo que eligió
+      quien puso a mano las ocho etiquetas viejas que tienen ese archivo. Se descartó buscar sin
+      `--first-parent`, que las pone en commits de las ramas de trabajo, y tomar el más nuevo, que
+      movería la versión a la edición si alguien tocara una migración ya fusionada —lo que [C-05](docs/12-pruebas-y-calidad.md#c-05)
+      prohíbe—. **Nunca mueve una etiqueta que ya existe**, aunque apunte a otro commit: moverla le
+      cambiaría la base a quien ya la descargó, y si alguna estuviera mal se decide a mano
 
 **De la corrección por contra-asiento ([3.10](docs/08-plan-de-desarrollo.md#tarea-3-10)):**
 
