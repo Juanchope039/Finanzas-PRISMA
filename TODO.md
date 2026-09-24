@@ -34,16 +34,16 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 <!-- generado:plan-tablero · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
-| [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 19 | 0 | 0 | 0 |
-| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
+| [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta(#sprint-0) | 19 | 19 | 0 | 0 | 0 |
+| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · [Base de datos, RLS, identidad propagada e idempotencia(#sprint-1) | 21 | 21 | 0 | 0 | 0 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · [Acceso, usuarios, cargos y canal firmado](#sprint-2) | 22 | 22 | 0 | 0 | 0 |
-| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
-| [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 4 | 0 | 7 | 9 |
-| [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 11 | 5 | 0 | 6 | 6,5 |
-| [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
-| [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
-| [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
-| [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
+| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · [Movimientos(#sprint-3) | 25 | 25 | 0 | 0 | 0 |
+| [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · [Pedidos y anticipos(#sprint-4) | 11 | 4 | 0 | 7 | 9 |
+| [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · [Productos y costeo(#sprint-5) | 11 | 5 | 0 | 6 | 6,5 |
+| [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · [Reportes y KPIs(#sprint-6) | 10 | 1 | 0 | 9 | 14,5 |
+| [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · [Capital, retiros y patrimonio(#sprint-7) | 9 | 1 | 0 | 8 | 12 |
+| [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · [Nómina, cotizador y cierre(#sprint-88) | 12 | 2 | 0 | 10 | 15,5 |
+| [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · [Promoción, PWA y endurecimiento(#sprint-) | 13 | 1 | 0 | 12 | 10,5 |
 | **Total** | **153** | **101** | **0** | **52** | **68** |
 <!-- /generado:plan-tablero -->
 
@@ -302,7 +302,7 @@ o indirectamente. No es el orden en que se descubrieron.
 
 ---
 
-## 2. Sprint 0 · proyectos, ambientes y contrato
+## 2. <a id="sprint-0"></a>Sprint 0 · proyectos, ambientes y contrato
 
 - [x] [**0.1**](docs/08-plan-de-desarrollo.md#tarea-0-1) Proyecto `prisma_api`: Java 25, Spring Boot 4 y Gradle, con el esqueleto hexagonal · API
 - [x] [**0.2**](docs/08-plan-de-desarrollo.md#tarea-0-2) Regla de frontera con ArchUnit en la integración continua · API
@@ -357,7 +357,7 @@ se cierra con la [0.9](docs/08-plan-de-desarrollo.md#tarea-0-9), que volvió a e
 
 ---
 
-## 3. Sprint 1 · base, RLS, identidad e idempotencia
+## 3. <a id="sprint-1"></a>Sprint 1 · base, RLS, identidad e idempotencia
 
 ✏️ quiere decir que el SQL ya está en la migración inicial de `prisma_db`
 (`20260915120000_esquema_inicial.sql`) pero nunca corrió contra una base: no cuenta como hecho
@@ -665,7 +665,7 @@ hasta aplicarlo y probarlo.
 
 ---
 
-## 5. Sprints 3 a 8 · funcionalidades en cadenas paralelas
+## 5. <a id="sprint-3"></a>Sprints 3 a 8 · funcionalidades en cadenas paralelas
 
 **Las cadenas avanzan a la vez y comparten lo mínimo**: cada una tiene sus tablas y su rango de
 códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-verticales-sprints-3-a-8)). El orden exacto dentro de cada una lo dan las dependencias del plan.
@@ -868,7 +868,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       `auth`, GoTrue, Storage y `pg_cron`, y un `postgres:16` escrito a mano no tendría `auth.uid()`
       que juzgar. Ninguna clave se versiona. Con su [ADR-038](docs/adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md). **Queda por hacer la primera
       construcción de las dos imágenes** en una máquina con cuota de Docker Hub ([§9](#9-a-vigilar))
-**[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
+<a id="sprint-7"></a>**[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
 
 - [ ] 🔒 [**6.1**](docs/08-plan-de-desarrollo.md#tarea-6-1) Utilidad causada, flujo de caja y caja libre · API
 - [ ] 🔒 [**6.2**](docs/08-plan-de-desarrollo.md#tarea-6-2) Pruebas con el ejemplo de septiembre completo · API
@@ -884,7 +884,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       `60`–`69`, el último que quedaba vacío. **Cierra el carril Contrato**: los diez módulos del
       plan quedan acordados antes de implementarse
 
-**[Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio**
+<a id="sprint-7"></a>**[Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio**
 
 - [ ] ⚡ [**7.1**](docs/08-plan-de-desarrollo.md#tarea-7-1) Inversiones en activos · API, Front
 - [ ] ⚡ [**7.2**](docs/08-plan-de-desarrollo.md#tarea-7-2) Aportes de capital · API, Front
@@ -902,7 +902,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 ### Cadena B · el pedido
 
-**[Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo**
+<a id="sprint-5"></a>**[Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo**
 
 - [x] [**5.1**](docs/08-plan-de-desarrollo.md#tarea-5-1) Dominio `Producto` y servicio `calcularMargenes` · API — los tres márgenes de
       [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes) reproducidos producto por producto, con el margen por hora vacío —no en cero—
@@ -939,7 +939,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19) y con la 3.10 ya adentro. **Le deja dos filas a la API**, y **falta promoverla a
       dev y a qa**
 
-**[Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos**
+<a id="sprint-4"></a>**[Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos**
 
 - [x] [**4.1**](docs/08-plan-de-desarrollo.md#tarea-4-1) Dominio `Pedido`, estados y transiciones · API — los cinco estados y los siete pasos
       que existen entre ellos; entregado y cancelado son finales, y anular no es cancelar
@@ -970,7 +970,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       `cancelado_por` también la cuenta [C-01](docs/12-pruebas-y-calidad.md#c-01). Van en el PR que suba su `prisma.esquema`, y **falta
       promoverla a dev y a qa**
 
-**[Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Cotizador**
+<a id="sprint-8"></a>**[Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Cotizador**
 
 - [ ] 🔒 [**8.8**](docs/08-plan-de-desarrollo.md#tarea-8-8) Cotizaciones y remisiones en PDF con logo · API, Front
 - [ ] ⚡ [**8.9**](docs/08-plan-de-desarrollo.md#tarea-8-9) Validador de anticipo mínimo · API
@@ -1004,7 +1004,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 
 ---
 
-## 6. Sprint 9 · promoción, PWA y endurecimiento
+## 6.<a id="sprint-9"></a> Sprint 9 · promoción, PWA y endurecimiento
 
 **No se parte: lo hacen todos los carriles juntos**, porque consiste en integrar y probar lo de todos.
 
