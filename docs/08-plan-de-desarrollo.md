@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [5.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-24 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -133,10 +133,10 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 | [H2](#h2) · Sprint 1 | semana 7 | semana 5 | semana 4 |
 | [H3](#h3) · Sprint 2 | semana 11 | semana 7 | semana 6 |
 | [H4](#h4) · Sprint 3 | semana 15 | semana 9 | semana 7 |
-| [H5](#h5) · Sprint 4 | semana 18 | semana 11 | semana 8 |
+| [H5](#h5) · Sprint 4 | semana 18 | semana 10 | semana 8 |
 | [H6](#h6) · Sprint 5 | semana 19 | semana 11 | semana 9 |
 | [H7](#h7) · Sprint 6 | semana 22 | semana 13 | semana 10 |
-| [H8](#h8) · Sprint 7 | semana 23 | semana 13 | semana 10 |
+| [H8](#h8) · Sprint 7 | semana 23 | semana 14 | semana 10 |
 | [H9](#h9) · Sprint 8 | semana 26 | semana 15 | semana 12 |
 | [H10](#h10) · Sprint 9 | semana 28 | semana 16 | semana 12 |
 | [H11](#h11) · go-live | semana 31 | semana 19 | semana 15 |
@@ -179,7 +179,7 @@ gantt
     S0 :api0, 2026-09-15, 2026-10-05
     S1 :api1, 2026-09-22, 2026-10-07
     S2 :api2, 2026-10-07, 2026-10-24
-    S3 :api3, 2026-10-09, 2026-11-02
+    S3 :api3, 2026-10-09, 2026-11-01
     S4 :api4, 2026-10-25, 2026-11-08
     S5 :api5, 2026-10-28, 2026-11-11
     S6 :api6, 2026-11-11, 2026-11-22
@@ -191,9 +191,9 @@ gantt
     S0 :base0, 2026-09-16, 2026-09-18
     S1 :base1, 2026-09-18, 2026-10-04
     S2 :base2, 2026-10-04, 2026-10-22
-    S3 :base3, 2026-10-16, 2026-10-27
+    S3 :base3, 2026-10-16, 2026-10-30
     S4 :base4, 2026-10-28, 2026-11-07
-    S5 :base5, 2026-11-02, 2026-11-04
+    S5 :base5, 2026-11-02, 2026-11-03
     S6 :base6, 2026-11-17, 2026-11-19
     S8 :base8, 2026-11-12, 2026-11-24
     S9 :base9, 2026-11-24, 2026-11-25
@@ -214,8 +214,8 @@ gantt
     S3 :contrato3, 2026-10-11, 2026-10-18
     S4 :contrato4, 2026-10-27, 2026-10-28
     S5 :contrato5, 2026-10-30, 2026-10-31
-    S6 :contrato6, 2026-10-31, 2026-11-01
-    S7 :contrato7, 2026-11-01, 2026-11-02
+    S6 :contrato6, 2026-11-01, 2026-11-02
+    S7 :contrato7, 2026-11-03, 2026-11-04
     S8 :contrato8, 2026-11-08, 2026-11-09
 
     section Decisión
@@ -475,7 +475,7 @@ reenviada tal cual se rechaza por nonce repetido.
 | <a id="tarea-3-7"></a>3.7 | Transferencias entre cuentas | API | [3.4](#tarea-3-4) | 1 |
 | <a id="tarea-3-8"></a>3.8 | Listado con filtros por fecha, tipo, categoría y cuenta | API, Front | [3.4](#tarea-3-4), [3.21](#tarea-3-21) | 1,5 |
 | <a id="tarea-3-9"></a>3.9 | Anulación con motivo obligatorio | API, Front | [3.4](#tarea-3-4), [3.8](#tarea-3-8), [3.23](#tarea-3-23) | 1 |
-| <a id="tarea-3-10"></a>3.10 | Corrección por contra-asiento | API | [3.9](#tarea-3-9) | 1 |
+| <a id="tarea-3-10"></a>3.10 | Corrección por contra-asiento | Base, API | [3.9](#tarea-3-9) | 1 |
 | <a id="tarea-3-11"></a>3.11 | Marca de registro tardío | API | [3.2](#tarea-3-2) | 0,5 |
 | <a id="tarea-3-12"></a>3.12 | Cálculo de saldos por cuenta | API | [3.3](#tarea-3-3) | 1 |
 | <a id="tarea-3-13"></a>3.13 | **Contrato de movimientos**: registro, transferencias, anulación, adjuntos y filtros | Contrato | [2.19](#tarea-2-19) | 0,5 |
@@ -504,7 +504,7 @@ reenviada tal cual se rechaza por nonce repetido.
 | 5 | [3.21](#tarea-3-21) | API | 2 |
 | 6 | [3.8](#tarea-3-8) | API | 1,5 |
 | 7 | [3.9](#tarea-3-9) | API | 1 |
-| 8 | [3.10](#tarea-3-10) | API | 1 |
+| 8 | [3.10](#tarea-3-10) | Base | 1 |
 <!-- /generado:plan-oleadas-3 -->
 
 > **El dibujo del libro le sumó al sprint las tareas [3.17](#tarea-3-17) a [3.24](#tarea-3-24).** El mockup aprobado pinta un
@@ -935,7 +935,7 @@ El [Sprint 9](#sprint-9) va de último porque endurece lo que ya existe. No es r
 «funciona en mi computador» de «Gerencia lo aprobó y el taller lo tiene».
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.19.0") · [ADR-011](adr/ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [ADR-037](adr/ADR-037-el-pr-se-abre-a-pedido.md "ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos") · [AGENTS](../AGENTS.md "AGENTS.md") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
+**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.20.0") · [ADR-011](adr/ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [ADR-037](adr/ADR-037-el-pr-se-abre-a-pedido.md "ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos") · [ADR-038](adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md "ADR-038 · La pila local se orquesta desde prisma_db, y cada receta se apunta desde su .env") · [AGENTS](../AGENTS.md "AGENTS.md") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
 <!-- /generado:referenciado-desde -->
 
 ---
