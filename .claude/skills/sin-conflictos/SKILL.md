@@ -8,10 +8,8 @@ model: opus
 
 # Dejar la rama sin conflictos contra su base
 
-Las rutas son relativas a la carpeta de trabajo, la que contiene `repositories/`.
-
-**Esto se corre antes de avisar que la rama está lista** ([ADR-037](https://github.com/Juanchope039/Finanzas-PRISMA/blob/main/docs/adr/ADR-037-el-pr-se-abre-a-pedido.md)), y otra vez si la base
-se movió entre el aviso y el PR. El PR no lo abres tú: cuando lo pidan, es la skill `pr`.
+Las rutas son relativas a la carpeta de trabajo, la que contiene `repositories/`. Cuándo se corre lo
+dice la regla del PR, en el `CLAUDE.md` de la especificación (§2).
 
 ## 1. Mirar antes de tocar
 
@@ -23,10 +21,10 @@ git -C repositories/<repo> fetch --all
 git -C repositories/<repo> log --oneline HEAD..origin/<base>
 ```
 
-- **La base es `develop`** en `api`, `database` y `front-end`, y **`main`** en `documentation`.
+- **La base es `develop`** en `backend-api`, `backend-db` y `frontend-flutter`, y **`main`** en
+  `documentation`.
 - Si no hay nada en `HEAD..origin/<base>`, la base no se movió: salta al paso 4 y comprueba igual.
 - Si el árbol tiene cambios sin commitear, **no los arrastres a la fusión**: enséñalos y pregunta.
-  Puede ser trabajo de otra cosa que no va en esta rama.
 
 Antes de fusionar, mira **qué va a chocar**, que es más barato que descubrirlo a mitad de camino:
 
@@ -43,8 +41,8 @@ líneas siguientes son los archivos que chocan.
 git -C repositories/<repo> merge origin/<base> --no-commit
 ```
 
-Se fusiona, **no se rebasa**: la rama ya está empujada desde su primer commit ([21 §6.5](https://github.com/Juanchope039/Finanzas-PRISMA/blob/main/docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)), y
-reescribirla obligaría a forzar el empuje.
+Se fusiona, **no se rebasa**: la rama ya está empujada desde su primer commit, y reescribirla
+obligaría a forzar el empuje.
 
 ## 3. Resolver, y cada clase de conflicto tiene su receta
 
@@ -53,14 +51,14 @@ quería. Si de verdad una sobra, se dice por qué en el commit de fusión.
 
 | Qué chocó | Qué se hace |
 |---|---|
-| **Un bloque `<!-- generado:… -->`** | No se resuelve a mano. Se toma cualquiera de los dos lados, se resuelve el archivo y se corre `node scripts/docs/documentar.mjs enlazar`, que lo reescribe con los números buenos |
-| **La versión del proyecto** (`build.gradle.kts`, `pubspec.yaml`, `schema_version`) | **Nunca se queda la de la rama.** Se lee la de la base ya fusionada y se sube **un paso desde ahí**. Si la otra rama se llevó el número que tenías, el tuyo es el siguiente |
+| **Un bloque `<!-- generado:… -->`** | Se toma cualquiera de los dos lados, se resuelve el archivo y se corre `node scripts/docs/documentar.mjs enlazar`, que lo reescribe con los números buenos |
+| **La versión del proyecto** (`build.gradle.kts`, `pubspec.yaml`, `schema_version`) | **Nunca se queda la de la rama.** Se lee la de la base ya fusionada y se sube **un paso desde ahí**. Si la otra rama se llevó el número que tenías, el tuyo es el siguiente. En `prisma_db`, la migración que publica la versión todavía no salió: se renombra, o se escribe otra |
 | **La versión de un `.md`** | Igual: la de la base más un paso, y la fecha de hoy |
-| **`contrato/openapi.json`** (la copia fijada) | No se edita a mano nunca. Se resuelve el resto, se corre `./gradlew build` y se copia `build/contrato/openapi.json` encima. [C-04](https://github.com/Juanchope039/Finanzas-PRISMA/blob/main/docs/12-pruebas-y-calidad.md#c-04) es quien dice si quedó bien |
+| **`contrato/openapi.json`** (la copia fijada) | Se resuelve el resto, se corre `./gradlew build` y se copia `build/contrato/openapi.json` encima. [C-04](https://github.com/Juanchope039/Finanzas-PRISMA/blob/main/docs/12-pruebas-y-calidad.md#c-04) es quien dice si quedó bien |
 | **Un contador de pruebas o de rutas** en un README | Se vuelve a contar con la base adentro. Un número heredado de antes de la fusión es falso |
 | **Un modelo compartido** que las dos ramas ampliaron | Se queda con **los campos de las dos**, y el javadoc de las dos. Es el caso más común y el que más fácil se resuelve mal |
 | **Una firma de constructor o de puerto** | Se juntan los dos cambios y se compila. Que compile no alcanza: mira si el método nuevo de la otra rama tiene que usarse también en tu camino |
-| **`TODO.md` o `docs/INDICE.md`** | La receta del `AGENTS.md` de la especificación: se trae `main`, `git add`, y después `enlazar` |
+| **`TODO.md` o `docs/INDICE.md`** | El §4 de la skill `documentar`: se toma el lado de `main`, `git add`, y después `enlazar` |
 
 **Un archivo resuelto se marca resuelto:** `git add <ruta>`. Mientras un archivo siga en conflicto,
 `git ls-files` lo lista una vez por etapa y las herramientas que leen esa lista —`documentar.mjs`,
@@ -76,15 +74,9 @@ git -C repositories/<repo> grep -n -E '^(<{7}|={7}|>{7})' -- . || echo 'sin marc
 git -C repositories/<repo> status --short | grep -E '^(UU|AA|DD|AU|UA|DU|UD)' || echo 'sin conflictos'
 ```
 
-**Y después las puertas del [08 §4](https://github.com/Juanchope039/Finanzas-PRISMA/blob/main/docs/08-plan-de-desarrollo.md#4-definición-de-terminado), que es lo que de verdad se está comprobando.** Hay conflictos que
+**Y después las puertas de cada repositorio, ya con la base adentro**, que es lo que de verdad se
+está comprobando: están en su `AGENTS.md`, en la sección «Las puertas del PR». Hay conflictos que
 git no ve: dos versiones al mismo número fusionan limpio y dejan [C-05](https://github.com/Juanchope039/Finanzas-PRISMA/blob/main/docs/12-pruebas-y-calidad.md#c-05) en rojo.
-
-| Repositorio | Lo que se vuelve a correr, ya con la base adentro |
-|---|---|
-| `api` | `./gradlew spotlessApply build`; `./gradlew integracion` si la tarea toca la base; `./gradlew laVersionSubio --args=origin/develop` |
-| `database` | `./scripts/db/reset-local.sh` y `verificar-base.sql` en `OK`; `./scripts/db/la-version-subio.sh origin/develop` |
-| `documentation` | `node scripts/docs/documentar.mjs enlazar` y después `verificar --base origin/main` |
-| `front-end` | `dart format --set-exit-if-changed .`, `dart analyze --fatal-infos`, `flutter test` y `dart run tool/la_version_subio.dart origin/develop` |
 
 Si algo no se puede correr en esta máquina —sin Docker no hay `integracion` ni base local—, **se dice
 cuál y por qué**, y no se da por pasado.

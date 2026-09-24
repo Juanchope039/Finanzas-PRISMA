@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [10.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [10.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 Las reglas de PRISMA, para cualquier sesión en cualquiera de los cuatro repositorios.
 
@@ -34,22 +34,30 @@ ni referencias de proyectos, ni nombres de clientes.
 
 ## 2. Reglas del proceso
 
+**Cada regla vive en un solo sitio** ([ADR-039](docs/adr/ADR-039-cada-regla-en-un-solo-sitio.md)).
+- Las de todo el proyecto, aquí; las de un solo repositorio, en su `CLAUDE.md`. Una regla cambia
+  con su ADR.
+- Cómo se hace algo en un repositorio —comandos, estructura, dónde vive cada cosa—, en su
+  `AGENTS.md`, que cambia cuando cambia la forma del repositorio.
+- El paso a paso de lo que se repite, en su skill de `.claude/skills/`.
+- Los demás sitios lo nombran y lo enlazan, pero no lo repiten. Solo se repiten la `description` de
+  cada skill y el comando que corre uno de sus pasos.
+- Ni este `CLAUDE.md` ni los `AGENTS.md` llevan estado, conteos o versiones ([ADR-035](docs/adr/ADR-035-repositorios-hermanos.md)), y cerrar una
+  tarea no toca ninguno de los dos.
+
 **Antes de escribir código se escribe el plan.**
-- Cada plan de trabajo es un archivo en `plan/` de la carpeta de trabajo, fuera de los repositorios.
-- Se llama `NN-titulo.md`: dos dígitos, un guion y el título en minúsculas, sin puntos.
-- El número es el siguiente al mayor que haya: arranca en 01, no salta y no se repite.
-- Dice qué se va a hacer, qué se decidió y por qué —con lo que se descartó— y cómo se va a
-  verificar. Son los tres títulos del commit, en futuro.
+- Vive en `plan/`, en la carpeta de trabajo y fuera de los repositorios.
 - No se versiona y no se corrige: si resultó equivocado, se escribe el siguiente.
 - **Ningún documento lo cita**, ni por ruta ni por número ([22 §10](docs/22-documentacion.md#10-los-planes-de-trabajo)).
+- Qué lleva, qué número y qué nombre: la skill `plan`.
 
 **Lo primero de una tarea es salir de la base al día, en una copia limpia** ([ADR-037](docs/adr/ADR-037-el-pr-se-abre-a-pedido.md)).
-- Antes de abrir la rama, y en cada repositorio que la tarea toca: `git status` sin nada pendiente,
-  `git switch <base>` y `git pull --ff-only`. La base es `develop` en los repositorios de código y
-  `main` en la especificación, que no tiene `develop`.
+- La base es `develop` en los repositorios de código y `main` en la especificación, que no tiene
+  `develop`.
 - **Un árbol sucio no se arrastra a la rama nueva:** se enseña lo que hay y se pregunta qué hacer
   con ello. Lo de otra cosa no entra aquí por descuido.
-- Recién entonces se abre `feature/<id>`, con el id que la tarea tiene en el 08.
+- Recién entonces se abre `feature/<id>`, con el id que la tarea tiene en el 08. El paso a paso es
+  la skill `tarea`.
 
 **Una tarea es una rama `feature/<id>` en cada repositorio que toca, y un PR** ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)).
 - El PR va contra `develop` en los repositorios de código y contra `main` en la especificación.
@@ -78,7 +86,9 @@ ni referencias de proyectos, ni nombres de clientes.
 - Dos tareas no van en el mismo commit.
 - Lo que no es una tarea —documentación, herramientas, arreglos sueltos— va en su propio commit, sin
   número.
-- Los mensajes van **en español sin tildes**.
+- Los mensajes van **en español sin tildes, y sin trailers**: ni `Co-Authored-By` ni ningún otro
+  ([ADR-036](docs/adr/ADR-036-sin-limite-en-el-commit.md)).
+- El paso a paso es la skill `commit`.
 
 **La versión del proyecto sube un paso en cada PR que cambia lo que se publica** ([ADR-034](docs/adr/ADR-034-la-version-sube-en-cada-pr.md)).
 - Es el PATCH, el MINOR o el MAJOR siguiente de la versión de `develop`. En el front, el `+BUILD`
@@ -91,11 +101,10 @@ ni referencias de proyectos, ni nombres de clientes.
 
 **Todo `.md` de los cuatro repositorios lleva encabezado con versión, estado y fechas** ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md),
 [`22-documentacion.md`](docs/22-documentacion.md)).
-- Al cambiar un documento se sube su versión, que es MAJOR si alguien actuaría mal con la anterior.
-- Se pone la fecha de hoy.
-- Se corre `enlazar` y después `verificar`.
+- Al cambiar un documento sube su versión, que es MAJOR si alguien actuaría mal con la anterior.
 - **Los bloques `<!-- generado:… -->` no se editan a mano**, y tampoco las marcas ⚡ 🔒 ⏭️ de
   [`TODO.md`](TODO.md). 🚧 y ✏️ sí las pone una persona.
+- El paso a paso —la versión, la fecha, `enlazar` y `verificar`— es la skill `documentar`.
 
 **El plan de desarrollo manda sobre el tablero.**
 - [`08-plan-de-desarrollo.md`](docs/08-plan-de-desarrollo.md) dice qué hay que hacer, en qué carril y de qué depende. [`TODO.md`](TODO.md) dice
@@ -107,11 +116,6 @@ ni referencias de proyectos, ni nombres de clientes.
 
 **No se inventan reglas de negocio.** Si un documento no cubre un caso, se decide lo mínimo, se
 escribe el porqué en el commit y se anota en [`TODO.md`](TODO.md) [§10](TODO.md#10-decisiones-de-construcción-que-conviene-revisar), la lista que revisa quien dirige.
-
-**Este `CLAUDE.md` y los `AGENTS.md` no llevan estado, ni conteos, ni versiones** ([ADR-035](docs/adr/ADR-035-repositorios-hermanos.md)).
-- Una regla cambia con su ADR.
-- Si cambia la forma de un repositorio, cambia su `AGENTS.md`.
-- Cerrar una tarea no toca ninguno de los dos.
 
 ---
 
@@ -154,7 +158,6 @@ prisma_front  ──HTTP──▶  prisma_api  ──SQL──▶  prisma_db
 - **Un ADR aceptado no se edita.** Si la decisión cambia, se escribe otro que lo reemplaza. Al viejo
   solo se le agrega una nota, que sube la versión MINOR ([22 §3](docs/22-documentacion.md#3-versiones)).
 - **`contrato/openapi.json` va en LF, byte a byte**, porque la API guarda una copia exacta.
-- **Ningún documento cita un plan de trabajo.**
 
 ---
 

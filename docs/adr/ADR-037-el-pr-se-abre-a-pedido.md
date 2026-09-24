@@ -109,5 +109,5 @@ base adentro».
 ---
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [AGENTS](../../AGENTS.md "AGENTS.md") · [CLAUDE](../../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [ADR-039](ADR-039-cada-regla-en-un-solo-sitio.md "ADR-039 · Cada regla vive en un solo sitio: CLAUDE.md, AGENTS.md o una skill") · [CLAUDE](../../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
