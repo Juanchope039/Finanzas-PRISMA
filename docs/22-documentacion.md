@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/22-documentacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-21 | [Proceso](INDICE.md#etiqueta-proceso) |
+| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/22-documentacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se escribe, se versiona y se enlaza la documentación de PRISMA: la de este repositorio y los
 README, `CLAUDE.md` y `AGENTS.md` de los tres repositorios de código. La decisión y su porqué están en [ADR-027](adr/ADR-027-documentacion-versionada.md); aquí están las
@@ -189,6 +189,11 @@ dependencias del plan: ⚡ si todo lo que la tarea necesita ya está hecho, 🔒
 Las otras dos marcas dicen **en qué va** una tarea, y eso no se deduce de ninguna dependencia: 🚧
 cuando alguien la está haciendo y ✏️ cuando está escrita pero sin verificar. Las pone quien trabaja
 la tarea, y la herramienta las respeta y las deja de primeras en la línea.
+
+**Cada sprint del tablero lleva a su sección del propio [`TODO.md`](../TODO.md)**, y esa sección enlaza la del
+plan. La sección es el encabezado o la línea en negrita que empieza por «Sprint N ·», y su ancla
+`sprint-N` la pone la herramienta ahí y en ningún otro sitio. Si un sprint no tiene sección, su
+enlace va al plan y la verificación falla.
 
 **El tablero y el plan tienen que tener las mismas tareas, y la verificación lo comprueba.** Si el
 plan gana una tarea que [`TODO.md`](../TODO.md) no enumera, o el tablero lista una que el plan no tiene, la
