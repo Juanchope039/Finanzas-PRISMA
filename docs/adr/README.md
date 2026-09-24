@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-09-22 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
+| [1.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-09-24 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
 
 Registro de las decisiones técnicas importantes: qué se decidió, por qué, qué alternativas se
 consideraron y qué consecuencias tiene.
@@ -46,8 +46,9 @@ consideraron y qué consecuencias tiene.
 | [035](ADR-035-repositorios-hermanos.md) | Los cuatro repositorios, hermanos en una carpeta de trabajo | Aceptado |
 | [036](ADR-036-sin-limite-en-el-commit.md) | El mensaje de commit no tiene limite de longitud | Aceptado |
 | [037](ADR-037-el-pr-se-abre-a-pedido.md) | La rama sale de la base al día, y el PR se abre a pedido y sin conflictos | Aceptado |
+| [038](ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md) | La pila local se orquesta desde `prisma_db`, y cada receta se apunta desde su `.env` | Aceptado |
 
-Son **37 decisiones** registradas: 29 aceptadas y 8 reemplazadas.
+Son **38 decisiones** registradas: 30 aceptadas y 8 reemplazadas.
 
 > **Sobre la numeración.** El cambio de stack se planeó como [ADR-010](ADR-010-almacenamiento-contrasenas.md) y [ADR-011](ADR-011-stack-flutter-dart.md), pero el 010 ya
 > estaba ocupado por la decisión de contraseñas. Un número asignado no se reutiliza, así que el

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.24.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.25.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -37,14 +37,14 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 19 | 0 | 0 | 0 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
-| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 25 | 24 | 0 | 1 | 2,5 |
+| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 4 | 0 | 7 | 9 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 4 | 0 | 6 | 6,5 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **152** | **99** | **0** | **53** | **70,5** |
+| **Total** | **152** | **100** | **0** | **52** | **68** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -140,7 +140,6 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
 | **API** | [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.9](docs/08-plan-de-desarrollo.md#tarea-4-9) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
-| **Base** | [3.25](docs/08-plan-de-desarrollo.md#tarea-3-25) |
 | **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -148,12 +147,12 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **53 tareas y 70,5 días de trabajo** de 152 tareas del plan.
+Quedan **52 tareas y 68 días de trabajo** de 152 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 10,6 semanas | **13,6 semanas** |
-| 2 | 6,0 semanas | **9,0 semanas** |
+| 1 | 10,2 semanas | **13,2 semanas** |
+| 2 | 5,7 semanas | **8,7 semanas** |
 | 3 | 5,1 semanas | **8,1 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -847,10 +846,17 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       elige aquí es **con qué se dibuja**: el tono de la paleta de cada color y el símbolo de cada
       efecto —▲, ▼, ↔ y —, los del mockup—; un color que esta versión no conozca se pinta neutro,
       que es no decir nada. `prisma_front` en `0.12.0+16`, con 413 pruebas
-- [ ] ⚡ [**3.25**](docs/08-plan-de-desarrollo.md#tarea-3-25) La pila local en contenedores · Base, API, Front — cada
-      repositorio de código con su receta, y `prisma_db` las levanta juntas con un solo comando; cada
-      receta y cada puerto se apuntan desde el `.env` de la orquestación, y la base sigue en Supabase
-
+- [x] [**3.25**](docs/08-plan-de-desarrollo.md#tarea-3-25) La pila local en contenedores · Base, API, Front —
+      `./scripts/db/pila-local.ps1` levanta las tres piezas con un solo comando: `supabase start`,
+      la clave local del rol `prisma_api` —cada reset lo deja sin contraseña a propósito— y
+      `docker compose` con las recetas de la API y del front, que ya existían desde el [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0).
+      **Ninguna ruta va escrita**: cada receta, cada puerto y el nombre de la pila se apuntan desde
+      `pila/.env`, que está ignorado, así que da igual cómo se llame cada carpeta en cada máquina y
+      cambiar `PRISMA_API_PUERTO` mueve a la vez lo que publica la API y la URL que el front
+      compila dentro. **La base no entra en el `compose.yaml`**: la de PRISMA es la de Supabase, con
+      `auth`, GoTrue, Storage y `pg_cron`, y un `postgres:16` escrito a mano no tendría `auth.uid()`
+      que juzgar. Ninguna clave se versiona. Con su [ADR-038](docs/adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md). **Queda por hacer la primera
+      construcción de las dos imágenes** en una máquina con cuota de Docker Hub ([§9](#9-a-vigilar))
 **[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
 
 - [ ] 🔒 [**6.1**](docs/08-plan-de-desarrollo.md#tarea-6-1) Utilidad causada, flujo de caja y caja libre · API
@@ -1203,6 +1209,11 @@ a `anon`.
   las tres situaciones de la cuenta de destino tienen excepción de dominio y código propio. Las de
   `Pedido` y `Costeo` esperan a la [4.3](docs/08-plan-de-desarrollo.md#tarea-4-3) y a la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2), y hasta entonces ninguno de esos mensajes es el
   que verá el taller.
+- **Las dos imágenes de la pila local no se han construido nunca.** La orquestación de la [3.25](docs/08-plan-de-desarrollo.md#tarea-3-25)
+  resuelve cada ruta, cada puerto y cada variable, y apuntar una receta que no existe falla
+  diciendo cuál; pero **construir la imagen de la API y la del front quedó sin ejercitar**, porque
+  Docker Hub responde `429` a la máquina donde se escribió. Es lo primero que hay que correr en una
+  máquina con cuota: `./scripts/db/pila-local.ps1`, y ver las tres piezas arriba
 - **Ninguna etiqueta `esquema-vX.Y.Z` existe en `prisma_db`, y la CI de la API depende de ellas.**
   El [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) dice que la API descarga la base en la etiqueta de su `prisma.esquema`, y hoy
   no hay ninguna: ni la `esquema-v0.11.0` ni las cuatro siguientes, aunque sus migraciones estén
@@ -1416,7 +1427,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 
 **De la entrada de la 3.25 al 08:**
 
-- [ ] ⚡ **Entró una tarea nueva al plan, la [3.25](docs/08-plan-de-desarrollo.md#tarea-3-25), y el total pasa de 151 a 152.** La
+- [ ] 🔒 **Entró una tarea nueva al plan, la [3.25](docs/08-plan-de-desarrollo.md#tarea-3-25), y el total pasa de 151 a 152.** La
       pidió quien dirige para agilizar y homogeneizar lo local. Lo que ya había —la imagen de la API,
       la receta del front y `supabase start`— no se levanta junto, y cada carril reparte sus puertos
       copiando a mano un `config.toml` que no se versiona ([21 §6.4](docs/21-trabajo-en-paralelo.md#64-ambientes))
