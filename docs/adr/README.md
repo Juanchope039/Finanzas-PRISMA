@@ -49,8 +49,9 @@ consideraron y qué consecuencias tiene.
 | [038](ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md) | La pila local se orquesta desde `prisma_db`, y cada receta se apunta desde su `.env` | Aceptado |
 | [039](ADR-039-cada-regla-en-un-solo-sitio.md) | Cada regla vive en un solo sitio: `CLAUDE.md`, `AGENTS.md` o una skill | Aceptado |
 | [040](ADR-040-rama-feature-y-pr-autorizado.md) | Toda rama empieza por `feature/`, y el PR se abre solo con autorización expresa, trayendo entonces la base | Aceptado |
+| [041](ADR-041-cuatro-lineas-por-parrafo.md) | Un párrafo de código o de commit tiene cuatro líneas como máximo | Aceptado |
 
-Son **40 decisiones** registradas: 31 aceptadas y 9 reemplazadas.
+Son **41 decisiones** registradas: 32 aceptadas y 9 reemplazadas.
 
 > **Sobre la numeración.** El cambio de stack se planeó como [ADR-010](ADR-010-almacenamiento-contrasenas.md) y [ADR-011](ADR-011-stack-flutter-dart.md), pero el 010 ya
 > estaba ocupado por la decisión de contraseñas. Un número asignado no se reutiliza, así que el

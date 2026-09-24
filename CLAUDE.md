@@ -80,14 +80,22 @@ ni referencias de proyectos, ni nombres de clientes.
 
 **Una tarea es un commit, y el commit explica por qué** ([ADR-028](docs/adr/ADR-028-un-commit-por-tarea.md)).
 - El asunto lleva el sprint y el número: `Sprint 3 / 3.11: marca de registro tardio`.
-- El cuerpo son tres líneas: `Hace:`, `Decide:` y `Verifica:`. La última lleva el conteo de pruebas
-  y **qué se rompió a propósito para verlas fallar**.
+- El cuerpo son tres párrafos, separados por una línea en blanco: `Hace:`, `Decide:` y `Verifica:`.
+  El último lleva el conteo de pruebas y **qué se rompió a propósito para verlas fallar**.
 - Dos tareas no van en el mismo commit.
 - Lo que no es una tarea —documentación, herramientas, arreglos sueltos— va en su propio commit, sin
   número.
-- Los mensajes van **en español sin tildes, y sin trailers**: ni `Co-Authored-By` ni ningún otro
-  ([ADR-036](docs/adr/ADR-036-sin-limite-en-el-commit.md)).
+- Los mensajes van **en español sin tildes ni eñes, y sin trailers**: ni `Co-Authored-By` ni ningún
+  otro ([ADR-036](docs/adr/ADR-036-sin-limite-en-el-commit.md)).
 - El paso a paso es la skill `commit`.
+
+**Un párrafo de código o de commit tiene cuatro líneas como máximo** ([ADR-041](docs/adr/ADR-041-cuatro-lineas-por-parrafo.md)).
+- Vale para los comentarios y la documentación dentro del código, y para el mensaje de un commit.
+- La línea es la del formateador del archivo —120 columnas en Java, 80 en Dart— o 100 donde no hay
+  uno. En el commit, 100.
+- **Si hace falta más, se pide autorización a quien dirige antes de escribirlo, con la razón.** Sin
+  ella, se parte, se recorta o el porqué largo va al plan o a un ADR.
+- Rige para lo que se escribe o se cambia: lo que ya está no se reescribe solo por esto.
 
 **La versión del proyecto sube un paso en cada PR que cambia lo que se publica** ([ADR-034](docs/adr/ADR-034-la-version-sube-en-cada-pr.md)).
 - Es el PATCH, el MINOR o el MAJOR siguiente de la versión de `develop`. En el front, el `+BUILD`

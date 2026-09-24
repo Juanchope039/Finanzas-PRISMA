@@ -89,9 +89,11 @@ El commit de fusión lleva el formato del proyecto, con el asunto `Trae <base>: 
 ```
 Trae develop: la foto del recibo y el arreglo de la version
 
-Hace: el libro junta los soportes de la pagina en una consulta
-Decide: 0.12.0, porque la 3.6 ya se llevo la 0.11.0
-Verifica: 871 y 173, C-04 y C-05 en verde
+Hace: el libro junta los soportes de la pagina en una consulta.
+
+Decide: 0.12.0, porque la 3.6 ya se llevo la 0.11.0.
+
+Verifica: 871 y 173, C-04 y C-05 en verde.
 ```
 
 Después:

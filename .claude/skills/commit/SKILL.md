@@ -22,15 +22,26 @@ el commit explica por qué. Aquí va el procedimiento.
 ```
 Sprint 3 / 3.11: marca de registro tardio
 
-Hace: lo que hace, en el lenguaje del negocio y no en el del diff.
+Hace: lo que hace, en el lenguaje del negocio y no en el del diff. Si no cabe en una linea, sigue
+en la siguiente.
+
 Decide: lo que se decidio que ningun documento decia, y por que.
+
 Verifica: 746 en verde; sin el filtro, 3 rojas.
 ```
 
 - **El asunto**, si es una tarea, es `Sprint N / N.M: frase corta`. Si no, va sin número y con lo
   que toca delante: `README: …`, `Arreglo: …`, `Herramienta: …`, `Skills: …`, `ADR-NNN: …` o
   `Trae develop: …`.
-- **El porqué largo no va aquí**: va en el plan, que se escribió antes.
+- **Cada párrafo se parte a mano en líneas de 100 columnas**, con una línea en blanco entre los
+  tres. Si alguno no cabe, para y aplica la regla de los párrafos del `CLAUDE.md`: la autorización
+  de quien dirige, o el porqué largo al plan.
+- **Mídelo antes de commitear.** Las dos órdenes tienen que salir vacías:
+
+  ```bash
+  awk 'length > 100 { print "linea " NR " de " length " columnas" }' mensaje.txt
+  awk 'BEGIN { RS = "" } { n = split($0, l, "\n"); if (n > 4) print "parrafo " NR " de " n " lineas" }' mensaje.txt
+  ```
 
 ## 3. El commit y el empuje
 

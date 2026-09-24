@@ -2,7 +2,12 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-028-un-commit-por-tarea.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-16 | 2026-09-22 | [Proceso](../INDICE.md#etiqueta-proceso) · [Plan](../INDICE.md#etiqueta-plan) |
+| [1.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-028-un-commit-por-tarea.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-16 | 2026-09-24 | [Proceso](../INDICE.md#etiqueta-proceso) · [Plan](../INDICE.md#etiqueta-plan) |
+
+> **El cuerpo son tres párrafos, de cuatro líneas como máximo.** El [ADR-041](ADR-041-cuatro-lineas-por-parrafo.md) partió en párrafos los
+> tres títulos que la nota de abajo deja en una línea cada uno: `Hace:`, `Decide:` y `Verifica:` van
+> separados por una línea en blanco, y cada uno cabe en cuatro líneas de 100 columnas. El mensaje
+> sigue sin tope total.
 
 > **Una línea del cuerpo se fue, y el tope que la sacó ya no existe.** El [ADR-031](ADR-031-commit-de-256-caracteres.md) dejó los tres
 > títulos en una línea cada uno y abreviados a `Hace:`, `Decide:` y `Verifica:`, y borró la línea
@@ -107,5 +112,5 @@ lo será—, revertirla es `git revert` de un commit, no una cirugía sobre un l
 ---
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [ADR-031](ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-035](ADR-035-repositorios-hermanos.md "ADR-035 · Los cuatro repositorios, hermanos en una carpeta de trabajo") · [ADR-036](ADR-036-sin-limite-en-el-commit.md "ADR-036 · El mensaje de commit no tiene limite de longitud") · [ADR-037](ADR-037-el-pr-se-abre-a-pedido.md "ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos") · [ADR-040](ADR-040-rama-feature-y-pr-autorizado.md "ADR-040 · Toda rama empieza por feature/, y el PR se abre solo con autorización expresa, trayendo entonces la base") · [CLAUDE](../../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [ADR-031](ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-035](ADR-035-repositorios-hermanos.md "ADR-035 · Los cuatro repositorios, hermanos en una carpeta de trabajo") · [ADR-036](ADR-036-sin-limite-en-el-commit.md "ADR-036 · El mensaje de commit no tiene limite de longitud") · [ADR-037](ADR-037-el-pr-se-abre-a-pedido.md "ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos") · [ADR-040](ADR-040-rama-feature-y-pr-autorizado.md "ADR-040 · Toda rama empieza por feature/, y el PR se abre solo con autorización expresa, trayendo entonces la base") · [ADR-041](ADR-041-cuatro-lineas-por-parrafo.md "ADR-041 · Un párrafo de código o de commit tiene cuatro líneas como máximo") · [CLAUDE](../../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
