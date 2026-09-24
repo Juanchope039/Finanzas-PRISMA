@@ -2,7 +2,12 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-037-el-pr-se-abre-a-pedido.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-09-22 | 2026-09-22 | [Proceso](../INDICE.md#etiqueta-proceso) · [Paralelo](../INDICE.md#etiqueta-paralelo) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-037-el-pr-se-abre-a-pedido.md "Historial de cambios") | [⛔ Reemplazado](../22-documentacion.md#estados-de-un-adr) por [ADR-040](ADR-040-rama-feature-y-pr-autorizado.md) | 2026-09-22 | 2026-09-24 | [Proceso](../INDICE.md#etiqueta-proceso) · [Paralelo](../INDICE.md#etiqueta-paralelo) |
+
+> **Lo reemplaza [ADR-040](ADR-040-rama-feature-y-pr-autorizado.md):** la rama sigue saliendo de la base al día y de una copia
+> limpia, y el PR sigue sin abrirse por cuenta propia, tal como se argumenta abajo. Cambia la
+> tercera regla: **la base ya no se trae antes de avisar que la rama está lista**, sino cuando quien
+> dirige autoriza el PR. Y toda rama empieza por `feature/`, también la que no es una tarea.
 
 ## Contexto
 
@@ -109,5 +114,5 @@ base adentro».
 ---
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [AGENTS](../../AGENTS.md "AGENTS.md") · [CLAUDE](../../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [ADR-039](ADR-039-cada-regla-en-un-solo-sitio.md "ADR-039 · Cada regla vive en un solo sitio: CLAUDE.md, AGENTS.md o una skill") · [ADR-040](ADR-040-rama-feature-y-pr-autorizado.md "ADR-040 · Toda rama empieza por feature/, y el PR se abre solo con autorización expresa, trayendo entonces la base")
 <!-- /generado:referenciado-desde -->

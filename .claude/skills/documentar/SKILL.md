@@ -7,8 +7,8 @@ paths: "**/*.md"
 # Dejar un documento al día
 
 Las reglas están en `22-documentacion.md` y en el `CLAUDE.md` de la especificación. La herramienta
-está en `repositories/documentation/scripts/docs/`. Se corre desde cualquier carpeta y revisa
-también los `.md` de los repositorios hermanos.
+está en `repositories/documentation/scripts/docs/`, con sus comandos en el §2 del `AGENTS.md` de la
+especificación. Se corre desde cualquier carpeta y revisa también los `.md` de los hermanos.
 
 ## 1. Mientras se edita
 
@@ -24,45 +24,32 @@ también los `.md` de los repositorios hermanos.
 - **Desde un repositorio de código, la especificación se enlaza en absoluto**
   (`https://github.com/Juanchope039/Finanzas-PRISMA/blob/main/…`). Un `../documentation/…` también
   sirve: la herramienta lo reescribe.
-- **Nunca a mano:**
-  - los bloques `<!-- generado:… -->`;
-  - las anclas `<a id="…">`;
-  - las marcas ⚡ 🔒 ⏭️ de `TODO.md`.
-
-  🚧 y ✏️ sí las pone una persona, al principio de la línea.
-- **Ningún documento cita un plan de trabajo**, ni por ruta ni por número.
-- **El cuerpo de un ADR aceptado no se edita.** Se le agrega una nota debajo del encabezado
-  (`> **…**`), que sube la versión MINOR.
-- **El `CLAUDE.md` y los `AGENTS.md` no llevan estado, ni conteos, ni versiones**, y no se tocan al
-  cerrar una tarea.
+- **Las anclas `<a id="…">` las pone la herramienta**: no se escriben a mano.
+- **La nota de un ADR aceptado va debajo del encabezado**, con la forma `> **…**`.
 
 ## 2. La versión y la fecha
 
-| Cambio | Versión |
-|---|---|
-| Quien actuaba según la versión anterior ahora actuaría mal: cambia una fórmula, se quita un requisito, cambian las tareas de un sprint, se invierte una regla | MAJOR |
-| Se agrega algo compatible: una sección, un requisito, un ejemplo, una nota | MINOR |
-| No cambia nada de lo que alguien haría: una errata, la redacción, un enlace, el formato | PATCH |
-
-- **«Actualizado»** va en AAAA-MM-DD, en hora de Bogotá. **«Creado»** no cambia nunca.
-- **Un documento nuevo** arranca en 0.1.0 como 📝 Borrador, o en 1.0.0 si nace ✅ Vigente o 🔄 Vivo.
-- **Los bloques generados no cuentan** para la versión.
+- **La versión sube según 22 §3**: MAJOR, MINOR o PATCH, con sus ejemplos. Los bloques generados no
+  cuentan.
 - **En un mismo PR, un documento sube una sola vez** con respecto a la base, aunque se toque en
   varios commits.
+- **«Actualizado»** va en AAAA-MM-DD, en hora de Bogotá. **«Creado»** no cambia nunca.
+- **Un documento nuevo** arranca en 0.1.0 como 📝 Borrador, o en 1.0.0 si nace ✅ Vigente o 🔄 Vivo.
 
 ## 3. Correr la herramienta
 
 ```bash
 node repositories/documentation/scripts/docs/documentar.mjs enlazar
 node repositories/documentation/scripts/docs/documentar.mjs verificar
-node repositories/documentation/scripts/docs/documentar.mjs verificar --base origin/main   # antes del PR
+node repositories/documentation/scripts/docs/documentar.mjs verificar --base origin/main   # con el PR autorizado
 ```
 
 - **`enlazar` se corre dos veces si hace falta**: la segunda tiene que decir `0 de N archivos
   actualizados`.
 - **Lo que `enlazar` genera va en el mismo commit** que el cambio que lo provocó.
-- **Para `--base`, la rama tiene que estar al día con `main`**. Si no, salen falsos positivos
-  cuando `main` ya subió un documento.
+- **`--base origin/main` necesita a `main` adentro**, y `main` entra con el PR autorizado: sin él,
+  salen falsos positivos cuando `main` ya subió un documento. Antes, se compara contra el punto de
+  donde salió la rama: `--base $(git merge-base origin/main HEAD)`.
 - **Qué hacer con cada mensaje de error** está en la tabla de `scripts/docs/README.md`.
 
 ## 4. Si hay conflicto en `TODO.md` o `docs/INDICE.md`

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [10.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-22 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [11.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 Las reglas de PRISMA, para cualquier sesión en cualquiera de los cuatro repositorios.
 
@@ -34,51 +34,68 @@ ni referencias de proyectos, ni nombres de clientes.
 
 ## 2. Reglas del proceso
 
+**Cada regla vive en un solo sitio** ([ADR-039](docs/adr/ADR-039-cada-regla-en-un-solo-sitio.md)).
+- Las de todo el proyecto, aquí; las de un solo repositorio, en su `CLAUDE.md`. Una regla cambia
+  con su ADR.
+- Cómo se hace algo en un repositorio —comandos, estructura, dónde vive cada cosa—, en su
+  `AGENTS.md`, que cambia cuando cambia la forma del repositorio.
+- El paso a paso de lo que se repite, en su skill de `.claude/skills/`.
+- Los demás sitios lo nombran y lo enlazan, pero no lo repiten. Solo se repiten la `description` de
+  cada skill y el comando que corre uno de sus pasos.
+- Ni este `CLAUDE.md` ni los `AGENTS.md` llevan estado, conteos o versiones ([ADR-035](docs/adr/ADR-035-repositorios-hermanos.md)), y cerrar una
+  tarea no toca ninguno de los dos.
+
 **Antes de escribir código se escribe el plan.**
-- Cada plan de trabajo es un archivo en `plan/` de la carpeta de trabajo, fuera de los repositorios.
-- Se llama `NN-titulo.md`: dos dígitos, un guion y el título en minúsculas, sin puntos.
-- El número es el siguiente al mayor que haya: arranca en 01, no salta y no se repite.
-- Dice qué se va a hacer, qué se decidió y por qué —con lo que se descartó— y cómo se va a
-  verificar. Son los tres títulos del commit, en futuro.
+- Vive en `plan/`, en la carpeta de trabajo y fuera de los repositorios.
 - No se versiona y no se corrige: si resultó equivocado, se escribe el siguiente.
 - **Ningún documento lo cita**, ni por ruta ni por número ([22 §10](docs/22-documentacion.md#10-los-planes-de-trabajo)).
+- Qué lleva, qué número y qué nombre: la skill `plan`.
 
-**Lo primero de una tarea es salir de la base al día, en una copia limpia** ([ADR-037](docs/adr/ADR-037-el-pr-se-abre-a-pedido.md)).
-- Antes de abrir la rama, y en cada repositorio que la tarea toca: `git status` sin nada pendiente,
-  `git switch <base>` y `git pull --ff-only`. La base es `develop` en los repositorios de código y
-  `main` en la especificación, que no tiene `develop`.
-- **Un árbol sucio no se arrastra a la rama nueva:** se enseña lo que hay y se pregunta qué hacer
-  con ello. Lo de otra cosa no entra aquí por descuido.
-- Recién entonces se abre `feature/<id>`, con el id que la tarea tiene en el 08.
+**Toda rama empieza por `feature/`, sin excepción** ([ADR-040](docs/adr/ADR-040-rama-feature-y-pr-autorizado.md)).
+- Si es una tarea del 08, lleva su id y nada más: `feature/3.11`. Si no lo es, el título de lo que
+  agrega, en minúsculas y con guiones: `feature/reglas-en-un-solo-sitio`.
+- Vale también para una sesión que trae asignada otra rama, como las `claude/…`: se abre y se
+  empuja la `feature/…` que corresponde.
+- **Sale de su base al día y de una copia limpia.** La base es `develop` en los repositorios de
+  código y `main` en la especificación, que no tiene `develop`. Un árbol sucio no se arrastra a la
+  rama nueva: se enseña lo que hay y se pregunta qué hacer con ello. El paso a paso: la skill `tarea`.
+- **Se empuja siempre**, desde su primer commit y sin que haya que pedirlo. `develop`, `main`, `qa`,
+  `uat` y `prod` no se mueven por cuenta propia.
 
-**Una tarea es una rama `feature/<id>` en cada repositorio que toca, y un PR** ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)).
-- El PR va contra `develop` en los repositorios de código y contra `main` en la especificación.
-- Se trabaja y **se deja la documentación al día antes de pedir el PR**.
-- **La rama se empuja siempre**, desde su primer commit y sin que haya que pedirlo, aunque el
-  commit no sea de una tarea.
-- `develop`, `main`, `qa`, `uat` y `prod` no se mueven por cuenta propia.
+**Una tarea es una rama en cada repositorio que toca, y un PR** ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)).
+- Se trabaja y **se deja la documentación al día antes de avisar que la rama está lista**.
 - **Se espera a que acepten el PR: no se empieza otra tarea hasta entonces.** La excepción es una
   tarea marcada ⚡ que no toque lo que está en revisión.
 
-**El PR se abre a pedido, y la rama llega sin conflictos** ([ADR-037](docs/adr/ADR-037-el-pr-se-abre-a-pedido.md)).
-- **Nunca se abre un PR por cuenta propia.** Se termina, se empuja y se avisa que la rama está
-  lista y contra qué base se abriría. Empujar respalda; abrir el PR pide el turno de una persona, y
-  cuándo pedirlo lo decide quien dirige.
-- **Antes de avisar, la rama se trae su base y queda sin un solo conflicto**, y se comprueba que la
-  fusión de vuelta daría limpia. Si la base se movió otra vez, se repite.
+**El PR se abre solo con autorización expresa de quien dirige** ([ADR-040](docs/adr/ADR-040-rama-feature-y-pr-autorizado.md)).
+- **Nunca por cuenta propia, ni en borrador**: terminar una tarea no lo autoriza. Se termina, se
+  empuja y se avisa que la rama está lista y contra qué base se abriría.
+- **Con la autorización, y solo entonces**, en cada repositorio de la rama: se trae lo último de su
+  base, se resuelven los conflictos, se vuelven a pasar las puertas del [08 §4](docs/08-plan-de-desarrollo.md#4-definición-de-terminado) con la base adentro y
+  se abre el PR contra esa base. Antes, la base no se fusiona en la rama.
 - **No basta con que no queden marcas `<<<<<<<`.** Dos ramas que suben la versión al mismo número, o
-  que agregan una ruta a la copia fijada del contrato, fusionan limpio y dejan [C-04](docs/12-pruebas-y-calidad.md#c-04) y [C-05](docs/12-pruebas-y-calidad.md#c-05) en
-  rojo: lo que se comprueba es que las puertas del [08 §4](docs/08-plan-de-desarrollo.md#4-definición-de-terminado) vuelven a pasar con la base adentro.
-- La receta es la skill `sin-conflictos`, y abrirlo cuando lo pidan, la skill `pr`.
+  que agregan una ruta a la copia fijada del contrato, fusionan limpio y dejan [C-04](docs/12-pruebas-y-calidad.md#c-04) y [C-05](docs/12-pruebas-y-calidad.md#c-05) en rojo.
+- El paso a paso es la skill `pr`. Quien dirige la invoca con `/pr`; si lo pide en palabras, se
+  sigue su archivo.
 
 **Una tarea es un commit, y el commit explica por qué** ([ADR-028](docs/adr/ADR-028-un-commit-por-tarea.md)).
 - El asunto lleva el sprint y el número: `Sprint 3 / 3.11: marca de registro tardio`.
-- El cuerpo son tres líneas: `Hace:`, `Decide:` y `Verifica:`. La última lleva el conteo de pruebas
-  y **qué se rompió a propósito para verlas fallar**.
+- El cuerpo son tres párrafos, separados por una línea en blanco: `Hace:`, `Decide:` y `Verifica:`.
+  El último lleva el conteo de pruebas y **qué se rompió a propósito para verlas fallar**.
 - Dos tareas no van en el mismo commit.
 - Lo que no es una tarea —documentación, herramientas, arreglos sueltos— va en su propio commit, sin
   número.
-- Los mensajes van **en español sin tildes**.
+- Los mensajes van **en español sin tildes ni eñes, y sin trailers**: ni `Co-Authored-By` ni ningún
+  otro ([ADR-036](docs/adr/ADR-036-sin-limite-en-el-commit.md)).
+- El paso a paso es la skill `commit`.
+
+**Un párrafo de código o de commit tiene cuatro líneas como máximo** ([ADR-041](docs/adr/ADR-041-cuatro-lineas-por-parrafo.md)).
+- Vale para los comentarios y la documentación dentro del código, y para el mensaje de un commit.
+- La línea es la del formateador del archivo —120 columnas en Java, 80 en Dart— o 100 donde no hay
+  uno. En el commit, 100.
+- **Si hace falta más, se pide autorización a quien dirige antes de escribirlo, con la razón.** Sin
+  ella, se parte, se recorta o el porqué largo va al plan o a un ADR.
+- Rige para lo que se escribe o se cambia: lo que ya está no se reescribe solo por esto.
 
 **La versión del proyecto sube un paso en cada PR que cambia lo que se publica** ([ADR-034](docs/adr/ADR-034-la-version-sube-en-cada-pr.md)).
 - Es el PATCH, el MINOR o el MAJOR siguiente de la versión de `develop`. En el front, el `+BUILD`
@@ -91,11 +108,10 @@ ni referencias de proyectos, ni nombres de clientes.
 
 **Todo `.md` de los cuatro repositorios lleva encabezado con versión, estado y fechas** ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md),
 [`22-documentacion.md`](docs/22-documentacion.md)).
-- Al cambiar un documento se sube su versión, que es MAJOR si alguien actuaría mal con la anterior.
-- Se pone la fecha de hoy.
-- Se corre `enlazar` y después `verificar`.
+- Al cambiar un documento sube su versión, que es MAJOR si alguien actuaría mal con la anterior.
 - **Los bloques `<!-- generado:… -->` no se editan a mano**, y tampoco las marcas ⚡ 🔒 ⏭️ de
   [`TODO.md`](TODO.md). 🚧 y ✏️ sí las pone una persona.
+- El paso a paso —la versión, la fecha, `enlazar` y `verificar`— es la skill `documentar`.
 
 **El plan de desarrollo manda sobre el tablero.**
 - [`08-plan-de-desarrollo.md`](docs/08-plan-de-desarrollo.md) dice qué hay que hacer, en qué carril y de qué depende. [`TODO.md`](TODO.md) dice
@@ -107,11 +123,6 @@ ni referencias de proyectos, ni nombres de clientes.
 
 **No se inventan reglas de negocio.** Si un documento no cubre un caso, se decide lo mínimo, se
 escribe el porqué en el commit y se anota en [`TODO.md`](TODO.md) [§10](TODO.md#10-decisiones-de-construcción-que-conviene-revisar), la lista que revisa quien dirige.
-
-**Este `CLAUDE.md` y los `AGENTS.md` no llevan estado, ni conteos, ni versiones** ([ADR-035](docs/adr/ADR-035-repositorios-hermanos.md)).
-- Una regla cambia con su ADR.
-- Si cambia la forma de un repositorio, cambia su `AGENTS.md`.
-- Cerrar una tarea no toca ninguno de los dos.
 
 ---
 
@@ -154,7 +165,6 @@ prisma_front  ──HTTP──▶  prisma_api  ──SQL──▶  prisma_db
 - **Un ADR aceptado no se edita.** Si la decisión cambia, se escribe otro que lo reemplaza. Al viejo
   solo se le agrega una nota, que sube la versión MINOR ([22 §3](docs/22-documentacion.md#3-versiones)).
 - **`contrato/openapi.json` va en LF, byte a byte**, porque la API guarda una copia exacta.
-- **Ningún documento cita un plan de trabajo.**
 
 ---
 
