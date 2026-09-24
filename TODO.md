@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.25.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.26.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -39,12 +39,12 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 4 | 0 | 7 | 9 |
-| [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 4 | 0 | 6 | 6,5 |
+| [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 11 | 5 | 0 | 6 | 6,5 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **152** | **100** | **0** | **52** | **68** |
+| **Total** | **153** | **101** | **0** | **52** | **68** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -147,7 +147,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **52 tareas y 68 días de trabajo** de 152 tareas del plan.
+Quedan **52 tareas y 68 días de trabajo** de 153 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
@@ -914,6 +914,19 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       operaciones, once esquemas y dos códigos que estrenan el rango `40`–`49`. El formulario se
       guarda de una vez y el costo no se sobrescribe: si cambió, entra una fila nueva. **A Operación
       no le llegan ni el costo ni los márgenes ni los minutos**, porque `costos_producto` lleva RLS
+- [x] [**5.11**](docs/08-plan-de-desarrollo.md#tarea-5-11) El «solo Gerencia» de `productos`, en la base · Base — el contrato de la
+      [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) declara de solo Gerencia el alta, la edición, la desactivación y la reactivación, y
+      la tabla tenía **RLS apagada**: `authenticated` conservaba `INSERT` y `UPDATE`, así que la
+      [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) lo habría resuelto con un `if`, que es lo que el [ADR-006](docs/adr/ADR-006-rls-por-rol.md) evita. Entran
+      `productos_lectura` y `productos_escritura`, con el molde que la [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) le dio a `cuentas` y
+      `categorias`: la lectura abierta, porque sin catálogo no hay pedido ni cotización, y la
+      escritura en `FOR ALL`, porque desactivar y reactivar son `UPDATE`. Y las dos restricciones que
+      `cargos` tiene desde el esquema inicial —`anulacion_con_motivo` y `desactivacion_con_motivo`—,
+      con las que **ningún producto sale del catálogo sin motivo escrito**. Esquema `0.17.0` —y no la
+      `0.16.0` que traía, que se llevó la [3.10](docs/08-plan-de-desarrollo.md#tarea-3-10) mientras esta tarea estaba abierta—, con 308
+      comprobaciones, todas en `OK` salvo la de `pg_cron`, contra el mismo PostgreSQL 16 de la
+      [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19) y con la 3.10 ya adentro. **Le deja dos filas a la API**, y **falta promoverla a
+      dev y a qa**
 
 **[Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos**
 
@@ -1180,7 +1193,8 @@ a `anon`.
   `FOR INSERT` para que la anulación, que es un `UPDATE`, no quede abierta el día que exista ese
   endpoint. Lo que queda por revisar es si alguna de las otras siete tablas sin RLS está en el
   mismo caso. **La [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) lo contestó para cuatro de ellas**: las dos del cotizador lo estaban, y
-  ya llevan RLS; y `pedidos` y `productos` también lo están, y siguen sin ella ([§10](#10-decisiones-de-construcción-que-conviene-revisar)).
+  ya llevan RLS; y `pedidos` y `productos` también lo estaban. **`productos` ya la lleva**, con este
+  mismo molde, desde la [5.11](docs/08-plan-de-desarrollo.md#tarea-5-11); a `pedidos` le falta, y la necesitará la [4.9](docs/08-plan-de-desarrollo.md#tarea-4-9) ([§10](#10-decisiones-de-construcción-que-conviene-revisar)).
 - **`fn_auditar` leía `OLD.anulado_en` en cinco tablas que no tienen esa columna, y ya no.** Lo
   arregló la [3.18](docs/08-plan-de-desarrollo.md#tarea-3-18), en el esquema `0.12.0`, después de comprobarlo contra una base: un `UPDATE` sobre
   `costos_producto`, `prolabore_config`, `nomina_detalle`, `sobres_config` o `cierres_mensuales` se
@@ -1250,12 +1264,13 @@ a `anon`.
   [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) siguió a la base, que es lo que [ADR-006](docs/adr/ADR-006-rls-por-rol.md) manda, y le declara a Operación el nombre, el tipo,
   la unidad y el precio. O se ajusta el mockup, o los minutos salen de la tabla de costos: mientras
   tanto, esa columna no se puede pintar para Operación.
-- **`productos` deja apagarse sin motivo, y `cargos` no.** Las dos tablas dicen «inactivo» con
-  `activo` y guardan el porqué en `anulado_*`, pero solo `cargos` tiene el `CHECK`
-  `desactivacion_con_motivo` que amarra las dos cosas ([04 §4.2](docs/04-modelo-de-datos.md#42-cargos-usuarios-y-cuentas)). El contrato promete que ningún
-  producto sale del catálogo sin motivo escrito, y hoy esa promesa la sostendría solo la API, que es
-  la capa que [ADR-015](docs/adr/ADR-015-validacion-tres-capas.md) dice que sí se puede saltar. Cerrarlo es una restricción nueva, y entra
-  primero al [04](docs/04-modelo-de-datos.md).
+- **`productos` dejaba apagarse sin motivo, y lo cerró la [5.11](docs/08-plan-de-desarrollo.md#tarea-5-11).** Las dos tablas dicen «inactivo»
+  con `activo` y guardan el porqué en `anulado_*`, y solo `cargos` tenía el par de `CHECK` que amarra
+  las dos cosas ([04 §4.2](docs/04-modelo-de-datos.md#42-cargos-usuarios-y-cuentas)). El contrato promete que ningún producto sale del catálogo sin motivo
+  escrito, y esa promesa la sostenía solo la API, que es la capa que [ADR-015](docs/adr/ADR-015-validacion-tres-capas.md) dice que sí se puede
+  saltar. Entraron primero al [04](docs/04-modelo-de-datos.md) y después a la migración, con los mismos dos nombres de `cargos`:
+  `desactivacion_con_motivo` y `anulacion_con_motivo`. **`pedidos` no las necesita**, porque cancelar
+  no es apagar y sus cuatro columnas las escribió la [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11).
 - **La semilla y los documentos no dicen la misma tarifa por hora.** `prolabore_config` siembra
   $1.500.000 sobre 160 horas, que dan **$9.375**; el [05 §7.4](docs/05-reglas-financieras.md#74-el-indicador-que-concilia-los-dos-mundos) y el [06 §4.1](docs/06-nomina-y-capacidad-de-pago.md#41-el-margen-de-contribución-correcto) trabajan con **$9.400**, que
   es lo que la semilla escribe a mano en `costos_producto.tarifa_hora`. Mientras la tarifa fuera un
@@ -1363,12 +1378,14 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 
 **De las tablas del cotizador ([8.12](docs/08-plan-de-desarrollo.md#tarea-8-12)):**
 
-- [ ] **`pedidos` y `productos` tienen operaciones de solo Gerencia que nadie impone en la base.** El
-      contrato le da a `pedidos` una anulación de «solo Gerencia» con `40300`, y a `productos` el alta,
-      la edición, la desactivación y la reactivación, también de solo Gerencia; y ninguna de las dos
-      lleva RLS. Es la pregunta que el [§9](#9-a-vigilar) dejó abierta con la [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10), y **la tiene delante la
-      [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2)**, que ya puede empezar y construye el catálogo: sin política, la resolvería con un `if`
-      de la API, que el [ADR-006](docs/adr/ADR-006-rls-por-rol.md) prohíbe. Son una migración de Base cada una, y hoy no tienen tarea
+- [x] **La mitad de `productos` está cerrada; la de `pedidos` sigue abierta.** El contrato le da a
+      `pedidos` una anulación de «solo Gerencia» con `40300`, y a `productos` el alta, la edición, la
+      desactivación y la reactivación, también de solo Gerencia; y ninguna de las dos llevaba RLS. Es
+      la pregunta que el [§9](#9-a-vigilar) dejó abierta con la [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10). **La de `productos` la resolvió la
+      [5.11](docs/08-plan-de-desarrollo.md#tarea-5-11)**, que entró al plan justo por esto: la tenía delante la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2), que construye el
+      catálogo, y sin política la habría resuelto con un `if` de la API, que el [ADR-006](docs/adr/ADR-006-rls-por-rol.md) prohíbe. **La
+      de `pedidos` sigue sin tarea y es una migración de Base**, y la necesitará la [4.9](docs/08-plan-de-desarrollo.md#tarea-4-9), que es la
+      que cancela un pedido
 - [ ] **Las dos del cotizador llevan RLS, aunque el [04 §7](docs/04-modelo-de-datos.md#7-seguridad-por-tipo-de-usuario-rls) las pusiera entre las que no.** Ese texto
       es de antes del contrato de la [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11), que hizo de la anulación algo de solo Gerencia. Se
       tomó la salida de la [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) —política, no `if`— y el 04 ya lo cuenta así

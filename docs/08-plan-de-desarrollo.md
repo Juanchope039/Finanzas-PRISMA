@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-24 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [5.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-24 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -11,7 +11,7 @@ cuánto dura el desarrollo según cuántos carriles avancen a la vez. Un carril 
 persona, un equipo o una sesión de trabajo; al plan le da igual.
 
 <!-- generado:plan-resumen · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**30,0 semanas con 1 carril**, **18,1 semanas con 2 carriles** y **14,8 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
+**30,1 semanas con 1 carril**, **18,1 semanas con 2 carriles** y **14,9 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
 <!-- /generado:plan-resumen -->
 
 > **El plan de 7 sprints daba por hecho que no había backend.**
@@ -119,13 +119,13 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 ### 1.1 Cuánto dura con 1, 2 o 3 carriles activos
 
 <!-- generado:plan-calendario · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**180 días de trabajo en 152 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
+**180,5 días de trabajo en 153 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
 
 | Carriles activos | Desarrollo | Estabilización | Total | Frente a 1 carril |
 |:---:|---:|---:|---:|---:|
-| 1 | 27,0 semanas | 3 semanas | **30,0 semanas** | — |
-| 2 | 15,1 semanas | 3 semanas | **18,1 semanas** | −11,9 semanas |
-| 3 | 11,8 semanas | 3 semanas | **14,8 semanas** | −15,3 semanas |
+| 1 | 27,1 semanas | 3 semanas | **30,1 semanas** | — |
+| 2 | 15,1 semanas | 3 semanas | **18,1 semanas** | −12,0 semanas |
+| 3 | 11,9 semanas | 3 semanas | **14,9 semanas** | −15,2 semanas |
 
 | Hito | 1 carril | 2 carriles | 3 carriles |
 |---|:---:|:---:|:---:|
@@ -133,7 +133,7 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 | [H2](#h2) · Sprint 1 | semana 7 | semana 5 | semana 4 |
 | [H3](#h3) · Sprint 2 | semana 11 | semana 7 | semana 6 |
 | [H4](#h4) · Sprint 3 | semana 15 | semana 9 | semana 7 |
-| [H5](#h5) · Sprint 4 | semana 18 | semana 10 | semana 8 |
+| [H5](#h5) · Sprint 4 | semana 18 | semana 11 | semana 8 |
 | [H6](#h6) · Sprint 5 | semana 19 | semana 11 | semana 9 |
 | [H7](#h7) · Sprint 6 | semana 22 | semana 13 | semana 10 |
 | [H8](#h8) · Sprint 7 | semana 23 | semana 14 | semana 10 |
@@ -180,11 +180,11 @@ gantt
     S1 :api1, 2026-09-22, 2026-10-07
     S2 :api2, 2026-10-07, 2026-10-24
     S3 :api3, 2026-10-09, 2026-11-01
-    S4 :api4, 2026-10-25, 2026-11-08
+    S4 :api4, 2026-10-25, 2026-11-09
     S5 :api5, 2026-10-28, 2026-11-11
-    S6 :api6, 2026-11-11, 2026-11-22
-    S7 :api7, 2026-11-04, 2026-11-22
-    S8 :api8, 2026-11-09, 2026-12-06
+    S6 :api6, 2026-11-12, 2026-11-22
+    S7 :api7, 2026-11-04, 2026-11-24
+    S8 :api8, 2026-11-09, 2026-12-07
     S9 :api9, 2026-11-25, 2026-12-04
 
     section Base
@@ -192,10 +192,10 @@ gantt
     S1 :base1, 2026-09-18, 2026-10-04
     S2 :base2, 2026-10-04, 2026-10-22
     S3 :base3, 2026-10-16, 2026-10-30
-    S4 :base4, 2026-10-28, 2026-11-07
-    S5 :base5, 2026-11-02, 2026-11-03
-    S6 :base6, 2026-11-17, 2026-11-19
-    S8 :base8, 2026-11-12, 2026-11-24
+    S4 :base4, 2026-10-28, 2026-11-08
+    S5 :base5, 2026-10-31, 2026-11-04
+    S6 :base6, 2026-11-18, 2026-11-20
+    S8 :base8, 2026-11-11, 2026-11-15
     S9 :base9, 2026-11-24, 2026-11-25
 
     section Front
@@ -203,7 +203,7 @@ gantt
     S1 :front1, 2026-09-26, 2026-09-30
     S2 :front2, 2026-10-06, 2026-10-16
     S3 :front3, 2026-10-12, 2026-10-25
-    S5 :front5, 2026-11-07, 2026-11-08
+    S5 :front5, 2026-11-08, 2026-11-09
     S6 :front6, 2026-11-14, 2026-11-21
     S7 :front7, 2026-11-21, 2026-11-24
     S9 :front9, 2026-11-24, 2026-11-28
@@ -215,8 +215,8 @@ gantt
     S4 :contrato4, 2026-10-27, 2026-10-28
     S5 :contrato5, 2026-10-30, 2026-10-31
     S6 :contrato6, 2026-11-01, 2026-11-02
-    S7 :contrato7, 2026-11-03, 2026-11-04
-    S8 :contrato8, 2026-11-08, 2026-11-09
+    S7 :contrato7, 2026-11-02, 2026-11-03
+    S8 :contrato8, 2026-11-02, 2026-11-03
 
     section Decisión
     S0 :decisin0, 2026-09-15, 2026-09-16
@@ -224,9 +224,9 @@ gantt
     S9 :decisin9, 2026-09-16, 2026-10-04
 
     section Implantación
-    Estabilización y aprobación en UAT :est, 2026-12-06, 2026-12-20
-    Migración y capacitación :mig, 2026-12-20, 2026-12-27
-    Go-live :milestone, 2026-12-27, 0d
+    Estabilización y aprobación en UAT :est, 2026-12-07, 2026-12-21
+    Migración y capacitación :mig, 2026-12-21, 2026-12-28
+    Go-live :milestone, 2026-12-28, 0d
 ```
 <!-- /generado:plan-gantt -->
 
@@ -584,7 +584,7 @@ la venta se causa completa en abril.
 | # | Tarea | Carril | Depende de | Días |
 |---|---|---|---|---:|
 | <a id="tarea-5-1"></a>5.1 | Dominio: `Producto` y servicio `calcularMargenes` | API | [1.9](#tarea-1-9) | 1,5 |
-| <a id="tarea-5-2"></a>5.2 | Catálogo de productos y servicios | API, Front | [1.14](#tarea-1-14), [2.13](#tarea-2-13), [5.1](#tarea-5-1), [5.10](#tarea-5-10) | 1,5 |
+| <a id="tarea-5-2"></a>5.2 | Catálogo de productos y servicios | API, Front | [1.14](#tarea-1-14), [2.13](#tarea-2-13), [5.1](#tarea-5-1), [5.10](#tarea-5-10), [5.11](#tarea-5-11) | 1,5 |
 | <a id="tarea-5-3"></a>5.3 | Costeo unitario: insumo, consumibles, minutos de trabajo | API | [5.1](#tarea-5-1) | 2 |
 | <a id="tarea-5-4"></a>5.4 | Costeo de bordado por tiempo de máquina | API | [5.3](#tarea-5-3) | 1 |
 | <a id="tarea-5-5"></a>5.5 | Historial de costos con fecha de vigencia | Base, API | [5.2](#tarea-5-2) | 1 |
@@ -593,6 +593,7 @@ la venta se causa completa en abril.
 | <a id="tarea-5-8"></a>5.8 | Ocultar costos y márgenes al tipo Operación: **la API no los envía**; esconderlos solo en la pantalla no cuenta | API | [1.7](#tarea-1-7), [5.6](#tarea-5-6) | 1 |
 | <a id="tarea-5-9"></a>5.9 | Cuadro comparativo ordenable por margen por hora | Front | [5.6](#tarea-5-6), [5.10](#tarea-5-10) | 1 |
 | <a id="tarea-5-10"></a>5.10 | **Contrato de productos, servicios y costeo** | Contrato | [2.19](#tarea-2-19) | 0,5 |
+| <a id="tarea-5-11"></a>5.11 | **El «solo Gerencia» de `productos`, en la base y no en un `if`**: las políticas `productos_lectura` y `productos_escritura`, con el molde que la tarea [1.10](#tarea-1-10) le dio a `cuentas` y `categorias`, porque el contrato de la [5.10](#tarea-5-10) hizo de solo Gerencia el alta, la edición, la desactivación y la reactivación, y la tabla no lleva RLS. Y las dos restricciones que `cargos` tiene desde el esquema inicial y `productos` no —`anulacion_con_motivo` y `desactivacion_con_motivo`—, para que ningún producto salga del catálogo sin motivo escrito. Pide dos filas nuevas en la tabla de traducción de la API | Base | [1.1](#tarea-1-1), [5.10](#tarea-5-10) | 0,5 |
 
 <!-- generado:plan-oleadas-5 · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **Qué puede ir a la vez en este sprint.** Cada oleada espera solo a las anteriores; dentro de una oleada, todo arranca junto.
@@ -600,10 +601,18 @@ la venta se causa completa en abril.
 | Oleada | Tareas | Carriles | Días |
 |:---:|---|---|---:|
 | 1 | [5.1](#tarea-5-1) · [5.10](#tarea-5-10) | API, Contrato | 2 |
-| 2 | [5.2](#tarea-5-2) · [5.3](#tarea-5-3) | API | 3,5 |
-| 3 | [5.4](#tarea-5-4) · [5.5](#tarea-5-5) · [5.6](#tarea-5-6) | API, Base | 3 |
-| 4 | [5.7](#tarea-5-7) · [5.8](#tarea-5-8) · [5.9](#tarea-5-9) | API, Front | 3 |
+| 2 | [5.3](#tarea-5-3) · [5.11](#tarea-5-11) | API, Base | 2,5 |
+| 3 | [5.2](#tarea-5-2) · [5.4](#tarea-5-4) · [5.6](#tarea-5-6) | API | 3,5 |
+| 4 | [5.5](#tarea-5-5) · [5.7](#tarea-5-7) · [5.8](#tarea-5-8) · [5.9](#tarea-5-9) | Base, API, Front | 4 |
 <!-- /generado:plan-oleadas-5 -->
+
+> **La [5.11](#tarea-5-11) entró porque la [5.2](#tarea-5-2) se la encontró delante.** El [04 §7](04-modelo-de-datos.md#7-seguridad-por-tipo-de-usuario-rls) lo dejó escrito al cerrar la
+> [8.12](#tarea-8-12): el contrato le da a `productos` cuatro operaciones de «solo Gerencia» y la tabla no lleva
+> política, así que la 5.2 lo resolvería con un `if` de la API, que es lo que el [ADR-006](adr/ADR-006-rls-por-rol.md) evita. No es
+> una tarea nueva de alcance: es la mitad de Base que la 5.2 daba por hecha, y por eso vale medio día
+> y no entra al [§6](#6-backlog-priorizado). **La lleva Base**, con el mismo camino de la [1.10](#tarea-1-10) y la [8.12](#tarea-8-12), y va antes que la
+> API que la usa ([ADR-025](adr/ADR-025-cuatro-repositorios.md)). `pedidos` sigue en el mismo caso y no tiene tarea: la suya la pide el
+> [§10](../TODO.md#10-decisiones-de-construcción-que-conviene-revisar) del tablero, y la necesitará la [4.9](#tarea-4-9).
 
 **Terminado cuando** — el cuadro de los 5 productos coincide con el documento [05](05-reglas-financieras.md) [§7.2](05-reglas-financieras.md#72-los-tres-márgenes).
 

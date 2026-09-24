@@ -151,7 +151,7 @@ base de datos y las pantallas. Con más carriles se termina antes, pero no en la
 que van en cadena y la puesta en marcha no se parte.
 
 <!-- generado:plan-resumen · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**30,0 semanas con 1 carril**, **18,1 semanas con 2 carriles** y **14,8 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](08-plan-de-desarrollo.md#1-cronograma-por-carriles).
+**30,1 semanas con 1 carril**, **18,1 semanas con 2 carriles** y **14,9 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](08-plan-de-desarrollo.md#1-cronograma-por-carriles).
 <!-- /generado:plan-resumen -->
 
 | Sprint | Entrega |
@@ -171,13 +171,13 @@ que van en cadena y la puesta en marcha no se parte.
 **En qué semana llega cada hito**, según cuántos carriles avancen a la vez:
 
 <!-- generado:plan-calendario · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**180 días de trabajo en 152 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
+**180,5 días de trabajo en 153 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
 
 | Carriles activos | Desarrollo | Estabilización | Total | Frente a 1 carril |
 |:---:|---:|---:|---:|---:|
-| 1 | 27,0 semanas | 3 semanas | **30,0 semanas** | — |
-| 2 | 15,1 semanas | 3 semanas | **18,1 semanas** | −11,9 semanas |
-| 3 | 11,8 semanas | 3 semanas | **14,8 semanas** | −15,3 semanas |
+| 1 | 27,1 semanas | 3 semanas | **30,1 semanas** | — |
+| 2 | 15,1 semanas | 3 semanas | **18,1 semanas** | −12,0 semanas |
+| 3 | 11,9 semanas | 3 semanas | **14,9 semanas** | −15,2 semanas |
 
 | Hito | 1 carril | 2 carriles | 3 carriles |
 |---|:---:|:---:|:---:|
@@ -185,7 +185,7 @@ que van en cadena y la puesta en marcha no se parte.
 | [H2](08-plan-de-desarrollo.md#h2) · Sprint 1 | semana 7 | semana 5 | semana 4 |
 | [H3](08-plan-de-desarrollo.md#h3) · Sprint 2 | semana 11 | semana 7 | semana 6 |
 | [H4](08-plan-de-desarrollo.md#h4) · Sprint 3 | semana 15 | semana 9 | semana 7 |
-| [H5](08-plan-de-desarrollo.md#h5) · Sprint 4 | semana 18 | semana 10 | semana 8 |
+| [H5](08-plan-de-desarrollo.md#h5) · Sprint 4 | semana 18 | semana 11 | semana 8 |
 | [H6](08-plan-de-desarrollo.md#h6) · Sprint 5 | semana 19 | semana 11 | semana 9 |
 | [H7](08-plan-de-desarrollo.md#h7) · Sprint 6 | semana 22 | semana 13 | semana 10 |
 | [H8](08-plan-de-desarrollo.md#h8) · Sprint 7 | semana 23 | semana 14 | semana 10 |

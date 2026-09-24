@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.13.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.14.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-24 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -619,7 +619,11 @@ CREATE TABLE productos (
   creado_en     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   anulado_en    TIMESTAMPTZ,
   anulado_por   UUID REFERENCES usuarios(id),
-  anulado_motivo motivo
+  anulado_motivo motivo,
+  CONSTRAINT anulacion_con_motivo
+    CHECK (anulado_en IS NULL OR (anulado_por IS NOT NULL AND anulado_motivo IS NOT NULL)),
+  CONSTRAINT desactivacion_con_motivo
+    CHECK (activo OR anulado_en IS NOT NULL)
 );
 
 CREATE TABLE costos_producto (
@@ -644,6 +648,15 @@ vigencia. Así un pedido antiguo conserva el costo que tenía cuando se produjo.
 
 `minutos_maquina` es lo que permite costear el **bordado** por tiempo de máquina en lugar de
 por unidad de producto.
+
+**Las dos restricciones de `productos` las escribió la tarea [5.11](08-plan-de-desarrollo.md#tarea-5-11)**, en el esquema `0.16.0`, y son
+las mismas de `cargos` ([§4.2](#42-cargos-usuarios-y-cuentas)). `productos` no tiene columnas propias de desactivación: apagar un
+producto es llenar `anulado_en`, `anulado_por` y `anulado_motivo`, como en los cargos, y por eso
+hacen falta las dos y no una. `desactivacion_con_motivo` amarra `activo = FALSE` a que haya fecha de
+baja, y `anulacion_con_motivo` exige el autor y el motivo cuando esa fecha existe: juntas son la
+promesa del contrato de que **ningún producto sale del catálogo sin motivo escrito**. Reactivar
+limpia las tres columnas, así que un producto vuelto a activar no arrastra el porqué de su baja
+anterior; el porqué de la reactivación queda en `auditoria`.
 
 **Las dos tablas del cotizador las escribió la tarea [8.12](08-plan-de-desarrollo.md#tarea-8-12)**, en el esquema `0.15.0`. Estaban en el
 catálogo y en el diagrama desde el principio sin `CREATE TABLE`, y el contrato de la tarea [8.11](08-plan-de-desarrollo.md#tarea-8-11) ya
@@ -2260,17 +2273,30 @@ es el `40980`— lo dice `aceptada_no_se_anula`.
 **Las líneas se escriben en dos sentencias, después de la cotización.** Su política busca la
 cotización para saber quién la emitió, y dentro de una sola sentencia no la vería.
 
-Con esto, las dieciséis tablas que el [§3](#3-catálogo-de-entidades) marca como sensibles tienen política, y con `cargos`,
-`cuentas`, `categorias`, `presentacion_tipos`, `cotizaciones` y `cotizacion_lineas` son veintidós las
-que llevan RLS encendida. Las cinco restantes —`adjuntos`, `pedidos`, `pedido_lineas`, `anticipos` y
-`productos`— siguen sin RLS a propósito: los dos tipos trabajan con ellas todo el día y no hay nada que
-separar. El principio 6 del [§1](#1-principios-del-modelo) se lee así: **en cada tabla donde haya algo que proteger.**
+**`productos` lo lee todo el mundo y lo escribe solo Gerencia**, que es el molde exacto de `cargos`,
+`cuentas` y `categorias`. Lo escribió la tarea [5.11](08-plan-de-desarrollo.md#tarea-5-11), en el esquema `0.16.0`:
 
-> **Dos de esas cinco ya tienen algo que separar.** El contrato le da a `pedidos` una anulación de
-> «solo Gerencia» y a `productos` el alta, la edición, la desactivación y la reactivación, también
-> de «solo Gerencia», y sin política nadie lo impone en la base: es el caso de `cuentas` y
-> `categorias` en la tarea [1.10](08-plan-de-desarrollo.md#tarea-1-10), y ahora el del cotizador. Queda en el [TODO §10](../TODO.md#10-decisiones-de-construcción-que-conviene-revisar) para quien
-> dirige, antes de que la tarea [5.2](08-plan-de-desarrollo.md#tarea-5-2) y las del pedido lo resuelvan con un `if`.
+```sql
+CREATE POLICY productos_lectura   ON productos FOR SELECT USING (TRUE);
+CREATE POLICY productos_escritura ON productos FOR ALL
+  USING (fn_es_gerencia()) WITH CHECK (fn_es_gerencia());
+```
+
+La lectura sigue abierta porque Operación elige productos todo el día, al armar un pedido y al
+cotizar; lo único que cambia es quién los define. Va `FOR ALL` y no `FOR INSERT` porque **la
+desactivación y la reactivación del contrato son `UPDATE`**, y una política de inserción sola las
+dejaría abiertas el día que se escriban esos dos endpoints, sin ninguna prueba que lo delatara.
+
+Con esto, las dieciséis tablas que el [§3](#3-catálogo-de-entidades) marca como sensibles tienen política, y con `cargos`,
+`cuentas`, `categorias`, `presentacion_tipos`, `cotizaciones`, `cotizacion_lineas` y `productos` son
+veintitrés las que llevan RLS encendida. Las cuatro restantes —`adjuntos`, `pedidos`, `pedido_lineas`
+y `anticipos`— siguen sin RLS a propósito: los dos tipos trabajan con ellas todo el día y no hay nada
+que separar. El principio 6 del [§1](#1-principios-del-modelo) se lee así: **en cada tabla donde haya algo que proteger.**
+
+> **A `pedidos` todavía le falta.** El contrato le da una anulación de «solo Gerencia» y la tabla no
+> lleva política, así que hoy nadie lo impone en la base. Era el mismo caso de `productos` hasta la
+> [5.11](08-plan-de-desarrollo.md#tarea-5-11), y antes el de `cuentas` y `categorias` en la tarea [1.10](08-plan-de-desarrollo.md#tarea-1-10). Sigue en el [TODO §10](../TODO.md#10-decisiones-de-construcción-que-conviene-revisar) para
+> quien dirige, y hace falta antes de que la tarea [4.9](08-plan-de-desarrollo.md#tarea-4-9) lo resuelva con un `if`.
 
 Las pruebas que ejercen estas políticas con una sesión real de tipo Operación son [P-16](12-pruebas-y-calidad.md#p-16) a [P-31](12-pruebas-y-calidad.md#p-31)
 de [`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md) [§3](12-pruebas-y-calidad.md#3-pruebas-de-permisos).
