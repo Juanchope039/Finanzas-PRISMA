@@ -34,16 +34,16 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 <!-- generado:plan-tablero · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
-| [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · [Dos proyectos, cuatro ambientes, tubería y contrato de respuesta](#sprint-0) | 19 | 19 | 0 | 0 | 0 |
-| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · [Base de datos, RLS, identidad propagada e idempotencia](#sprint-1) | 21 | 21 | 0 | 0 | 0 |
-| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · [Acceso, usuarios, cargos y canal firmado](#sprint-2) | 22 | 22 | 0 | 0 | 0 |
-| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · [Movimientos](#sprint-3) | 25 | 25 | 0 | 0 | 0 |
-| [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · [Pedidos y anticipos](#sprint-4) | 11 | 4 | 0 | 7 | 9 |
-| [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · [Productos y costeo](#sprint-5) | 11 | 5 | 0 | 6 | 6,5 |
-| [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · [Reportes y KPIs](#sprint-6) | 10 | 1 | 0 | 9 | 14,5 |
-| [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · [Capital, retiros y patrimonio](#sprint-7) | 9 | 1 | 0 | 8 | 12 |
-| [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · [Nómina, cotizador y cierre](#sprint-88) | 12 | 2 | 0 | 10 | 15,5 |
-| [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · [Promoción, PWA y endurecimiento](#sprint-) | 13 | 1 | 0 | 12 | 10,5 |
+| [Sprint 0](#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 19 | 0 | 0 | 0 |
+| [Sprint 1](#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
+| [Sprint 2](#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
+| [Sprint 3](#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
+| [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 4 | 0 | 7 | 9 |
+| [Sprint 5](#sprint-5) · Productos y costeo | 11 | 5 | 0 | 6 | 6,5 |
+| [Sprint 6](#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
+| [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
+| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
+| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
 | **Total** | **153** | **101** | **0** | **52** | **68** |
 <!-- /generado:plan-tablero -->
 
@@ -302,7 +302,7 @@ o indirectamente. No es el orden en que se descubrieron.
 
 ---
 
-## 2. <a id="sprint-0"></a>Sprint 0 · proyectos, ambientes y contrato
+## 2. <a id="sprint-0"></a>[Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · proyectos, ambientes y contrato
 
 - [x] [**0.1**](docs/08-plan-de-desarrollo.md#tarea-0-1) Proyecto `prisma_api`: Java 25, Spring Boot 4 y Gradle, con el esqueleto hexagonal · API
 - [x] [**0.2**](docs/08-plan-de-desarrollo.md#tarea-0-2) Regla de frontera con ArchUnit en la integración continua · API
@@ -357,7 +357,7 @@ se cierra con la [0.9](docs/08-plan-de-desarrollo.md#tarea-0-9), que volvió a e
 
 ---
 
-## 3. <a id="sprint-1"></a>Sprint 1 · base, RLS, identidad e idempotencia
+## 3. <a id="sprint-1"></a>[Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · base, RLS, identidad e idempotencia
 
 ✏️ quiere decir que el SQL ya está en la migración inicial de `prisma_db`
 (`20260915120000_esquema_inicial.sql`) pero nunca corrió contra una base: no cuenta como hecho
@@ -483,7 +483,7 @@ hasta aplicarlo y probarlo.
 
 ---
 
-## 4. <a id="sprint-2"></a>Sprint 2 · acceso, usuarios, cargos y canal firmado
+## 4. <a id="sprint-2"></a>[Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · acceso, usuarios, cargos y canal firmado
 
 - [x] [**2.1**](docs/08-plan-de-desarrollo.md#tarea-2-1) Autenticación contra Supabase Auth desde la API, con el correo sintético en el
       servidor · API — `POST /api/v0/sesiones`, y con ella **la primera transacción con identidad
