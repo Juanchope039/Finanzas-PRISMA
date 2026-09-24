@@ -1219,13 +1219,35 @@ tbody tr.fila-detalle:hover{background:none}
             </div>
             <div class="campos-form">
               <div class="campo"><label for="n-cliente">Cliente</label>
-                <input type="text" id="n-cliente" placeholder="Nombre del cliente" value="Colegio Bilingüe del Valle"></div>
+                <select id="n-cliente"></select></div>
               <div class="campo"><label for="n-prod">Producto o servicio</label>
                 <select id="n-prod"></select></div>
               <div class="campo"><label for="n-cant">Cantidad</label>
                 <input type="number" id="n-cant" value="60" min="1" max="9999"></div>
               <div class="campo"><label for="n-fecha">Fecha de entrega</label>
                 <input type="date" id="n-fecha" value="2026-10-15"></div>
+            </div>
+
+            <!-- El alta en línea. En el taller el cliente entra por teléfono mientras se toma el
+                 pedido (CU-05): mandar a otra pantalla a media captura pierde el pedido a medio
+                 escribir. Solo el nombre es obligatorio; el correo llega después. -->
+            <div id="n-cliente-nuevo" hidden style="margin-top:14px; padding:13px 14px; border-radius:9px;
+                 background:var(--accent-soft); border:1px solid var(--accent)">
+              <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:12px">
+                <b class="grow" style="font-family:var(--display); font-size:.95rem; color:var(--accent)">Cliente nuevo</b>
+                <span class="eyebrow">Queda en el catálogo · solo el nombre es obligatorio</span>
+              </div>
+              <div class="campos-form">
+                <div class="campo"><label for="nc-nombre">Nombre</label>
+                  <input type="text" id="nc-nombre" placeholder="La persona, el colegio o la empresa"></div>
+                <div class="campo"><label for="nc-telefono">Teléfono</label>
+                  <input type="text" id="nc-telefono" inputmode="tel" placeholder="3155551020"></div>
+                <div class="campo"><label for="nc-correo">Correo</label>
+                  <input type="text" id="nc-correo" inputmode="email" placeholder="compras@ejemplo.co"></div>
+                <div class="campo"><label for="nc-notas">Notas</label>
+                  <input type="text" id="nc-notas" placeholder="Lo que haya que recordar"></div>
+              </div>
+              <p class="capa-error" id="nc-error" role="alert" aria-live="polite" hidden style="margin-top:12px"></p>
             </div>
 
             <div class="ctrl" style="margin:16px 0 0">
@@ -1258,6 +1280,46 @@ tbody tr.fila-detalle:hover{background:none}
           <div class="tw"><table>
             <thead><tr><th>Pedido</th><th>Fecha</th><th>Cliente</th><th>Detalle</th><th class="r r-mid">Total</th><th class="r r-mid">Anticipo</th><th class="r r-mid">Saldo</th><th>Estado</th></tr></thead>
             <tbody id="tb-pedidos"></tbody>
+          </table></div>
+        </div>
+        <!-- Los clientes no son una pantalla: el menú lo dicta la API (RF-103) y sus ocho claves
+             no incluyen «clientes». Viven donde se usan, que es al tomar un pedido. Leerlos y
+             crearlos lo hacen los dos tipos de usuario —sin cliente no hay pedido, CU-05—; anular
+             es de Gerencia, y lo impone `clientes_actualizacion` en la base, no esta pantalla. -->
+        <div class="panel">
+          <div class="panel-head">
+            <h2 class="grow">Clientes del taller</h2>
+            <span class="eyebrow">Se eligen al tomar el pedido · nada se borra</span>
+            <button class="cta" id="btn-cliente" aria-expanded="false" aria-controls="form-cliente">+ Nuevo cliente</button>
+          </div>
+
+          <div class="formulario" id="form-cliente" hidden>
+            <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px">
+              <h3 class="grow">Nuevo cliente</h3>
+              <span class="eyebrow">Solo el nombre es obligatorio</span>
+            </div>
+            <div class="campos-form">
+              <div class="campo"><label for="cl-nombre">Nombre</label>
+                <input type="text" id="cl-nombre" placeholder="La persona, el colegio o la empresa"></div>
+              <div class="campo"><label for="cl-telefono">Teléfono</label>
+                <input type="text" id="cl-telefono" inputmode="tel" placeholder="3155551020"></div>
+              <div class="campo"><label for="cl-correo">Correo</label>
+                <input type="text" id="cl-correo" inputmode="email" placeholder="compras@ejemplo.co"></div>
+              <div class="campo"><label for="cl-notas">Notas</label>
+                <input type="text" id="cl-notas" placeholder="Lo que haya que recordar"></div>
+            </div>
+
+            <p class="capa-error" id="cl-error" role="alert" aria-live="polite" hidden style="margin-top:14px"></p>
+
+            <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; align-items:center">
+              <button class="cta" id="cl-guardar">Guardar cliente</button>
+              <button class="ghost" id="cl-cancelar">Cancelar</button>
+            </div>
+          </div>
+
+          <div class="tw"><table>
+            <thead><tr><th>Cliente</th><th>Contacto</th><th>Notas</th><th class="r r-mid">Pedidos</th><th>Acciones</th></tr></thead>
+            <tbody id="tb-clientes"></tbody>
           </table></div>
         </div>
         <div class="panel" data-ger id="panel-anulados" hidden>
@@ -2073,22 +2135,65 @@ function porId(id){
   return PRODUCTOS.filter(function(p){ return p.id === +id; })[0];
 }
 
+/* Los clientes del taller. Un pedido apunta a uno por id y no guarda su nombre: dos formas de
+   escribir «Colegio San Vicente» serían dos clientes sin historial común, que es justo lo que el
+   desplegable evita. `baja` guarda la anulación —cuándo, quién y por qué—: nada se borra (RN-13). */
+var CLIENTES = [
+  {id:'c1', nombre:'Eventos Marcela Ruiz',   telefono:'3155551020', correo:'marcela@eventosmr.co',
+   notas:'Pide factura a nombre de la empresa',        baja:null},
+  {id:'c2', nombre:'Gimnasio Pórtico',       telefono:'3004448812', correo:'admin@gimnasioportico.co',
+   notas:'',                                           baja:null},
+  {id:'c3', nombre:'Panadería La Espiga',    telefono:'3122237745', correo:'',
+   notas:'Recibe solo después de las 2 p. m.',          baja:null},
+  {id:'c4', nombre:'Colegio San Vicente',    telefono:'3187770101', correo:'compras@sanvicente.edu.co',
+   notas:'Orden de compra antes de empezar',            baja:null},
+  {id:'c5', nombre:'Ferretería El Tornillo', telefono:'3159993322', correo:'',
+   notas:'',                                           baja:null},
+  {id:'c6', nombre:'Distribuidora Andina',   telefono:'3201114466', correo:'cartera@andina.com.co',
+   notas:'Paga a 30 días',                              baja:null},
+  {id:'c7', nombre:'Colegio Santa Rita',     telefono:'3166668890', correo:'rectoria@santarita.edu.co',
+   notas:'',                                           baja:null},
+  {id:'c8', nombre:'Clínica Versalles',      telefono:'3013335577', correo:'compras@versalles.co',
+   notas:'Entregar en la portería',                     baja:null},
+  {id:'c9', nombre:'Almacenes Rueda',        telefono:'3144442200', correo:'',
+   notas:'Cerró el local',                              baja:{motivo:'Cerró el local y no volvió a pedir',
+   por:'Yuliana Martínez Ríos', en:'2026-08-30'}}
+];
+var consecutivoCliente = 9;
+
+function clientePorId(id){
+  return CLIENTES.filter(function(c){ return c.id === id; })[0];
+}
+/* Los anulados no salen del desplegable: no se le puede tomar un pedido nuevo a un cliente que
+   ya no está. Los pedidos que ya lo nombran lo siguen nombrando. */
+function clientesVigentes(){
+  return CLIENTES.filter(function(c){ return !c.baja; })
+    .sort(function(a, b){ return a.nombre.localeCompare(b.nombre, 'es'); });
+}
+function nombreDeCliente(p){
+  var c = clientePorId(p.clienteId);
+  return c ? c.nombre : 'Cliente sin nombre';
+}
+function pedidosDeCliente(id){
+  return PEDIDOS.filter(function(p){ return p.clienteId === id; }).length;
+}
+
 var PEDIDOS = [
-  {id:'P-0287', fecha:'2026-09-24', entrega:'2026-10-09', cliente:'Eventos Marcela Ruiz',
+  {id:'P-0287', fecha:'2026-09-24', entrega:'2026-10-09', clienteId:'c1',
    prodId:3, cant:60, anticipo: 540000, estado:'anticipo',  baja:null},
-  {id:'P-0286', fecha:'2026-09-22', entrega:'2026-10-06', cliente:'Gimnasio Pórtico',
+  {id:'P-0286', fecha:'2026-09-22', entrega:'2026-10-06', clienteId:'c2',
    prodId:1, cant:45, anticipo: 720000, estado:'anticipo',  baja:null},
-  {id:'P-0284', fecha:'2026-09-20', entrega:'2026-10-04', cliente:'Panadería La Espiga',
+  {id:'P-0284', fecha:'2026-09-20', entrega:'2026-10-04', clienteId:'c3',
    prodId:5, cant:24, anticipo: 264000, estado:'anticipo',  baja:null},
-  {id:'P-0271', fecha:'2026-08-26', entrega:'2026-08-28', cliente:'Colegio San Vicente',
+  {id:'P-0271', fecha:'2026-08-26', entrega:'2026-08-28', clienteId:'c4',
    prodId:1, cant:36, anticipo: 576000, estado:'estancado', baja:null},
-  {id:'P-0283', fecha:'2026-09-18', entrega:'2026-09-18', cliente:'Ferretería El Tornillo',
+  {id:'P-0283', fecha:'2026-09-18', entrega:'2026-09-18', clienteId:'c5',
    prodId:2, cant:60, anticipo:      0, estado:'entregado', baja:null},
-  {id:'P-0281', fecha:'2026-09-15', entrega:'2026-09-15', cliente:'Distribuidora Andina',
+  {id:'P-0281', fecha:'2026-09-15', entrega:'2026-09-15', clienteId:'c6',
    prodId:4, cant:28, anticipo:      0, estado:'entregado', baja:null},
-  {id:'P-0279', fecha:'2026-09-11', entrega:'2026-09-11', cliente:'Colegio Santa Rita',
+  {id:'P-0279', fecha:'2026-09-11', entrega:'2026-09-11', clienteId:'c7',
    prodId:3, cant:120, anticipo:     0, estado:'entregado', baja:null},
-  {id:'P-0276', fecha:'2026-09-05', entrega:'2026-09-05', cliente:'Clínica Versalles',
+  {id:'P-0276', fecha:'2026-09-05', entrega:'2026-09-05', clienteId:'c8',
    prodId:1, cant:35, anticipo:      0, estado:'entregado', baja:null}
 ];
 
@@ -2332,6 +2437,7 @@ function aplicarRol(){
   libro.abierto  = null;
   libro.anulados = false;
   tablaProductos();
+  tablaClientes();
   tablaPedidos();
   kpisPedidos();
   pintarCuentas();
@@ -2651,7 +2757,7 @@ function tablaPedidos(){
       (ger ? ' tabindex="0" role="button" aria-expanded="' + (sel ? 'true' : 'false') +
              '" style="cursor:pointer' + (sel ? '; background:var(--accent-soft)' : '') + '"' : '') +
       '><td class="mono">' + p.id + '</td><td class="mono">' + fechaCorta(p.fecha) +
-      '</td><td>' + enTexto(p.cliente) + '</td><td style="color:var(--muted)">' + enTexto(detallePedido(p)) +
+      '</td><td>' + enTexto(nombreDeCliente(p)) + '</td><td style="color:var(--muted)">' + enTexto(detallePedido(p)) +
       '</td><td class="r r-mid">' + fmt(total) +
       '</td><td class="r r-mid" style="color:' + (p.anticipo ? 'var(--anticipo)' : 'var(--faint)') + '">' +
       (p.anticipo ? fmt(p.anticipo) : '—') +
@@ -2679,10 +2785,193 @@ function tablaPedidos(){
   tablaAnulados();
 }
 
+/* ---------- clientes (RF-18, CU-05) ---------- */
+/* El desplegable reemplaza al texto libre que había aquí: el contrato dice que
+   POST /api/v0/consultas/clientes es «el origen del campo clienteId del formulario pedido», y
+   dos maneras de escribir el mismo nombre son dos clientes y ningún historial. */
+function llenarSelectClientes(){
+  var sel = document.getElementById('n-cliente');
+  if (!sel) return;
+  var antes = sel.value;
+  sel.innerHTML = clientesVigentes().map(function(c){
+    return '<option value="' + c.id + '">' + enTexto(c.nombre) + '</option>';
+  }).join('') + '<option value="__nuevo">+ Cliente nuevo…</option>';
+  if (antes && sel.querySelector('option[value="' + antes + '"]')) sel.value = antes;
+}
+
+/* «+ Cliente nuevo…» abre los campos aquí mismo. Nadie sale del pedido a medio tomar. */
+function alternarClienteNuevo(){
+  var sel  = document.getElementById('n-cliente');
+  var caja = document.getElementById('n-cliente-nuevo');
+  if (!sel || !caja) return;
+  var nuevo = (sel.value === '__nuevo');
+  caja.hidden = !nuevo;
+  avisoCampo('nc-error', '');
+  if (nuevo) document.getElementById('nc-nombre').focus();
+}
+
+/* Crea el cliente y lo devuelve. El id lo pone quien pide —en la API es un UUID que viaja en la
+   ruta con su clave de idempotencia (ADR-020)—, no la tabla. */
+function crearCliente(nombre, telefono, correo, notas){
+  consecutivoCliente += 1;
+  var c = {id:'c' + consecutivoCliente, nombre:nombre, telefono:telefono || '',
+           correo:correo || '', notas:notas || '', baja:null};
+  CLIENTES.push(c);
+  return c;
+}
+
+/* El cliente del pedido que se está guardando: el elegido, o el que se acaba de escribir.
+   Devuelve null cuando falta el nombre, y entonces ya dejó dicho dónde. */
+function clienteDelPedido(){
+  var sel = document.getElementById('n-cliente');
+  if (sel.value !== '__nuevo') return sel.value;
+  var nombre = (document.getElementById('nc-nombre').value || '').trim();
+  if (!nombre){
+    avisoCampo('nc-error', 'Ponle nombre al cliente, como lo conocen en el taller.');
+    document.getElementById('nc-nombre').focus();
+    return null;
+  }
+  var c = crearCliente(nombre,
+    (document.getElementById('nc-telefono').value || '').trim(),
+    (document.getElementById('nc-correo').value   || '').trim(),
+    (document.getElementById('nc-notas').value    || '').trim());
+  llenarSelectClientes();
+  sel.value = c.id;
+  alternarClienteNuevo();
+  ['nc-nombre','nc-telefono','nc-correo','nc-notas'].forEach(function(id){
+    document.getElementById(id).value = '';
+  });
+  tablaClientes();
+  return c.id;
+}
+
+var avisoClientes = null;
+
+/* La tabla enseña solo los vigentes, como la consulta del contrato: un cliente anulado no
+   recibe pedidos nuevos, así que tampoco sale de la lista de la que alguien elige. Lo que ya lo
+   nombra lo sigue nombrando, y por eso la columna de pedidos cuenta los suyos. */
+function tablaClientes(){
+  var cuerpo = document.getElementById('tb-clientes');
+  if (!cuerpo) return;
+  var ger   = (rol === 'gerencia');
+  var aviso = avisoClientes;
+  avisoClientes = null;
+  if (filaAbierta && cuerpo.contains(filaAbierta)) filaAbierta = null;
+
+  cuerpo.innerHTML = filaAviso(aviso, 5) + clientesVigentes().map(function(c){
+    var contacto = [c.telefono, c.correo].filter(function(x){ return x; }).join(' · ');
+    return '<tr><td style="font-weight:500">' + enTexto(c.nombre) +
+      '</td><td style="color:var(--muted)">' + (contacto ? enTexto(contacto) : '—') +
+      '</td><td style="color:var(--muted)">' + enTexto(c.notas || '—') +
+      '</td><td class="r r-mid">' + pedidosDeCliente(c.id) +
+      '</td>' + (ger
+        ? '<td><button class="ghost" style="padding:3px 9px; color:var(--neg)" data-cl-anular="' +
+          c.id + '">Anular</button></td>'
+        : '<td></td>') +
+      '</tr>';
+  }).join('');
+
+  /* Sin `if` de rol en el botón de verdad: en la API lo niega `clientes_actualizacion`, y aquí
+     no pintarlo es comodidad, no permiso (10 §2.1, principio 6). */
+  if (ger){
+    $$('#tb-clientes [data-cl-anular]').forEach(function(b){
+      b.addEventListener('click', function(){ pedirMotivoCliente(b.getAttribute('data-cl-anular'), b); });
+    });
+  }
+  llenarSelectClientes();
+}
+
+function abrirFormCliente(){
+  var form = document.getElementById('form-cliente');
+  var btn  = document.getElementById('btn-cliente');
+  ['cl-nombre','cl-telefono','cl-correo','cl-notas'].forEach(function(id){
+    document.getElementById(id).value = '';
+  });
+  avisoCampo('cl-error', '');
+  form.hidden = false;
+  btn.setAttribute('aria-expanded', 'true');
+  btn.textContent = 'Cerrar';
+  form.scrollIntoView({block:'nearest'});
+  document.getElementById('cl-nombre').focus();
+}
+
+function cerrarFormCliente(){
+  var btn = document.getElementById('btn-cliente');
+  document.getElementById('form-cliente').hidden = true;
+  btn.setAttribute('aria-expanded', 'false');
+  btn.textContent = '+ Nuevo cliente';
+  avisoCampo('cl-error', '');
+}
+
+function guardarCliente(){
+  var nombre = (document.getElementById('cl-nombre').value || '').trim();
+  if (!nombre){
+    avisoCampo('cl-error', 'Ponle nombre al cliente, como lo conocen en el taller.');
+    document.getElementById('cl-nombre').focus();
+    return;
+  }
+  crearCliente(nombre,
+    (document.getElementById('cl-telefono').value || '').trim(),
+    (document.getElementById('cl-correo').value   || '').trim(),
+    (document.getElementById('cl-notas').value    || '').trim());
+  avisoClientes = {tono:'info', titulo:'«' + nombre + '» ya se puede elegir',
+    texto:'Sale en el desplegable de Nuevo pedido, ordenado por nombre.'};
+  cerrarFormCliente();
+  tablaClientes();
+}
+
+/* Anular es de Gerencia y pide motivo escrito: la fila se queda entera con cuándo, quién y por
+   qué (RN-13), y los pedidos de ese cliente siguen enteros. */
+function pedirMotivoCliente(id, boton){
+  var c = clientePorId(id);
+  if (!c) return;
+  var cuantos = pedidosDeCliente(c.id);
+  var extra = abrirPanelFila(boton,
+    '<div class="confirma"><b>¿Anular a «' + enTexto(c.nombre) + '»?</b>' +
+    '<p>Deja de ofrecerse al tomar un pedido, pero no se borra: queda con quién lo anuló, cuándo ' +
+    'y por qué' + (cuantos ? ', y sus ' + cuantos + ' pedidos siguen enteros' : '') + '.</p>' +
+    '<div class="campo"><label for="cla-motivo">Motivo</label>' +
+    '<input type="text" id="cla-motivo" placeholder="Cerró el local, ya no pide…"></div>' +
+    '<p class="capa-error" role="alert" aria-live="polite" hidden></p>' +
+    '<div class="botones"><button type="button" class="cta" data-ok>Sí, anular</button>' +
+    '<button type="button" class="ghost" data-no>Cancelar</button></div></div>');
+  if (!extra) return;
+
+  var campo = extra.querySelector('input');
+  var error = extra.querySelector('.capa-error');
+  campo.focus();
+  extra.querySelector('[data-no]').addEventListener('click', cerrarPanelFila);
+  extra.querySelector('[data-ok]').addEventListener('click', function(){
+    var motivo = (campo.value || '').trim();
+    if (motivo.length < 5){
+      error.textContent = 'El motivo tiene que explicar algo: escribe al menos 5 caracteres.';
+      error.hidden = false;
+      campo.focus();
+      return;
+    }
+    c.baja = {motivo:motivo, por:(sesion ? sesion.nombreCompleto : 'Gerencia'), en:'2026-09-30'};
+    avisoClientes = {tono:'info', titulo:'«' + c.nombre + '» sale del catálogo',
+      texto:'No se borró nada: queda el motivo, y sus pedidos siguen en la lista.'};
+    cerrarPanelFila();
+    tablaClientes();
+  });
+}
+
+(function initCliente(){
+  var btn = document.getElementById('btn-cliente');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    if (document.getElementById('form-cliente').hidden) abrirFormCliente();
+    else cerrarFormCliente();
+  });
+  document.getElementById('cl-cancelar').addEventListener('click', cerrarFormCliente);
+  document.getElementById('cl-guardar').addEventListener('click', guardarCliente);
+})();
+
 function filaAcciones(p){
   return '<tr class="acciones-pedido"><td colspan="8" style="background:var(--accent-soft); padding:10px 12px">' +
     '<div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">' +
-    '<span style="font-size:.82rem"><b>' + p.id + '</b> · ' + enTexto(p.cliente) + '</span>' +
+    '<span style="font-size:.82rem"><b>' + p.id + '</b> · ' + enTexto(nombreDeCliente(p)) + '</span>' +
     '<span style="flex:1"></span>' +
     (p.estado !== 'entregado'
       ? '<button class="ghost" data-entregar="' + p.id + '">Marcar entregado</button>' : '') +
@@ -2768,7 +3057,7 @@ function tablaAnulados(){
   document.getElementById('panel-anulados').hidden = (fuera.length === 0 || rol !== 'gerencia');
   cuerpo.innerHTML = fuera.map(function(p){
     return '<tr><td class="mono" style="color:var(--muted)">' + p.id +
-      '</td><td style="color:var(--muted)">' + enTexto(p.cliente) +
+      '</td><td style="color:var(--muted)">' + enTexto(nombreDeCliente(p)) +
       '</td><td class="r r-mid" style="color:var(--muted)">' + fmt(totalPedido(p)) +
       '</td><td style="color:var(--muted)">' + enTexto(p.baja.motivo) +
       '</td><td style="color:var(--muted)">' + p.baja.destino +
@@ -2789,7 +3078,7 @@ function tablaPedidosResumen(){
   if (!cuerpo) return;
   cuerpo.innerHTML = abiertos().map(function(p){
     var total = totalPedido(p);
-    return '<tr><td class="mono">' + p.id + '</td><td>' + enTexto(p.cliente) +
+    return '<tr><td class="mono">' + p.id + '</td><td>' + enTexto(nombreDeCliente(p)) +
       '</td><td class="mono">' + fechaCorta(p.entrega) + '</td><td class="r r-mid">' + fmt(total) +
       '</td><td class="r r-mid">' + fmt(p.anticipo) + '</td><td class="r r-mid">' + fmt(total - p.anticipo) +
       '</td><td>' + (p.estado === 'estancado'
@@ -3408,7 +3697,18 @@ function abrirFormPedido(id){
 
   document.getElementById('pedido-titulo').textContent = p ? 'Modificar ' + p.id : 'Nuevo pedido';
   document.getElementById('n-guardar').textContent = p ? 'Guardar cambios' : 'Guardar pedido';
-  document.getElementById('n-cliente').value = p ? p.cliente : 'Colegio Bilingüe del Valle';
+  llenarSelectClientes();
+  var sel = document.getElementById('n-cliente');
+  var vigentes = clientesVigentes();
+  /* Un pedido de un cliente anulado se sigue pudiendo modificar, así que su opción vuelve al
+     desplegable mientras esa ficha esté abierta: si no, guardar lo cambiaría de cliente solo. */
+  if (p && !sel.querySelector('option[value="' + p.clienteId + '"]')){
+    var c = clientePorId(p.clienteId);
+    if (c) sel.insertAdjacentHTML('afterbegin',
+      '<option value="' + c.id + '">' + enTexto(c.nombre) + ' (anulado)</option>');
+  }
+  sel.value = p ? p.clienteId : (vigentes[0] ? vigentes[0].id : '__nuevo');
+  alternarClienteNuevo();
   document.getElementById('n-cant').value    = p ? p.cant : 60;
   document.getElementById('n-fecha').value   = p ? p.entrega : '2026-10-15';
   if (p) document.getElementById('n-prod').value = p.prodId;
@@ -3441,6 +3741,8 @@ function cerrarFormPedido(){
   });
   document.getElementById('n-cancelar').addEventListener('click', cerrarFormPedido);
 
+  document.getElementById('n-cliente').addEventListener('change', alternarClienteNuevo);
+
   ['n-prod','n-cant','n-ant'].forEach(function(id){
     var el = document.getElementById(id);
     var vuelveAlPorcentaje = function(){
@@ -3455,18 +3757,19 @@ function cerrarFormPedido(){
   document.getElementById('n-guardar').addEventListener('click', function(){
     var d = datosNuevo();
     if (!d) return;
-    var cliente = (document.getElementById('n-cliente').value || '').trim() || 'Cliente sin nombre';
+    var cliente = clienteDelPedido();
+    if (!cliente) return;
     var entrega = document.getElementById('n-fecha').value || '2026-10-15';
 
     if (editandoPedido){
       var p = pedidoPorId(editandoPedido);
-      p.cliente = cliente; p.prodId = d.p.id; p.cant = d.cant;
+      p.clienteId = cliente; p.prodId = d.p.id; p.cant = d.cant;
       p.entrega = entrega; p.anticipo = d.recibe;
       if (p.estado === 'entregado' && d.recibe > 0) p.estado = 'anticipo';
     } else {
       consecutivo += 1;
       PEDIDOS.unshift({
-        id:'P-0' + consecutivo, fecha:'2026-09-30', entrega:entrega, cliente:cliente,
+        id:'P-0' + consecutivo, fecha:'2026-09-30', entrega:entrega, clienteId:cliente,
         prodId:d.p.id, cant:d.cant, anticipo:d.recibe, estado:'anticipo', baja:null
       });
     }
