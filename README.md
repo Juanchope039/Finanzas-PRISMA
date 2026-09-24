@@ -3,7 +3,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/README.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-13 | 2026-09-21 | [Negocio](docs/INDICE.md#etiqueta-negocio) · [Plan](docs/INDICE.md#etiqueta-plan) |
+| [1.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/README.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-13 | 2026-09-24 | [Negocio](docs/INDICE.md#etiqueta-negocio) · [Plan](docs/INDICE.md#etiqueta-plan) |
 
 > **PRISMA** = **P**lataforma de **R**egistro, **I**nversión, **S**eguimiento, **M**árgenes y **A**dministración.
 > Un solo lugar para saber cuánto entra, cuánto sale, cuánto queda y cuánto se puede pagar.
@@ -194,3 +194,13 @@ interno, no un sistema contable certificado ni un facturador electrónico DIAN.
 
 Los aspectos tributarios y de facturación electrónica están **explícitamente fuera del alcance**
 de esta versión y se documentan en [`docs/14-roadmap-e-ideas.md`](docs/14-roadmap-e-ideas.md).
+
+---
+
+## 9. Licencia
+
+Copyright (C) 2026 Juan David Garzón Vallejo <juanchope039@gmail.com>.
+
+Este repositorio se licencia bajo la GNU Affero General Public License, versión 3 y solo esa
+(`SPDX-License-Identifier: AGPL-3.0-only`), sin ninguna garantía. El texto completo está en
+[`LICENSE`](LICENSE).
