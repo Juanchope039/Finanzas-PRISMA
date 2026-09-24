@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.17.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-23 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.18.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -37,14 +37,14 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 19 | 0 | 0 | 0 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
-| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 25 | 17 | 1 | 7 | 11 |
+| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 25 | 18 | 1 | 6 | 9 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 4 | 0 | 7 | 9 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 10 | 4 | 0 | 6 | 6,5 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **152** | **92** | **1** | **59** | **79** |
+| **Total** | **152** | **93** | **1** | **58** | **77** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -143,7 +143,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [3.21](docs/08-plan-de-desarrollo.md#tarea-3-21) · [3.22](docs/08-plan-de-desarrollo.md#tarea-3-22) · [3.23](docs/08-plan-de-desarrollo.md#tarea-3-23) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.9](docs/08-plan-de-desarrollo.md#tarea-4-9) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) · [3.22](docs/08-plan-de-desarrollo.md#tarea-3-22) · [3.23](docs/08-plan-de-desarrollo.md#tarea-3-23) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.9](docs/08-plan-de-desarrollo.md#tarea-4-9) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [3.25](docs/08-plan-de-desarrollo.md#tarea-3-25) |
 | **Front** | [3.24](docs/08-plan-de-desarrollo.md#tarea-3-24) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
@@ -152,13 +152,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **60 tareas y 79 días de trabajo** de 152 tareas del plan.
+Quedan **59 tareas y 77 días de trabajo** de 152 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 11,8 semanas | **14,8 semanas** |
-| 2 | 6,7 semanas | **9,7 semanas** |
-| 3 | 5,8 semanas | **8,8 semanas** |
+| 1 | 11,5 semanas | **14,5 semanas** |
+| 2 | 6,4 semanas | **9,4 semanas** |
+| 3 | 5,3 semanas | **8,3 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -706,7 +706,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       de origen, o un tipo que no lo admite— las rechaza PostgreSQL con `42226`. El descriptor **no
       la declara obligatoria a propósito**: «obligatorio si» sería una regla en el front ([20 §4.4](docs/20-contrato-de-api.md#44-las-reglas-que-caben-y-por-qué-no-caben-más)).
       891 pruebas en la API y 175 contra la base, sin una sola línea nueva
-- [ ] 🚧🔒 [**3.8**](docs/08-plan-de-desarrollo.md#tarea-3-8) Listado con filtros · API, Front — **la mitad de la API
+- [ ] 🚧⚡ [**3.8**](docs/08-plan-de-desarrollo.md#tarea-3-8) Listado con filtros · API, Front — **la mitad de la API
       está hecha**: `POST /api/v0/consultas/movimientos` devuelve el libro con sus filtros, lo más
       reciente primero y con el total aparte. Falta la pantalla, que ya está dibujada en el
       mockup. **Espera a la [3.21](docs/08-plan-de-desarrollo.md#tarea-3-21)**, que le da a la API lo que el dibujo pide: cómo se ve cada
@@ -783,7 +783,19 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       une las dos mitades de un retiro: quien dirige decidió que entrara aquí y no en un PR aparte.
       Esquema `0.14.0`, con 259 comprobaciones, todas en `OK` salvo la de `pg_cron`, contra el mismo
       PostgreSQL 16 de la [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19). **No le deja filas a la API**, y **falta promoverla a dev y a qa**
-- [ ] ⚡ [**3.21**](docs/08-plan-de-desarrollo.md#tarea-3-21) El libro que dibujó el mockup, en la API · API
+- [x] [**3.21**](docs/08-plan-de-desarrollo.md#tarea-3-21) El libro que dibujó el mockup, en la API · API — cada fila
+      trae ahora **cómo se pinta su tipo** —el nombre, el color y el signo del valor—, **con qué
+      registro va** y **si se deja anular**, con el porqué en palabras cuando no. Las tres salen de
+      la misma consulta: la presentación de `presentacion_tipos`, el registro hermano de un
+      `LATERAL` que pregunta en las seis tablas que pueden tenerlo, y el impedimento de lo mismo que
+      mira `fn_anular_movimiento` antes de anular ([CU-03](docs/02-casos-de-uso.md#cu-03) A2 a A7), **dicho antes de que nadie toque
+      el botón**. La consulta pagina, filtra por grupo y rechaza con `42227` el rango con una sola
+      fecha o al revés, que hasta hoy devolvía la lista vacía y lo escondía. El máximo por página lo
+      decide la API y viaja en la respuesta, con las dos banderas de Gerencia y el mes en curso de
+      Bogotá. Y `POST /api/v0/consultas/soporte` **baja el recibo por la API**, en base64 dentro del
+      sobre, nunca por una URL al bucket. `prisma_api` en `0.16.0`, copia fijada del contrato en
+      `0.19.0` y `prisma.esquema` en `0.14.0`, que trae las seis filas que la 3.15, la 3.19 y la
+      4.11 le habían dejado a la tabla de traducción; 1012 pruebas en la API y 202 contra la base
 - [ ] ⚡ [**3.22**](docs/08-plan-de-desarrollo.md#tarea-3-22) Cómo se ve cada tipo: leerlo y cambiarlo ([RF-104](docs/03-requisitos-y-bdd.md#rf-104)) · API
 - [ ] ⚡ [**3.23**](docs/08-plan-de-desarrollo.md#tarea-3-23) Anular arrastra al registro hermano · API
 - [ ] ⚡ [**3.24**](docs/08-plan-de-desarrollo.md#tarea-3-24) «Cómo se ve cada tipo», el bloque de Gerencia ([RF-104](docs/03-requisitos-y-bdd.md#rf-104)) · Front
