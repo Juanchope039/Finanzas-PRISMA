@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-24 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -71,6 +71,7 @@ con la de la API?} -->|No| VI[Versión incompatible · no hay salida]
   MS --> MP[Cambiar mi contraseña]
   MS --> VO[Ver como Operación]
 
+  P --> CL[Clientes del taller]
   P --> PD[Detalle del pedido]
   PD --> PA[Cobrar anticipo]
   PD --> PE[Entregar y cobrar saldo]
@@ -244,6 +245,32 @@ Movimientos ([§4.3](#43-movimientos)).
 Lista **ordenada por fecha**, con estado visual: anticipo cobrado (morado), entregado (verde),
 estancado 15+ días (ámbar). Filtros por estado, cliente y rango de fechas. Cada fila muestra
 valor total, anticipo y saldo.
+
+#### Los clientes viven aquí, y no en una pantalla propia
+
+Un cliente existe para que haya un pedido, así que se administra donde se usa. **No es la pantalla
+número doce**: el menú lo dicta la API y sus claves no incluyen ninguna que se llame así, y una
+clave que el front no conoce no se pinta.
+
+- **El cliente de un pedido se elige de una lista, no se escribe.** El campo «Cliente» de «Nuevo
+  pedido» es un desplegable con los clientes vigentes, ordenados por nombre. Dos maneras de escribir
+  el mismo nombre serían dos clientes y ningún historial común.
+- **«+ Cliente nuevo…» abre el alta en la misma pantalla**, debajo del campo: nombre, teléfono,
+  correo y notas. Solo el nombre es obligatorio, porque en el taller el cliente entra por teléfono
+  mientras se toma el pedido y el correo llega después ([CU-05](02-casos-de-uso.md#cu-05)). Al guardar, el cliente recién
+  creado queda elegido; nadie sale del pedido a medio tomar.
+- **El panel «Clientes del taller»** lista los vigentes con su contacto, sus notas y cuántos pedidos
+  tiene cada uno. Crear puede cualquiera de los dos tipos de usuario: sin cliente no hay pedido.
+- **Anular es de Gerencia y pide motivo escrito.** Sale del desplegable y del panel, pero no se
+  borra ([RN-13](03-requisitos-y-bdd.md#rn-13)): queda con cuándo, quién y por qué, y sus pedidos siguen enteros. Lo pide el mismo
+  panel de confirmación en línea que el resto del prototipo, y a Operación el botón no se le
+  atúna: no existe ([principio 6](#principio-6)).
+
+  Que a Operación no se le pinte es comodidad, no permiso: quien lo impide de verdad es
+  `clientes_actualizacion` en PostgreSQL ([04 §7](04-modelo-de-datos.md#7-seguridad-por-tipo-de-usuario-rls)).
+- **Un cliente anulado no desaparece de los pedidos que ya lo nombran.** Si se modifica uno de esos
+  pedidos, su cliente vuelve al desplegable mientras esa ficha esté abierta, marcado como anulado:
+  guardar no puede cambiarle el cliente a un pedido por su cuenta.
 
 ### 4.3 Movimientos
 
