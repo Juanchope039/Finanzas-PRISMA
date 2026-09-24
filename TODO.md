@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.18.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.26.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -37,14 +37,14 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 19 | 0 | 0 | 0 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
 | [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
-| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 25 | 17 | 1 | 7 | 11 |
+| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 4 | 0 | 7 | 9 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 11 | 5 | 0 | 6 | 6,5 |
 | [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
 | [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 1 | 0 | 8 | 12 |
 | [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **153** | **93** | **1** | **59** | **79** |
+| **Total** | **153** | **101** | **0** | **52** | **68** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -72,22 +72,18 @@ Lo que tiene su commit en `develop` con la integración continua en verde, que e
 | **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 25 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 64 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los quince triggers de auditoría escribiendo y las 34 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. La semilla es fija, re-ejecutable y con filas en toda tabla que preguntan las pruebas de permisos, y `sembrar.ps1` la lleva a dev y a qa sin dejarla acercarse a uat ni a prod. Y esto ya no es solo dev: **qa quedó al día con la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)**, con sus 109 comprobaciones en `OK` y `schema_version` en `0.3.0`. Y con la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) el esquema estrena la tabla `adjuntos` —la ficha del soporte, con su trigger y sus dos flechas excluyentes— y el **bucket privado `soportes`**, que impone el techo de 5 MB y los cuatro tipos de contenido **antes** de que los bytes se guarden: son 123 comprobaciones en `OK` contra la base local, y `0.4.0` **todavía sin promover a dev ni a qa**. Y con la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) el libro impone al fin **las tres reglas de la cuenta de destino** —un gasto ya no llega con destino, y una transferencia ya no va de una cuenta a sí misma, que además le **bajaba el saldo** a esa cuenta— y **la fecha se juzga con el día de Bogotá y no con el huso de la sesión**, que de siete a doce de la noche aceptaba el mañana que la API rechaza: 141 comprobaciones en `OK`, y la `0.6.0` esperando promoción como la `0.4.0`. Y con la [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) **`pedidos` tiene dónde guardar la cancelación**, que el contrato prometía desde el `0.10.0`: cuándo, quién, por qué y qué pasó con el anticipo, sin cancelación muda y sin reusar las columnas de la anulación —un pedido cancelado y después anulado perdería una de las dos historias—. 199 comprobaciones en `OK`, y la `0.11.0` tampoco está promovida. Y con la [3.18](docs/08-plan-de-desarrollo.md#tarea-3-18) **editar una fila ya no tumba la escritura en cinco de las quince tablas auditadas**: `fn_auditar` leía `anulado_en` también donde no existe, y el `UPDATE` se caía con `42703` dentro del trigger. 216 comprobaciones en `OK`, una edición por tabla auditada, y la `0.12.0` sin promover. Y con la [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19) **el libro tiene de dónde leer cómo se ve cada tipo**: `presentacion_tipos`, con las nueve lecturas que ya pintaba escritas por la migración, que leen los dos tipos y cambia solo Gerencia —la sesión de Operación no alcanza ninguna fila— y con el decimosexto trigger de auditoría. 235 comprobaciones en `OK`, y la `0.13.0` sin promover. Y con la [3.20](docs/08-plan-de-desarrollo.md#tarea-3-20) **anular ya no queda a medias**: `fn_anular_movimiento` anula el movimiento y lo que va con él —el anticipo de un pedido en proceso, el activo, el aporte, las dos mitades del retiro, que une la columna nueva `aportes_retiros.retiro_id`, o el adelanto sin descontar— con el mismo motivo, autor e instante, y rechaza entera la anulación de lo que ya siguió su vida. 259 comprobaciones, y la `0.14.0` sin promover. Y con la [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) **el cotizador tiene dónde guardar**: `cotizaciones` y `cotizacion_lineas`, que el contrato de la [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) prometía y la base no tenía, con la validez que no vence antes de emitirse, el pedido en que se convierte y la anulación con motivo. **Llevan RLS** porque anular es solo de Gerencia, y a Operación se lo niega la base con `42501`. 291 comprobaciones, y la `0.15.0` sin promover | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) · [2.4](docs/08-plan-de-desarrollo.md#tarea-2-4) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) · [3.18](docs/08-plan-de-desarrollo.md#tarea-3-18) · [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19) · [3.20](docs/08-plan-de-desarrollo.md#tarea-3-20) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
-**965 pruebas en verde en la API** —y 192 más contra la base local, que desde la [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) sí corre la tubería— y 370 en el front. El dominio se prueba con las cifras de los
+**1019 pruebas en verde en la API** —y 211 más contra la base local, que desde la [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) sí corre la tubería— y 436 en el front. El dominio se prueba con las cifras de los
 documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md): si una prueba falla, o se rompió el código o el documento dice
 otra cosa.
 
 ### 1.3 🚧 En progreso
 
-**El libro con filtros ([3.8](docs/08-plan-de-desarrollo.md#tarea-3-8)), por la mitad de la API.** `POST /api/v0/consultas/movimientos`
-ya devuelve el libro recortado por rango de fechas, tipos, cuenta y categoría, lo más reciente
-primero y con el total aparte del límite. **Los permisos siguen siendo de la base**: el libro
-vigente se lee de `v_movimientos`, y pedir los anulados consulta la tabla con `fn_es_gerencia()`
-decidiendo. Falta la pantalla, que es el otro carril de la misma tarea, así que no se marca `[x]`.
-**Y la pantalla ya está dibujada** en el mockup, con el mes y sus flechas, los filtros, la
-paginación, los anulados y el botón de anular de la [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9): antes de construirla, el contrato y la
-API tienen que dar lo que el dibujo pide. **Y eso ya son tareas del plan**, las tareas [3.17](docs/08-plan-de-desarrollo.md#tarea-3-17) a [3.24](docs/08-plan-de-desarrollo.md#tarea-3-24): el
-contrato, la base, la API y el bloque de Gerencia que elige cómo se ve cada tipo. La 3.8 espera a la
-[3.21](docs/08-plan-de-desarrollo.md#tarea-3-21), y la 3.9 a la 3.8 y a la [3.23](docs/08-plan-de-desarrollo.md#tarea-3-23). Lo que falta decidir está en el [§10](#10-decisiones-de-construcción-que-conviene-revisar).
+**El hilo del libro está cerrado, y queda la pila local ([3.25](docs/08-plan-de-desarrollo.md#tarea-3-25)).** El libro lo sirve la API
+([3.21](docs/08-plan-de-desarrollo.md#tarea-3-21)), lo pinta la pantalla ([3.8](docs/08-plan-de-desarrollo.md#tarea-3-8)), el botón de anular vive en la fila abierta ([3.9](docs/08-plan-de-desarrollo.md#tarea-3-9)),
+anular se lleva el registro hermano ([3.23](docs/08-plan-de-desarrollo.md#tarea-3-23)) y lo que no se puede anular se corrige con un
+contra-asiento sin tocar el original ([3.10](docs/08-plan-de-desarrollo.md#tarea-3-10)). Lo que falta decidir está en el
+[§10](#10-decisiones-de-construcción-que-conviene-revisar), y lo que hay que vigilar —las etiquetas
+del esquema, que no existen— en el [§9](#9-a-vigilar).
 
 **El alta de usuarios volvió a servir, y falta ejercitarla contra dev.** Crear a alguien respondía
 «algo salió mal» con cualquier nombre de usuario, porque faltaba `SUPABASE_SERVICE_ROLE_KEY` en el
@@ -143,22 +139,21 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [3.21](docs/08-plan-de-desarrollo.md#tarea-3-21) · [3.22](docs/08-plan-de-desarrollo.md#tarea-3-22) · [3.23](docs/08-plan-de-desarrollo.md#tarea-3-23) · [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.9](docs/08-plan-de-desarrollo.md#tarea-4-9) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
-| **Base** | [3.25](docs/08-plan-de-desarrollo.md#tarea-3-25) |
-| **Front** | [3.24](docs/08-plan-de-desarrollo.md#tarea-3-24) · [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
+| **API** | [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [4.9](docs/08-plan-de-desarrollo.md#tarea-4-9) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **60 tareas y 79 días de trabajo** de 153 tareas del plan.
+Quedan **52 tareas y 68 días de trabajo** de 153 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 11,8 semanas | **14,8 semanas** |
-| 2 | 6,7 semanas | **9,7 semanas** |
-| 3 | 5,8 semanas | **8,8 semanas** |
+| 1 | 10,2 semanas | **13,2 semanas** |
+| 2 | 5,7 semanas | **8,7 semanas** |
+| 3 | 5,1 semanas | **8,1 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -706,24 +701,45 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       de origen, o un tipo que no lo admite— las rechaza PostgreSQL con `42226`. El descriptor **no
       la declara obligatoria a propósito**: «obligatorio si» sería una regla en el front ([20 §4.4](docs/20-contrato-de-api.md#44-las-reglas-que-caben-y-por-qué-no-caben-más)).
       891 pruebas en la API y 175 contra la base, sin una sola línea nueva
-- [ ] 🚧🔒 [**3.8**](docs/08-plan-de-desarrollo.md#tarea-3-8) Listado con filtros · API, Front — **la mitad de la API
-      está hecha**: `POST /api/v0/consultas/movimientos` devuelve el libro con sus filtros, lo más
-      reciente primero y con el total aparte. Falta la pantalla, que ya está dibujada en el
-      mockup. **Espera a la [3.21](docs/08-plan-de-desarrollo.md#tarea-3-21)**, que le da a la API lo que el dibujo pide: cómo se ve cada
-      tipo, el grupo, las páginas, el rango, las banderas, el registro hermano y el soporte
-- [ ] 🔒 [**3.9**](docs/08-plan-de-desarrollo.md#tarea-3-9) Anulación con motivo obligatorio · API, Front — **la
-      API está hecha**: `POST /api/v0/movimientos/{id}/anulacion` saca el movimiento de las cuentas
-      con motivo escrito y **no borra nada** —la fila se queda entera y solo estrena sus tres
-      columnas de anulación—, y desde ese momento no suma en ninguna cifra. **El «no» a Operación lo
-      dice PostgreSQL** con `mov_anulacion`, no un `if`, y la prueba lo afirma contra la base
-      ([BDD-03-4](docs/03-requisitos-y-bdd.md#bdd-03-4)); la auditoría la escribe el trigger con su acción propia, `ANULAR`. Anular dos
-      veces responde `40900` y **no pisa el motivo del primero**, que es lo que explica por qué se
-      sacó de las cuentas: lo sostiene el `WHERE anulado_en IS NULL` del `UPDATE`, no una pregunta
-      previa. `prisma_api` en `0.14.0`; 896 pruebas en la API y 181 contra la base. **Falta el
-      botón**, que vive en la fila abierta del libro de la [3.8](docs/08-plan-de-desarrollo.md#tarea-3-8) y ya está dibujado en `mockup/`, igual
-      que «Ver anulados». **Espera a la 3.8 y a la [3.23](docs/08-plan-de-desarrollo.md#tarea-3-23)**, que hace que anular arrastre al
-      registro hermano
-- [ ] 🔒 [**3.10**](docs/08-plan-de-desarrollo.md#tarea-3-10) Corrección por contra-asiento · API
+- [x] [**3.8**](docs/08-plan-de-desarrollo.md#tarea-3-8) Listado con filtros · API, Front — el libro cuelga de
+      «Movimientos», debajo del registro rápido. **Se abre pidiendo sin fechas**, porque el mes en
+      curso es el de Bogotá y eso lo sabe la API, no el reloj del navegador; con `mesEnCurso` en la
+      mano se coloca, las flechas lo mueven y la de adelante se apaga sola en el mes actual. Cada
+      fila se pinta con lo que la API resolvió —el nombre del tipo, su color y el signo del valor—,
+      y **el color y el signo llegan aparte a propósito**: el color lo elige Gerencia en la
+      [3.24](docs/08-plan-de-desarrollo.md#tarea-3-24) y el signo es lo que el movimiento le hace a la caja. La fila se abre en su
+      sitio, sin otra consulta, con quién registró, cuándo se digitó, con qué registro va y sus
+      soportes, que **baja la API en base64 y nunca una URL al almacén**. «Ver anulados» es un
+      interruptor y solo existe si la API dijo que quien mira puede: cambia qué libro se lee, así que
+      el panel cambia de aspecto mientras está puesto, y lo anulado se queda atenuado y tachado con
+      su motivo. Un rango a medias **no se ataja en el front**: se manda, y se lee el `42227` con las
+      palabras de la API. `prisma_front` en `0.12.0+16`; 429 pruebas
+- [x] [**3.9**](docs/08-plan-de-desarrollo.md#tarea-3-9) Anulación con motivo obligatorio · API, Front — `POST
+      /api/v0/movimientos/{id}/anulacion` saca el movimiento de las cuentas con motivo escrito y
+      **no borra nada** —la fila se queda entera y solo estrena sus tres columnas de anulación—, y
+      desde ese momento no suma en ninguna cifra. **El «no» a Operación lo dice PostgreSQL** con
+      `mov_anulacion`, no un `if`, y la prueba lo afirma contra la base ([BDD-03-4](docs/03-requisitos-y-bdd.md#bdd-03-4)); la auditoría
+      la escribe el trigger con su acción propia, `ANULAR`. Anular dos veces responde `40900` y **no
+      pisa el motivo del primero**: lo sostiene el `WHERE anulado_en IS NULL` del `UPDATE`, no una
+      pregunta previa. **Y ya está el botón**, en la fila abierta del libro: existe solo si la API
+      dijo que ese movimiento se deja anular, y con `sePuedeAnular` en `false` lo que se lee es el
+      porqué que ella redactó, no un botón apagado. El motivo se pide **antes** de confirmar, en un
+      panel debajo de la fila, y lo pinta el formulario «anulacion-de-movimiento» que describe la
+      API: su etiqueta, su ayuda y sus avisos no están escritos en `lib/`. Si el movimiento va con
+      otro registro, el panel lo dice antes con las palabras del `registroHermano`, y anulado el
+      libro **se vuelve a pedir**, porque qué quedó anulado lo decide la base. `prisma_api` en
+      `0.16.0` y `prisma_front` en `0.12.0+16`; 436 pruebas en el front
+- [x] [**3.10**](docs/08-plan-de-desarrollo.md#tarea-3-10) Corrección por contra-asiento · Base, API — `PUT
+      /api/v0/movimientos/{id}/correccion/{correccionId}` registra un movimiento que reversa al
+      errado y lo deja apuntando a él, y **el original queda intacto**: los dos se leen en el libro,
+      así que la historia cuenta también el error ([RF-15](docs/03-requisitos-y-bdd.md#rf-15), [04 §5.3](docs/04-modelo-de-datos.md#53-corrección-por-contra-asiento)). **La API no calcula la
+      reversa**: no le da la vuelta al tipo ni copia el valor, porque ningún documento dice qué tipo
+      reversa a cuál. Los dos ids van en la ruta para que el cuerpo siga siendo el formulario
+      «movimiento» tal cual. **El «solo Gerencia» del [CU-04](docs/02-casos-de-uso.md#cu-04) lo dice la base**: `mov_insercion` pasa
+      a juzgar quién llena `corrige_a_id`, y registrar sigue siendo de los dos tipos; a Operación le
+      responde `42501`, que sale como `40300`. Contrato `v0.20.0`, `prisma_api` en `0.16.0` y
+      esquema `0.16.0`, **que `prisma.esquema` todavía no declara porque su etiqueta no existe**
+      ([§9](#9-a-vigilar)); 1024 pruebas en la API, 216 contra la base y 295 comprobaciones en la base
 - [x] [**3.11**](docs/08-plan-de-desarrollo.md#tarea-3-11) Marca de registro tardío · API — más de 7 días entre lo que ocurrió y lo que se
       digitó, contados en días de Bogotá
 - [x] [**3.12**](docs/08-plan-de-desarrollo.md#tarea-3-12) Saldos por cuenta · API — `POST /api/v0/consultas/saldos`: cada
@@ -783,14 +799,64 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       une las dos mitades de un retiro: quien dirige decidió que entrara aquí y no en un PR aparte.
       Esquema `0.14.0`, con 259 comprobaciones, todas en `OK` salvo la de `pg_cron`, contra el mismo
       PostgreSQL 16 de la [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19). **No le deja filas a la API**, y **falta promoverla a dev y a qa**
-- [ ] ⚡ [**3.21**](docs/08-plan-de-desarrollo.md#tarea-3-21) El libro que dibujó el mockup, en la API · API
-- [ ] ⚡ [**3.22**](docs/08-plan-de-desarrollo.md#tarea-3-22) Cómo se ve cada tipo: leerlo y cambiarlo ([RF-104](docs/03-requisitos-y-bdd.md#rf-104)) · API
-- [ ] ⚡ [**3.23**](docs/08-plan-de-desarrollo.md#tarea-3-23) Anular arrastra al registro hermano · API
-- [ ] ⚡ [**3.24**](docs/08-plan-de-desarrollo.md#tarea-3-24) «Cómo se ve cada tipo», el bloque de Gerencia ([RF-104](docs/03-requisitos-y-bdd.md#rf-104)) · Front
-- [ ] ⚡ [**3.25**](docs/08-plan-de-desarrollo.md#tarea-3-25) La pila local en contenedores · Base, API, Front — cada
-      repositorio de código con su receta, y `prisma_db` las levanta juntas con un solo comando; cada
-      receta y cada puerto se apuntan desde el `.env` de la orquestación, y la base sigue en Supabase
-
+- [x] [**3.21**](docs/08-plan-de-desarrollo.md#tarea-3-21) El libro que dibujó el mockup, en la API · API — cada fila
+      trae ahora **cómo se pinta su tipo** —el nombre, el color y el signo del valor—, **con qué
+      registro va** y **si se deja anular**, con el porqué en palabras cuando no. Las tres salen de
+      la misma consulta: la presentación de `presentacion_tipos`, el registro hermano de un
+      `LATERAL` que pregunta en las seis tablas que pueden tenerlo, y el impedimento de lo mismo que
+      mira `fn_anular_movimiento` antes de anular ([CU-03](docs/02-casos-de-uso.md#cu-03) A2 a A7), **dicho antes de que nadie toque
+      el botón**. La consulta pagina, filtra por grupo y rechaza con `42227` el rango con una sola
+      fecha o al revés, que hasta hoy devolvía la lista vacía y lo escondía. El máximo por página lo
+      decide la API y viaja en la respuesta, con las dos banderas de Gerencia y el mes en curso de
+      Bogotá. Y `POST /api/v0/consultas/soporte` **baja el recibo por la API**, en base64 dentro del
+      sobre, nunca por una URL al bucket. `prisma_api` en `0.16.0`, copia fijada del contrato en
+      `0.19.0` y `prisma.esquema` en `0.14.0`, que trae las seis filas que la 3.15, la 3.19 y la
+      4.11 le habían dejado a la tabla de traducción; 1012 pruebas en la API y 202 contra la base
+- [x] [**3.22**](docs/08-plan-de-desarrollo.md#tarea-3-22) Cómo se ve cada tipo: leerlo y cambiarlo ([RF-104](docs/03-requisitos-y-bdd.md#rf-104)) · API —
+      `POST /api/v0/consultas/presentacion-de-tipos` devuelve los nueve renglones del bloque, **en
+      el orden del ENUM y no en el alfabético**, y la edición cambia el nombre, el color y el grupo
+      del filtro. Cada renglón enseña además **lo que ese cambio no toca**: el efecto sobre las tres
+      cifras, que sale de `TipoDeMovimiento` y no de la tabla, porque una columna de efecto habría
+      sido una segunda copia del [05 §2](docs/05-reglas-financieras.md#2-naturaleza-de-cada-movimiento) y además editable. **Los dos «no» a Operación los
+      dice la base**: el de leer con `fn_es_gerencia()` antes de la consulta, porque la tabla se la
+      enseña a los dos tipos —Operación necesita el libro—, y el de escribir con
+      `presentacion_actualizacion`, que no le deja alcanzar ninguna fila ([BDD-104-2](docs/03-requisitos-y-bdd.md#bdd-104-2)). El cambio
+      queda en la bitácora con el antes y el después. 1019 pruebas en la API y 208 contra la base
+- [x] [**3.23**](docs/08-plan-de-desarrollo.md#tarea-3-23) Anular arrastra al registro hermano · API — la anulación
+      dejó de ser un `UPDATE` de tres columnas y pasa a llamar a `fn_anular_movimiento`, que anula
+      también el anticipo, el activo, el aporte, las dos mitades de un retiro o el adelanto que
+      cuelgan del movimiento, **con el mismo motivo, el mismo autor y el mismo instante y en la
+      misma transacción** ([04 §10](docs/04-modelo-de-datos.md#10-funciones-de-negocio-atómicas)). Lo que vuelve trae su `registroHermano` con la
+      anulación puesta, y eso es lo que más se anuló. **Quién anula y cuándo ya no viajan desde la
+      API**: los pone la función con `auth.uid()` y el `now()` de la transacción. Y lo que ya siguió
+      su vida **no anula nada y la transacción cae entera**, con su código: `40920`, `40921`,
+      `40922`, `40923` y el `40960` del mes cerrado ([CU-03](docs/02-casos-de-uso.md#cu-03) A3 a A7). Los cinco se reconocen **por
+      el texto del `RAISE`**, que es contrato con la base porque todos salen con `P0001`, y del
+      mismo mapa con que el libro pinta `porQueNo` antes de que nadie toque el botón. `prisma_api`
+      en `0.16.0` —la rama entera es un PR y la versión sube un solo paso ([C-05](docs/12-pruebas-y-calidad.md#c-05))—; 1019 pruebas
+      en la API y 211 contra la base
+- [x] [**3.24**](docs/08-plan-de-desarrollo.md#tarea-3-24) «Cómo se ve cada tipo», el bloque de Gerencia ([RF-104](docs/03-requisitos-y-bdd.md#rf-104)) · Front — el
+      bloque va dentro del panel «Cuentas de dinero», que es donde lo dibujó el mockup. Cada renglón
+      pinta la píldora **tal como se lee hoy** —nunca el valor del ENUM: el front no traduce tipos—
+      y, al lado, **lo que ese cambio no toca**: lo que el tipo le hace a las tres cifras, que llega
+      resuelto de la API. «Cambiar» abre el formulario que describe la API **lleno con lo que el
+      tipo dice hoy**, porque cambiarle el color a uno no puede obligar a volver a escribir su
+      nombre; para eso `FormularioDescrito` estrena `valoresIniciales`, que es lo que separa un
+      formulario de alta de uno de edición. Guardado, la lista se vuelve a pedir. Lo único que se
+      elige aquí es **con qué se dibuja**: el tono de la paleta de cada color y el símbolo de cada
+      efecto —▲, ▼, ↔ y —, los del mockup—; un color que esta versión no conozca se pinta neutro,
+      que es no decir nada. `prisma_front` en `0.12.0+16`, con 413 pruebas
+- [x] [**3.25**](docs/08-plan-de-desarrollo.md#tarea-3-25) La pila local en contenedores · Base, API, Front —
+      `./scripts/db/pila-local.ps1` levanta las tres piezas con un solo comando: `supabase start`,
+      la clave local del rol `prisma_api` —cada reset lo deja sin contraseña a propósito— y
+      `docker compose` con las recetas de la API y del front, que ya existían desde el [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0).
+      **Ninguna ruta va escrita**: cada receta, cada puerto y el nombre de la pila se apuntan desde
+      `pila/.env`, que está ignorado, así que da igual cómo se llame cada carpeta en cada máquina y
+      cambiar `PRISMA_API_PUERTO` mueve a la vez lo que publica la API y la URL que el front
+      compila dentro. **La base no entra en el `compose.yaml`**: la de PRISMA es la de Supabase, con
+      `auth`, GoTrue, Storage y `pg_cron`, y un `postgres:16` escrito a mano no tendría `auth.uid()`
+      que juzgar. Ninguna clave se versiona. Con su [ADR-038](docs/adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md). **Queda por hacer la primera
+      construcción de las dos imágenes** en una máquina con cuota de Docker Hub ([§9](#9-a-vigilar))
 **[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
 
 - [ ] 🔒 [**6.1**](docs/08-plan-de-desarrollo.md#tarea-6-1) Utilidad causada, flujo de caja y caja libre · API
@@ -856,9 +922,11 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       `categorias`: la lectura abierta, porque sin catálogo no hay pedido ni cotización, y la
       escritura en `FOR ALL`, porque desactivar y reactivar son `UPDATE`. Y las dos restricciones que
       `cargos` tiene desde el esquema inicial —`anulacion_con_motivo` y `desactivacion_con_motivo`—,
-      con las que **ningún producto sale del catálogo sin motivo escrito**. Esquema `0.16.0`, con 304
+      con las que **ningún producto sale del catálogo sin motivo escrito**. Esquema `0.17.0` —y no la
+      `0.16.0` que traía, que se llevó la [3.10](docs/08-plan-de-desarrollo.md#tarea-3-10) mientras esta tarea estaba abierta—, con 308
       comprobaciones, todas en `OK` salvo la de `pg_cron`, contra el mismo PostgreSQL 16 de la
-      [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19). **Le deja dos filas a la API**, y **falta promoverla a dev y a qa**
+      [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19) y con la 3.10 ya adentro. **Le deja dos filas a la API**, y **falta promoverla a
+      dev y a qa**
 
 **[Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos**
 
@@ -1155,12 +1223,35 @@ a `anon`.
   las tres situaciones de la cuenta de destino tienen excepción de dominio y código propio. Las de
   `Pedido` y `Costeo` esperan a la [4.3](docs/08-plan-de-desarrollo.md#tarea-4-3) y a la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2), y hasta entonces ninguno de esos mensajes es el
   que verá el taller.
-- **El contra-asiento se quedó sin ruta acordada.** La [3.10](docs/08-plan-de-desarrollo.md#tarea-3-10) corrige un movimiento errado creando
-  otro que lo reversa, con `corrige_a_id` apuntando al original ([04 §5.3](docs/04-modelo-de-datos.md#53-corrección-por-contra-asiento)), pero `corrigeAId` no
-  entró al contrato de la [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13): no cabe en el formulario «movimiento» —el descriptor pinta
-  todos sus campos, y ese no se pinta— y darle ruta propia era decidir desde aquí una pantalla que
-  nadie ha diseñado. La [3.10](docs/08-plan-de-desarrollo.md#tarea-3-10) depende hoy solo de la [3.9](docs/08-plan-de-desarrollo.md#tarea-3-9), así que hay que acordarle el contrato
-  antes de implementarla ([21 §3.2](docs/21-trabajo-en-paralelo.md#32-contrato-acordado-y-contrato-generado-no-se-contradicen)).
+- **Las dos imágenes de la pila local no se han construido nunca.** La orquestación de la [3.25](docs/08-plan-de-desarrollo.md#tarea-3-25)
+  resuelve cada ruta, cada puerto y cada variable, y apuntar una receta que no existe falla
+  diciendo cuál; pero **construir la imagen de la API y la del front quedó sin ejercitar**, porque
+  Docker Hub responde `429` a la máquina donde se escribió. Es lo primero que hay que correr en una
+  máquina con cuota: `./scripts/db/pila-local.ps1`, y ver las tres piezas arriba
+- **A `prisma_db` le faltan seis etiquetas `esquema-vX.Y.Z`, y la CI de la API depende de ellas.**
+  El [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) dice que la API descarga la base en la etiqueta de su `prisma.esquema`.
+  Están la `esquema-v0.1.0` y de la `0.3.0` a la `0.10.0`; **faltan la `0.2.0` y de la `0.11.0` a
+  la `0.15.0`**, aunque sus migraciones estén fusionadas en `develop`. **Con `prisma.esquema` en
+  `0.14.0`, el trabajo «Probar contra la base» no puede correr.** Cada una va sobre el commit con
+  que se fusionó su PR, como las que ya existen: `0.2.0` en `15dce67`, `0.11.0` en `89982e6`,
+  `0.12.0` en `2dd0e11`, `0.13.0` en `f24cf39`, `0.14.0` en `1c337b2` y `0.15.0` en `ca14398`; la
+  `0.16.0`, sobre el commit con que se fusione el PR de la [3.10](docs/08-plan-de-desarrollo.md#tarea-3-10). **Hasta que existan, la API no
+  puede subir su `prisma.esquema`**, y con ella se quedan esperando las doce filas de traducción
+  que le dejó la [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) y la política del contra-asiento de la [3.10](docs/08-plan-de-desarrollo.md#tarea-3-10), cuya prueba de permiso
+  se salta mientras tanto en vez de pasar en verde sin mirar
+- **Una comprobación de la [2.5](docs/08-plan-de-desarrollo.md#tarea-2-5) se pone en rojo con dos personas de Gerencia activas.** El
+  informe espera que, con el guardián de fila apagado, la desactivación masiva la atrape el de
+  sentencia; lo que responde es el trigger de permisos —«Solo Gerencia cambia el tipo, el cargo…»—,
+  porque la sesión desactiva su **propia** fila antes de llegar a la otra y deja de ser Gerencia a
+  mitad del `UPDATE`. Es de la comprobación, no de la regla: los dos guardianes siguen puestos. Se
+  vio contra la base local con la semilla, y no lo causa ninguna tarea de este sprint
+- **El contra-asiento ya tiene ruta, y la corrección no tiene pantalla.** La [3.10](docs/08-plan-de-desarrollo.md#tarea-3-10) le acordó el
+  contrato que le faltaba: `PUT /api/v0/movimientos/{id}/correccion/{correccionId}`, con el
+  formulario «movimiento» de siempre y los dos ids en la ruta, que es lo que deja `corrigeAId`
+  fuera del descriptor sin inventarle un campo que nadie pinta. **Lo que sigue sin existir es la
+  pantalla**: el mockup dibuja el botón de anular y no el de corregir, así que la API sirve una
+  corrección que hoy nadie puede pedir desde el front. Cuando se dibuje, entra como tarea del [08](docs/08-plan-de-desarrollo.md)
+  con su carril Front.
 - **Nadie comprueba que la categoría sea de la naturaleza del movimiento.** Un gasto con una
   categoría de ingreso entra: la base no lo impide —`categorias.naturaleza` no se cruza con
   `movimientos.tipo`—, el dominio no lo mira y el contrato de la [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) no le dio código, porque
@@ -1260,6 +1351,31 @@ a `anon`.
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
 
+**De la corrección por contra-asiento ([3.10](docs/08-plan-de-desarrollo.md#tarea-3-10)):**
+
+- [ ] **La ruta lleva dos ids y no uno, y el `corrigeAId` no entra al cuerpo.** `PUT
+      /api/v0/movimientos/{id}/correccion/{correccionId}`: el primero es el movimiento que se
+      corrige y el segundo el del contra-asiento, que lo genera quien corrige, como en cualquier
+      registro ([ADR-020](docs/adr/ADR-020-idempotencia.md)). **Se descartó meterlo en el cuerpo**: el cuerpo de `PUT
+      /api/v0/movimientos/{id}` **es** el formulario «movimiento», y el generador exige que cada
+      campo del cuerpo sea un campo del formulario, así que `corrigeAId` obligaría a pintar una caja
+      con un UUID. Con los dos en la ruta, el formulario no cambia: la pantalla de corregir, cuando
+      se dibuje, pinta el mismo de registrar
+- [ ] **La tarea se llevó una migración, así que su carril pasó de «API» a «Base, API».** El
+      [CU-04](docs/02-casos-de-uso.md#cu-04) dice que corrige Gerencia, y `mov_insercion` dejaba registrar a los dos tipos: sin la
+      política, ese «solo Gerencia» habría quedado en un `if` de la API, que es lo que el
+      [ADR-006](docs/adr/ADR-006-rls-por-rol.md) prohíbe. Se escribió la migración primero y la API después, que es el orden del
+      [ADR-025](docs/adr/ADR-025-cuatro-repositorios.md). **Conviene revisar si el 08 quería eso** o si la política era tarea aparte
+- [ ] **Nada impide corregir un movimiento ya anulado.** Anular ya lo sacó de las cuentas, así que
+      un contra-asiento encima lo restaría dos veces. Ningún documento escribe esa regla: el
+      [04 §5.3](docs/04-modelo-de-datos.md#53-corrección-por-contra-asiento) solo dice que el original queda intacto, y el [CU-03](docs/02-casos-de-uso.md#cu-03) A3 pone al contra-asiento
+      como la salida cuando **no** se puede anular. **Decidido: no se inventa aquí.** Si hay que
+      prohibirlo, es un `CHECK` o un trigger en la base y una tarea de Base, no un `if` de la API
+- [ ] **La corrección no anula el original, y el libro no los junta todavía.** Los dos movimientos
+      se leen como dos filas, y la fila abierta no dice «corregido por» ni «corrige a». El
+      `corrige_a_id` está en la base desde el esquema inicial y la consulta del libro no lo trae:
+      cuando haya pantalla de corregir ([§9](#9-a-vigilar)), es lo primero que va a hacer falta
+
 **De las tablas del cotizador ([8.12](docs/08-plan-de-desarrollo.md#tarea-8-12)):**
 
 - [x] **La mitad de `productos` está cerrada; la de `pedidos` sigue abierta.** El contrato le da a
@@ -1329,7 +1445,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 
 **De la entrada de la 3.25 al 08:**
 
-- [ ] ⚡ **Entró una tarea nueva al plan, la [3.25](docs/08-plan-de-desarrollo.md#tarea-3-25), y el total pasa de 151 a 152.** La
+- [ ] 🔒 **Entró una tarea nueva al plan, la [3.25](docs/08-plan-de-desarrollo.md#tarea-3-25), y el total pasa de 151 a 152.** La
       pidió quien dirige para agilizar y homogeneizar lo local. Lo que ya había —la imagen de la API,
       la receta del front y `supabase start`— no se levanta junto, y cada carril reparte sus puertos
       copiando a mano un `config.toml` que no se versiona ([21 §6.4](docs/21-trabajo-en-paralelo.md#64-ambientes))
@@ -1544,15 +1660,12 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 
 **De la 3.9, la anulación con motivo:**
 
-- [ ] **La tarea entra en dos pasos, y el botón se queda para el segundo.** El 08 le da carril «API,
-      Front», pero el botón de anular vive dentro de la tabla del libro, que es la 3.8 y está en
-      progreso, y `mockup/` tiene escrita la regla y **no la pantalla**. Construirlo ahora sería
-      adelantarlo sin mockup y editar el mismo archivo que otra rama. **Decidido: esta entrega es la
-      API entera**, que es lo que el front necesita para existir; el botón entra cuando haya
-      pantalla aprobada. **Conviene decidir si eso es una tarea nueva del 08** o la misma 3.9 en dos
-      PR. **Queda la misma 3.9**: el botón es su mitad Front, que ya tiene pantalla aprobada. Lo
-      que el dibujo le suma a su mitad API —que anular arrastre al registro hermano— es la tarea [3.23](docs/08-plan-de-desarrollo.md#tarea-3-23),
-      y la 3.9 la espera
+- [x] **La tarea entró en dos pasos, y el botón fue el segundo.** El 08 le da carril «API, Front»,
+      pero el botón de anular vive dentro de la tabla del libro, que es la 3.8, y cuando se entregó
+      la API `mockup/` tenía escrita la regla y **no la pantalla**. **Fue la misma 3.9 en dos PR**,
+      no una tarea nueva del 08: la API primero, y el botón después, con la pantalla de la 3.8 ya
+      construida. Lo que el dibujo le sumó a su mitad API —que anular arrastre al registro
+      hermano— es la tarea [3.23](docs/08-plan-de-desarrollo.md#tarea-3-23), que entró antes que el botón
 - [ ] **La anulación no entra en la bitácora de cambios reversibles.** Los eventos de
       `EventoDeBitacora` son de usuarios y cargos, y agregar uno de movimiento pediría un ámbito
       nuevo y un valor nuevo del ENUM de la base, o sea una migración y dos PR. **Ningún documento

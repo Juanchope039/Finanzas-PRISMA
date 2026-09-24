@@ -4902,7 +4902,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.19.0"
+    "version" : "0.20.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -9196,6 +9196,91 @@
           }
         },
         "summary" : "Anular un movimiento",
+        "tags" : [ "Movimientos" ]
+      }
+    },
+    "/api/v0/movimientos/{id}/correccion/{correccionId}" : {
+      "put" : {
+        "description" : "Corrige un movimiento errado registrando otro que lo reversa, y el original queda intacto (RF-15, CU-04, 04 §5.3). El contra-asiento es un movimiento como cualquier otro —el mismo formulario «movimiento», las mismas reglas y los mismos códigos— con una sola diferencia: queda apuntando al que corrige, así que los dos se leen en el libro y la historia cuenta también el error. Los dos ids van en la ruta: el del movimiento que se corrige, y el del contra-asiento, que genera quien corrige al decidir la acción (ADR-020); el mismo dos veces responde 40900 en vez de duplicar el libro, y un movimiento que no existe responde 40400. Corrige solo Gerencia, y lo rechaza la base con mov_insercion (04 §7), no un if: registrar sigue siendo de los dos tipos de usuario, y lo que la política juzga es quién llena corrige_a_id. No anula nada: anular y corregir son dos cosas distintas, y lo de un mes cerrado solo se corrige (CU-03 A3). Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902, 42200 con data.errores, 42223, 42224, 42225 y 42226.",
+        "operationId" : "corregirMovimiento",
+        "parameters" : [ {
+          "description" : "El id del movimiento que se corrige",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "El id del contra-asiento, que genera quien corrige",
+          "in" : "path",
+          "name" : "correccionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevoMovimiento"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreMovimiento"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Corregir un movimiento por contra-asiento",
         "tags" : [ "Movimientos" ]
       }
     },
