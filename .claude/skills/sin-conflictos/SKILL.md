@@ -1,15 +1,16 @@
 ---
 name: sin-conflictos
-description: Deja una rama de PRISMA al día con su base —develop en los repositorios de código, main en la especificación— y sin un solo conflicto, antes de avisar que está lista para el PR. Trae la base, resuelve cada clase de choque con su receta y comprueba que la fusión de vuelta daría limpia. Se invoca a mano.
+description: Trae la base a una rama de PRISMA —develop en los repositorios de código, main en la especificación— y la deja sin un solo conflicto, con las puertas en verde y la base adentro. Es el paso 2 de la skill pr, así que solo corre con el PR autorizado. Se invoca a mano.
 argument-hint: "[repositorio, o id de la tarea para hacerlo en todos los que toca]"
 disable-model-invocation: true
 model: opus
 ---
 
-# Dejar la rama sin conflictos contra su base
+# Traer la base y dejar la rama sin conflictos
 
-Las rutas son relativas a la carpeta de trabajo, la que contiene `repositories/`. Cuándo se corre lo
-dice la regla del PR, en el `CLAUDE.md` de la especificación (§2).
+Las rutas son relativas a la carpeta de trabajo, la que contiene `repositories/`. **Es el paso 2 de
+la skill `pr`**: corre cuando quien dirige autorizó el PR, y otra vez si la base se mueve mientras
+el PR espera. Antes, no.
 
 ## 1. Mirar antes de tocar
 
@@ -100,16 +101,12 @@ git -C repositories/<repo> push
 git -C repositories/<repo> merge-tree --write-tree origin/<base> HEAD >/dev/null && echo 'fusiona limpio'
 ```
 
-**Esa última línea es la promesa de esta skill.** Si no la imprime, la rama todavía no está lista.
+**Esa última línea es la promesa de esta skill.** Si no la imprime, el PR no se abre.
 
-## 6. Qué se avisa
+## 6. Qué se dice
 
-Cuando los repositorios de la tarea pasan los pasos 4 y 5:
+Cuando los repositorios de la rama pasan los pasos 4 y 5, se sigue con el paso 3 de la skill `pr`,
+y se dice:
 
-- que la rama está lista y **contra qué base** se abriría el PR, uno por repositorio;
 - qué trajo la base y qué se resolvió, en una línea por conflicto que no fuera mecánico;
-- qué puerta no se pudo correr aquí, si alguna;
-- el enlace de comparación, para que quien dirige abra el PR cuando quiera:
-  `https://github.com/<dueño>/<repositorio>/compare/<base>...feature/<id>?expand=1`.
-
-**Y ahí se para.** El PR lo abre quien dirige, o esta sesión cuando lo pida, con la skill `pr`.
+- qué puerta no se pudo correr aquí, si alguna.

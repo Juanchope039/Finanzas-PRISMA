@@ -54,8 +54,8 @@ Cada uno es una skill, en `.claude/skills/<nombre>/SKILL.md`:
 | `documentar` | Cambiar un `.md`: la versión, la fecha, los enlaces y la herramienta |
 | `contrato` | Cambiar `contrato/openapi.json` byte a byte, y lo que sigue en la API |
 | `commit` | Hacer el commit con el formato del proyecto, y empujar |
-| `sin-conflictos` | Traer la base a la rama y resolver cada clase de choque |
-| `pr` | Abrir el PR, cuando quien dirige lo pide |
+| `sin-conflictos` | Traer la base a la rama y resolver cada clase de choque, dentro del PR |
+| `pr` | Abrir el PR, cuando quien dirige lo autoriza |
 
 ---
 

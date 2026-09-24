@@ -41,14 +41,15 @@ especificación. Se corre desde cualquier carpeta y revisa también los `.md` de
 ```bash
 node repositories/documentation/scripts/docs/documentar.mjs enlazar
 node repositories/documentation/scripts/docs/documentar.mjs verificar
-node repositories/documentation/scripts/docs/documentar.mjs verificar --base origin/main   # antes del PR
+node repositories/documentation/scripts/docs/documentar.mjs verificar --base origin/main   # con el PR autorizado
 ```
 
 - **`enlazar` se corre dos veces si hace falta**: la segunda tiene que decir `0 de N archivos
   actualizados`.
 - **Lo que `enlazar` genera va en el mismo commit** que el cambio que lo provocó.
-- **Para `--base`, la rama tiene que estar al día con `main`**. Si no, salen falsos positivos
-  cuando `main` ya subió un documento.
+- **`--base origin/main` necesita a `main` adentro**, y `main` entra con el PR autorizado: sin él,
+  salen falsos positivos cuando `main` ya subió un documento. Antes, se compara contra el punto de
+  donde salió la rama: `--base $(git merge-base origin/main HEAD)`.
 - **Qué hacer con cada mensaje de error** está en la tabla de `scripts/docs/README.md`.
 
 ## 4. Si hay conflicto en `TODO.md` o `docs/INDICE.md`

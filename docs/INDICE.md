@@ -121,9 +121,10 @@ a una pregunta concreta. Ver el [índice de ADRs](adr/README.md).
 | [034](adr/ADR-034-la-version-sube-en-cada-pr.md) | Cada cambio que se publica sube la versión un paso, y la CI lo exige | ¿Cómo sé que «Acerca de» dice la versión que de verdad corre? |
 | [035](adr/ADR-035-repositorios-hermanos.md) | Los cuatro repositorios viven lado a lado, y cada uno trae sus reglas y su guía para los agentes | ¿Dónde vive cada parte en disco, y qué lee un agente antes de tocarla? |
 | [036](adr/ADR-036-sin-limite-en-el-commit.md) | El mensaje de un commit puede ser tan largo como haga falta | ¿Cuánto puedo escribir para explicar un cambio? |
-| [037](adr/ADR-037-el-pr-se-abre-a-pedido.md) | Cada tarea arranca de una copia limpia y al día, y la solicitud de revisión la pide quien dirige, con la rama ya sin choques | ¿Quién decide cuándo se revisa un cambio, y por qué llega sin pelearse con lo que ya estaba? |
+| [037](adr/ADR-037-el-pr-se-abre-a-pedido.md) | Cada tarea arranca de una copia limpia y al día, y la solicitud de revisión la pide quien dirige, con la rama ya sin choques · **Reemplazado por 040** | ¿Quién decide cuándo se revisa un cambio, y por qué llega sin pelearse con lo que ya estaba? |
 | [038](adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md) | Un solo comando levanta el sistema entero en la máquina de quien trabaja, y cada quien le dice dónde tiene sus carpetas | ¿Cómo pruebo todo junto sin armarlo a mano cada vez? |
 | [039](adr/ADR-039-cada-regla-en-un-solo-sitio.md) | Cada regla del proyecto está escrita en un solo lugar, y los demás la señalan sin copiarla | ¿Dónde busco una regla, y cómo sé que no hay otra versión en otro lado? |
+| [040](adr/ADR-040-rama-feature-y-pr-autorizado.md) | Cada cambio va en una rama que dice qué trae, y la revisión solo se pide cuando quien dirige la autoriza: ahí se pone al día con lo último | ¿Quién decide cuándo se revisa un cambio, y cuándo se pone al día con lo que ya estaba? |
 
 Del 017 al 026 están las decisiones del modelo de tres partes: el cambio de Dart a Java en la
 API, que el front no decide nada, el contrato de respuesta, la idempotencia, el canal firmado,
@@ -132,8 +133,8 @@ despliega. Del 027 al 030 son de cómo se trabaja: la propia documentación, el 
 del esquema y el contrato sin GET. El 032 vuelve sobre el 026 y adelanta un solo ambiente, dev, para
 que el sistema se pueda ver en línea antes del final. El 031, el 034 y el 035 vuelven a cómo se
 trabaja: el tamaño del commit, la versión que sube en cada PR y dónde vive cada repositorio, y el 033
-limita la única llave que se salta los permisos de la base. El 039 ordena lo que leen los agentes:
-cada regla en un solo sitio.
+limita la única llave que se salta los permisos de la base. El 039 y el 040 ordenan lo que leen y
+hacen los agentes: cada regla en un solo sitio, y la rama y la revisión que solo pide quien dirige.
 
 ---
 
@@ -170,7 +171,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) | 0.1.0 | 💡 Propuesta | 2026-09-16 | [Entrega](#etiqueta-entrega) · [Front](#etiqueta-front) |
 | [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 5.1.0 | ✅ Vigente | 2026-09-21 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
 | [20 · Contrato de la API](20-contrato-de-api.md) | 2.9.0 | ✅ Vigente | 2026-09-19 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
-| [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) | 5.1.0 | ✅ Vigente | 2026-09-22 | [Paralelo](#etiqueta-paralelo) · [Proceso](#etiqueta-proceso) |
+| [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) | 6.0.0 | ✅ Vigente | 2026-09-24 | [Paralelo](#etiqueta-paralelo) · [Proceso](#etiqueta-proceso) |
 | [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 2.0.0 | ✅ Vigente | 2026-09-21 | [Proceso](#etiqueta-proceso) |
 | [Contrato de la API · v0.20.0](../contrato/README.md) | 3.11.0 | ✅ Vigente | 2026-09-24 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [Decisiones de arquitectura (ADR)](adr/README.md) | 1.12.0 | 🔄 Vivo | 2026-09-24 | [Arquitectura](#etiqueta-arquitectura) |
@@ -210,11 +211,12 @@ Qué significa cada estado y cuándo sube una versión está en
 | [ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige](adr/ADR-034-la-version-sube-en-cada-pr.md) | 1.0.0 | ✅ Aceptado | 2026-09-19 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) · [Calidad](#etiqueta-calidad) |
 | [ADR-035 · Los cuatro repositorios, hermanos en una carpeta de trabajo](adr/ADR-035-repositorios-hermanos.md) | 1.0.0 | ✅ Aceptado | 2026-09-21 | [Proceso](#etiqueta-proceso) · [Paralelo](#etiqueta-paralelo) |
 | [ADR-036 · El mensaje de commit no tiene limite de longitud](adr/ADR-036-sin-limite-en-el-commit.md) | 1.0.0 | ✅ Aceptado | 2026-09-21 | — |
-| [ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos](adr/ADR-037-el-pr-se-abre-a-pedido.md) | 1.0.0 | ✅ Aceptado | 2026-09-22 | [Proceso](#etiqueta-proceso) · [Paralelo](#etiqueta-paralelo) |
+| [ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos](adr/ADR-037-el-pr-se-abre-a-pedido.md) | 1.1.0 | ⛔ Reemplazado | 2026-09-24 | [Proceso](#etiqueta-proceso) · [Paralelo](#etiqueta-paralelo) |
 | [ADR-038 · La pila local se orquesta desde prisma_db, y cada receta se apunta desde su .env](adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md) | 1.0.0 | ✅ Aceptado | 2026-09-24 | [Proceso](#etiqueta-proceso) · [Base de datos](#etiqueta-base-de-datos) |
 | [ADR-039 · Cada regla vive en un solo sitio: CLAUDE.md, AGENTS.md o una skill](adr/ADR-039-cada-regla-en-un-solo-sitio.md) | 1.0.0 | ✅ Aceptado | 2026-09-24 | [Proceso](#etiqueta-proceso) |
+| [ADR-040 · Toda rama empieza por feature/, y el PR se abre solo con autorización expresa, trayendo entonces la base](adr/ADR-040-rama-feature-y-pr-autorizado.md) | 1.0.0 | ✅ Aceptado | 2026-09-24 | [Proceso](#etiqueta-proceso) · [Paralelo](#etiqueta-paralelo) |
 | [AGENTS.md](../AGENTS.md) | 1.2.0 | ✅ Vigente | 2026-09-24 | [Proceso](#etiqueta-proceso) |
-| [CLAUDE.md](../CLAUDE.md) | 10.1.0 | ✅ Vigente | 2026-09-24 | [Proceso](#etiqueta-proceso) |
+| [CLAUDE.md](../CLAUDE.md) | 11.0.0 | ✅ Vigente | 2026-09-24 | [Proceso](#etiqueta-proceso) |
 | [Herramienta de documentación](../scripts/docs/README.md) | 2.0.2 | ✅ Vigente | 2026-09-22 | [Proceso](#etiqueta-proceso) |
 <!-- /generado:estado-de-la-documentacion -->
 
@@ -283,7 +285,7 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-paralelo"></a>Paralelo
 
-[Tareas de PRISMA](../TODO.md) · [08 · Plan de desarrollo](08-plan-de-desarrollo.md) · [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) · [ADR-023 · Tres repositorios y el contrato como artefacto versionado](adr/ADR-023-tres-repositorios.md) · [ADR-025 · Cuatro repositorios: la base de datos sale de la API](adr/ADR-025-cuatro-repositorios.md) · [ADR-035 · Los cuatro repositorios, hermanos en una carpeta de trabajo](adr/ADR-035-repositorios-hermanos.md) · [ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos](adr/ADR-037-el-pr-se-abre-a-pedido.md)
+[Tareas de PRISMA](../TODO.md) · [08 · Plan de desarrollo](08-plan-de-desarrollo.md) · [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) · [ADR-023 · Tres repositorios y el contrato como artefacto versionado](adr/ADR-023-tres-repositorios.md) · [ADR-025 · Cuatro repositorios: la base de datos sale de la API](adr/ADR-025-cuatro-repositorios.md) · [ADR-035 · Los cuatro repositorios, hermanos en una carpeta de trabajo](adr/ADR-035-repositorios-hermanos.md) · [ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos](adr/ADR-037-el-pr-se-abre-a-pedido.md) · [ADR-040 · Toda rama empieza por feature/, y el PR se abre solo con autorización expresa, trayendo entonces la base](adr/ADR-040-rama-feature-y-pr-autorizado.md)
 
 ### <a id="etiqueta-contrato"></a>Contrato
 
@@ -291,7 +293,7 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-proceso"></a>Proceso
 
-[19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) · [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) · [22 · Documentación: versiones, estados y referencias](22-documentacion.md) · [ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad](adr/ADR-014-semver.md) · [ADR-023 · Tres repositorios y el contrato como artefacto versionado](adr/ADR-023-tres-repositorios.md) · [ADR-025 · Cuatro repositorios: la base de datos sale de la API](adr/ADR-025-cuatro-repositorios.md) · [ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica](adr/ADR-027-documentacion-versionada.md) · [ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué](adr/ADR-028-un-commit-por-tarea.md) · [ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige](adr/ADR-034-la-version-sube-en-cada-pr.md) · [ADR-035 · Los cuatro repositorios, hermanos en una carpeta de trabajo](adr/ADR-035-repositorios-hermanos.md) · [ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos](adr/ADR-037-el-pr-se-abre-a-pedido.md) · [ADR-038 · La pila local se orquesta desde prisma_db, y cada receta se apunta desde su .env](adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md) · [ADR-039 · Cada regla vive en un solo sitio: CLAUDE.md, AGENTS.md o una skill](adr/ADR-039-cada-regla-en-un-solo-sitio.md) · [AGENTS.md](../AGENTS.md) · [CLAUDE.md](../CLAUDE.md) · [Herramienta de documentación](../scripts/docs/README.md)
+[19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) · [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) · [22 · Documentación: versiones, estados y referencias](22-documentacion.md) · [ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad](adr/ADR-014-semver.md) · [ADR-023 · Tres repositorios y el contrato como artefacto versionado](adr/ADR-023-tres-repositorios.md) · [ADR-025 · Cuatro repositorios: la base de datos sale de la API](adr/ADR-025-cuatro-repositorios.md) · [ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica](adr/ADR-027-documentacion-versionada.md) · [ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué](adr/ADR-028-un-commit-por-tarea.md) · [ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige](adr/ADR-034-la-version-sube-en-cada-pr.md) · [ADR-035 · Los cuatro repositorios, hermanos en una carpeta de trabajo](adr/ADR-035-repositorios-hermanos.md) · [ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos](adr/ADR-037-el-pr-se-abre-a-pedido.md) · [ADR-038 · La pila local se orquesta desde prisma_db, y cada receta se apunta desde su .env](adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md) · [ADR-039 · Cada regla vive en un solo sitio: CLAUDE.md, AGENTS.md o una skill](adr/ADR-039-cada-regla-en-un-solo-sitio.md) · [ADR-040 · Toda rama empieza por feature/, y el PR se abre solo con autorización expresa, trayendo entonces la base](adr/ADR-040-rama-feature-y-pr-autorizado.md) · [AGENTS.md](../AGENTS.md) · [CLAUDE.md](../CLAUDE.md) · [Herramienta de documentación](../scripts/docs/README.md)
 <!-- /generado:etiquetas -->
 
 ---

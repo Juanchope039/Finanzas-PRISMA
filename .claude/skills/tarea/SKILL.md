@@ -46,6 +46,7 @@ git -C repositories/<repo> log --oneline -1                # di desde qué commi
 - **Si el árbol no está limpio, para.** Enseña `git status --short` y `git diff --stat`, y pregunta.
   No lo guardes por tu cuenta.
 - **Si `pull --ff-only` no puede avanzar**, la base local divergió de la remota: no lo fuerces, dilo.
+- **Lo que no es una tarea sigue los mismos pasos**, con `feature/<titulo>` en vez del id.
 - **Si otra sesión usa la misma copia, trabaja en worktrees con el mismo acomodo**:
   `<carpeta>/repositories/<repo>`. Así la herramienta de documentación sigue viendo a los hermanos.
 
@@ -58,7 +59,5 @@ Antes de tocar código, sigue la skill `plan`.
 - **El commit**, con la skill `commit`.
 - **El tablero**, en el PR de la especificación: la tarea marcada `[x]`, como dice el §5 del
   `AGENTS.md` de la especificación.
-- **La rama sin conflictos**, con la skill `sin-conflictos`: entre que empezaste y terminaste
-  pudieron entrar otros PR.
-- **Se empuja y se avisa que está lista**, con la base contra la que se abriría el PR. El PR lo pide
-  quien dirige, y entonces es la skill `pr`.
+- **Se empuja y se avisa que está lista**, con la base contra la que se abriría el PR. **Ahí se
+  para**: la base no se trae hasta que quien dirige autorice el PR, y entonces es la skill `pr`.

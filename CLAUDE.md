@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [10.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [11.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 Las reglas de PRISMA, para cualquier sesión en cualquiera de los cuatro repositorios.
 
@@ -51,33 +51,32 @@ ni referencias de proyectos, ni nombres de clientes.
 - **Ningún documento lo cita**, ni por ruta ni por número ([22 §10](docs/22-documentacion.md#10-los-planes-de-trabajo)).
 - Qué lleva, qué número y qué nombre: la skill `plan`.
 
-**Lo primero de una tarea es salir de la base al día, en una copia limpia** ([ADR-037](docs/adr/ADR-037-el-pr-se-abre-a-pedido.md)).
-- La base es `develop` en los repositorios de código y `main` en la especificación, que no tiene
-  `develop`.
-- **Un árbol sucio no se arrastra a la rama nueva:** se enseña lo que hay y se pregunta qué hacer
-  con ello. Lo de otra cosa no entra aquí por descuido.
-- Recién entonces se abre `feature/<id>`, con el id que la tarea tiene en el 08. El paso a paso es
-  la skill `tarea`.
+**Toda rama empieza por `feature/`, sin excepción** ([ADR-040](docs/adr/ADR-040-rama-feature-y-pr-autorizado.md)).
+- Si es una tarea del 08, lleva su id y nada más: `feature/3.11`. Si no lo es, el título de lo que
+  agrega, en minúsculas y con guiones: `feature/reglas-en-un-solo-sitio`.
+- Vale también para una sesión que trae asignada otra rama, como las `claude/…`: se abre y se
+  empuja la `feature/…` que corresponde.
+- **Sale de su base al día y de una copia limpia.** La base es `develop` en los repositorios de
+  código y `main` en la especificación, que no tiene `develop`. Un árbol sucio no se arrastra a la
+  rama nueva: se enseña lo que hay y se pregunta qué hacer con ello. El paso a paso: la skill `tarea`.
+- **Se empuja siempre**, desde su primer commit y sin que haya que pedirlo. `develop`, `main`, `qa`,
+  `uat` y `prod` no se mueven por cuenta propia.
 
-**Una tarea es una rama `feature/<id>` en cada repositorio que toca, y un PR** ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)).
-- El PR va contra `develop` en los repositorios de código y contra `main` en la especificación.
-- Se trabaja y **se deja la documentación al día antes de pedir el PR**.
-- **La rama se empuja siempre**, desde su primer commit y sin que haya que pedirlo, aunque el
-  commit no sea de una tarea.
-- `develop`, `main`, `qa`, `uat` y `prod` no se mueven por cuenta propia.
+**Una tarea es una rama en cada repositorio que toca, y un PR** ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)).
+- Se trabaja y **se deja la documentación al día antes de avisar que la rama está lista**.
 - **Se espera a que acepten el PR: no se empieza otra tarea hasta entonces.** La excepción es una
   tarea marcada ⚡ que no toque lo que está en revisión.
 
-**El PR se abre a pedido, y la rama llega sin conflictos** ([ADR-037](docs/adr/ADR-037-el-pr-se-abre-a-pedido.md)).
-- **Nunca se abre un PR por cuenta propia.** Se termina, se empuja y se avisa que la rama está
-  lista y contra qué base se abriría. Empujar respalda; abrir el PR pide el turno de una persona, y
-  cuándo pedirlo lo decide quien dirige.
-- **Antes de avisar, la rama se trae su base y queda sin un solo conflicto**, y se comprueba que la
-  fusión de vuelta daría limpia. Si la base se movió otra vez, se repite.
+**El PR se abre solo con autorización expresa de quien dirige** ([ADR-040](docs/adr/ADR-040-rama-feature-y-pr-autorizado.md)).
+- **Nunca por cuenta propia, ni en borrador**: terminar una tarea no lo autoriza. Se termina, se
+  empuja y se avisa que la rama está lista y contra qué base se abriría.
+- **Con la autorización, y solo entonces**, en cada repositorio de la rama: se trae lo último de su
+  base, se resuelven los conflictos, se vuelven a pasar las puertas del [08 §4](docs/08-plan-de-desarrollo.md#4-definición-de-terminado) con la base adentro y
+  se abre el PR contra esa base. Antes, la base no se fusiona en la rama.
 - **No basta con que no queden marcas `<<<<<<<`.** Dos ramas que suben la versión al mismo número, o
-  que agregan una ruta a la copia fijada del contrato, fusionan limpio y dejan [C-04](docs/12-pruebas-y-calidad.md#c-04) y [C-05](docs/12-pruebas-y-calidad.md#c-05) en
-  rojo: lo que se comprueba es que las puertas del [08 §4](docs/08-plan-de-desarrollo.md#4-definición-de-terminado) vuelven a pasar con la base adentro.
-- La receta es la skill `sin-conflictos`, y abrirlo cuando lo pidan, la skill `pr`.
+  que agregan una ruta a la copia fijada del contrato, fusionan limpio y dejan [C-04](docs/12-pruebas-y-calidad.md#c-04) y [C-05](docs/12-pruebas-y-calidad.md#c-05) en rojo.
+- El paso a paso es la skill `pr`. Quien dirige la invoca con `/pr`; si lo pide en palabras, se
+  sigue su archivo.
 
 **Una tarea es un commit, y el commit explica por qué** ([ADR-028](docs/adr/ADR-028-un-commit-por-tarea.md)).
 - El asunto lleva el sprint y el número: `Sprint 3 / 3.11: marca de registro tardio`.

@@ -38,7 +38,7 @@ Verifica: 746 en verde; sin el filtro, 3 rojas.
 git add <rutas explícitas>
 git status                          # un add con una ruta que no existe aborta el add entero
 git commit -F mensaje.txt
-git push -u origin feature/<id>     # desde el primer commit; nunca develop, main, qa, uat ni prod
+git push -u origin <rama>          # la feature/…, desde el primer commit; nunca develop, main, qa, uat ni prod
 ```
 
 - **Si en el índice hay cambios que no son tuyos** (un `.env`, cosas a medias de otra persona), no
