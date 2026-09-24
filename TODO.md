@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.25.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [7.25.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -1214,11 +1214,12 @@ a `anon`.
   diciendo cuál; pero **construir la imagen de la API y la del front quedó sin ejercitar**, porque
   Docker Hub responde `429` a la máquina donde se escribió. Es lo primero que hay que correr en una
   máquina con cuota: `./scripts/db/pila-local.ps1`, y ver las tres piezas arriba
-- **Ninguna etiqueta `esquema-vX.Y.Z` existe en `prisma_db`, y la CI de la API depende de ellas.**
-  El [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) dice que la API descarga la base en la etiqueta de su `prisma.esquema`, y hoy
-  no hay ninguna: ni la `esquema-v0.11.0` ni las cuatro siguientes, aunque sus migraciones estén
-  fusionadas en `develop`. **Con `prisma.esquema` en `0.14.0`, el trabajo «Probar contra la base»
-  no puede correr.** Las etiquetas van sobre estos commits de `prisma_db`: `0.11.0` en `89982e6`,
+- **A `prisma_db` le faltan seis etiquetas `esquema-vX.Y.Z`, y la CI de la API depende de ellas.**
+  El [ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md) dice que la API descarga la base en la etiqueta de su `prisma.esquema`.
+  Están la `esquema-v0.1.0` y de la `0.3.0` a la `0.10.0`; **faltan la `0.2.0` y de la `0.11.0` a
+  la `0.15.0`**, aunque sus migraciones estén fusionadas en `develop`. **Con `prisma.esquema` en
+  `0.14.0`, el trabajo «Probar contra la base» no puede correr.** Cada una va sobre el commit con
+  que se fusionó su PR, como las que ya existen: `0.2.0` en `15dce67`, `0.11.0` en `89982e6`,
   `0.12.0` en `2dd0e11`, `0.13.0` en `f24cf39`, `0.14.0` en `1c337b2` y `0.15.0` en `ca14398`; la
   `0.16.0`, sobre el commit con que se fusione el PR de la [3.10](docs/08-plan-de-desarrollo.md#tarea-3-10). **Hasta que existan, la API no
   puede subir su `prisma.esquema`**, y con ella se quedan esperando las doce filas de traducción
