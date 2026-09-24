@@ -2,11 +2,12 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/AGENTS.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-21 | 2026-09-22 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/AGENTS.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-21 | 2026-09-24 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 Guía para los agentes de código que trabajan en la especificación de PRISMA. **Las reglas están en
 [`CLAUDE.md`](CLAUDE.md)**, tanto las del proceso como las de la arquitectura y las de este
-repositorio: léelas antes de tocar nada. Aquí se explica cómo se hace cada cosa. Todo va en español.
+repositorio: léelas antes de tocar nada. Aquí se explica cómo se hace cada cosa, y el paso a paso de
+lo que se repite está en las skills del [§3](#3-los-procedimientos).
 
 ---
 
@@ -20,6 +21,7 @@ repositorio: léelas antes de tocar nada. Aquí se explica cómo se hace cada co
 | `mockup/` | El prototipo navegable. Nada se construye sin su pantalla aprobada |
 | [`TODO.md`](TODO.md) | El tablero: en qué va cada tarea y qué decisiones tiene que revisar quien dirige |
 | `scripts/docs/` | La herramienta que pone y verifica encabezados, enlaces y bloques generados |
+| `.claude/skills/` | Los procedimientos paso a paso del [§3](#3-los-procedimientos). Son Markdown: cualquier agente los puede leer |
 
 Los repositorios de código están al lado, en `../backend-api`, `../backend-db` y
 `../frontend-flutter`. Cuando están en disco, la herramienta también revisa sus `.md`.
@@ -35,32 +37,25 @@ node scripts/docs/documentar.mjs verificar                      # falla si algo 
 node scripts/docs/documentar.mjs verificar --base origin/main   # además: versiones subidas
 ```
 
-- Se corre desde cualquier carpeta, **cada vez** que cambia un `.md`: primero `enlazar` y después
-  `verificar`.
-- `verificar --base` es lo que corre la integración continua en cada PR. Antes de avisar que la
-  rama está lista, córrelo con `main` ya traído a la rama.
+- Se corre desde cualquier carpeta. Cuándo y en qué orden, lo dice la skill `documentar`.
+- `verificar --base` es lo que corre la integración continua en cada PR.
 - Qué hacer con cada mensaje de error está en `scripts/docs/README.md`.
 
 ---
 
-## 3. Cómo se cambia un documento
+## 3. Los procedimientos
 
-1. Se edita el texto. Toda referencia es un enlace, y la herramienta los pone sola:
-   - identificadores como `RF-01`, `C-05` o `ADR-025`;
-   - tareas y sprints, como `tarea 3.4` o `Sprint 3`;
-   - documentos y secciones, como [`05-reglas-financieras.md`](docs/05-reglas-financieras.md) o `07 §3`.
+Cada uno es una skill, en `.claude/skills/<nombre>/SKILL.md`:
 
-   Lo que va entre comillas invertidas no se enlaza. La excepción es el nombre de un documento
-   numerado, que sí se enlaza.
-2. Se sube la versión del encabezado según [22 §3](docs/22-documentacion.md#3-versiones):
-   - MAJOR si quien actuaba según la versión anterior ahora actuaría mal;
-   - MINOR si se agrega algo compatible;
-   - PATCH si no cambia nada de lo que alguien haría.
-3. «Actualizado» lleva la fecha de hoy, en hora de Bogotá. «Creado» no cambia nunca.
-4. Se corre `enlazar`, después `verificar`, y se hace el commit.
-
-Los estados, las etiquetas y la forma exacta del encabezado están en [`22-documentacion.md`](docs/22-documentacion.md). Un
-documento nuevo arranca en 0.1.0 como 📝 Borrador, o en 1.0.0 si nace ✅ Vigente.
+| Skill | Para qué |
+|---|---|
+| `tarea` | Empezar una tarea del 08: la base al día, la rama y el plan |
+| `plan` | Escribir el plan de trabajo, antes de tocar código |
+| `documentar` | Cambiar un `.md`: la versión, la fecha, los enlaces y la herramienta |
+| `contrato` | Cambiar `contrato/openapi.json` byte a byte, y lo que sigue en la API |
+| `commit` | Hacer el commit con el formato del proyecto, y empujar |
+| `sin-conflictos` | Traer la base a la rama y resolver cada clase de choque, dentro del PR |
+| `pr` | Abrir el PR, cuando quien dirige lo autoriza |
 
 ---
 
@@ -82,48 +77,19 @@ documento nuevo arranca en 0.1.0 como 📝 Borrador, o en 1.0.0 si nace ✅ Vige
 
 ---
 
-## 5. Cómo se cambia el contrato
+## 5. El tablero
 
-- **Primero el PR aquí.** Un cambio de contrato es un PR en este repositorio, revisado por los dos
-  lados, **antes** de implementarlo.
-- **El formato es el que genera la API.** `contrato/openapi.json` lleva:
-  - las claves ordenadas a cualquier profundidad;
-  - `tags` y `required` también ordenados;
-  - `"clave" : valor`, con dos espacios de sangría;
-  - los arreglos de valores simples en una sola línea;
-  - saltos de línea LF.
-
-  Un cambio a mano tiene que dejar exactamente esos bytes. La prueba es reescribir el archivo sin
-  cambios y obtener el mismo archivo.
-- **Sube `info.version`**, y es MAJOR si el cambio rompe algo. Con ella sube también la versión del
-  encabezado de `contrato/README.md`.
-- **Un código nuevo** va en el rango de su módulo, según [`20-contrato-de-api.md`](docs/20-contrato-de-api.md), con su mensaje en
-  español y dentro de `x-prisma-codigos`.
-- **Cuando la API lo implementa**, copia el archivo a su `contrato/` y sube `prisma.contrato.version`.
-  La prueba [C-04](docs/12-pruebas-y-calidad.md#c-04) compara las dos cosas.
+- **Una tarea nueva se escribe en el 08**, con su carril y lo que la bloquea. Después el tablero la
+  lista en su sprint.
+- **Al terminar una tarea** se marca `[x]` en [`TODO.md`](TODO.md) y se corre `enlazar`, que rehace las marcas
+  ⚡ y 🔒, lo que puede empezar hoy y cuánto falta. Va en el PR de la tarea.
 
 ---
 
-## 6. El tablero
+## 6. Las puertas del PR
 
-- **Una tarea nueva entra primero a [`08-plan-de-desarrollo.md`](docs/08-plan-de-desarrollo.md)**, con su carril y lo que la bloquea.
-  Después el tablero la lista en su sprint.
-- **Al terminar una tarea** se marca `[x]` en [`TODO.md`](TODO.md) y se corre `enlazar`. Eso rehace las marcas ⚡
-  y 🔒, lo que puede empezar hoy y cuánto falta. Todo va en el PR de la tarea.
-- **🚧 (en progreso) y ✏️ (escrita sin verificar) las pone una persona**, al principio de la línea.
-
----
-
-## 7. Si dos PR chocan
-
-La receta entera —para los cuatro repositorios y para las clases de conflicto que git no ve— es la
-skill `sin-conflictos`, y se corre **antes de avisar que la rama está lista**, no cuando GitHub se
-queja ([ADR-037](https://github.com/Juanchope039/Finanzas-PRISMA/blob/main/docs/adr/ADR-037-el-pr-se-abre-a-pedido.md)). Aquí, casi siempre chocan en [`TODO.md`](TODO.md) y [`docs/INDICE.md`](docs/INDICE.md), dentro de
-bloques generados:
-
-1. Se trae `main` a la rama con `git merge --no-commit origin/main`.
-2. En esos dos archivos se toma el lado de `main` y se vuelve a poner encima lo de la rama. La versión
-   de [`TODO.md`](TODO.md) queda por encima de la de `main`.
-3. Se hace `git add` de lo resuelto, **y después** se corre `enlazar`. Si un archivo sigue en
-   conflicto sin agregar, la herramienta lo cuenta tres veces y duplica filas en el índice.
-4. Se hace `git add` otra vez, el commit, `verificar --base origin/main` y se empuja.
+- **`verificar --base origin/main` en verde, con `main` ya traído a la rama.** Sin él adentro, salen
+  falsos positivos cuando `main` ya subió un documento.
+- **Si es una tarea, va marcada `[x]` en el tablero**, como dice el [§5](#5-el-tablero).
+- **Si al traer `main` chocan [`TODO.md`](TODO.md) o [`docs/INDICE.md`](docs/INDICE.md)**, la receta cierra la skill
+  `documentar`. Cualquier otra clase de choque, la skill `sin-conflictos`.

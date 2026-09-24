@@ -6,21 +6,21 @@ paths: "**/contrato/**"
 
 # Cambiar el contrato
 
-El contrato es el acuerdo entre el front y la API. Se cambia **antes** de implementarse, con un
-solo PR en la especificación que revisan los dos lados. Rutas relativas a
-`repositories/documentation`.
+El contrato es el acuerdo entre el front y la API, y su cambio es un solo PR en la especificación
+que revisan los dos lados. Las reglas están en el `CLAUDE.md` de la especificación (§3 y §4). Rutas
+relativas a `repositories/documentation`.
 
 ## 1. El cambio
 
 - **Lee primero `20-contrato-de-api.md`.** Ahí están el sobre `{status, mensaje, data}`, los códigos
   de cinco dígitos —`HTTP(3) + caso(2)`— y la tabla de rangos por módulo.
-- **Todo por `POST` bajo `/api/v0`** (ADR-030). Las lecturas van por `POST …/consultas/…`.
+- **Las lecturas van por `POST …/consultas/…`.**
 - **Un código nuevo:**
   - va en el rango de su módulo, con un caso que no esté usado;
   - su mensaje va en español, sin jerga técnica, dirigido a quien usa la pantalla;
   - se agrega a `x-prisma-codigos` y a la lista de respuestas de cada operación que lo emite.
 - **Un formulario nuevo** se describe con los campos y reglas que la API va a generar de su propio
-  validador. El front no trae ningún umbral ni mensaje propio.
+  validador.
 
 ## 2. El formato, byte a byte
 
@@ -33,7 +33,8 @@ prueba C-04 compara:
 - los arreglos de valores simples van en una sola línea: `[ "a", "b" ]`;
 - los saltos de línea son LF, y el archivo termina en uno.
 
-Después de editar, compruébalo:
+Un cambio a mano tiene que dejar exactamente esos bytes: reescribir el archivo sin cambios tiene que
+dar el mismo archivo. Después de editar, compruébalo:
 
 ```bash
 git diff --stat contrato/openapi.json                 # solo las líneas que querías
@@ -61,7 +62,4 @@ Cuando se fusione el PR del contrato, en el repositorio `backend-api` se hace es
 2. Se sube `prisma.contrato.version` en `application.yml`.
 3. Lo acordado que todavía no se emite se marca con `@PendienteDeEmitir(sprint, quien)`.
 4. Se corre `./gradlew build`: C-04 compara lo generado con la copia, y C-03 el catálogo con el
-   código fuente.
-
-**Si C-04 falla**, el código se desvió del contrato y **se corrige el código**. El contrato solo
-cambia con otro PR aquí.
+   código fuente. Si C-04 falla, manda la regla del `CLAUDE.md` de la API.

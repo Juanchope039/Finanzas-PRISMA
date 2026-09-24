@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.28.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [8.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -1042,8 +1042,9 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 | 12 | Plazos de conservación y registro de bases de datos personales (Ley 1581) | Un abogado | Go-live | ⬜ |
 | 13 | Qué objetivos nativos se publican | Gerencia | Nada hoy: no hay disparador | ⬜ |
 | 14 | Una sola licencia para los cuatro repositorios | Quien dirige | Nada técnico | ✅ **AGPL-3.0 en los cuatro**: PRISMA se sirve por la red y no se distribuye, y la sección 13 es lo único que obliga a publicar lo que alguien modifique de un servicio |
-| 15 | Encabezado de licencia en cada archivo fuente | Quien dirige | Nada técnico | ⬜ Hoy no lo lleva ninguno. La AGPL lo recomienda, pero son cientos de archivos en tres lenguajes y el `LICENSE` del repositorio ya dice cuál rige |
+| 15 | Encabezado de licencia en cada archivo fuente | Quien dirige | Nada técnico | ✅ **No lleva: la licencia se declara una vez por repositorio, no en cada archivo.** Los tres repositorios de código son privados, así que ningún archivo fuente sale solo de ellos. Las migraciones ya fusionadas de `prisma_db` no se editan, así que una regla de «cada archivo» nacería con excepciones. El aviso por archivo es un consejo del apéndice de la AGPL, no una condición de la licencia. Se revisa si un repositorio de código se hace público, y entonces basta una línea `SPDX-License-Identifier`. La versión que declara y el titular son la fila 17 |
 | 16 | Dónde vive la orquestación de la pila local, y cómo encuentra cada receta | Quien dirige | Tarea [3.25](docs/08-plan-de-desarrollo.md#tarea-3-25) | ✅ **En `prisma_db`**, el repositorio más idóneo: ya levanta la base local y reparte sus puertos ([21 §6.4](docs/21-trabajo-en-paralelo.md#64-ambientes)). Cada receta de contenedor y cada puerto se apuntan desde el `.env` de la orquestación, no con rutas escritas. La especificación no va en un contenedor. El ADR lo escribe la propia tarea |
+| 17 | Quién es el titular de PRISMA, y si la licencia es `AGPL-3.0-only` o `AGPL-3.0-or-later` | Quien dirige | Nada técnico | ✅ **Juan David Garzón Vallejo, con `AGPL-3.0-only`.** Lo declara la sección «Licencia» del README de cada repositorio, con su `SPDX-License-Identifier`. Solo la versión 3 porque, con un solo titular, `-or-later` no da nada que no se logre volviendo a licenciar, y deja en manos de la FSF una versión que todavía no existe. Las licencias que el titular otorgue a otros van por contrato aparte, fuera de los repositorios |
 
 **Lo que el modelo de datos todavía no define** ([`04-modelo-de-datos.md`](docs/04-modelo-de-datos.md)):
 
@@ -3538,14 +3539,13 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 ## Cómo se mantiene este archivo
 
 - **Una tarea hecha es un commit, y el commit explica por qué** ([ADR-028](docs/adr/ADR-028-un-commit-por-tarea.md)). El asunto lleva el
-  sprint y el número —`Sprint 3 / 3.11: marca de registro tardio`— y el cuerpo son tres líneas:
-  `Hace:`, `Decide:` y `Verifica:`, la última con qué se rompió a propósito para ver fallar las
+  sprint y el número —`Sprint 3 / 3.11: marca de registro tardio`— y el cuerpo son tres párrafos:
+  `Hace:`, `Decide:` y `Verifica:`, el último con qué se rompió a propósito para ver fallar las
   pruebas. Dos tareas no van en un mismo commit aunque toquen la misma clase. Así `git log
   --oneline` es esta misma lista, en el orden en que se hizo.
-- **Y el mensaje no tiene tope de longitud** ([ADR-036](docs/adr/ADR-036-sin-limite-en-el-commit.md)): la brevedad es una guía y la
-  aplica quien escribe, no una cifra que mida la herramienta. El porqué largo va en el plan de
-  trabajo, que se escribió antes; un cuerpo que se estira es la señal de que algo del plan se fue
-  al commit.
+- **Y el mensaje no tiene tope total** ([ADR-036](docs/adr/ADR-036-sin-limite-en-el-commit.md)), pero cada párrafo cabe en cuatro líneas de 100
+  columnas ([ADR-041](docs/adr/ADR-041-cuatro-lineas-por-parrafo.md)). El porqué largo va en el plan de trabajo, que se escribió antes; un párrafo
+  que no cabe es la señal de que algo del plan se fue al commit.
 - Una tarea se marca `[x]` cuando su commit está en `develop` con la integración continua en verde
   ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)). La marca viaja en el PR de la especificación de esa misma tarea, que se
   acepta junto con el del código. Lo escrito pero no probado lleva ✏️, no `[x]`; lo que alguien
