@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [8.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [8.3.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -665,14 +665,14 @@ hasta aplicarlo y probarlo.
 
 ---
 
-## 5. <a id="sprint-3"></a>Sprints 3 a 8 · funcionalidades en cadenas paralelas
+## 5. Sprints 3 a 8 · funcionalidades en cadenas paralelas
 
 **Las cadenas avanzan a la vez y comparten lo mínimo**: cada una tiene sus tablas y su rango de
 códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-verticales-sprints-3-a-8)). El orden exacto dentro de cada una lo dan las dependencias del plan.
 
 ### Cadena A · el dinero
 
-**[Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos**
+<a id="sprint-3"></a>**[Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos**
 
 - [x] [**3.1**](docs/08-plan-de-desarrollo.md#tarea-3-1) Dominio `Movimiento`, tipos y su efecto sobre utilidad, caja y patrimonio · API —
       los nueve tipos con su efecto sobre las tres cifras, y `aporteAUtilidad`, `aporteACaja` y
@@ -868,7 +868,8 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       `auth`, GoTrue, Storage y `pg_cron`, y un `postgres:16` escrito a mano no tendría `auth.uid()`
       que juzgar. Ninguna clave se versiona. Con su [ADR-038](docs/adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md). **Queda por hacer la primera
       construcción de las dos imágenes** en una máquina con cuota de Docker Hub ([§9](#9-a-vigilar))
-<a id="sprint-7"></a>**[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
+
+<a id="sprint-6"></a>**[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
 
 - [ ] 🔒 [**6.1**](docs/08-plan-de-desarrollo.md#tarea-6-1) Utilidad causada, flujo de caja y caja libre · API
 - [ ] 🔒 [**6.2**](docs/08-plan-de-desarrollo.md#tarea-6-2) Pruebas con el ejemplo de septiembre completo · API
@@ -1011,7 +1012,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 
 ---
 
-## 6.<a id="sprint-9"></a> Sprint 9 · promoción, PWA y endurecimiento
+## 6. <a id="sprint-9"></a>[Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · promoción, PWA y endurecimiento
 
 **No se parte: lo hacen todos los carriles juntos**, porque consiste en integrar y probar lo de todos.
 
