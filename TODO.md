@@ -36,7 +36,7 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 |---|---:|---:|---:|---:|---:|
 | [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 19 | 0 | 0 | 0 |
 | [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
-| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · [Acceso, usuarios, cargos y canal firmado](TODO.md#sprint-2) | 22 | 22 | 0 | 0 | 0 |
+| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · [Acceso, usuarios, cargos y canal firmado](#sprint-2) | 22 | 22 | 0 | 0 | 0 |
 | [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
 | [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 4 | 0 | 7 | 9 |
 | [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 11 | 5 | 0 | 6 | 6,5 |
