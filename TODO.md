@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [8.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [8.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -77,6 +77,17 @@ documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad
 otra cosa.
 
 ### 1.3 🚧 En progreso
+
+**Los clientes ya existen en los tres sitios, y falta la pantalla que los enseñe (tarea [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2)).**
+La API sirve las tres operaciones —crear con el id de la ruta, anular con motivo y consultar los
+vigentes ordenados por nombre— sin estrenar ningún código, y los permisos son los de siempre:
+Operación los lee y los crea, porque sin cliente no hay pedido, y anular lo niega
+`clientes_actualizacion` y no un `if`. En el front están las tres llamadas y el panel «Clientes del
+taller», con sus once pruebas. **Lo que falta no es de esta tarea**: el panel vive dentro de
+Pedidos, que es la pantalla de la [4.3](docs/08-plan-de-desarrollo.md#tarea-4-3), así que todavía no se puede abrir y por eso la
+4.2 no se marca. Y **la pantalla está dibujada pero no aprobada**: el mockup ya trae el desplegable
+que reemplaza al texto libre, el alta en línea y el panel de Gerencia, y eso es lo que hay que
+mirar antes de seguir con la 4.3.
 
 **El hilo del libro está cerrado, y queda la pila local ([3.25](docs/08-plan-de-desarrollo.md#tarea-3-25)).** El libro lo sirve la API
 ([3.21](docs/08-plan-de-desarrollo.md#tarea-3-21)), lo pinta la pantalla ([3.8](docs/08-plan-de-desarrollo.md#tarea-3-8)), el botón de anular vive en la fila abierta ([3.9](docs/08-plan-de-desarrollo.md#tarea-3-9)),
@@ -1354,6 +1365,25 @@ a `anon`.
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**De la gestión de clientes (4.2):**
+
+- [ ] **La pantalla de clientes se dibujó sin estar aprobada, y hay que aprobarla.** La regla es que
+      nada se construye sin su pantalla aprobada, y la 4.2 no tenía ninguna: el [10](docs/10-ux-y-mockups.md) fija once
+      pantallas y ninguna es «Clientes». Se decidió que **no son una pantalla sino un panel de
+      Pedidos** —el menú lo dicta la API y ninguna de sus ocho claves se llama así— y se dibujó en
+      el mockup para poder aprobarla. El [10](docs/10-ux-y-mockups.md) sube a MAJOR porque **invierte** lo que había: el
+      cliente de «Nuevo pedido» era un campo de texto libre y ahora es un desplegable, que es lo que
+      el contrato prometía desde la [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10)
+- [ ] **El front no tiene cómo saber si esta sesión puede anular un cliente.** La navegación trae
+      tres banderas —usuarios, cuentas y vista previa— y ninguna para clientes, así que el panel
+      recibe `puedeAnular` de quien lo monta en vez de deducirlo. **Ninguna de las dos salidas malas
+      se tomó**: ni mirar el tipo de usuario en el front, que sería decidir, ni pintar siempre el
+      botón y dejar que falle. Si se quiere que la API lo diga, es una bandera más en `Navegacion` y
+      un cambio de contrato
+- [ ] **Un pedido de un cliente anulado se sigue pudiendo modificar**, y su cliente vuelve al
+      desplegable mientras esa ficha esté abierta, marcado como anulado. Ningún documento decía qué
+      pasa ahí; sin eso, guardar le cambiaba el cliente al pedido por su cuenta
 
 **Del arreglo de las etiquetas del esquema:**
 
