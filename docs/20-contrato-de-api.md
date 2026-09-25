@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-24 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-25 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
@@ -298,9 +298,10 @@ La decisión de que el front no contenga ninguna regla está en
 > lo pinta desde la [2.6](08-plan-de-desarrollo.md#tarea-2-6) y la API lo genera con la [2.1](08-plan-de-desarrollo.md#tarea-2-1). **Y el tipo `numero` entró con el contrato
 > `v0.12.0`** (tarea [5.10](08-plan-de-desarrollo.md#tarea-5-10)), porque los minutos de trabajo de un producto no son ninguno de los
 > seis anteriores y sin un tipo que los exprese el front no puede pintar el campo; con él, el
-> anticipo de un pedido deja de declararse `porcentaje`, que nunca existió. **La API y el front lo
-> construyeron con la tarea [7.3](08-plan-de-desarrollo.md#tarea-7-3)**, que lo estrena en las horas del formulario «prolabore»: una
-> cantidad con decimales, que se escribe con coma y viaja como número.
+> anticipo de un pedido deja de declararse `porcentaje`, que nunca existió. **La API lo genera
+> desde la tarea [5.2](08-plan-de-desarrollo.md#tarea-5-2)**, en los minutos del formulario «producto», **y el front lo pinta desde la
+> [7.3](08-plan-de-desarrollo.md#tarea-7-3)**, que lo estrena en las horas del formulario «prolabore»: una cantidad con decimales,
+> que se escribe con coma y viaja como número.
 
 ```http
 POST /api/v0/consultas/formularios HTTP/1.1

@@ -671,6 +671,38 @@ function marcasDeTareas(todo, tareas, hechas) {
     .join('\n');
 }
 
+// La sección de cada sprint en el tablero: el encabezado o la línea en negrita que empieza por
+// «Sprint N ·», la primera si hay dos. Su ancla `sprint-N` va ahí y en ningún otro sitio, porque
+// una repetida lleva a la primera, aunque sea la de otro sprint.
+function anclasDeSprints(todo) {
+  const lineas = todo.contenido.split('\n');
+  const enCodigo = md.lineasDeCodigo(lineas);
+  const generadas = md.lineasGeneradas(todo.contenido);
+  const sprintDeLinea = new Map();
+  const conSeccion = new Set();
+  lineas.forEach((l, i) => {
+    if (enCodigo[i] || generadas[i]) return;
+    const sinAnclas = l.replace(/<a id="[^"]*"><\/a>/g, '');
+    const encabezado = sinAnclas.match(/^#{2,6}\s+(.*)$/);
+    const titulo = encabezado ? encabezado[1] : /^\*\*.*\*\*\s*$/.test(sinAnclas) ? sinAnclas : null;
+    const m = titulo && md.textoDeEncabezado(titulo).match(/^(?:\d+(?:\.\d+)*\.?\s+)?Sprint (\d) ·/);
+    if (!m || conSeccion.has(Number(m[1]))) return;
+    conSeccion.add(Number(m[1]));
+    sprintDeLinea.set(i, Number(m[1]));
+  });
+  todo.contenido = lineas
+    .map((l, i) => {
+      if (enCodigo[i] || generadas[i]) return l;
+      const ancla = sprintDeLinea.has(i) ? `<a id="sprint-${sprintDeLinea.get(i)}"></a>` : null;
+      const limpia = l.replace(/<a id="sprint-\d"><\/a>/g, (a) => (a === ancla ? a : ''));
+      if (!ancla || limpia.includes(ancla)) return limpia;
+      if (/^#{2,6}\s/.test(limpia)) return limpia.replace(/^(#{2,6}\s+(?:\d+(?:\.\d+)*\.?\s+)?)/, `$1${ancla}`);
+      return ancla + limpia;
+    })
+    .join('\n');
+  return conSeccion;
+}
+
 function bloquesDelPlan(ctx, errores) {
   const plan08 = ctx.porRuta.get(cfg.DOC_PLAN);
   if (!plan08) return;
@@ -730,7 +762,16 @@ function bloquesDelPlan(ctx, errores) {
     });
   }
 
-  const enlaceSprint = (n) => `[Sprint ${n}](${ctx.url(todo, cfg.DOC_PLAN, `sprint-${n}`)})`;
+  // Cada sprint del tablero lleva a su sección del propio TODO.md; sin ella, al plan.
+  const conSeccion = anclasDeSprints(todo);
+  const sinSeccion = [...new Set(tareas.map((t) => t.sprintEfectivo))].filter((s) => !conSeccion.has(s)).sort((a, b) => a - b);
+  for (const s of sinSeccion) {
+    errores.push({
+      ruta: cfg.DOC_TAREAS,
+      texto: `no tiene sección para el Sprint ${s}: un encabezado o una línea en negrita que empiece por «Sprint ${s} ·»`,
+    });
+  }
+  const enlaceSprint = (n) => `[Sprint ${n}](${ctx.url(todo, conSeccion.has(n) ? cfg.DOC_TAREAS : cfg.DOC_PLAN, `sprint-${n}`)})`;
   ponerBloque(todo, 'plan-tablero', plan.bloqueTablero(tareas, hechas, enProgreso, titulos, enlaceSprint));
   ponerBloque(todo, 'plan-restante', plan.bloqueRestante(tareas, hechas));
   ponerBloque(todo, 'plan-listas-ya', plan.bloqueListasYa(tareas, hechas, enlaceEn(todo)));

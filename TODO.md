@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [8.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [8.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-25 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -34,16 +34,16 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 <!-- generado:plan-tablero · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Sprint | Tareas | ✅ Hechas | 🚧 En progreso | ⬜ Pendientes | Días que faltan |
 |---|---:|---:|---:|---:|---:|
-| [Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 19 | 0 | 0 | 0 |
-| [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
-| [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
-| [Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
-| [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos | 11 | 4 | 0 | 7 | 9 |
-| [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo | 11 | 5 | 0 | 6 | 6,5 |
-| [Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
-| [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio | 9 | 2 | 0 | 7 | 10,5 |
-| [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
-| [Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
+| [Sprint 0](#sprint-0) · Dos proyectos, cuatro ambientes, tubería y contrato de respuesta | 19 | 19 | 0 | 0 | 0 |
+| [Sprint 1](#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
+| [Sprint 2](#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
+| [Sprint 3](#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
+| [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 4 | 0 | 7 | 9 |
+| [Sprint 5](#sprint-5) · Productos y costeo | 11 | 5 | 0 | 6 | 6,5 |
+| [Sprint 6](#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
+| [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 2 | 0 | 7 | 10,5 |
+| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
+| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
 | **Total** | **153** | **102** | **0** | **51** | **66,5** |
 <!-- /generado:plan-tablero -->
 
@@ -62,7 +62,7 @@ Lo que tiene su commit en `develop` con la integración continua en verde, que e
 | **API y Front · el soporte del movimiento** | **La foto del recibo ya llega al bucket, y pasa por la API** ([3.6](docs/08-plan-de-desarrollo.md#tarea-3-6), [07 §1](docs/07-arquitectura.md)). En el celular se elige con la cámara y **se encoge en el navegador** —1600 px de lado mayor, JPEG— antes de salir, que es lo que se ahorra del plan de datos de quien registra. `POST /api/v0/movimientos/{id}/adjuntos` es **la primera ruta que recibe archivos**: el cuerpo es `multipart/form-data` de una sola parte y la API lo lee de los bytes que el canal firmado ya retuvo, porque `MultipartFile` habría llegado tarde. **El id del adjunto es la clave de idempotencia** ([04 §4.12](docs/04-modelo-de-datos.md#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido), [ADR-020](docs/adr/ADR-020-idempotencia.md)), así que dos intentos escriben el mismo objeto en vez de dejar copias sueltas. Sube como `authenticated`, con el token de la sesión y nunca con la clave de servicio ([ADR-033](docs/adr/ADR-033-service-role-solo-en-auth.md)), y **primero el objeto y después la ficha**, para que ninguna fila prometa un archivo que no está. Estrena los códigos `40020` y `40021`, y **el bucket los vuelve a imponer por su cuenta**: con Storage levantado en la pila local, un PDF de 6 MB y un GIF los para el servicio y no un `if` ([ADR-015](docs/adr/ADR-015-validacion-tres-capas.md)) | [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6) |
 | **API · los saldos** | **La caja ya dice cuánta plata hay en cada cuenta, y cuánta en total.** `POST /api/v0/consultas/saldos` suma en el dominio —el saldo inicial más el `aporteACaja` de cada movimiento vigente, sin un `if` por tipo— y deja `v_saldos_cuenta` de segunda opinión, como pide el [04 §6](docs/04-modelo-de-datos.md#6-vistas-de-cálculo-financiero): una prueba contra la base las enfrenta fila por fila. El total viaja sumado, porque el front no suma plata ([ADR-018](docs/adr/ADR-018-front-sin-decisiones.md)). **Solo Gerencia, y sin un `if` de tipos**: la tabla la leen los dos, así que el adaptador le pregunta a la base `fn_es_gerencia()` antes de leer los saldos, y a Operación le responde `40300`. La copia fijada del contrato pasa a `0.18.0` | [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12) |
 | **API · los pedidos** | **El pedido ya cobra su anticipo, y es un pasivo y no un ingreso** ([RN-05](docs/03-requisitos-y-bdd.md#rn-05)). `POST /api/v0/pedidos/{id}/anticipos` escribe dos filas en la misma transacción: el movimiento `anticipo_recibido`, que sube la caja de la cuenta sin tocar la utilidad, y el anticipo, que queda por devengar hasta la entrega. Cobran los dos tipos, y la respuesta es **el pedido entero** —el cliente, los renglones, lo anticipado, el saldo y si está estancado, con la regla del [RF-24](docs/03-requisitos-y-bdd.md#rf-24) ya en el dominio—. **Un rechazo no deja nada escrito**: el filtro de idempotencia confirma los `4xx`, así que todo se valida antes de la primera escritura. Y **dos cobros a la vez no se pasan juntos del valor del pedido**, porque la base no lo impide: el pedido se lee reservado con `FOR UPDATE`, y una prueba contra la base lo comprueba con otra transacción de por medio | [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) |
-| **API y Front · el capital** | **El trabajo de la gerencia ya tiene precio, y se define desde la aplicación.** `PUT /api/v0/prolabore/{id}` escribe una definición nueva del pro-labore —el valor mensual, las horas productivas y la justificación—, vigente desde el día en que se guarda en Bogotá, y `POST /api/v0/consultas/prolabore` devuelve la que rige con la tarifa por hora que de ella toman los costeos. **Nada se sobrescribe**: el historial queda entero, y no se pinta. Leer y definir son de Gerencia, y lo dice `prolabore_solo_gerencia`: a Operación la consulta le llega vacía y definir le responde `40300`, las dos cosas desde la base. Estrena el `42294` y, con él, el rango `90`–`99`. En el front se abre **«Inversiones y retiros»**, por ahora con un solo panel, y **el descriptor aprende el tipo `numero`**: las horas llevan decimales | [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) |
+| **API y Front · el capital** | **El trabajo de la gerencia ya tiene precio, y se define desde la aplicación.** `PUT /api/v0/prolabore/{id}` escribe una definición nueva del pro-labore —el valor mensual, las horas productivas y la justificación—, vigente desde el día en que se guarda en Bogotá, y `POST /api/v0/consultas/prolabore` devuelve la que rige con la tarifa por hora que de ella toman los costeos. **Nada se sobrescribe**: el historial queda entero, y no se pinta. Leer y definir son de Gerencia, y lo dice `prolabore_solo_gerencia`: a Operación la consulta le llega vacía y definir le responde `40300`, las dos cosas desde la base. Estrena el `42294` y, con él, el rango `90`–`99`. En el front se abre **«Inversiones y retiros»**, por ahora con un solo panel, y **el descriptor del front aprende el tipo `numero`**, que la API genera desde la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2): las horas llevan decimales | [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3) |
 | **API y Front · las personas** | **Quién entra al sistema, administrado desde el sistema**: crear con clave temporal, editar el nombre, el cargo y el tipo, desactivar con motivo escrito y restablecer la contraseña —que además corta las sesiones abiertas—. **Ni un permiso vive en la API**: crear lo autoriza `usuarios_insercion`, y al último usuario activo de Gerencia lo rechaza un trigger que estaba puesto desde el esquema inicial. La identidad se crea contra GoTrue con la clave de servicio, acotada a eso por el [ADR-033](docs/adr/ADR-033-service-role-solo-en-auth.md) y vigilada por una prueba que rompe la compilación si aparece en otro archivo. **Y desde la [2.16](docs/08-plan-de-desarrollo.md#tarea-2-16) esos cambios se leen y se deshacen**: los doce eventos con nombre, la bitácora redactada por la API —qué pasó, sobre quién, el «de → a» y qué pasaría al revertir— y la reversión, que escribe un cambio nuevo y deja la entrada original intacta. **Y con la [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) el cambio de clave obligatorio lo impone la API y no la pantalla**: quien no ha creado la suya alcanza seis rutas y en las otras 80 lee «Crea tu contraseña para continuar.» | [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) · [2.16](docs/08-plan-de-desarrollo.md#tarea-2-16) · [2.17](docs/08-plan-de-desarrollo.md#tarea-2-17) |
 | **Front** | El proyecto Flutter con su integración continua, la insignia de versión y ambiente, el bloqueo por MAJOR incompatible y `Dinero` en Dart | [0.3](docs/08-plan-de-desarrollo.md#tarea-0-3) · [0.12](docs/08-plan-de-desarrollo.md#tarea-0-12) · [0.13](docs/08-plan-de-desarrollo.md#tarea-0-13) · [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9) |
 | **Front · sistema de diseño** | La tabla, el panel de confirmación en línea, la píldora de estado y los formatos colombianos de fecha y porcentaje; el cliente HTTP con clave de idempotencia; y el panel «Acerca de» | [0.19](docs/08-plan-de-desarrollo.md#tarea-0-19) · [1.19](docs/08-plan-de-desarrollo.md#tarea-1-19) · [2.10](docs/08-plan-de-desarrollo.md#tarea-2-10) |
@@ -73,7 +73,7 @@ Lo que tiene su commit en `develop` con la integración continua en verde, que e
 | **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 25 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 64 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los quince triggers de auditoría escribiendo y las 34 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. La semilla es fija, re-ejecutable y con filas en toda tabla que preguntan las pruebas de permisos, y `sembrar.ps1` la lleva a dev y a qa sin dejarla acercarse a uat ni a prod. Y esto ya no es solo dev: **qa quedó al día con la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)**, con sus 109 comprobaciones en `OK` y `schema_version` en `0.3.0`. Y con la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) el esquema estrena la tabla `adjuntos` —la ficha del soporte, con su trigger y sus dos flechas excluyentes— y el **bucket privado `soportes`**, que impone el techo de 5 MB y los cuatro tipos de contenido **antes** de que los bytes se guarden: son 123 comprobaciones en `OK` contra la base local, y `0.4.0` **todavía sin promover a dev ni a qa**. Y con la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) el libro impone al fin **las tres reglas de la cuenta de destino** —un gasto ya no llega con destino, y una transferencia ya no va de una cuenta a sí misma, que además le **bajaba el saldo** a esa cuenta— y **la fecha se juzga con el día de Bogotá y no con el huso de la sesión**, que de siete a doce de la noche aceptaba el mañana que la API rechaza: 141 comprobaciones en `OK`, y la `0.6.0` esperando promoción como la `0.4.0`. Y con la [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) **`pedidos` tiene dónde guardar la cancelación**, que el contrato prometía desde el `0.10.0`: cuándo, quién, por qué y qué pasó con el anticipo, sin cancelación muda y sin reusar las columnas de la anulación —un pedido cancelado y después anulado perdería una de las dos historias—. 199 comprobaciones en `OK`, y la `0.11.0` tampoco está promovida. Y con la [3.18](docs/08-plan-de-desarrollo.md#tarea-3-18) **editar una fila ya no tumba la escritura en cinco de las quince tablas auditadas**: `fn_auditar` leía `anulado_en` también donde no existe, y el `UPDATE` se caía con `42703` dentro del trigger. 216 comprobaciones en `OK`, una edición por tabla auditada, y la `0.12.0` sin promover. Y con la [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19) **el libro tiene de dónde leer cómo se ve cada tipo**: `presentacion_tipos`, con las nueve lecturas que ya pintaba escritas por la migración, que leen los dos tipos y cambia solo Gerencia —la sesión de Operación no alcanza ninguna fila— y con el decimosexto trigger de auditoría. 235 comprobaciones en `OK`, y la `0.13.0` sin promover. Y con la [3.20](docs/08-plan-de-desarrollo.md#tarea-3-20) **anular ya no queda a medias**: `fn_anular_movimiento` anula el movimiento y lo que va con él —el anticipo de un pedido en proceso, el activo, el aporte, las dos mitades del retiro, que une la columna nueva `aportes_retiros.retiro_id`, o el adelanto sin descontar— con el mismo motivo, autor e instante, y rechaza entera la anulación de lo que ya siguió su vida. 259 comprobaciones, y la `0.14.0` sin promover. Y con la [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) **el cotizador tiene dónde guardar**: `cotizaciones` y `cotizacion_lineas`, que el contrato de la [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) prometía y la base no tenía, con la validez que no vence antes de emitirse, el pedido en que se convierte y la anulación con motivo. **Llevan RLS** porque anular es solo de Gerencia, y a Operación se lo niega la base con `42501`. 291 comprobaciones, y la `0.15.0` sin promover | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) · [2.4](docs/08-plan-de-desarrollo.md#tarea-2-4) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) · [3.18](docs/08-plan-de-desarrollo.md#tarea-3-18) · [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19) · [3.20](docs/08-plan-de-desarrollo.md#tarea-3-20) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway al final ([ADR-026](docs/adr/ADR-026-railway-al-final.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
-**1074 pruebas en verde en la API** —y 235 más contra la base local, que desde la [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) sí corre la tubería— y 461 en el front. El dominio se prueba con las cifras de los
+**1142 pruebas en verde en la API** —y 251 más contra la base local, que desde la [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) sí corre la tubería— y 461 en el front. El dominio se prueba con las cifras de los
 documentos [05](docs/05-reglas-financieras.md) y [06](docs/06-nomina-y-capacidad-de-pago.md): si una prueba falla, o se rompió el código o el documento dice
 otra cosa.
 
@@ -303,7 +303,7 @@ o indirectamente. No es el orden en que se descubrieron.
 
 ---
 
-## 2. Sprint 0 · proyectos, ambientes y contrato
+## 2. <a id="sprint-0"></a>[Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · proyectos, ambientes y contrato
 
 - [x] [**0.1**](docs/08-plan-de-desarrollo.md#tarea-0-1) Proyecto `prisma_api`: Java 25, Spring Boot 4 y Gradle, con el esqueleto hexagonal · API
 - [x] [**0.2**](docs/08-plan-de-desarrollo.md#tarea-0-2) Regla de frontera con ArchUnit en la integración continua · API
@@ -358,7 +358,7 @@ se cierra con la [0.9](docs/08-plan-de-desarrollo.md#tarea-0-9), que volvió a e
 
 ---
 
-## 3. Sprint 1 · base, RLS, identidad e idempotencia
+## 3. <a id="sprint-1"></a>[Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · base, RLS, identidad e idempotencia
 
 ✏️ quiere decir que el SQL ya está en la migración inicial de `prisma_db`
 (`20260915120000_esquema_inicial.sql`) pero nunca corrió contra una base: no cuenta como hecho
@@ -484,7 +484,7 @@ hasta aplicarlo y probarlo.
 
 ---
 
-## 4. Sprint 2 · acceso, usuarios, cargos y canal firmado
+## 4. <a id="sprint-2"></a>[Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · acceso, usuarios, cargos y canal firmado
 
 - [x] [**2.1**](docs/08-plan-de-desarrollo.md#tarea-2-1) Autenticación contra Supabase Auth desde la API, con el correo sintético en el
       servidor · API — `POST /api/v0/sesiones`, y con ella **la primera transacción con identidad
@@ -673,7 +673,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 ### Cadena A · el dinero
 
-**[Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos**
+<a id="sprint-3"></a>**[Sprint 3](docs/08-plan-de-desarrollo.md#sprint-3) · Movimientos**
 
 - [x] [**3.1**](docs/08-plan-de-desarrollo.md#tarea-3-1) Dominio `Movimiento`, tipos y su efecto sobre utilidad, caja y patrimonio · API —
       los nueve tipos con su efecto sobre las tres cifras, y `aporteAUtilidad`, `aporteACaja` y
@@ -869,7 +869,8 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       `auth`, GoTrue, Storage y `pg_cron`, y un `postgres:16` escrito a mano no tendría `auth.uid()`
       que juzgar. Ninguna clave se versiona. Con su [ADR-038](docs/adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md). **Queda por hacer la primera
       construcción de las dos imágenes** en una máquina con cuota de Docker Hub ([§9](#9-a-vigilar))
-**[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
+
+<a id="sprint-6"></a>**[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
 
 - [ ] 🔒 [**6.1**](docs/08-plan-de-desarrollo.md#tarea-6-1) Utilidad causada, flujo de caja y caja libre · API
 - [ ] 🔒 [**6.2**](docs/08-plan-de-desarrollo.md#tarea-6-2) Pruebas con el ejemplo de septiembre completo · API
@@ -885,18 +886,19 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       `60`–`69`, el último que quedaba vacío. **Cierra el carril Contrato**: los diez módulos del
       plan quedan acordados antes de implementarse
 
-**[Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio**
+<a id="sprint-7"></a>**[Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio**
 
 - [ ] ⚡ [**7.1**](docs/08-plan-de-desarrollo.md#tarea-7-1) Inversiones en activos · API, Front
 - [ ] ⚡ [**7.2**](docs/08-plan-de-desarrollo.md#tarea-7-2) Aportes de capital · API, Front
 - [x] [**7.3**](docs/08-plan-de-desarrollo.md#tarea-7-3) Pro-labore con justificación · API, Front — `PUT /api/v0/prolabore/{id}`
-      escribe una definición nueva, vigente desde el día de Bogotá, y `POST /api/v0/consultas/prolabore`
-      devuelve la que rige con su tarifa por hora: **nada se sobrescribe**. El «no» a Operación es de
-      la base, que le rechaza la escritura y no le devuelve la fila. La justificación la exige el
-      formulario aunque la columna la admita nula. Estrena el `42294` y el tipo de campo `numero`, y
-      en el front abre «Inversiones y retiros» con el panel del pro-labore. **La pantalla está
-      dibujada pero no aprobada** ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). `prisma_api` en `0.18.0` y `prisma_front` en `0.14.0+18`, con 30
-      pruebas nuevas en la API, 9 contra la base local y 14 en el front
+      escribe una definición nueva, vigente desde el día de Bogotá, y
+      `POST /api/v0/consultas/prolabore` devuelve la que rige con su tarifa por hora: **nada se
+      sobrescribe**. El «no» a Operación es de la base, que le rechaza la escritura y no le
+      devuelve la fila. La justificación la exige el formulario aunque la columna la admita
+      nula. Estrena el `42294` y, en el front, el tipo de campo `numero` y «Inversiones y
+      retiros», con el panel del pro-labore. **La pantalla la aprobó quien dirige** ([§10](#10-decisiones-de-construcción-que-conviene-revisar)).
+      `prisma_api` en `0.19.0` y `prisma_front` en `0.14.0+18`, con 35 pruebas nuevas en la API,
+      9 contra la base local y 14 en el front
 - [ ] ⚡ [**7.4**](docs/08-plan-de-desarrollo.md#tarea-7-4) Retiro con división automática en pro-labore y distribución · API
 - [ ] 🔒 [**7.5**](docs/08-plan-de-desarrollo.md#tarea-7-5) Cálculo de patrimonio · API
 - [ ] 🔒 [**7.6**](docs/08-plan-de-desarrollo.md#tarea-7-6) Alerta de descapitalización a 12 meses · API
@@ -910,12 +912,19 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 ### Cadena B · el pedido
 
-**[Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo**
+<a id="sprint-5"></a>**[Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo**
 
 - [x] [**5.1**](docs/08-plan-de-desarrollo.md#tarea-5-1) Dominio `Producto` y servicio `calcularMargenes` · API — los tres márgenes de
       [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes) reproducidos producto por producto, con el margen por hora vacío —no en cero—
       cuando el ítem no consume tiempo
-- [ ] ⚡ [**5.2**](docs/08-plan-de-desarrollo.md#tarea-5-2) Catálogo de productos y servicios · API, Front
+- [ ] ⚡ [**5.2**](docs/08-plan-de-desarrollo.md#tarea-5-2) Catálogo de productos y servicios · API, Front — **la mitad API está
+      hecha**: las seis rutas del contrato de la [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) —crear con su primer costeo, guardar,
+      desactivar y reactivar, el cuadro y la vista previa del formulario—, los códigos `40940` y
+      `42240` y el tipo `numero` del descriptor. La tarifa sale del pro-labore y se congela en el
+      costeo; con la semilla, el cuadro es el de [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes). A Operación le llega por nombre y sin
+      cifras porque la base no le devuelve el costeo ([BDD-02-2](docs/03-requisitos-y-bdd.md#bdd-02-2)). La API declara el esquema
+      `0.17.0`. **Falta la pantalla**, del carril Front, y la tarea se marca cuando aterricen las dos
+      mitades ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)). El precio sugerido es de la [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7)
 - [x] [**5.3**](docs/08-plan-de-desarrollo.md#tarea-5-3) Costeo unitario: insumo, consumibles y minutos de trabajo · API — las dos fórmulas
       de [05 §7.1](docs/05-reglas-financieras.md#71-costo-unitario): el costo partido en materia y tiempo, y la tarifa por hora que sale del
       pro-labore o del salario. Reproduce la tabla de [06 §4.1](docs/06-nomina-y-capacidad-de-pago.md#41-el-margen-de-contribución-correcto). Atar el costeo al historial de cada producto es
@@ -947,7 +956,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19) y con la 3.10 ya adentro. **Le deja dos filas a la API**, y **falta promoverla a
       dev y a qa**
 
-**[Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos**
+<a id="sprint-4"></a>**[Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4) · Pedidos y anticipos**
 
 - [x] [**4.1**](docs/08-plan-de-desarrollo.md#tarea-4-1) Dominio `Pedido`, estados y transiciones · API — los cinco estados y los siete pasos
       que existen entre ellos; entregado y cancelado son finales, y anular no es cancelar
@@ -978,7 +987,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       `cancelado_por` también la cuenta [C-01](docs/12-pruebas-y-calidad.md#c-01). Van en el PR que suba su `prisma.esquema`, y **falta
       promoverla a dev y a qa**
 
-**[Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Cotizador**
+<a id="sprint-8"></a>**[Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Cotizador**
 
 - [ ] 🔒 [**8.8**](docs/08-plan-de-desarrollo.md#tarea-8-8) Cotizaciones y remisiones en PDF con logo · API, Front
 - [ ] ⚡ [**8.9**](docs/08-plan-de-desarrollo.md#tarea-8-9) Validador de anticipo mínimo · API
@@ -1012,7 +1021,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 
 ---
 
-## 6. Sprint 9 · promoción, PWA y endurecimiento
+## 6. <a id="sprint-9"></a>[Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · promoción, PWA y endurecimiento
 
 **No se parte: lo hacen todos los carriles juntos**, porque consiste en integrar y probar lo de todos.
 
@@ -1224,7 +1233,7 @@ a `anon`.
   `UPDATE`** ([04 §7](docs/04-modelo-de-datos.md#7-seguridad-por-tipo-de-usuario-rls)): si alguna de ellas necesita editarla con la sesión y no desde una función
   `SECURITY DEFINER`, la base le va a responder cero filas y no un error
 
-- **Quedan 30 diferencias entre lo que sirve la API y lo acordado, y son del contrato.** El arreglo
+- **Quedan diferencias entre lo que sirve la API y lo acordado, y son del contrato.** El arreglo
   de la copia fijada cerró 31 de 61 —las cabeceras de firma, que faltaban en **todas** las
   operaciones con sesión; dos `operationId`; ocho descripciones; el `201` de crear usuario; las dos
   etiquetas; el `cuando` del `40101`— y dejó medidas las que no son del código: los `minLength` y
@@ -1233,16 +1242,19 @@ a `anon`.
   etiqueta de `cargos-asignables`, donde **el acordado es el que está mal** porque `cargos` la lee
   todo el mundo ([P-14](docs/12-pruebas-y-calidad.md#p-14)); y el `requestBody` de la navegación, que el acordado declara obligatorio y
   el código acepta ausente —cambiarlo es una decisión, porque el front vuelve a su vista pidiéndola
-  sin cuerpo—. Las del `DescriptorDeCampo` se cierran con los tipos que le faltan: `casilla` ya está, con la
-  [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) —lo estrena `esFijo` del formulario «categoria»—, y queda `numero`, de la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2). **Hasta que estén, la copia fijada no puede ser el acordado byte a
-  byte**, que es lo que haría exigible la promesa del [21 §3.1](docs/21-trabajo-en-paralelo.md#31-el-punto-débil-de-tener-repositorios-separados-y-cómo-se-tapa).
+  sin cuerpo—. **Las del `DescriptorDeCampo` ya se cerraron**: `casilla` llegó con la [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) y
+  `numero` con la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2), y el esquema es el acordado letra por letra. La 5.2 sumó una del contrato:
+  a la cabecera `Idempotency-Key` de `/consultas/productos` y `/consultas/costeo` el acordado le dejó
+  el texto de una escritura, como a la de `/consultas/movimientos`. **Mientras queden, la copia fijada
+  no es el acordado byte a byte**, que es lo que haría exigible la promesa del [21 §3.1](docs/21-trabajo-en-paralelo.md#31-el-punto-débil-de-tener-repositorios-separados-y-cómo-se-tapa).
 - **Las reglas del dominio todavía no tienen código del catálogo.** `Movimiento`, `Pedido` y
   `Costeo` rechazan lo que no se puede registrar con excepciones de Java, y hoy eso saldría como
   `50000`, «algo salió mal». Las de `Movimiento` y `Pedido` **ya tienen nombre y mensaje acordados**
   ([3.13](docs/08-plan-de-desarrollo.md#tarea-3-13), [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) y [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10)). **Las de `Movimiento` ya se emiten** desde la [3.4](docs/08-plan-de-desarrollo.md#tarea-3-4): la fecha futura y
-  las tres situaciones de la cuenta de destino tienen excepción de dominio y código propio. Las de
-  `Pedido` y `Costeo` esperan a la [4.3](docs/08-plan-de-desarrollo.md#tarea-4-3) y a la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2), y hasta entonces ninguno de esos mensajes es el
-  que verá el taller.
+  las tres situaciones de la cuenta de destino tienen excepción de dominio y código propio. **Las de
+  `Costeo` se emiten desde la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2)**: los minutos con más de dos decimales son el `42240`, la falta
+  de pro-labore el `40940`, y los negativos los ataja el formulario. Las de `Pedido` esperan a la
+  [4.3](docs/08-plan-de-desarrollo.md#tarea-4-3), y hasta entonces ninguno de esos mensajes es el que verá el taller.
 - **Las dos imágenes de la pila local no se han construido nunca.** La orquestación de la [3.25](docs/08-plan-de-desarrollo.md#tarea-3-25)
   resuelve cada ruta, cada puerto y cada variable, y apuntar una receta que no existe falla
   diciendo cuál; pero **construir la imagen de la API y la del front quedó sin ejercitar**, porque
@@ -1298,7 +1310,8 @@ a `anon`.
   $1.500.000 sobre 160 horas, que dan **$9.375**; el [05 §7.4](docs/05-reglas-financieras.md#74-el-indicador-que-concilia-los-dos-mundos) y el [06 §4.1](docs/06-nomina-y-capacidad-de-pago.md#41-el-margen-de-contribución-correcto) trabajan con **$9.400**, que
   es lo que la semilla escribe a mano en `costos_producto.tarifa_hora`. Mientras la tarifa fuera un
   número de ejemplo daba igual; desde el contrato de la [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) la calcula la API con esa división,
-  así que los costeos de la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) saldrían 25 pesos por hora por debajo de los del documento.
+  y **desde la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) ya sale así**: un costeo nuevo congela $9.375, 25 pesos por hora por debajo del
+  documento, y los cinco de la semilla conservan sus $9.400. El cuadro de [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes) da igual por eso.
 - **Anular desde el libro un movimiento que pertenece a otro registro lo deja cojo.** La anulación
   del contrato de la [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) sirve para cualquier movimiento, y varios no están solos: el de un
   anticipo tiene su fila en `anticipos`, el de una inversión en `activos`, el de un aporte o un retiro
@@ -1376,11 +1389,12 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 
 **Del pro-labore (7.3):**
 
-- [ ] **La pantalla del pro-labore se dibujó sin estar aprobada, y hay que aprobarla.** Como la de
-      clientes: nada se construye sin su pantalla aprobada, y el mockup pintaba «Inversiones y
-      retiros» solo para consultar. Se dibujó el panel «El pro-labore» —lo que rige, el vacío y el
-      formulario en línea— y se construyó a la vez, que es lo que quien dirige pidió para la
-      [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2). El [10](docs/10-ux-y-mockups.md) sube a MAJOR, porque el pro-labore cambió de sitio en el mapa
+- [x] **La pantalla del pro-labore la aprobó quien dirige el 2026-09-25**, en el PR de la tarea.
+      Se dibujó sin estar aprobada, como la de clientes: nada se construye sin su pantalla
+      aprobada, y el mockup pintaba «Inversiones y retiros» solo para consultar. Se dibujó el
+      panel «El pro-labore» —lo que rige, el vacío y el formulario en línea— y se construyó a la
+      vez, que es lo que quien dirige pidió para la [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2). El [10](docs/10-ux-y-mockups.md) sube a MAJOR, porque el
+      pro-labore cambió de sitio en el mapa
 - [ ] **El pro-labore vive en «Inversiones y retiros», y ya no en «Configuración».** El mapa del
       [10 §2](docs/10-ux-y-mockups.md#2-mapa-de-navegación) lo colgaba de una «Configuración» que no es ninguna de las once pantallas ni
       tiene clave en el menú, y el menú lo dicta la API: dársela es un cambio de contrato. Ponerlo
@@ -1390,16 +1404,46 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       «Inversiones y retiros» —la [7.4](docs/08-plan-de-desarrollo.md#tarea-7-4), la [7.5](docs/08-plan-de-desarrollo.md#tarea-7-5) y la [7.6](docs/08-plan-de-desarrollo.md#tarea-7-6) son solo API—, y sin cablear la clave
       `capital` al panel no llegaba nadie. Los activos, los aportes, el retiro partido y el
       patrimonio entran con sus tareas, cada uno debajo del anterior
-- [ ] **El tipo de campo `numero` ya existe en los dos lados, y no lo construyó el costeo.** El
-      contrato lo acordó en la [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) para los minutos, y nadie lo había construido; las horas del
+- [ ] **El tipo de campo `numero` lo estrenó en el front el pro-labore, y no el catálogo.** La API
+      lo genera desde la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2), para los minutos; en el front no existía, y las horas del
       pro-labore llevan decimales y no son plata, así que sin él el formulario no se podía pintar.
-      De paso, el esquema del descriptor en la API quedó igual al acordado: seis descripciones se
-      habían quedado atrás
+      La mitad Front de la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) ya lo encuentra hecho: acepta coma o punto, y viaja como número
 - [ ] **Unas horas por encima de 9.999,99 salen como `50000`.** No caben en `NUMERIC(6,2)` y el
       contrato no le puso máximo al formulario, así que la base las rechaza sin traducción. Se
       descartó reusar el `42294`, que habla de decimales, y se descartó inventar un tope de 744
       horas sin contrato. El arreglo es un `maximum` en `NuevoProlabore.horasMensuales`, y sube la
-      MINOR del contrato
+      MINOR del contrato. Es el mismo hueco que la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) dejó en los minutos
+
+**De la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2), el catálogo de productos, en su mitad API:**
+
+- [ ] ⚡ **La vista previa del formulario es de la 5.2, y el precio sugerido de la [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7).** El formulario
+      del mockup pinta el costo, los márgenes y la lectura mientras se escribe, y sin la consulta la
+      pantalla de la 5.2 no tendría de dónde sacarlos. `POST /api/v0/consultas/costeo` ya acepta y
+      valida `margenObjetivo`, y `precioSugerido`, que el contrato deja ausente, llega con la 5.7
+- [ ] **Editar un producto desactivado responde `40900`.** El contrato lo declara en la edición sin
+      decir cuándo, y el único estado con el que choca guardar el formulario es estar fuera del
+      catálogo: el panel del mockup solo ofrece reactivarlo. Se descartó editarlo en silencio, que
+      dejaría un código acordado sin emitir nunca
+- [ ] **Guardar agrega un costeo solo si cambió lo que el formulario trae de él**: el material, los
+      consumibles, los minutos o el precio. Un pro-labore nuevo no reescribe costos por su cuenta, y
+      corregir el nombre no congela otra tarifa. Si no hay costeo a la vista, cuenta como cambiado
+- [ ] **`incluirInactivos` lo juzga la base, y a Operación no le cambia nada.** El contrato lo hace de
+      solo Gerencia y no le da `40300` a la consulta, y `productos_lectura` le deja leer todo a
+      Operación. La consulta pide `activo OR (? AND fn_es_gerencia())`: la bandera pesa solo para
+      quien la política llama Gerencia, sin un `if` sobre el tipo
+- [ ] **A Operación, crear y la vista previa le responden `40300` desde `fn_es_gerencia()`.** La
+      tarifa sale de `prolabore_config`, que a Operación le responde vacío como si no hubiera
+      pro-labore; sin la pregunta, la respuesta sería `40940`. Desactivar y reactivar no necesitan
+      tarifa, y a ellos los detiene `productos_escritura`
+- [ ] **El catálogo lleva lo que no está en el cuadro, y donde va lo decide la API**: primero el cuadro
+      en el orden pedido, después lo que se vende sin costeo a la vista —todo, para Operación— y al
+      final lo desactivado, con sus márgenes y sin lectura. «Por nombre» es con el orden del español
+- [ ] **Los minutos de 10.000 o más no caben en `NUMERIC(6,2)` y salen como `50000`.** Ningún
+      documento les pone techo, y el descriptor no puede anunciarlo sin cambiar el contrato: **o el
+      contrato les da un máximo, o se acepta** que nadie tarda 166 horas en producir una unidad
+- [ ] **Las restricciones del cotizador van por su clase en la tabla de traducción**, como toda
+      restricción cuyo módulo no tiene API todavía: `no_vence_antes_de_emitirse` responde `42200` y
+      no el `42281` de su contrato, y `aceptada_no_se_anula` tampoco el `40980`. Los pone la [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8)
 
 **De la gestión de clientes (4.2):**
 
