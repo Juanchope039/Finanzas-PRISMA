@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-24 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-24 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -84,8 +84,9 @@ con la de la API?} -->|No| VI[Versión incompatible · no hay salida]
   N --> NS[Simulador de capacidad]
   N --> NL[Liquidación mensual]
 
+  I --> IP[Pro-labore]
+
   CF --> CS[Los 4 sobres]
-  CF --> CP[Pro-labore]
   CF --> CA[Auditoría]
   CF --> CE[Exportar respaldo]
 
@@ -382,6 +383,28 @@ costo ni margen.**
 
 Tres bloques: activos del negocio, aportes de capital, y retiros **separados en pro-labore y
 distribución**. Al pie, el patrimonio calculado y la alerta de descapitalización si aplica.
+
+#### El pro-labore se define aquí, y no en una pantalla «Configuración»
+
+El retiro se parte con el pro-labore vigente en su fecha, así que el pro-labore vive donde se parte
+el retiro. **No es una pantalla de configuración**: el menú lo dicta la API, sus claves no incluyen
+ninguna que se llame así, y una clave que el front no conoce no se pinta. Toda la pantalla es de
+Gerencia.
+
+- **El panel «El pro-labore» pinta lo que rige hoy**: el valor mensual, las horas productivas del
+  mes, la tarifa por hora que de ellos toman los costeos nuevos, desde cuándo rige y con qué se
+  justificó. La tarifa la calcula la API —el valor entre las horas, redondeado a peso
+  ([05 §7.1](05-reglas-financieras.md#71-costo-unitario))—, y con cero horas no hay tarifa: el panel dice que el trabajo no le pone precio a
+  ningún costeo.
+- **Sin pro-labore definido, el panel lo dice y explica lo que eso bloquea**: el costeo no le pone
+  precio al trabajo y el simulador de capacidad de pago no arranca ([RN-08](03-requisitos-y-bdd.md#rn-08)).
+- **«Definir pro-labore» abre el formulario en la misma pantalla**, con tres campos: el valor mensual,
+  las horas productivas y la justificación. El valor y la justificación son obligatorios; las horas
+  llevan dos decimales como máximo. La ayuda de la justificación es la pregunta del [05 §6.3](05-reglas-financieras.md#63-el-pro-labore--la-trampa-del-trabajo-invisible-rn-08): cuánto
+  habría que pagarle a alguien para que hiciera ese trabajo.
+- **Guardar no edita la definición anterior**: la nueva rige desde hoy y la anterior queda en el
+  historial, que no se pinta. Los costeos ya guardados conservan su tarifa, y un retiro se sigue
+  partiendo con el pro-labore de su fecha.
 
 ### 4.6 Reportes
 

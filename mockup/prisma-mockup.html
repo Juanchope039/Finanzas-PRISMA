@@ -1590,6 +1590,41 @@ tbody tr.fila-detalle:hover{background:none}
           <div class="panel"><div class="kpi"><span>Distribuciones retiradas</span><b style="color:var(--neg)">−$14.000.000</b></div></div>
         </div>
 
+        <!-- El pro-labore no es una pantalla: «Configuración» no tiene clave en el menú, que lo
+             dicta la API (RF-103). Vive aquí, donde el retiro se parte con él (05 §6.3), y la
+             pantalla entera es de Gerencia: a Operación la base no le devuelve la fila (P-21). -->
+        <div class="panel" id="panel-prolabore">
+          <div class="panel-head">
+            <h2 class="grow">El pro-labore</h2>
+            <span class="eyebrow">Tu trabajo en el taller · es gasto</span>
+            <button class="cta" id="btn-prolabore" aria-expanded="false" aria-controls="form-prolabore">Definir pro-labore</button>
+          </div>
+
+          <div class="formulario" id="form-prolabore" hidden>
+            <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px">
+              <h3 class="grow">Definir el pro-labore</h3>
+              <span class="eyebrow">Rige desde hoy</span>
+            </div>
+            <div class="campos-form">
+              <div class="campo"><label for="pl-valor">Valor mensual</label>
+                <input type="text" id="pl-valor" inputmode="numeric" placeholder="1.500.000"></div>
+              <div class="campo"><label for="pl-horas">Horas productivas del mes</label>
+                <input type="text" id="pl-horas" inputmode="decimal" placeholder="160"></div>
+              <div class="campo" style="grid-column:span 2"><label for="pl-justificacion">Justificación</label>
+                <input type="text" id="pl-justificacion" placeholder="¿Cuánto le pagarías a alguien por hacer tu trabajo en el taller?"></div>
+            </div>
+
+            <p class="capa-error" id="pl-error" role="alert" aria-live="polite" hidden style="margin-top:14px"></p>
+
+            <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; align-items:center">
+              <button class="cta" id="pl-guardar">Guardar pro-labore</button>
+              <button class="ghost" id="pl-cancelar">Cancelar</button>
+            </div>
+          </div>
+
+          <div id="prolabore-vigente"></div>
+        </div>
+
         <div class="grid g23">
           <div class="panel">
             <div class="panel-head"><h2 class="grow">Cómo se parte el retiro de septiembre</h2></div>
@@ -2438,6 +2473,8 @@ function aplicarRol(){
   libro.anulados = false;
   tablaProductos();
   tablaClientes();
+  cerrarFormProlabore();
+  pintarProlabore();
   tablaPedidos();
   kpisPedidos();
   pintarCuentas();
@@ -2966,6 +3003,119 @@ function pedirMotivoCliente(id, boton){
   });
   document.getElementById('cl-cancelar').addEventListener('click', cerrarFormCliente);
   document.getElementById('cl-guardar').addEventListener('click', guardarCliente);
+})();
+
+/* ---------- pro-labore (RF-47, CU-25, RN-08) ---------- */
+/* Lo que rige hoy. Definirlo escribe una fila nueva con su día (04 §4.6) y no edita la anterior:
+   el historial se guarda y no se pinta, porque el RF-51 pide conservarlo, no mostrarlo. */
+var PROLABORE = {valor:1500000, horas:160, desde:'2026-09-01',
+  justificacion:'Lo que cobraría una estampadora con experiencia por el trabajo que hago en el taller'};
+var HISTORIAL_PROLABORE = [];
+var avisoProlabore = null;
+
+/* La tarifa la calcula la API (05 §7.1): valor entre horas, redondeado a peso. Sin horas no hay. */
+function tarifaHora(p){ return p.horas > 0 ? Math.round(p.valor / p.horas) : null; }
+
+function horasTexto(h){ return String(h).replace('.', ','); }
+
+/* El día desde el que rige, como lo escribe el front: «1 sep 2026» (el formato de fmtFechaHora). */
+function fechaDeVigencia(iso){
+  var t = String(iso || '').split('-');
+  return (+t[2]) + ' ' + MESES_CORTOS[+t[1] - 1] + ' ' + t[0];
+}
+
+function pintarProlabore(){
+  var caja = document.getElementById('prolabore-vigente');
+  if (!caja) return;
+  var aviso = avisoProlabore;
+  avisoProlabore = null;
+  var html = aviso
+    ? '<div class="alerta a-' + aviso.tono + '" style="margin-bottom:14px"><span class="tag">AVISO</span>' +
+      '<div><b>' + enTexto(aviso.titulo) + '</b><span>' + enTexto(aviso.texto) + '</span></div></div>'
+    : '';
+  if (!PROLABORE){
+    caja.innerHTML = html + '<div class="alerta a-alta"><span class="tag">FALTA</span>' +
+      '<div><b>Todavía no has definido tu pro-labore</b><span>Sin él tu trabajo no tiene precio: el ' +
+      'costeo no puede calcular lo que cuesta producir y el simulador de capacidad de pago se ' +
+      'bloquea.</span></div></div>';
+    return;
+  }
+  var t = tarifaHora(PROLABORE);
+  caja.innerHTML = html + '<div class="calc">' +
+    '<div><span>Valor mensual</span><b id="pl-vigente-valor">' + fmt(PROLABORE.valor) + '</b></div>' +
+    '<div><span>Horas productivas del mes</span><b id="pl-vigente-horas">' + horasTexto(PROLABORE.horas) +
+    '</b></div>' +
+    '<div class="tot"><span>Tarifa por hora · la toman los costeos nuevos</span><b id="pl-tarifa">' +
+    (t === null ? '—' : fmt(t)) + '</b></div></div>' +
+    '<p style="font-size:.78rem; color:var(--muted); margin-top:10px">' +
+    (t === null ? 'Sin horas productivas, tu trabajo no le pone precio a ningún costeo. ' : '') +
+    'Rige desde el ' + fechaDeVigencia(PROLABORE.desde) +
+    (PROLABORE.justificacion ? ' · «' + enTexto(PROLABORE.justificacion) + '»' : '') + '</p>';
+}
+
+function abrirFormProlabore(){
+  var btn = document.getElementById('btn-prolabore');
+  ['pl-valor','pl-horas','pl-justificacion'].forEach(function(id){
+    document.getElementById(id).value = '';
+  });
+  avisoCampo('pl-error', '');
+  document.getElementById('form-prolabore').hidden = false;
+  btn.setAttribute('aria-expanded', 'true');
+  btn.textContent = 'Cerrar';
+  document.getElementById('form-prolabore').scrollIntoView({block:'nearest'});
+  document.getElementById('pl-valor').focus();
+}
+
+function cerrarFormProlabore(){
+  var btn = document.getElementById('btn-prolabore');
+  if (!btn) return;
+  document.getElementById('form-prolabore').hidden = true;
+  btn.setAttribute('aria-expanded', 'false');
+  btn.textContent = 'Definir pro-labore';
+  avisoCampo('pl-error', '');
+}
+
+function fallaProlabore(id, texto){
+  avisoCampo('pl-error', texto);
+  document.getElementById(id).focus();
+}
+
+/* Las reglas y los mensajes son los del formulario «prolabore» que manda la API: el valor es
+   obligatorio, las horas llevan dos decimales como máximo (42294) y la justificación no queda en
+   blanco, aunque la columna la admita nula. */
+function guardarProlabore(){
+  var textoValor = (document.getElementById('pl-valor').value || '').trim();
+  var textoHoras = (document.getElementById('pl-horas').value || '').trim().replace(',', '.');
+  var justificacion = (document.getElementById('pl-justificacion').value || '').trim();
+  if (!textoValor) return fallaProlabore('pl-valor', 'Escribe el valor mensual del pro-labore.');
+  if (textoHoras && !/^\d+(\.\d+)?$/.test(textoHoras)){
+    return fallaProlabore('pl-horas', 'Escribe las horas con números: 160 o 150,5.');
+  }
+  if (/\.\d{3,}$/.test(textoHoras)){
+    return fallaProlabore('pl-horas', 'Las horas se registran con dos decimales como máximo.');
+  }
+  if (!justificacion){
+    return fallaProlabore('pl-justificacion', 'Escribe la justificación: con qué comparaste ese valor.');
+  }
+  if (PROLABORE) HISTORIAL_PROLABORE.push(PROLABORE);
+  PROLABORE = {valor:soloDigitos(textoValor), horas:textoHoras ? +textoHoras : 0,
+    desde:'2026-09-30', justificacion:justificacion};
+  avisoProlabore = {tono:'info', titulo:'El pro-labore nuevo rige desde hoy',
+    texto:'Los costeos nuevos toman su tarifa por hora y los guardados conservan la suya. El ' +
+      'retiro de septiembre ya se partió con el anterior.'};
+  cerrarFormProlabore();
+  pintarProlabore();
+}
+
+(function initProlabore(){
+  var btn = document.getElementById('btn-prolabore');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    if (document.getElementById('form-prolabore').hidden) abrirFormProlabore();
+    else cerrarFormProlabore();
+  });
+  document.getElementById('pl-cancelar').addEventListener('click', cerrarFormProlabore);
+  document.getElementById('pl-guardar').addEventListener('click', guardarProlabore);
 })();
 
 function filaAcciones(p){
