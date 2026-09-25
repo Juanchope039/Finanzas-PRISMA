@@ -289,7 +289,7 @@ simulador, por tanto, entrega una cota **optimista**: si con estos números no a
 números completos tampoco.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [Contrato](../contrato/README.md "Contrato de la API · v0.18.0")
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [Contrato](../contrato/README.md "Contrato de la API · v0.20.0")
 <!-- /generado:referenciado-desde -->
 
 ---

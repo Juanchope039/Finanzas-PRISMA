@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.9.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-19 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-25 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
@@ -262,7 +262,7 @@ La API entrega, junto a cada formulario, el descriptor de sus campos:
 |---|---|
 | `campo` | El nombre con el que viaja el dato, y con el que vuelve un error de [§1.2](#12-los-errores-de-campo-van-dentro-de-data) |
 | `etiqueta` | Lo que se pinta encima de la caja |
-| `tipo` | Cómo se presenta y se formatea: `dinero`, `texto`, `fecha`, `lista`, `casilla`, `clave` |
+| `tipo` | Cómo se presenta y se formatea: `dinero`, `texto`, `fecha`, `lista`, `casilla`, `clave`, `numero` |
 | `obligatorio` | Si puede quedar vacío |
 | `minimo` · `maximo` | Los límites, como valores, no como condición programada |
 | `teclado` | Qué teclado abre el celular. Es presentación pura |
@@ -298,7 +298,10 @@ La decisión de que el front no contenga ninguna regla está en
 > lo pinta desde la [2.6](08-plan-de-desarrollo.md#tarea-2-6) y la API lo genera con la [2.1](08-plan-de-desarrollo.md#tarea-2-1). **Y el tipo `numero` entró con el contrato
 > `v0.12.0`** (tarea [5.10](08-plan-de-desarrollo.md#tarea-5-10)), porque los minutos de trabajo de un producto no son ninguno de los
 > seis anteriores y sin un tipo que los exprese el front no puede pintar el campo; con él, el
-> anticipo de un pedido deja de declararse `porcentaje`, que nunca existió.
+> anticipo de un pedido deja de declararse `porcentaje`, que nunca existió. **La API lo genera
+> desde la tarea [5.2](08-plan-de-desarrollo.md#tarea-5-2)**, en los minutos del formulario «producto», **y el front lo pinta desde la
+> [7.3](08-plan-de-desarrollo.md#tarea-7-3)**, que lo estrena en las horas del formulario «prolabore»: una cantidad con decimales,
+> que se escribe con coma y viaja como número.
 
 ```http
 POST /api/v0/consultas/formularios HTTP/1.1
@@ -820,7 +823,7 @@ firma se arma igual que en una escritura, con `sha256` del cuerpo vacío; y esta
 | Con qué configuración corre cada ambiente y cómo se publica | [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.18.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [AGENTS](../AGENTS.md "AGENTS.md") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.20.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

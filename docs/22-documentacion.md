@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/22-documentacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-21 | [Proceso](INDICE.md#etiqueta-proceso) |
+| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/22-documentacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se escribe, se versiona y se enlaza la documentación de PRISMA: la de este repositorio y los
 README, `CLAUDE.md` y `AGENTS.md` de los tres repositorios de código. La decisión y su porqué están en [ADR-027](adr/ADR-027-documentacion-versionada.md); aquí están las
@@ -190,6 +190,11 @@ Las otras dos marcas dicen **en qué va** una tarea, y eso no se deduce de ningu
 cuando alguien la está haciendo y ✏️ cuando está escrita pero sin verificar. Las pone quien trabaja
 la tarea, y la herramienta las respeta y las deja de primeras en la línea.
 
+**Cada sprint del tablero lleva a su sección del propio [`TODO.md`](../TODO.md)**, y esa sección enlaza la del
+plan. La sección es el encabezado o la línea en negrita que empieza por «Sprint N ·», y su ancla
+`sprint-N` la pone la herramienta ahí y en ningún otro sitio. Si un sprint no tiene sección, su
+enlace va al plan y la verificación falla.
+
 **El tablero y el plan tienen que tener las mismas tareas, y la verificación lo comprueba.** Si el
 plan gana una tarea que [`TODO.md`](../TODO.md) no enumera, o el tablero lista una que el plan no tiene, la
 construcción falla. Sin eso, una tarea nueva puede quedarse fuera del tablero para siempre: nadie la
@@ -252,7 +257,7 @@ repositorios, no se versiona y **ningún documento lo cita**, ni por ruta ni por
 que de un plan le importe a la documentación se escribe en el documento que afecta. Cuándo y cómo se
 escribe un plan lo dicen las reglas del proyecto, en [`CLAUDE.md`](../CLAUDE.md).
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-035](adr/ADR-035-repositorios-hermanos.md "ADR-035 · Los cuatro repositorios, hermanos en una carpeta de trabajo") · [AGENTS](../AGENTS.md "AGENTS.md") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
+**🔗 Referenciado desde:** [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-035](adr/ADR-035-repositorios-hermanos.md "ADR-035 · Los cuatro repositorios, hermanos en una carpeta de trabajo") · [ADR-039](adr/ADR-039-cada-regla-en-un-solo-sitio.md "ADR-039 · Cada regla vive en un solo sitio: CLAUDE.md, AGENTS.md o una skill") · [ADR-041](adr/ADR-041-cuatro-lineas-por-parrafo.md "ADR-041 · Un párrafo de código o de commit tiene cuatro líneas como máximo") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
 <!-- /generado:referenciado-desde -->
 
 ---

@@ -6,13 +6,12 @@ model: opus
 
 # Escribir el plan de trabajo
 
-La regla está en el `CLAUDE.md` de la especificación: antes de escribir código se escribe el plan.
-Aquí va el procedimiento.
+La regla está en el `CLAUDE.md` de la especificación (§2): antes de escribir código se escribe el
+plan. Aquí va el procedimiento.
 
 ## 1. Dónde va y qué número lleva
 
-1. **La carpeta es `plan/` de la carpeta de trabajo**, la que contiene `repositories/`. No va dentro
-   de ningún repositorio y no se versiona.
+1. **La carpeta es `plan/` de la carpeta de trabajo**, la que contiene `repositories/`.
 2. **El número es el mayor más uno, con dos dígitos**: `07`, `45`. Mira primero lo que hay con
    `ls plan/`. Comprueba que entre el 01 y el mayor no falte ninguno ni se repita. Si pasa, avisa
    antes de seguir: no se arregla renumerando.
@@ -41,15 +40,9 @@ Con la prueba en negativo: qué se va a romper a propósito para ver fallar cada
 
 - **Va en futuro.** El commit cuenta lo que pasó, el plan cuenta lo que se va a hacer, y cuál de los
   dos mintió se ve comparándolos.
-- **Sin encabezado de versión.** Un plan no es un documento versionado.
+- **Sin encabezado de versión.**
 - **Los enlaces a la especificación son relativos a `plan/`**, por ejemplo
   `../repositories/documentation/docs/05-reglas-financieras.md`.
 - **No lleva datos internos**, aunque no se publique: ni claves, ni referencias de proyectos, ni URL
   privadas.
-
-## 3. Después
-
-- **Un plan no se corrige.** Si resultó equivocado, se escribe el siguiente.
-- **Ningún documento de ningún repositorio lo cita**, ni por ruta ni por número. Lo que la
-  documentación necesite de un plan se escribe en el documento.
-- **El porqué largo que no cabe en el commit se queda aquí.**
+- **Aquí cabe el porqué largo** que no cabe en el commit.

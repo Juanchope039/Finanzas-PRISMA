@@ -685,6 +685,108 @@ tbody tr.sep-baja:hover,tbody tr.fila-confirma:hover{background:none}
 .bit-pie{display:flex; justify-content:center; margin-top:14px}
 tbody tr.bit-foco,tbody tr.bit-foco:hover{background:var(--accent-soft)}
 
+/* ============ LIBRO DE MOVIMIENTOS ============ */
+/* El mes se cambia con dos flechas pegadas al título: el negocio razona por meses, y el reporte
+   y el cierre también. En el celular cada flecha mide 44 px, lo mínimo para el pulgar (10 §3.3). */
+.libro-periodo{display:flex; align-items:center; gap:6px}
+.libro .flecha{min-width:34px; padding:4px 0; font-size:1rem; line-height:1.2}
+.libro .ghost:disabled{opacity:.4; cursor:default}
+.libro .ghost:disabled:hover{border-color:var(--line); color:var(--muted)}
+.libro-rango{display:flex; flex-wrap:wrap; align-items:flex-end; gap:10px; margin:-4px 0 14px}
+.libro-rango .campo{min-width:0; flex:0 1 170px}
+.libro-rango input{
+  font:inherit; font-size:.85rem; width:100%; min-width:0; color:var(--text);
+  background:var(--surface); border:1px solid var(--line); border-radius:7px; padding:6px 9px;
+}
+.libro-filtros{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:14px}
+.libro-filtros select{flex:0 1 200px; min-width:0}
+/* «Ver anulados» es un interruptor y no una opción más del filtro: cambia QUÉ libro se lee, no
+   cuánto de él. Encendido toma el ámbar de todo lo que dice «ojo con esto» (10 §5.7). */
+.interruptor{
+  display:inline-flex; align-items:center; gap:10px; margin-left:auto;
+  border:1px solid var(--line); background:var(--surface); padding:5px 10px; border-radius:8px;
+  font-size:.8rem; font-weight:600; color:var(--muted);
+}
+.interruptor .luz{
+  flex:none; width:30px; height:17px; border-radius:999px; position:relative;
+  border:1px solid var(--line-strong); background:var(--surface-2);
+  transition:background .15s, border-color .15s;
+}
+.interruptor .luz::after{
+  content:''; position:absolute; top:2px; left:2px; width:11px; height:11px; border-radius:50%;
+  background:var(--muted); transition:transform .15s, background .15s;
+}
+.interruptor[aria-checked="true"]{background:var(--warn-soft); border-color:var(--warn); color:var(--warn)}
+.interruptor[aria-checked="true"] .luz{background:var(--warn); border-color:var(--warn)}
+.interruptor[aria-checked="true"] .luz::after{background:var(--on-accent); transform:translateX(15px)}
+/* Con los anulados a la vista el panel cambia de aspecto: el 04 §5.5 pide que ese modo no se
+   confunda nunca con el libro de siempre. */
+.libro.modo-anulados{border-color:var(--warn); box-shadow:0 0 0 1px var(--warn)}
+.libro-aviso{
+  margin:0 0 12px; padding:9px 12px; border-radius:9px; font-size:.8rem;
+  background:var(--warn-soft); border:1px solid var(--warn); color:var(--warn);
+}
+/* El pie va después de la tabla: .tw no puede comerse el borde de abajo del panel. */
+.libro .tw{margin-bottom:0}
+.fila-mov{cursor:pointer}
+/* Una cifra no se parte: «−» en un renglón y «$2.300.000» en el otro se lee como dos cosas. Cuando
+   el motivo de un anulado ensancha el concepto, el que se acomoda es el concepto. */
+.fila-mov .valor{white-space:nowrap}
+tbody tr.fila-mov.abierta,tbody tr.fila-mov.abierta:hover{background:var(--accent-soft)}
+tbody tr.fila-detalle:hover{background:none}
+/* Lo anulado se lee, pero apagado y con el valor tachado: está en el libro y no suma. Se apaga
+   con el gris de lo secundario y no con transparencia, que dejaba el motivo por debajo del
+   contraste AA (10 §3.3). La marca «Anulado» conserva su color: es lo primero que hay que ver. */
+.fila-anulada td{color:var(--muted)}
+.fila-anulada .valor{text-decoration:line-through}
+.motivo-anulado{display:block; margin-top:3px; font-size:.74rem; color:var(--muted)}
+.marcas{white-space:nowrap}
+.marcas .pill + .pill{margin-left:4px}
+.libro-vacio{padding:26px 0; text-align:center; color:var(--faint); font-size:.85rem}
+/* Un rango que no se puede pedir no es un libro vacío: es un rechazo, y se lee en rojo, donde
+   iría la tabla, como el front pinta una lectura rechazada. */
+.libro-vacio.rechazo{color:var(--neg)}
+/* La fila abierta: quién y cuándo, el soporte y las acciones. En el celular la tabla es más ancha
+   que la pantalla, así que la caja se pega al borde visible, como el panel de confirmar. */
+.fila-detalle > td{padding:0 0 12px}
+.mov-det{
+  position:sticky; left:0; display:flex; flex-wrap:wrap; align-items:flex-start; gap:12px 22px;
+  padding:12px 14px; border-radius:9px; background:var(--surface-2); border:1px solid var(--line);
+}
+.mov-det-datos{display:flex; flex-direction:column; gap:3px; flex:1 1 230px; min-width:0; font-size:.8rem; color:var(--muted)}
+.mov-det-datos b{color:var(--text); font-weight:600}
+.mov-det-datos .anulada{color:var(--warn)}
+.mov-soporte{display:flex; flex-direction:column; align-items:flex-start; gap:6px}
+.mov-foto{border:0; background:none; padding:0; border-radius:6px; cursor:zoom-in}
+.mov-foto img{display:block; width:72px; height:auto; border-radius:6px; border:1px solid var(--line)}
+.mov-foto[aria-expanded="true"]{cursor:zoom-out}
+.mov-foto[aria-expanded="true"] img{width:240px; max-width:66vw}
+.mov-archivo{font-family:var(--mono); font-size:.68rem; color:var(--muted)}
+.mov-sin{font-size:.8rem; color:var(--faint)}
+.mov-det .botones{display:flex; gap:8px; flex-wrap:wrap; margin-left:auto; align-self:flex-end}
+.confirma p.hermano{color:var(--text); font-weight:600}
+.libro-pie{display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; margin-top:14px}
+.libro-pie .grow{flex:1}
+.libro-tamano,.libro-paginas{display:flex; align-items:center; gap:8px}
+.libro-cuantos{font-size:.76rem; color:var(--muted); min-width:96px; text-align:center}
+.tipos-mov{margin-top:18px; padding-top:16px; border-top:1px solid var(--line)}
+.tipos-mov h3{margin-bottom:6px}
+.tipos-mov .bajada{margin:0 0 12px}
+.tipo-campos{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:0 10px; max-width:640px}
+.tipo-campos .campo{max-width:none}
+.tipo-campos select{width:100%}
+.tipo-muestra{display:flex; align-items:center; gap:8px}
+@media (max-width:760px){
+  .libro .flecha{min-width:44px; min-height:44px}
+  .libro-filtros .seg{flex:1 1 100%}
+  .libro-filtros .seg button{flex:1}
+  /* Dos desplegables lado a lado no caben en 375 px: «Todas las categorías» salía cortado. */
+  .libro-filtros select{flex:1 1 100%}
+  .interruptor{margin-left:0}
+  .libro-rango .campo{flex:1 1 130px}
+  .tipo-campos{grid-template-columns:1fr}
+}
+
 @media (max-width:760px){
   .sesion-id small{display:none}
   .capa{padding:24px 14px}
@@ -1117,13 +1219,35 @@ tbody tr.bit-foco,tbody tr.bit-foco:hover{background:var(--accent-soft)}
             </div>
             <div class="campos-form">
               <div class="campo"><label for="n-cliente">Cliente</label>
-                <input type="text" id="n-cliente" placeholder="Nombre del cliente" value="Colegio Bilingüe del Valle"></div>
+                <select id="n-cliente"></select></div>
               <div class="campo"><label for="n-prod">Producto o servicio</label>
                 <select id="n-prod"></select></div>
               <div class="campo"><label for="n-cant">Cantidad</label>
                 <input type="number" id="n-cant" value="60" min="1" max="9999"></div>
               <div class="campo"><label for="n-fecha">Fecha de entrega</label>
                 <input type="date" id="n-fecha" value="2026-10-15"></div>
+            </div>
+
+            <!-- El alta en línea. En el taller el cliente entra por teléfono mientras se toma el
+                 pedido (CU-05): mandar a otra pantalla a media captura pierde el pedido a medio
+                 escribir. Solo el nombre es obligatorio; el correo llega después. -->
+            <div id="n-cliente-nuevo" hidden style="margin-top:14px; padding:13px 14px; border-radius:9px;
+                 background:var(--accent-soft); border:1px solid var(--accent)">
+              <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:12px">
+                <b class="grow" style="font-family:var(--display); font-size:.95rem; color:var(--accent)">Cliente nuevo</b>
+                <span class="eyebrow">Queda en el catálogo · solo el nombre es obligatorio</span>
+              </div>
+              <div class="campos-form">
+                <div class="campo"><label for="nc-nombre">Nombre</label>
+                  <input type="text" id="nc-nombre" placeholder="La persona, el colegio o la empresa"></div>
+                <div class="campo"><label for="nc-telefono">Teléfono</label>
+                  <input type="text" id="nc-telefono" inputmode="tel" placeholder="3155551020"></div>
+                <div class="campo"><label for="nc-correo">Correo</label>
+                  <input type="text" id="nc-correo" inputmode="email" placeholder="compras@ejemplo.co"></div>
+                <div class="campo"><label for="nc-notas">Notas</label>
+                  <input type="text" id="nc-notas" placeholder="Lo que haya que recordar"></div>
+              </div>
+              <p class="capa-error" id="nc-error" role="alert" aria-live="polite" hidden style="margin-top:12px"></p>
             </div>
 
             <div class="ctrl" style="margin:16px 0 0">
@@ -1156,6 +1280,46 @@ tbody tr.bit-foco,tbody tr.bit-foco:hover{background:var(--accent-soft)}
           <div class="tw"><table>
             <thead><tr><th>Pedido</th><th>Fecha</th><th>Cliente</th><th>Detalle</th><th class="r r-mid">Total</th><th class="r r-mid">Anticipo</th><th class="r r-mid">Saldo</th><th>Estado</th></tr></thead>
             <tbody id="tb-pedidos"></tbody>
+          </table></div>
+        </div>
+        <!-- Los clientes no son una pantalla: el menú lo dicta la API (RF-103) y sus ocho claves
+             no incluyen «clientes». Viven donde se usan, que es al tomar un pedido. Leerlos y
+             crearlos lo hacen los dos tipos de usuario —sin cliente no hay pedido, CU-05—; anular
+             es de Gerencia, y lo impone `clientes_actualizacion` en la base, no esta pantalla. -->
+        <div class="panel">
+          <div class="panel-head">
+            <h2 class="grow">Clientes del taller</h2>
+            <span class="eyebrow">Se eligen al tomar el pedido · nada se borra</span>
+            <button class="cta" id="btn-cliente" aria-expanded="false" aria-controls="form-cliente">+ Nuevo cliente</button>
+          </div>
+
+          <div class="formulario" id="form-cliente" hidden>
+            <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px">
+              <h3 class="grow">Nuevo cliente</h3>
+              <span class="eyebrow">Solo el nombre es obligatorio</span>
+            </div>
+            <div class="campos-form">
+              <div class="campo"><label for="cl-nombre">Nombre</label>
+                <input type="text" id="cl-nombre" placeholder="La persona, el colegio o la empresa"></div>
+              <div class="campo"><label for="cl-telefono">Teléfono</label>
+                <input type="text" id="cl-telefono" inputmode="tel" placeholder="3155551020"></div>
+              <div class="campo"><label for="cl-correo">Correo</label>
+                <input type="text" id="cl-correo" inputmode="email" placeholder="compras@ejemplo.co"></div>
+              <div class="campo"><label for="cl-notas">Notas</label>
+                <input type="text" id="cl-notas" placeholder="Lo que haya que recordar"></div>
+            </div>
+
+            <p class="capa-error" id="cl-error" role="alert" aria-live="polite" hidden style="margin-top:14px"></p>
+
+            <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; align-items:center">
+              <button class="cta" id="cl-guardar">Guardar cliente</button>
+              <button class="ghost" id="cl-cancelar">Cancelar</button>
+            </div>
+          </div>
+
+          <div class="tw"><table>
+            <thead><tr><th>Cliente</th><th>Contacto</th><th>Notas</th><th class="r r-mid">Pedidos</th><th>Acciones</th></tr></thead>
+            <tbody id="tb-clientes"></tbody>
           </table></div>
         </div>
         <div class="panel" data-ger id="panel-anulados" hidden>
@@ -1206,15 +1370,55 @@ tbody tr.bit-foco,tbody tr.bit-foco:hover{background:var(--accent-soft)}
           </div>
         </div>
 
-        <div class="panel">
+        <!-- El libro: la tabla con sus filtros (tarea 3.8) y la anulación (3.9). Lo que aquí
+             decide el prototipo lo manda la API en el sistema real: el nombre, el color y el
+             signo de cada tipo, en qué grupo cuenta, cuántos van por página como máximo y si
+             «Anular» y «Ver anulados» existen para quien mira (10 §4.3). -->
+        <div class="panel libro" id="panel-libro">
           <div class="panel-head">
-            <h2 class="grow">Septiembre 2026</h2>
-            <div class="seg"><button aria-pressed="true">Todos</button><button aria-pressed="false">Ingresos</button><button aria-pressed="false">Gastos</button></div>
+            <div class="libro-periodo">
+              <button type="button" class="ghost flecha" id="lb-antes" aria-label="Mes anterior">‹</button>
+              <h2 id="lb-titulo" aria-live="polite">Septiembre 2026</h2>
+              <button type="button" class="ghost flecha" id="lb-despues" aria-label="Mes siguiente">›</button>
+            </div>
+            <span class="grow"></span>
+            <button type="button" class="ghost" id="lb-otro-rango" aria-expanded="false"
+                    aria-controls="lb-rango">Otro rango</button>
           </div>
+          <div class="libro-rango" id="lb-rango" hidden>
+            <div class="campo"><label for="lb-desde">Desde</label><input type="date" id="lb-desde"></div>
+            <div class="campo"><label for="lb-hasta">Hasta</label><input type="date" id="lb-hasta"></div>
+            <button type="button" class="ghost" id="lb-volver">Volver al mes</button>
+          </div>
+          <div class="libro-filtros">
+            <div class="seg" id="lb-grupo" role="group" aria-label="Qué movimientos se ven">
+              <button type="button" aria-pressed="true" data-grupo="todos">Todos</button>
+              <button type="button" aria-pressed="false" data-grupo="ingresos">Ingresos</button>
+              <button type="button" aria-pressed="false" data-grupo="gastos">Gastos</button>
+            </div>
+            <select id="lb-categoria" aria-label="Categoría"></select>
+            <!-- Solo nombres, como el <select> del registro rápido: filtrar por cuenta no le
+                 muestra a Operación el saldo de ninguna. -->
+            <select id="lb-cuenta" aria-label="Cuenta"></select>
+            <button type="button" class="interruptor" id="lb-anulados" role="switch"
+                    aria-checked="false" data-ger>Ver anulados<span class="luz" aria-hidden="true"></span></button>
+          </div>
+          <p class="libro-aviso" id="lb-aviso-anulados" hidden>
+            <b>Estás viendo también los anulados</b> · no suman en ninguna cifra</p>
           <div class="tw"><table>
             <thead><tr><th>Fecha mov.</th><th>Concepto</th><th>Categoría</th><th>Cuenta</th><th class="r r-mid">Valor</th><th>Tipo</th><th></th></tr></thead>
             <tbody id="tb-movs"></tbody>
           </table></div>
+          <div class="libro-pie">
+            <div class="libro-tamano"><span class="eyebrow">Por página</span>
+              <div class="seg" id="lb-tamano" role="group" aria-label="Movimientos por página"></div></div>
+            <span class="grow"></span>
+            <div class="libro-paginas">
+              <button type="button" class="ghost" id="lb-anterior">‹ Anterior</button>
+              <span class="libro-cuantos mono" id="lb-cuantos" aria-live="polite"></span>
+              <button type="button" class="ghost" id="lb-siguiente">Siguiente ›</button>
+            </div>
+          </div>
         </div>
 
         <!-- Crear cuentas vivía en el Inicio y era su única acción de escritura. Se mudó aquí:
@@ -1256,15 +1460,20 @@ tbody tr.bit-foco,tbody tr.bit-foco:hover{background:var(--accent-soft)}
             Cada movimiento se registra contra una cuenta. Aquí se crean; los saldos se leen en
             el Inicio, que es la pantalla que solo informa.
           </p>
-        </div>
 
-        <div class="panel" data-ger>
-          <div class="panel-head"><h2 class="grow">Anulación</h2><span class="eyebrow">Solo gerencia</span></div>
-          <div class="alerta a-crit">
-            <span class="tag">REGLA</span>
-            <div><b>Anular exige un motivo escrito y nunca borra el registro</b>
-            <span>El movimiento queda marcado con quién lo anuló, cuándo, desde qué dispositivo y por qué.
-            Para corregir un valor equivocado se crea un contra-asiento: el original permanece intacto.</span></div>
+          <!-- Cómo se lee cada tipo en el libro. Gerencia cambia la palabra, el color y el grupo
+               del filtro; lo que el tipo le hace a las tres cifras es del 05 §2 y no se toca
+               aquí, pero se ve: las tres últimas columnas. Los colores son cuatro de los seis del
+               10 §3.1: el ámbar es de las advertencias y el índigo, de la marca y las acciones. -->
+          <div class="tipos-mov">
+            <h3>Cómo se ve cada tipo</h3>
+            <p class="bajada">Aquí cambia cómo se lee cada tipo en el libro, no cómo cuenta: lo que
+            cada uno le hace a la utilidad, a la caja y al patrimonio es fijo, y se ve en las tres
+            últimas columnas. «Cuenta en» dice si sale al filtrar por Ingresos o por Gastos.</p>
+            <div class="tw"><table>
+              <thead><tr><th>Tipo</th><th>Se lee como</th><th>Cuenta en</th><th>Utilidad</th><th>Caja</th><th>Patrimonio</th><th class="r"></th></tr></thead>
+              <tbody id="tb-tipos-mov"></tbody>
+            </table></div>
           </div>
         </div>
       </section>
@@ -1379,6 +1588,41 @@ tbody tr.bit-foco,tbody tr.bit-foco:hover{background:var(--accent-soft)}
           <div class="panel"><div class="kpi"><span>Aportes de capital</span><b>$3.000.000</b></div></div>
           <div class="panel"><div class="kpi"><span>Utilidades acumuladas</span><b class="up" style="color:var(--pos)">$18.000.000</b></div></div>
           <div class="panel"><div class="kpi"><span>Distribuciones retiradas</span><b style="color:var(--neg)">−$14.000.000</b></div></div>
+        </div>
+
+        <!-- El pro-labore no es una pantalla: «Configuración» no tiene clave en el menú, que lo
+             dicta la API (RF-103). Vive aquí, donde el retiro se parte con él (05 §6.3), y la
+             pantalla entera es de Gerencia: a Operación la base no le devuelve la fila (P-21). -->
+        <div class="panel" id="panel-prolabore">
+          <div class="panel-head">
+            <h2 class="grow">El pro-labore</h2>
+            <span class="eyebrow">Tu trabajo en el taller · es gasto</span>
+            <button class="cta" id="btn-prolabore" aria-expanded="false" aria-controls="form-prolabore">Definir pro-labore</button>
+          </div>
+
+          <div class="formulario" id="form-prolabore" hidden>
+            <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px">
+              <h3 class="grow">Definir el pro-labore</h3>
+              <span class="eyebrow">Rige desde hoy</span>
+            </div>
+            <div class="campos-form">
+              <div class="campo"><label for="pl-valor">Valor mensual</label>
+                <input type="text" id="pl-valor" inputmode="numeric" placeholder="1.500.000"></div>
+              <div class="campo"><label for="pl-horas">Horas productivas del mes</label>
+                <input type="text" id="pl-horas" inputmode="decimal" placeholder="160"></div>
+              <div class="campo" style="grid-column:span 2"><label for="pl-justificacion">Justificación</label>
+                <input type="text" id="pl-justificacion" placeholder="¿Cuánto le pagarías a alguien por hacer tu trabajo en el taller?"></div>
+            </div>
+
+            <p class="capa-error" id="pl-error" role="alert" aria-live="polite" hidden style="margin-top:14px"></p>
+
+            <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; align-items:center">
+              <button class="cta" id="pl-guardar">Guardar pro-labore</button>
+              <button class="ghost" id="pl-cancelar">Cancelar</button>
+            </div>
+          </div>
+
+          <div id="prolabore-vigente"></div>
         </div>
 
         <div class="grid g23">
@@ -1926,37 +2170,198 @@ function porId(id){
   return PRODUCTOS.filter(function(p){ return p.id === +id; })[0];
 }
 
+/* Los clientes del taller. Un pedido apunta a uno por id y no guarda su nombre: dos formas de
+   escribir «Colegio San Vicente» serían dos clientes sin historial común, que es justo lo que el
+   desplegable evita. `baja` guarda la anulación —cuándo, quién y por qué—: nada se borra (RN-13). */
+var CLIENTES = [
+  {id:'c1', nombre:'Eventos Marcela Ruiz',   telefono:'3155551020', correo:'marcela@eventosmr.co',
+   notas:'Pide factura a nombre de la empresa',        baja:null},
+  {id:'c2', nombre:'Gimnasio Pórtico',       telefono:'3004448812', correo:'admin@gimnasioportico.co',
+   notas:'',                                           baja:null},
+  {id:'c3', nombre:'Panadería La Espiga',    telefono:'3122237745', correo:'',
+   notas:'Recibe solo después de las 2 p. m.',          baja:null},
+  {id:'c4', nombre:'Colegio San Vicente',    telefono:'3187770101', correo:'compras@sanvicente.edu.co',
+   notas:'Orden de compra antes de empezar',            baja:null},
+  {id:'c5', nombre:'Ferretería El Tornillo', telefono:'3159993322', correo:'',
+   notas:'',                                           baja:null},
+  {id:'c6', nombre:'Distribuidora Andina',   telefono:'3201114466', correo:'cartera@andina.com.co',
+   notas:'Paga a 30 días',                              baja:null},
+  {id:'c7', nombre:'Colegio Santa Rita',     telefono:'3166668890', correo:'rectoria@santarita.edu.co',
+   notas:'',                                           baja:null},
+  {id:'c8', nombre:'Clínica Versalles',      telefono:'3013335577', correo:'compras@versalles.co',
+   notas:'Entregar en la portería',                     baja:null},
+  {id:'c9', nombre:'Almacenes Rueda',        telefono:'3144442200', correo:'',
+   notas:'Cerró el local',                              baja:{motivo:'Cerró el local y no volvió a pedir',
+   por:'Yuliana Martínez Ríos', en:'2026-08-30'}}
+];
+var consecutivoCliente = 9;
+
+function clientePorId(id){
+  return CLIENTES.filter(function(c){ return c.id === id; })[0];
+}
+/* Los anulados no salen del desplegable: no se le puede tomar un pedido nuevo a un cliente que
+   ya no está. Los pedidos que ya lo nombran lo siguen nombrando. */
+function clientesVigentes(){
+  return CLIENTES.filter(function(c){ return !c.baja; })
+    .sort(function(a, b){ return a.nombre.localeCompare(b.nombre, 'es'); });
+}
+function nombreDeCliente(p){
+  var c = clientePorId(p.clienteId);
+  return c ? c.nombre : 'Cliente sin nombre';
+}
+function pedidosDeCliente(id){
+  return PEDIDOS.filter(function(p){ return p.clienteId === id; }).length;
+}
+
 var PEDIDOS = [
-  {id:'P-0287', fecha:'2026-09-24', entrega:'2026-10-09', cliente:'Eventos Marcela Ruiz',
+  {id:'P-0287', fecha:'2026-09-24', entrega:'2026-10-09', clienteId:'c1',
    prodId:3, cant:60, anticipo: 540000, estado:'anticipo',  baja:null},
-  {id:'P-0286', fecha:'2026-09-22', entrega:'2026-10-06', cliente:'Gimnasio Pórtico',
+  {id:'P-0286', fecha:'2026-09-22', entrega:'2026-10-06', clienteId:'c2',
    prodId:1, cant:45, anticipo: 720000, estado:'anticipo',  baja:null},
-  {id:'P-0284', fecha:'2026-09-20', entrega:'2026-10-04', cliente:'Panadería La Espiga',
+  {id:'P-0284', fecha:'2026-09-20', entrega:'2026-10-04', clienteId:'c3',
    prodId:5, cant:24, anticipo: 264000, estado:'anticipo',  baja:null},
-  {id:'P-0271', fecha:'2026-08-26', entrega:'2026-08-28', cliente:'Colegio San Vicente',
+  {id:'P-0271', fecha:'2026-08-26', entrega:'2026-08-28', clienteId:'c4',
    prodId:1, cant:36, anticipo: 576000, estado:'estancado', baja:null},
-  {id:'P-0283', fecha:'2026-09-18', entrega:'2026-09-18', cliente:'Ferretería El Tornillo',
+  {id:'P-0283', fecha:'2026-09-18', entrega:'2026-09-18', clienteId:'c5',
    prodId:2, cant:60, anticipo:      0, estado:'entregado', baja:null},
-  {id:'P-0281', fecha:'2026-09-15', entrega:'2026-09-15', cliente:'Distribuidora Andina',
+  {id:'P-0281', fecha:'2026-09-15', entrega:'2026-09-15', clienteId:'c6',
    prodId:4, cant:28, anticipo:      0, estado:'entregado', baja:null},
-  {id:'P-0279', fecha:'2026-09-11', entrega:'2026-09-11', cliente:'Colegio Santa Rita',
+  {id:'P-0279', fecha:'2026-09-11', entrega:'2026-09-11', clienteId:'c7',
    prodId:3, cant:120, anticipo:     0, estado:'entregado', baja:null},
-  {id:'P-0276', fecha:'2026-09-05', entrega:'2026-09-05', cliente:'Clínica Versalles',
+  {id:'P-0276', fecha:'2026-09-05', entrega:'2026-09-05', clienteId:'c8',
    prodId:1, cant:35, anticipo:      0, estado:'entregado', baja:null}
 ];
 
+/* La foto del recibo de ejemplo. Es un dibujo y no una foto: el mockup es un solo archivo, sin
+   nada de fuera, y un recibo inventado no le enseña a nadie los datos de nadie. */
+function reciboSvg(comercio, documento, total){
+  var borde = 'M12 6H108V150';
+  for (var i = 1; i <= 16; i += 1) borde += 'L' + (108 - 6 * i) + ' ' + (i % 2 ? 156 : 150);
+  var renglones = '';
+  [[46, 46, 22], [55, 38, 18], [64, 52, 24], [73, 30, 16], [82, 42, 20]].forEach(function(r){
+    renglones += "<rect x='20' y='" + r[0] + "' width='" + r[1] + "' height='4' rx='1' fill='#CFC9BC'/>" +
+      "<rect x='" + (100 - r[2]) + "' y='" + r[0] + "' width='" + r[2] + "' height='4' rx='1' fill='#CFC9BC'/>";
+  });
+  var letra = "font-family='monospace' fill='#2B2A33'";
+  var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 168'>" +
+    "<rect width='120' height='168' fill='#D8D2C4'/>" +
+    "<path d='" + borde + "Z' fill='#FDFCF7'/>" +
+    "<text x='60' y='22' text-anchor='middle' font-size='7.5' font-weight='700' " + letra + ">" + comercio + "</text>" +
+    "<text x='60' y='31' text-anchor='middle' font-size='5' " + letra + ">" + documento + "</text>" +
+    "<line x1='18' y1='38' x2='102' y2='38' stroke='#B9B2A4' stroke-dasharray='2 2'/>" + renglones +
+    "<line x1='18' y1='104' x2='102' y2='104' stroke='#B9B2A4' stroke-dasharray='2 2'/>" +
+    "<text x='20' y='118' font-size='7' font-weight='700' " + letra + ">TOTAL</text>" +
+    "<text x='100' y='118' text-anchor='end' font-size='7' font-weight='700' " + letra + ">" + total + "</text>" +
+    "<rect x='34' y='130' width='52' height='5' rx='1' fill='#CFC9BC'/></svg>";
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+/* El libro guarda objetos y no arreglos: el mes, la fila abierta y los anulados piden campos que
+   un arreglo de siete posiciones no tenía. Son los del Movimiento del contrato: la fecha en que
+   ocurrió, cuándo se digitó y quién, las dos cuentas, el soporte y la anulación. El valor va
+   siempre positivo (RN-02); el signo lo pone el tipo al pintarlo. «hermano» es el registro que se
+   anula junto con el movimiento, y su aviso lo redacta la API. */
+var YULIANA = 'Yuliana Martínez Ríos', MARCELA = 'Marcela Ospina Vélez';
 var MOVS = [
-  ['28 sep','Saldo pedido P-0279','Estampado','Bancolombia', 1080000,'ingreso',''],
-  ['26 sep','Anticipo pedido P-0287','Anticipo','Nequi',      516000,'anticipo',''],
-  ['24 sep','Transferencias DTF · 50 m','Insumos','Nequi',    -840000,'gasto',''],
-  ['22 sep','Anticipo pedido P-0286','Anticipo','Nequi',      720000,'anticipo',''],
-  ['18 sep','Arriendo del taller','Arriendo · fijo','Bancolombia',-800000,'gasto',''],
-  ['14 sep','Compra de 120 mugs','Insumos','Efectivo',        -504000,'gasto','tardio'],
-  ['12 sep','Adelanto a Ana María','Adelanto','Nequi',        -300000,'neutro',''],
-  ['10 sep','Servicios públicos','Servicios · fijo','Daviplata',-180000,'gasto',''],
-  ['05 sep','Retiro · pro-labore','Pro-labore','Bancolombia',-1500000,'gasto',''],
-  ['05 sep','Retiro · distribución','Distribución','Bancolombia',-400000,'neutro','']
+  {id:1,  fecha:'2026-09-28', tipo:'ingreso', concepto:'Saldo pedido P-0279', categoria:'Estampado',
+   cuenta:'Bancolombia', valor:1080000, por:YULIANA, en:new Date(2026, 8, 28, 16, 5)},
+  {id:2,  fecha:'2026-09-26', tipo:'anticipo_recibido', concepto:'Anticipo pedido P-0287', categoria:null,
+   cuenta:'Nequi', valor:540000, por:MARCELA, en:new Date(2026, 8, 26, 11, 20),
+   hermano:{corto:'Anticipo del pedido P-0287',
+            aviso:'Es el anticipo del pedido P-0287: el pedido también deja de contarlo.'}},
+  {id:3,  fecha:'2026-09-24', tipo:'gasto', concepto:'Transferencias DTF · 50 m', categoria:'Insumos',
+   cuenta:'Nequi', valor:840000, por:YULIANA, en:new Date(2026, 8, 24, 9, 45),
+   soporte:{tipo:'pdf', nombre:'factura-dtf-0918.pdf', peso:'1,2 MB'}},
+  {id:4,  fecha:'2026-09-22', tipo:'anticipo_recibido', concepto:'Anticipo pedido P-0286', categoria:null,
+   cuenta:'Nequi', valor:720000, por:MARCELA, en:new Date(2026, 8, 22, 15, 10),
+   hermano:{corto:'Anticipo del pedido P-0286',
+            aviso:'Es el anticipo del pedido P-0286: el pedido también deja de contarlo.'}},
+  {id:5,  fecha:'2026-09-20', tipo:'transferencia', concepto:'Traslado entre cuentas', categoria:null,
+   cuenta:'Nequi', destino:'Bancolombia', valor:1000000, por:YULIANA, en:new Date(2026, 8, 20, 18, 30)},
+  {id:6,  fecha:'2026-09-18', tipo:'gasto', concepto:'Arriendo del taller', categoria:'Arriendo · fijo',
+   cuenta:'Bancolombia', valor:800000, por:YULIANA, en:new Date(2026, 8, 18, 10, 2),
+   soporte:{tipo:'foto', nombre:'recibo-arriendo.jpg', peso:'412 KB',
+            src:reciboSvg('ARRENDAMIENTOS', 'RECIBO DE CAJA 0412', '$800.000')}},
+  {id:7,  fecha:'2026-09-16', tipo:'ingreso', concepto:'Venta de mostrador', categoria:'Estampado',
+   cuenta:'Efectivo', valor:185000, por:MARCELA, en:new Date(2026, 8, 16, 17, 40)},
+  {id:8,  fecha:'2026-09-15', tipo:'gasto', concepto:'Compra de insumos', categoria:'Insumos',
+   cuenta:'Nequi', valor:504000, por:MARCELA, en:new Date(2026, 8, 15, 12, 5),
+   anulacion:{motivo:'Se registró dos veces: es la compra de mugs del 14', por:YULIANA,
+              en:new Date(2026, 8, 16, 8, 40)}},
+  {id:9,  fecha:'2026-09-14', tipo:'gasto', concepto:'Compra de 120 mugs', categoria:'Insumos',
+   cuenta:'Efectivo', valor:504000, por:MARCELA, en:new Date(2026, 8, 22, 10, 5), tardio:true,
+   soporte:{tipo:'foto', nombre:'factura-mugs.jpg', peso:'538 KB',
+            src:reciboSvg('CERÁMICAS DEL VALLE', 'FACTURA FV-2231', '$504.000')}},
+  {id:10, fecha:'2026-09-12', tipo:'adelanto_empleada', concepto:'Adelanto a Ana María', categoria:null,
+   cuenta:'Nequi', valor:300000, por:YULIANA, en:new Date(2026, 8, 12, 9, 15),
+   hermano:{corto:'Adelanto de nómina de Ana María',
+            aviso:'Es el adelanto a Ana María: también se anula, y ya no se le descuenta en la nómina.'}},
+  {id:11, fecha:'2026-09-10', tipo:'gasto', concepto:'Servicios públicos', categoria:'Servicios · fijo',
+   cuenta:'Daviplata', valor:180000, por:YULIANA, en:new Date(2026, 8, 10, 14, 0)},
+  {id:12, fecha:'2026-09-08', tipo:'inversion', concepto:'Prensa térmica 40 × 50', categoria:null,
+   cuenta:'Bancolombia', valor:2300000, por:YULIANA, en:new Date(2026, 8, 8, 11, 30),
+   hermano:{corto:'Compra del activo «Prensa térmica 40 × 50»',
+            aviso:'Es la compra de la prensa térmica: el activo también se anula y sale de Inversiones.'}},
+  {id:13, fecha:'2026-09-07', tipo:'gasto', concepto:'Domicilio a Clínica Versalles', categoria:'Transporte',
+   cuenta:'Efectivo', valor:35000, por:MARCELA, en:new Date(2026, 8, 7, 16, 20),
+   anulacion:{motivo:'El domicilio lo pagó el cliente', por:YULIANA, en:new Date(2026, 8, 8, 9, 5)}},
+  {id:14, fecha:'2026-09-05', tipo:'retiro_prolabore', concepto:'Retiro · pro-labore', categoria:null,
+   cuenta:'Bancolombia', valor:1500000, por:YULIANA, en:new Date(2026, 8, 5, 8, 50),
+   hermano:{corto:'Parte de un retiro',
+            aviso:'Es un retiro: su registro en Inversiones y retiros también se anula.'}},
+  {id:15, fecha:'2026-09-05', tipo:'retiro_distribucion', concepto:'Retiro · distribución', categoria:null,
+   cuenta:'Bancolombia', valor:400000, por:YULIANA, en:new Date(2026, 8, 5, 8, 50),
+   hermano:{corto:'Parte de un retiro',
+            aviso:'Es un retiro: su registro en Inversiones y retiros también se anula.'}},
+  {id:16, fecha:'2026-09-03', tipo:'aporte', concepto:'Aporte de Yuliana', categoria:null,
+   cuenta:'Bancolombia', valor:1000000, por:YULIANA, en:new Date(2026, 8, 3, 10, 0),
+   hermano:{corto:'Aporte de capital',
+            aviso:'Es un aporte de capital: también se anula en Inversiones y retiros.'}},
+  {id:17, fecha:'2026-08-28', tipo:'ingreso', concepto:'Saldo pedido P-0268', categoria:'Estampado',
+   cuenta:'Bancolombia', valor:1250000, por:YULIANA, en:new Date(2026, 7, 28, 15, 0)},
+  {id:18, fecha:'2026-08-25', tipo:'gasto', concepto:'Tintas de sublimación', categoria:'Insumos',
+   cuenta:'Nequi', valor:260000, por:MARCELA, en:new Date(2026, 7, 25, 10, 30)},
+  {id:19, fecha:'2026-08-18', tipo:'gasto', concepto:'Arriendo del taller', categoria:'Arriendo · fijo',
+   cuenta:'Bancolombia', valor:800000, por:YULIANA, en:new Date(2026, 7, 18, 9, 40)},
+  {id:20, fecha:'2026-08-10', tipo:'gasto', concepto:'Servicios públicos', categoria:'Servicios · fijo',
+   cuenta:'Daviplata', valor:175000, por:YULIANA, en:new Date(2026, 7, 10, 14, 10)},
+  {id:21, fecha:'2026-08-05', tipo:'retiro_prolabore', concepto:'Retiro · pro-labore', categoria:null,
+   cuenta:'Bancolombia', valor:1500000, por:YULIANA, en:new Date(2026, 7, 5, 8, 30),
+   hermano:{corto:'Parte de un retiro',
+            aviso:'Es un retiro: su registro en Inversiones y retiros también se anula.'}}
 ];
+
+/* Cómo se ve cada tipo en el libro. Lo configura Gerencia en «Cuentas de dinero»: el nombre que
+   se lee, el color de la píldora y en qué grupo del filtro cuenta. «utilidad», «caja» y
+   «patrimonio» NO se configuran: son lo que el tipo le hace a cada cifra según el 04 §4.3 y el
+   05 §2 —1 sube, −1 baja, 0 no la toca; en la caja, el 0 de la transferencia es que la plata solo
+   cambia de bolsillo—. De la caja sale el signo del valor, y las tres se ven en la tabla de
+   configuración, para que quede a la vista lo que no cambia. Los valores de arranque son los que
+   el libro ya pintaba. El orden es el del ENUM del contrato. */
+var TIPOS_MOV = {
+  ingreso            :{nombre:'Ingreso',                     lee:'Ingreso',            tono:'verde',  grupo:'ingresos', utilidad: 1, caja: 1, patrimonio: 1},
+  gasto              :{nombre:'Gasto',                       lee:'Gasto',              tono:'rojo',   grupo:'gastos',   utilidad:-1, caja:-1, patrimonio:-1},
+  transferencia      :{nombre:'Transferencia entre cuentas', lee:'Transferencia',      tono:'gris',   grupo:'ninguno',  utilidad: 0, caja: 0, patrimonio: 0},
+  inversion          :{nombre:'Inversión en un activo',      lee:'Inversión',          tono:'gris',   grupo:'ninguno',  utilidad: 0, caja:-1, patrimonio: 0},
+  aporte             :{nombre:'Aporte de capital',           lee:'Aporte de capital',  tono:'gris',   grupo:'ninguno',  utilidad: 0, caja: 1, patrimonio: 1},
+  retiro_prolabore   :{nombre:'Retiro · pro-labore',         lee:'Gasto',              tono:'rojo',   grupo:'gastos',   utilidad:-1, caja:-1, patrimonio:-1},
+  retiro_distribucion:{nombre:'Retiro · distribución',       lee:'No afecta utilidad', tono:'gris',   grupo:'ninguno',  utilidad: 0, caja:-1, patrimonio:-1},
+  anticipo_recibido  :{nombre:'Anticipo recibido',           lee:'Anticipo · pasivo',  tono:'morado', grupo:'ninguno',  utilidad: 0, caja: 1, patrimonio: 0},
+  adelanto_empleada  :{nombre:'Adelanto a la empleada',      lee:'No afecta utilidad', tono:'gris',   grupo:'ninguno',  utilidad: 0, caja:-1, patrimonio: 0}
+};
+
+/* Los cuatro colores que el 10 §3.1 deja para un tipo, cada uno con lo que significa. Gerencia
+   elige entre estos y no entre cualquiera: el color dice algo en todo el sistema y tiene que
+   leerse en los dos temas. No están los otros dos: el ámbar es de las advertencias —«Registro
+   tardío» y «Anulado» ya son ámbar— y el índigo, de la marca y las acciones. Un tipo de esos
+   colores se leería como un aviso o como un botón. */
+var TONOS = {
+  verde : {nombre:'Verde · positivo',    pill:'p-ok',   color:'var(--pos)'},
+  rojo  : {nombre:'Rojo · negativo',     pill:'p-neg',  color:'var(--neg)'},
+  gris  : {nombre:'Gris · neutro',       pill:'p-mut',  color:'var(--muted)'},
+  morado: {nombre:'Morado · anticipo',   pill:'p-ant',  color:'var(--anticipo)'}
+};
+var GRUPOS_MOV = {ingresos:'Ingresos', gastos:'Gastos', ninguno:'Ninguno'};
 
 var REPORTE = [
   ['Enero',    5200000, 2860000, 1700000,  640000],
@@ -2062,10 +2467,19 @@ function aplicarRol(){
   var bl = $('#nomina-bloqueo'), co = $('#nomina-contenido');
   if (bl && co){ bl.hidden = (rol === 'gerencia'); co.hidden = (rol !== 'gerencia'); }
   pedidoSeleccionado = null;   /* la selección no sobrevive a un cambio de rol */
+  /* Tampoco la fila abierta del libro, ni los anulados a la vista: nadie los hereda de otra sesión
+     ni de la vista previa. */
+  libro.abierto  = null;
+  libro.anulados = false;
   tablaProductos();
+  tablaClientes();
+  cerrarFormProlabore();
+  pintarProlabore();
   tablaPedidos();
   kpisPedidos();
   pintarCuentas();
+  tablaMovs();
+  tablaTiposMov();
   cerrarDescarga();   /* el barrido de data-ger abriría el panel de descarga: se cierra aquí */
   ir(activa);
   pintarMenuSesion();
@@ -2380,7 +2794,7 @@ function tablaPedidos(){
       (ger ? ' tabindex="0" role="button" aria-expanded="' + (sel ? 'true' : 'false') +
              '" style="cursor:pointer' + (sel ? '; background:var(--accent-soft)' : '') + '"' : '') +
       '><td class="mono">' + p.id + '</td><td class="mono">' + fechaCorta(p.fecha) +
-      '</td><td>' + enTexto(p.cliente) + '</td><td style="color:var(--muted)">' + enTexto(detallePedido(p)) +
+      '</td><td>' + enTexto(nombreDeCliente(p)) + '</td><td style="color:var(--muted)">' + enTexto(detallePedido(p)) +
       '</td><td class="r r-mid">' + fmt(total) +
       '</td><td class="r r-mid" style="color:' + (p.anticipo ? 'var(--anticipo)' : 'var(--faint)') + '">' +
       (p.anticipo ? fmt(p.anticipo) : '—') +
@@ -2408,10 +2822,306 @@ function tablaPedidos(){
   tablaAnulados();
 }
 
+/* ---------- clientes (RF-18, CU-05) ---------- */
+/* El desplegable reemplaza al texto libre que había aquí: el contrato dice que
+   POST /api/v0/consultas/clientes es «el origen del campo clienteId del formulario pedido», y
+   dos maneras de escribir el mismo nombre son dos clientes y ningún historial. */
+function llenarSelectClientes(){
+  var sel = document.getElementById('n-cliente');
+  if (!sel) return;
+  var antes = sel.value;
+  sel.innerHTML = clientesVigentes().map(function(c){
+    return '<option value="' + c.id + '">' + enTexto(c.nombre) + '</option>';
+  }).join('') + '<option value="__nuevo">+ Cliente nuevo…</option>';
+  if (antes && sel.querySelector('option[value="' + antes + '"]')) sel.value = antes;
+}
+
+/* «+ Cliente nuevo…» abre los campos aquí mismo. Nadie sale del pedido a medio tomar. */
+function alternarClienteNuevo(){
+  var sel  = document.getElementById('n-cliente');
+  var caja = document.getElementById('n-cliente-nuevo');
+  if (!sel || !caja) return;
+  var nuevo = (sel.value === '__nuevo');
+  caja.hidden = !nuevo;
+  avisoCampo('nc-error', '');
+  if (nuevo) document.getElementById('nc-nombre').focus();
+}
+
+/* Crea el cliente y lo devuelve. El id lo pone quien pide —en la API es un UUID que viaja en la
+   ruta con su clave de idempotencia (ADR-020)—, no la tabla. */
+function crearCliente(nombre, telefono, correo, notas){
+  consecutivoCliente += 1;
+  var c = {id:'c' + consecutivoCliente, nombre:nombre, telefono:telefono || '',
+           correo:correo || '', notas:notas || '', baja:null};
+  CLIENTES.push(c);
+  return c;
+}
+
+/* El cliente del pedido que se está guardando: el elegido, o el que se acaba de escribir.
+   Devuelve null cuando falta el nombre, y entonces ya dejó dicho dónde. */
+function clienteDelPedido(){
+  var sel = document.getElementById('n-cliente');
+  if (sel.value !== '__nuevo') return sel.value;
+  var nombre = (document.getElementById('nc-nombre').value || '').trim();
+  if (!nombre){
+    avisoCampo('nc-error', 'Ponle nombre al cliente, como lo conocen en el taller.');
+    document.getElementById('nc-nombre').focus();
+    return null;
+  }
+  var c = crearCliente(nombre,
+    (document.getElementById('nc-telefono').value || '').trim(),
+    (document.getElementById('nc-correo').value   || '').trim(),
+    (document.getElementById('nc-notas').value    || '').trim());
+  llenarSelectClientes();
+  sel.value = c.id;
+  alternarClienteNuevo();
+  ['nc-nombre','nc-telefono','nc-correo','nc-notas'].forEach(function(id){
+    document.getElementById(id).value = '';
+  });
+  tablaClientes();
+  return c.id;
+}
+
+var avisoClientes = null;
+
+/* La tabla enseña solo los vigentes, como la consulta del contrato: un cliente anulado no
+   recibe pedidos nuevos, así que tampoco sale de la lista de la que alguien elige. Lo que ya lo
+   nombra lo sigue nombrando, y por eso la columna de pedidos cuenta los suyos. */
+function tablaClientes(){
+  var cuerpo = document.getElementById('tb-clientes');
+  if (!cuerpo) return;
+  var ger   = (rol === 'gerencia');
+  var aviso = avisoClientes;
+  avisoClientes = null;
+  if (filaAbierta && cuerpo.contains(filaAbierta)) filaAbierta = null;
+
+  cuerpo.innerHTML = filaAviso(aviso, 5) + clientesVigentes().map(function(c){
+    var contacto = [c.telefono, c.correo].filter(function(x){ return x; }).join(' · ');
+    return '<tr><td style="font-weight:500">' + enTexto(c.nombre) +
+      '</td><td style="color:var(--muted)">' + (contacto ? enTexto(contacto) : '—') +
+      '</td><td style="color:var(--muted)">' + enTexto(c.notas || '—') +
+      '</td><td class="r r-mid">' + pedidosDeCliente(c.id) +
+      '</td>' + (ger
+        ? '<td><button class="ghost" style="padding:3px 9px; color:var(--neg)" data-cl-anular="' +
+          c.id + '">Anular</button></td>'
+        : '<td></td>') +
+      '</tr>';
+  }).join('');
+
+  /* Sin `if` de rol en el botón de verdad: en la API lo niega `clientes_actualizacion`, y aquí
+     no pintarlo es comodidad, no permiso (10 §2.1, principio 6). */
+  if (ger){
+    $$('#tb-clientes [data-cl-anular]').forEach(function(b){
+      b.addEventListener('click', function(){ pedirMotivoCliente(b.getAttribute('data-cl-anular'), b); });
+    });
+  }
+  llenarSelectClientes();
+}
+
+function abrirFormCliente(){
+  var form = document.getElementById('form-cliente');
+  var btn  = document.getElementById('btn-cliente');
+  ['cl-nombre','cl-telefono','cl-correo','cl-notas'].forEach(function(id){
+    document.getElementById(id).value = '';
+  });
+  avisoCampo('cl-error', '');
+  form.hidden = false;
+  btn.setAttribute('aria-expanded', 'true');
+  btn.textContent = 'Cerrar';
+  form.scrollIntoView({block:'nearest'});
+  document.getElementById('cl-nombre').focus();
+}
+
+function cerrarFormCliente(){
+  var btn = document.getElementById('btn-cliente');
+  document.getElementById('form-cliente').hidden = true;
+  btn.setAttribute('aria-expanded', 'false');
+  btn.textContent = '+ Nuevo cliente';
+  avisoCampo('cl-error', '');
+}
+
+function guardarCliente(){
+  var nombre = (document.getElementById('cl-nombre').value || '').trim();
+  if (!nombre){
+    avisoCampo('cl-error', 'Ponle nombre al cliente, como lo conocen en el taller.');
+    document.getElementById('cl-nombre').focus();
+    return;
+  }
+  crearCliente(nombre,
+    (document.getElementById('cl-telefono').value || '').trim(),
+    (document.getElementById('cl-correo').value   || '').trim(),
+    (document.getElementById('cl-notas').value    || '').trim());
+  avisoClientes = {tono:'info', titulo:'«' + nombre + '» ya se puede elegir',
+    texto:'Sale en el desplegable de Nuevo pedido, ordenado por nombre.'};
+  cerrarFormCliente();
+  tablaClientes();
+}
+
+/* Anular es de Gerencia y pide motivo escrito: la fila se queda entera con cuándo, quién y por
+   qué (RN-13), y los pedidos de ese cliente siguen enteros. */
+function pedirMotivoCliente(id, boton){
+  var c = clientePorId(id);
+  if (!c) return;
+  var cuantos = pedidosDeCliente(c.id);
+  var extra = abrirPanelFila(boton,
+    '<div class="confirma"><b>¿Anular a «' + enTexto(c.nombre) + '»?</b>' +
+    '<p>Deja de ofrecerse al tomar un pedido, pero no se borra: queda con quién lo anuló, cuándo ' +
+    'y por qué' + (cuantos ? ', y sus ' + cuantos + ' pedidos siguen enteros' : '') + '.</p>' +
+    '<div class="campo"><label for="cla-motivo">Motivo</label>' +
+    '<input type="text" id="cla-motivo" placeholder="Cerró el local, ya no pide…"></div>' +
+    '<p class="capa-error" role="alert" aria-live="polite" hidden></p>' +
+    '<div class="botones"><button type="button" class="cta" data-ok>Sí, anular</button>' +
+    '<button type="button" class="ghost" data-no>Cancelar</button></div></div>');
+  if (!extra) return;
+
+  var campo = extra.querySelector('input');
+  var error = extra.querySelector('.capa-error');
+  campo.focus();
+  extra.querySelector('[data-no]').addEventListener('click', cerrarPanelFila);
+  extra.querySelector('[data-ok]').addEventListener('click', function(){
+    var motivo = (campo.value || '').trim();
+    if (motivo.length < 5){
+      error.textContent = 'El motivo tiene que explicar algo: escribe al menos 5 caracteres.';
+      error.hidden = false;
+      campo.focus();
+      return;
+    }
+    c.baja = {motivo:motivo, por:(sesion ? sesion.nombreCompleto : 'Gerencia'), en:'2026-09-30'};
+    avisoClientes = {tono:'info', titulo:'«' + c.nombre + '» sale del catálogo',
+      texto:'No se borró nada: queda el motivo, y sus pedidos siguen en la lista.'};
+    cerrarPanelFila();
+    tablaClientes();
+  });
+}
+
+(function initCliente(){
+  var btn = document.getElementById('btn-cliente');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    if (document.getElementById('form-cliente').hidden) abrirFormCliente();
+    else cerrarFormCliente();
+  });
+  document.getElementById('cl-cancelar').addEventListener('click', cerrarFormCliente);
+  document.getElementById('cl-guardar').addEventListener('click', guardarCliente);
+})();
+
+/* ---------- pro-labore (RF-47, CU-25, RN-08) ---------- */
+/* Lo que rige hoy. Definirlo escribe una fila nueva con su día (04 §4.6) y no edita la anterior:
+   el historial se guarda y no se pinta, porque el RF-51 pide conservarlo, no mostrarlo. */
+var PROLABORE = {valor:1500000, horas:160, desde:'2026-09-01',
+  justificacion:'Lo que cobraría una estampadora con experiencia por el trabajo que hago en el taller'};
+var HISTORIAL_PROLABORE = [];
+var avisoProlabore = null;
+
+/* La tarifa la calcula la API (05 §7.1): valor entre horas, redondeado a peso. Sin horas no hay. */
+function tarifaHora(p){ return p.horas > 0 ? Math.round(p.valor / p.horas) : null; }
+
+function horasTexto(h){ return String(h).replace('.', ','); }
+
+/* El día desde el que rige, como lo escribe el front: «1 sep 2026» (el formato de fmtFechaHora). */
+function fechaDeVigencia(iso){
+  var t = String(iso || '').split('-');
+  return (+t[2]) + ' ' + MESES_CORTOS[+t[1] - 1] + ' ' + t[0];
+}
+
+function pintarProlabore(){
+  var caja = document.getElementById('prolabore-vigente');
+  if (!caja) return;
+  var aviso = avisoProlabore;
+  avisoProlabore = null;
+  var html = aviso
+    ? '<div class="alerta a-' + aviso.tono + '" style="margin-bottom:14px"><span class="tag">AVISO</span>' +
+      '<div><b>' + enTexto(aviso.titulo) + '</b><span>' + enTexto(aviso.texto) + '</span></div></div>'
+    : '';
+  if (!PROLABORE){
+    caja.innerHTML = html + '<div class="alerta a-alta"><span class="tag">FALTA</span>' +
+      '<div><b>Todavía no has definido tu pro-labore</b><span>Sin él tu trabajo no tiene precio: el ' +
+      'costeo no puede calcular lo que cuesta producir y el simulador de capacidad de pago se ' +
+      'bloquea.</span></div></div>';
+    return;
+  }
+  var t = tarifaHora(PROLABORE);
+  caja.innerHTML = html + '<div class="calc">' +
+    '<div><span>Valor mensual</span><b id="pl-vigente-valor">' + fmt(PROLABORE.valor) + '</b></div>' +
+    '<div><span>Horas productivas del mes</span><b id="pl-vigente-horas">' + horasTexto(PROLABORE.horas) +
+    '</b></div>' +
+    '<div class="tot"><span>Tarifa por hora · la toman los costeos nuevos</span><b id="pl-tarifa">' +
+    (t === null ? '—' : fmt(t)) + '</b></div></div>' +
+    '<p style="font-size:.78rem; color:var(--muted); margin-top:10px">' +
+    (t === null ? 'Sin horas productivas, tu trabajo no le pone precio a ningún costeo. ' : '') +
+    'Rige desde el ' + fechaDeVigencia(PROLABORE.desde) +
+    (PROLABORE.justificacion ? ' · «' + enTexto(PROLABORE.justificacion) + '»' : '') + '</p>';
+}
+
+function abrirFormProlabore(){
+  var btn = document.getElementById('btn-prolabore');
+  ['pl-valor','pl-horas','pl-justificacion'].forEach(function(id){
+    document.getElementById(id).value = '';
+  });
+  avisoCampo('pl-error', '');
+  document.getElementById('form-prolabore').hidden = false;
+  btn.setAttribute('aria-expanded', 'true');
+  btn.textContent = 'Cerrar';
+  document.getElementById('form-prolabore').scrollIntoView({block:'nearest'});
+  document.getElementById('pl-valor').focus();
+}
+
+function cerrarFormProlabore(){
+  var btn = document.getElementById('btn-prolabore');
+  if (!btn) return;
+  document.getElementById('form-prolabore').hidden = true;
+  btn.setAttribute('aria-expanded', 'false');
+  btn.textContent = 'Definir pro-labore';
+  avisoCampo('pl-error', '');
+}
+
+function fallaProlabore(id, texto){
+  avisoCampo('pl-error', texto);
+  document.getElementById(id).focus();
+}
+
+/* Las reglas y los mensajes son los del formulario «prolabore» que manda la API: el valor es
+   obligatorio, las horas llevan dos decimales como máximo (42294) y la justificación no queda en
+   blanco, aunque la columna la admita nula. */
+function guardarProlabore(){
+  var textoValor = (document.getElementById('pl-valor').value || '').trim();
+  var textoHoras = (document.getElementById('pl-horas').value || '').trim().replace(',', '.');
+  var justificacion = (document.getElementById('pl-justificacion').value || '').trim();
+  if (!textoValor) return fallaProlabore('pl-valor', 'Escribe el valor mensual del pro-labore.');
+  if (textoHoras && !/^\d+(\.\d+)?$/.test(textoHoras)){
+    return fallaProlabore('pl-horas', 'Escribe las horas con números: 160 o 150,5.');
+  }
+  if (/\.\d{3,}$/.test(textoHoras)){
+    return fallaProlabore('pl-horas', 'Las horas se registran con dos decimales como máximo.');
+  }
+  if (!justificacion){
+    return fallaProlabore('pl-justificacion', 'Escribe la justificación: con qué comparaste ese valor.');
+  }
+  if (PROLABORE) HISTORIAL_PROLABORE.push(PROLABORE);
+  PROLABORE = {valor:soloDigitos(textoValor), horas:textoHoras ? +textoHoras : 0,
+    desde:'2026-09-30', justificacion:justificacion};
+  avisoProlabore = {tono:'info', titulo:'El pro-labore nuevo rige desde hoy',
+    texto:'Los costeos nuevos toman su tarifa por hora y los guardados conservan la suya. El ' +
+      'retiro de septiembre ya se partió con el anterior.'};
+  cerrarFormProlabore();
+  pintarProlabore();
+}
+
+(function initProlabore(){
+  var btn = document.getElementById('btn-prolabore');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    if (document.getElementById('form-prolabore').hidden) abrirFormProlabore();
+    else cerrarFormProlabore();
+  });
+  document.getElementById('pl-cancelar').addEventListener('click', cerrarFormProlabore);
+  document.getElementById('pl-guardar').addEventListener('click', guardarProlabore);
+})();
+
 function filaAcciones(p){
   return '<tr class="acciones-pedido"><td colspan="8" style="background:var(--accent-soft); padding:10px 12px">' +
     '<div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">' +
-    '<span style="font-size:.82rem"><b>' + p.id + '</b> · ' + enTexto(p.cliente) + '</span>' +
+    '<span style="font-size:.82rem"><b>' + p.id + '</b> · ' + enTexto(nombreDeCliente(p)) + '</span>' +
     '<span style="flex:1"></span>' +
     (p.estado !== 'entregado'
       ? '<button class="ghost" data-entregar="' + p.id + '">Marcar entregado</button>' : '') +
@@ -2497,7 +3207,7 @@ function tablaAnulados(){
   document.getElementById('panel-anulados').hidden = (fuera.length === 0 || rol !== 'gerencia');
   cuerpo.innerHTML = fuera.map(function(p){
     return '<tr><td class="mono" style="color:var(--muted)">' + p.id +
-      '</td><td style="color:var(--muted)">' + enTexto(p.cliente) +
+      '</td><td style="color:var(--muted)">' + enTexto(nombreDeCliente(p)) +
       '</td><td class="r r-mid" style="color:var(--muted)">' + fmt(totalPedido(p)) +
       '</td><td style="color:var(--muted)">' + enTexto(p.baja.motivo) +
       '</td><td style="color:var(--muted)">' + p.baja.destino +
@@ -2518,7 +3228,7 @@ function tablaPedidosResumen(){
   if (!cuerpo) return;
   cuerpo.innerHTML = abiertos().map(function(p){
     var total = totalPedido(p);
-    return '<tr><td class="mono">' + p.id + '</td><td>' + enTexto(p.cliente) +
+    return '<tr><td class="mono">' + p.id + '</td><td>' + enTexto(nombreDeCliente(p)) +
       '</td><td class="mono">' + fechaCorta(p.entrega) + '</td><td class="r r-mid">' + fmt(total) +
       '</td><td class="r r-mid">' + fmt(p.anticipo) + '</td><td class="r r-mid">' + fmt(total - p.anticipo) +
       '</td><td>' + (p.estado === 'estancado'
@@ -2541,23 +3251,283 @@ function kpisPedidos(){
   if (k3) k3.textContent = vivos().filter(function(p){ return p.estado === 'entregado'; }).length + ' pedidos';
 }
 
+/* ---------- el libro de movimientos (tareas 3.8 y 3.9) ---------- */
+/* Lo que aquí decide el prototipo lo decide la API en el sistema real (10 §4.3): cuál es el mes
+   en curso, cuántos caben por página como máximo, en qué grupo cuenta cada tipo y si quien mira
+   puede anular o ver los anulados. Se simula para que la pantalla se pueda recorrer. */
+var MES_EN_CURSO   = {anio:2026, mes:8};   /* septiembre de 2026, el mes de los datos de ejemplo */
+var MAX_POR_PAGINA = 50;                   /* la variable de entorno de la API, y 50 si no está */
+var TAMANOS_PAGINA = [10, 25, 50];
+var libro = {
+  modo:'mes', anio:MES_EN_CURSO.anio, mes:MES_EN_CURSO.mes, desde:'', hasta:'',
+  grupo:'todos', categoria:'', cuenta:'', anulados:false,
+  porPagina:MAX_POR_PAGINA, pagina:0, abierto:null, aviso:null
+};
+var secuenciaMov = MOVS.length;
+
+function movPorId(id){ return MOVS.filter(function(m){ return m.id === id; })[0]; }
+function isoDia(anio, mes, dia){
+  return anio + '-' + String(mes + 1).padStart(2, '0') + '-' + String(dia).padStart(2, '0');
+}
+function periodoLibro(){
+  if (libro.modo === 'rango') return {desde:libro.desde, hasta:libro.hasta};
+  var ultimo = new Date(libro.anio, libro.mes + 1, 0).getDate();
+  return {desde:isoDia(libro.anio, libro.mes, 1), hasta:isoDia(libro.anio, libro.mes, ultimo)};
+}
+function tituloLibro(){
+  if (libro.modo === 'mes'){
+    var m = MESES_LARGOS[libro.mes];
+    return m.charAt(0).toUpperCase() + m.slice(1) + ' ' + libro.anio;
+  }
+  if (!libro.desde || !libro.hasta) return 'Otro rango';
+  var d = libro.desde.split('-'), h = libro.hasta.split('-');
+  return (+d[2]) + ' ' + MESES_CORTOS[+d[1] - 1] + (d[0] !== h[0] ? ' ' + d[0] : '') +
+    ' – ' + (+h[2]) + ' ' + MESES_CORTOS[+h[1] - 1] + ' ' + h[0];
+}
+
+/* Un rango sin una de sus fechas, o al revés, no se puede pedir: la API lo rechaza con su mensaje
+   y el libro lo pinta donde iría la tabla, en vez de dejarla en blanco sin decir por qué. Qué
+   responde la API todavía no lo dice el contrato; estas palabras son de ejemplo. */
+function rechazoDelRango(){
+  if (libro.modo !== 'rango') return '';
+  if (!libro.desde || !libro.hasta) return 'Elige las dos fechas: desde cuándo y hasta cuándo.';
+  if (libro.desde > libro.hasta) return '«Desde» tiene que ir antes de «Hasta».';
+  return '';
+}
+
+/* El libro vacío dice de qué período y si hay filtros puestos: «con estos filtros» sin ninguno
+   puesto manda a buscar un filtro que no existe. */
+function libroVacio(){
+  var filtros = libro.grupo !== 'todos' || libro.categoria || libro.cuenta;
+  var periodo = libro.modo === 'mes'
+    ? 'en ' + MESES_LARGOS[libro.mes] + ' de ' + libro.anio
+    : 'entre el ' + fechaLarga(libro.desde) + ' y el ' + fechaLarga(libro.hasta);
+  return 'No hay movimientos ' + periodo + (filtros ? ' con estos filtros' : '') + '.';
+}
+
+/* Lo que el libro le pide a la API: el período por la fecha en que ocurrió cada movimiento
+   (RN-01), el grupo, la categoría, la cuenta —la de origen o la de destino— y, solo si quien mira
+   es Gerencia, también los anulados. Lo más reciente primero. */
+function movsDelLibro(){
+  var p   = periodoLibro();
+  var ver = libro.anulados && rol === 'gerencia';
+  return MOVS.filter(function(m){
+    if (m.anulacion && !ver) return false;
+    if (!p.desde || !p.hasta || m.fecha < p.desde || m.fecha > p.hasta) return false;
+    if (libro.grupo !== 'todos' && TIPOS_MOV[m.tipo].grupo !== libro.grupo) return false;
+    if (libro.categoria && m.categoria !== libro.categoria) return false;
+    if (libro.cuenta && m.cuenta !== libro.cuenta && m.destino !== libro.cuenta) return false;
+    return true;
+  }).sort(function(a, b){
+    if (a.fecha !== b.fecha) return a.fecha < b.fecha ? 1 : -1;
+    return b.en - a.en;
+  });
+}
+
+/* Una fila del libro. La Cuenta y la Categoría las escribió una persona: se escapan, como en
+   todas las tablas. Lo anulado se apaga con color y no con transparencia, para que el motivo se
+   siga leyendo con el contraste AA del 10 §3.3. */
+function filaMov(m){
+  var t       = TIPOS_MOV[m.tipo];
+  var anulada = !!m.anulacion;
+  var tono    = anulada ? TONOS.gris : TONOS[t.tono];
+  var abierta = (libro.abierto === m.id);
+  var valor   = fmt(t.caja < 0 ? -m.valor : m.valor);
+  return '<tr class="fila-mov' + (anulada ? ' fila-anulada' : '') + (abierta ? ' abierta' : '') +
+      '" data-mov="' + m.id + '" tabindex="0" role="button" aria-expanded="' + (abierta ? 'true' : 'false') + '">' +
+    '<td class="mono">' + fechaCorta(m.fecha) + '</td>' +
+    '<td>' + enTexto(m.concepto) + (anulada
+      ? '<span class="motivo-anulado">«' + enTexto(m.anulacion.motivo) + '» · ' + enTexto(m.anulacion.por) +
+        ' · ' + fmtFechaHora(m.anulacion.en) + '</span>' : '') + '</td>' +
+    '<td style="color:var(--muted); white-space:nowrap">' + enTexto(m.categoria || '—') + '</td>' +
+    '<td class="mono" style="color:var(--muted); white-space:nowrap">' + enTexto(m.cuenta) +
+      (m.destino ? ' → ' + enTexto(m.destino) : '') + '</td>' +
+    '<td class="r r-mid valor" style="color:' + tono.color + '; font-weight:600">' + valor + '</td>' +
+    '<td><span class="pill ' + tono.pill + '">' + enTexto(t.lee) + '</span></td>' +
+    '<td class="marcas">' + (m.tardio ? '<span class="pill p-warn">Registro tardío</span>' : '') +
+      (anulada ? '<span class="pill p-warn">Anulado</span>' : '') + '</td></tr>' +
+    (abierta ? filaDetalleMov(m) : '');
+}
+
+/* La fila abierta: quién lo registró y cuándo se digitó, con qué va junto, el soporte y, para
+   Gerencia, «Anular movimiento». Que el botón exista lo dice la API, no el tipo de la sesión. */
+function filaDetalleMov(m){
+  var ger   = (rol === 'gerencia');
+  var datos = ['Registrado por <b>' + enTexto(m.por) + '</b>', 'Digitado el ' + fmtFechaHora(m.en)];
+  if (m.destino) datos.push('De ' + enTexto(m.cuenta) + ' a ' + enTexto(m.destino));
+  if (m.hermano) datos.push(enTexto(m.hermano.corto));
+  if (m.anulacion){
+    datos.push('<span class="anulada">Anulado el ' + fmtFechaHora(m.anulacion.en) + ' por ' +
+      enTexto(m.anulacion.por) + ': «' + enTexto(m.anulacion.motivo) + '»</span>');
+  }
+  return '<tr class="fila-detalle"><td colspan="7"><div class="mov-det">' +
+    '<div class="mov-det-datos">' + datos.map(function(d){ return '<span>' + d + '</span>'; }).join('') + '</div>' +
+    soporteMov(m) +
+    '<div class="botones">' +
+      (ger && !m.anulacion
+        ? '<button type="button" class="ghost" data-mv-anular="' + m.id + '" style="color:var(--neg)">Anular movimiento</button>'
+        : '') +
+      '<button type="button" class="ghost" data-mv-cerrar>Cerrar</button></div>' +
+    '</div></td></tr>';
+}
+
+/* La foto la baja la API, en base64 dentro del sobre, como cualquier archivo que sale del
+   sistema. En el prototipo la foto es un dibujo y el PDF no se abre, y el botón lo dice. */
+function soporteMov(m){
+  var s   = m.soporte;
+  var cab = '<span class="eyebrow">Soporte</span>';
+  if (!s) return '<div class="mov-soporte">' + cab + '<span class="mov-sin">Sin soporte</span></div>';
+  if (s.tipo === 'foto'){
+    return '<div class="mov-soporte">' + cab +
+      '<button type="button" class="mov-foto" aria-expanded="false" aria-label="Agrandar la foto del recibo">' +
+      '<img src="' + s.src + '" alt="Foto del recibo: ' + enAtributo(s.nombre) + '"></button>' +
+      '<span class="mov-archivo">' + enTexto(s.nombre) + ' · ' + s.peso + '</span></div>';
+  }
+  return '<div class="mov-soporte">' + cab +
+    '<span class="mov-archivo">📄 ' + enTexto(s.nombre) + ' · ' + s.peso + '</span>' +
+    '<button type="button" class="ghost" data-mv-pdf>Abrir</button>' +
+    '<span class="pill p-mut" data-mv-pdf-aviso hidden>En el prototipo no se abre ningún archivo</span></div>';
+}
+
+function enfocarFilaMov(id){
+  var f = document.querySelector('#tb-movs tr[data-mov="' + id + '"]');
+  if (f) f.focus();
+}
+
 function tablaMovs(){
-  var col = {ingreso:'var(--pos)', gasto:'var(--neg)', anticipo:'var(--anticipo)', neutro:'var(--muted)'};
-  var tag = {
-    ingreso : '<span class="pill p-ok">Ingreso</span>',
-    gasto   : '<span class="pill p-neg">Gasto</span>',
-    anticipo: '<span class="pill p-ant">Anticipo · pasivo</span>',
-    neutro  : '<span class="pill p-mut">No afecta utilidad</span>'
-  };
-  /* La columna Cuenta ya no es dato fijo del prototipo: sale del nombre que alguien escribió
-     en «Cuentas de dinero». Se escapa, igual que en todas las demás tablas. */
-  $('#tb-movs').innerHTML = MOVS.map(function(m){
-    return '<tr><td class="mono">' + m[0] + '</td><td>' + enTexto(m[1]) +
-      '</td><td style="color:var(--muted)">' + enTexto(m[2]) + '</td><td class="mono" style="color:var(--muted)">' + enTexto(m[3]) +
-      '</td><td class="r r-mid" style="color:' + col[m[5]] + '; font-weight:600">' + fmt(m[4]) +
-      '</td><td>' + tag[m[5]] + '</td><td>' +
-      (m[6] === 'tardio' ? '<span class="pill p-warn">Registro tardío</span>' : '') + '</td></tr>';
-  }).join('');
+  var cuerpo = document.getElementById('tb-movs');
+  if (!cuerpo) return;
+  var ger     = (rol === 'gerencia');
+  var ver     = libro.anulados && ger;
+  var lista   = movsDelLibro();
+  var paginas = Math.max(1, Math.ceil(lista.length / libro.porPagina));
+  if (libro.pagina > paginas - 1) libro.pagina = paginas - 1;
+  var inicio  = libro.pagina * libro.porPagina;
+  var vista   = lista.slice(inicio, inicio + libro.porPagina);
+  var aviso   = libro.aviso;
+  libro.aviso = null;
+  /* Igual que en tablaPedidos(): el innerHTML se rehace y el panel de confirmar abierto se va
+     con él, así que hay que soltar la referencia antes. */
+  if (filaAbierta && cuerpo.contains(filaAbierta)) filaAbierta = null;
+
+  cuerpo.innerHTML = filaAviso(aviso, 7) + (vista.length ? vista.map(filaMov).join('')
+    : (rechazoDelRango()
+      ? '<tr><td colspan="7" class="libro-vacio rechazo" role="alert">' + rechazoDelRango() + '</td></tr>'
+      : '<tr><td colspan="7" class="libro-vacio">' + libroVacio() + '</td></tr>'));
+
+  $$('#tb-movs tr.fila-mov').forEach(function(fila){
+    var id = +fila.getAttribute('data-mov');
+    var abrir = function(conTeclado){
+      libro.abierto = (libro.abierto === id) ? null : id;
+      tablaMovs();
+      if (conTeclado) enfocarFilaMov(id);
+    };
+    fila.addEventListener('click', function(){ abrir(false); });
+    fila.addEventListener('keydown', function(e){
+      if (e.target !== fila) return;
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); abrir(true); }
+    });
+  });
+  $$('#tb-movs [data-mv-cerrar]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var id = libro.abierto;
+      libro.abierto = null;
+      tablaMovs();
+      enfocarFilaMov(id);
+    });
+  });
+  $$('#tb-movs [data-mv-anular]').forEach(function(b){
+    b.addEventListener('click', function(){ pedirMotivoAnularMov(+b.getAttribute('data-mv-anular'), b); });
+  });
+  $$('#tb-movs .mov-foto').forEach(function(b){
+    b.addEventListener('click', function(){
+      var grande = b.getAttribute('aria-expanded') !== 'true';
+      b.setAttribute('aria-expanded', grande ? 'true' : 'false');
+      b.setAttribute('aria-label', grande ? 'Achicar la foto del recibo' : 'Agrandar la foto del recibo');
+    });
+  });
+  $$('#tb-movs [data-mv-pdf]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var a = b.parentNode.querySelector('[data-mv-pdf-aviso]');
+      if (a) a.hidden = false;
+    });
+  });
+  var det = cuerpo.querySelector('.mov-det');
+  if (det) ajustarAlVisible(det);
+
+  pintarControlesLibro(lista.length, inicio, vista.length, ver);
+}
+
+/* El encabezado, los filtros y el pie dicen siempre lo que la tabla está mostrando. */
+function pintarControlesLibro(total, inicio, cuantos, ver){
+  var enMes = (libro.modo === 'mes');
+  $('#lb-titulo').textContent = tituloLibro();
+  $('#lb-antes').hidden   = !enMes;
+  $('#lb-despues').hidden = !enMes;
+  /* La flecha de adelante no pasa del mes en curso: no hay movimientos del futuro (RF-16). */
+  $('#lb-despues').disabled = (libro.anio === MES_EN_CURSO.anio && libro.mes >= MES_EN_CURSO.mes) ||
+    libro.anio > MES_EN_CURSO.anio;
+  $('#lb-otro-rango').hidden = !enMes;
+  $('#lb-rango').hidden = enMes;
+  if (!enMes){
+    $('#lb-desde').value = libro.desde;
+    $('#lb-hasta').value = libro.hasta;
+  }
+  $$('#lb-grupo [data-grupo]').forEach(function(b){
+    b.setAttribute('aria-pressed', b.getAttribute('data-grupo') === libro.grupo ? 'true' : 'false');
+  });
+  $('#lb-categoria').value = libro.categoria;
+  $('#lb-cuenta').value    = libro.cuenta;
+  $('#lb-anulados').setAttribute('aria-checked', ver ? 'true' : 'false');
+  $('#panel-libro').classList.toggle('modo-anulados', ver);
+  $('#lb-aviso-anulados').hidden = !ver;
+  $$('#lb-tamano [data-tamano]').forEach(function(b){
+    b.setAttribute('aria-pressed', +b.getAttribute('data-tamano') === libro.porPagina ? 'true' : 'false');
+  });
+  $('#lb-cuantos').textContent = total ? (inicio + 1) + '–' + (inicio + cuantos) + ' de ' + total : 'Ninguno';
+  $('#lb-anterior').disabled  = (libro.pagina === 0);
+  $('#lb-siguiente').disabled = (inicio + cuantos >= total);
+}
+
+/* Anular pide el motivo antes de confirmar (10 §6) y no borra nada. Si el movimiento va junto
+   con otro registro —el anticipo de un pedido, un activo, un aporte, un retiro o un adelanto—,
+   la API también lo anula en la misma transacción, y el panel lo dice antes de confirmar.
+   En el prototipo anular solo cambia el libro: las cifras de las otras pantallas son de ejemplo
+   y no se recalculan. */
+function pedirMotivoAnularMov(id, boton){
+  var m = movPorId(id);
+  if (!m || m.anulacion) return;
+  var extra = abrirPanelFila(boton,
+    '<div class="confirma"><b>¿Anular este movimiento?</b>' +
+    '<p>' + enTexto(m.concepto) + ' · ' + fechaCorta(m.fecha) + ' · ' + fmt(m.valor) + '</p>' +
+    '<p>Sale de todas las cifras, pero no se borra: queda con quién lo anuló, cuándo y por qué. ' +
+    'Si lo que está mal es el valor, se corrige con un contra-asiento y el original queda intacto.</p>' +
+    (m.hermano ? '<p class="hermano">' + enTexto(m.hermano.aviso) + '</p>' : '') +
+    '<div class="campo"><label for="mv-an-motivo">Motivo</label>' +
+    '<input type="text" id="mv-an-motivo" placeholder="Se registró dos veces, el valor está mal…"></div>' +
+    '<p class="capa-error" role="alert" aria-live="polite" hidden></p>' +
+    '<div class="botones"><button type="button" class="cta" data-ok>Sí, anular</button>' +
+    '<button type="button" class="ghost" data-no>Cancelar</button></div></div>');
+  if (!extra) return;
+
+  var campo = extra.querySelector('input');
+  var error = extra.querySelector('.capa-error');
+  campo.focus();
+  extra.querySelector('[data-no]').addEventListener('click', cerrarPanelFila);
+  extra.querySelector('[data-ok]').addEventListener('click', function(){
+    var motivo = (campo.value || '').trim();
+    if (!motivo){
+      error.textContent = 'Escribe el motivo. Sin motivo escrito no se anula ningún movimiento.';
+      error.hidden = false;
+      campo.focus();
+      return;
+    }
+    m.anulacion = {motivo:motivo, por:(sesion ? sesion.nombreCompleto : YULIANA), en:new Date()};
+    libro.abierto = null;
+    libro.aviso = {tono:'info', titulo:'Movimiento anulado',
+      texto:'Ya no suma en ninguna cifra. No se borró: se ve con «Ver anulados», con su motivo.'};
+    tablaMovs();
+  });
 }
 
 var ordenPorHora = true;
@@ -2877,7 +3847,18 @@ function abrirFormPedido(id){
 
   document.getElementById('pedido-titulo').textContent = p ? 'Modificar ' + p.id : 'Nuevo pedido';
   document.getElementById('n-guardar').textContent = p ? 'Guardar cambios' : 'Guardar pedido';
-  document.getElementById('n-cliente').value = p ? p.cliente : 'Colegio Bilingüe del Valle';
+  llenarSelectClientes();
+  var sel = document.getElementById('n-cliente');
+  var vigentes = clientesVigentes();
+  /* Un pedido de un cliente anulado se sigue pudiendo modificar, así que su opción vuelve al
+     desplegable mientras esa ficha esté abierta: si no, guardar lo cambiaría de cliente solo. */
+  if (p && !sel.querySelector('option[value="' + p.clienteId + '"]')){
+    var c = clientePorId(p.clienteId);
+    if (c) sel.insertAdjacentHTML('afterbegin',
+      '<option value="' + c.id + '">' + enTexto(c.nombre) + ' (anulado)</option>');
+  }
+  sel.value = p ? p.clienteId : (vigentes[0] ? vigentes[0].id : '__nuevo');
+  alternarClienteNuevo();
   document.getElementById('n-cant').value    = p ? p.cant : 60;
   document.getElementById('n-fecha').value   = p ? p.entrega : '2026-10-15';
   if (p) document.getElementById('n-prod').value = p.prodId;
@@ -2910,6 +3891,8 @@ function cerrarFormPedido(){
   });
   document.getElementById('n-cancelar').addEventListener('click', cerrarFormPedido);
 
+  document.getElementById('n-cliente').addEventListener('change', alternarClienteNuevo);
+
   ['n-prod','n-cant','n-ant'].forEach(function(id){
     var el = document.getElementById(id);
     var vuelveAlPorcentaje = function(){
@@ -2924,18 +3907,19 @@ function cerrarFormPedido(){
   document.getElementById('n-guardar').addEventListener('click', function(){
     var d = datosNuevo();
     if (!d) return;
-    var cliente = (document.getElementById('n-cliente').value || '').trim() || 'Cliente sin nombre';
+    var cliente = clienteDelPedido();
+    if (!cliente) return;
     var entrega = document.getElementById('n-fecha').value || '2026-10-15';
 
     if (editandoPedido){
       var p = pedidoPorId(editandoPedido);
-      p.cliente = cliente; p.prodId = d.p.id; p.cant = d.cant;
+      p.clienteId = cliente; p.prodId = d.p.id; p.cant = d.cant;
       p.entrega = entrega; p.anticipo = d.recibe;
       if (p.estado === 'entregado' && d.recibe > 0) p.estado = 'anticipo';
     } else {
       consecutivo += 1;
       PEDIDOS.unshift({
-        id:'P-0' + consecutivo, fecha:'2026-09-30', entrega:entrega, cliente:cliente,
+        id:'P-0' + consecutivo, fecha:'2026-09-30', entrega:entrega, clienteId:cliente,
         prodId:d.p.id, cant:d.cant, anticipo:d.recibe, estado:'anticipo', baja:null
       });
     }
@@ -3226,6 +4210,28 @@ function refrescarCuentasMov(){
     return '<option value="' + i + '">' + enTexto(c.n) + '</option>';
   }).join('');
   if (previo !== '' && CUENTAS[+previo]) sel.value = previo;
+  refrescarFiltrosLibro();
+}
+
+/* Las categorías y las cuentas del filtro del libro salen de los mismos catálogos que el registro
+   rápido, y con solo los nombres: filtrar por una cuenta no le muestra a nadie su saldo. */
+function refrescarFiltrosLibro(){
+  var cat = document.getElementById('lb-categoria');
+  var cta = document.getElementById('lb-cuenta');
+  if (!cat || !cta) return;
+  var nombres = [];
+  CATEGORIAS_MOV.map(function(c){ return c.v; })
+    .concat(MOVS.map(function(m){ return m.categoria; }))
+    .forEach(function(n){ if (n && nombres.indexOf(n) < 0) nombres.push(n); });
+  nombres.sort(function(a, b){ return a.localeCompare(b, 'es'); });
+  cat.innerHTML = '<option value="">Todas las categorías</option>' + nombres.map(function(n){
+    return '<option value="' + enAtributo(n) + '">' + enTexto(n) + '</option>';
+  }).join('');
+  cta.innerHTML = '<option value="">Todas las cuentas</option>' + CUENTAS.map(function(c){
+    return '<option value="' + enAtributo(c.n) + '">' + enTexto(c.n) + '</option>';
+  }).join('');
+  cat.value = libro.categoria;
+  cta.value = libro.cuenta;
 }
 
 /* Las dos fechas del libro: la de hoy, que solo sirve para la auditoría, y la del movimiento,
@@ -3238,20 +4244,6 @@ function notaFechaMov(){
   nota.textContent = larga
     ? 'Se digita hoy; se contabiliza el ' + larga + '.'
     : 'Falta la fecha en que ocurrió: es la que manda en los reportes.';
-}
-
-/* La tabla se lee por fecha del movimiento, no por orden de digitación: un gasto del día 14
-   registrado hoy no puede quedar encima de uno del 28. La clave sale del «28 sep» que ya
-   guardan las filas sembradas, que es lo único que tienen. */
-function claveMov(etiqueta){
-  var t = String(etiqueta).split(' ');
-  var m = MESES_CORTOS.indexOf(t[1]);
-  return (m < 0 ? 0 : m) * 100 + (+t[0] || 0);
-}
-function insertarMov(fila){
-  var i = 0;
-  while (i < MOVS.length && claveMov(MOVS[i][0]) >= claveMov(fila[0])) i += 1;
-  MOVS.splice(i, 0, fila);
 }
 
 function avisoMov(texto, clase){
@@ -3296,7 +4288,16 @@ function guardarMovimiento(){
   /* El gasto sale de la cuenta elegida. El saldo baja aquí y el Inicio lo lee de CUENTAS:
      Operación registra contra un saldo que no ve en ninguna pantalla. */
   cuenta.s = cuenta.s - valor;
-  insertarMov([fechaCorta(iso), cat.concepto, cat.v, cuenta.n, -valor, 'gasto', '']);
+  /* El libro se ordena solo, por la fecha en que ocurrió: un gasto del día 14 registrado hoy no
+     queda encima de uno del 28. Quién y cuándo los pone el sistema, no quien registra. */
+  secuenciaMov += 1;
+  MOVS.push({
+    id:secuenciaMov, fecha:iso, tipo:'gasto', concepto:cat.concepto, categoria:cat.v,
+    cuenta:cuenta.n, valor:valor, por:(sesion ? sesion.nombreCompleto : YULIANA), en:new Date(),
+    /* Más de 7 días entre lo que ocurrió y lo que se digitó. Lo decide la API (RN-14). */
+    tardio:(Date.now() - new Date(iso + 'T12:00:00').getTime()) > 7 * 86400000
+  });
+  libro.pagina = 0;
   tablaMovs();
   pintarCuentas();
   /* El valor se limpia: si se quedara puesto, un segundo clic sin querer registraría el mismo
@@ -3329,6 +4330,184 @@ function guardarMovimiento(){
     avisoMov('En el prototipo no se adjunta ningún archivo', 'p-mut');
   });
 })();
+
+/* ---------- controles del libro de movimientos ---------- */
+(function initLibro(){
+  if (!document.getElementById('panel-libro')) return;
+  /* El rango no pasa del último día del mes en curso, igual que la flecha. */
+  var ultimo = new Date(MES_EN_CURSO.anio, MES_EN_CURSO.mes + 1, 0).getDate();
+  var tope   = isoDia(MES_EN_CURSO.anio, MES_EN_CURSO.mes, ultimo);
+  $('#lb-desde').max = tope;
+  $('#lb-hasta').max = tope;
+
+  /* Ningún tamaño por encima del máximo que dice la API. */
+  $('#lb-tamano').innerHTML = TAMANOS_PAGINA.filter(function(n){ return n <= MAX_POR_PAGINA; })
+    .map(function(n){
+      return '<button type="button" aria-pressed="false" data-tamano="' + n + '">' + n + '</button>';
+    }).join('');
+
+  /* Cambiar lo que se pide vuelve a la primera página y cierra la fila abierta: la que estaba
+     abierta puede no estar en lo que llega. */
+  function pedir(cambio){
+    return function(e){
+      cambio(e);
+      libro.pagina  = 0;
+      libro.abierto = null;
+      tablaMovs();
+    };
+  }
+
+  $('#lb-antes').addEventListener('click', pedir(function(){
+    libro.mes -= 1;
+    if (libro.mes < 0){ libro.mes = 11; libro.anio -= 1; }
+  }));
+  $('#lb-despues').addEventListener('click', pedir(function(){
+    if (libro.anio === MES_EN_CURSO.anio && libro.mes >= MES_EN_CURSO.mes) return;
+    libro.mes += 1;
+    if (libro.mes > 11){ libro.mes = 0; libro.anio += 1; }
+  }));
+  $('#lb-otro-rango').addEventListener('click', function(){
+    var p = periodoLibro();
+    pedir(function(){ libro.modo = 'rango'; libro.desde = p.desde; libro.hasta = p.hasta; })();
+    $('#lb-desde').focus();
+  });
+  $('#lb-volver').addEventListener('click', function(){
+    pedir(function(){ libro.modo = 'mes'; })();
+    $('#lb-otro-rango').focus();
+  });
+  $('#lb-desde').addEventListener('change', pedir(function(e){ libro.desde = e.target.value; }));
+  $('#lb-hasta').addEventListener('change', pedir(function(e){ libro.hasta = e.target.value; }));
+  $$('#lb-grupo [data-grupo]').forEach(function(b){
+    b.addEventListener('click', pedir(function(){ libro.grupo = b.getAttribute('data-grupo'); }));
+  });
+  $('#lb-categoria').addEventListener('change', pedir(function(e){ libro.categoria = e.target.value; }));
+  $('#lb-cuenta').addEventListener('change', pedir(function(e){ libro.cuenta = e.target.value; }));
+  $('#lb-anulados').addEventListener('click', pedir(function(){ libro.anulados = !libro.anulados; }));
+  $$('#lb-tamano [data-tamano]').forEach(function(b){
+    b.addEventListener('click', pedir(function(){ libro.porPagina = +b.getAttribute('data-tamano'); }));
+  });
+  $('#lb-anterior').addEventListener('click', function(){
+    if (libro.pagina === 0) return;
+    libro.pagina -= 1;
+    libro.abierto = null;
+    tablaMovs();
+  });
+  $('#lb-siguiente').addEventListener('click', function(){
+    libro.pagina += 1;
+    libro.abierto = null;
+    tablaMovs();
+  });
+
+  /* Escape cierra la fila abierta. Si hay un panel de confirmar encima, primero se va ese: lo
+     cierra el manejador de la confirmación en línea, y la fila se queda para el siguiente Escape. */
+  document.addEventListener('keydown', function(e){
+    if (e.key !== 'Escape' || filaAbierta || libro.abierto === null || activa !== 'movimientos') return;
+    var id = libro.abierto;
+    libro.abierto = null;
+    tablaMovs();
+    enfocarFilaMov(id);
+  });
+
+  refrescarFiltrosLibro();
+  tablaTiposMov();
+})();
+
+/* ---------- cómo se ve cada tipo (Gerencia, en «Cuentas de dinero») ---------- */
+/* Lo que un tipo le hace a una cifra, como lo escribe el 05 §2. En la caja, el 0 es la
+   transferencia: la plata no entra ni sale, cambia de bolsillo. En las otras dos, es que no la toca. */
+function efectoTipo(n, enLaCaja){
+  if (n > 0) return '▲ sube';
+  if (n < 0) return '▼ baja';
+  return enLaCaja ? '↔ neutra' : '—';
+}
+
+function tablaTiposMov(){
+  var cuerpo = document.getElementById('tb-tipos-mov');
+  if (!cuerpo) return;
+  if (filaAbierta && cuerpo.contains(filaAbierta)) filaAbierta = null;
+  /* Las tres últimas columnas no se editan: están para que quien cambia cómo se lee un tipo vea,
+     en el mismo renglón, lo que ese cambio no toca. */
+  var fijo = '<td class="mono" style="color:var(--muted); white-space:nowrap">';
+  cuerpo.innerHTML = Object.keys(TIPOS_MOV).map(function(clave){
+    var t = TIPOS_MOV[clave];
+    return '<tr><td style="font-weight:500">' + enTexto(t.nombre) + '</td>' +
+      '<td><span class="pill ' + TONOS[t.tono].pill + '">' + enTexto(t.lee) + '</span></td>' +
+      '<td>' + GRUPOS_MOV[t.grupo] + '</td>' +
+      fijo + efectoTipo(t.utilidad, false) + '</td>' +
+      fijo + efectoTipo(t.caja, true) + '</td>' +
+      fijo + efectoTipo(t.patrimonio, false) + '</td>' +
+      /* Nueve botones que dicen lo mismo no le sirven a un lector de pantalla: cada uno dice de
+         qué tipo es, como «Desactivar a …» en Gestión de usuarios (10 §3.3). */
+      '<td class="r"><button type="button" class="ghost" style="padding:3px 9px" data-tipo-editar="' +
+      clave + '" aria-label="Editar cómo se lee «' + enAtributo(t.nombre) + '»">Editar</button></td></tr>';
+  }).join('');
+  $$('#tb-tipos-mov [data-tipo-editar]').forEach(function(b){
+    b.addEventListener('click', function(){ editarTipoMov(b.getAttribute('data-tipo-editar'), b); });
+  });
+}
+
+/* Se edita en un panel debajo de la fila, como todo lo demás de la pantalla, con la píldora de
+   muestra al lado: se ve cómo queda antes de guardarla. */
+function editarTipoMov(clave, boton){
+  var t = TIPOS_MOV[clave];
+  if (!t) return;
+  var opciones = function(lista, elegida){
+    return Object.keys(lista).map(function(k){
+      var nombre = (typeof lista[k] === 'string') ? lista[k] : lista[k].nombre;
+      return '<option value="' + k + '"' + (k === elegida ? ' selected' : '') + '>' + nombre + '</option>';
+    }).join('');
+  };
+  var extra = abrirPanelFila(boton,
+    '<div class="confirma confirma-info"><b>Cómo se lee «' + enTexto(t.nombre) + '»</b>' +
+    '<p>Cambia la píldora del libro y el filtro en que sale. Lo que el tipo le hace a la utilidad, ' +
+    'a la caja y al patrimonio no cambia.</p>' +
+    '<div class="tipo-campos">' +
+      '<div class="campo"><label for="tm-lee">Se lee como</label>' +
+        '<input type="text" id="tm-lee" value="' + enAtributo(t.lee) + '"></div>' +
+      '<div class="campo"><label for="tm-tono">Color</label>' +
+        '<select id="tm-tono">' + opciones(TONOS, t.tono) + '</select></div>' +
+      '<div class="campo"><label for="tm-grupo">Cuenta en</label>' +
+        '<select id="tm-grupo">' + opciones(GRUPOS_MOV, t.grupo) + '</select></div>' +
+    '</div>' +
+    '<p class="tipo-muestra">Así se verá en el libro: <span class="pill" id="tm-muestra"></span></p>' +
+    '<p class="capa-error" role="alert" aria-live="polite" hidden></p>' +
+    '<div class="botones"><button type="button" class="cta" data-ok>Guardar</button>' +
+    '<button type="button" class="ghost" data-no>Cancelar</button></div></div>');
+  if (!extra) return;
+
+  var lee     = extra.querySelector('#tm-lee');
+  var tono    = extra.querySelector('#tm-tono');
+  var grupo   = extra.querySelector('#tm-grupo');
+  var muestra = extra.querySelector('#tm-muestra');
+  var error   = extra.querySelector('.capa-error');
+  var pintarMuestra = function(){
+    muestra.className   = 'pill ' + TONOS[tono.value].pill;
+    muestra.textContent = (lee.value || '').trim() || '—';
+  };
+  pintarMuestra();
+  lee.addEventListener('input', pintarMuestra);
+  tono.addEventListener('change', pintarMuestra);
+  lee.focus();
+  lee.select();
+  extra.querySelector('[data-no]').addEventListener('click', cerrarPanelFila);
+  extra.querySelector('[data-ok]').addEventListener('click', function(){
+    var texto = (lee.value || '').trim();
+    if (!texto){
+      error.textContent = 'Escribe cómo se lee este tipo en el libro.';
+      error.hidden = false;
+      lee.focus();
+      return;
+    }
+    t.lee   = texto;
+    t.tono  = tono.value;
+    t.grupo = grupo.value;
+    cerrarPanelFila();
+    tablaTiposMov();
+    tablaMovs();
+    var b = document.querySelector('#tb-tipos-mov [data-tipo-editar="' + clave + '"]');
+    if (b) b.focus();
+  });
+}
 
 /* ---------- descarga del Inicio (RF-96) ---------- */
 /* El Inicio no crea datos, solo los muestra; lo único que ofrece es llevarse lo que ve.
@@ -4287,30 +5466,36 @@ function cerrarPanelFila(){
   filaAbierta = null;
   /* El foco vuelve a la fila que lo abrió; si no, se pierde al final del documento. */
   if (fila){
-    var b = fila.querySelector('[data-u-estado], [data-u-clave], [data-bit-revertir], [data-bit-ver], [data-c-baja], [data-anular], [data-baja]');
+    var b = fila.querySelector('[data-u-estado], [data-u-clave], [data-bit-revertir], [data-bit-ver], [data-c-baja], [data-anular], [data-baja], [data-mv-anular], [data-tipo-editar]');
     if (b) b.focus();
   }
+}
+
+/* Cuando la tabla es más ancha que la pantalla —en celular siempre— una celda que abarca todas
+   las columnas hereda ese ancho, y lo que lleva adentro se sale. Se le da el ancho que de verdad
+   se ve, que es el del contenedor que desplaza menos su relleno; el CSS la pega a la izquierda.
+   Lo usan el panel de confirmar y la fila abierta del libro. */
+function ajustarAlVisible(caja){
+  var tw = caja && caja.closest('.tw');
+  if (!tw || tw.scrollWidth <= tw.clientWidth) return;
+  var est   = window.getComputedStyle(tw);
+  var libre = tw.clientWidth - parseFloat(est.paddingLeft) - parseFloat(est.paddingRight);
+  if (libre > 200) caja.style.width = libre + 'px';
 }
 
 function abrirPanelFila(boton, html){
   cerrarPanelFila();
   var fila = boton.closest('tr');
   if (!fila) return null;
+  /* Las columnas que abarca la fila, no sus celdas: una fila abierta —la de acciones de un
+     pedido, la de un movimiento— es una sola celda que abarca todas, y el panel iría apretado
+     en la primera columna. */
+  var columnas = Array.prototype.reduce.call(fila.children, function(n, c){ return n + (c.colSpan || 1); }, 0);
   var extra = document.createElement('tr');
   extra.className = 'fila-confirma';
-  extra.innerHTML = '<td colspan="' + fila.children.length + '">' + html + '</td>';
+  extra.innerHTML = '<td colspan="' + columnas + '">' + html + '</td>';
   fila.parentNode.insertBefore(extra, fila.nextSibling);
-
-  /* Cuando la tabla es más ancha que la pantalla —en celular siempre— la celda del panel
-     hereda ese ancho y el panel se sale. Se le da el ancho que de verdad se ve, que es el
-     del contenedor que desplaza menos su relleno; el CSS lo pega a la izquierda. */
-  var caja = extra.querySelector('.confirma');
-  var tw   = fila.closest('.tw');
-  if (caja && tw && tw.scrollWidth > tw.clientWidth){
-    var est   = window.getComputedStyle(tw);
-    var libre = tw.clientWidth - parseFloat(est.paddingLeft) - parseFloat(est.paddingRight);
-    if (libre > 200) caja.style.width = libre + 'px';
-  }
+  ajustarAlVisible(extra.querySelector('.confirma'));
 
   filaAbierta = extra;
   return extra;

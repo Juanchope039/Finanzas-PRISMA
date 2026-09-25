@@ -775,7 +775,7 @@
         "type" : "object"
       },
       "ConsultaDeMovimientos" : {
-        "description" : "El cuerpo de POST /api/v0/consultas/movimientos. Todo es opcional: sin nada, el libro vigente entero",
+        "description" : "El cuerpo de POST /api/v0/consultas/movimientos. Todo es opcional: sin nada, la primera página del libro vigente entero",
         "properties" : {
           "categoriaId" : {
             "description" : "Solo los de esa categoría",
@@ -788,12 +788,17 @@
             "type" : "string"
           },
           "desde" : {
-            "description" : "Por fecha_movimiento, incluida. No por la de digitación (RN-01)",
+            "description" : "Por fecha_movimiento, incluida. No por la de digitación (RN-01). Va con hasta o no va: una sin la otra, o desde después de hasta, responde 42227",
             "format" : "date",
             "type" : "string"
           },
+          "grupo" : {
+            "description" : "Solo los tipos que Gerencia puso en ese grupo del filtro «Todos · Ingresos · Gastos» (RF-104). Sin él, todos. Se combina con tipos: salen los que cumplen los dos",
+            "enum" : [ "gastos", "ingresos" ],
+            "type" : "string"
+          },
           "hasta" : {
-            "description" : "Por fecha_movimiento, incluida",
+            "description" : "Por fecha_movimiento, incluida. Va con desde o no va",
             "format" : "date",
             "type" : "string"
           },
@@ -802,7 +807,13 @@
             "type" : "boolean"
           },
           "limite" : {
-            "description" : "Cuántos de los más recientes. Sin él, todos",
+            "description" : "Cuántos movimientos por página. Sin él, el máximo, que la API lee de una variable de entorno y vale 50 si no está; por encima del máximo responde 42200 con data.errores. La pantalla ofrece 10, 25 y 50 sin pasar de PaginaDeMovimientos.maximoPorPagina",
+            "format" : "int32",
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "pagina" : {
+            "description" : "Qué página, desde 1. Sin ella, la primera. Una página más allá de la última responde la lista vacía con el total",
             "format" : "int32",
             "minimum" : 1,
             "type" : "integer"
@@ -940,6 +951,18 @@
             "type" : "integer"
           }
         },
+        "type" : "object"
+      },
+      "ConsultaDeSoporte" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/soporte",
+        "properties" : {
+          "adjuntoId" : {
+            "description" : "Uno de Movimiento.adjuntos",
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "adjuntoId" ],
         "type" : "object"
       },
       "ConsultaDeTablero" : {
@@ -1127,6 +1150,28 @@
         "required" : [ "nombre" ],
         "type" : "object"
       },
+      "DatosDePresentacionDeTipo" : {
+        "description" : "El formulario «presentacion-de-tipo». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"presentacion-de-tipo\"}. Todo cabe en el descriptor, así que no tiene códigos propios: lo que no cuadra responde 42200 con data.errores, y lo vuelve a juzgar la base con presentacion_tipos_se_lee_como_legible, presentacion_tipos_color_valido y presentacion_tipos_grupo_valido (04 §4.13)",
+        "properties" : {
+          "color" : {
+            "description" : "Uno de los cuatro colores de un tipo",
+            "enum" : [ "gris", "morado", "rojo", "verde" ],
+            "type" : "string"
+          },
+          "grupo" : {
+            "enum" : [ "gastos", "ingresos", "ninguno" ],
+            "type" : "string"
+          },
+          "seLeeComo" : {
+            "description" : "De 1 a 30 caracteres, sin contar los espacios de los extremos",
+            "maxLength" : 30,
+            "minLength" : 1,
+            "type" : "string"
+          }
+        },
+        "required" : [ "color", "grupo", "seLeeComo" ],
+        "type" : "object"
+      },
       "DatosDeProducto" : {
         "description" : "El formulario «producto», el mismo para crear y para editar. Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"producto\"}",
         "properties" : {
@@ -1290,7 +1335,7 @@
         "type" : "object"
       },
       "Documento" : {
-        "description" : "Un archivo que la API entrega: el desprendible, la cotización, la remisión o lo que muestra el Inicio. Viaja dentro del sobre, en data, como cualquier otra respuesta, y no como bytes crudos: así una misma ruta no tiene dos formas de contestar, una para cuando sale bien y otra para el 40300 o el 40400 (tarea 8.11). El contenido va en base64, que cuesta un 33% de tamaño, y por eso el tope es de 5 MB, el mismo del adjunto de subida",
+        "description" : "Un archivo que la API entrega: el desprendible, la cotización, la remisión, lo que muestra el Inicio o el soporte de un movimiento. Viaja dentro del sobre, en data, como cualquier otra respuesta, y no como bytes crudos: así una misma ruta no tiene dos formas de contestar, una para cuando sale bien y otra para el 40300 o el 40400 (tarea 8.11). El contenido va en base64, que cuesta un 33% de tamaño, y por eso el tope es de 5 MB, el mismo del adjunto de subida",
         "properties" : {
           "bytes" : {
             "description" : "Cuánto pesa el archivo ya decodificado. Nunca más de 5.242.880",
@@ -1307,8 +1352,8 @@
             "type" : "string"
           },
           "tipo" : {
-            "description" : "El tipo de contenido del archivo. El desprendible, la cotización y la remisión siempre bajan en PDF; la descarga del Inicio baja en el formato que se le pidió (RF-96, tarea 6.10)",
-            "enum" : [ "application/pdf", "text/csv" ],
+            "description" : "El tipo de contenido del archivo. El desprendible, la cotización y la remisión siempre bajan en PDF; la descarga del Inicio baja en el formato que se le pidió (RF-96, tarea 6.10), y el soporte de un movimiento en el que se subió: foto o PDF",
+            "enum" : [ "application/pdf", "image/jpeg", "image/png", "image/webp", "text/csv" ],
             "type" : "string"
           }
         },
@@ -1361,6 +1406,27 @@
           }
         },
         "required" : [ "cargoId", "nombreCompleto", "tipo" ],
+        "type" : "object"
+      },
+      "EfectoDeTipo" : {
+        "description" : "Lo que un tipo le hace a las tres cifras (05 §2, 04 §4.3). No se configura: está a la vista para que quien cambia cómo se lee un tipo vea, en el mismo renglón, lo que ese cambio no toca. El mockup lo pinta «▲ sube», «▼ baja», «↔ neutra» o «—»",
+        "properties" : {
+          "caja" : {
+            "description" : "De aquí sale el signo del valor en el libro",
+            "enum" : [ "baja", "neutra", "ninguno", "sube" ],
+            "type" : "string"
+          },
+          "patrimonio" : {
+            "description" : "ninguno también cuando solo cambia de forma, crea un pasivo o crea una cuenta por cobrar",
+            "enum" : [ "baja", "neutra", "ninguno", "sube" ],
+            "type" : "string"
+          },
+          "utilidad" : {
+            "enum" : [ "baja", "neutra", "ninguno", "sube" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "caja", "patrimonio", "utilidad" ],
         "type" : "object"
       },
       "Empleada" : {
@@ -1979,6 +2045,13 @@
             "format" : "uuid",
             "type" : "string"
           },
+          "porQueNo" : {
+            "description" : "Por qué este movimiento no se deja anular, en palabras, para pintarlo en la fila abierta en lugar del botón. Es el mismo mensaje del código con que respondería la anulación. Solo para Gerencia, y solo con sePuedeAnular en false",
+            "type" : "string"
+          },
+          "presentacion" : {
+            "$ref" : "#/components/schemas/PresentacionDeMovimiento"
+          },
           "registradoEn" : {
             "description" : "Cuándo se digitó. Manda en la auditoría y nunca en los reportes",
             "format" : "date-time",
@@ -1988,8 +2061,16 @@
             "description" : "El nombre completo de quien lo registró",
             "type" : "string"
           },
+          "registroHermano" : {
+            "$ref" : "#/components/schemas/RegistroHermano",
+            "description" : "Ausente si el movimiento va solo, como un ingreso, un gasto o una transferencia registrados en el libro"
+          },
           "registroTardio" : {
             "description" : "Se digitó más de 7 días después de ocurrido (RN-14). Lo decide la API: el front pinta la marca, no cuenta los días",
+            "type" : "boolean"
+          },
+          "sePuedeAnular" : {
+            "description" : "Si quien mira puede anular este movimiento. Siempre false para Operación. Para Gerencia es false cuando ya está anulado, cuando es de un mes cerrado o cuando su registro hermano ya siguió su vida (CU-03 A2 a A7): entonces la fila no ofrece «Anular» y porQueNo dice por qué",
             "type" : "boolean"
           },
           "tipo" : {
@@ -2003,7 +2084,7 @@
             "type" : "integer"
           }
         },
-        "required" : [ "adjuntos", "cuenta", "cuentaId", "fechaMovimiento", "id", "registradoEn", "registradoPor", "registroTardio", "tipo", "valor" ],
+        "required" : [ "adjuntos", "cuenta", "cuentaId", "fechaMovimiento", "id", "presentacion", "registradoEn", "registradoPor", "registroTardio", "sePuedeAnular", "tipo", "valor" ],
         "type" : "object"
       },
       "Navegacion" : {
@@ -2655,8 +2736,23 @@
         "type" : "object"
       },
       "PaginaDeMovimientos" : {
-        "description" : "El libro es la única lista que crece sin tope, así que dice cuántos hay además de traer los primeros",
+        "description" : "Una página del libro, que es la única lista que crece sin tope: trae la página pedida, cuántos hay en total y lo que la pantalla necesita para no decidir nada (10 §4.3)",
         "properties" : {
+          "limite" : {
+            "description" : "Cuántos movimientos caben en esta página: el pedido o, sin él, el máximo",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "maximoPorPagina" : {
+            "description" : "El máximo de movimientos por página. La pantalla no ofrece un tamaño mayor y arranca en él",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "mesEnCurso" : {
+            "description" : "El mes de hoy en Bogotá, AAAA-MM (RNF-08). La pantalla apaga ahí la flecha de adelante",
+            "pattern" : "^[0-9]{4}-(0[1-9]|1[0-2])$",
+            "type" : "string"
+          },
           "movimientos" : {
             "description" : "Los más recientes primero, por fecha del movimiento",
             "items" : {
@@ -2664,13 +2760,26 @@
             },
             "type" : "array"
           },
+          "pagina" : {
+            "description" : "La página que se devolvió",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "puedeAnular" : {
+            "description" : "Si quien mira puede anular movimientos, que es solo Gerencia (CU-03 A1). Con false no se pinta el botón en ninguna fila",
+            "type" : "boolean"
+          },
+          "puedeVerAnulados" : {
+            "description" : "Si quien mira puede pedir los anulados, que es solo Gerencia (04 §5.5). Con false no se pinta el interruptor «Ver anulados»",
+            "type" : "boolean"
+          },
           "total" : {
-            "description" : "Cuántos hay en total con esos filtros, para decir cuántos faltan",
+            "description" : "Cuántos hay en total con esos filtros, para el pie «1–10 de 14»",
             "format" : "int32",
             "type" : "integer"
           }
         },
-        "required" : [ "movimientos", "total" ],
+        "required" : [ "limite", "maximoPorPagina", "mesEnCurso", "movimientos", "pagina", "puedeAnular", "puedeVerAnulados", "total" ],
         "type" : "object"
       },
       "Patrimonio" : {
@@ -2869,6 +2978,54 @@
         "required" : [ "anio", "cerrado", "id", "mes" ],
         "type" : "object"
       },
+      "PresentacionDeMovimiento" : {
+        "description" : "Cómo se pinta la fila de un movimiento en el libro (RF-104, 10 §4.3). La decide la API con lo que Gerencia eligió en presentacion_tipos: el front pinta la píldora y el valor tal como llegan, y no traduce ningún tipo",
+        "properties" : {
+          "color" : {
+            "description" : "El color de la píldora del tipo, uno de los cuatro que el 10 §3.1 deja para un tipo. El valor se pinta del mismo color",
+            "enum" : [ "gris", "morado", "rojo", "verde" ],
+            "type" : "string"
+          },
+          "seLeeComo" : {
+            "description" : "El nombre con que se lee el tipo en el libro, como «Anticipo · pasivo». De 1 a 30 caracteres",
+            "type" : "string"
+          },
+          "signo" : {
+            "description" : "El signo del valor, que es el de lo que el movimiento le hace a la caja y no se configura: mas si la plata entró a las cuentas, menos si salió, y ninguno si solo cambió de cuenta, como en una transferencia",
+            "enum" : [ "mas", "menos", "ninguno" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "color", "seLeeComo", "signo" ],
+        "type" : "object"
+      },
+      "PresentacionDeTipo" : {
+        "description" : "Un renglón del bloque «Cómo se ve cada tipo» del panel «Cuentas de dinero» (RF-104, 10 §4.3): lo que Gerencia cambia —el nombre, el color y el grupo— y lo que no se configura, su efecto",
+        "properties" : {
+          "color" : {
+            "enum" : [ "gris", "morado", "rojo", "verde" ],
+            "type" : "string"
+          },
+          "efecto" : {
+            "$ref" : "#/components/schemas/EfectoDeTipo"
+          },
+          "grupo" : {
+            "description" : "En qué botón del filtro «Todos · Ingresos · Gastos» sale. Cambia en qué filtro sale, no lo que es: el anticipo en «Ingresos» sigue siendo un pasivo (RN-05)",
+            "enum" : [ "gastos", "ingresos", "ninguno" ],
+            "type" : "string"
+          },
+          "seLeeComo" : {
+            "type" : "string"
+          },
+          "tipo" : {
+            "description" : "Los nueve valores del ENUM tipo_movimiento",
+            "enum" : [ "ingreso", "gasto", "transferencia", "inversion", "aporte", "retiro_prolabore", "retiro_distribucion", "anticipo_recibido", "adelanto_empleada" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "color", "efecto", "grupo", "seLeeComo", "tipo" ],
+        "type" : "object"
+      },
       "Productividad" : {
         "description" : "Horas pagadas contra horas facturadas, y lo que cuesta la diferencia (06 §9, CU-27)",
         "properties" : {
@@ -3038,6 +3195,35 @@
           }
         },
         "required" : [ "gastosFijosMensuales", "margenDeContribucion", "ventasNecesarias" ],
+        "type" : "object"
+      },
+      "RegistroHermano" : {
+        "description" : "El registro que va con un movimiento y que se anula con él (04 §5.2, CU-03): el anticipo de un pedido, la venta que causó su entrega, un activo, un aporte, una mitad de un retiro, un adelanto o el pago de una nómina. Lo pinta la fila abierta del libro y el panel de anular (10 §4.3)",
+        "properties" : {
+          "anulacion" : {
+            "$ref" : "#/components/schemas/Anulacion",
+            "description" : "Presente cuando el registro ya está anulado. Es lo que responde la anulación del movimiento para decir qué más se anuló"
+          },
+          "clase" : {
+            "description" : "Qué clase de registro es. Un retiro partido en pro-labore y distribución son dos movimientos, y cada uno apunta al retiro entero",
+            "enum" : [ "activo", "adelanto", "anticipo", "aporte", "nomina", "retiro", "venta" ],
+            "type" : "string"
+          },
+          "descripcion" : {
+            "description" : "El registro en palabras, para pintarlo tal cual: «Anticipo del pedido P-0042 · Marcela Ríos», «Máquina bordadora», «Retiro del 12 de septiembre: pro-labore y distribución»",
+            "type" : "string"
+          },
+          "id" : {
+            "description" : "El id del registro en su propia tabla",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "seAnulaConEl" : {
+            "description" : "Si anular el movimiento anula también este registro, en la misma transacción. Con false, el movimiento no se deja anular y Movimiento.porQueNo dice por qué",
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "clase", "descripcion", "id", "seAnulaConEl" ],
         "type" : "object"
       },
       "Reporte" : {
@@ -4102,6 +4288,28 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobreListPresentacionDeTipo" : {
+        "properties" : {
+          "data" : {
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver",
+            "items" : {
+              "$ref" : "#/components/schemas/PresentacionDeTipo"
+            },
+            "type" : "array"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreListProducto" : {
         "properties" : {
           "data" : {
@@ -4264,6 +4472,25 @@
         "properties" : {
           "data" : {
             "$ref" : "#/components/schemas/PeriodoDeNomina",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobrePresentacionDeTipo" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/PresentacionDeTipo",
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
           },
           "mensaje" : {
@@ -4675,7 +4902,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.18.0"
+    "version" : "0.20.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -6874,7 +7101,7 @@
     },
     "/api/v0/consultas/movimientos" : {
       "post" : {
-        "description" : "El libro único con sus filtros: rango de fechas del movimiento, tipo, categoría y cuenta, lo más reciente primero (RF-08 a RF-13, CU-13). Cada movimiento trae el nombre de su cuenta y de su categoría, y si llegó tarde: las tres las resuelve la API, porque el front no consulta de más ni cuenta días (ADR-018). Los anulados no salen salvo que se pidan, y pedirlos es solo de Gerencia (04 §5.5). Consultan los dos tipos de usuario. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902 y 42200 con data.errores.",
+        "description" : "El libro único con sus filtros, por páginas: rango de fechas del movimiento, grupo del filtro «Todos · Ingresos · Gastos», tipo, categoría y cuenta, lo más reciente primero (RF-08 a RF-13, RF-104, CU-13, 10 §4.3). Cada movimiento trae el nombre de su cuenta y de su categoría, si llegó tarde, cómo se pinta su tipo, con qué registro va y si se deja anular: todo lo resuelve la API, porque el front no consulta de más, no cuenta días y no traduce tipos (ADR-018). La página trae el mes en curso de Bogotá, el máximo por página y si quien mira puede anular y ver anulados. Los anulados no salen salvo que se pidan, y pedirlos es solo de Gerencia (04 §5.5). Un rango con una sola fecha o al revés responde 42227; un límite por encima del máximo, 42200. Consultan los dos tipos de usuario. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902, 42200 con data.errores y 42227.",
         "operationId" : "movimientos",
         "parameters" : [ {
           "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
@@ -7262,6 +7489,63 @@
         },
         "summary" : "Los meses de nómina",
         "tags" : [ "Nómina" ]
+      }
+    },
+    "/api/v0/consultas/presentacion-de-tipos" : {
+      "post" : {
+        "description" : "Los nueve tipos de movimiento, cada uno con cómo se lee en el libro —el nombre, el color de su píldora y el grupo del filtro— y con lo que le hace a la utilidad, la caja y el patrimonio, que no se configura (RF-104, 10 §4.3). Es el bloque «Cómo se ve cada tipo» del panel «Cuentas de dinero», así que solo Gerencia, y hoy lo niega la API con 40300. Operación no lo necesita: cada fila del libro trae su propia presentación. Van en el orden del ENUM tipo_movimiento. Puede devolver 20000, 40100, 40101, 40102, 40103, 40300 y 40302.",
+        "operationId" : "presentacionDeTipos",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreListPresentacionDeTipo"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Cómo se ve cada tipo de movimiento",
+        "tags" : [ "Movimientos" ]
       }
     },
     "/api/v0/consultas/productividad" : {
@@ -7701,6 +7985,73 @@
         },
         "summary" : "Los cuatro sobres vigentes",
         "tags" : [ "Capital" ]
+      }
+    },
+    "/api/v0/consultas/soporte" : {
+      "post" : {
+        "description" : "Baja el soporte de un movimiento —la foto del recibo o el PDF de la factura— para enseñarlo en la fila abierta del libro (RF-12, 10 §4.3). Viaja dentro del sobre, en un Documento con el contenido en base64, como el desprendible: así la ruta no tiene dos formas de contestar. El archivo sale de la API y nunca directo del almacenamiento (07 §1). Consultan los dos tipos de usuario, los mismos que ven el libro. Un adjunto que no existe, que está anulado o cuyo movimiento no le deja ver la base a quien pide responde 40400. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40400, 40901 y 40902.",
+        "operationId" : "soporte",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeSoporte"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreDocumento"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Bajar el soporte de un movimiento",
+        "tags" : [ "Movimientos" ]
       }
     },
     "/api/v0/consultas/tablero" : {
@@ -8774,7 +9125,7 @@
     },
     "/api/v0/movimientos/{id}/anulacion" : {
       "post" : {
-        "description" : "Anula el movimiento con motivo escrito y no borra nada (RF-14, RN-13, CU-03): la fila guarda cuándo, quién y por qué, y desde ese momento no suma en ninguna cifra. Solo Gerencia, y lo rechaza la base con mov_anulacion (04 §7). Para corregir un valor equivocado se registra un contra-asiento, que es otro movimiento, y el original queda intacto (RF-15, 04 §5.3). Uno ya anulado responde 40900. El formulario es «anulacion-de-movimiento». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902 y 42200 con data.errores.",
+        "description" : "Anula el movimiento con motivo escrito y no borra nada (RF-14, RN-13, CU-03): la fila guarda cuándo, quién y por qué, y desde ese momento no suma en ninguna cifra. Anula también el registro que va con él —el anticipo de un pedido en proceso, un activo, un aporte, las dos mitades de un retiro o un adelanto sin descontar—, con el mismo motivo y en la misma transacción, que es fn_anular_movimiento (04 §5.2, §10); el movimiento que vuelve trae su registroHermano con la anulación puesta, y eso es lo que más se anuló. Cuando el registro ya siguió su vida no anula nada y responde su código: el anticipo de un pedido entregado o cancelado 40920, la venta que causó una entrega 40921, un adelanto ya descontado en una nómina 40922 y el pago de una nómina 40923 (CU-03 A4 a A7). Uno de un mes cerrado responde 40960 (CU-03 A3). En todos esos casos lo que corrige es un contra-asiento, que es otro movimiento, y el original queda intacto (RF-15, 04 §5.3). Solo Gerencia, y lo rechaza la base con mov_anulacion (04 §7). Uno ya anulado responde 40900. El formulario es «anulacion-de-movimiento». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902, 40920, 40921, 40922, 40923, 40960 y 42200 con data.errores.",
         "operationId" : "anularMovimiento",
         "parameters" : [ {
           "description" : "El id del movimiento que se anula",
@@ -8845,6 +9196,91 @@
           }
         },
         "summary" : "Anular un movimiento",
+        "tags" : [ "Movimientos" ]
+      }
+    },
+    "/api/v0/movimientos/{id}/correccion/{correccionId}" : {
+      "put" : {
+        "description" : "Corrige un movimiento errado registrando otro que lo reversa, y el original queda intacto (RF-15, CU-04, 04 §5.3). El contra-asiento es un movimiento como cualquier otro —el mismo formulario «movimiento», las mismas reglas y los mismos códigos— con una sola diferencia: queda apuntando al que corrige, así que los dos se leen en el libro y la historia cuenta también el error. Los dos ids van en la ruta: el del movimiento que se corrige, y el del contra-asiento, que genera quien corrige al decidir la acción (ADR-020); el mismo dos veces responde 40900 en vez de duplicar el libro, y un movimiento que no existe responde 40400. Corrige solo Gerencia, y lo rechaza la base con mov_insercion (04 §7), no un if: registrar sigue siendo de los dos tipos de usuario, y lo que la política juzga es quién llena corrige_a_id. No anula nada: anular y corregir son dos cosas distintas, y lo de un mes cerrado solo se corrige (CU-03 A3). Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902, 42200 con data.errores, 42223, 42224, 42225 y 42226.",
+        "operationId" : "corregirMovimiento",
+        "parameters" : [ {
+          "description" : "El id del movimiento que se corrige",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "El id del contra-asiento, que genera quien corrige",
+          "in" : "path",
+          "name" : "correccionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevoMovimiento"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreMovimiento"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Corregir un movimiento por contra-asiento",
         "tags" : [ "Movimientos" ]
       }
     },
@@ -9510,6 +9946,82 @@
         },
         "summary" : "La remisión de entrega en PDF",
         "tags" : [ "Cotizaciones" ]
+      }
+    },
+    "/api/v0/presentacion-de-tipos/{tipo}/edicion" : {
+      "post" : {
+        "description" : "Cambia cómo se lee un tipo en el libro: el nombre, el color y el grupo del filtro (RF-104, 10 §4.3). Se cambia en su sitio, como un cargo, y no con una fila por cambio: el libro pinta todo con la presentación de hoy, y quién la cambió y cuándo lo guarda la bitácora (04 §4.13). No toca lo que el tipo le hace a las tres cifras, que no se configura. Solo Gerencia. El formulario es «presentacion-de-tipo». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902 y 42200 con data.errores.",
+        "operationId" : "editarPresentacionDeTipo",
+        "parameters" : [ {
+          "description" : "El tipo cuya presentación se cambia",
+          "in" : "path",
+          "name" : "tipo",
+          "required" : true,
+          "schema" : {
+            "enum" : [ "ingreso", "gasto", "transferencia", "inversion", "aporte", "retiro_prolabore", "retiro_distribucion", "anticipo_recibido", "adelanto_empleada" ],
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DatosDePresentacionDeTipo"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobrePresentacionDeTipo"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Cambiar cómo se ve un tipo",
+        "tags" : [ "Movimientos" ]
       }
     },
     "/api/v0/productos/{id}" : {
@@ -10929,6 +11441,50 @@
     "nombre" : "ADJUNTO_NO_ES_FOTO_NI_PDF",
     "status" : 40021
   }, {
+    "cuando" : "Anular el movimiento de un anticipo cuyo pedido ya se entregó o se canceló: el anticipo ya se volvió venta o ya se decidió su destino (CU-03 A4)",
+    "http" : 409,
+    "mensaje" : "Ese anticipo es de un pedido ya entregado o cancelado: no se anula, se corrige con un contra-asiento.",
+    "modulo" : "MOVIMIENTOS_Y_CUENTAS",
+    "nombre" : "ANTICIPO_DE_PEDIDO_CERRADO",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 3.23: anular arrastra al registro hermano",
+      "sprint" : 3
+    },
+    "status" : 40920
+  }, {
+    "cuando" : "Anular el ingreso con que se causó la venta de un pedido entregado: el pedido quedaría entregado sin venta (CU-03 A5)",
+    "http" : 409,
+    "mensaje" : "Ese ingreso es la venta de un pedido entregado. Anularlo dejaría el pedido sin venta: se corrige con un contra-asiento.",
+    "modulo" : "MOVIMIENTOS_Y_CUENTAS",
+    "nombre" : "VENTA_DE_PEDIDO_ENTREGADO",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 3.23: anular arrastra al registro hermano",
+      "sprint" : 3
+    },
+    "status" : 40921
+  }, {
+    "cuando" : "Anular el movimiento de un adelanto que ya se descontó en una nómina liquidada (CU-03 A6, RN-11)",
+    "http" : 409,
+    "mensaje" : "Ese adelanto ya se descontó en una nómina: no se anula, se corrige con un contra-asiento.",
+    "modulo" : "MOVIMIENTOS_Y_CUENTAS",
+    "nombre" : "ADELANTO_YA_DESCONTADO",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 3.23: anular arrastra al registro hermano",
+      "sprint" : 3
+    },
+    "status" : 40922
+  }, {
+    "cuando" : "Anular el movimiento con que se pagó una liquidación de nómina, que no tiene cómo anularse (CU-03 A7)",
+    "http" : 409,
+    "mensaje" : "Ese movimiento es el pago de una nómina: no se anula, se corrige con un contra-asiento.",
+    "modulo" : "MOVIMIENTOS_Y_CUENTAS",
+    "nombre" : "PAGO_DE_NOMINA",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 3.23: anular arrastra al registro hermano",
+      "sprint" : 3
+    },
+    "status" : 40923
+  }, {
     "cuando" : "Se crea una categoría dentro de otra que no existe o que fue anulada. El error va en data.errores, sobre padreId",
     "http" : 422,
     "mensaje" : "La categoría madre que elegiste no existe.",
@@ -10989,6 +11545,17 @@
     "modulo" : "MOVIMIENTOS_Y_CUENTAS",
     "nombre" : "CUENTA_DE_DESTINO_QUE_NO_CORRESPONDE",
     "status" : 42226
+  }, {
+    "cuando" : "Una consulta del libro con desde sin hasta, hasta sin desde, o desde después de hasta. El error va en data.errores, sobre la fecha que falta o sobre desde",
+    "http" : 422,
+    "mensaje" : "Para ver otro rango pon las dos fechas, y la de «Desde» no puede ir después de la de «Hasta».",
+    "modulo" : "MOVIMIENTOS_Y_CUENTAS",
+    "nombre" : "RANGO_DE_FECHAS_INVALIDO",
+    "pendienteDeEmitir" : {
+      "quien" : "Tarea 3.21: el libro que dibujó el mockup, en la API",
+      "sprint" : 3
+    },
+    "status" : 42227
   }, {
     "cuando" : "El anticipo, sumado a los ya cobrados del pedido, supera su valor total, o no es mayor que cero. El error va en data.errores, sobre valor",
     "http" : 422,
@@ -11266,7 +11833,7 @@
     "pendienteDeEmitir" : true,
     "status" : 42271
   }, {
-    "cuando" : "Cerrar un mes que ya tiene su fila en cierres_mensuales. Lo rechaza cierres_mensuales_anio_mes_key, no un if",
+    "cuando" : "Cerrar un mes que ya tiene su fila en cierres_mensuales. Lo rechaza cierres_mensuales_anio_mes_key, no un if. También anular un movimiento de un mes cerrado, que se corrige con un contra-asiento (CU-03 A3)",
     "http" : 409,
     "mensaje" : "Ese mes ya está cerrado.",
     "modulo" : "REPORTES_Y_CIERRES",

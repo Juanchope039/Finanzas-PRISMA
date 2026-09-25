@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/03-requisitos-y-bdd.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [2.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/03-requisitos-y-bdd.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 ---
 
@@ -69,11 +69,17 @@ evalúa Row Level Security; el cargo es descriptivo y nunca decide un permiso.
 | <a id="rf-16"></a>RF-16 | Rechazar fechas de movimiento futuras | S | [CU-01](02-casos-de-uso.md#cu-01) |
 | <a id="rf-17"></a>RF-17 | Permitir categorías jerárquicas de ingreso y gasto | S | — |
 | <a id="rf-97"></a>RF-97 | Precisa **[RF-06](#rf-06)**: las cuentas de dinero se crean desde Movimientos y solo con tipo Gerencia | M | — |
+| <a id="rf-104"></a>RF-104 | Permitir a Gerencia elegir cómo se ve cada tipo de movimiento en el libro —el nombre con que se lee, el color de su píldora y si cuenta en «Ingresos», en «Gastos» o en ninguno— sin cambiar lo que le hace a la utilidad, la caja y el patrimonio | S | — |
 
 > **[RF-97](#rf-97) no repite a [RF-06](#rf-06): lo precisa.** [RF-06](#rf-06) dice qué capacidad existe —crear cuentas de
 > dinero—; [RF-97](#rf-97) dice dónde se ejerce y quién puede. Se leen en dos renglones porque los
 > identificadores son etiquetas estables: [RF-06](#rf-06) encabeza el rango `RF-06 … RF-17` de la matriz
 > de trazabilidad ([§5](#5-matriz-de-trazabilidad)), y fundirlos o renumerarlos rompería esa cadena.
+
+> **[RF-104](#rf-104) cambia cómo se lee un tipo, no lo que es.** Que Gerencia ponga el anticipo en «Ingresos»
+> cambia en qué filtro del libro sale, no lo que es: sigue siendo un pasivo ([RN-05](#rn-05)), y lo que cada
+> tipo le hace a las tres cifras lo fija el [05 §2](05-reglas-financieras.md#2-naturaleza-de-cada-movimiento) y no se configura. Por eso el color se elige entre
+> cuatro y no es libre ([10 §3.1](10-ux-y-mockups.md#31-color)). Lo decidió quien dirige al aprobar el dibujo del libro ([10 §4.3](10-ux-y-mockups.md#43-movimientos)).
 
 ### 1.3 Clientes, pedidos y facturas
 
@@ -383,10 +389,11 @@ Formato Gherkin tabulado. Cada escenario se convierte en una prueba automática.
 | <a id="bdd-100-1"></a>BDD-100-1 | «Acerca de» responde la primera pregunta de todo reporte de fallo | Una sesión abierta en QA | Abro «Acerca de» desde el menú de la sesión | Veo la versión del front, la de la API, la del esquema, el ambiente, la fecha de compilación y la referencia del commit |
 | <a id="bdd-101-1"></a>BDD-101-1 | El front rechaza una API con MAJOR incompatible | Un front compilado contra la MAJOR 1 de la API y un servidor que responde `2.0.0` en `POST /api/v0/consultas/version` | Abro la aplicación | La sesión no abre: aparece «Esta versión de la aplicación ya no sirve con el servidor. Actualiza.» y no hay forma de seguir |
 
-> **El número del medio de `BDD-98-*`, `BDD-100-1` y `BDD-101-1` es el del requisito, no el de un
-> caso de uso.** Es la única excepción del documento y no admite ambigüedad: los casos de uso
-> llegan a [CU-37](02-casos-de-uso.md#cu-37), así que ningún identificador puede chocar. Se hace así porque estos escenarios
-> verifican requisitos que a propósito no cuelgan de ningún caso de uso (ver [§1.8](#18-administración-del-sistema)).
+> **El número del medio de `BDD-98-*`, `BDD-100-1`, `BDD-101-1` y `BDD-104-*` es el del requisito, no
+> el de un caso de uso.** Es la única excepción del documento y no admite ambigüedad: los casos de
+> uso llegan a [CU-37](02-casos-de-uso.md#cu-37), así que ningún identificador puede chocar. Se hace así porque estos
+> escenarios verifican requisitos que no cuelgan de ningún caso de uso: los de [§1.8](#18-administración-del-sistema), a propósito,
+> y [RF-104](#rf-104), que es de la pantalla del libro y no de una tarea del taller.
 
 ### 4.12 Idempotencia, canal firmado y mensajes dictados por la API
 
@@ -400,6 +407,13 @@ Formato Gherkin tabulado. Cada escenario se convierte en una prueba automática.
 > no funcionales, no casos de uso. Sin el prefijo, `BDD-27-1` ya existe —el de tiempo ocioso de
 > [CU-27](02-casos-de-uso.md#cu-27)— y `BDD-28-1` también. La excepción de `BDD-98-*` funciona porque los casos de uso llegan
 > a [CU-37](02-casos-de-uso.md#cu-37) y esos números están libres; con [RNF-26](#rnf-26) a [RNF-31](#rnf-31) no lo estarían.
+
+### 4.13 Cómo se ve cada tipo
+
+| ID | Escenario | Dado | Cuando | Entonces |
+|---|---|---|---|---|
+| <a id="bdd-104-1"></a>BDD-104-1 | Cambiar cómo se lee un tipo no cambia las cifras | El anticipo recibido, que se lee «Anticipo · pasivo» y no cuenta ni en «Ingresos» ni en «Gastos», y un anticipo de $1.500.000 cobrado este mes | Gerencia lo pone a contar en «Ingresos», en verde | El libro pinta el anticipo en verde y lo muestra con el filtro «Ingresos», y la utilidad del mes no cambia: sigue siendo un pasivo |
+| <a id="bdd-104-2"></a>BDD-104-2 | Operación no cambia cómo se lee un tipo | Sesión con rol Operación | Intento cambiar el nombre con que se lee el gasto | La base de datos rechaza la operación, no solo la pantalla |
 
 ---
 
@@ -423,17 +437,18 @@ Sin huérfanos en ninguna dirección.
 | [RF-95](#rf-95) … [RF-97](#rf-97) | [CU-13](02-casos-de-uso.md#cu-13) · [CU-37](02-casos-de-uso.md#cu-37) | [BDD-13-4](#bdd-13-4) | 1 · Dashboard · 3 · Movimientos | `cuentas`, `movimientos`, `exportaciones` |
 | [RF-98](#rf-98) … [RF-101](#rf-101) | — | [BDD-98-*](#bdd-98-1), [BDD-100-1](#bdd-100-1), [BDD-101-1](#bdd-101-1) | Todas (pie de la barra lateral y franja) · «Acerca de» | `schema_version` |
 | [RF-102](#rf-102) · [RF-103](#rf-103) | — | [BDD-RNF-28-1](#bdd-rnf-28-1) | Todas (formularios y navegación) | — · los dicta la API |
+| [RF-104](#rf-104) | — | [BDD-104-*](#bdd-104-1) | 3 · Movimientos | `presentacion_tipos` |
 | [RNF-26](#rnf-26) … [RNF-31](#rnf-31) | — | [BDD-RNF-27-1](#bdd-rnf-27-1), [BDD-RNF-28-1](#bdd-rnf-28-1), [BDD-RNF-29-1](#bdd-rnf-29-1) | Todas (sobre de respuesta y cola local) | `peticiones_idempotentes` |
 
 > **La última fila es de requisitos no funcionales, y es la única.** Se incluye porque los tres
 > escenarios de [§4.12](#412-idempotencia-canal-firmado-y-mensajes-dictados-por-la-api) no cuelgan de ningún RF y quedarían huérfanos en la matriz, que es justo lo
 > que esta sección promete que no pasa.
 
-**Cobertura:** 103 requisitos funcionales · 31 no funcionales · 19 reglas de negocio ·
-37 casos de uso · 67 escenarios BDD · 11 pantallas.
+**Cobertura:** 104 requisitos funcionales · 31 no funcionales · 19 reglas de negocio ·
+37 casos de uso · 69 escenarios BDD · 11 pantallas.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.18.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-016](adr/ADR-016-flutter-web-pwa.md "ADR-016 · Flutter Web instalable como PWA") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.20.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-016](adr/ADR-016-flutter-web-pwa.md "ADR-016 · Flutter Web instalable como PWA") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
