@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [8.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-26 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [8.8.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-26 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -39,12 +39,12 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 2](#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
 | [Sprint 3](#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 5 | 0 | 6 | 8 |
-| [Sprint 5](#sprint-5) · Productos y costeo | 11 | 6 | 0 | 5 | 5,5 |
+| [Sprint 5](#sprint-5) · Productos y costeo | 11 | 7 | 0 | 4 | 4 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 3 | 0 | 6 | 8,5 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **153** | **105** | **0** | **48** | **62,5** |
+| **Total** | **153** | **106** | **0** | **47** | **61** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -151,7 +151,8 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **Base** | [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5) |
 | **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -159,12 +160,12 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **48 tareas y 62,5 días de trabajo** de 153 tareas del plan.
+Quedan **47 tareas y 61 días de trabajo** de 153 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 9,3 semanas | **12,3 semanas** |
-| 2 | 5,2 semanas | **8,2 semanas** |
+| 1 | 9,1 semanas | **12,1 semanas** |
+| 2 | 5,1 semanas | **8,1 semanas** |
 | 3 | 4,6 semanas | **7,6 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -925,20 +926,24 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [x] [**5.1**](docs/08-plan-de-desarrollo.md#tarea-5-1) Dominio `Producto` y servicio `calcularMargenes` · API — los tres márgenes de
       [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes) reproducidos producto por producto, con el margen por hora vacío —no en cero—
       cuando el ítem no consume tiempo
-- [ ] ⚡ [**5.2**](docs/08-plan-de-desarrollo.md#tarea-5-2) Catálogo de productos y servicios · API, Front — **la mitad API está
-      hecha**: las seis rutas del contrato de la [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) —crear con su primer costeo, guardar,
-      desactivar y reactivar, el cuadro y la vista previa del formulario—, los códigos `40940` y
-      `42240` y el tipo `numero` del descriptor. La tarifa sale del pro-labore y se congela en el
-      costeo; con la semilla, el cuadro es el de [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes). A Operación le llega por nombre y sin
-      cifras porque la base no le devuelve el costeo ([BDD-02-2](docs/03-requisitos-y-bdd.md#bdd-02-2)). La API declara el esquema
-      `0.17.0`. **Falta la pantalla**, del carril Front, y la tarea se marca cuando aterricen las dos
-      mitades ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)). El precio sugerido es de la [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7)
+- [x] [**5.2**](docs/08-plan-de-desarrollo.md#tarea-5-2) Catálogo de productos y servicios · API, Front — **las dos mitades
+      aterrizaron.** La API trae las seis rutas del contrato de la [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) —crear con su primer
+      costeo, guardar, desactivar y reactivar, el cuadro y la vista previa del formulario—, los
+      códigos `40940` y `42240` y el tipo `numero` del descriptor, con el esquema `0.17.0`. La tarifa
+      sale del pro-labore y se congela en el costeo; con la semilla, el cuadro es el de [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes).
+      **Y en el front se abre «Productos y servicios»**: la tabla de ocho columnas, y **las cinco de
+      cifras se pintan solo si llegó el costeo**, así que a Operación le quedan el producto y el
+      precio ([BDD-02-2](docs/03-requisitos-y-bdd.md#bdd-02-2)) sin que el front pregunte quién mira. El formulario lo describe la API y
+      **su vista previa la calcula la API**: al teclear algo que costea se pide el costeo, agrupado a
+      400 ms, y el deslizador de margen objetivo estrena el `precioSugerido` de la [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7). Desactivar
+      pide motivo con su descriptor y reactivar no pregunta nada. El cuadro ordenable con su barra es
+      la [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9)
 - [x] [**5.3**](docs/08-plan-de-desarrollo.md#tarea-5-3) Costeo unitario: insumo, consumibles y minutos de trabajo · API — las dos fórmulas
       de [05 §7.1](docs/05-reglas-financieras.md#71-costo-unitario): el costo partido en materia y tiempo, y la tarifa por hora que sale del
       pro-labore o del salario. Reproduce la tabla de [06 §4.1](docs/06-nomina-y-capacidad-de-pago.md#41-el-margen-de-contribución-correcto). Atar el costeo al historial de cada producto es
       la [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5), y el tiempo de máquina del bordado, la [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4)
 - [ ] ⚡ [**5.4**](docs/08-plan-de-desarrollo.md#tarea-5-4) Costeo de bordado por tiempo de máquina · API
-- [ ] 🔒 [**5.5**](docs/08-plan-de-desarrollo.md#tarea-5-5) Historial de costos con fecha de vigencia · Base, API
+- [ ] ⚡ [**5.5**](docs/08-plan-de-desarrollo.md#tarea-5-5) Historial de costos con fecha de vigencia · Base, API
 - [x] [**5.6**](docs/08-plan-de-desarrollo.md#tarea-5-6) Margen por hora · API — `CompararMargenes` arma el cuadro de [10 §4.4](docs/10-ux-y-mockups.md#44-productos-y-servicios),
       ordenado por margen por hora y también por porcentaje, y lee cada producto contra la mediana de
       los demás: con la tabla de [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes), solo el rompecabezas rinde menos. Trae la lectura, su nivel y el
@@ -1517,6 +1522,34 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **Las restricciones del cotizador van por su clase en la tabla de traducción**, como toda
       restricción cuyo módulo no tiene API todavía: `no_vence_antes_de_emitirse` responde `42200` y
       no el `42281` de su contrato, y `aceptada_no_se_anula` tampoco el `40980`. Los pone la [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8)
+
+**De la 5.2, el catálogo de productos, en su mitad Front:**
+
+- [ ] **Cargando, catálogo vacío y error de red se inventaron, porque el mockup no los dibuja.** Un
+      indicador mientras no llega la lista, `AvisoDeLectura` con «Reintentar» cuando falla, y «Todavía
+      no hay ningún producto en el catálogo.» cuando no hay ninguno. Esa frase es legítima —no es del
+      catálogo de la API, como «Todavía no hay ninguna cuenta.»—, pero los tres hay que dibujarlos
+- [ ] **La columna «Tiempo» se va con las de Gerencia, aunque el mockup la pinte para los dos.** Su
+      `<th>` no lleva `data-ger`, pero `minutosTrabajo` vive **dentro** del costeo y a Operación no le
+      llega ni una fila de `costos_producto`. Las dos salidas de verdad son ajustar el mockup o subir
+      los minutos fuera del costeo, y ninguna es del carril Front
+- [ ] **El deslizador del margen objetivo se mueve entre 20 y 80, y el contrato admite de 1 a 99.** Se
+      tomó el rango del mockup, que es la pantalla aprobada. Si algún día se abre, la API ya lo
+      acepta: no hay que tocar nada del otro lado
+- [ ] 🔒 **La mitad Front del precio sugerido entró aquí sin tener tarea en el 08.** La [5.7](docs/08-plan-de-desarrollo.md#tarea-5-7) es de carril
+      API y la palabra «sugerido» no aparece en el [08](docs/08-plan-de-desarrollo.md): sin esta decisión, el control que el mockup
+      dibuja en este formulario no habría tenido dueño. Lo autorizó quien dirige
+- [ ] **Los controles de escritura se pintan siempre, y el «no» lo dice la base.** El mockup marca
+      «+ Nuevo producto», «Editar» y «Desactivar» como de Gerencia, y el front no tiene con qué
+      distinguirlo. Se descartó atarlos a que haya cifras a la vista: con el catálogo vacío, Gerencia
+      se quedaría sin poder crear el primero
+- [ ] **El margen porcentual se pinta entero, y el contrato lo manda con dos decimales.** Esa es la
+      precisión del dato y no la de la pantalla: el mockup lo redondea, y en ocho columnas los
+      decimales sobran. El valor completo sigue llegando
+- [ ] **El color del margen por hora sale del `nivel` de la lectura, no del umbral del mockup.** El
+      mockup pinta en rojo por debajo de `$30.000`, un número que no está en ningún documento y que
+      escrito en `lib/` sería una regla del front. Se mapean `critica` a rojo y `alta` a ámbar, y un
+      nivel que esta versión no conozca se pinta neutro
 
 **De la gestión de clientes (4.2):**
 
