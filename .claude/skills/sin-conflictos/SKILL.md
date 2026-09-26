@@ -3,7 +3,7 @@ name: sin-conflictos
 description: Trae la base a una rama de PRISMA —develop en los repositorios de código, main en la especificación— y la deja sin un solo conflicto, con las puertas en verde y la base adentro. Es el paso 2 de la skill pr, así que solo corre con el PR autorizado. Se invoca a mano.
 argument-hint: "[repositorio, o id de la tarea para hacerlo en todos los que toca]"
 disable-model-invocation: true
-model: opus
+model: sonnet
 ---
 
 # Traer la base y dejar la rama sin conflictos
