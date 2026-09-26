@@ -3,14 +3,25 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/README.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-13 | 2026-09-24 | [Negocio](docs/INDICE.md#etiqueta-negocio) · [Plan](docs/INDICE.md#etiqueta-plan) |
+| [1.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/README.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-13 | 2026-09-26 | [Negocio](docs/INDICE.md#etiqueta-negocio) · [Plan](docs/INDICE.md#etiqueta-plan) |
 
 > **PRISMA** = **P**lataforma de **R**egistro, **I**nversión, **S**eguimiento, **M**árgenes y **A**dministración.
 > Un solo lugar para saber cuánto entra, cuánto sale, cuánto queda y cuánto se puede pagar.
 
 ---
+## Índice
+- [1. El problema en una frase](#titulo-1)
+- [2. Índice de la documentación](#titulo-2)
+- [3. Mockup interactivo](#titulo-3)
+- [4. Las tres piezas que se van a construir](#titulo-4)
+- [5. Las 7 decisiones de diseño que definen el producto](#titulo-5)
+- [6. Estado del proyecto](#titulo-6)
+- [7. Cómo usar esta documentación](#titulo-7)
+- [8. Advertencia](#titulo-8)
+- [9. Licencia](#titulo-9)
+---
 
-## 1. El problema en una frase
+## <a id="titulo-1"></a>1. El problema en una frase
 
 Hoy la plata del negocio y la plata personal se mezclan, las facturas viven en fotos del celular
 y en un cuaderno, y no hay forma confiable de responder tres preguntas críticas:
@@ -23,7 +34,7 @@ PRISMA existe para responder esas tres preguntas con números, no con intuición
 
 ---
 
-## 2. Índice de la documentación
+## <a id="titulo-2"></a>2. Índice de la documentación
 
 > 🧭 **¿No eres técnico y no sabes por dónde empezar?** Abre el
 > **[índice navegable](docs/INDICE.md)**: organiza toda la documentación por preguntas
@@ -61,7 +72,7 @@ PRISMA existe para responder esas tres preguntas con números, no con intuición
 
 ---
 
-## 3. Mockup interactivo
+## <a id="titulo-3"></a>3. Mockup interactivo
 
 Antes de escribir una sola línea de código de producción hay un **prototipo navegable**
 en [`mockup/prisma-mockup.html`](mockup/prisma-mockup.html).
@@ -90,7 +101,7 @@ Son 11 pantallas con datos ficticios realistas, contando la de acceso.
 
 ---
 
-## 4. Las tres piezas que se van a construir
+## <a id="titulo-4"></a>4. Las tres piezas que se van a construir
 
 El mockup es un archivo HTML suelto y se abre con doble clic. El sistema de verdad no: son
 **tres piezas con vidas separadas**, y hay que saber cuál es cuál antes de tocar nada.
@@ -135,7 +146,7 @@ siempre en pantalla qué versión es y contra qué ambiente está hablando. El d
 
 ---
 
-## 5. Las 7 decisiones de diseño que definen el producto
+## <a id="titulo-5"></a>5. Las 7 decisiones de diseño que definen el producto
 
 | # | Decisión | Por qué |
 |---|----------|---------|
@@ -149,7 +160,7 @@ siempre en pantalla qué versión es y contra qué ambiente está hablando. El d
 
 ---
 
-## 6. Estado del proyecto
+## <a id="titulo-6"></a>6. Estado del proyecto
 
 | Fase | Estado |
 |------|--------|
@@ -179,7 +190,7 @@ paralelo— está en [`TODO.md`](TODO.md).
 
 ---
 
-## 7. Cómo usar esta documentación
+## <a id="titulo-7"></a>7. Cómo usar esta documentación
 
 - **Si diriges el negocio:** lee [`00-resumen-ejecutivo.md`](docs/00-resumen-ejecutivo.md), abre el mockup, y luego [`05-reglas-financieras.md`](docs/05-reglas-financieras.md).
 - **Si vas a programar:** lee `01`, `02`, `03`, `04`, `07`, `19` y `20` en ese orden.
@@ -187,7 +198,7 @@ paralelo— está en [`TODO.md`](TODO.md).
 
 ---
 
-## 8. Advertencia
+## <a id="titulo-8"></a>8. Advertencia
 
 **Este software no reemplaza a un contador público.** Es una herramienta de gestión y control
 interno, no un sistema contable certificado ni un facturador electrónico DIAN.
@@ -197,7 +208,7 @@ de esta versión y se documentan en [`docs/14-roadmap-e-ideas.md`](docs/14-roadm
 
 ---
 
-## 9. Licencia
+## <a id="titulo-9"></a>9. Licencia
 
 Copyright (C) 2026 Juan David Garzón Vallejo <juanchope039@gmail.com>.
 
