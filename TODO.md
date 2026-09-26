@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [8.13.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-26 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [8.14.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-26 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -132,6 +132,14 @@ migración ni código nuevo**: la clase `aporte` estaba en el esquema inicial, e
 ya la nombraban, y `fn_anular_movimiento` ya la arrastra desde la [3.20](docs/08-plan-de-desarrollo.md#tarea-3-20). **Falta su panel**, en la
 misma pantalla que espera la [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1), y con ella cierra la oleada 2 del [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7): solo el
 patrimonio queda detrás.
+
+**Y el reparto de cada peso ya se define desde la aplicación, y va a la misma pantalla.** La mitad
+API de la [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) está hecha: los cuatro sobres se configuran y se leen, y **cada cambio es una
+fila nueva**, así que el historial que pide el [RF-51](docs/03-requisitos-y-bdd.md#rf-51) queda entero. **Las dos reglas son de la
+base**: el «no» a Operación lo pone `sobres_solo_gerencia` y que los cuatro sumen 100, `suma_cien`,
+que estrena el `42293`. **Faltan los tres paneles juntos** —activos, aportes y sobres— en
+«Inversiones y retiros», y con ellos se cierran las dos oleadas del [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) que no esperan al
+patrimonio.
 
 **Lo siguiente, en cuanto alguien lo tome:** cerrar la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) destrabó lo que la estaba
 esperando. En el carril API **la prueba de permisos con sesión real ya está** ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)), y con ella
@@ -962,7 +970,21 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       en `0.22.0`, con 33 pruebas nuevas y 11 contra la base local ([§10](#10-decisiones-de-construcción-que-conviene-revisar))
 - [ ] 🔒 [**7.5**](docs/08-plan-de-desarrollo.md#tarea-7-5) Cálculo de patrimonio · API
 - [ ] 🔒 [**7.6**](docs/08-plan-de-desarrollo.md#tarea-7-6) Alerta de descapitalización a 12 meses · API
-- [ ] ⚡ [**7.7**](docs/08-plan-de-desarrollo.md#tarea-7-7) Los cuatro sobres con historial · API, Front
+- [ ] ⚡ [**7.7**](docs/08-plan-de-desarrollo.md#tarea-7-7) Los cuatro sobres con historial · API, Front — **la mitad
+      API está hecha**: `PUT /api/v0/sobres/{id}` define desde hoy cómo se reparte cada peso que entra
+      en efectivo —costo directo, gastos fijos, reserva y retiro ([05 §11](docs/05-reglas-financieras.md#11-la-regla-de-los-4-sobres))— y
+      `POST /api/v0/consultas/sobres` devuelve el reparto que rige. **Nada se sobrescribe**: cada
+      cambio es una fila de `sobres_config`, vigente desde el día de Bogotá, así que el historial del
+      [RF-51](docs/03-requisitos-y-bdd.md#rf-51) queda entero y la configuración de la semilla sigue donde estaba. **Las dos
+      reglas las impone la base, con su control positivo en el fallo**: el «no» a Operación lo pone
+      `sobres_solo_gerencia` —configurar responde `40300` y consultar le llega vacía, no con error
+      ([P-07](docs/12-pruebas-y-calidad.md#p-07), [P-22](docs/12-pruebas-y-calidad.md#p-22))— y que los cuatro sumen 100 lo para `suma_cien`, cuyo `23514`
+      **estrena el `42293`**, el código que el contrato de capital dejó pendiente para esta tarea. Una
+      regla entre cuatro campos no cabe en el descriptor ([20 §4.4](docs/20-contrato-de-api.md#44-las-reglas-que-caben-y-por-qué-no-caben-más)), y la API no la sabría
+      mejor que la base. **No pidió migración**: la tabla, la restricción y la política están desde el
+      esquema inicial. `prisma_api` en `0.27.0`, con 13 pruebas nuevas y 11 contra la base local.
+      **Falta la pantalla**, del carril Front, y la tarea se marca cuando aterricen las dos mitades
+      ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración))
 - [ ] 🔒 [**7.8**](docs/08-plan-de-desarrollo.md#tarea-7-8) Panel de sobres: asignado contra usado · Front
 - [x] [**7.9**](docs/08-plan-de-desarrollo.md#tarea-7-9) Contrato de inversiones, aportes, retiros, pro-labore y sobres · Contrato — v0.13.0:
       diez operaciones, veintitrés esquemas y cinco códigos que estrenan el rango `90`–`99`. El
