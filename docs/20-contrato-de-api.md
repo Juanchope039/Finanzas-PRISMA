@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-25 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-25 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
@@ -374,6 +374,17 @@ Una regla así sigue pudiendo existir: la comprueba la API cuando llega la petic
 vuelve en `data.errores`. Lo que no puede es **anunciarse en el descriptor**, y quien diseña el
 formulario lo sabe al arrancar la API, no cuando una empleada ve un error que la pantalla nunca
 le avisó.
+
+**Y hay un caso más, que no es una regla sino una forma: un campo que es una lista de renglones.**
+Las líneas de un pedido no son un campo con un valor, son una tabla que se agrega y se quita, y el
+descriptor no tiene cómo decirla. Ese campo va marcado para quedar fuera del descriptor, y entonces
+**la pantalla lo pinta a mano**: el formulario «pedido» llega con su cliente, sus fechas y su
+porcentaje, y los renglones los dibuja el front.
+
+Marcarlo no le devuelve ninguna regla al front. Lo que el renglón puede tener de malo —que no haya
+ninguno, que la cantidad no sea positiva o que el producto ya no esté en el catálogo— lo responde la
+API con su código y su aviso en `data.errores`, igual que las reglas de arriba. Lo único que cambia
+es quién dibuja la caja.
 
 ---
 
@@ -823,7 +834,7 @@ firma se arma igual que en una escritura, con `sha256` del cuerpo vacío; y esta
 | Con qué configuración corre cada ambiente y cómo se publica | [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.21.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.22.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

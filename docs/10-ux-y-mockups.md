@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-26 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [4.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-26 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -246,6 +246,26 @@ Movimientos ([§4.3](#43-movimientos)).
 Lista **ordenada por fecha**, con estado visual: anticipo cobrado (morado), entregado (verde),
 estancado 15+ días (ámbar). Filtros por estado, cliente y rango de fechas. Cada fila muestra
 valor total, anticipo y saldo.
+
+#### Tomar un pedido son tres formularios, y no uno
+
+**El pedido lleva renglones, no un producto suelto** ([RF-19](03-requisitos-y-bdd.md#rf-19), [CU-05](02-casos-de-uso.md#cu-05)). «Qué se entrega» es una
+lista: cada renglón es un producto del catálogo y su cantidad, con «+ Agregar renglón» y «Quitar».
+El precio es el del catálogo el día en que se pidió, y viaja con el pedido: el catálogo cambia y un
+pedido de septiembre sigue valiendo lo que valía.
+
+**Las cuatro cifras del resumen las da la API** —el valor del pedido, el costo directo, el anticipo
+al confirmar y el saldo contra entrega—, y la pantalla las pinta. Se le piden mientras se captura,
+con los renglones y el porcentaje, porque multiplicar precio por cantidad en el cliente sería
+decidir plata ([ADR-018](adr/ADR-018-front-sin-decisiones.md)). Por eso el valor total no viaja en la petición que registra.
+
+**Al guardar se pregunta por el abono, y ahí empieza otro caso de uso.** Cobrar el anticipo escribe
+el movimiento y el pasivo en la misma transacción ([RN-05](03-requisitos-y-bdd.md#rn-05), [CU-06](02-casos-de-uso.md#cu-06)), así que tiene su propio
+formulario: el «sí» lleva a él con el pedido ya referenciado por su número, y el «ahora no» cierra.
+Meterlo dentro del formulario del pedido dejaría dos escrituras colgando de un solo botón.
+
+**El número del pedido lo pone el sistema**, como `P-0287`, y es único en toda la base: no se
+escribe ni se elige.
 
 #### Los clientes viven aquí, y no en una pantalla propia
 
@@ -737,7 +757,7 @@ El checklist de aprobación pantalla por pantalla está en
 [`09-plan-de-implantacion.md`](09-plan-de-implantacion.md) [§1](09-plan-de-implantacion.md#1-checklist-de-aprobación-del-mockup).
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.21.0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.22.0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
