@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [8.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-25 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [8.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-26 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -41,10 +41,10 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 5 | 0 | 6 | 8 |
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 6 | 0 | 5 | 5,5 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
-| [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 2 | 0 | 7 | 10,5 |
+| [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 3 | 0 | 6 | 8,5 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **153** | **104** | **0** | **49** | **64,5** |
+| **Total** | **153** | **105** | **0** | **48** | **62,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -151,7 +151,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.4](docs/08-plan-de-desarrollo.md#tarea-7-4) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2) · [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -159,12 +159,12 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **49 tareas y 64,5 días de trabajo** de 153 tareas del plan.
+Quedan **48 tareas y 62,5 días de trabajo** de 153 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 9,6 semanas | **12,6 semanas** |
-| 2 | 5,4 semanas | **8,4 semanas** |
+| 1 | 9,3 semanas | **12,3 semanas** |
+| 2 | 5,2 semanas | **8,2 semanas** |
 | 3 | 4,6 semanas | **7,6 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -899,7 +899,15 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       retiros», con el panel del pro-labore. **La pantalla la aprobó quien dirige** ([§10](#10-decisiones-de-construcción-que-conviene-revisar)).
       `prisma_api` en `0.19.0` y `prisma_front` en `0.14.0+18`, con 35 pruebas nuevas en la API,
       9 contra la base local y 14 en el front
-- [ ] ⚡ [**7.4**](docs/08-plan-de-desarrollo.md#tarea-7-4) Retiro con división automática en pro-labore y distribución · API
+- [x] [**7.4**](docs/08-plan-de-desarrollo.md#tarea-7-4) Retiro con división automática en pro-labore y distribución · API —
+      `PUT /api/v0/retiros/{id}` escribe un movimiento y una fila de `aportes_retiros` por cada parte
+      que no sea cero, unidas por `retiro_id`, así que anular una mitad anula el retiro entero. Sin
+      decir cuánto es pro-labore, **la API lo parte**: completa el del mes, vigente en la fecha del
+      retiro, y el resto es distribución; `POST /api/v0/consultas/division-de-retiro` lo propone
+      antes de guardar. **Trae la primera caja libre**, que era de la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1) y el contrato le pedía
+      al retiro: un retiro que se pasa responde `40990` hasta que llegue confirmado. El «no» a
+      Operación es de la base. Estrena el `40990`, el `42290`, el `42291` y el `42292`. `prisma_api`
+      en `0.22.0`, con 33 pruebas nuevas y 11 contra la base local ([§10](#10-decisiones-de-construcción-que-conviene-revisar))
 - [ ] 🔒 [**7.5**](docs/08-plan-de-desarrollo.md#tarea-7-5) Cálculo de patrimonio · API
 - [ ] 🔒 [**7.6**](docs/08-plan-de-desarrollo.md#tarea-7-6) Alerta de descapitalización a 12 meses · API
 - [ ] ⚡ [**7.7**](docs/08-plan-de-desarrollo.md#tarea-7-7) Los cuatro sobres con historial · API, Front
@@ -1456,6 +1464,28 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       descartó reusar el `42294`, que habla de decimales, y se descartó inventar un tope de 744
       horas sin contrato. El arreglo es un `maximum` en `NuevoProlabore.horasMensuales`, y sube la
       MINOR del contrato. Es el mismo hueco que la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) dejó en los minutos
+
+**Del retiro partido ([7.4](docs/08-plan-de-desarrollo.md#tarea-7-4)):**
+
+- [x] **Los gastos fijos comprometidos son los del mes anterior que este mes todavía no se pagan.**
+      Lo decidió quien dirige el 2026-09-26. El [05 §3.3](docs/05-reglas-financieras.md#33-caja-libre--la-cifra-que-hoy-no-existe-en-ninguna-parte) dice «gastos fijos pendientes del mes» y ningún
+      documento dice cuánto se espera pagar: `categorias.es_fijo` marca qué es fijo, pero no hay
+      monto. Por cada categoría fija se toma lo pagado el mes anterior y se le resta lo pagado en
+      este, sin bajar de cero. Se descartó dejarlos en cero hasta la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1), que subía la caja libre
+      y retrasaba el aviso del retiro. **Conviene escribirlo en el 05**, que es donde vive la fórmula
+- [ ] 🔒 **La caja libre la construyó el retiro, y no la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1).** El contrato del retiro la pide
+      —`cajaLibre` en la propuesta y el `40990`— y la 6.1 dependía de la 7.4: era un círculo, y el
+      [§10](#10-decisiones-de-construcción-que-conviene-revisar) ya lo había anotado al acordar el capital. `CalcularCajaLibre` queda en el dominio para que
+      la 6.1 la reutilice en el tablero y la [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8) en el cierre
+- [ ] **Los ids de los dos movimientos salen del id del retiro.** El retiro no tiene tabla propia, así
+      que el mismo id dos veces tenía que chocar en algún sitio: los movimientos llevan un UUID v3 del
+      id y su tipo, y la llave primaria de `movimientos` responde el `40900` sin preguntar antes
+- [ ] **El `40300` de la propuesta lo da la lectura de los saldos**, que pregunta `fn_es_gerencia()`,
+      y no el pro-labore, que a Operación le llega vacío sin error. Es la base la que dice que no,
+      pero por la puerta de la caja libre
+- [ ] **El retiro no tiene pantalla.** La 7.4 es solo API, y el panel de «Inversiones y retiros»
+      todavía pinta solo el pro-labore. Es la misma pregunta que ya estaba abierta para la [7.5](docs/08-plan-de-desarrollo.md#tarea-7-5) y
+      la [7.6](docs/08-plan-de-desarrollo.md#tarea-7-6): o ganan mitad Front, o se dice cuál de las 7.x la lleva
 
 **De la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2), el catálogo de productos, en su mitad API:**
 
