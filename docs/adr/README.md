@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-09-24 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
+| [1.13.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-09-26 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
 
 Registro de las decisiones técnicas importantes: qué se decidió, por qué, qué alternativas se
 consideraron y qué consecuencias tiene.
@@ -50,8 +50,9 @@ consideraron y qué consecuencias tiene.
 | [039](ADR-039-cada-regla-en-un-solo-sitio.md) | Cada regla vive en un solo sitio: `CLAUDE.md`, `AGENTS.md` o una skill | Aceptado |
 | [040](ADR-040-rama-feature-y-pr-autorizado.md) | Toda rama empieza por `feature/`, y el PR se abre solo con autorización expresa, trayendo entonces la base | Aceptado |
 | [041](ADR-041-cuatro-lineas-por-parrafo.md) | Un párrafo de código o de commit tiene cuatro líneas como máximo | Aceptado |
+| [042](ADR-042-la-version-del-documento-es-la-de-la-api.md) | El documento OpenAPI declara la versión de la API, y la del contrato viaja en `x-prisma-contrato` | Aceptado |
 
-Son **41 decisiones** registradas: 32 aceptadas y 9 reemplazadas.
+Son **42 decisiones** registradas: 33 aceptadas y 9 reemplazadas.
 
 > **Sobre la numeración.** El cambio de stack se planeó como [ADR-010](ADR-010-almacenamiento-contrasenas.md) y [ADR-011](ADR-011-stack-flutter-dart.md), pero el 010 ya
 > estaba ocupado por la decisión de contraseñas. Un número asignado no se reutiliza, así que el
