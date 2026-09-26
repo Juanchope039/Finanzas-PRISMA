@@ -3,13 +3,13 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/README.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-13 | 2026-09-24 | [Negocio](docs/INDICE.md#etiqueta-negocio) · [Plan](docs/INDICE.md#etiqueta-plan) |
+| [1.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/README.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-13 | 2026-09-26 | [Negocio](docs/INDICE.md#etiqueta-negocio) · [Plan](docs/INDICE.md#etiqueta-plan) |
 
 > **PRISMA** = **P**lataforma de **R**egistro, **I**nversión, **S**eguimiento, **M**árgenes y **A**dministración.
 > Un solo lugar para saber cuánto entra, cuánto sale, cuánto queda y cuánto se puede pagar.
 
 ---
-# Indice
+## Índice
 - [1. El problema en una frase](#titulo-1)
 - [2. Índice de la documentación](#titulo-2)
 - [3. Mockup interactivo](#titulo-3)
