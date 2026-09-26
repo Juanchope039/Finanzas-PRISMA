@@ -254,10 +254,14 @@ lista: cada renglón es un producto del catálogo y su cantidad, con «+ Agregar
 El precio es el del catálogo el día en que se pidió, y viaja con el pedido: el catálogo cambia y un
 pedido de septiembre sigue valiendo lo que valía.
 
-**Las cuatro cifras del resumen las da la API** —el valor del pedido, el costo directo, el anticipo
-al confirmar y el saldo contra entrega—, y la pantalla las pinta. Se le piden mientras se captura,
-con los renglones y el porcentaje, porque multiplicar precio por cantidad en el cliente sería
-decidir plata ([ADR-018](adr/ADR-018-front-sin-decisiones.md)). Por eso el valor total no viaja en la petición que registra.
+**Las tres cifras del resumen las da la API** —el valor del pedido, el anticipo al confirmar y el
+saldo contra entrega—, y la pantalla las pinta. Se le piden mientras se captura, con los renglones y
+el porcentaje, porque multiplicar precio por cantidad en el cliente sería decidir plata
+([ADR-018](adr/ADR-018-front-sin-decisiones.md)). Por eso el valor total no viaja en la petición que registra.
+
+**El costo directo que el prototipo dibuja al lado todavía no llega**, y por eso no se pinta: lo
+trae el validador de anticipo mínimo (tarea [8.9](08-plan-de-desarrollo.md#tarea-8-9)), que es el que sabe si ese porcentaje alcanza para
+pagar el material. Es de Gerencia, así que tampoco puede salir en la misma consulta para todos.
 
 **Al guardar se pregunta por el abono, y ahí empieza otro caso de uso.** Cobrar el anticipo escribe
 el movimiento y el pasivo en la misma transacción ([RN-05](03-requisitos-y-bdd.md#rn-05), [CU-06](02-casos-de-uso.md#cu-06)), así que tiene su propio
