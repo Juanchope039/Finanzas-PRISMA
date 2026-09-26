@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [8.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-26 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [8.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-26 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -103,6 +103,13 @@ Dejaba sin servir la [2.7](docs/08-plan-de-desarrollo.md#tarea-2-7) recién term
 único que el código no podía hacer solo. Es un arreglo suelto: no lleva número de tarea y no entra en
 las cuentas de abajo. **Queda ejercitarlo contra dev** con una sesión de Gerencia: es lo
 único del arreglo que no se ve desde fuera.
+
+**Los equipos del negocio ya se registran, y falta su panel.** La mitad API de la [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) está hecha:
+comprar una prensa baja la caja y no toca la utilidad, y a Operación la base le deja la lista vacía
+en vez de un error. **Falta la pantalla**, que es del carril Front y va debajo del pro-labore en
+«Inversiones y retiros», como dice el [§10](#10-decisiones-de-construcción-que-conviene-revisar).
+**Y el costeo de bordado ([5.4](docs/08-plan-de-desarrollo.md#tarea-5-4)) sigue sin poder empezar**: cómo entra el tiempo de máquina en
+el costo unitario es una regla financiera que ningún documento cubre, así que espera a quien dirige.
 
 **Lo siguiente, en cuanto alguien lo tome:** cerrar la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) destrabó lo que la estaba
 esperando. En el carril API **la prueba de permisos con sesión real ya está** ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)), y con ella
@@ -887,7 +894,18 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 <a id="sprint-7"></a>**[Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio**
 
-- [ ] ⚡ [**7.1**](docs/08-plan-de-desarrollo.md#tarea-7-1) Inversiones en activos · API, Front
+- [ ] ⚡ [**7.1**](docs/08-plan-de-desarrollo.md#tarea-7-1) Inversiones en activos · API, Front — **la mitad API está
+      hecha**: `PUT /api/v0/activos/{id}` registra la compra de un equipo y
+      `POST /api/v0/consultas/activos` los lista del más caro al más barato. Con cuenta escribe en la
+      misma transacción el activo y un movimiento `inversion`, que **baja la caja y no toca ni la
+      utilidad ni el patrimonio** ([BDD-15-1](docs/03-requisitos-y-bdd.md#bdd-15-1)); sin cuenta entra solo el activo, que es como se
+      registran los equipos que el taller ya tenía el día del corte ([09 §4.1](docs/09-plan-de-implantacion.md#41-qué-se-migra-y-qué-no)). El «no» a Operación es
+      de la base **en los dos sentidos**: le rechaza la escritura con el `42501` de
+      `activos_solo_gerencia` y al leer le filtra las filas, así que recibe la lista vacía y no un
+      `40300` ([P-20](docs/12-pruebas-y-calidad.md#p-20)). No estrena ningún código: el `42290` y el `42291` ya los emitía la 7.4, y aquí
+      el primero va sobre `fechaCompra`. `prisma_api` en 0.24.0, con 13 pruebas nuevas y 10 contra la
+      base local ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). **Falta la pantalla**,
+      del carril Front, y la tarea se marca cuando aterricen las dos mitades ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración))
 - [ ] ⚡ [**7.2**](docs/08-plan-de-desarrollo.md#tarea-7-2) Aportes de capital · API, Front
 - [x] [**7.3**](docs/08-plan-de-desarrollo.md#tarea-7-3) Pro-labore con justificación · API, Front — `PUT /api/v0/prolabore/{id}`
       escribe una definición nueva, vigente desde el día de Bogotá, y
@@ -1419,6 +1437,21 @@ a `anon`.
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**De los activos ([7.1](docs/08-plan-de-desarrollo.md#tarea-7-1)), en su mitad API:**
+
+- [ ] **`activos.vida_util_meses` se queda vacía.** La columna existe desde el esquema inicial y
+      ningún documento dice cómo se deprecia un equipo ni el contrato la declara, así que escribirla
+      sería inventar una regla financiera. El día que la depreciación exista, la columna ya está y el
+      contrato sube la MINOR
+- [ ] **Un activo no se anula, y la tabla sí sabe.** `activos` tiene `anulado_en`, `anulado_por` y
+      `anulado_motivo`, y el contrato no declara ninguna operación que las llene: la lista filtra
+      `anulado_en IS NULL` y nada más. Vender un equipo o darlo de baja tampoco está en ningún
+      documento, y es lo mismo que dice el `estado`, que tiene un solo valor
+- [ ] **El `42290` va sobre `fechaCompra` y el retiro lo manda sobre `fecha`.** Los dos formularios
+      llaman distinto a su fecha y el código es el mismo, así que `FechaDeCapitalInvalida` ahora
+      lleva el campo: el aviso se pinta debajo del que existe en cada formulario, como el catálogo
+      del contrato lo describe
 
 **De los costos ocultos a Operación ([5.8](docs/08-plan-de-desarrollo.md#tarea-5-8)):**
 
