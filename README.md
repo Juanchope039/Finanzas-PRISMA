@@ -9,8 +9,11 @@
 > Un solo lugar para saber cuánto entra, cuánto sale, cuánto queda y cuánto se puede pagar.
 
 ---
+# Indice
+## [1. El problema en una frase](#titulo-1)
+---
 
-## 1. El problema en una frase
+## <a id="titulo-1"></a>1. El problema en una frase
 
 Hoy la plata del negocio y la plata personal se mezclan, las facturas viven en fotos del celular
 y en un cuaderno, y no hay forma confiable de responder tres preguntas críticas:
