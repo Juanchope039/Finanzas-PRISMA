@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [8.8.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-26 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [8.9.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-26 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -39,12 +39,12 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 2](#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
 | [Sprint 3](#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 6 | 0 | 5 | 7 |
-| [Sprint 5](#sprint-5) · Productos y costeo | 11 | 6 | 0 | 5 | 5,5 |
+| [Sprint 5](#sprint-5) · Productos y costeo | 11 | 7 | 0 | 4 | 4,5 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 3 | 0 | 6 | 8,5 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **153** | **106** | **0** | **47** | **61,5** |
+| **Total** | **153** | **107** | **0** | **46** | **60,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -149,7 +149,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [5.8](docs/08-plan-de-desarrollo.md#tarea-5-8) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1) · [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -157,13 +157,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **47 tareas y 61,5 días de trabajo** de 153 tareas del plan.
+Quedan **46 tareas y 60,5 días de trabajo** de 153 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 9,2 semanas | **12,2 semanas** |
-| 2 | 5,1 semanas | **8,1 semanas** |
-| 3 | 4,6 semanas | **7,6 semanas** |
+| 1 | 9,0 semanas | **12,0 semanas** |
+| 2 | 5,3 semanas | **8,3 semanas** |
+| 3 | 4,3 semanas | **7,3 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -948,7 +948,11 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       definición de margen porcentual de [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes), y el llavero del cuadro —$2.100 al 70 %— da sus
       $7.000. Sale en pesos enteros **sin redondeo comercial**, y **no depende del precio escrito**:
       con el precio en cero los márgenes no viajan y el sugerido sí, que es cuando más sirve
-- [ ] ⚡ [**5.8**](docs/08-plan-de-desarrollo.md#tarea-5-8) Costos y márgenes ocultos al tipo Operación: la API no los envía · API
+- [x] [**5.8**](docs/08-plan-de-desarrollo.md#tarea-5-8) Costos y márgenes ocultos al tipo Operación: la API no los envía · API —
+      **no hizo falta código**: la base no le devuelve el costeo y sin él no hay de dónde sacar los
+      márgenes. Lo que faltaba era la prueba del [12 §3](docs/12-pruebas-y-calidad.md#3-pruebas-de-permisos): [P-02](docs/12-pruebas-y-calidad.md#p-02) va ahora **por HTTP, con la sesión real
+      de Operación**, y recorre el sobre entero del catálogo sin encontrar una cifra; la vista previa,
+      guardar y reactivar le responden `40300` sin dejar nada escrito. `prisma_api` sigue en `0.22.0`
 - [ ] ⚡ [**5.9**](docs/08-plan-de-desarrollo.md#tarea-5-9) Cuadro comparativo ordenable por margen por hora · Front
 - [x] [**5.10**](docs/08-plan-de-desarrollo.md#tarea-5-10) Contrato de productos, servicios y costeo · Contrato — v0.12.0: seis
       operaciones, once esquemas y dos códigos que estrenan el rango `40`–`49`. El formulario se
@@ -1410,6 +1414,15 @@ a `anon`.
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**De los costos ocultos a Operación ([5.8](docs/08-plan-de-desarrollo.md#tarea-5-8)):**
+
+- [ ] **`pedidos` y `pedido_lineas` guardan costos y van sin RLS.** El [04 §7](docs/04-modelo-de-datos.md#7-seguridad-por-tipo-de-usuario-rls) las deja abiertas
+      porque «no hay nada que separar», pero `pedidos.costo_directo` y `pedido_lineas.costo_unitario`
+      y `horas_unitarias` son justo lo que `costos_solo_gerencia` le esconde a Operación en
+      `costos_producto`. Hoy la API los lee y **no los envía**, y la 5.8 no los tocó. La [4.3](docs/08-plan-de-desarrollo.md#tarea-4-3) los
+      escribirá y la [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) los usará: antes hay que decidir si se protegen en la base, con
+      una vista o con una función, o si basta con que la API no los mande
 
 **Del costeo de bordado ([5.4](docs/08-plan-de-desarrollo.md#tarea-5-4)), que no se pudo empezar:**
 
