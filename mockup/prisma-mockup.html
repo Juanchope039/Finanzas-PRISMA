@@ -1220,12 +1220,21 @@ tbody tr.fila-detalle:hover{background:none}
             <div class="campos-form">
               <div class="campo"><label for="n-cliente">Cliente</label>
                 <select id="n-cliente"></select></div>
-              <div class="campo"><label for="n-prod">Producto o servicio</label>
-                <select id="n-prod"></select></div>
-              <div class="campo"><label for="n-cant">Cantidad</label>
-                <input type="number" id="n-cant" value="60" min="1" max="9999"></div>
               <div class="campo"><label for="n-fecha">Fecha de entrega</label>
                 <input type="date" id="n-fecha" value="2026-10-15"></div>
+            </div>
+
+            <!-- Los renglones del pedido (tarea 4.3). Son una lista y no un producto suelto: un
+                 pedido del taller lleva camisetas y gorras en la misma orden. El descriptor de la
+                 API no sabe expresar una lista (20 §4.4), así que esta parte la pinta la pantalla
+                 y sus rechazos llegan con el codigo 42231. -->
+            <div style="margin-top:14px">
+              <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:8px">
+                <b class="grow" style="font-family:var(--display); font-size:.95rem">Qué se entrega</b>
+                <span class="eyebrow">El precio es el del catálogo el día del pedido</span>
+              </div>
+              <div id="n-lineas"></div>
+              <button class="ghost" id="n-agregar" type="button">+ Agregar renglón</button>
             </div>
 
             <!-- El alta en línea. En el taller el cliente entra por teléfono mientras se toma el
@@ -1255,13 +1264,15 @@ tbody tr.fila-detalle:hover{background:none}
               <input type="range" id="n-ant" min="0" max="100" step="5" value="50">
             </div>
 
+            <!-- Las tres cifras las da la API mientras se captura, con los renglones y el
+                 porcentaje: el front no multiplica ni saca porcentajes (ADR-018). El costo directo
+                 es de Gerencia, y llega con el validador de anticipo minimo (tarea 8.9). -->
             <div class="resumen-pedido">
               <div><span>Valor del pedido</span><b id="n-total">$0</b></div>
               <div><span>Costo directo</span><b id="n-costo">$0</b></div>
-              <div><span style="color:var(--anticipo)">Anticipo a cobrar hoy</span>
-                <div class="editable" style="color:var(--anticipo)">
-                  <input type="text" id="n-recibe" inputmode="numeric" aria-label="Anticipo a cobrar, editable" value="$0"></div>
-                <div class="editable-nota" id="n-recibe-nota">o escribe el valor exacto</div></div>
+              <div><span style="color:var(--anticipo)">Anticipo al confirmar</span>
+                <b id="n-recibe" style="color:var(--anticipo)">$0</b>
+                <div class="editable-nota" id="n-recibe-nota">sale del porcentaje de arriba</div></div>
               <div><span>Saldo contra entrega</span><b id="n-saldo">$0</b></div>
             </div>
 
@@ -1274,6 +1285,21 @@ tbody tr.fila-detalle:hover{background:none}
               <button class="cta" id="n-guardar">Guardar pedido</button>
               <button class="ghost" id="n-cancelar">Cancelar</button>
               <span id="n-ok" class="pill p-ok" hidden>Pedido agregado</span>
+            </div>
+          </div>
+
+          <!-- El tercer formulario del encadenado (tarea 4.3). Cobrar el anticipo es otro caso de
+               uso —el que escribe el movimiento y el pasivo en la misma transaccion, RN-05—, asi
+               que se pregunta despues de guardar y no dentro del pedido. -->
+          <div class="formulario" id="form-abono" hidden>
+            <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px">
+              <h3 class="grow" id="abono-titulo">Quedó el pedido</h3>
+              <span class="eyebrow">El número lo pone el sistema</span>
+            </div>
+            <p id="abono-texto" style="margin:0 0 14px; color:var(--muted)"></p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center">
+              <button class="cta" id="abono-si">Sí, registrar el abono</button>
+              <button class="ghost" id="abono-no">Ahora no</button>
             </div>
           </div>
 
@@ -2215,21 +2241,21 @@ function pedidosDeCliente(id){
 
 var PEDIDOS = [
   {id:'P-0287', fecha:'2026-09-24', entrega:'2026-10-09', clienteId:'c1',
-   prodId:3, cant:60, anticipo: 540000, estado:'anticipo',  baja:null},
+   lineas:[{prodId:3, cant:60}, {prodId:5, cant:12}], anticipo: 540000, estado:'anticipo',  baja:null},
   {id:'P-0286', fecha:'2026-09-22', entrega:'2026-10-06', clienteId:'c2',
-   prodId:1, cant:45, anticipo: 720000, estado:'anticipo',  baja:null},
+   lineas:[{prodId:1, cant:45}], anticipo: 720000, estado:'anticipo',  baja:null},
   {id:'P-0284', fecha:'2026-09-20', entrega:'2026-10-04', clienteId:'c3',
-   prodId:5, cant:24, anticipo: 264000, estado:'anticipo',  baja:null},
+   lineas:[{prodId:5, cant:24}], anticipo: 264000, estado:'anticipo',  baja:null},
   {id:'P-0271', fecha:'2026-08-26', entrega:'2026-08-28', clienteId:'c4',
-   prodId:1, cant:36, anticipo: 576000, estado:'estancado', baja:null},
+   lineas:[{prodId:1, cant:36}], anticipo: 576000, estado:'estancado', baja:null},
   {id:'P-0283', fecha:'2026-09-18', entrega:'2026-09-18', clienteId:'c5',
-   prodId:2, cant:60, anticipo:      0, estado:'entregado', baja:null},
+   lineas:[{prodId:2, cant:60}], anticipo:      0, estado:'entregado', baja:null},
   {id:'P-0281', fecha:'2026-09-15', entrega:'2026-09-15', clienteId:'c6',
-   prodId:4, cant:28, anticipo:      0, estado:'entregado', baja:null},
+   lineas:[{prodId:4, cant:28}], anticipo:      0, estado:'entregado', baja:null},
   {id:'P-0279', fecha:'2026-09-11', entrega:'2026-09-11', clienteId:'c7',
-   prodId:3, cant:120, anticipo:     0, estado:'entregado', baja:null},
+   lineas:[{prodId:3, cant:120}], anticipo:     0, estado:'entregado', baja:null},
   {id:'P-0276', fecha:'2026-09-05', entrega:'2026-09-05', clienteId:'c8',
-   prodId:1, cant:35, anticipo:      0, estado:'entregado', baja:null}
+   lineas:[{prodId:1, cant:35}], anticipo:      0, estado:'entregado', baja:null}
 ];
 
 /* La foto del recibo de ejemplo. Es un dibujo y no una foto: el mockup es un solo archivo, sin
@@ -2767,10 +2793,21 @@ function fechaCorta(iso){
   return String(+t[2]).padStart(2, '0') + ' ' + MES3[+t[1] - 1];
 }
 function pedidoPorId(id){ return PEDIDOS.filter(function(x){ return x.id === id; })[0]; }
-function totalPedido(p){ var d = porId(p.prodId); return d ? d.precio * p.cant : 0; }
+/* Un pedido son sus renglones (tarea 4.3): la suma de precio por cantidad de cada uno. En la
+   aplicación esta cuenta la hace la API y el front la pinta; aquí se hace para que el prototipo
+   navegue. */
+function lineasDe(p){ return p.lineas || []; }
+function totalPedido(p){
+  return lineasDe(p).reduce(function(suma, l){
+    var d = porId(l.prodId);
+    return suma + (d ? d.precio * l.cant : 0);
+  }, 0);
+}
 function detallePedido(p){
-  var d = porId(p.prodId);
-  return p.cant + ' × ' + (d ? d.n : 'producto retirado');
+  return lineasDe(p).map(function(l){
+    var d = porId(l.prodId);
+    return l.cant + ' × ' + (d ? d.n : 'producto retirado');
+  }).join(' · ');
 }
 function vivos(){ return PEDIDOS.filter(function(p){ return !p.baja; }); }
 function abiertos(){ return vivos().filter(function(p){ return p.estado !== 'entregado'; }); }
@@ -3788,37 +3825,80 @@ function cotizar(){
 var consecutivo = 287;
 var editandoPedido = null;
 
+/* Los renglones que se llevan escritos en el formulario (tarea 4.3). Son una lista porque un
+   pedido del taller lleva varias cosas, y el contrato acepta al menos una. */
+var renglonesNuevo = [];
+
+function pintarRenglones(){
+  var caja = document.getElementById('n-lineas');
+  if (!caja) return;
+  var ofrecidos = activos();
+  caja.innerHTML = renglonesNuevo.map(function(l, i){
+    return '<div class="campos-form" style="margin-bottom:8px">' +
+      '<div class="campo"><label for="n-prod-' + i + '">Producto o servicio</label>' +
+      '<select id="n-prod-' + i + '" data-linea="' + i + '">' +
+      ofrecidos.map(function(p){
+        return '<option value="' + p.id + '"' + (p.id === l.prodId ? ' selected' : '') + '>' +
+          enTexto(p.n) + ' · ' + fmt(p.precio) + '</option>';
+      }).join('') +
+      '</select></div>' +
+      '<div class="campo"><label for="n-cant-' + i + '">Cantidad</label>' +
+      '<input type="number" id="n-cant-' + i + '" data-linea="' + i + '" value="' + l.cant +
+      '" min="1" max="9999"></div>' +
+      (renglonesNuevo.length > 1
+        ? '<div class="campo"><label>&nbsp;</label>' +
+          '<button class="ghost" type="button" data-quitar="' + i + '">Quitar</button></div>'
+        : '') +
+      '</div>';
+  }).join('');
+
+  $$('#n-lineas select[data-linea]').forEach(function(sel){
+    sel.addEventListener('change', function(){
+      renglonesNuevo[+sel.dataset.linea].prodId = +sel.value;
+      pintarNuevo();
+    });
+  });
+  $$('#n-lineas input[data-linea]').forEach(function(campo){
+    campo.addEventListener('input', function(){
+      renglonesNuevo[+campo.dataset.linea].cant = Math.max(1, +campo.value || 1);
+      pintarNuevo();
+    });
+  });
+  $$('#n-lineas [data-quitar]').forEach(function(boton){
+    boton.addEventListener('click', function(){
+      renglonesNuevo.splice(+boton.dataset.quitar, 1);
+      pintarRenglones();
+      pintarNuevo();
+    });
+  });
+}
+
 function datosNuevo(){
-  var p    = porId(document.getElementById('n-prod').value) || activos()[0];
-  if (!p) return null;
-  var cant = Math.max(1, +document.getElementById('n-cant').value || 1);
-  var pct  = +document.getElementById('n-ant').value;
-  var total  = p.precio * cant;
-  var costo  = p.costo * cant;
-  var recibe = (manualPedido === null)
-    ? Math.round(total * pct / 100)
-    : Math.min(manualPedido, total);
+  var vivos = renglonesNuevo.filter(function(l){ return porId(l.prodId); });
+  if (!vivos.length) return null;
+  var pct   = +document.getElementById('n-ant').value;
+  var total = vivos.reduce(function(s, l){ return s + porId(l.prodId).precio * l.cant; }, 0);
+  var costo = vivos.reduce(function(s, l){ return s + porId(l.prodId).costo  * l.cant; }, 0);
+  var recibe = Math.round(total * pct / 100);
   return {
-    p:p, cant:cant, pct:(total ? recibe / total * 100 : 0), manual:(manualPedido !== null),
-    total:total, costo:costo, recibe:recibe,
+    lineas:vivos, pct:pct, total:total, costo:costo, recibe:recibe,
     saldo:total - recibe, falta:costo - recibe,
-    minimo:Math.ceil(costo / total * 100),
-    sugerido:Math.min(100, Math.ceil(Math.ceil(costo / total * 100) / 5) * 5 + 5)
+    margen:(total ? (total - costo) / total : 0),
+    minimo:(total ? Math.ceil(costo / total * 100) : 0),
+    sugerido:total ? Math.min(100, Math.ceil(Math.ceil(costo / total * 100) / 5) * 5 + 5) : 0
   };
 }
 
+/* En la aplicación estas cuatro cifras las da la API, con los renglones y el porcentaje: el front
+   no multiplica ni saca porcentajes (ADR-018). Aquí se calculan para que el prototipo navegue. */
 function pintarNuevo(){
   var d = datosNuevo();
   if (!d) return;
-  var campoPed = document.getElementById('n-recibe');
-  if (document.activeElement !== campoPed) campoPed.value = fmt(d.recibe);
-  document.getElementById('n-recibe-nota').textContent = d.manual
-    ? 'valor escrito a mano · mueve el deslizador para volver al porcentaje'
-    : 'o escribe el valor exacto';
-  document.getElementById('n-o-ant').textContent = pctTexto(d.pct) + (d.manual ? ' · manual' : '');
-  document.getElementById('n-total').textContent = fmt(d.total);
-  document.getElementById('n-costo').textContent = fmt(d.costo);
-  document.getElementById('n-saldo').textContent = fmt(d.saldo);
+  document.getElementById('n-o-ant').textContent  = pctTexto(d.pct);
+  document.getElementById('n-total').textContent  = fmt(d.total);
+  document.getElementById('n-costo').textContent  = fmt(d.costo);
+  document.getElementById('n-recibe').textContent = fmt(d.recibe);
+  document.getElementById('n-saldo').textContent  = fmt(d.saldo);
 
   var al = document.getElementById('n-alerta');
   if (d.falta > 0){
@@ -3826,7 +3906,7 @@ function pintarNuevo(){
     document.getElementById('n-alerta-t').textContent =
       'El anticipo de ' + pctTexto(d.pct) + ' no cubre el costo directo';
     document.getElementById('n-alerta-s').innerHTML =
-      'Este pedido tiene ' + Math.round(d.p.pct * 100) + '% de margen. Cobrando ' + fmt(d.recibe) +
+      'Este pedido tiene ' + Math.round(d.margen * 100) + '% de margen. Cobrando ' + fmt(d.recibe) +
       ' pones <b>' + fmt(d.falta) + '</b> de tu bolsillo hasta la entrega. Anticipo sugerido: <b>' +
       d.sugerido + '%</b>, o sea ' + fmt(Math.round(d.total * d.sugerido / 100)) + '.';
   } else {
@@ -3845,6 +3925,7 @@ function abrirFormPedido(id){
   var p    = id ? pedidoPorId(id) : null;
   editandoPedido = p ? p.id : null;
 
+  document.getElementById('form-abono').hidden = true;
   document.getElementById('pedido-titulo').textContent = p ? 'Modificar ' + p.id : 'Nuevo pedido';
   document.getElementById('n-guardar').textContent = p ? 'Guardar cambios' : 'Guardar pedido';
   llenarSelectClientes();
@@ -3859,10 +3940,11 @@ function abrirFormPedido(id){
   }
   sel.value = p ? p.clienteId : (vigentes[0] ? vigentes[0].id : '__nuevo');
   alternarClienteNuevo();
-  document.getElementById('n-cant').value    = p ? p.cant : 60;
-  document.getElementById('n-fecha').value   = p ? p.entrega : '2026-10-15';
-  if (p) document.getElementById('n-prod').value = p.prodId;
-  manualPedido = p ? p.anticipo : null;
+  renglonesNuevo = p
+    ? lineasDe(p).map(function(l){ return {prodId:l.prodId, cant:l.cant}; })
+    : [{prodId:(activos()[0] || {}).id, cant:60}];
+  pintarRenglones();
+  document.getElementById('n-fecha').value = p ? p.entrega : '2026-10-15';
   if (!p) document.getElementById('n-ant').value = 50;
 
   form.hidden = false;
@@ -3875,10 +3957,22 @@ function abrirFormPedido(id){
 function cerrarFormPedido(){
   var btn = document.getElementById('btn-nuevo');
   document.getElementById('form-pedido').hidden = true;
+  document.getElementById('form-abono').hidden = true;
   btn.setAttribute('aria-expanded', 'false');
   btn.textContent = '+ Nuevo pedido';
   editandoPedido = null;
-  manualPedido = null;
+}
+
+/* Lo que se pregunta después de guardar: el abono es otro caso de uso, con su propio formulario
+   (tarea 4.3). El «sí» lleva al de movimientos con el pedido ya referenciado. */
+function preguntarPorElAbono(pedido){
+  document.getElementById('form-pedido').hidden = true;
+  document.getElementById('abono-titulo').textContent = 'Quedó el pedido ' + pedido.id;
+  document.getElementById('abono-texto').innerHTML =
+    'Por <b>' + fmt(totalPedido(pedido)) + '</b>, y le faltan <b>' +
+    fmt(totalPedido(pedido) - pedido.anticipo) + '</b>. ¿Registras el abono ahora?';
+  document.getElementById('form-abono').hidden = false;
+  document.getElementById('form-abono').scrollIntoView({block:'nearest'});
 }
 
 (function initPedido(){
@@ -3890,19 +3984,24 @@ function cerrarFormPedido(){
     else cerrarFormPedido();
   });
   document.getElementById('n-cancelar').addEventListener('click', cerrarFormPedido);
-
   document.getElementById('n-cliente').addEventListener('change', alternarClienteNuevo);
-
-  ['n-prod','n-cant','n-ant'].forEach(function(id){
-    var el = document.getElementById(id);
-    var vuelveAlPorcentaje = function(){
-      if (id === 'n-ant') manualPedido = null;
-      pintarNuevo();
-    };
-    el.addEventListener('input', vuelveAlPorcentaje);
-    el.addEventListener('change', vuelveAlPorcentaje);
+  document.getElementById('n-agregar').addEventListener('click', function(){
+    renglonesNuevo.push({prodId:(activos()[0] || {}).id, cant:1});
+    pintarRenglones();
+    pintarNuevo();
   });
-  montoEditable('n-recibe', function(valor){ manualPedido = valor; pintarNuevo(); });
+
+  ['n-ant'].forEach(function(id){
+    var el = document.getElementById(id);
+    el.addEventListener('input', pintarNuevo);
+    el.addEventListener('change', pintarNuevo);
+  });
+
+  document.getElementById('abono-no').addEventListener('click', cerrarFormPedido);
+  document.getElementById('abono-si').addEventListener('click', function(){
+    cerrarFormPedido();
+    ir('movimientos');
+  });
 
   document.getElementById('n-guardar').addEventListener('click', function(){
     var d = datosNuevo();
@@ -3910,18 +4009,22 @@ function cerrarFormPedido(){
     var cliente = clienteDelPedido();
     if (!cliente) return;
     var entrega = document.getElementById('n-fecha').value || '2026-10-15';
+    var lineas  = d.lineas.map(function(l){ return {prodId:l.prodId, cant:l.cant}; });
+    var guardado;
 
     if (editandoPedido){
       var p = pedidoPorId(editandoPedido);
-      p.clienteId = cliente; p.prodId = d.p.id; p.cant = d.cant;
+      p.clienteId = cliente; p.lineas = lineas;
       p.entrega = entrega; p.anticipo = d.recibe;
       if (p.estado === 'entregado' && d.recibe > 0) p.estado = 'anticipo';
+      guardado = p;
     } else {
       consecutivo += 1;
-      PEDIDOS.unshift({
+      guardado = {
         id:'P-0' + consecutivo, fecha:'2026-09-30', entrega:entrega, clienteId:cliente,
-        prodId:d.p.id, cant:d.cant, anticipo:d.recibe, estado:'anticipo', baja:null
-      });
+        lineas:lineas, anticipo:0, estado:'anticipo', baja:null
+      };
+      PEDIDOS.unshift(guardado);
     }
 
     var ok = document.getElementById('n-ok');
@@ -3930,8 +4033,10 @@ function cerrarFormPedido(){
     setTimeout(function(){ ok.hidden = true; }, 2600);
 
     pedidoSeleccionado = null;
-    cerrarFormPedido();
+    var editaba = editandoPedido;
     tablaPedidos(); kpisPedidos(); pintarCuentas();
+    if (editaba) cerrarFormPedido();
+    else preguntarPorElAbono(guardado);
   });
 
   pintarNuevo();
@@ -3939,7 +4044,6 @@ function cerrarFormPedido(){
 
 /* ---------- alta y edición de productos (CU-09 · CU-10) ---------- */
 var editandoProd = null;
-var manualPedido = null;
 var manualCotiza = null;
 
 function leerFormProducto(){
