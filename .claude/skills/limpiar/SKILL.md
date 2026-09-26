@@ -2,7 +2,7 @@
 name: limpiar
 description: Deja las cuatro copias de la carpeta de trabajo en su base, al día y con el árbol limpio. Primero comprueba en cada una que no falte nada por subir; si falta algo, lo informa y para sin tocar nada. Se invoca a mano.
 argument-hint: "[repositorio, o nada para los cuatro]"
-model: opus
+model: sonnet
 ---
 
 # Limpiar la carpeta de trabajo
