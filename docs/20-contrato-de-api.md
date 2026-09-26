@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-25 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-26 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
@@ -594,6 +594,10 @@ El documento OpenAPI 3.1 se produce desde los controladores y los DTO de la API.
 escrito a mano se desactualiza el primer día en que alguien tiene prisa, y a partir de ahí miente
 con toda la autoridad de un documento oficial.
 
+**El badge dice qué artefacto está corriendo**: `info.version` es la versión de la API, la misma
+que responde `POST /api/v0/consultas/version` y la misma que muestra «Acerca de». La versión del
+contrato que ese artefacto implementa viaja al lado, en `x-prisma-contrato` ([ADR-042](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md)).
+
 ### 7.2 Dónde se publica en cada ambiente
 
 | Ambiente | Dónde | Quién entra |
@@ -823,7 +827,7 @@ firma se arma igual que en una escritura, con `sha256` del cuerpo vacío; y esta
 | Con qué configuración corre cada ambiente y cómo se publica | [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.21.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.21.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [ADR-042](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md "ADR-042 · El documento OpenAPI declara la versión de la API, y la del contrato viaja en x-prisma-contrato") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

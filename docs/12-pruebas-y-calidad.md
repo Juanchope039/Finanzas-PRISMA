@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-19 | [Calidad](INDICE.md#etiqueta-calidad) |
+| [3.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-26 | [Calidad](INDICE.md#etiqueta-calidad) |
 
 ---
 
@@ -421,7 +421,7 @@ ese vigilante.
 | [C-01](#c-01) | Recorrer `pg_constraint` y cruzar cada restricción nombrada con la tabla de traducción de `prisma_api` | Todas tienen entrada. Si falta una, la prueba falla y dice cuál |
 | [C-02](#c-02) | Arrancar el front declarando una MAJOR de API distinta a la que responde `POST /api/v0/consultas/version` | El front se planta en la primera pantalla y no deja seguir |
 | [C-03](#c-03) | Cruzar los códigos de cinco dígitos que emite el código fuente contra el catálogo | Ninguno emitido falta en el catálogo y ninguno del catálogo sobra. Falla nombrando el código |
-| [C-04](#c-04) | Regenerar el OpenAPI desde los controladores y compararlo con el `openapi.json` versionado | Idénticos. Cualquier diferencia rompe la compilación |
+| [C-04](#c-04) | Regenerar el OpenAPI desde los controladores y compararlo con el `openapi.json` versionado | Idénticos, salvo las dos versiones que el documento declara de sí mismo ([ADR-042](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md)), que se afirman contra su fuente. Cualquier otra diferencia rompe la compilación |
 | [C-05](#c-05) | Comparar cada PR contra `develop`: qué cambió y cómo quedó la versión del proyecto | Si cambió lo que se publica, la versión subió **un paso**. Si no, falla nombrando los archivos y los tres pasos posibles |
 
 ### <a id="c-01"></a>9.1 C-01 · Ninguna restricción sin mensaje
@@ -498,6 +498,18 @@ hace exigible el **[RNF-30](03-requisitos-y-bdd.md#rnf-30)** y la que sostiene [
 > **Actualizar la documentación deja de ser disciplina y pasa a ser un requisito para poder mezclar
 > el cambio.** Un documento que depende de que alguien se acuerde se desactualiza el primer día en
 > que alguien tiene prisa, y a partir de ahí miente con toda seguridad.
+
+**Dos campos del documento servido no son del contrato** ([ADR-042](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md)): `info.version`,
+que declara la versión de la API para que el badge de Swagger diga lo mismo que «Acerca de», y
+`x-prisma-contrato`, adonde se mudó la del contrato.
+
+Ninguno de los dos se compara con la copia fijada, y no porque se excluyan: antes de comparar, el
+documento generado se lleva a la forma que se fija —la versión del contrato de vuelta en
+`info.version`, sin la extensión—, y cada número se afirma aparte contra su fuente.
+
+Así **subir `prisma.contrato.version` sin traer el documento nuevo sigue dejando la prueba en
+rojo**, que es la garantía que antes daba comparar `info.version`, y además falla diciendo cuál de
+las dos versiones se movió.
 
 ### <a id="c-05"></a>9.5 C-05 · La versión sube un paso en cada PR
 
@@ -618,7 +630,7 @@ El procedimiento y las políticas de retención están en
 **restaurar es una prueba con fecha, no una buena intención.**
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.21.0") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [ADR-037](adr/ADR-037-el-pr-se-abre-a-pedido.md "ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos") · [ADR-040](adr/ADR-040-rama-feature-y-pr-autorizado.md "ADR-040 · Toda rama empieza por feature/, y el PR se abre solo con autorización expresa, trayendo entonces la base") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.21.0") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [ADR-037](adr/ADR-037-el-pr-se-abre-a-pedido.md "ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos") · [ADR-040](adr/ADR-040-rama-feature-y-pr-autorizado.md "ADR-040 · Toda rama empieza por feature/, y el PR se abre solo con autorización expresa, trayendo entonces la base") · [ADR-042](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md "ADR-042 · El documento OpenAPI declara la versión de la API, y la del contrato viaja en x-prisma-contrato") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/INDICE.md "Historial de cambios") | [🔄 Vivo](22-documentacion.md#estados) | 2026-09-15 | 2026-09-24 | — |
+| [1.8.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/INDICE.md "Historial de cambios") | [🔄 Vivo](22-documentacion.md#estados) | 2026-09-15 | 2026-09-26 | — |
 
 > Guía para moverte por toda la documentación de PRISMA **sin perderte y sin saber de programación**.
 > Cada documento dice para qué sirve, en lenguaje sencillo, y está marcado si es técnico.
@@ -126,6 +126,7 @@ a una pregunta concreta. Ver el [índice de ADRs](adr/README.md).
 | [039](adr/ADR-039-cada-regla-en-un-solo-sitio.md) | Cada regla del proyecto está escrita en un solo lugar, y los demás la señalan sin copiarla | ¿Dónde busco una regla, y cómo sé que no hay otra versión en otro lado? |
 | [040](adr/ADR-040-rama-feature-y-pr-autorizado.md) | Cada cambio va en una rama que dice qué trae, y la revisión solo se pide cuando quien dirige la autoriza: ahí se pone al día con lo último | ¿Quién decide cuándo se revisa un cambio, y cuándo se pone al día con lo que ya estaba? |
 | [041](adr/ADR-041-cuatro-lineas-por-parrafo.md) | Cada párrafo que explica algo en el código o en un cambio cabe en cuatro líneas, salvo que quien dirige autorice más | ¿Cuánto se puede escribir para explicar un cambio o un pedazo de código? |
+| [042](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md) | La página técnica de la API muestra la misma versión que «Acerca de»: la del programa que está corriendo. La del acuerdo con el front sigue anotada al lado | ¿Por qué la página técnica de la API mostraba un número distinto al de «Acerca de»? |
 
 Del 017 al 026 están las decisiones del modelo de tres partes: el cambio de Dart a Java en la
 API, que el front no decide nada, el contrato de respuesta, la idempotencia, el canal firmado,
@@ -151,7 +152,7 @@ Qué significa cada estado y cuándo sube una versión está en
 |---|:---:|---|:---:|---|
 | [PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) | 1.5.0 | ✅ Vigente | 2026-09-26 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
 | [Tareas de PRISMA](../TODO.md) | 8.12.0 | 🔄 Vivo | 2026-09-26 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
-| [Índice navegable de la documentación](INDICE.md) | 1.7.0 | 🔄 Vivo | 2026-09-24 | — |
+| [Índice navegable de la documentación](INDICE.md) | 1.8.0 | 🔄 Vivo | 2026-09-26 | — |
 | [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Finanzas](#etiqueta-finanzas) · [Plan](#etiqueta-plan) |
 | [01 · Visión y alcance](01-vision-y-alcance.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Requisitos](#etiqueta-requisitos) |
 | [02 · Casos de uso](02-casos-de-uso.md) | 1.3.0 | ✅ Vigente | 2026-09-23 | [Requisitos](#etiqueta-requisitos) · [Negocio](#etiqueta-negocio) |
@@ -164,7 +165,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [09 · Plan de implantación](09-plan-de-implantacion.md) | 5.0.0 | ✅ Vigente | 2026-09-18 | [Plan](#etiqueta-plan) · [Entrega](#etiqueta-entrega) · [Negocio](#etiqueta-negocio) |
 | [10 · Diseño de experiencia y mockups](10-ux-y-mockups.md) | 4.1.0 | ✅ Vigente | 2026-09-26 | [UX](#etiqueta-ux) · [Front](#etiqueta-front) |
 | [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) | 2.0.0 | ✅ Vigente | 2026-09-18 | [Seguridad](#etiqueta-seguridad) · [Datos personales](#etiqueta-datos-personales) · [Negocio](#etiqueta-negocio) |
-| [12 · Pruebas y calidad](12-pruebas-y-calidad.md) | 3.1.0 | ✅ Vigente | 2026-09-19 | [Calidad](#etiqueta-calidad) |
+| [12 · Pruebas y calidad](12-pruebas-y-calidad.md) | 3.2.0 | ✅ Vigente | 2026-09-26 | [Calidad](#etiqueta-calidad) |
 | [13 · Respaldo y exportación](13-respaldo-y-exportacion.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Base de datos](#etiqueta-base-de-datos) · [Datos personales](#etiqueta-datos-personales) |
 | [14 · Roadmap e ideas de valor](14-roadmap-e-ideas.md) | 1.0.0 | 🔄 Vivo | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
 | [15 · Glosario](15-glosario.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Negocio](#etiqueta-negocio) |
@@ -172,11 +173,11 @@ Qué significa cada estado y cuándo sube una versión está en
 | [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) | 1.1.0 | ✅ Vigente | 2026-09-22 | [Front](#etiqueta-front) · [API](#etiqueta-api) · [Arquitectura](#etiqueta-arquitectura) |
 | [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) | 0.1.0 | 💡 Propuesta | 2026-09-16 | [Entrega](#etiqueta-entrega) · [Front](#etiqueta-front) |
 | [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 5.1.0 | ✅ Vigente | 2026-09-21 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
-| [20 · Contrato de la API](20-contrato-de-api.md) | 2.10.0 | ✅ Vigente | 2026-09-25 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
+| [20 · Contrato de la API](20-contrato-de-api.md) | 2.11.0 | ✅ Vigente | 2026-09-26 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) | 6.0.0 | ✅ Vigente | 2026-09-24 | [Paralelo](#etiqueta-paralelo) · [Proceso](#etiqueta-proceso) |
 | [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 2.1.0 | ✅ Vigente | 2026-09-24 | [Proceso](#etiqueta-proceso) |
 | [Contrato de la API · v0.21.0](../contrato/README.md) | 3.12.0 | ✅ Vigente | 2026-09-26 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
-| [Decisiones de arquitectura (ADR)](adr/README.md) | 1.12.0 | 🔄 Vivo | 2026-09-24 | [Arquitectura](#etiqueta-arquitectura) |
+| [Decisiones de arquitectura (ADR)](adr/README.md) | 1.13.0 | 🔄 Vivo | 2026-09-26 | [Arquitectura](#etiqueta-arquitectura) |
 | [ADR-001 · Stack tecnológico](adr/ADR-001-stack.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) |
 | [ADR-002 · Arquitectura hexagonal con regla de dependencias verificada](adr/ADR-002-arquitectura-hexagonal.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) · [API](#etiqueta-api) |
 | [ADR-003 · Dinero como entero de pesos](adr/ADR-003-dinero-entero.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Finanzas](#etiqueta-finanzas) · [API](#etiqueta-api) · [Base de datos](#etiqueta-base-de-datos) |
@@ -218,6 +219,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [ADR-039 · Cada regla vive en un solo sitio: CLAUDE.md, AGENTS.md o una skill](adr/ADR-039-cada-regla-en-un-solo-sitio.md) | 1.0.0 | ✅ Aceptado | 2026-09-24 | [Proceso](#etiqueta-proceso) |
 | [ADR-040 · Toda rama empieza por feature/, y el PR se abre solo con autorización expresa, trayendo entonces la base](adr/ADR-040-rama-feature-y-pr-autorizado.md) | 1.0.0 | ✅ Aceptado | 2026-09-24 | [Proceso](#etiqueta-proceso) · [Paralelo](#etiqueta-paralelo) |
 | [ADR-041 · Un párrafo de código o de commit tiene cuatro líneas como máximo](adr/ADR-041-cuatro-lineas-por-parrafo.md) | 1.0.0 | ✅ Aceptado | 2026-09-24 | [Proceso](#etiqueta-proceso) · [Calidad](#etiqueta-calidad) |
+| [ADR-042 · El documento OpenAPI declara la versión de la API, y la del contrato viaja en x-prisma-contrato](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md) | 1.0.0 | ✅ Aceptado | 2026-09-26 | [API](#etiqueta-api) · [Contrato](#etiqueta-contrato) · [Calidad](#etiqueta-calidad) |
 | [AGENTS.md](../AGENTS.md) | 1.2.0 | ✅ Vigente | 2026-09-24 | [Proceso](#etiqueta-proceso) |
 | [CLAUDE.md](../CLAUDE.md) | 11.0.0 | ✅ Vigente | 2026-09-24 | [Proceso](#etiqueta-proceso) |
 | [Herramienta de documentación](../scripts/docs/README.md) | 2.1.0 | ✅ Vigente | 2026-09-24 | [Proceso](#etiqueta-proceso) |
@@ -256,7 +258,7 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-api"></a>API
 
-[07 · Arquitectura técnica](07-arquitectura.md) · [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) · [20 · Contrato de la API](20-contrato-de-api.md) · [Contrato de la API · v0.21.0](../contrato/README.md) · [ADR-002 · Arquitectura hexagonal con regla de dependencias verificada](adr/ADR-002-arquitectura-hexagonal.md) · [ADR-003 · Dinero como entero de pesos](adr/ADR-003-dinero-entero.md) · [ADR-009 · Acceso con nombre de usuario, no con correo](adr/ADR-009-login-por-usuario.md) · [ADR-011 · Stack: Flutter y Dart con API propia](adr/ADR-011-stack-flutter-dart.md) · [ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando](adr/ADR-012-identidad-a-postgres.md) · [ADR-015 · Validación en tres capas, con la base como juez](adr/ADR-015-validacion-tres-capas.md) · [ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API](adr/ADR-017-api-en-java.md) · [ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos](adr/ADR-019-contrato-de-respuesta.md) · [ADR-020 · Idempotencia obligatoria en toda escritura](adr/ADR-020-idempotencia.md) · [ADR-021 · Canal firmado contra repetición y manipulación](adr/ADR-021-canal-firmado.md) · [ADR-024 · Java 25, Gradle y Spring Boot 4 en la API](adr/ADR-024-java-25-y-gradle.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) · [ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0](adr/ADR-030-contrato-sin-get.md) · [ADR-033 · La clave de servicio entra, pero solo para crear identidades](adr/ADR-033-service-role-solo-en-auth.md)
+[07 · Arquitectura técnica](07-arquitectura.md) · [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) · [20 · Contrato de la API](20-contrato-de-api.md) · [Contrato de la API · v0.21.0](../contrato/README.md) · [ADR-002 · Arquitectura hexagonal con regla de dependencias verificada](adr/ADR-002-arquitectura-hexagonal.md) · [ADR-003 · Dinero como entero de pesos](adr/ADR-003-dinero-entero.md) · [ADR-009 · Acceso con nombre de usuario, no con correo](adr/ADR-009-login-por-usuario.md) · [ADR-011 · Stack: Flutter y Dart con API propia](adr/ADR-011-stack-flutter-dart.md) · [ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando](adr/ADR-012-identidad-a-postgres.md) · [ADR-015 · Validación en tres capas, con la base como juez](adr/ADR-015-validacion-tres-capas.md) · [ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API](adr/ADR-017-api-en-java.md) · [ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos](adr/ADR-019-contrato-de-respuesta.md) · [ADR-020 · Idempotencia obligatoria en toda escritura](adr/ADR-020-idempotencia.md) · [ADR-021 · Canal firmado contra repetición y manipulación](adr/ADR-021-canal-firmado.md) · [ADR-024 · Java 25, Gradle y Spring Boot 4 en la API](adr/ADR-024-java-25-y-gradle.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) · [ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0](adr/ADR-030-contrato-sin-get.md) · [ADR-033 · La clave de servicio entra, pero solo para crear identidades](adr/ADR-033-service-role-solo-en-auth.md) · [ADR-042 · El documento OpenAPI declara la versión de la API, y la del contrato viaja en x-prisma-contrato](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md)
 
 ### <a id="etiqueta-front"></a>Front
 
@@ -276,7 +278,7 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-calidad"></a>Calidad
 
-[03 · Requisitos, reglas de negocio y escenarios BDD](03-requisitos-y-bdd.md) · [12 · Pruebas y calidad](12-pruebas-y-calidad.md) · [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) · [ADR-022 · OpenAPI generado del código y verificado en integración continua](adr/ADR-022-openapi-generado.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) · [ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige](adr/ADR-034-la-version-sube-en-cada-pr.md) · [ADR-041 · Un párrafo de código o de commit tiene cuatro líneas como máximo](adr/ADR-041-cuatro-lineas-por-parrafo.md)
+[03 · Requisitos, reglas de negocio y escenarios BDD](03-requisitos-y-bdd.md) · [12 · Pruebas y calidad](12-pruebas-y-calidad.md) · [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) · [ADR-022 · OpenAPI generado del código y verificado en integración continua](adr/ADR-022-openapi-generado.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) · [ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige](adr/ADR-034-la-version-sube-en-cada-pr.md) · [ADR-041 · Un párrafo de código o de commit tiene cuatro líneas como máximo](adr/ADR-041-cuatro-lineas-por-parrafo.md) · [ADR-042 · El documento OpenAPI declara la versión de la API, y la del contrato viaja en x-prisma-contrato](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md)
 
 ### <a id="etiqueta-entrega"></a>Entrega
 
@@ -292,7 +294,7 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-contrato"></a>Contrato
 
-[20 · Contrato de la API](20-contrato-de-api.md) · [Contrato de la API · v0.21.0](../contrato/README.md) · [ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos](adr/ADR-019-contrato-de-respuesta.md) · [ADR-020 · Idempotencia obligatoria en toda escritura](adr/ADR-020-idempotencia.md) · [ADR-021 · Canal firmado contra repetición y manipulación](adr/ADR-021-canal-firmado.md) · [ADR-022 · OpenAPI generado del código y verificado en integración continua](adr/ADR-022-openapi-generado.md) · [ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0](adr/ADR-030-contrato-sin-get.md)
+[20 · Contrato de la API](20-contrato-de-api.md) · [Contrato de la API · v0.21.0](../contrato/README.md) · [ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos](adr/ADR-019-contrato-de-respuesta.md) · [ADR-020 · Idempotencia obligatoria en toda escritura](adr/ADR-020-idempotencia.md) · [ADR-021 · Canal firmado contra repetición y manipulación](adr/ADR-021-canal-firmado.md) · [ADR-022 · OpenAPI generado del código y verificado en integración continua](adr/ADR-022-openapi-generado.md) · [ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0](adr/ADR-030-contrato-sin-get.md) · [ADR-042 · El documento OpenAPI declara la versión de la API, y la del contrato viaja en x-prisma-contrato](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md)
 
 ### <a id="etiqueta-proceso"></a>Proceso
 
