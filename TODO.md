@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [8.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-26 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [8.13.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-26 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -123,6 +123,15 @@ en vez de un error. **Falta la pantalla**, que es del carril Front y va debajo d
 «Inversiones y retiros», como dice el [§10](#10-decisiones-de-construcción-que-conviene-revisar).
 **Y el costeo de bordado ([5.4](docs/08-plan-de-desarrollo.md#tarea-5-4)) sigue sin poder empezar**: cómo entra el tiempo de máquina en
 el costo unitario es una regla financiera que ningún documento cubre, así que espera a quien dirige.
+
+**Y la plata que entra desde afuera ya entra, aunque tampoco tenga panel.** La mitad API de la
+[7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) está hecha: `PUT /api/v0/aportes/{id}` escribe el movimiento y su fila de
+`aportes_retiros` en la misma transacción, y **sube la caja y el patrimonio sin tocar la utilidad**,
+que es la fila del [05 §2](docs/05-reglas-financieras.md) y lo que el patrimonio de la [7.5](docs/08-plan-de-desarrollo.md#tarea-7-5) va a necesitar. **No pidió
+migración ni código nuevo**: la clase `aporte` estaba en el esquema inicial, el `42290` y el `42291`
+ya la nombraban, y `fn_anular_movimiento` ya la arrastra desde la [3.20](docs/08-plan-de-desarrollo.md#tarea-3-20). **Falta su panel**, en la
+misma pantalla que espera la [7.1](docs/08-plan-de-desarrollo.md#tarea-7-1), y con ella cierra la oleada 2 del [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7): solo el
+patrimonio queda detrás.
 
 **Lo siguiente, en cuanto alguien lo tome:** cerrar la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) destrabó lo que la estaba
 esperando. En el carril API **la prueba de permisos con sesión real ya está** ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)), y con ella
@@ -919,7 +928,20 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       el primero va sobre `fechaCompra`. `prisma_api` en 0.24.0, con 13 pruebas nuevas y 10 contra la
       base local ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). **Falta la pantalla**,
       del carril Front, y la tarea se marca cuando aterricen las dos mitades ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración))
-- [ ] ⚡ [**7.2**](docs/08-plan-de-desarrollo.md#tarea-7-2) Aportes de capital · API, Front
+- [ ] ⚡ [**7.2**](docs/08-plan-de-desarrollo.md#tarea-7-2) Aportes de capital · API, Front — **la mitad API está
+      hecha**: `PUT /api/v0/aportes/{id}` registra plata que entra desde afuera, y escribe en la misma
+      transacción el movimiento `aporte` —que **sube la caja y el patrimonio y no toca la utilidad**
+      ([05 §2](docs/05-reglas-financieras.md))— y su fila de `aportes_retiros` con clase `aporte`. **Aquí la cuenta sí es
+      obligatoria**, al contrario que en la compra de un activo: `aportes_retiros.movimiento_id` no
+      admite nulo, así que todo aporte es un movimiento ([04 §4.6](docs/04-modelo-de-datos.md#46-inversiones-capital-y-pro-labore)). **El id de la ruta es el de la
+      fila**, y no se deja al `DEFAULT` como en el retiro: así el mismo id dos veces choca con
+      `aportes_retiros_pkey` y responde `40900` en vez de dejar dos filas, y el id del movimiento se
+      deriva de él como en el activo. El «no» a Operación es de la base, con el `42501` de
+      `ret_solo_gerencia` y su control positivo en el fallo. **No estrena ningún código ni pide
+      migración**: el `42290` y el `42291` ya nombraban al aporte, la clase `aporte` está en el
+      esquema desde el inicial y `fn_anular_movimiento` ya lo arrastra desde la [3.20](docs/08-plan-de-desarrollo.md#tarea-3-20). `prisma_api`
+      en 0.25.0. **Falta la pantalla**, del carril Front, que va debajo del pro-labore en
+      «Inversiones y retiros», y la tarea se marca cuando aterricen las dos mitades ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración))
 - [x] [**7.3**](docs/08-plan-de-desarrollo.md#tarea-7-3) Pro-labore con justificación · API, Front — `PUT /api/v0/prolabore/{id}`
       escribe una definición nueva, vigente desde el día de Bogotá, y
       `POST /api/v0/consultas/prolabore` devuelve la que rige con su tarifa por hora: **nada se
