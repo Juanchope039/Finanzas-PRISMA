@@ -10,15 +10,15 @@
 
 ---
 # Indice
-## [1. El problema en una frase](#titulo-1)
-## [2. Índice de la documentación](#titulo-2)
-## [3. Mockup interactivo](#titulo-3)
-## [4. Las tres piezas que se van a construir](#titulo-4)
-## [5. Las 7 decisiones de diseño que definen el producto](#titulo-5)
-## [6. Estado del proyecto](#titulo-6)
-## [7. Cómo usar esta documentación](#titulo-7)
-## [8. Advertencia](#titulo-8)
-## [9. Licencia](#titulo-9)
+- [1. El problema en una frase](#titulo-1)
+- [2. Índice de la documentación](#titulo-2)
+- [3. Mockup interactivo](#titulo-3)
+- [4. Las tres piezas que se van a construir](#titulo-4)
+- [5. Las 7 decisiones de diseño que definen el producto](#titulo-5)
+- [6. Estado del proyecto](#titulo-6)
+- [7. Cómo usar esta documentación](#titulo-7)
+- [8. Advertencia](#titulo-8)
+- [9. Licencia](#titulo-9)
 ---
 
 ## <a id="titulo-1"></a>1. El problema en una frase
