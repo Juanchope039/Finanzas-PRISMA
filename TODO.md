@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [8.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-26 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [8.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-26 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -22,8 +22,21 @@ Cada tarea dice su **carril**: **API** (`prisma_api`), **Base** (`prisma_db`), *
 (`prisma_front`), **Contrato** (`contrato/`, los dos lados) o **Decisión** (sin código).
 
 ---
+## Índice
+- [1. Hecho, en progreso y pendiente](#titulo-1)
+- [2. Sprint 0 · proyectos, ambientes y contrato](#titulo-2)
+- [3. Sprint 1 · base, RLS, identidad e idempotencia](#titulo-3)
+- [4. Sprint 2 · acceso, usuarios, cargos y canal firmado](#titulo-4)
+- [5. Sprints 3 a 8 · funcionalidades en cadenas paralelas](#titulo-5)
+- [6. Sprint 9 · promoción, PWA y endurecimiento](#titulo-6)
+- [7. Decisiones pendientes](#titulo-7)
+- [8. Documentación](#titulo-8)
+- [9. A vigilar](#titulo-9)
+- [10. Decisiones de construcción que conviene revisar](#titulo-10)
+- [Cómo se mantiene este archivo](#titulo-11)
+---
 
-## 1. Hecho, en progreso y pendiente
+## <a id="titulo-1"></a>1. Hecho, en progreso y pendiente
 
 Las tres preguntas de siempre. Las secciones 2 a 6 enumeran **las 152 tareas del plan**, una por una
 y con su marca; aquí está el resumen. Que no falte ninguna no depende de la memoria de nadie: la
@@ -309,7 +322,7 @@ o indirectamente. No es el orden en que se descubrieron.
 
 ---
 
-## 2. <a id="sprint-0"></a>[Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · proyectos, ambientes y contrato
+## <a id="titulo-2"></a>2. <a id="sprint-0"></a>[Sprint 0](docs/08-plan-de-desarrollo.md#sprint-0) · proyectos, ambientes y contrato
 
 - [x] [**0.1**](docs/08-plan-de-desarrollo.md#tarea-0-1) Proyecto `prisma_api`: Java 25, Spring Boot 4 y Gradle, con el esqueleto hexagonal · API
 - [x] [**0.2**](docs/08-plan-de-desarrollo.md#tarea-0-2) Regla de frontera con ArchUnit en la integración continua · API
@@ -364,7 +377,7 @@ se cierra con la [0.9](docs/08-plan-de-desarrollo.md#tarea-0-9), que volvió a e
 
 ---
 
-## 3. <a id="sprint-1"></a>[Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · base, RLS, identidad e idempotencia
+## <a id="titulo-3"></a>3. <a id="sprint-1"></a>[Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) · base, RLS, identidad e idempotencia
 
 ✏️ quiere decir que el SQL ya está en la migración inicial de `prisma_db`
 (`20260915120000_esquema_inicial.sql`) pero nunca corrió contra una base: no cuenta como hecho
@@ -490,7 +503,7 @@ hasta aplicarlo y probarlo.
 
 ---
 
-## 4. <a id="sprint-2"></a>[Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · acceso, usuarios, cargos y canal firmado
+## <a id="titulo-4"></a>4. <a id="sprint-2"></a>[Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2) · acceso, usuarios, cargos y canal firmado
 
 - [x] [**2.1**](docs/08-plan-de-desarrollo.md#tarea-2-1) Autenticación contra Supabase Auth desde la API, con el correo sintético en el
       servidor · API — `POST /api/v0/sesiones`, y con ella **la primera transacción con identidad
@@ -672,7 +685,7 @@ hasta aplicarlo y probarlo.
 
 ---
 
-## 5. Sprints 3 a 8 · funcionalidades en cadenas paralelas
+## <a id="titulo-5"></a>5. Sprints 3 a 8 · funcionalidades en cadenas paralelas
 
 **Las cadenas avanzan a la vez y comparten lo mínimo**: cada una tiene sus tablas y su rango de
 códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-verticales-sprints-3-a-8)). El orden exacto dentro de cada una lo dan las dependencias del plan.
@@ -1072,7 +1085,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 
 ---
 
-## 6. <a id="sprint-9"></a>[Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · promoción, PWA y endurecimiento
+## <a id="titulo-6"></a>6. <a id="sprint-9"></a>[Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9) · promoción, PWA y endurecimiento
 
 **No se parte: lo hacen todos los carriles juntos**, porque consiste en integrar y probar lo de todos.
 
@@ -1096,7 +1109,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 
 ---
 
-## 7. Decisiones pendientes
+## <a id="titulo-7"></a>7. Decisiones pendientes
 
 | # | Decisión | Quién | Bloquea | Estado |
 |---|---|---|---|---|
@@ -1206,7 +1219,7 @@ a `anon`.
 
 ---
 
-## 8. Documentación
+## <a id="titulo-8"></a>8. Documentación
 
 - [x] Encabezado con versión, estado, fechas y etiquetas en los 57 documentos de los cuatro
       repositorios ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md))
@@ -1217,7 +1230,7 @@ a `anon`.
 
 ---
 
-## 9. A vigilar
+## <a id="titulo-9"></a>9. A vigilar
 
 - **Con el CLI de Supabase 2.117.0, el GoTrue local acepta la clave «x»**, y las dos pruebas de
   `GoTrueIntegracionTest` que esperan un `weak_password` salen rojas. Pasa también en `develop`, sin
@@ -1433,7 +1446,7 @@ a `anon`.
 
 ---
 
-## 10. Decisiones de construcción que conviene revisar
+## <a id="titulo-10"></a>10. Decisiones de construcción que conviene revisar
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
@@ -3768,7 +3781,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 
 ---
 
-## Cómo se mantiene este archivo
+## <a id="titulo-11"></a>Cómo se mantiene este archivo
 
 - **Una tarea hecha es un commit, y el commit explica por qué** ([ADR-028](docs/adr/ADR-028-un-commit-por-tarea.md)). El asunto lleva el
   sprint y el número —`Sprint 3 / 3.11: marca de registro tardio`— y el cuerpo son tres párrafos:
