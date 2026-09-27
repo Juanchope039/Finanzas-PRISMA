@@ -1770,6 +1770,44 @@ tbody tr.fila-detalle:hover{background:none}
             acumulado se ve arriba, en el patrimonio. Lo que se registra aquí sube la caja y el
             patrimonio, y no toca la utilidad del mes.</p>
         </div>
+
+        <!-- Configurar los sobres se hace aquí (RF-50, CU-17): «Configuración» no tiene clave en el
+             menú, que lo dicta la API, y el reparto manda sobre la plata que entra. Cada cambio es
+             una fila nueva con su vigencia (RF-51), y el historial se conserva sin pintarse. Que los
+             cuatro sumen 100 lo rechaza suma_cien y sale como el 42293, debajo del último. -->
+        <div class="panel" id="panel-sobres">
+          <div class="panel-head">
+            <h2 class="grow">Los 4 sobres</h2>
+            <span class="eyebrow">Cómo se reparte cada peso que entra</span>
+            <button class="cta" id="btn-sobres" aria-expanded="false" aria-controls="form-sobres">Configurar los sobres</button>
+          </div>
+
+          <div class="formulario" id="form-sobres" hidden>
+            <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px">
+              <h3 class="grow">Configurar los sobres</h3>
+              <span class="eyebrow">Rige desde hoy</span>
+            </div>
+            <div class="campos-form">
+              <div class="campo"><label for="sb-costo">Costo directo</label>
+                <input type="text" id="sb-costo" inputmode="numeric" placeholder="45"></div>
+              <div class="campo"><label for="sb-gastos">Gastos fijos</label>
+                <input type="text" id="sb-gastos" inputmode="numeric" placeholder="25"></div>
+              <div class="campo"><label for="sb-reserva">Reserva</label>
+                <input type="text" id="sb-reserva" inputmode="numeric" placeholder="10"></div>
+              <div class="campo"><label for="sb-retiro">Retiro</label>
+                <input type="text" id="sb-retiro" inputmode="numeric" placeholder="20"></div>
+            </div>
+
+            <p class="capa-error" id="sb-error" role="alert" aria-live="polite" hidden style="margin-top:14px"></p>
+
+            <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; align-items:center">
+              <button class="cta" id="sb-guardar">Guardar los sobres</button>
+              <button class="ghost" id="sb-cancelar">Cancelar</button>
+            </div>
+          </div>
+
+          <div id="sobres-vigentes"></div>
+        </div>
       </section>
 
       <!-- ===== 6 · REPORTES ===== -->
@@ -2575,6 +2613,8 @@ function aplicarRol(){
   tablaActivos();
   cerrarFormAporte();
   pintarAportes();
+  cerrarFormSobres();
+  pintarSobres();
   tablaPedidos();
   kpisPedidos();
   pintarCuentas();
@@ -3428,6 +3468,119 @@ function guardarAporte(){
   });
   document.getElementById('ap-cancelar').addEventListener('click', cerrarFormAporte);
   document.getElementById('ap-guardar').addEventListener('click', guardarAporte);
+})();
+
+/* ---------- los 4 sobres (RF-50, RF-51, CU-17, tarea 7.7) ---------- */
+/* Cómo se reparte cada peso que entra en efectivo (05 §11). Configurarlos escribe una fila nueva con
+   su día (04 §4.8) y no edita la anterior: el historial se conserva y no se pinta, igual que en el
+   pro-labore. Los cuatro colores son los de la tarjeta del Inicio, para que el reparto configurado y
+   lo que se usó de cada sobre se lean como lo mismo. */
+var SOBRES = {costo:45, gastos:25, reserva:10, retiro:20, desde:'2026-09-01'};
+var HISTORIAL_SOBRES = [];
+var avisoSobres = null;
+
+var COLOR_SOBRE = [
+  {clave:'costo',   nombre:'Costo directo', color:'var(--accent)'},
+  {clave:'gastos',  nombre:'Gastos fijos',  color:'var(--warn)'},
+  {clave:'reserva', nombre:'Reserva',       color:'var(--pos)'},
+  {clave:'retiro',  nombre:'Retiro',        color:'var(--anticipo)'}
+];
+
+function pintarSobres(){
+  var caja = document.getElementById('sobres-vigentes');
+  if (!caja) return;
+  var aviso = avisoSobres;
+  avisoSobres = null;
+  var html = aviso
+    ? '<div class="alerta a-' + aviso.tono + '" style="margin-bottom:14px"><span class="tag">AVISO</span>' +
+      '<div><b>' + enTexto(aviso.titulo) + '</b><span>' + enTexto(aviso.texto) + '</span></div></div>'
+    : '';
+  if (!SOBRES){
+    caja.innerHTML = html + '<div class="alerta a-alta"><span class="tag">FALTA</span>' +
+      '<div><b>Todavía no has repartido lo que entra</b><span>Sin los cuatro sobres, cada peso que ' +
+      'entra en efectivo se queda sin destino: no hay con qué decir cuánto va al próximo pedido, ' +
+      'cuánto a los gastos fijos, cuánto a la reserva y cuánto a la propiedad.</span></div></div>';
+    return;
+  }
+  var barra = '', lista = '';
+  COLOR_SOBRE.forEach(function(s){
+    var pct = SOBRES[s.clave];
+    if (pct > 0) barra += '<div style="width:' + pct + '%; background:' + s.color + '">' + pct + '%</div>';
+    /* La columna «a» va vacía a propósito: aquí no hay plata asignada, que es del Inicio, y
+       dejarla es lo que mantiene el porcentaje contra el margen derecho, como en esa tarjeta. */
+    lista += '<div class="sobre"><i style="background:' + s.color + '"></i>' +
+      '<span class="n">' + s.nombre + '</span><span class="a"></span>' +
+      '<span class="d">' + pct + '%</span></div>';
+  });
+  caja.innerHTML = html + '<div class="prisma">' + barra + '</div>' +
+    '<div class="sobre-list">' + lista + '</div>' +
+    '<p style="font-size:.78rem; color:var(--muted); margin-top:14px">' +
+    'Rige desde el ' + fechaConAno(SOBRES.desde) + ' · lo anterior queda en el historial, que no se ' +
+    'pinta. Lo asignado contra lo usado de cada sobre se ve en el Inicio.</p>';
+}
+
+function abrirFormSobres(){
+  var btn = document.getElementById('btn-sobres');
+  ['sb-costo','sb-gastos','sb-reserva','sb-retiro'].forEach(function(id){
+    document.getElementById(id).value = '';
+  });
+  avisoCampo('sb-error', '');
+  document.getElementById('form-sobres').hidden = false;
+  btn.setAttribute('aria-expanded', 'true');
+  btn.textContent = 'Cerrar';
+  document.getElementById('form-sobres').scrollIntoView({block:'nearest'});
+  document.getElementById('sb-costo').focus();
+}
+
+function cerrarFormSobres(){
+  var btn = document.getElementById('btn-sobres');
+  if (!btn) return;
+  document.getElementById('form-sobres').hidden = true;
+  btn.setAttribute('aria-expanded', 'false');
+  btn.textContent = 'Configurar los sobres';
+  avisoCampo('sb-error', '');
+}
+
+function fallaSobres(id, texto){
+  avisoCampo('sb-error', texto);
+  document.getElementById(id).focus();
+}
+
+/* Cada sobre va de 0 a 100 y eso lo dice el descriptor. Que los cuatro sumen 100 no cabe en él
+   (20 §4.4): la impone suma_cien y sube como el 42293, debajo del último sobre, que es donde el
+   prototipo pinta el aviso. */
+function guardarSobres(){
+  var leidos = {};
+  for (var i = 0; i < COLOR_SOBRE.length; i++){
+    var s = COLOR_SOBRE[i];
+    var id = 'sb-' + s.clave;
+    var texto = (document.getElementById(id).value || '').trim();
+    if (!texto) return fallaSobres(id, 'Escribe qué porcentaje va a ' + s.nombre.toLowerCase() + '.');
+    if (!/^\d+$/.test(texto)) return fallaSobres(id, 'Escribe el porcentaje en puntos enteros: 45.');
+    if (+texto > 100) return fallaSobres(id, 'Un sobre no puede pasar de 100 %.');
+    leidos[s.clave] = +texto;
+  }
+  var suma = leidos.costo + leidos.gastos + leidos.reserva + leidos.retiro;
+  if (suma !== 100) return fallaSobres('sb-retiro', 'Los cuatro sobres tienen que sumar 100 %.');
+  if (SOBRES) HISTORIAL_SOBRES.push(SOBRES);
+  leidos.desde = '2026-09-30';
+  SOBRES = leidos;
+  avisoSobres = {tono:'info', titulo:'El reparto nuevo rige desde hoy',
+    texto:'Cada peso que entre en efectivo desde hoy se reparte así. Lo que ya entró se repartió ' +
+      'con el anterior, que queda en el historial.'};
+  cerrarFormSobres();
+  pintarSobres();
+}
+
+(function initSobres(){
+  var btn = document.getElementById('btn-sobres');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    if (document.getElementById('form-sobres').hidden) abrirFormSobres();
+    else cerrarFormSobres();
+  });
+  document.getElementById('sb-cancelar').addEventListener('click', cerrarFormSobres);
+  document.getElementById('sb-guardar').addEventListener('click', guardarSobres);
 })();
 
 function filaAcciones(p){
