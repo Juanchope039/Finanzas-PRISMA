@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-27 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-27 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -55,10 +55,10 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 7 | 0 | 4 | 5 |
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 8 | 0 | 3 | 3 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
-| [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 5 | 0 | 4 | 6 |
+| [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 6 | 0 | 3 | 4,5 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **153** | **111** | **0** | **42** | **54,5** |
+| **Total** | **153** | **112** | **0** | **41** | **53** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -135,16 +135,18 @@ ya la nombraban, y `fn_anular_movimiento` ya la arrastra desde la [3.20](docs/08
 debajo del de los activos**, con una particularidad: **es el primero sin tabla**, porque el contrato
 no declara ninguna consulta de aportes. No lista nada, dice dónde se ve lo aportado y pinta el
 comprobante que la API devolvió, que el mockup tampoco dibujaba ([§10](#10-decisiones-de-construcción-que-conviene-revisar)).
-Queda el panel de los sobres para cerrar la oleada 2 del [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7): solo el patrimonio queda
-detrás.
 
-**Y el reparto de cada peso ya se define desde la aplicación, y va a la misma pantalla.** La mitad
-API de la [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) está hecha: los cuatro sobres se configuran y se leen, y **cada cambio es una
+**Y el reparto de cada peso ya se define desde la aplicación, con su pantalla.** Con la mitad Front,
+la [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) queda cerrada: los cuatro sobres se configuran y se leen, y **cada cambio es una
 fila nueva**, así que el historial que pide el [RF-51](docs/03-requisitos-y-bdd.md#rf-51) queda entero. **Las dos reglas son de la
 base**: el «no» a Operación lo pone `sobres_solo_gerencia` y que los cuatro sumen 100, `suma_cien`,
-que estrena el `42293`. **Falta su panel**, en «Inversiones y retiros», donde los activos y los
-aportes ya entraron, y con él se cierran las dos oleadas del [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) que no esperan al
-patrimonio.
+que estrena el `42293`. **Y su panel cierra «Inversiones y retiros» por abajo**, donde los activos y
+los aportes ya entraron: pinta la barra de cuatro tramos y desde cuándo rige, **no pinta el
+historial** —el requisito pide conservarlo, no mostrarlo— y **no suma los cuatro campos**, porque esa
+regla es de la base. Como el pro-labore, no estaba dibujado, y el mockup lo estrena
+([§10](#10-decisiones-de-construcción-que-conviene-revisar)). **Con él quedan cerradas las oleadas 1
+y 2 del [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7)**, y el carril Front se queda sin nada pendiente en este sprint hasta
+la [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8), que espera a la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1).
 
 **Lo siguiente, en cuanto alguien lo tome:** cerrar la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) destrabó lo que la estaba
 esperando. En el carril API **la prueba de permisos con sesión real ya está** ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)), y con ella
@@ -191,7 +193,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [4.6](docs/08-plan-de-desarrollo.md#tarea-4-6) · [4.8](docs/08-plan-de-desarrollo.md#tarea-4-8) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [4.6](docs/08-plan-de-desarrollo.md#tarea-4-6) · [4.8](docs/08-plan-de-desarrollo.md#tarea-4-8) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [4.5](docs/08-plan-de-desarrollo.md#tarea-4-5) · [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5) |
 | **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
@@ -200,12 +202,12 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **42 tareas y 54,5 días de trabajo** de 153 tareas del plan.
+Quedan **41 tareas y 53 días de trabajo** de 153 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 8,1 semanas | **11,1 semanas** |
-| 2 | 4,6 semanas | **7,6 semanas** |
+| 1 | 7,9 semanas | **10,9 semanas** |
+| 2 | 4,4 semanas | **7,4 semanas** |
 | 3 | 4,2 semanas | **7,2 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -987,9 +989,9 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       en `0.22.0`, con 33 pruebas nuevas y 11 contra la base local ([§10](#10-decisiones-de-construcción-que-conviene-revisar))
 - [ ] 🔒 [**7.5**](docs/08-plan-de-desarrollo.md#tarea-7-5) Cálculo de patrimonio · API
 - [ ] 🔒 [**7.6**](docs/08-plan-de-desarrollo.md#tarea-7-6) Alerta de descapitalización a 12 meses · API
-- [ ] ⚡ [**7.7**](docs/08-plan-de-desarrollo.md#tarea-7-7) Los cuatro sobres con historial · API, Front — **la mitad
-      API está hecha**: `PUT /api/v0/sobres/{id}` define desde hoy cómo se reparte cada peso que entra
-      en efectivo —costo directo, gastos fijos, reserva y retiro ([05 §11](docs/05-reglas-financieras.md#11-la-regla-de-los-4-sobres))— y
+- [x] [**7.7**](docs/08-plan-de-desarrollo.md#tarea-7-7) Los cuatro sobres con historial · API, Front — **las dos mitades
+      aterrizaron**. La API: `PUT /api/v0/sobres/{id}` define desde hoy cómo se reparte cada peso que
+      entra en efectivo —costo directo, gastos fijos, reserva y retiro ([05 §11](docs/05-reglas-financieras.md#11-la-regla-de-los-4-sobres))— y
       `POST /api/v0/consultas/sobres` devuelve el reparto que rige. **Nada se sobrescribe**: cada
       cambio es una fila de `sobres_config`, vigente desde el día de Bogotá, así que el historial del
       [RF-51](docs/03-requisitos-y-bdd.md#rf-51) queda entero y la configuración de la semilla sigue donde estaba. **Las dos
@@ -1000,8 +1002,13 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       regla entre cuatro campos no cabe en el descriptor ([20 §4.4](docs/20-contrato-de-api.md#44-las-reglas-que-caben-y-por-qué-no-caben-más)), y la API no la sabría
       mejor que la base. **No pidió migración**: la tabla, la restricción y la política están desde el
       esquema inicial. `prisma_api` en `0.27.0`, con 13 pruebas nuevas y 11 contra la base local.
-      **Falta la pantalla**, del carril Front, y la tarea se marca cuando aterricen las dos mitades
-      ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración))
+      Y el Front: el panel «Los 4 sobres» cierra «Inversiones y retiros» por abajo, con la barra de
+      cuatro tramos, los cuatro con su color y su porcentaje, y desde cuándo rige. **El historial no
+      se pinta** —el [RF-51](docs/03-requisitos-y-bdd.md#rf-51) pide conservarlo, no mostrarlo— **y la suma tampoco se comprueba ahí**:
+      el `42293` llega sobre `pctRetiro` y se lee debajo del último sobre. **Los cuatro colores los
+      pone la pantalla**, los de la tarjeta del Inicio, porque el contrato manda cuatro claves
+      sueltas y ninguna presentación ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). El panel no estaba dibujado y el mockup lo
+      estrena. `prisma_front` en `0.22.0+27`, con 14 pruebas nuevas
 - [ ] 🔒 [**7.8**](docs/08-plan-de-desarrollo.md#tarea-7-8) Panel de sobres: asignado contra usado · Front
 - [x] [**7.9**](docs/08-plan-de-desarrollo.md#tarea-7-9) Contrato de inversiones, aportes, retiros, pro-labore y sobres · Contrato — v0.13.0:
       diez operaciones, veintitrés esquemas y cinco códigos que estrenan el rango `90`–`99`. El
@@ -1658,6 +1665,29 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **El retiro no tiene pantalla.** La 7.4 es solo API, y «Inversiones y retiros» ya pinta el
       pro-labore y los activos, pero no el retiro. Es la misma pregunta que ya estaba abierta para la [7.5](docs/08-plan-de-desarrollo.md#tarea-7-5) y
       la [7.6](docs/08-plan-de-desarrollo.md#tarea-7-6): o ganan mitad Front, o se dice cuál de las 7.x la lleva
+
+**De los cuatro sobres ([7.7](docs/08-plan-de-desarrollo.md#tarea-7-7)), en su mitad Front:**
+
+- [ ] **El panel «Los 4 sobres» se dibujó, y el mockup lo estrena.** No existía: el prototipo solo
+      tenía la tarjeta del Inicio, que es lo asignado contra lo usado y es la [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8), no dónde se
+      configura. Se dibujó y se construyó a la vez, como el pro-labore de la [7.3](docs/08-plan-de-desarrollo.md#tarea-7-3), que es lo que
+      quien dirige pidió para la [4.2](docs/08-plan-de-desarrollo.md#tarea-4-2). **Falta que lo apruebe**
+- [ ] **Los sobres viven en «Inversiones y retiros», y ya no en «Configuración».** Es lo que el
+      [§10](#10-decisiones-de-construcción-que-conviene-revisar) dejó pendiente al mover el pro-labore, con la misma razón: «Configuración» no es
+      ninguna de las once pantallas ni tiene clave en el menú, y el menú lo dicta la API. El [10](docs/10-ux-y-mockups.md) sube
+      a MAJOR y su mapa los cuelga de «Inversiones y retiros». **«Configuración» se queda con la
+      auditoría y el respaldo**, y esos dos siguen sin pantalla ni clave
+- [ ] **Los cuatro colores los pone el front.** El contrato manda cuatro claves sueltas y ninguna
+      presentación, como pasa con los activos: son los de la tarjeta del Inicio, para que el reparto
+      configurado y lo usado se lean como lo mismo. Se descartó pedirle a la API una presentación,
+      que es contrato nuevo que nadie pidió
+- [ ] **El historial no se pinta en ninguna parte.** El [RF-51](docs/03-requisitos-y-bdd.md#rf-51) pide conservarlo y el contrato no
+      declara ninguna consulta que lo devuelva, así que no hay de dónde leerlo. Conviene mirar si al
+      cambiar el reparto hace falta ver con qué venía, que es contrato nuevo
+- [ ] **La suma se queda en un solo sitio, y es la base.** El panel manda los cuatro como se
+      escribieron y lee el `42293` debajo del último sobre. Se descartó sumarlos antes de enviar, que
+      ahorraría un viaje y pondría una regla de negocio en Flutter, y también pintar el total mientras
+      se llena, que es la misma regla disfrazada de ayuda
 
 **De la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2), el catálogo de productos, en su mitad API:**
 

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-26 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [5.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-27 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -85,8 +85,8 @@ con la de la API?} -->|No| VI[Versión incompatible · no hay salida]
   N --> NL[Liquidación mensual]
 
   I --> IP[Pro-labore]
+  I --> IS[Los 4 sobres]
 
-  CF --> CS[Los 4 sobres]
   CF --> CA[Auditoría]
   CF --> CE[Exportar respaldo]
 
@@ -490,6 +490,35 @@ Un aporte es plata que entra desde afuera: **sube la caja y el patrimonio, y no 
   de un equipo.
 - **Toda la pantalla es de Gerencia, y lo impone la base**: `ret_solo_gerencia` no deja escribir
   `aportes_retiros`, así que el rechazo no lo decide la pantalla.
+
+#### Los cuatro sobres se configuran aquí, y tampoco en una «Configuración»
+
+El reparto manda sobre cada peso que entra en efectivo ([05 §11](05-reglas-financieras.md#11-la-regla-de-los-4-sobres)), así que vive donde se mira
+la plata del negocio. Es el mismo caso del pro-labore, y por la misma razón: el menú lo dicta la API
+y no tiene clave para «Configuración», así que dársela sería un cambio de contrato. Ponerlo aquí no
+lo es.
+
+- **El panel «Los 4 sobres» pinta el reparto que rige**: la barra de cuatro tramos y, debajo, los
+  cuatro con su color y su porcentaje —costo directo, gastos fijos, reserva y retiro—, y desde cuándo
+  rige. **Los colores son los de la tarjeta del Inicio**, para que el reparto configurado y lo
+  asignado contra lo usado ([7.8](08-plan-de-desarrollo.md#tarea-7-8)) se lean como lo mismo. La API manda cuatro claves sueltas y
+  ninguna presentación, así que la traducción a color es del front, como la píldora «En uso» de los
+  activos.
+- **El historial no se pinta.** El [RF-51](03-requisitos-y-bdd.md#rf-51) pide conservarlo, no mostrarlo, y el contrato no declara
+  ninguna consulta que lo devuelva. Lo que se pinta es desde cuándo rige lo que rige.
+- **Sin reparto configurado, el panel lo dice**: cada peso que entra se queda sin destino, y no hay
+  con qué decir cuánto va al próximo pedido, cuánto a los gastos fijos, cuánto a la reserva y cuánto
+  a la propiedad.
+- **«Configurar los sobres» abre el formulario en la misma pantalla**, con los cuatro porcentajes en
+  puntos enteros. Los cuatro son obligatorios y cada uno va de 0 a 100, que es lo que el descriptor
+  sabe decir.
+- **Que los cuatro sumen 100 no lo comprueba la pantalla.** Es una regla entre cuatro campos, que no
+  cabe en el descriptor ([20 §4.4](20-contrato-de-api.md#44-las-reglas-que-caben-y-por-qué-no-caben-más)): la impone `suma_cien` y llega como el `42293`, con su aviso debajo
+  del último sobre. Sumarlos aquí sería escribir una regla de negocio en el front ([ADR-018](adr/ADR-018-front-sin-decisiones.md)).
+- **Guardar no edita el reparto anterior**: el nuevo rige desde hoy y el anterior queda en el
+  historial. El panel vuelve a pedir lo vigente en vez de dar por hecho lo que escribió.
+- **Toda la pantalla es de Gerencia, y lo impone la base**: a Operación `sobres_solo_gerencia` le
+  deja la consulta vacía —no con error— y le rechaza configurar ([P-07](12-pruebas-y-calidad.md#p-07), [P-22](12-pruebas-y-calidad.md#p-22)).
 
 ### 4.6 Reportes
 
