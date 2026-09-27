@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [11.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [12.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-27 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 Las reglas de PRISMA, para cualquier sesión en cualquiera de los cuatro repositorios.
 
@@ -119,6 +119,17 @@ ni referencias de proyectos, ni nombres de clientes.
 - Los dos enumeran las mismas tareas, y la verificación falla si no coinciden.
 - **Una tarea nueva entra primero al 08**, nunca al tablero.
 
+**Una tarea solo depende de tareas anteriores** ([ADR-043](docs/adr/ADR-043-dependencias-solo-hacia-atras.md)).
+- «Anterior» es el número menor: primero el sprint, después el número dentro de él. De esas
+  dependencias salen las oleadas, el camino crítico y el calendario, así que una que mire hacia
+  adelante hace que el número mienta.
+- **Depender de una tarea de un sprint posterior es lo grave**: un sprint es un orden de entrega, y
+  si eso pasa lo que está mal es el número del sprint. Cambiarlo lo autoriza quien dirige.
+- **Una tarea nueva se escribe después de todo lo que necesita.** Si hace falta que una vieja dependa
+  de ella, no va al final de la tabla: se renumera con autorización, o se parte.
+- Lo comprueba `verificar`, y lo que ya estaba es deuda declarada en `scripts/docs/config.mjs`, a la
+  vista en el [08 §1.3](docs/08-plan-de-desarrollo.md#13-las-dependencias-que-miran-hacia-adelante). Esa lista solo se encoge.
+
 **`git add` va con rutas explícitas**, nunca con `-A`. Antes de commitear se mira `git status`.
 
 **No se inventan reglas de negocio.** Si un documento no cubre un caso, se decide lo mínimo, se
@@ -145,7 +156,10 @@ prisma_front  ──HTTP──▶  prisma_api  ──SQL──▶  prisma_db
 - **Toda respuesta lleva el sobre `{status, mensaje, data}`**, también los errores, con un código de
   cinco dígitos: `HTTP(3) + caso(2)`. El catálogo de códigos es la fuente única de los mensajes
   ([ADR-019](docs/adr/ADR-019-contrato-de-respuesta.md)).
-- **Todo viaja por `POST` bajo `/api/v0`** ([ADR-030](docs/adr/ADR-030-contrato-sin-get.md)).
+- **Ninguna operación usa `GET`, y todas cuelgan de `/api/v0`** ([ADR-030](docs/adr/ADR-030-contrato-sin-get.md)). Las lecturas van por `POST`
+  bajo `/api/v0/consultas/…`; de las escrituras, la que trae el id que generó quien registra va por
+  `PUT` a ese id, y cerrar la sesión por `DELETE`. Cuál verbo lleva cada una lo dice
+  [`20-contrato-de-api.md`](docs/20-contrato-de-api.md).
 - **Toda petición lleva `Idempotency-Key`** ([ADR-020](docs/adr/ADR-020-idempotencia.md)), salvo el ingreso y la renovación de sesión.
   La clave la genera el front cuando la persona decide la acción, y la reutiliza en cada reintento.
 - **El contrato se acuerda antes de implementarse.** El acordado es `contrato/openapi.json`, y la API

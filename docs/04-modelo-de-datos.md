@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.14.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-24 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.15.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-27 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -95,6 +95,8 @@ erDiagram
 | 26 | `nonces_vistos` | Nonce ya usados por el canal firmado, dentro de su ventana | ✅ |
 | 27 | `sesiones` | La clave de firma de cada sesión abierta, del lado del servidor | ✅ |
 | 28 | `presentacion_tipos` | Cómo se lee cada tipo de movimiento en el libro: el nombre, el color y el grupo del filtro | |
+| 29 | `exportaciones` | Qué se exportó, con qué alcance, cuánto pesaba y quién se lo llevó ([13 §8](13-respaldo-y-exportacion.md#8-tabla-de-registro)) | |
+| 30 | `schema_version` | Una fila por versión del esquema publicada: el historial, no un número que se pisa | |
 
 *Sensible = el acceso a la tabla está restringido por Row Level Security ([§7](#7-seguridad-por-tipo-de-usuario-rls)). En la mayoría eso
 significa «solo Gerencia», pero no en todas: en `usuarios`, `empleados`, `nomina_periodos`,
@@ -107,7 +109,7 @@ tabla está en el [§7](#7-seguridad-por-tipo-de-usuario-rls).*
 SQL sí aparece antes de `usuarios`, porque `usuarios` la referencia.
 
 Las entidades **25**, **26** y **27** —`peticiones_idempotentes`, `nonces_vistos` y `sesiones`— son
-las tres únicas que no son del negocio: no guardan plata, ni personas, ni pedidos. La primera guarda el rastro de qué
+las tres del transporte: no guardan plata, ni personas, ni pedidos. La primera guarda el rastro de qué
 peticiones ya se atendieron, para no cobrar dos veces lo mismo ([§4.9](#49-claves-de-idempotencia)); la segunda, qué nonce ya se
 usaron, para que nadie reenvíe una petición capturada ([§4.10](#410-los-nonce-vistos)); la tercera, con qué clave firma cada
 sesión, que es contra lo que se comprueban esos envíos ([§4.11](#411-las-sesiones-abiertas)). Están en el catálogo porque son
@@ -117,6 +119,11 @@ razón por la que sí pueden borrarse: no son entidades del taller, son mecanism
 La entidad **28**, `presentacion_tipos`, la creó la tarea [3.19](08-plan-de-desarrollo.md#tarea-3-19), en el esquema `0.13.0`: es lo que Gerencia elige de cómo se
 lee cada tipo en el libro ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)). Se une a `movimientos` por el valor de `tipo` y no por una llave
 foránea, así que su línea del diagrama dice de qué habla la tabla, no que haya un `REFERENCES`.
+
+Las entidades **29** y **30**, `exportaciones` y `schema_version`, **estaban en el esquema y no en
+este catálogo**, y por eso las cuentas del [§7](#7-seguridad-por-tipo-de-usuario-rls) no cuadraban con la base. Van al final para no renumerar,
+como `cargos`. Ninguna la especifica este documento: la primera la escribe el [13 §8](13-respaldo-y-exportacion.md#8-tabla-de-registro) y la segunda es
+la versión del esquema, que se publica con cada migración ([19 §4](19-ambientes-y-entrega.md#4-versionado)).
 
 Las entidades **12** y **13**, `cotizaciones` y `cotizacion_lineas`, estuvieron en este catálogo y en el
 diagrama desde el principio sin `CREATE TABLE`, y las escribió la tarea [8.12](08-plan-de-desarrollo.md#tarea-8-12), en el esquema `0.15.0`
@@ -2287,9 +2294,10 @@ cotizar; lo único que cambia es quién los define. Va `FOR ALL` y no `FOR INSER
 desactivación y la reactivación del contrato son `UPDATE`**, y una política de inserción sola las
 dejaría abiertas el día que se escriban esos dos endpoints, sin ninguna prueba que lo delatara.
 
-Con esto, las dieciséis tablas que el [§3](#3-catálogo-de-entidades) marca como sensibles tienen política, y con `cargos`,
+Con esto, las diecisiete tablas que el [§3](#3-catálogo-de-entidades) marca como sensibles tienen política, y con `cargos`,
 `cuentas`, `categorias`, `presentacion_tipos`, `cotizaciones`, `cotizacion_lineas` y `productos` son
-veintitrés las que llevan RLS encendida. Las cuatro restantes —`adjuntos`, `pedidos`, `pedido_lineas`
+veinticuatro; con `exportaciones` y `schema_version`, que no son del negocio, **veintiséis de las
+treinta**. Las cuatro restantes —`adjuntos`, `pedidos`, `pedido_lineas`
 y `anticipos`— siguen sin RLS a propósito: los dos tipos trabajan con ellas todo el día y no hay nada
 que separar. El principio 6 del [§1](#1-principios-del-modelo) se lee así: **en cada tabla donde haya algo que proteger.**
 

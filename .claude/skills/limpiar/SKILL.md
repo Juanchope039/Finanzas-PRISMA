@@ -10,7 +10,7 @@ model: sonnet
 Las rutas son relativas a la carpeta de trabajo, la que contiene `repositories/`.
 
 De aquí sale la tarea siguiente: su primer paso es la base al día en una copia limpia
-([ADR-037](https://github.com/Juanchope039/Finanzas-PRISMA/blob/main/docs/adr/ADR-037-el-pr-se-abre-a-pedido.md)). Esta skill es ese paso hecho aparte, en las cuatro copias y sin
+([ADR-040](https://github.com/Juanchope039/Finanzas-PRISMA/blob/main/docs/adr/ADR-040-rama-feature-y-pr-autorizado.md)). Esta skill es ese paso hecho aparte, en las cuatro copias y sin
 abrir ninguna tarea.
 
 **Todo pasa en las copias de `repositories/`.** Ni worktrees, ni clones, ni carpetas temporales: si

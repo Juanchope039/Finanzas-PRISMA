@@ -98,5 +98,5 @@ el paso a paso largo sin costarle nada a las sesiones que no lo necesitan.
 ---
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [ADR-040](ADR-040-rama-feature-y-pr-autorizado.md "ADR-040 · Toda rama empieza por feature/, y el PR se abre solo con autorización expresa, trayendo entonces la base") · [CLAUDE](../../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [20](../20-contrato-de-api.md "20 · Contrato de la API") · [ADR-040](ADR-040-rama-feature-y-pr-autorizado.md "ADR-040 · Toda rama empieza por feature/, y el PR se abre solo con autorización expresa, trayendo entonces la base") · [ADR-043](ADR-043-dependencias-solo-hacia-atras.md "ADR-043 · Una tarea solo depende de tareas anteriores") · [CLAUDE](../../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->

@@ -8,6 +8,7 @@ import {
   CARRILES_A_SIMULAR,
   CARRILES_DE_TRABAJO,
   COSTO_DE_COORDINACION_POR_CARRIL,
+  DEPENDENCIAS_HACIA_ADELANTE,
   INICIO_DEL_PLAN,
   RITMO_DIAS_POR_SEMANA,
   SEMANAS_DE_ESTABILIZACION,
@@ -118,6 +119,50 @@ export function validarPlan(tareas) {
     estado.set(id, 'hecho');
   };
   if (!errores.length) for (const t of tareas) visitar(t.id, []);
+  if (!errores.length) errores.push(...validarDireccion(tareas));
+  return errores;
+}
+
+// Las dependencias que apuntan a una tarea POSTERIOR. El número es el orden: primero el sprint,
+// después el número dentro de él.
+export function dependenciasHaciaAdelante(tareas) {
+  const porId = new Map(tareas.map((t) => [t.id, t]));
+  const pares = [];
+  for (const t of [...tareas].sort((a, b) => ordenDeTarea(a.id) - ordenDeTarea(b.id))) {
+    for (const d of t.dependencias) {
+      const dep = porId.get(d);
+      if (!dep || ordenDeTarea(dep.id) <= ordenDeTarea(t.id)) continue;
+      pares.push({ de: t.id, a: d, cruzaSprint: dep.sprint !== t.sprint });
+    }
+  }
+  return pares;
+}
+
+// ADR-043: una tarea solo depende de tareas anteriores. La lista de config.mjs es deuda declarada, no
+// permiso: falla lo que no esté en ella, y falla también lo que esté y ya no exista, para que la
+// lista solo pueda encogerse.
+function validarDireccion(tareas) {
+  const errores = [];
+  const clave = (p) => `${p.de}→${p.a}`;
+  const declaradas = new Map(DEPENDENCIAS_HACIA_ADELANTE.map((p) => [clave(p), p]));
+  const encontradas = new Set();
+  for (const p of dependenciasHaciaAdelante(tareas)) {
+    encontradas.add(clave(p));
+    if (declaradas.has(clave(p))) continue;
+    const donde = p.cruzaSprint ? ', y además cruza de sprint' : '';
+    errores.push(
+      `la tarea ${p.de} depende de ${p.a}, que es posterior${donde}: ADR-043 pide que una tarea solo` +
+        ' dependa de tareas anteriores. Renumera con autorización de quien dirige, o declárala en' +
+        ' DEPENDENCIAS_HACIA_ADELANTE de scripts/docs/config.mjs con su motivo',
+    );
+  }
+  for (const k of declaradas.keys()) {
+    if (encontradas.has(k)) continue;
+    errores.push(
+      `DEPENDENCIAS_HACIA_ADELANTE declara ${k.replace('→', ' → ')} y el plan ya no la tiene:` +
+        ' bórrala de scripts/docs/config.mjs, que esa lista solo se encoge (ADR-043)',
+    );
+  }
   return errores;
 }
 
@@ -418,6 +463,28 @@ export function bloqueCaminoCritico(tareas, enlaceTarea) {
     `**La cadena más larga de dependencias suma ${numero(dias)} días en ${cadena.length} tareas.** Un día de retraso en cualquiera de ellas es un día de retraso del plan entero, tenga los carriles que tenga:`,
     '',
     cadena.map(enlaceTarea).join(' → '),
+  ].join('\n');
+}
+
+// La deuda declarada de ADR-043, sacada del plan y no de la lista: si alguien borra un par de
+// config.mjs sin arreglar la dependencia, `verificar` ya falló antes de llegar aquí.
+export function bloqueDependenciasHaciaAdelante(tareas, enlaceTarea) {
+  const pares = dependenciasHaciaAdelante(tareas);
+  if (!pares.length) {
+    return '**Ninguna tarea depende de una posterior.** La regla de [ADR-043](adr/ADR-043-dependencias-solo-hacia-atras.md) se cumple sin excepciones.';
+  }
+  const motivos = new Map(DEPENDENCIAS_HACIA_ADELANTE.map((p) => [`${p.de}→${p.a}`, p.motivo]));
+  const cruzan = pares.filter((p) => p.cruzaSprint);
+  const filas = pares.map((p) => {
+    const marca = p.cruzaSprint ? ' ⚠️' : '';
+    return `| ${enlaceTarea(p.de)} | ${enlaceTarea(p.a)}${marca} | ${motivos.get(`${p.de}→${p.a}`) ?? '—'} |`;
+  });
+  return [
+    `**${pares.length} dependencias apuntan a una tarea posterior, y ${cruzan.length === 1 ? 'una cruza' : `${cruzan.length} cruzan`} de sprint** (⚠️). Es deuda declarada de [ADR-043](adr/ADR-043-dependencias-solo-hacia-atras.md): la regla rige desde hoy, esta lista solo se encoge y ninguna nueva pasa la verificación.`,
+    '',
+    '| La tarea | Espera a | Por qué la posterior nació después |',
+    '|---|---|---|',
+    ...filas,
   ].join('\n');
 }
 

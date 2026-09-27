@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/AGENTS.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-21 | 2026-09-24 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [1.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/AGENTS.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-21 | 2026-09-27 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 Guía para los agentes de código que trabajan en la especificación de PRISMA. **Las reglas están en
 [`CLAUDE.md`](CLAUDE.md)**, tanto las del proceso como las de la arquitectura y las de este
@@ -56,6 +56,7 @@ Cada uno es una skill, en `.claude/skills/<nombre>/SKILL.md`:
 | `commit` | Hacer el commit con el formato del proyecto, y empujar |
 | `sin-conflictos` | Traer la base a la rama y resolver cada clase de choque, dentro del PR |
 | `pr` | Abrir el PR, cuando quien dirige lo autoriza |
+| `limpiar` | Dejar las cuatro copias en su base, al día y con el árbol limpio, sin perder nada |
 
 ---
 
