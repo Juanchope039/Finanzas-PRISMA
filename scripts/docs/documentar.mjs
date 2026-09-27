@@ -733,6 +733,11 @@ function bloquesDelPlan(ctx, errores) {
   }
   ponerBloque(plan08, 'plan-grafo', plan.bloqueGrafoDeSprints(tareas, titulos));
   ponerBloque(plan08, 'plan-camino-critico', plan.bloqueCaminoCritico(tareas, enlaceEn(plan08)));
+  ponerBloque(
+    plan08,
+    'plan-dependencias-hacia-adelante',
+    plan.bloqueDependenciasHaciaAdelante(tareas, enlaceEn(plan08)),
+  );
   ponerBloque(plan08, 'plan-gantt', plan.bloqueGantt(tareas));
   for (let s = 0; s <= 9; s++) ponerBloque(plan08, `plan-oleadas-${s}`, plan.bloqueOleadas(tareas, s, enlaceEn(plan08)));
 

@@ -133,6 +133,72 @@ export const NO_CUENTAN_COMO_REFERENCIA = new Set([
   'docs/adr/README.md',
 ]);
 
+// La deuda declarada de ADR-043: las dependencias que apuntan a una tarea POSTERIOR. La regla es que
+// una tarea solo depende de tareas anteriores, y `verificar` falla con cualquier par que no esté
+// aquí. También falla si un par de aquí ya no existe en el plan, así que la lista solo se encoge:
+// cuando quede vacía, se borra y la regla se queda sin excepciones.
+//
+// Cada par es [la tarea, la tarea posterior de la que depende]. El motivo es el del grupo, y se
+// escribe una vez: lo que lo explica es por qué la tarea posterior nació después.
+export const DEPENDENCIAS_HACIA_ADELANTE = [
+  // Las tres que cruzan de sprint, que son el caso grave de ADR-043 §2: lo que está mal es el número
+  // del sprint, y cambiarlo lo decide quien dirige. Siguen declaradas porque nadie lo ha decidido.
+  { de: '4.3', a: '5.2', motivo: 'Productos va antes que Pedidos: el pedido con lineas necesita el catalogo (08 §7)' },
+  { de: '6.1', a: '7.3', motivo: 'Reportes y Capital se entrelazan: el flujo de caja necesita el pro-labore (05 §12.2)' },
+  { de: '6.1', a: '7.4', motivo: 'Reportes y Capital se entrelazan: el flujo de caja necesita el retiro (05 §12.2)' },
+  // El sobre de respuesta se escribio despues de la consulta de version, que lo usa.
+  { de: '0.11', a: '0.14', motivo: 'el sobre es un cimiento y entro al Sprint 0 despues de la consulta que lo usa' },
+  // La decision del esquema para las pruebas de integracion, que ADR-025 dejo abierta (08 §0.2).
+  { de: '1.7', a: '1.20', motivo: 'la decision del esquema de prisma_db se numero al final del Sprint 1 (08 §0.2)' },
+  { de: '1.8', a: '1.20', motivo: 'la decision del esquema de prisma_db se numero al final del Sprint 1 (08 §0.2)' },
+  { de: '1.15', a: '1.20', motivo: 'la decision del esquema de prisma_db se numero al final del Sprint 1 (08 §0.2)' },
+  // Las doce tareas que el plan hacia sin numerarlas (08 §0.2): el contrato por funcionalidad, el
+  // renderizador del descriptor y el cliente HTTP nacieron despues de lo que los necesita.
+  { de: '1.10', a: '1.14', motivo: 'el filtro de idempotencia se numero despues de la gestion que lo usa' },
+  { de: '1.10', a: '1.17', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '1.10', a: '1.18', motivo: 'la mitad de front de RF-102 se numero al final del sprint (08 §0.2)' },
+  { de: '1.10', a: '1.19', motivo: 'la mitad de front de ADR-020 se numero al final del sprint (08 §0.2)' },
+  { de: '2.1', a: '2.19', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '2.6', a: '2.19', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '3.4', a: '3.13', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '3.5', a: '3.13', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '4.2', a: '4.10', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '5.2', a: '5.10', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '5.9', a: '5.10', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '6.3', a: '6.10', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '6.5', a: '6.10', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '7.1', a: '7.9', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '7.2', a: '7.9', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '7.3', a: '7.9', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '7.7', a: '7.9', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '8.1', a: '8.11', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '8.5', a: '8.11', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '8.8', a: '8.11', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '8.9', a: '8.11', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  { de: '8.10', a: '8.11', motivo: 'el contrato por funcionalidad se numero al final del sprint (08 §0.2)' },
+  // La mitad de base que una tarea de API o de Front daba por hecha, y que aparecio al hacerla.
+  { de: '2.1', a: '2.4', motivo: 'la tabla usuarios se amplio despues de la sesion que la consulta' },
+  { de: '2.8', a: '2.22', motivo: 'las dos reglas de cargos aparecieron al hacer el catalogo (08 Sprint 2)' },
+  { de: '2.9', a: '2.21', motivo: 'la auditoria de usuarios aparecio al hacer el registro de ingresos' },
+  { de: '2.13', a: '2.20', motivo: 'las tablas del canal firmado aparecieron al ir a hacer el filtro (08 Sprint 2)' },
+  { de: '2.15', a: '2.21', motivo: 'la auditoria de usuarios aparecio despues de la tabla que la usa' },
+  { de: '2.16', a: '2.21', motivo: 'la auditoria de usuarios aparecio despues de la bitacora que la usa' },
+  { de: '3.6', a: '3.14', motivo: 'la tabla adjuntos no existia y ninguna tarea la creaba (08 Sprint 3)' },
+  { de: '4.9', a: '4.11', motivo: 'las columnas de la cancelacion aparecieron al hacer la cancelacion' },
+  { de: '5.2', a: '5.11', motivo: 'el RLS de productos aparecio al hacer el catalogo (08 Sprint 5)' },
+  { de: '8.8', a: '8.12', motivo: 'las tablas del cotizador aparecieron al acordar su contrato' },
+  // Lo que el dibujo del libro le sumo al Sprint 3, que el 08 explica al pie de su tabla.
+  { de: '3.8', a: '3.21', motivo: 'el libro en la API entro con el dibujo del mockup (08 Sprint 3)' },
+  { de: '3.9', a: '3.23', motivo: 'la anulacion que arrastra entro con el dibujo del mockup (08 Sprint 3)' },
+  // Lo demas, uno a uno.
+  { de: '2.2', a: '2.14', motivo: 'la navegacion dictada por la API se numero despues del enrutamiento' },
+  { de: '3.6', a: '3.16', motivo: 'el andamio del celular entro al sprint despues de la foto del recibo' },
+  { de: '8.2', a: '8.3', motivo: 'la liquidacion en la base se numero antes de los adelantos que descuenta' },
+  { de: '9.2', a: '9.12', motivo: 'la 0.4 se partio y los dos proyectos de pago quedaron al final del Sprint 9' },
+  { de: '9.5', a: '9.13', motivo: 'los secretos de qa se numeraron al final del Sprint 9' },
+  { de: '9.10', a: '9.11', motivo: 'etiquetar 1.0.0 espera a todo el sprint, Swagger en prod incluido' },
+];
+
 // El calendario del plan. Un carril avanza al ritmo del plan original: 151,5 días de trabajo en 23
 // semanas de desarrollo. La estabilización no se parte: son 3 semanas con cualquier número de
 // carriles (21-trabajo-en-paralelo.md §5).

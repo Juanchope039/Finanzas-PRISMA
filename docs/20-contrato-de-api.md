@@ -2,29 +2,34 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-26 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.13.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-27 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
 
-> **Construcción: en parte.** En `prisma_api` ya están construidos el sobre de respuesta, el
-> catálogo de códigos, la consulta de versión, el descriptor de formulario, la navegación y las
-> cuatro operaciones de `/sesiones`, con el contrato v0.7.0 (tareas [0.11](08-plan-de-desarrollo.md#tarea-0-11) y [0.14](08-plan-de-desarrollo.md#tarea-0-14) a [0.18](08-plan-de-desarrollo.md#tarea-0-18),
-> [2.1](08-plan-de-desarrollo.md#tarea-2-1), [2.2](08-plan-de-desarrollo.md#tarea-2-2) y [2.14](08-plan-de-desarrollo.md#tarea-2-14)). El **canal firmado existe de los dos lados** ([2.13](08-plan-de-desarrollo.md#tarea-2-13)) y el filtro de
-> idempotencia ([1.14](08-plan-de-desarrollo.md#tarea-1-14)) ya registra cada clave a nombre de quien firmó. Este documento fijó el
-> contrato antes de escribir el primer controlador, porque un contrato acordado después es un
-> contrato que ya se rompió en tres sitios distintos.
+> **Construcción: en parte.** Todo lo que este documento describe —el sobre, el catálogo, el
+> descriptor, la idempotencia y el canal firmado— está construido de los dos lados. De las
+> operaciones, el contrato acordado va por el `0.22.0` y la copia fijada de `prisma_api` lo sigue;
+> **qué rutas sirve ya la API y cuáles todavía no, lo dice su README**, no este documento, para que
+> un número no envejezca en dos sitios ([ADR-039](adr/ADR-039-cada-regla-en-un-solo-sitio.md)).
+> Este documento fijó el contrato antes de escribir el primer controlador, porque un contrato
+> acordado después es un contrato que ya se rompió en tres sitios distintos.
 
 **Este documento no repite la arquitectura.** Cómo está construido el sistema por dentro —las
 capas, la regla de dependencias, cómo la identidad llega hasta PostgreSQL— está en
 [`07-arquitectura.md`](07-arquitectura.md). Aquí solo está **lo que viaja por el cable**.
 
 > **Ninguna operación usa `GET`** ([ADR-030](adr/ADR-030-contrato-sin-get.md)). Toda la API cuelga
-> de `/api/v0`; las diecinueve lecturas viajan por `POST` bajo `/api/v0/consultas/…`, con sus datos
-> en el cuerpo y no en la URL; las treinta y seis escrituras se quedan en su recurso. El `v0` es el MAJOR de
-> la API y pasa a `v1` con la primera publicación en producción ([ADR-014](adr/ADR-014-semver.md)).
+> de `/api/v0`; las lecturas viajan por `POST` bajo `/api/v0/consultas/…`, con sus datos en el cuerpo
+> y no en la URL, y las escrituras se quedan en su recurso. El `v0` es el MAJOR de la API y pasa a
+> `v1` con la primera publicación en producción ([ADR-014](adr/ADR-014-semver.md)).
 > Fuera del prefijo y fuera de la regla quedan los estáticos del front, Swagger, `/error` y las
 > sondas de Actuator: no son operaciones del contrato.
+>
+> **Y tres verbos, no uno.** «Sin `GET`» no quiere decir «todo por `POST`»: del `0.22.0`, **37
+> lecturas y 31 escrituras van por `POST`, 22 escrituras por `PUT` y una operación por `DELETE`**.
+> El `PUT` es para la escritura cuyo id lo genera quien registra, junto con la clave de idempotencia
+> ([§8.1](#81-éxito--20100)), y el `DELETE` es cerrar la sesión ([§6.5](#65-la-sesión-qué-vive-dónde-y-qué-pasa-cuando-se-recarga-la-página)). Son 91 operaciones en 91 rutas.
 
 ---
 
