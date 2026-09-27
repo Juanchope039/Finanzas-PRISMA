@@ -1687,17 +1687,45 @@ tbody tr.fila-detalle:hover{background:none}
           </div>
         </div>
 
-        <div class="panel">
-          <div class="panel-head"><h2 class="grow">Activos del negocio</h2>
-            <span class="eyebrow">Una inversión no reduce la utilidad</span></div>
+        <!-- Registrar la inversión se hace aquí (RF-45, CU-15): la API sirve el formulario «activo»
+             y la lista, que llega del equipo más caro al más barato. Anular no está: el contrato no
+             declara la operación, así que la tabla no lleva columna de acciones. -->
+        <div class="panel" id="panel-activos">
+          <div class="panel-head">
+            <h2 class="grow">Activos del negocio</h2>
+            <span class="eyebrow">Una inversión no reduce la utilidad</span>
+            <button class="cta" id="btn-activo" aria-expanded="false" aria-controls="form-activo">+ Registrar inversión</button>
+          </div>
+
+          <div class="formulario" id="form-activo" hidden>
+            <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px">
+              <h3 class="grow">Registrar una inversión</h3>
+              <span class="eyebrow">Baja la caja · no es gasto</span>
+            </div>
+            <div class="campos-form">
+              <div class="campo"><label for="av-nombre">Nombre</label>
+                <input type="text" id="av-nombre" placeholder="Prensa de calor 40×50"></div>
+              <div class="campo"><label for="av-valor">Valor de compra</label>
+                <input type="text" id="av-valor" inputmode="numeric" placeholder="2.500.000"></div>
+              <div class="campo"><label for="av-cuenta">Cuenta</label>
+                <select id="av-cuenta"></select></div>
+              <div class="campo"><label for="av-fecha">Fecha de compra</label>
+                <input type="date" id="av-fecha"></div>
+            </div>
+
+            <p class="capa-error" id="av-error" role="alert" aria-live="polite" hidden style="margin-top:14px"></p>
+
+            <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; align-items:center">
+              <button class="cta" id="av-guardar">Guardar inversión</button>
+              <button class="ghost" id="av-cancelar">Cancelar</button>
+            </div>
+          </div>
+
+          <div id="activos-aviso"></div>
+
           <div class="tw"><table>
             <thead><tr><th>Activo</th><th>Compra</th><th class="r r-mid">Valor</th><th>Estado</th></tr></thead>
-            <tbody>
-              <tr><td>Máquina bordadora</td><td class="mono">14 mar 2025</td><td class="r r-mid">$4.200.000</td><td><span class="pill p-ok">En uso</span></td></tr>
-              <tr><td>Impresora DTF</td><td class="mono">02 jul 2025</td><td class="r r-mid">$3.800.000</td><td><span class="pill p-ok">En uso</span></td></tr>
-              <tr><td>Prensa de calor 40×50</td><td class="mono">19 nov 2024</td><td class="r r-mid">$2.500.000</td><td><span class="pill p-ok">En uso</span></td></tr>
-              <tr><td>Horno de tazas</td><td class="mono">08 feb 2026</td><td class="r r-mid">$680.000</td><td><span class="pill p-ok">En uso</span></td></tr>
-            </tbody>
+            <tbody id="tb-activos"></tbody>
           </table></div>
         </div>
       </section>
@@ -2501,6 +2529,8 @@ function aplicarRol(){
   tablaClientes();
   cerrarFormProlabore();
   pintarProlabore();
+  cerrarFormActivo();
+  tablaActivos();
   tablaPedidos();
   kpisPedidos();
   pintarCuentas();
@@ -3055,8 +3085,9 @@ function tarifaHora(p){ return p.horas > 0 ? Math.round(p.valor / p.horas) : nul
 
 function horasTexto(h){ return String(h).replace('.', ','); }
 
-/* El día desde el que rige, como lo escribe el front: «1 sep 2026» (el formato de fmtFechaHora). */
-function fechaDeVigencia(iso){
+/* El día con su año, como lo escribe el front: «1 sep 2026», que es su `fechaCorta`. Lo usan la
+   vigencia del pro-labore y la compra de un activo; el `fechaCorta` de arriba no lleva año. */
+function fechaConAno(iso){
   var t = String(iso || '').split('-');
   return (+t[2]) + ' ' + MESES_CORTOS[+t[1] - 1] + ' ' + t[0];
 }
@@ -3086,7 +3117,7 @@ function pintarProlabore(){
     (t === null ? '—' : fmt(t)) + '</b></div></div>' +
     '<p style="font-size:.78rem; color:var(--muted); margin-top:10px">' +
     (t === null ? 'Sin horas productivas, tu trabajo no le pone precio a ningún costeo. ' : '') +
-    'Rige desde el ' + fechaDeVigencia(PROLABORE.desde) +
+    'Rige desde el ' + fechaConAno(PROLABORE.desde) +
     (PROLABORE.justificacion ? ' · «' + enTexto(PROLABORE.justificacion) + '»' : '') + '</p>';
 }
 
@@ -3153,6 +3184,116 @@ function guardarProlabore(){
   });
   document.getElementById('pl-cancelar').addEventListener('click', cerrarFormProlabore);
   document.getElementById('pl-guardar').addEventListener('click', guardarProlabore);
+})();
+
+/* ---------- los activos del negocio (RF-45, CU-15, tarea 7.1) ---------- */
+/* Comprar un equipo cambia plata por un bien: baja la caja y no toca la utilidad ni el patrimonio
+   (RN-04). La lista llega del más caro al más barato y el panel no la reordena. La cuenta es
+   opcional, porque así entran los equipos que el taller ya tenía el día del corte (09 §4.1). */
+var ACTIVOS = [
+  {nombre:'Máquina bordadora',     compra:'2025-03-14', valor:4200000, estado:'en_uso'},
+  {nombre:'Impresora DTF',         compra:'2025-07-02', valor:3800000, estado:'en_uso'},
+  {nombre:'Prensa de calor 40×50', compra:'2024-11-19', valor:2500000, estado:'en_uso'},
+  {nombre:'Horno de tazas',        compra:'2026-02-08', valor: 680000, estado:'en_uso'}
+];
+var avisoActivos = null;
+
+/* «En uso» lo escribe el front: el contrato manda `en_uso` y para los activos no hay tabla de
+   presentación como la de los tipos de movimiento. */
+var ESTADO_ACTIVO = {en_uso:'<span class="pill p-ok">En uso</span>'};
+
+function tablaActivos(){
+  var cuerpo = document.getElementById('tb-activos');
+  if (!cuerpo) return;
+  var caja = document.getElementById('activos-aviso');
+  var aviso = avisoActivos;
+  avisoActivos = null;
+  if (caja){
+    caja.innerHTML = aviso
+      ? '<div class="alerta a-' + aviso.tono + '" style="margin-bottom:14px"><span class="tag">AVISO</span>' +
+        '<div><b>' + enTexto(aviso.titulo) + '</b><span>' + enTexto(aviso.texto) + '</span></div></div>'
+      : '';
+  }
+  /* Una tabla con cero filas no se distingue de una que no cargó, así que la lista vacía se dice. */
+  if (!ACTIVOS.length){
+    cuerpo.innerHTML = '<tr><td colspan="4" style="color:var(--muted)">Todavía no hay ningún activo ' +
+      'registrado.</td></tr>';
+    return;
+  }
+  cuerpo.innerHTML = ACTIVOS.slice().sort(function(a, b){ return b.valor - a.valor; })
+    .map(function(a){
+      return '<tr><td>' + enTexto(a.nombre) + '</td><td class="mono">' + fechaConAno(a.compra) +
+        '</td><td class="r r-mid">' + fmt(a.valor) + '</td><td>' +
+        (ESTADO_ACTIVO[a.estado] || enTexto(a.estado)) + '</td></tr>';
+    }).join('');
+}
+
+/* La cuenta puede quedar vacía, y la primera opción lo dice con palabras del taller. */
+function refrescarCuentasActivo(){
+  var sel = document.getElementById('av-cuenta');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">Ninguna · ya lo tenía</option>' + CUENTAS.map(function(c, i){
+    return '<option value="' + i + '">' + enTexto(c.n) + '</option>';
+  }).join('');
+}
+
+function abrirFormActivo(){
+  var btn = document.getElementById('btn-activo');
+  ['av-nombre','av-valor'].forEach(function(id){ document.getElementById(id).value = ''; });
+  refrescarCuentasActivo();
+  document.getElementById('av-fecha').value = '2026-09-30';
+  avisoCampo('av-error', '');
+  document.getElementById('form-activo').hidden = false;
+  btn.setAttribute('aria-expanded', 'true');
+  btn.textContent = 'Cerrar';
+  document.getElementById('form-activo').scrollIntoView({block:'nearest'});
+  document.getElementById('av-nombre').focus();
+}
+
+function cerrarFormActivo(){
+  var btn = document.getElementById('btn-activo');
+  if (!btn) return;
+  document.getElementById('form-activo').hidden = true;
+  btn.setAttribute('aria-expanded', 'false');
+  btn.textContent = '+ Registrar inversión';
+  avisoCampo('av-error', '');
+}
+
+function fallaActivo(id, texto){
+  avisoCampo('av-error', texto);
+  document.getElementById(id).focus();
+}
+
+/* Las reglas y los mensajes son los del formulario «activo» que manda la API: el nombre y el valor
+   son obligatorios, el valor es mayor que cero, y la fecha posterior a hoy responde 42290. */
+function guardarActivo(){
+  var nombre = (document.getElementById('av-nombre').value || '').trim();
+  var valor  = soloDigitos(document.getElementById('av-valor').value);
+  var fecha  = document.getElementById('av-fecha').value || '2026-09-30';
+  var cuenta = document.getElementById('av-cuenta').value;
+  if (!nombre) return fallaActivo('av-nombre', 'Escribe qué compraste, como le dices en el taller.');
+  if (!valor)  return fallaActivo('av-valor', 'Lo que costó tiene que ser mayor que cero.');
+  if (fecha > '2026-09-30'){
+    return fallaActivo('av-fecha', 'No puedes registrar una compra de mañana.');
+  }
+  ACTIVOS.push({nombre:nombre, compra:fecha, valor:valor, estado:'en_uso'});
+  avisoActivos = {tono:'info', titulo:'«' + nombre + '» ya es un activo del negocio',
+    texto:cuenta === ''
+      ? 'Entró sin movimiento: es un equipo que ya tenías, así que ningún saldo cambió.'
+      : 'Salió de ' + CUENTAS[+cuenta].n + ': la caja baja y la utilidad no se toca.'};
+  cerrarFormActivo();
+  tablaActivos();
+}
+
+(function initActivos(){
+  var btn = document.getElementById('btn-activo');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    if (document.getElementById('form-activo').hidden) abrirFormActivo();
+    else cerrarFormActivo();
+  });
+  document.getElementById('av-cancelar').addEventListener('click', cerrarFormActivo);
+  document.getElementById('av-guardar').addEventListener('click', guardarActivo);
 })();
 
 function filaAcciones(p){
