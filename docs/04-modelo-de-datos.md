@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.15.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-27 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.16.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-27 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -2512,6 +2512,32 @@ pagada sin descontar el adelanto.
 | `fn_liquidar_nomina(p_periodo UUID, p_empleado UUID, …)` | Escribe la fila de `nomina_detalle`, marca con `descontado_en` los adelantos pendientes de esa persona y escribe el movimiento del pago | Que un adelanto se descuente dos veces, o ninguna ([RN-11](03-requisitos-y-bdd.md#rn-11)) |
 | La función `SECURITY DEFINER` del [§5.4](#54-auditoría-por-triggers), usada en el [§5.7](#57-reactivar-y-revertir-escrituras-compensatorias) | Aplica el `UPDATE` que deshace un cambio y escribe la fila `cambio_revertido` con su `revierte_a` | Una bitácora que anota una reversión que no ocurrió, o al revés |
 | `fn_anular_movimiento(p_movimiento UUID, p_motivo motivo)` | Anula el movimiento y el registro que va con él —el anticipo, el activo, el aporte o el retiro, o el adelanto—, los dos con el mismo motivo, el mismo autor y el mismo instante ([§5.2](#52-anulación-lógica-con-trazabilidad)) | Un anticipo, un activo o un adelanto que siguen contando una plata que ya salió de las cifras, o una anulación que se queda a medias |
+
+**La primera la escribió la tarea [4.5](08-plan-de-desarrollo.md#tarea-4-5)**, y hace esto, en este orden:
+1. **Toma el pedido con `SELECT … FOR UPDATE`**, y no lo entrega si no existe, si está anulado o si
+   ya está en uno de los dos estados finales. El `FOR UPDATE` cierra la carrera de dos entregas
+   del mismo pedido a la vez.
+2. **Deja el pedido `entregado` con su `fecha_entrega_real`**, que es la fecha que causa la venta
+   ([RN-06](03-requisitos-y-bdd.md#rn-06)). Sin fecha, hoy en Bogotá; una futura la rechaza, porque causaría la venta de un
+   mes que todavía no llega.
+3. **Devenga sus anticipos vigentes**, los que aún no lo están: el pasivo se libera y lo cobrado
+   por adelantado ya es venta ([RN-05](03-requisitos-y-bdd.md#rn-05)).
+4. **Escribe el `ingreso` por el saldo**, cuando hay cuenta que lo reciba y queda saldo. Sin
+   cuenta se entrega igual y el saldo queda por cobrar ([CU-07 A1](02-casos-de-uso.md#cu-07)).
+
+**El movimiento vale el saldo y no el valor total**, y la venta causada la causa el pedido y no el
+apunte. Los ingresos causados y el costo directo del [05 §9.1](05-reglas-financieras.md#9-catálogo-de-kpis) son sumas sobre los pedidos
+entregados del período, así que causar el costo no escribe nada: el insumo ya se registró el día
+que se compró.
+
+> **Y el saldo de la cuenta lo exige.** El anticipo ya entró como `anticipo_recibido`, que sube la
+> caja; un `ingreso` por el valor total la subiría por segunda vez y la cuenta diría tener una
+> plata que nadie le depositó. Es el ejemplo del [05 §3.2](05-reglas-financieras.md#32-el-caso-que-rompe-la-intuición-el-pedido-que-cruza-de-mes).
+
+Sus tres rechazos son `RAISE` con texto en español, y ese texto es contrato: el pedido ya cerrado
+es el `40931`, el que no existe o está anulado es el `40400`, y la fecha futura es el `42234`.
+**Que la fecha no sea anterior a la del pedido y que la cuenta esté vigente los sigue comprobando
+la API**, porque son errores de campo y van en `data.errores`.
 
 La tercera **ya está en este documento**: es la misma función del [§5.4](#54-auditoría-por-triggers) que escribe los eventos de
 acceso y administración. No se duplica aquí; se nombra para dejar claro que pertenece a esta
