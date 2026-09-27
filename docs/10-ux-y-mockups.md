@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-26 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [4.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-26 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -432,6 +432,64 @@ Gerencia.
 - **Guardar no edita la definición anterior**: la nueva rige desde hoy y la anterior queda en el
   historial, que no se pinta. Los costeos ya guardados conservan su tarifa, y un retiro se sigue
   partiendo con el pro-labore de su fecha.
+
+#### Un equipo se registra aquí, y se da de baja en el libro
+
+Comprar una prensa no es un gasto: cambia plata por un bien, así que baja la caja y no toca ni la
+utilidad ni el patrimonio ([RN-04](03-requisitos-y-bdd.md#rn-04), [BDD-15-1](03-requisitos-y-bdd.md#bdd-15-1)). Por eso los activos viven en esta pantalla y no entre
+los gastos, y por eso el panel lleva su cintillo: «Una inversión no reduce la utilidad».
+
+- **El panel «Activos del negocio» pinta cuatro columnas**: qué se compró, cuándo, cuánto costó y en
+  qué está. **El orden lo da la API**, del equipo más caro al más barato, y la pantalla no reordena
+  ni filtra ([ADR-018](adr/ADR-018-front-sin-decisiones.md)).
+- **«En uso» lo escribe la pantalla.** El contrato manda el estado como `en_uso`, y para los activos
+  no hay tabla de presentación como la de los tipos de movimiento, así que la traducción es del
+  front —como el «GER» y el «OPE» de la tabla de personas—. Un estado que no conozca lo pinta como
+  llegó.
+- **Sin ningún activo el panel lo dice con una frase**, porque una tabla de cero filas no se
+  distingue de una que no cargó.
+- **«+ Registrar inversión» abre el formulario en la misma pantalla**, con cuatro campos: el nombre,
+  el valor de compra, la cuenta y la fecha. El nombre y el valor son obligatorios; **la cuenta es
+  opcional**, y así entran los equipos que el taller ya tenía el día del corte ([09 §4.1](09-plan-de-implantacion.md#41-qué-se-migra-y-qué-no)), que no
+  mueven ningún saldo porque no escriben movimiento. Sin fecha, la compra es de hoy en Bogotá
+  ([RNF-08](03-requisitos-y-bdd.md#rnf-08)).
+- **De dónde salió la plata no se pinta**, porque no llega: el contrato devuelve cinco claves y
+  ninguna es la cuenta. Un equipo comprado con cuenta y uno que ya estaba el día del corte se ven
+  igual en la tabla, y la plata que salió se ve en el libro, en su movimiento de inversión.
+- **Guardar vuelve a pedir la lista**: lo que se pinta es lo que quedó en la base y no lo que se
+  escribió. Lo que la API rechace —la fecha de mañana, la cuenta que no sirve— se lee con su mensaje
+  debajo del campo que corresponda, y lo escrito no se pierde.
+- **La tabla no lleva acciones, porque aquí no se anula un activo**: el contrato no declara la
+  operación. El que se compró con cuenta se da de baja anulando su movimiento de inversión en el
+  libro, que se lleva la fila del activo; el que entró sin cuenta no tiene movimiento, así que hoy
+  no hay por dónde.
+- **Toda la pantalla es de Gerencia, y lo impone la base**: a Operación `activos_solo_gerencia` le
+  filtra las filas al leer —le llega la lista vacía, no un error— y le rechaza la compra ([P-20](12-pruebas-y-calidad.md#p-20)).
+
+#### Un aporte de capital se registra aquí, y su historial vive en el libro
+
+Un aporte es plata que entra desde afuera: **sube la caja y el patrimonio, y no toca la utilidad**
+([05 §2](05-reglas-financieras.md#2-naturaleza-de-cada-movimiento)), porque no la generó el negocio. Por eso el panel lleva su cintillo:
+«Sube la caja y el patrimonio · no es utilidad».
+
+- **«+ Registrar aporte» abre el formulario en la misma pantalla**, con cuatro campos: el valor, la
+  cuenta, la fecha y una nota. El valor y **la cuenta son obligatorios**, al contrario que en la
+  compra de un equipo: todo aporte es un movimiento, porque `aportes_retiros.movimiento_id` no
+  admite nulo ([04 §4.6](04-modelo-de-datos.md#46-inversiones-capital-y-pro-labore)). Sin fecha, el aporte es de hoy en Bogotá ([RNF-08](03-requisitos-y-bdd.md#rnf-08)).
+- **La nota es opcional, y es para acordarse de dónde salió la plata**: un préstamo de la familia,
+  la venta de algo propio. Si no se escribe, no viaja.
+- **El panel no lleva tabla, porque el contrato no declara ninguna consulta de aportes.** Lo
+  aportado se ve en el libro, cada uno en su movimiento, y lo acumulado en el patrimonio, que es una
+  de sus tres cifras. Armar la lista pidiendo el libro filtrado por tipo sería consultar de más y
+  decidir qué página del libro le toca a esta pantalla ([ADR-018](adr/ADR-018-front-sin-decisiones.md)).
+- **Lo que sí se pinta es el aporte que la API acaba de devolver**: cuánto, cuándo y la nota, como
+  quedaron en la base y no como se escribieron. **La cuenta no se pinta**, porque del sobre llega su
+  id, y traducirlo a un nombre no le toca a este panel: el nombre lo manda la API en el libro.
+- **Lo que la API rechace se lee debajo de su campo, y lo escrito no se pierde.** La fecha posterior
+  a hoy y la cuenta que no sirve no caben en el descriptor y llegan con su código, como en la compra
+  de un equipo.
+- **Toda la pantalla es de Gerencia, y lo impone la base**: `ret_solo_gerencia` no deja escribir
+  `aportes_retiros`, así que el rechazo no lo decide la pantalla.
 
 ### 4.6 Reportes
 
