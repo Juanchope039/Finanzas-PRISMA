@@ -110,7 +110,7 @@
         "type" : "object"
       },
       "Adjunto" : {
-        "description" : "Un soporte del movimiento: la foto del recibo o el PDF de la factura",
+        "description" : "Un archivo colgado de un movimiento o de un pedido: la foto del recibo, el PDF de un gasto o la factura del pedido",
         "properties" : {
           "bytes" : {
             "description" : "Cuánto pesa el archivo",
@@ -979,7 +979,7 @@
         "description" : "El cuerpo de POST /api/v0/consultas/soporte",
         "properties" : {
           "adjuntoId" : {
-            "description" : "Uno de Movimiento.adjuntos",
+            "description" : "Uno de Movimiento.adjuntos o de Pedido.adjuntos",
             "format" : "uuid",
             "type" : "string"
           }
@@ -2859,6 +2859,13 @@
       },
       "Pedido" : {
         "properties" : {
+          "adjuntos" : {
+            "description" : "Las facturas del pedido. Vacío si no tiene",
+            "items" : {
+              "$ref" : "#/components/schemas/Adjunto"
+            },
+            "type" : "array"
+          },
           "anticipado" : {
             "description" : "Lo ya cobrado en anticipos vigentes de este pedido",
             "format" : "int64",
@@ -2930,7 +2937,7 @@
             "type" : "integer"
           }
         },
-        "required" : [ "anticipado", "anticipoPct", "clienteId", "estado", "estancado", "fechaPedido", "id", "lineas", "numero", "saldoPendiente", "valorTotal" ],
+        "required" : [ "adjuntos", "anticipado", "anticipoPct", "clienteId", "estado", "estancado", "fechaPedido", "id", "lineas", "numero", "saldoPendiente", "valorTotal" ],
         "type" : "object"
       },
       "Pendientes" : {
@@ -4969,7 +4976,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.22.0"
+    "version" : "0.23.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -8123,7 +8130,7 @@
     },
     "/api/v0/consultas/soporte" : {
       "post" : {
-        "description" : "Baja el soporte de un movimiento —la foto del recibo o el PDF de la factura— para enseñarlo en la fila abierta del libro (RF-12, 10 §4.3). Viaja dentro del sobre, en un Documento con el contenido en base64, como el desprendible: así la ruta no tiene dos formas de contestar. El archivo sale de la API y nunca directo del almacenamiento (07 §1). Consultan los dos tipos de usuario, los mismos que ven el libro. Un adjunto que no existe, que está anulado o cuyo movimiento no le deja ver la base a quien pide responde 40400. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40400, 40901 y 40902.",
+        "description" : "Baja un archivo adjunto —el soporte de un movimiento para enseñarlo en la fila abierta del libro (RF-12, 10 §4.3), o la factura de un pedido (RF-27)—. Viaja dentro del sobre, en un Documento con el contenido en base64, como el desprendible: así la ruta no tiene dos formas de contestar. El archivo sale de la API y nunca directo del almacenamiento (07 §1). Consultan los dos tipos de usuario, los mismos que ven el libro y los pedidos. Un adjunto que no existe, que está anulado o cuyo movimiento o pedido no le deja ver la base a quien pide responde 40400. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40400, 40901 y 40902.",
         "operationId" : "soporte",
         "parameters" : [ {
           "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
@@ -8184,7 +8191,7 @@
             "description" : "OK"
           }
         },
-        "summary" : "Bajar el soporte de un movimiento",
+        "summary" : "Bajar un archivo adjunto",
         "tags" : [ "Movimientos" ]
       }
     },
@@ -9709,6 +9716,90 @@
           }
         },
         "summary" : "Registrar un pedido",
+        "tags" : [ "Pedidos" ]
+      }
+    },
+    "/api/v0/pedidos/{id}/adjuntos" : {
+      "post" : {
+        "description" : "Sube la factura del pedido y la deja colgada de él (RF-27, CU-05). Es la misma tubería que el soporte de un movimiento: el archivo pasa por la API y nunca va directo al almacenamiento (07 §1), máximo 5 MB, que responde 40020, y solo image/jpeg, image/png, image/webp o application/pdf, que responde 40021. Adjuntan los dos tipos de usuario. No tiene formulario: el cuerpo es multipart/form-data con una sola parte, «archivo». El id del adjunto es la clave de idempotencia de la petición, así que dos intentos de la misma intención escriben el mismo objeto (04 §4.12, ADR-020). Un pedido que no existe, que está anulado o que esta sesión no alcanza responde 40400, y lo rechaza la llave foránea y no un if. Las facturas ya subidas vuelven en Pedido.adjuntos, y se bajan con POST /api/v0/consultas/soporte. Puede devolver 20100, 40002, 40020, 40021, 40100, 40101, 40102, 40103, 40302, 40400, 40901 y 40902.",
+        "operationId" : "adjuntarFactura",
+        "parameters" : [ {
+          "description" : "El id del pedido al que se le adjunta la factura",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "properties" : {
+                  "archivo" : {
+                    "description" : "La factura, foto o PDF, de 5 MB como máximo",
+                    "format" : "binary",
+                    "type" : "string"
+                  }
+                },
+                "required" : [ "archivo" ],
+                "type" : "object"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreAdjunto"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Adjuntar la factura de un pedido",
         "tags" : [ "Pedidos" ]
       }
     },
@@ -11561,14 +11652,14 @@
     },
     "status" : 42214
   }, {
-    "cuando" : "El archivo que se adjunta a un movimiento pasa de 5 MB",
+    "cuando" : "El archivo que se adjunta a un movimiento o a un pedido pasa de 5 MB",
     "http" : 400,
     "mensaje" : "Esa foto pesa demasiado. El máximo son 5 MB.",
     "modulo" : "MOVIMIENTOS_Y_CUENTAS",
     "nombre" : "ADJUNTO_DEMASIADO_GRANDE",
     "status" : 40020
   }, {
-    "cuando" : "El archivo que se adjunta no es image/jpeg, image/png, image/webp ni application/pdf",
+    "cuando" : "El archivo que se adjunta a un movimiento o a un pedido no es image/jpeg, image/png, image/webp ni application/pdf",
     "http" : 400,
     "mensaje" : "Solo se pueden adjuntar fotos o archivos PDF.",
     "modulo" : "MOVIMIENTOS_Y_CUENTAS",
