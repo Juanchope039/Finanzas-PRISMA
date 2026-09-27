@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-27 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-27 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -52,13 +52,13 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 1](#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
 | [Sprint 2](#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
 | [Sprint 3](#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
-| [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 7 | 0 | 4 | 5 |
+| [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 8 | 0 | 3 | 3 |
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 8 | 0 | 3 | 3 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 6 | 0 | 3 | 4,5 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **153** | **112** | **0** | **41** | **53** |
+| **Total** | **153** | **113** | **0** | **40** | **51** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -193,8 +193,8 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [4.6](docs/08-plan-de-desarrollo.md#tarea-4-6) · [4.8](docs/08-plan-de-desarrollo.md#tarea-4-8) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
-| **Base** | [4.5](docs/08-plan-de-desarrollo.md#tarea-4-5) · [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5) |
+| **API** | [4.6](docs/08-plan-de-desarrollo.md#tarea-4-6) · [4.8](docs/08-plan-de-desarrollo.md#tarea-4-8) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **Base** | [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5) |
 | **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -202,13 +202,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **41 tareas y 53 días de trabajo** de 153 tareas del plan.
+Quedan **40 tareas y 51 días de trabajo** de 153 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 7,9 semanas | **10,9 semanas** |
-| 2 | 4,4 semanas | **7,4 semanas** |
-| 3 | 4,2 semanas | **7,2 semanas** |
+| 1 | 7,6 semanas | **10,6 semanas** |
+| 2 | 4,2 semanas | **7,2 semanas** |
+| 3 | 4,0 semanas | **7,0 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -915,7 +915,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 <a id="sprint-6"></a>**[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
 
-- [ ] 🔒 [**6.1**](docs/08-plan-de-desarrollo.md#tarea-6-1) Utilidad causada, flujo de caja y caja libre · API
+- [ ] ⚡ [**6.1**](docs/08-plan-de-desarrollo.md#tarea-6-1) Utilidad causada, flujo de caja y caja libre · API
 - [ ] 🔒 [**6.2**](docs/08-plan-de-desarrollo.md#tarea-6-2) Pruebas con el ejemplo de septiembre completo · API
 - [ ] 🔒 [**6.3**](docs/08-plan-de-desarrollo.md#tarea-6-3) Dashboard con las tres cifras · Front
 - [ ] 🔒 [**6.4**](docs/08-plan-de-desarrollo.md#tarea-6-4) Gráfico de 12 meses · Front
@@ -1106,7 +1106,16 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       pedido se lee reservado con `FOR UPDATE`: sin eso, dos cobros a la vez se pasaban juntos del
       valor. Estrena `40930`, `42230`, `42233` y `42234`. `prisma_api` en `0.15.0`, con 11 pruebas
       nuevas contra la base local
-- [ ] ⚡ [**4.5**](docs/08-plan-de-desarrollo.md#tarea-4-5) Función en la base que entrega el pedido y causa la venta en una transacción · Base
+- [x] [**4.5**](docs/08-plan-de-desarrollo.md#tarea-4-5) Función en la base que entrega el pedido y causa la venta en una
+      transacción · Base — `fn_entregar_pedido(p_pedido, p_fecha, p_cuenta)` es **la primera de las
+      cuatro funciones de negocio del [04 §10](docs/04-modelo-de-datos.md#10-funciones-de-negocio-atómicas)**: deja el pedido `entregado` con su fecha, devenga
+      sus anticipos vigentes y escribe el `ingreso` por el saldo, las tres cosas o ninguna. **El
+      movimiento vale el saldo y no el valor total**, que es la única lectura con la que las dos
+      frases del contrato son ciertas a la vez y la cuenta no sube dos veces por la misma plata; **la
+      venta causada la causa el pedido**, porque los ingresos causados del [05 §9.1](docs/05-reglas-financieras.md#9-catálogo-de-kpis) son la suma de
+      los pedidos entregados del período ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). Sin cuenta se entrega igual y el saldo queda por
+      cobrar ([CU-07 A1](docs/02-casos-de-uso.md#cu-07)). Esquema `0.18.0`, con 325 comprobaciones en `OK` contra la base local,
+      diecisiete suyas. **No le deja ninguna fila a la API**: no agrega restricciones
 - [ ] ⚡ [**4.6**](docs/08-plan-de-desarrollo.md#tarea-4-6) Listado ordenado por fecha con filtros · API, Front
 - [ ] 🔒 [**4.7**](docs/08-plan-de-desarrollo.md#tarea-4-7) Resaltado de pedidos estancados · API, Front
 - [ ] ⚡ [**4.8**](docs/08-plan-de-desarrollo.md#tarea-4-8) Factura adjunta al pedido · API, Front
@@ -1652,7 +1661,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       monto. Por cada categoría fija se toma lo pagado el mes anterior y se le resta lo pagado en
       este, sin bajar de cero. Se descartó dejarlos en cero hasta la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1), que subía la caja libre
       y retrasaba el aviso del retiro. **Conviene escribirlo en el 05**, que es donde vive la fórmula
-- [ ] 🔒 **La caja libre la construyó el retiro, y no la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1).** El contrato del retiro la pide
+- [ ] ⚡ **La caja libre la construyó el retiro, y no la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1).** El contrato del retiro la pide
       —`cajaLibre` en la propuesta y el `40990`— y la 6.1 dependía de la 7.4: era un círculo, y el
       [§10](#10-decisiones-de-construcción-que-conviene-revisar) ya lo había anotado al acordar el capital. `CalcularCajaLibre` queda en el dominio para que
       la 6.1 la reutilice en el tablero y la [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8) en el cierre
@@ -3913,6 +3922,32 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       ruta sea de lectura o de escritura, así que dice lo mismo que en las otras nueve consultas; el
       original le dejó a esta el texto de una escritura. **No cambia nada de lo que alguien hace**,
       pero el original y la copia no dicen lo mismo hasta que alguien decida cuál se corrige
+
+**De la [4.5](docs/08-plan-de-desarrollo.md#tarea-4-5):**
+
+- [ ] **El movimiento que causa la venta vale el saldo, no el valor total del pedido.** El contrato
+      dice las dos cosas —«causa la venta por el valor total» y «sube la caja por el saldo»— y el
+      [04 §10](docs/04-modelo-de-datos.md#10-funciones-de-negocio-atómicas) dice que es **un** movimiento: solo el saldo hace ciertas las dos. Y es lo que exige
+      el saldo de la cuenta, porque el anticipo ya la subió una vez. **Lo que cuelga de esto es la
+      [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1)**: los ingresos causados no se pueden sumar de los movimientos, porque los de un
+      pedido entregado dicen el saldo y no la venta; salen de `pedidos`, como el costo directo
+- [ ] **Causar el costo no escribe ningún apunte.** El [05 §9.1](docs/05-reglas-financieras.md#9-catálogo-de-kpis) define el costo directo del período
+      como la suma del costo de los pedidos entregados en él, y el insumo ya se registró como gasto
+      el día que se compró: un segundo apunte lo contaría dos veces. Así que «causa el costo» del
+      contrato lo cumple el pedido al quedar `entregado` con su fecha, y no una escritura nueva
+- [ ] **De `cotizado` la base sí deja entregar, y la API no.** El contrato le da a la entrega un
+      único código de estado, el `40931`, y su texto es «ya está cerrado»: solo `entregado` y
+      `cancelado`. La máquina de estados de la [4.1](docs/08-plan-de-desarrollo.md#tarea-4-1) es más estricta, y hoy es la única que para
+      una cotización que nunca se confirmó. **Cerrarlo en la base pide un código nuevo**, y un
+      código nuevo es un PR en la especificación
+- [ ] **La fecha futura la rechaza la base y la anterior al pedido la rechaza la API**, y las dos
+      son el mismo `42234`. Sin cuenta no hay movimiento, así que `fecha_no_futura` no mira y solo
+      la base puede cerrar ese hueco; la otra mitad es un error de campo, va en `data.errores` y ya
+      estaba escrita desde la [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4). Repetirla en la base sería la segunda versión de una regla
+- [ ] **La entrega parcial del [CU-07 A2](docs/02-casos-de-uso.md#cu-07) no se puede pedir.** El formulario `entrega` del contrato son
+      dos campos —la fecha y la cuenta— y ni uno más, así que no hay dónde decir qué parte se
+      entrega. El estado `parcial` existe y la función lo entrega entero. Nadie ha planificado la
+      tarea que la escriba
 
 ---
 
