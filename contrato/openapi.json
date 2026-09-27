@@ -4969,7 +4969,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.22.0"
+    "version" : "0.22.1"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -7429,7 +7429,7 @@
         "description" : "Los pedidos ordenados por fecha, los más recientes primero, con filtros por estado, cliente y rango de fechas (RF-20, CU-08). Cada pedido trae lo anticipado, el saldo pendiente y si está estancado: las tres las calcula la API (RF-23, RF-24), porque el front no calcula plata ni decide qué resaltar (ADR-018). Los anulados no salen salvo que se pidan. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902 y 42200 con data.errores.",
         "operationId" : "pedidos",
         "parameters" : [ {
-          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
           "in" : "header",
           "name" : "Idempotency-Key",
           "required" : true,
