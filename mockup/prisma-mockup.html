@@ -1728,6 +1728,48 @@ tbody tr.fila-detalle:hover{background:none}
             <tbody id="tb-activos"></tbody>
           </table></div>
         </div>
+
+        <!-- Registrar el aporte se hace aquí (RF-46, CU-15): la API sirve el formulario «aporte» y
+             devuelve lo que quedó registrado. Lo que no hay es lista: el contrato no declara la
+             consulta, el acumulado es una cifra del patrimonio y el historial se ve en el libro. -->
+        <div class="panel" id="panel-aportes">
+          <div class="panel-head">
+            <h2 class="grow">Aportes de capital</h2>
+            <span class="eyebrow">Sube la caja y el patrimonio · no es utilidad</span>
+            <button class="cta" id="btn-aporte" aria-expanded="false" aria-controls="form-aporte">+ Registrar aporte</button>
+          </div>
+
+          <div class="formulario" id="form-aporte" hidden>
+            <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px">
+              <h3 class="grow">Registrar un aporte</h3>
+              <span class="eyebrow">Plata que entra desde afuera</span>
+            </div>
+            <div class="campos-form">
+              <div class="campo"><label for="ap-valor">Valor del aporte</label>
+                <input type="text" id="ap-valor" inputmode="numeric" placeholder="1.000.000"></div>
+              <div class="campo"><label for="ap-cuenta">Cuenta</label>
+                <select id="ap-cuenta"></select></div>
+              <div class="campo"><label for="ap-fecha">Fecha</label>
+                <input type="date" id="ap-fecha"></div>
+              <div class="campo"><label for="ap-nota">Nota</label>
+                <input type="text" id="ap-nota" placeholder="De dónde salió la plata, si sirve recordarlo"></div>
+            </div>
+
+            <p class="capa-error" id="ap-error" role="alert" aria-live="polite" hidden style="margin-top:14px"></p>
+
+            <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; align-items:center">
+              <button class="cta" id="ap-guardar">Guardar aporte</button>
+              <button class="ghost" id="ap-cancelar">Cancelar</button>
+            </div>
+          </div>
+
+          <div id="aportes-aviso"></div>
+
+          <p style="font-size:.8rem; color:var(--muted); margin-top:4px">
+            Aquí no hay tabla de aportes: cada uno queda en el libro, en su movimiento, y lo
+            acumulado se ve arriba, en el patrimonio. Lo que se registra aquí sube la caja y el
+            patrimonio, y no toca la utilidad del mes.</p>
+        </div>
       </section>
 
       <!-- ===== 6 · REPORTES ===== -->
@@ -2531,6 +2573,8 @@ function aplicarRol(){
   pintarProlabore();
   cerrarFormActivo();
   tablaActivos();
+  cerrarFormAporte();
+  pintarAportes();
   tablaPedidos();
   kpisPedidos();
   pintarCuentas();
@@ -3294,6 +3338,96 @@ function guardarActivo(){
   });
   document.getElementById('av-cancelar').addEventListener('click', cerrarFormActivo);
   document.getElementById('av-guardar').addEventListener('click', guardarActivo);
+})();
+
+/* ---------- los aportes de capital (RF-46, CU-15, tarea 7.2) ---------- */
+/* Plata que entra desde afuera: sube la caja y el patrimonio, y no la utilidad (05 §2). Aquí no hay
+   tabla, porque el contrato no declara ninguna consulta de aportes: se pinta lo que la API devolvió
+   del último que se registró, y el historial se ve en el libro. La cuenta es obligatoria, al
+   contrario que en la compra de un activo, porque todo aporte es un movimiento (04 §4.6). */
+var ultimoAporte = null;
+
+/* Del sobre de la API llegan el valor, la fecha y la nota. La cuenta llega como id, y traducirla a
+   nombre no le toca a este panel: eso se ve en el libro, donde la API manda el nombre. */
+function pintarAportes(){
+  var caja = document.getElementById('aportes-aviso');
+  if (!caja) return;
+  if (!ultimoAporte){ caja.innerHTML = ''; return; }
+  var a = ultimoAporte;
+  caja.innerHTML =
+    '<div class="alerta a-info" style="margin:14px 0"><span class="tag">AVISO</span>' +
+    '<div><b>El aporte quedó registrado</b><span>La caja y el patrimonio suben. La utilidad del mes ' +
+    'no se mueve: esta plata no la generó el negocio.</span></div></div>' +
+    '<div class="calc">' +
+    '<div><span>Lo último que registraste</span><b>' + fmt(a.valor) + '</b></div>' +
+    '<div><span>Fecha</span><b class="mono">' + fechaConAno(a.fecha) + '</b></div>' +
+    (a.nota ? '<div><span>Nota</span><b>' + enTexto(a.nota) + '</b></div>' : '') +
+    '</div>';
+}
+
+/* La cuenta no puede quedar vacía: la primera opción obliga a elegir. */
+function refrescarCuentasAporte(){
+  var sel = document.getElementById('ap-cuenta');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">Elige una cuenta</option>' + CUENTAS.map(function(c, i){
+    return '<option value="' + i + '">' + enTexto(c.n) + '</option>';
+  }).join('');
+}
+
+function abrirFormAporte(){
+  var btn = document.getElementById('btn-aporte');
+  ['ap-valor','ap-nota'].forEach(function(id){ document.getElementById(id).value = ''; });
+  refrescarCuentasAporte();
+  document.getElementById('ap-fecha').value = '2026-09-30';
+  avisoCampo('ap-error', '');
+  document.getElementById('form-aporte').hidden = false;
+  btn.setAttribute('aria-expanded', 'true');
+  btn.textContent = 'Cerrar';
+  document.getElementById('form-aporte').scrollIntoView({block:'nearest'});
+  document.getElementById('ap-valor').focus();
+}
+
+function cerrarFormAporte(){
+  var btn = document.getElementById('btn-aporte');
+  if (!btn) return;
+  document.getElementById('form-aporte').hidden = true;
+  btn.setAttribute('aria-expanded', 'false');
+  btn.textContent = '+ Registrar aporte';
+  avisoCampo('ap-error', '');
+}
+
+function fallaAporte(id, texto){
+  avisoCampo('ap-error', texto);
+  document.getElementById(id).focus();
+}
+
+/* Las reglas y los mensajes son los del formulario «aporte» que manda la API. Los dos que no caben
+   en el descriptor llegan con su código: la fecha posterior a hoy, 42290, y la cuenta que no sirve,
+   42291. */
+function guardarAporte(){
+  var valor  = soloDigitos(document.getElementById('ap-valor').value);
+  var cuenta = document.getElementById('ap-cuenta').value;
+  var fecha  = document.getElementById('ap-fecha').value || '2026-09-30';
+  var nota   = (document.getElementById('ap-nota').value || '').trim();
+  if (!valor)       return fallaAporte('ap-valor', 'El aporte tiene que ser mayor que cero.');
+  if (cuenta === '') return fallaAporte('ap-cuenta', 'Elige en qué cuenta entró la plata.');
+  if (fecha > '2026-09-30'){
+    return fallaAporte('ap-fecha', 'Esa fecha todavía no llega. Aquí va cuándo ocurrió de verdad.');
+  }
+  ultimoAporte = {valor:valor, fecha:fecha, nota:nota};
+  cerrarFormAporte();
+  pintarAportes();
+}
+
+(function initAportes(){
+  var btn = document.getElementById('btn-aporte');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    if (document.getElementById('form-aporte').hidden) abrirFormAporte();
+    else cerrarFormAporte();
+  });
+  document.getElementById('ap-cancelar').addEventListener('click', cerrarFormAporte);
+  document.getElementById('ap-guardar').addEventListener('click', guardarAporte);
 })();
 
 function filaAcciones(p){

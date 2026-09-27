@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-26 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [4.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-26 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -465,6 +465,31 @@ los gastos, y por eso el panel lleva su cintillo: «Una inversión no reduce la 
   no hay por dónde.
 - **Toda la pantalla es de Gerencia, y lo impone la base**: a Operación `activos_solo_gerencia` le
   filtra las filas al leer —le llega la lista vacía, no un error— y le rechaza la compra ([P-20](12-pruebas-y-calidad.md#p-20)).
+
+#### Un aporte de capital se registra aquí, y su historial vive en el libro
+
+Un aporte es plata que entra desde afuera: **sube la caja y el patrimonio, y no toca la utilidad**
+([05 §2](05-reglas-financieras.md#2-naturaleza-de-cada-movimiento)), porque no la generó el negocio. Por eso el panel lleva su cintillo:
+«Sube la caja y el patrimonio · no es utilidad».
+
+- **«+ Registrar aporte» abre el formulario en la misma pantalla**, con cuatro campos: el valor, la
+  cuenta, la fecha y una nota. El valor y **la cuenta son obligatorios**, al contrario que en la
+  compra de un equipo: todo aporte es un movimiento, porque `aportes_retiros.movimiento_id` no
+  admite nulo ([04 §4.6](04-modelo-de-datos.md#46-inversiones-capital-y-pro-labore)). Sin fecha, el aporte es de hoy en Bogotá ([RNF-08](03-requisitos-y-bdd.md#rnf-08)).
+- **La nota es opcional, y es para acordarse de dónde salió la plata**: un préstamo de la familia,
+  la venta de algo propio. Si no se escribe, no viaja.
+- **El panel no lleva tabla, porque el contrato no declara ninguna consulta de aportes.** Lo
+  aportado se ve en el libro, cada uno en su movimiento, y lo acumulado en el patrimonio, que es una
+  de sus tres cifras. Armar la lista pidiendo el libro filtrado por tipo sería consultar de más y
+  decidir qué página del libro le toca a esta pantalla ([ADR-018](adr/ADR-018-front-sin-decisiones.md)).
+- **Lo que sí se pinta es el aporte que la API acaba de devolver**: cuánto, cuándo y la nota, como
+  quedaron en la base y no como se escribieron. **La cuenta no se pinta**, porque del sobre llega su
+  id, y traducirlo a un nombre no le toca a este panel: el nombre lo manda la API en el libro.
+- **Lo que la API rechace se lee debajo de su campo, y lo escrito no se pierde.** La fecha posterior
+  a hoy y la cuenta que no sirve no caben en el descriptor y llegan con su código, como en la compra
+  de un equipo.
+- **Toda la pantalla es de Gerencia, y lo impone la base**: `ret_solo_gerencia` no deja escribir
+  `aportes_retiros`, así que el rechazo no lo decide la pantalla.
 
 ### 4.6 Reportes
 
