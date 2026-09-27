@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-24 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [7.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-27 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -163,7 +163,78 @@ alrededor de 17 semanas, y eso es lo que permite confiar en la cifra de tres.
 [0.4](#tarea-0-4) → [0.10](#tarea-0-10) → [1.1](#tarea-1-1) → [1.4](#tarea-1-4) → [2.3](#tarea-2-3) → [2.4](#tarea-2-4) → [2.1](#tarea-2-1) → [2.12](#tarea-2-12) → [2.13](#tarea-2-13) → [5.2](#tarea-5-2) → [4.3](#tarea-4-3) → [4.5](#tarea-4-5) → [6.1](#tarea-6-1) → [6.5](#tarea-6-5) → [8.5](#tarea-8-5) → [8.6](#tarea-8-6)
 <!-- /generado:plan-camino-critico -->
 
-### 1.3 El diagrama con 3 carriles
+### 1.3 Las dependencias que miran hacia adelante
+
+**Una tarea solo depende de tareas anteriores** ([ADR-043](adr/ADR-043-dependencias-solo-hacia-atras.md)): si el orden sale de las dependencias
+—que es lo que dice el [§7](#7-orden-de-construcción-y-por-qué)—, una tarea que espera a otra de más abajo hace que el número
+mienta. Dentro de un sprint el número no promete un orden, porque eso lo dicen las oleadas; entre
+sprints sí, y ahí es grave: un sprint no puede cerrar hasta que haya avanzado uno posterior.
+
+Las de abajo son las que ya estaban cuando se escribió la regla. Todas nacieron igual: **una tarea
+que faltaba se escribió al final de la tabla de su sprint, y una tarea vieja pasó a depender de
+ella.** Ninguna nueva puede aparecer sin que la verificación la nombre.
+
+<!-- generado:plan-dependencias-hacia-adelante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
+**47 dependencias apuntan a una tarea posterior, y 3 cruzan de sprint** (⚠️). Es deuda declarada de [ADR-043](adr/ADR-043-dependencias-solo-hacia-atras.md): la regla rige desde hoy, esta lista solo se encoge y ninguna nueva pasa la verificación.
+
+| La tarea | Espera a | Por qué la posterior nació después |
+|---|---|---|
+| [0.11](#tarea-0-11) | [0.14](#tarea-0-14) | el sobre es un cimiento y entro al Sprint 0 despues de la consulta que lo usa |
+| [1.7](#tarea-1-7) | [1.20](#tarea-1-20) | la decision del esquema de prisma_db se numero al final del Sprint 1 (08 §0.2) |
+| [1.8](#tarea-1-8) | [1.20](#tarea-1-20) | la decision del esquema de prisma_db se numero al final del Sprint 1 (08 §0.2) |
+| [1.10](#tarea-1-10) | [1.14](#tarea-1-14) | el filtro de idempotencia se numero despues de la gestion que lo usa |
+| [1.10](#tarea-1-10) | [1.17](#tarea-1-17) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [1.10](#tarea-1-10) | [1.18](#tarea-1-18) | la mitad de front de RF-102 se numero al final del sprint (08 §0.2) |
+| [1.10](#tarea-1-10) | [1.19](#tarea-1-19) | la mitad de front de ADR-020 se numero al final del sprint (08 §0.2) |
+| [1.15](#tarea-1-15) | [1.20](#tarea-1-20) | la decision del esquema de prisma_db se numero al final del Sprint 1 (08 §0.2) |
+| [2.1](#tarea-2-1) | [2.4](#tarea-2-4) | la tabla usuarios se amplio despues de la sesion que la consulta |
+| [2.1](#tarea-2-1) | [2.19](#tarea-2-19) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [2.2](#tarea-2-2) | [2.14](#tarea-2-14) | la navegacion dictada por la API se numero despues del enrutamiento |
+| [2.6](#tarea-2-6) | [2.19](#tarea-2-19) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [2.8](#tarea-2-8) | [2.22](#tarea-2-22) | las dos reglas de cargos aparecieron al hacer el catalogo (08 Sprint 2) |
+| [2.9](#tarea-2-9) | [2.21](#tarea-2-21) | la auditoria de usuarios aparecio al hacer el registro de ingresos |
+| [2.13](#tarea-2-13) | [2.20](#tarea-2-20) | las tablas del canal firmado aparecieron al ir a hacer el filtro (08 Sprint 2) |
+| [2.15](#tarea-2-15) | [2.21](#tarea-2-21) | la auditoria de usuarios aparecio despues de la tabla que la usa |
+| [2.16](#tarea-2-16) | [2.21](#tarea-2-21) | la auditoria de usuarios aparecio despues de la bitacora que la usa |
+| [3.4](#tarea-3-4) | [3.13](#tarea-3-13) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [3.5](#tarea-3-5) | [3.13](#tarea-3-13) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [3.6](#tarea-3-6) | [3.14](#tarea-3-14) | la tabla adjuntos no existia y ninguna tarea la creaba (08 Sprint 3) |
+| [3.6](#tarea-3-6) | [3.16](#tarea-3-16) | el andamio del celular entro al sprint despues de la foto del recibo |
+| [3.8](#tarea-3-8) | [3.21](#tarea-3-21) | el libro en la API entro con el dibujo del mockup (08 Sprint 3) |
+| [3.9](#tarea-3-9) | [3.23](#tarea-3-23) | la anulacion que arrastra entro con el dibujo del mockup (08 Sprint 3) |
+| [4.2](#tarea-4-2) | [4.10](#tarea-4-10) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [4.3](#tarea-4-3) | [5.2](#tarea-5-2) ⚠️ | Productos va antes que Pedidos: el pedido con lineas necesita el catalogo (08 §7) |
+| [4.9](#tarea-4-9) | [4.11](#tarea-4-11) | las columnas de la cancelacion aparecieron al hacer la cancelacion |
+| [5.2](#tarea-5-2) | [5.10](#tarea-5-10) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [5.2](#tarea-5-2) | [5.11](#tarea-5-11) | el RLS de productos aparecio al hacer el catalogo (08 Sprint 5) |
+| [5.9](#tarea-5-9) | [5.10](#tarea-5-10) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [6.1](#tarea-6-1) | [7.3](#tarea-7-3) ⚠️ | Reportes y Capital se entrelazan: el flujo de caja necesita el pro-labore (05 §12.2) |
+| [6.1](#tarea-6-1) | [7.4](#tarea-7-4) ⚠️ | Reportes y Capital se entrelazan: el flujo de caja necesita el retiro (05 §12.2) |
+| [6.3](#tarea-6-3) | [6.10](#tarea-6-10) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [6.5](#tarea-6-5) | [6.10](#tarea-6-10) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [7.1](#tarea-7-1) | [7.9](#tarea-7-9) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [7.2](#tarea-7-2) | [7.9](#tarea-7-9) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [7.3](#tarea-7-3) | [7.9](#tarea-7-9) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [7.7](#tarea-7-7) | [7.9](#tarea-7-9) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [8.1](#tarea-8-1) | [8.11](#tarea-8-11) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [8.2](#tarea-8-2) | [8.3](#tarea-8-3) | la liquidacion en la base se numero antes de los adelantos que descuenta |
+| [8.5](#tarea-8-5) | [8.11](#tarea-8-11) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [8.8](#tarea-8-8) | [8.11](#tarea-8-11) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [8.8](#tarea-8-8) | [8.12](#tarea-8-12) | las tablas del cotizador aparecieron al acordar su contrato |
+| [8.9](#tarea-8-9) | [8.11](#tarea-8-11) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [8.10](#tarea-8-10) | [8.11](#tarea-8-11) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
+| [9.2](#tarea-9-2) | [9.12](#tarea-9-12) | la 0.4 se partio y los dos proyectos de pago quedaron al final del Sprint 9 |
+| [9.5](#tarea-9-5) | [9.13](#tarea-9-13) | los secretos de qa se numeraron al final del Sprint 9 |
+| [9.10](#tarea-9-10) | [9.11](#tarea-9-11) | etiquetar 1.0.0 espera a todo el sprint, Swagger en prod incluido |
+<!-- /generado:plan-dependencias-hacia-adelante -->
+
+> **Las tres que cruzan de sprint dicen que dos números están al revés, y eso no lo decide quien
+> construye.** La [4.3](#tarea-4-3) espera a la [5.2](#tarea-5-2) porque **Productos va antes que Pedidos**, que es lo que el
+> [§7](#7-orden-de-construcción-y-por-qué) ya reconoce sin sacar la conclusión; y la [6.1](#tarea-6-1) espera a la [7.3](#tarea-7-3) y a la [7.4](#tarea-7-4) porque Reportes y
+> Capital se entrelazan, que es el recuadro del grafo. Renumerar un sprint mueve los hitos, el
+> calendario y el tablero: queda planteado para quien dirige.
+
+### 1.4 El diagrama con 3 carriles
 
 Cada barra es un sprint dentro de un carril. Las barras de un mismo carril se solapan cuando dos
 funcionalidades avanzan a la vez.
@@ -800,7 +871,7 @@ Una tarea no está terminada hasta que cumple **todo** lo siguiente:
       la de `develop`, y en el front el número de compilación, uno más— si la tarea cambia lo que se
       publica; si agrega una migración, esa misma tarea publica la versión nueva del esquema. Lo
       exige la prueba [C-05](12-pruebas-y-calidad.md#c-05) en la integración continua de cada repositorio ([ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md)). Y el cambio llegó
-      al menos hasta qa. Mientras qa no exista —hasta el [Sprint 9](#sprint-9), por [ADR-026](adr/ADR-026-railway-al-final.md)—, basta con fusionarlo a
+      al menos hasta qa. Mientras qa no exista —hasta el [Sprint 9](#sprint-9), por [ADR-032](adr/ADR-032-railway-en-dev-ahora.md)—, basta con fusionarlo a
       `develop` con la integración continua en verde, por el PR de su rama `feature/` ([21 §6.5](21-trabajo-en-paralelo.md#65-ramas-e-integración)).
 - [ ] **La tarea es un commit, y el commit explica por qué** ([ADR-028](adr/ADR-028-un-commit-por-tarea.md)). El asunto lleva el sprint y
       el número de la tarea; el cuerpo son tres párrafos —`Hace:`, `Decide:` y `Verifica:`—, el
@@ -945,7 +1016,7 @@ El [Sprint 9](#sprint-9) va de último porque endurece lo que ya existe. No es r
 «funciona en mi computador» de «Gerencia lo aprobó y el taller lo tiene».
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.22.0") · [ADR-011](adr/ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [ADR-037](adr/ADR-037-el-pr-se-abre-a-pedido.md "ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos") · [ADR-038](adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md "ADR-038 · La pila local se orquesta desde prisma_db, y cada receta se apunta desde su .env") · [ADR-040](adr/ADR-040-rama-feature-y-pr-autorizado.md "ADR-040 · Toda rama empieza por feature/, y el PR se abre solo con autorización expresa, trayendo entonces la base") · [ADR-041](adr/ADR-041-cuatro-lineas-por-parrafo.md "ADR-041 · Un párrafo de código o de commit tiene cuatro líneas como máximo") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
+**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.22.0") · [ADR-011](adr/ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [ADR-037](adr/ADR-037-el-pr-se-abre-a-pedido.md "ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos") · [ADR-038](adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md "ADR-038 · La pila local se orquesta desde prisma_db, y cada receta se apunta desde su .env") · [ADR-040](adr/ADR-040-rama-feature-y-pr-autorizado.md "ADR-040 · Toda rama empieza por feature/, y el PR se abre solo con autorización expresa, trayendo entonces la base") · [ADR-041](adr/ADR-041-cuatro-lineas-por-parrafo.md "ADR-041 · Un párrafo de código o de commit tiene cuatro líneas como máximo") · [ADR-043](adr/ADR-043-dependencias-solo-hacia-atras.md "ADR-043 · Una tarea solo depende de tareas anteriores") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
 <!-- /generado:referenciado-desde -->
 
 ---
