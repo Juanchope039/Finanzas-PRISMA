@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-27 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-27 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -147,6 +147,15 @@ regla es de la base. Como el pro-labore, no estaba dibujado, y el mockup lo estr
 ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). **Con él quedan cerradas las oleadas 1
 y 2 del [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7)**, y el carril Front se queda sin nada pendiente en este sprint hasta
 la [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8), que espera a la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1).
+
+**La factura del pedido ya se sube, y falta el botón que la sube.** La mitad API de la [4.8](docs/08-plan-de-desarrollo.md#tarea-4-8) está
+hecha: `POST /api/v0/pedidos/{id}/adjuntos` cuelga la factura del pedido con la misma tubería que
+la foto del recibo, y el pedido la devuelve entre sus `adjuntos`, que es de donde la pantalla saca
+con qué id bajarla. **La tabla tenía las dos flechas desde la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) y ninguna ruta llenaba la del
+pedido**; ahora `Adjunto` sabe de qué cuelga, y de ahí sale la carpeta del objeto, así que el
+prefijo y la flecha de la base no pueden decir cosas distintas. **Falta la pantalla**, que es del
+carril Front: el mockup no dibuja de dónde se adjunta la factura de un pedido, así que hay que
+dibujarla primero ([§10](#10-decisiones-de-construcción-que-conviene-revisar)).
 
 **Lo siguiente, en cuanto alguien lo tome:** cerrar la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) destrabó lo que la estaba
 esperando. En el carril API **la prueba de permisos con sesión real ya está** ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)), y con ella
@@ -1118,7 +1127,18 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       diecisiete suyas. **No le deja ninguna fila a la API**: no agrega restricciones
 - [ ] ⚡ [**4.6**](docs/08-plan-de-desarrollo.md#tarea-4-6) Listado ordenado por fecha con filtros · API, Front
 - [ ] 🔒 [**4.7**](docs/08-plan-de-desarrollo.md#tarea-4-7) Resaltado de pedidos estancados · API, Front
-- [ ] ⚡ [**4.8**](docs/08-plan-de-desarrollo.md#tarea-4-8) Factura adjunta al pedido · API, Front
+- [ ] ⚡ [**4.8**](docs/08-plan-de-desarrollo.md#tarea-4-8) Factura adjunta al pedido · API, Front — **la mitad API
+      está hecha**: `POST /api/v0/pedidos/{id}/adjuntos` sube la factura y la deja colgada del pedido
+      ([RF-27](docs/03-requisitos-y-bdd.md#rf-27)), con el mismo cuerpo, el mismo techo de 5 MB y los mismos cuatro tipos que el soporte
+      de un movimiento; el id del adjunto sigue siendo la clave de idempotencia, así que dos intentos
+      escriben el mismo objeto. **No estrena ningún código**: el `40020` y el `40021` no dependen de
+      quién es el padre, y un pedido que no existe es el `40400` que produce
+      `adjuntos_pedido_id_fkey`. `Adjunto` deja de llevar el id del movimiento y lleva **de qué
+      cuelga**, de donde sale la carpeta del objeto, y `vigentePorId` cambia su unión interna por dos
+      por la izquierda: sin eso la factura de un pedido no se podía bajar. El pedido la devuelve en
+      `adjuntos`, que el contrato estrena en el `0.23.0`. `prisma_api` en 0.30.0, con 1336 pruebas sin
+      base —doce nuevas— y cinco nuevas contra ella ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). **Falta la pantalla**, del carril Front, y la tarea se
+      marca cuando aterricen las dos mitades ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración))
 - [x] [**4.9**](docs/08-plan-de-desarrollo.md#tarea-4-9) Cancelación con destino del anticipo · API — `POST
       /api/v0/pedidos/{id}/cancelacion` deja el pedido `cancelado` con su motivo y con **qué pasa con
       el anticipo ya cobrado**: devolución o ingreso, en las cuatro columnas de la [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11). **Que el
@@ -1508,6 +1528,26 @@ a `anon`.
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**De la factura del pedido ([4.8](docs/08-plan-de-desarrollo.md#tarea-4-8)), en su mitad API:**
+
+- [ ] **Subir un archivo es un solo caso de uso con dos padres, y no dos clases.** `AdjuntarSoporte`
+      sirve a las dos rutas, porque lo único que cambia es de qué cuelga. Partirlo duplicaría el orden
+      de las dos escrituras —primero el objeto y después la ficha—, que es el invariante que no puede
+      quedar en dos sitios: dos copias de una regla así se separan en cuanto una se toca
+- [ ] **El mockup no dibuja de dónde se adjunta la factura de un pedido.** La pantalla de Pedidos
+      tiene el formulario de «Nuevo pedido» y la lista, y ningún sitio para el archivo, aunque el
+      [RF-27](docs/03-requisitos-y-bdd.md#rf-27) lo pide y la fila del libro sí lo tiene dibujado para el movimiento ([10 §4.3](docs/10-ux-y-mockups.md)). La mitad
+      Front tendrá que dibujarlo primero, como lo estrenaron el botón de los activos y el panel de los
+      sobres
+- [ ] **Una factura no se anula, y la tabla sí sabe.** `adjuntos` tiene sus cinco columnas de
+      anulación desde la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) y el contrato no declara ninguna operación que las llene, ni para el
+      soporte del movimiento ni para la factura: la lectura filtra `anulado_en IS NULL` y nada más.
+      Cambiar una factura equivocada es hoy subir la buena, y las dos quedan
+- [ ] **El pedido trae sus facturas, y no hay consulta que las pida aparte.** Van dentro del pedido
+      como los soportes van dentro del movimiento, con la segunda consulta que junta
+      `ConsultarPedido`. Una ruta propia sería una ida más a la base para pintar la misma fila, y el
+      contrato no la declara
 
 **De los activos ([7.1](docs/08-plan-de-desarrollo.md#tarea-7-1)), en su mitad API:**
 
