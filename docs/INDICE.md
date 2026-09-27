@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.9.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/INDICE.md "Historial de cambios") | [🔄 Vivo](22-documentacion.md#estados) | 2026-09-15 | 2026-09-27 | — |
+| [1.8.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/INDICE.md "Historial de cambios") | [🔄 Vivo](22-documentacion.md#estados) | 2026-09-15 | 2026-09-26 | — |
 
 > Guía para moverte por toda la documentación de PRISMA **sin perderte y sin saber de programación**.
 > Cada documento dice para qué sirve, en lenguaje sencillo, y está marcado si es técnico.
@@ -127,7 +127,6 @@ a una pregunta concreta. Ver el [índice de ADRs](adr/README.md).
 | [040](adr/ADR-040-rama-feature-y-pr-autorizado.md) | Cada cambio va en una rama que dice qué trae, y la revisión solo se pide cuando quien dirige la autoriza: ahí se pone al día con lo último | ¿Quién decide cuándo se revisa un cambio, y cuándo se pone al día con lo que ya estaba? |
 | [041](adr/ADR-041-cuatro-lineas-por-parrafo.md) | Cada párrafo que explica algo en el código o en un cambio cabe en cuatro líneas, salvo que quien dirige autorice más | ¿Cuánto se puede escribir para explicar un cambio o un pedazo de código? |
 | [042](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md) | La página técnica de la API muestra la misma versión que «Acerca de»: la del programa que está corriendo. La del acuerdo con el front sigue anotada al lado | ¿Por qué la página técnica de la API mostraba un número distinto al de «Acerca de»? |
-| [043](adr/ADR-043-dependencias-solo-hacia-atras.md) | Ninguna tarea del plan espera a otra que esté más abajo en la lista, y una herramienta lo comprueba en cada cambio | ¿Puedo confiar en que el orden del plan es el orden en que se puede trabajar? |
 
 Del 017 al 026 están las decisiones del modelo de tres partes: el cambio de Dart a Java en la
 API, que el front no decide nada, el contrato de respuesta, la idempotencia, el canal firmado,
@@ -138,9 +137,7 @@ que el sistema se pueda ver en línea antes del final. El 031, el 034 y el 035 v
 trabaja: el tamaño del commit, la versión que sube en cada PR y dónde vive cada repositorio, y el 033
 limita la única llave que se salta los permisos de la base. Del 039 al 041 ordenan lo que leen y
 escriben los agentes: cada regla en un solo sitio, la rama y la revisión que solo pide quien dirige,
-y cuánto mide cada párrafo que explica algo. El 042 y el 043 cierran dos huecos de confianza: qué
-versión enseña la página técnica de la API, y que el orden del plan sea de verdad el orden en que se
-puede trabajar.
+y cuánto mide cada párrafo que explica algo.
 
 ---
 
@@ -155,7 +152,7 @@ Qué significa cada estado y cuándo sube una versión está en
 |---|:---:|---|:---:|---|
 | [PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) | 1.5.0 | ✅ Vigente | 2026-09-26 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
 | [Tareas de PRISMA](../TODO.md) | 9.0.0 | 🔄 Vivo | 2026-09-27 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
-| [Índice navegable de la documentación](INDICE.md) | 1.9.0 | 🔄 Vivo | 2026-09-27 | — |
+| [Índice navegable de la documentación](INDICE.md) | 1.8.0 | 🔄 Vivo | 2026-09-26 | — |
 | [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Finanzas](#etiqueta-finanzas) · [Plan](#etiqueta-plan) |
 | [01 · Visión y alcance](01-vision-y-alcance.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Requisitos](#etiqueta-requisitos) |
 | [02 · Casos de uso](02-casos-de-uso.md) | 1.3.0 | ✅ Vigente | 2026-09-23 | [Requisitos](#etiqueta-requisitos) · [Negocio](#etiqueta-negocio) |
@@ -166,7 +163,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [07 · Arquitectura técnica](07-arquitectura.md) | 5.1.0 | ✅ Vigente | 2026-09-21 | [Arquitectura](#etiqueta-arquitectura) · [API](#etiqueta-api) · [Front](#etiqueta-front) · [Base de datos](#etiqueta-base-de-datos) · [Seguridad](#etiqueta-seguridad) |
 | [08 · Plan de desarrollo](08-plan-de-desarrollo.md) | 7.0.0 | ✅ Vigente | 2026-09-27 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
 | [09 · Plan de implantación](09-plan-de-implantacion.md) | 5.0.0 | ✅ Vigente | 2026-09-18 | [Plan](#etiqueta-plan) · [Entrega](#etiqueta-entrega) · [Negocio](#etiqueta-negocio) |
-| [10 · Diseño de experiencia y mockups](10-ux-y-mockups.md) | 4.2.0 | ✅ Vigente | 2026-09-26 | [UX](#etiqueta-ux) · [Front](#etiqueta-front) |
+| [10 · Diseño de experiencia y mockups](10-ux-y-mockups.md) | 4.4.0 | ✅ Vigente | 2026-09-26 | [UX](#etiqueta-ux) · [Front](#etiqueta-front) |
 | [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) | 2.0.0 | ✅ Vigente | 2026-09-18 | [Seguridad](#etiqueta-seguridad) · [Datos personales](#etiqueta-datos-personales) · [Negocio](#etiqueta-negocio) |
 | [12 · Pruebas y calidad](12-pruebas-y-calidad.md) | 3.2.0 | ✅ Vigente | 2026-09-26 | [Calidad](#etiqueta-calidad) |
 | [13 · Respaldo y exportación](13-respaldo-y-exportacion.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Base de datos](#etiqueta-base-de-datos) · [Datos personales](#etiqueta-datos-personales) |
