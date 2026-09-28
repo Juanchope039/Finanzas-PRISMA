@@ -1206,9 +1206,25 @@ tbody tr.fila-detalle:hover{background:none}
         </div>
         <div class="panel">
           <div class="panel-head">
-            <h2 class="grow">Septiembre y octubre</h2>
+            <h2 class="grow">Los pedidos, por fecha</h2>
             <span class="eyebrow" data-ger>Toca un pedido para modificarlo</span>
-            <div class="seg"><button aria-pressed="true">Todos</button><button aria-pressed="false">Por entregar</button><button aria-pressed="false">Entregados</button></div>
+            <!-- Los tres filtros que acepta POST /api/v0/consultas/pedidos (tarea 4.6): estado,
+                 cliente y rango de fechas. El estado es uno de los cinco del contrato y no un grupo:
+                 «por entregar» son tres estados a la vez, y decidir aquí cuáles sería decidir en la
+                 pantalla lo que dice la API (ADR-018). Filtrar lo hace la API: aquí se dibuja. -->
+            <select id="f-estado" aria-label="Estado del pedido">
+              <option value="">Todos los estados</option>
+              <option value="cotizado">Cotizado</option>
+              <option value="en_proceso">En proceso</option>
+              <option value="parcial">Entrega parcial</option>
+              <option value="entregado">Entregado</option>
+              <option value="cancelado">Cancelado</option>
+            </select>
+            <select id="f-cliente" aria-label="Cliente">
+              <option value="">Todos los clientes</option>
+            </select>
+            <input type="date" id="f-desde" aria-label="Pedidos desde">
+            <input type="date" id="f-hasta" aria-label="Pedidos hasta">
             <button class="cta" id="btn-nuevo" aria-expanded="false" aria-controls="form-pedido">+ Nuevo pedido</button>
           </div>
 
@@ -1307,6 +1323,9 @@ tbody tr.fila-detalle:hover{background:none}
             <thead><tr><th>Pedido</th><th>Fecha</th><th>Cliente</th><th>Detalle</th><th class="r r-mid">Total</th><th class="r r-mid">Anticipo</th><th class="r r-mid">Saldo</th><th>Estado</th></tr></thead>
             <tbody id="tb-pedidos"></tbody>
           </table></div>
+          <p id="pedidos-error" class="capa-error" role="alert" aria-live="polite" hidden
+             style="margin:12px 0 0"></p>
+          <p id="pedidos-vacio" class="eyebrow" hidden style="margin:12px 0 0"></p>
         </div>
         <!-- Los clientes no son una pantalla: el menú lo dicta la API (RF-103) y sus ocho claves
              no incluyen «clientes». Viven donde se usan, que es al tomar un pedido. Leerlos y
@@ -2349,13 +2368,13 @@ function pedidosDeCliente(id){
 
 var PEDIDOS = [
   {id:'P-0287', fecha:'2026-09-24', entrega:'2026-10-09', clienteId:'c1',
-   lineas:[{prodId:3, cant:60}, {prodId:5, cant:12}], anticipo: 540000, estado:'anticipo',  baja:null},
+   lineas:[{prodId:3, cant:60}, {prodId:5, cant:12}], anticipo: 540000, estado:'en_proceso',  baja:null},
   {id:'P-0286', fecha:'2026-09-22', entrega:'2026-10-06', clienteId:'c2',
-   lineas:[{prodId:1, cant:45}], anticipo: 720000, estado:'anticipo',  baja:null},
+   lineas:[{prodId:1, cant:45}], anticipo: 720000, estado:'en_proceso',  baja:null},
   {id:'P-0284', fecha:'2026-09-20', entrega:'2026-10-04', clienteId:'c3',
-   lineas:[{prodId:5, cant:24}], anticipo: 264000, estado:'anticipo',  baja:null},
+   lineas:[{prodId:5, cant:24}], anticipo: 264000, estado:'en_proceso',  baja:null},
   {id:'P-0271', fecha:'2026-08-26', entrega:'2026-08-28', clienteId:'c4',
-   lineas:[{prodId:1, cant:36}], anticipo: 576000, estado:'estancado', baja:null},
+   lineas:[{prodId:1, cant:36}], anticipo: 576000, estado:'en_proceso', baja:null},
   {id:'P-0283', fecha:'2026-09-18', entrega:'2026-09-18', clienteId:'c5',
    lineas:[{prodId:2, cant:60}], anticipo:      0, estado:'entregado', baja:null},
   {id:'P-0281', fecha:'2026-09-15', entrega:'2026-09-15', clienteId:'c6',
@@ -2894,11 +2913,29 @@ function grafico(){
 }
 
 /* ---------- tablas ---------- */
+/* La etiqueta de la fila sale del estado y de lo que cuelga del pedido, como en la API: el estado
+   es uno de los cinco del contrato, y «anticipo cobrado» y «estancado» son condiciones y no
+   estados. Quien decide si está estancado es la API, que manda `estancado` ya resuelto (RF-24);
+   aquí se cuenta para que el prototipo navegue. */
 var ESTADOS = {
-  anticipo : '<span class="pill p-ant">Anticipo cobrado</span>',
-  estancado: '<span class="pill p-warn">Sin entregar</span>',
-  entregado: '<span class="pill p-ok">Entregado</span>'
+  cotizado  : '<span class="pill">Cotizado</span>',
+  en_proceso: '<span class="pill">En proceso</span>',
+  parcial   : '<span class="pill p-ant">Entrega parcial</span>',
+  entregado : '<span class="pill p-ok">Entregado</span>',
+  cancelado : '<span class="pill">Cancelado</span>'
 };
+function diasSinEntregar(p){
+  return Math.floor((Date.now() - Date.parse(p.fecha + 'T00:00:00')) / 86400000);
+}
+function estaEstancado(p){
+  return p.anticipo > 0 && p.estado !== 'entregado' && p.estado !== 'cancelado'
+      && diasSinEntregar(p) >= 15;
+}
+function pildoraDePedido(p){
+  if (estaEstancado(p)) return '<span class="pill p-warn">Sin entregar</span>';
+  if (p.anticipo > 0 && p.estado !== 'entregado') return '<span class="pill p-ant">Anticipo cobrado</span>';
+  return ESTADOS[p.estado] || enTexto(p.estado);
+}
 
 var MES3 = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 function fechaCorta(iso){
@@ -2924,6 +2961,22 @@ function detallePedido(p){
   }).join(' · ');
 }
 function vivos(){ return PEDIDOS.filter(function(p){ return !p.baja; }); }
+/* Lo que la pantalla le pide a la API: estado, cliente y rango, y la intersección de los tres
+   (tarea 4.6). El orden no se elige: llega por fecha, lo más reciente primero. */
+var filtroDePedidos = {estado:'', cliente:'', desde:'', hasta:''};
+function pedidosFiltrados(){
+  var f = filtroDePedidos;
+  return vivos().filter(function(p){
+    return (!f.estado  || p.estado === f.estado)
+        && (!f.cliente || p.clienteId === f.cliente)
+        && (!f.desde   || p.fecha >= f.desde)
+        && (!f.hasta   || p.fecha <= f.hasta);
+  }).sort(function(a, b){ return a.fecha < b.fecha ? 1 : (a.fecha > b.fecha ? -1 : 0); });
+}
+function hayFiltroDePedidos(){
+  var f = filtroDePedidos;
+  return !!(f.estado || f.cliente || f.desde || f.hasta);
+}
 function abiertos(){ return vivos().filter(function(p){ return p.estado !== 'entregado'; }); }
 
 var pedidoSeleccionado = null;
@@ -2937,7 +2990,18 @@ function tablaPedidos(){
      quitar una fila que ya no tiene padre. */
   if (filaAbierta && cuerpo.contains(filaAbierta)) filaAbierta = null;
 
-  cuerpo.innerHTML = vivos().map(function(p){
+  /* Un rango al revés no puede tener filas, y la API lo rechaza con el 42200 en vez de
+     devolver la lista vacía: en lugar de la tabla va su mensaje, que llega en el sobre y se
+     pinta tal cual (10 §4.3, ADR-018). */
+  var alReves = !!(filtroDePedidos.desde && filtroDePedidos.hasta
+                   && filtroDePedidos.desde > filtroDePedidos.hasta);
+  var aviso = document.getElementById("pedidos-error");
+  if (aviso){
+    aviso.hidden = !alReves;
+    aviso.textContent = alReves ? "Revisa los datos." : "";
+  }
+  var lista = alReves ? [] : pedidosFiltrados();
+  cuerpo.innerHTML = lista.map(function(p){
     var total = totalPedido(p);
     var saldo = total - p.anticipo;
     var sel   = (ger && pedidoSeleccionado === p.id);
@@ -2950,9 +3014,19 @@ function tablaPedidos(){
       '</td><td class="r r-mid" style="color:' + (p.anticipo ? 'var(--anticipo)' : 'var(--faint)') + '">' +
       (p.anticipo ? fmt(p.anticipo) : '—') +
       '</td><td class="r r-mid">' + (saldo ? fmt(saldo) : '—') +
-      '</td><td>' + ESTADOS[p.estado] + '</td></tr>' +
+      '</td><td>' + pildoraDePedido(p) + '</td></tr>' +
       (sel ? filaAcciones(p) : '');
   }).join('');
+
+  /* Si no queda ninguna fila se dice, y solo se habla de filtros cuando hay alguno puesto:
+     sin ellos mandaria a buscar uno que no existe (10 §4.3). */
+  var vacio = document.getElementById('pedidos-vacio');
+  if (vacio){
+    vacio.hidden = (lista.length > 0) || alReves;
+    vacio.textContent = hayFiltroDePedidos()
+      ? 'No hay pedidos con estos filtros.'
+      : 'Todavía no hay pedidos.';
+  }
 
   if (ger){
     $$('#tb-pedidos tr[data-pedido]').forEach(function(fila){
@@ -2985,6 +3059,23 @@ function llenarSelectClientes(){
     return '<option value="' + c.id + '">' + enTexto(c.nombre) + '</option>';
   }).join('') + '<option value="__nuevo">+ Cliente nuevo…</option>';
   if (antes && sel.querySelector('option[value="' + antes + '"]')) sel.value = antes;
+}
+
+/* El filtro de cliente del listado se llena con los mismos clientes vigentes, que es lo que
+   devuelve POST /api/v0/consultas/clientes. Su opción vacía es «todos», y no viaja. */
+function llenarFiltroDeClientes(){
+  var sel = document.getElementById("f-cliente");
+  if (!sel) return;
+  var antes = sel.value;
+  sel.innerHTML = '<option value="">Todos los clientes</option>' +
+    clientesVigentes().map(function(c){
+      return '<option value="' + c.id + '">' + enTexto(c.nombre) + '</option>';
+    }).join('');
+  if (antes && sel.querySelector('option[value="' + antes + '"]')){
+    sel.value = antes;
+  } else if (antes){
+    filtroDePedidos.cliente = "";
+  }
 }
 
 /* «+ Cliente nuevo…» abre los campos aquí mismo. Nadie sale del pedido a medio tomar. */
@@ -3696,8 +3787,8 @@ function tablaPedidosResumen(){
     return '<tr><td class="mono">' + p.id + '</td><td>' + enTexto(nombreDeCliente(p)) +
       '</td><td class="mono">' + fechaCorta(p.entrega) + '</td><td class="r r-mid">' + fmt(total) +
       '</td><td class="r r-mid">' + fmt(p.anticipo) + '</td><td class="r r-mid">' + fmt(total - p.anticipo) +
-      '</td><td>' + (p.estado === 'estancado'
-        ? '<span class="pill p-warn">18 días</span>'
+      '</td><td>' + (estaEstancado(p)
+        ? '<span class="pill p-warn">' + diasSinEntregar(p) + ' días</span>'
         : '<span class="pill p-ant">Anticipo</span>') + '</td></tr>';
   }).join('');
 }
@@ -4411,6 +4502,20 @@ function preguntarPorElAbono(pedido){
     if (document.getElementById('form-pedido').hidden) abrirFormPedido(null);
     else cerrarFormPedido();
   });
+  /* Los filtros del listado (tarea 4.6). Cada cambio vuelve a pedir la lista: en el sistema
+     real es otra llamada a POST /api/v0/consultas/pedidos con el filtro puesto. */
+  llenarFiltroDeClientes();
+  [['f-estado', 'estado'], ['f-cliente', 'cliente'], ['f-desde', 'desde'], ['f-hasta', 'hasta']]
+    .forEach(function(par){
+      var el = document.getElementById(par[0]);
+      if (!el) return;
+      el.addEventListener('change', function(){
+        filtroDePedidos[par[1]] = el.value;
+        pedidoSeleccionado = null;
+        tablaPedidos();
+      });
+    });
+
   document.getElementById('n-cancelar').addEventListener('click', cerrarFormPedido);
   document.getElementById('n-cliente').addEventListener('change', alternarClienteNuevo);
   document.getElementById('n-agregar').addEventListener('click', function(){
@@ -4444,13 +4549,13 @@ function preguntarPorElAbono(pedido){
       var p = pedidoPorId(editandoPedido);
       p.clienteId = cliente; p.lineas = lineas;
       p.entrega = entrega; p.anticipo = d.recibe;
-      if (p.estado === 'entregado' && d.recibe > 0) p.estado = 'anticipo';
+      if (p.estado === 'entregado' && d.recibe > 0) p.estado = 'en_proceso';
       guardado = p;
     } else {
       consecutivo += 1;
       guardado = {
         id:'P-0' + consecutivo, fecha:'2026-09-30', entrega:entrega, clienteId:cliente,
-        lineas:lineas, anticipo:0, estado:'anticipo', baja:null
+        lineas:lineas, anticipo:0, estado:'en_proceso', baja:null
       };
       PEDIDOS.unshift(guardado);
     }

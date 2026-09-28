@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-27 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [5.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-27 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -246,6 +246,28 @@ Movimientos ([§4.3](#43-movimientos)).
 Lista **ordenada por fecha**, con estado visual: anticipo cobrado (morado), entregado (verde),
 estancado 15+ días (ámbar). Filtros por estado, cliente y rango de fechas. Cada fila muestra
 valor total, anticipo y saldo.
+
+#### La lista y sus tres filtros
+
+**El orden no se elige**: llega por fecha, lo más reciente primero, y dos pedidos del mismo día
+los desempata el número. Las cifras de cada fila —el total, lo anticipado y el saldo— y **si está
+estancado** llegan hechas de la API: la pantalla pinta el ámbar, no cuenta los días.
+
+**El estado que se filtra es uno de los cinco del contrato**, no un grupo. «Por entregar» son tres
+a la vez —cotizado, en proceso y entrega parcial—, y decidir cuáles caben ahí sería decidir en la
+pantalla lo que dice la API. Por eso el filtro es un desplegable con los cinco y «todos», y no
+tres botones.
+
+**La etiqueta de la fila sale de la condición antes que del estado**: un pedido con anticipo
+cobrado y quince días sin entregar se lee «Sin entregar» en ámbar; uno con anticipo y sin
+entregar, «Anticipo cobrado» en morado; los demás llevan el nombre de su estado.
+
+**El rango va por la fecha del pedido, y sus dos fechas son independientes**: «de septiembre en
+adelante» es una pregunta legítima. Lo único que no se puede pedir es un rango al revés, y
+entonces, en lugar de la tabla, va el aviso que manda la API, como en el libro ([§4.3](#43-movimientos)).
+
+Si no queda ninguna fila, la tabla lo dice; y solo habla de filtros cuando hay alguno puesto,
+porque sin ellos mandaría a buscar uno que no existe.
 
 #### Tomar un pedido son tres formularios, y no uno
 
@@ -848,7 +870,7 @@ El checklist de aprobación pantalla por pantalla está en
 [`09-plan-de-implantacion.md`](09-plan-de-implantacion.md) [§1](09-plan-de-implantacion.md#1-checklist-de-aprobación-del-mockup).
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.23.0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.23.1") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
