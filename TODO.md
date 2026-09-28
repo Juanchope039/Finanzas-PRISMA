@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-27 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-28 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -52,13 +52,13 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 1](#sprint-1) · Base de datos, RLS, identidad propagada e idempotencia | 21 | 21 | 0 | 0 | 0 |
 | [Sprint 2](#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
 | [Sprint 3](#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
-| [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 9 | 0 | 2 | 1,5 |
+| [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 10 | 0 | 1 | 0,5 |
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 8 | 0 | 3 | 3 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 6 | 0 | 3 | 4,5 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **153** | **114** | **0** | **39** | **49,5** |
+| **Total** | **153** | **115** | **0** | **38** | **48,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -202,7 +202,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [4.7](docs/08-plan-de-desarrollo.md#tarea-4-7) · [4.8](docs/08-plan-de-desarrollo.md#tarea-4-8) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [4.8](docs/08-plan-de-desarrollo.md#tarea-4-8) · [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5) |
 | **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
@@ -211,13 +211,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **39 tareas y 49,5 días de trabajo** de 153 tareas del plan.
+Quedan **38 tareas y 48,5 días de trabajo** de 153 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 7,4 semanas | **10,4 semanas** |
-| 2 | 4,1 semanas | **7,1 semanas** |
-| 3 | 3,8 semanas | **6,8 semanas** |
+| 1 | 7,2 semanas | **10,2 semanas** |
+| 2 | 4,0 semanas | **7,0 semanas** |
+| 3 | 3,9 semanas | **6,9 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1141,7 +1141,18 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       pruebas nuevas —9 de ellas contra la base local— y `prisma_front` en `0.23.0+28` con 7
       pruebas de la pantalla. El contrato sube a `0.22.1`: la descripción de `Idempotency-Key` de
       esa consulta decía la de una escritura, de antes del [ADR-030](docs/adr/ADR-030-contrato-sin-get.md)
-- [ ] ⚡ [**4.7**](docs/08-plan-de-desarrollo.md#tarea-4-7) Resaltado de pedidos estancados · API, Front
+- [x] [**4.7**](docs/08-plan-de-desarrollo.md#tarea-4-7) Resaltado de pedidos estancados · API, Front — **no agregó
+      comportamiento, porque ya estaba: lo que faltaba era poder verlo fallar.** La regla la escribió
+      la tarea [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) —el anticipo vigente más viejo con quince días o más y el pedido sin llegar a un
+      estado final, con la entrega parcial contando como sin entregar ([RF-24](docs/03-requisitos-y-bdd.md#rf-24))— y la tarea [4.6](docs/08-plan-de-desarrollo.md#tarea-4-6) la
+      trajo por fila y pintó la píldora «Sin entregar» en ámbar. **Lo que cierra esta tarea es la
+      verificación**: la prueba de la pantalla afirmaba el *texto* de la píldora, así que cambiar el
+      ámbar por el neutro pasaba en verde y el pedido crítico se quedaba tan callado como los demás
+      ([10 §3.1](docs/10-ux-y-mockups.md#31-color)). Ahora afirma el tono, y también que **la condición le gana al estado**: con anticipo
+      cobrado y estancado, el morado no se pinta al lado. [BDD-08-1](docs/03-requisitos-y-bdd.md#bdd-08-1) queda nombrado en las dos mitades,
+      el caso de los 18 días en el dominio y el ámbar en la pantalla. **No se agregó ningún filtro
+      «solo estancados» ni el conteo de días** ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). `prisma_front` en `0.23.1+29`, con las mismas
+      563 pruebas: ninguna nueva, dos que ya estaban pasaron a mirar lo que importaba
 - [ ] ⚡ [**4.8**](docs/08-plan-de-desarrollo.md#tarea-4-8) Factura adjunta al pedido · API, Front — **la mitad API
       está hecha**: `POST /api/v0/pedidos/{id}/adjuntos` sube la factura y la deja colgada del pedido
       ([RF-27](docs/03-requisitos-y-bdd.md#rf-27)), con el mismo cuerpo, el mismo techo de 5 MB y los mismos cuatro tipos que el soporte
@@ -1579,6 +1590,20 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **Las tres cifras de arriba de la pantalla —«Por entregar», «Anticipos por devengar» y
       «Entregados»— no se construyeron.** Ninguna operación del contrato las devuelve, y sumarlas en
       el front sería calcular plata. El mockup las dibuja desde el principio
+
+**Del resaltado de estancados ([4.7](docs/08-plan-de-desarrollo.md#tarea-4-7)):**
+
+- [ ] 🔒 **La tarea se cerró sin comportamiento nuevo, y conviene saberlo.** Las tareas [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) y [4.6](docs/08-plan-de-desarrollo.md#tarea-4-6) se la
+      habían llevado por delante —una escribió la regla porque su respuesta necesitaba el campo, la
+      otra la pintó porque su fila lo traía—, así que lo único que quedaba era que el ámbar estuviera
+      protegido. **Si el resaltado tenía que ser algo más que la píldora, lo dice quien dirige**
+- [ ] **No se agregó un filtro «solo estancados», que es la otra lectura de «resaltado».** Serían una
+      operación nueva del contrato y un PR en la especificación antes, y el [10 §4.2](docs/10-ux-y-mockups.md#42-pedidos) fija a
+      propósito el desplegable de los cinco estados: «por entregar» son tres a la vez, y decidir
+      cuáles caben ahí sería decidir en la pantalla. Encontrar los estancados es hoy recorrer la lista
+- [ ] **Tampoco se enseña cuántos días lleva**, que es lo que el mockup dibuja en el resumen del
+      Inicio. El contrato manda `estancado` como un sí o un no, y contar los días en el front sería
+      decidir ([ADR-018](docs/adr/ADR-018-front-sin-decisiones.md)): enseñar «18 días» pide un campo nuevo, y ese es el Inicio y otro sprint
 
 **De los activos ([7.1](docs/08-plan-de-desarrollo.md#tarea-7-1)), en su mitad API:**
 
@@ -2103,7 +2128,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **La ruta es parte de la tarea, aunque el 08 diga «caso de uso».** Los cuatro códigos que el
       contrato reserva para cobrar un anticipo —`40930`, `42230`, `42233` y `42234`— esperaban a la
       [4.4](docs/08-plan-de-desarrollo.md#tarea-4-4) para emitirse, y sin ruta un caso de uso no emite nada
-- [ ] ⚡ **`estancado` ya se decide en el dominio, aunque el resaltado sea la [4.7](docs/08-plan-de-desarrollo.md#tarea-4-7).** La respuesta del
+- [ ] 🔒 **`estancado` ya se decide en el dominio, aunque el resaltado sea la [4.7](docs/08-plan-de-desarrollo.md#tarea-4-7).** La respuesta del
       cobro devuelve el pedido entero y el contrato exige el campo, así que un `false` fijo habría
       mentido con un pedido que lleva un mes esperando. La regla que se escribió: **el anticipo
       vigente más viejo tiene 15 días o más y el pedido no ha llegado a un estado final**. Una
