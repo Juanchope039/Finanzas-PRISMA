@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-28 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-28 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -54,11 +54,11 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 3](#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 8 | 0 | 3 | 3 |
-| [Sprint 6](#sprint-6) · Reportes y KPIs | 10 | 1 | 0 | 9 | 14,5 |
+| [Sprint 6](#sprint-6) · Reportes y KPIs | 10 | 2 | 0 | 8 | 12,5 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 6 | 0 | 3 | 4,5 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **153** | **116** | **0** | **37** | **48** |
+| **Total** | **153** | **117** | **0** | **36** | **46** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -202,21 +202,21 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.2](docs/08-plan-de-desarrollo.md#tarea-6-2) · [6.5](docs/08-plan-de-desarrollo.md#tarea-6-5) · [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6) · [6.7](docs/08-plan-de-desarrollo.md#tarea-6-7) · [7.5](docs/08-plan-de-desarrollo.md#tarea-7-5) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5) |
-| **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
+| **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [6.3](docs/08-plan-de-desarrollo.md#tarea-6-3) · [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **37 tareas y 48 días de trabajo** de 153 tareas del plan.
+Quedan **36 tareas y 46 días de trabajo** de 153 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 7,1 semanas | **10,1 semanas** |
-| 2 | 4,3 semanas | **7,3 semanas** |
+| 1 | 6,8 semanas | **9,8 semanas** |
+| 2 | 4,0 semanas | **7,0 semanas** |
 | 3 | 3,8 semanas | **6,8 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -924,13 +924,28 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 <a id="sprint-6"></a>**[Sprint 6](docs/08-plan-de-desarrollo.md#sprint-6) · Reportes y KPIs**
 
-- [ ] ⚡ [**6.1**](docs/08-plan-de-desarrollo.md#tarea-6-1) Utilidad causada, flujo de caja y caja libre · API
-- [ ] 🔒 [**6.2**](docs/08-plan-de-desarrollo.md#tarea-6-2) Pruebas con el ejemplo de septiembre completo · API
-- [ ] 🔒 [**6.3**](docs/08-plan-de-desarrollo.md#tarea-6-3) Dashboard con las tres cifras · Front
+- [x] [**6.1**](docs/08-plan-de-desarrollo.md#tarea-6-1) Utilidad causada, flujo de caja y caja libre · API —
+      **las tres cifras del [05 §1](docs/05-reglas-financieras.md) ya se calculan.** `CalcularUtilidadCausada` arma el estado de
+      resultados del mes —ingresos causados, costo directo, gastos operativos y el pro-labore que va
+      dentro de ellos— y `CalcularFlujoDeCaja`, las entradas contra las salidas; **la caja libre no
+      la hizo esta tarea**, la había hecho la [7.4](docs/08-plan-de-desarrollo.md#tarea-7-4), y aquí se reutiliza tal cual. Los cuatro son
+      funciones puras, sin base y sin Spring, y **ninguna tiene un `if` por tipo de movimiento**: el
+      signo lo decide `TipoDeMovimiento` y lo anulado ya aporta cero. Las pruebas reproducen
+      septiembre del [05 §12](docs/05-reglas-financieras.md#12-ejemplo-integral--septiembre-completo), que el [12 §4](docs/12-pruebas-y-calidad.md#4-juego-de-datos-de-prueba-oficial) declara juego de datos oficial: $1.258.000 de
+      utilidad causada con 16,0 % de margen neto, y −$1.255.000 de flujo el mismo mes, con las dos
+      invariantes del [12 §4.2](docs/12-pruebas-y-calidad.md#4-juego-de-datos-de-prueba-oficial) que le tocan. **Lo que decidió**: que el ingreso causado sale del pedido
+      entregado **y además** del `ingreso` que no es de ningún pedido —el apunte de la entrega lleva
+      `pedido_id`, así que contar los dos no duplica y la venta de mostrador deja de perderse—, y
+      que un gasto de categoría de costo directo, o atado a un pedido, no vuelve a restar en los
+      operativos. **No trae endpoint**: `POST /api/v0/consultas/tablero` junta además los doce meses
+      ([6.4](docs/08-plan-de-desarrollo.md#tarea-6-4)), las alertas ([6.7](docs/08-plan-de-desarrollo.md#tarea-6-7)) y los sobres ([7.8](docs/08-plan-de-desarrollo.md#tarea-7-8)), que todavía no existen. `prisma_api` en `0.32.0`,
+      con 27 pruebas nuevas ([§10](#10-decisiones-de-construcción-que-conviene-revisar))
+- [ ] ⚡ [**6.2**](docs/08-plan-de-desarrollo.md#tarea-6-2) Pruebas con el ejemplo de septiembre completo · API
+- [ ] ⚡ [**6.3**](docs/08-plan-de-desarrollo.md#tarea-6-3) Dashboard con las tres cifras · Front
 - [ ] 🔒 [**6.4**](docs/08-plan-de-desarrollo.md#tarea-6-4) Gráfico de 12 meses · Front
-- [ ] 🔒 [**6.5**](docs/08-plan-de-desarrollo.md#tarea-6-5) Reporte mensual y anual con promedio de ganancias · API, Front
-- [ ] 🔒 [**6.6**](docs/08-plan-de-desarrollo.md#tarea-6-6) Punto de equilibrio · API
-- [ ] 🔒 [**6.7**](docs/08-plan-de-desarrollo.md#tarea-6-7) Alertas: caja libre negativa, anticipos y pedidos estancados · API, Front
+- [ ] ⚡ [**6.5**](docs/08-plan-de-desarrollo.md#tarea-6-5) Reporte mensual y anual con promedio de ganancias · API, Front
+- [ ] ⚡ [**6.6**](docs/08-plan-de-desarrollo.md#tarea-6-6) Punto de equilibrio · API
+- [ ] ⚡ [**6.7**](docs/08-plan-de-desarrollo.md#tarea-6-7) Alertas: caja libre negativa, anticipos y pedidos estancados · API, Front
 - [ ] 🔒 [**6.8**](docs/08-plan-de-desarrollo.md#tarea-6-8) Cierre mensual con snapshot inmutable · Base, API
 - [ ] 🔒 [**6.9**](docs/08-plan-de-desarrollo.md#tarea-6-9) Inicio de solo consulta y su descarga en CSV o PDF ([RF-95](docs/03-requisitos-y-bdd.md#rf-95), [RF-96](docs/03-requisitos-y-bdd.md#rf-96)) · Front, API
 - [x] [**6.10**](docs/08-plan-de-desarrollo.md#tarea-6-10) Contrato de reportes, indicadores, alertas y cierre mensual · Contrato —
@@ -996,7 +1011,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       al retiro: un retiro que se pasa responde `40990` hasta que llegue confirmado. El «no» a
       Operación es de la base. Estrena el `40990`, el `42290`, el `42291` y el `42292`. `prisma_api`
       en `0.22.0`, con 33 pruebas nuevas y 11 contra la base local ([§10](#10-decisiones-de-construcción-que-conviene-revisar))
-- [ ] 🔒 [**7.5**](docs/08-plan-de-desarrollo.md#tarea-7-5) Cálculo de patrimonio · API
+- [ ] ⚡ [**7.5**](docs/08-plan-de-desarrollo.md#tarea-7-5) Cálculo de patrimonio · API
 - [ ] 🔒 [**7.6**](docs/08-plan-de-desarrollo.md#tarea-7-6) Alerta de descapitalización a 12 meses · API
 - [x] [**7.7**](docs/08-plan-de-desarrollo.md#tarea-7-7) Los cuatro sobres con historial · API, Front — **las dos mitades
       aterrizaron**. La API: `PUT /api/v0/sobres/{id}` define desde hoy cómo se reparte cada peso que
@@ -1018,7 +1033,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       pone la pantalla**, los de la tarjeta del Inicio, porque el contrato manda cuatro claves
       sueltas y ninguna presentación ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). El panel no estaba dibujado y el mockup lo
       estrena. `prisma_front` en `0.22.0+27`, con 14 pruebas nuevas
-- [ ] 🔒 [**7.8**](docs/08-plan-de-desarrollo.md#tarea-7-8) Panel de sobres: asignado contra usado · Front
+- [ ] ⚡ [**7.8**](docs/08-plan-de-desarrollo.md#tarea-7-8) Panel de sobres: asignado contra usado · Front
 - [x] [**7.9**](docs/08-plan-de-desarrollo.md#tarea-7-9) Contrato de inversiones, aportes, retiros, pro-labore y sobres · Contrato — v0.13.0:
       diez operaciones, veintitrés esquemas y cinco códigos que estrenan el rango `90`–`99`. El
       retiro se registra de una vez y se parte solo si no se dice cómo: pro-labore hasta completar
@@ -1563,6 +1578,33 @@ a `anon`.
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
 
+**De las tres cifras ([6.1](docs/08-plan-de-desarrollo.md#tarea-6-1)):**
+
+- [ ] **Nada dice qué categoría de gasto es costo directo, y el estado de resultados lo necesita.**
+      El [05 §12.1](docs/05-reglas-financieras.md#12-ejemplo-integral--septiembre-completo) descuenta el costo de los pedidos entregados —$3.612.000— y **no** la compra de
+      insumos del mes —$3.900.000—, que solo está en el flujo de caja. Si los dos entraran, el costo
+      se restaría dos veces. `categorias` tiene `es_fijo` y nada más, así que hoy el conjunto llega
+      vacío y **los insumos cuentan como gasto operativo**: la utilidad causada sale más baja de lo
+      que el documento dice. Hace falta una marca en `categorias`, con el molde de `es_fijo`, y es
+      carril Base: va antes que la API que la use ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)). **Conviene escribirlo también en el 05**,
+      que es donde vive la fórmula
+- [ ] **`pedidos.costo_directo` se queda en cero, así que el costo directo suma cero.** La columna
+      existe desde el esquema inicial, y `PedidosEnPostgres` no la escribe al registrar; tampoco
+      `pedido_lineas.costo_unitario` ni `horas_unitarias`, que la [4.3](docs/08-plan-de-desarrollo.md#tarea-4-3) dejó anotadas. El dominio las
+      suma bien: lo que falta es quién las llena, con el costeo vigente de cada producto el día del
+      pedido, que es lo que trae la [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5). Sin eso, el margen bruto del tablero será el ingreso entero
+- [ ] **La entrega parcial no causa venta, y el [CU-07 A2](docs/02-casos-de-uso.md#cu-07) dice que causaría en proporción.** Ninguna
+      columna guarda qué parte se entregó, así que contar el pedido entero causaría de más y no
+      contarlo, de menos. Se cuenta cero, que es lo que no miente, y queda a la vista
+- [ ] **La nómina no viaja en el estado de resultados, y el contrato la pide.** `MesDelReporte` trae
+      `nomina` dentro de los gastos operativos, pero un pago de nómina se reconoce por estar en
+      `nomina_detalle`, que es del [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8): el dominio no lo distingue de cualquier otro gasto. Lo
+      necesitará la [6.5](docs/08-plan-de-desarrollo.md#tarea-6-5)
+- [ ] **El ingreso sin pedido entra en la utilidad causada, y el [05 §9.1](docs/05-reglas-financieras.md#9-catálogo-de-kpis) solo nombra los pedidos.**
+      El registro rápido deja anotar una venta que nunca fue pedido, y esa venta existe: dejarla
+      fuera haría que el libro y el tablero contaran cosas distintas. No duplica, porque el apunte
+      de la entrega lleva `pedido_id`
+
 **De la factura del pedido ([4.8](docs/08-plan-de-desarrollo.md#tarea-4-8)), en su mitad API:**
 
 - [ ] **Subir un archivo es un solo caso de uso con dos padres, y no dos clases.** `AdjuntarSoporte`
@@ -1786,7 +1828,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       monto. Por cada categoría fija se toma lo pagado el mes anterior y se le resta lo pagado en
       este, sin bajar de cero. Se descartó dejarlos en cero hasta la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1), que subía la caja libre
       y retrasaba el aviso del retiro. **Conviene escribirlo en el 05**, que es donde vive la fórmula
-- [ ] ⚡ **La caja libre la construyó el retiro, y no la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1).** El contrato del retiro la pide
+- [ ] 🔒 **La caja libre la construyó el retiro, y no la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1).** El contrato del retiro la pide
       —`cajaLibre` en la propuesta y el `40990`— y la 6.1 dependía de la 7.4: era un círculo, y el
       [§10](#10-decisiones-de-construcción-que-conviene-revisar) ya lo había anotado al acordar el capital. `CalcularCajaLibre` queda en el dominio para que
       la 6.1 la reutilice en el tablero y la [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8) en el cierre
