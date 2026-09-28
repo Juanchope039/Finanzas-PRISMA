@@ -764,6 +764,10 @@ tbody tr.fila-detalle:hover{background:none}
 .mov-archivo{font-family:var(--mono); font-size:.68rem; color:var(--muted)}
 .mov-sin{font-size:.8rem; color:var(--faint)}
 .mov-det .botones{display:flex; gap:8px; flex-wrap:wrap; margin-left:auto; align-self:flex-end}
+/* La fila abierta del pedido usa el mismo molde y solo cambia de tono: es la fila seleccionada
+   de la tabla, y el acento la ata a ella. */
+.acciones-pedido > td{padding:0 0 12px}
+.acciones-pedido .mov-det{background:var(--accent-soft); border-color:var(--accent)}
 .confirma p.hermano{color:var(--text); font-weight:600}
 .libro-pie{display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; margin-top:14px}
 .libro-pie .grow{flex:1}
@@ -1207,7 +1211,8 @@ tbody tr.fila-detalle:hover{background:none}
         <div class="panel">
           <div class="panel-head">
             <h2 class="grow">Los pedidos, por fecha</h2>
-            <span class="eyebrow" data-ger>Toca un pedido para modificarlo</span>
+            <span class="eyebrow" data-ger>Toca un pedido para su factura o para modificarlo</span>
+            <span class="eyebrow" data-ope>Toca un pedido para ver o adjuntar su factura</span>
             <!-- Los tres filtros que acepta POST /api/v0/consultas/pedidos (tarea 4.6): estado,
                  cliente y rango de fechas. El estado es uno de los cinco del contrato y no un grupo:
                  «por entregar» son tres estados a la vez, y decidir aquí cuáles sería decidir en la
@@ -2368,7 +2373,9 @@ function pedidosDeCliente(id){
 
 var PEDIDOS = [
   {id:'P-0287', fecha:'2026-09-24', entrega:'2026-10-09', clienteId:'c1',
-   lineas:[{prodId:3, cant:60}, {prodId:5, cant:12}], anticipo: 540000, estado:'en_proceso',  baja:null},
+   lineas:[{prodId:3, cant:60}, {prodId:5, cant:12}], anticipo: 540000, estado:'en_proceso',  baja:null,
+   facturas:[{tipo:'foto', nombre:'factura-P-0287.jpg', peso:'486 KB',
+              src:reciboSvg('PRISMA', 'FACTURA DE VENTA FV-0287', '$1.344.000')}]},
   {id:'P-0286', fecha:'2026-09-22', entrega:'2026-10-06', clienteId:'c2',
    lineas:[{prodId:1, cant:45}], anticipo: 720000, estado:'en_proceso',  baja:null},
   {id:'P-0284', fecha:'2026-09-20', entrega:'2026-10-04', clienteId:'c3',
@@ -2376,7 +2383,8 @@ var PEDIDOS = [
   {id:'P-0271', fecha:'2026-08-26', entrega:'2026-08-28', clienteId:'c4',
    lineas:[{prodId:1, cant:36}], anticipo: 576000, estado:'en_proceso', baja:null},
   {id:'P-0283', fecha:'2026-09-18', entrega:'2026-09-18', clienteId:'c5',
-   lineas:[{prodId:2, cant:60}], anticipo:      0, estado:'entregado', baja:null},
+   lineas:[{prodId:2, cant:60}], anticipo:      0, estado:'entregado', baja:null,
+   facturas:[{tipo:'pdf', nombre:'factura-P-0283.pdf', peso:'96 KB'}]},
   {id:'P-0281', fecha:'2026-09-15', entrega:'2026-09-15', clienteId:'c6',
    lineas:[{prodId:4, cant:28}], anticipo:      0, estado:'entregado', baja:null},
   {id:'P-0279', fecha:'2026-09-11', entrega:'2026-09-11', clienteId:'c7',
@@ -2984,7 +2992,6 @@ var pedidoSeleccionado = null;
 function tablaPedidos(){
   var cuerpo = document.getElementById('tb-pedidos');
   if (!cuerpo) return;
-  var ger = (rol === 'gerencia');
   /* Igual que en tablaCargos(): el innerHTML se rehace y el panel de confirmación abierto se
      va con él, así que hay que soltar la referencia antes o cerrarPanelFila() intentaría
      quitar una fila que ya no tiene padre. */
@@ -3004,10 +3011,10 @@ function tablaPedidos(){
   cuerpo.innerHTML = lista.map(function(p){
     var total = totalPedido(p);
     var saldo = total - p.anticipo;
-    var sel   = (ger && pedidoSeleccionado === p.id);
+    var sel   = (pedidoSeleccionado === p.id);
     return '<tr data-pedido="' + p.id + '"' +
-      (ger ? ' tabindex="0" role="button" aria-expanded="' + (sel ? 'true' : 'false') +
-             '" style="cursor:pointer' + (sel ? '; background:var(--accent-soft)' : '') + '"' : '') +
+      ' tabindex="0" role="button" aria-expanded="' + (sel ? 'true' : 'false') +
+      '" style="cursor:pointer' + (sel ? '; background:var(--accent-soft)' : '') + '"' +
       '><td class="mono">' + p.id + '</td><td class="mono">' + fechaCorta(p.fecha) +
       '</td><td>' + enTexto(nombreDeCliente(p)) + '</td><td style="color:var(--muted)">' + enTexto(detallePedido(p)) +
       '</td><td class="r r-mid">' + fmt(total) +
@@ -3028,21 +3035,21 @@ function tablaPedidos(){
       : 'Todavía no hay pedidos.';
   }
 
-  if (ger){
-    $$('#tb-pedidos tr[data-pedido]').forEach(function(fila){
-      var abrir = function(e){
-        if (e.target.closest('button')) return;
-        var id = fila.getAttribute('data-pedido');
-        pedidoSeleccionado = (pedidoSeleccionado === id) ? null : id;
-        tablaPedidos();
-      };
-      fila.addEventListener('click', abrir);
-      fila.addEventListener('keydown', function(e){
-        if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); abrir(e); }
-      });
+  $$('#tb-pedidos tr[data-pedido]').forEach(function(fila){
+    var abrir = function(e){
+      if (e.target.closest('button')) return;
+      var id = fila.getAttribute('data-pedido');
+      pedidoSeleccionado = (pedidoSeleccionado === id) ? null : id;
+      tablaPedidos();
+    };
+    fila.addEventListener('click', abrir);
+    fila.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); abrir(e); }
     });
-    conectarAcciones();
-  }
+  });
+  conectarAcciones();
+  var abierta = cuerpo.querySelector('.acciones-pedido .mov-det');
+  if (abierta) ajustarAlVisible(abierta);
   tablaPedidosResumen();
   tablaAnulados();
 }
@@ -3674,22 +3681,80 @@ function guardarSobres(){
   document.getElementById('sb-guardar').addEventListener('click', guardarSobres);
 })();
 
+/* La fila abierta del pedido. La factura la ve y la sube cualquiera de los dos tipos de usuario
+   —el contrato dice que adjuntan los dos—, y por eso la fila se abre para los dos. Modificar,
+   entregar y anular siguen siendo de Gerencia, y quien lo impide de verdad es la base. */
 function filaAcciones(p){
-  return '<tr class="acciones-pedido"><td colspan="8" style="background:var(--accent-soft); padding:10px 12px">' +
-    '<div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">' +
-    '<span style="font-size:.82rem"><b>' + p.id + '</b> · ' + enTexto(nombreDeCliente(p)) + '</span>' +
-    '<span style="flex:1"></span>' +
-    (p.estado !== 'entregado'
-      ? '<button class="ghost" data-entregar="' + p.id + '">Marcar entregado</button>' : '') +
-    '<button class="ghost" data-modificar="' + p.id + '">Modificar</button>' +
-    '<button class="ghost" data-anular="' + p.id + '" style="color:var(--neg)">Anular pedido</button>' +
-    '<button class="ghost" data-cerrar="1">Cerrar</button>' +
-    '</div></td></tr>';
+  var ger = (rol === 'gerencia');
+  return '<tr class="acciones-pedido"><td colspan="8">' +
+    '<div class="mov-det">' +
+    '<div class="mov-det-datos"><span><b>' + p.id + '</b> · ' +
+      enTexto(nombreDeCliente(p)) + '</span></div>' +
+    facturasDelPedido(p) +
+    '<div class="botones">' +
+    '<button type="button" class="ghost" data-adjuntar="' + p.id + '">Adjuntar factura</button>' +
+    '<span class="pill p-mut" data-adjuntar-aviso hidden>' +
+    'En el prototipo no se adjunta ningún archivo</span>' +
+    (ger && p.estado !== 'entregado'
+      ? '<button type="button" class="ghost" data-entregar="' + p.id + '">Marcar entregado</button>' : '') +
+    (ger ? '<button type="button" class="ghost" data-modificar="' + p.id + '">Modificar</button>' : '') +
+    (ger ? '<button type="button" class="ghost" data-anular="' + p.id +
+           '" style="color:var(--neg)">Anular pedido</button>' : '') +
+    '<button type="button" class="ghost" data-cerrar="1">Cerrar</button>' +
+    '</div></div></td></tr>';
+}
+
+/* Las facturas que ya tiene el pedido llegan en su propio campo del listado (tarea 4.8, RF-27),
+   asi que verlas no pide otra consulta. Bajar una si: el archivo sale de la API y nunca directo
+   del almacenamiento (07 §1). Se visten con el mismo bloque que el soporte del libro. */
+function facturasDelPedido(p){
+  var fs = p.facturas || [];
+  return '<div class="mov-soporte"><span class="eyebrow">Factura</span>' +
+    (fs.length ? fs.map(archivoDeFactura).join('') : '<span class="mov-sin">Sin factura</span>') +
+    '</div>';
+}
+
+/* La foto se agranda al tocarla y el PDF se nombra: abrirlo es del navegador, y en el prototipo
+   no hay ningun archivo que abrir. */
+function archivoDeFactura(f){
+  if (f.tipo === 'foto'){
+    return '<button type="button" class="mov-foto" aria-expanded="false"' +
+      ' aria-label="Agrandar la factura del pedido">' +
+      '<img src="' + f.src + '" alt="Factura del pedido: ' + enAtributo(f.nombre) + '"></button>' +
+      '<span class="mov-archivo">' + enTexto(f.nombre) + ' · ' + f.peso + '</span>';
+  }
+  return '<span class="mov-archivo">📄 ' + enTexto(f.nombre) + ' · ' + f.peso + '</span>' +
+    '<button type="button" class="ghost" data-factura-pdf>Abrir</button>' +
+    '<span class="pill p-mut" data-factura-pdf-aviso hidden>' +
+    'En el prototipo no se abre ningún archivo</span>';
 }
 
 function conectarAcciones(){
   $$('#tb-pedidos [data-cerrar]').forEach(function(b){
     b.addEventListener('click', function(){ pedidoSeleccionado = null; tablaPedidos(); });
+  });
+  /* Adjuntan los dos tipos de usuario: lo dice el contrato, y esconderlo seria decidir aqui un
+     permiso (ADR-018). Como la foto del recibo, el boton dice que en el prototipo no sube nada:
+     prometer un adjunto que no ocurre es peor que no ofrecerlo. */
+  $$('#tb-pedidos [data-adjuntar]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var a = b.parentNode.querySelector('[data-adjuntar-aviso]');
+      if (a) a.hidden = false;
+    });
+  });
+  $$('#tb-pedidos .mov-foto').forEach(function(b){
+    b.addEventListener('click', function(){
+      var grande = b.getAttribute('aria-expanded') !== 'true';
+      b.setAttribute('aria-expanded', grande ? 'true' : 'false');
+      b.setAttribute('aria-label', grande ? 'Achicar la factura del pedido'
+                                          : 'Agrandar la factura del pedido');
+    });
+  });
+  $$('#tb-pedidos [data-factura-pdf]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var a = b.parentNode.querySelector('[data-factura-pdf-aviso]');
+      if (a) a.hidden = false;
+    });
   });
   $$('#tb-pedidos [data-modificar]').forEach(function(b){
     b.addEventListener('click', function(){ abrirFormPedido(b.getAttribute('data-modificar')); });

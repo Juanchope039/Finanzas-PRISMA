@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-27 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [5.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-28 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -268,6 +268,24 @@ entonces, en lugar de la tabla, va el aviso que manda la API, como en el libro (
 
 Si no queda ninguna fila, la tabla lo dice; y solo habla de filtros cuando hay alguno puesto,
 porque sin ellos mandaría a buscar uno que no existe.
+
+#### La factura vive en la fila abierta, y la adjuntan los dos tipos de usuario
+
+**Tocar una fila la abre debajo**, como en el libro ([§4.3](#43-movimientos)): dice de qué pedido y de qué cliente es,
+enseña la factura y trae las acciones. La cierran «Cerrar» y Escape.
+
+**Se abre para los dos tipos de usuario**, porque la factura la adjuntan los dos ([RF-27](03-requisitos-y-bdd.md#rf-27)). Esconderla
+detrás de un panel de Gerencia sería decidir un permiso en la pantalla ([ADR-018](adr/ADR-018-front-sin-decisiones.md)), y quien lo
+impediría de verdad es la base. Modificar, marcar entregado y anular siguen siendo de Gerencia.
+
+**Las facturas que ya tiene el pedido llegan con él**, así que verlas no pide otra consulta. Bajar
+una sí: el archivo sale de la API y nunca del almacenamiento ([07 §1](07-arquitectura.md#1-stack)), y viaja en base64 dentro del
+sobre, igual que el soporte de un movimiento. La foto se agranda al tocarla; del PDF se dice cuál
+es, porque abrirlo es del navegador. Un pedido sin factura lo dice.
+
+**La pantalla no juzga el archivo**: ni el peso ni el tipo. El techo de 5 MB y los cuatro tipos que
+se admiten los impone la API, y lo que se lee cuando rechaza es su mensaje, tal cual llegó. La clave
+de la petición es el id de la factura, así que reintentar sube el mismo archivo y no otro ([ADR-020](adr/ADR-020-idempotencia.md)).
 
 #### Tomar un pedido son tres formularios, y no uno
 
