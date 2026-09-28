@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.15.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-27 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.16.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-27 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -2513,6 +2513,32 @@ pagada sin descontar el adelanto.
 | La función `SECURITY DEFINER` del [§5.4](#54-auditoría-por-triggers), usada en el [§5.7](#57-reactivar-y-revertir-escrituras-compensatorias) | Aplica el `UPDATE` que deshace un cambio y escribe la fila `cambio_revertido` con su `revierte_a` | Una bitácora que anota una reversión que no ocurrió, o al revés |
 | `fn_anular_movimiento(p_movimiento UUID, p_motivo motivo)` | Anula el movimiento y el registro que va con él —el anticipo, el activo, el aporte o el retiro, o el adelanto—, los dos con el mismo motivo, el mismo autor y el mismo instante ([§5.2](#52-anulación-lógica-con-trazabilidad)) | Un anticipo, un activo o un adelanto que siguen contando una plata que ya salió de las cifras, o una anulación que se queda a medias |
 
+**La primera la escribió la tarea [4.5](08-plan-de-desarrollo.md#tarea-4-5)**, y hace esto, en este orden:
+1. **Toma el pedido con `SELECT … FOR UPDATE`**, y no lo entrega si no existe, si está anulado o si
+   ya está en uno de los dos estados finales. El `FOR UPDATE` cierra la carrera de dos entregas
+   del mismo pedido a la vez.
+2. **Deja el pedido `entregado` con su `fecha_entrega_real`**, que es la fecha que causa la venta
+   ([RN-06](03-requisitos-y-bdd.md#rn-06)). Sin fecha, hoy en Bogotá; una futura la rechaza, porque causaría la venta de un
+   mes que todavía no llega.
+3. **Devenga sus anticipos vigentes**, los que aún no lo están: el pasivo se libera y lo cobrado
+   por adelantado ya es venta ([RN-05](03-requisitos-y-bdd.md#rn-05)).
+4. **Escribe el `ingreso` por el saldo**, cuando hay cuenta que lo reciba y queda saldo. Sin
+   cuenta se entrega igual y el saldo queda por cobrar ([CU-07 A1](02-casos-de-uso.md#cu-07)).
+
+**El movimiento vale el saldo y no el valor total**, y la venta causada la causa el pedido y no el
+apunte. Los ingresos causados y el costo directo del [05 §9.1](05-reglas-financieras.md#9-catálogo-de-kpis) son sumas sobre los pedidos
+entregados del período, así que causar el costo no escribe nada: el insumo ya se registró el día
+que se compró.
+
+> **Y el saldo de la cuenta lo exige.** El anticipo ya entró como `anticipo_recibido`, que sube la
+> caja; un `ingreso` por el valor total la subiría por segunda vez y la cuenta diría tener una
+> plata que nadie le depositó. Es el ejemplo del [05 §3.2](05-reglas-financieras.md#32-el-caso-que-rompe-la-intuición-el-pedido-que-cruza-de-mes).
+
+Sus tres rechazos son `RAISE` con texto en español, y ese texto es contrato: el pedido ya cerrado
+es el `40931`, el que no existe o está anulado es el `40400`, y la fecha futura es el `42234`.
+**Que la fecha no sea anterior a la del pedido y que la cuenta esté vigente los sigue comprobando
+la API**, porque son errores de campo y van en `data.errores`.
+
 La tercera **ya está en este documento**: es la misma función del [§5.4](#54-auditoría-por-triggers) que escribe los eventos de
 acceso y administración. No se duplica aquí; se nombra para dejar claro que pertenece a esta
 lista y obedece las mismas reglas.
@@ -2683,7 +2709,7 @@ mismas reglas que la base— solo aguanta si esta prueba corre en cada despliegu
 capas que deciden se separan y ninguna avisa.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.22.1") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-020](adr/ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.23.1") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-020](adr/ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
