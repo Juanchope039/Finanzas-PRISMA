@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -157,6 +157,17 @@ así que esta tarea estrena la **fila abierta del pedido**, que era solo de Gere
 para los dos tipos de usuario, porque la factura la adjuntan los dos ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). **La factura se encola antes
 de salir a la red**, como la foto: lo que se toma en el taller no se pierde porque en ese momento
 no hubiera señal. **Con ella se cierra el [Sprint 4](docs/08-plan-de-desarrollo.md#sprint-4)**, que era el único con una tarea suelta.
+
+**El año mes a mes ya se puede pedir, y todavía no hay dónde verlo.** La mitad API de la
+[6.5](docs/08-plan-de-desarrollo.md#tarea-6-5) está hecha: `POST /api/v0/consultas/reporte` devuelve los doce meses, el promedio de
+ganancias del [05 §9.1](docs/05-reglas-financieras.md#91-resultado) y el punto de equilibrio del [05 §10](docs/05-reglas-financieras.md#10-punto-de-equilibrio). **Un mes cerrado no se
+vuelve a calcular**: sale tal cual de `cierres_mensuales` ([RN-16](docs/03-requisitos-y-bdd.md#rn-16)), que es lo que la [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8) va a
+llenar; los abiertos se calculan, y el que no tiene registro no viaja. **El promedio se divide entre
+los meses cerrados**, no entre los que vinieron, que es lo que el [CU-14](docs/02-casos-de-uso.md#cu-14) pide, y sin ningún mes cerrado
+no hay promedio ni proyección. **El «no» a Operación lo pone el caso de uso y no la base**, porque
+el reporte se arma de tablas que leen los dos tipos de usuario: es el `40300` que el contrato ya
+declaraba para esta ruta. **Y el punto de equilibrio es de la [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6)**, que el contrato acordado mete
+dentro de esta respuesta ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). **Falta su pantalla**, del carril Front, y con ella se marca la tarea.
 
 **Lo siguiente, en cuanto alguien lo tome:** cerrar la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) destrabó lo que la estaba
 esperando. En el carril API **la prueba de permisos con sesión real ya está** ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)), y con ella
@@ -997,7 +1008,22 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       es una sola imagen con su nombre**, que es el `role="img"` del mockup: veinticuatro cifras
       leídas una por una y sin poder recorrerlas no dicen nada. `prisma_front` en `0.26.0+32`, con 43
       pruebas nuevas y 646 en total
-- [ ] ⚡ [**6.5**](docs/08-plan-de-desarrollo.md#tarea-6-5) Reporte mensual y anual con promedio de ganancias · API, Front
+- [ ] ⚡ [**6.5**](docs/08-plan-de-desarrollo.md#tarea-6-5) Reporte mensual y anual con promedio de ganancias · API, Front — **la
+      mitad API está hecha**: `POST /api/v0/consultas/reporte` arma el año mes a mes, con el promedio
+      de ganancias del [05 §9.1](docs/05-reglas-financieras.md#91-resultado) y su proyección a doce meses ([BDD-14-1](docs/03-requisitos-y-bdd.md#bdd-14-1)). **Un mes cerrado no se
+      recalcula nunca**: viene tal cual de `cierres_mensuales`, que es la foto que congela la [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8)
+      ([RN-16](docs/03-requisitos-y-bdd.md#rn-16)); los abiertos los calcula `CalcularUtilidadCausada`, y **el mes sin un solo registro no
+      viaja**, para que un año a medias no pinte diez meses en cero. **El promedio se divide entre los
+      meses cerrados** y no entre los que trae la lista, que es lo que dice el [CU-14](docs/02-casos-de-uso.md#cu-14): sin ninguno
+      cerrado no hay promedio ni proyección, y la respuesta lo omite. **El rechazo a Operación lo
+      decide el caso de uso**, no la base, porque el reporte se arma de tablas que leen los dos tipos
+      de usuario y RLS no tiene a qué decirle que no: es el `40300` que el contrato ya declaraba para
+      esta ruta. **Estrena un código**, el `42260` para un año fuera de 2020..2100, que el contrato
+      declaraba y el catálogo no tenía. **Y arregla un silencio**: `vigentes()` nunca traía la
+      categoría ni el pedido de cada movimiento, así que los gastos fijos comprometidos de la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1)
+      salían siempre en cero. `prisma_api` en 0.34.0, con 1444 pruebas sin base —veintinueve nuevas— y 340
+      contra ella —siete nuevas— ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). **Falta la pantalla**, del carril Front, y la tarea se marca
+      cuando aterricen las dos mitades ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración))
 - [ ] ⚡ [**6.6**](docs/08-plan-de-desarrollo.md#tarea-6-6) Punto de equilibrio · API
 - [ ] ⚡ [**6.7**](docs/08-plan-de-desarrollo.md#tarea-6-7) Alertas: caja libre negativa, anticipos y pedidos estancados · API, Front
 - [ ] 🔒 [**6.8**](docs/08-plan-de-desarrollo.md#tarea-6-8) Cierre mensual con snapshot inmutable · Base, API
@@ -4245,6 +4271,40 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       el documento redondea a uno, y la prueba afirma los dos: el exacto y el del documento. Es lo
       mismo que ya pasa con el 16,03 % de margen neto que el [§12.1](docs/05-reglas-financieras.md#121-estado-de-resultados-causación) llama 16,0 %, y **conviene que el
       documento diga que redondea**, porque la cifra del tablero va a traer los dos decimales
+
+**Del año mes a mes ([6.5](docs/08-plan-de-desarrollo.md#tarea-6-5)), en su mitad API:**
+
+- [ ] ⚡ **El punto de equilibrio es de la [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6), y el contrato lo mete dentro de la respuesta de la
+      [6.5](docs/08-plan-de-desarrollo.md#tarea-6-5).** `Reporte` lo declara desde el `0.17.0`, así que la ruta no se podía servir sin él
+      y la mitad API lo trae: los gastos fijos del mes, el margen de contribución, las ventas
+      necesarias y los pedidos necesarios del [05 §10](docs/05-reglas-financieras.md#10-punto-de-equilibrio). **Lo que queda para la [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6) es la fila del
+      [05 §12.5](docs/05-reglas-financieras.md#125-indicadores-del-mes) y el ticket promedio como indicador del mes**, no el cálculo, y quien dirige decide si
+      la tarea se recorta o si se marca con esta
+- [ ] **Los gastos fijos mensuales salen de promediar lo registrado, porque nadie los declara.** El
+      [05 §10](docs/05-reglas-financieras.md#10-punto-de-equilibrio) los pide «del mes» y ninguna tabla guarda un presupuesto: se suman los gastos de categoría
+      `es_fijo` más el pro-labore del año y se dividen entre los meses con registro. **Un mes suelto
+      —un seguro anual, un arriendo pagado doble— mueve la cifra de todos**, y la alternativa sería
+      una tabla de gastos fijos declarados, que ningún documento pide
+- [ ] **Un mes cerrado no dice cuáles de sus gastos eran fijos.** `cierres_mensuales` congela las
+      cifras del estado de resultados, no sus categorías, así que el promedio de gastos fijos se arma
+      solo con los movimientos vigentes. Mientras la [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8) no exista no se nota; después, un año con
+      meses cerrados calcula su punto de equilibrio con menos meses de los que muestra
+- [ ] **La nómina de un mes abierto va en cero.** El contrato la declara en cada mes, la foto del
+      cierre la trae y el cálculo de un mes abierto no tiene de dónde sacarla: la nómina es del
+      [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) y todavía no hay tabla. Es cero, no ausente, para que la pantalla no tenga que
+      distinguir dos casos
+- [ ] **El promedio de ganancias divide la utilidad de todo el año, no la de los meses cerrados.** El
+      [05 §9.1](docs/05-reglas-financieras.md#91-resultado) dice «utilidad acumulada entre meses cerrados», y acumulada es la del año: con un mes
+      abierto que ya dio utilidad, el promedio sube sin que haya un mes más cerrado. **Se escribió lo
+      que el documento dice literalmente**, y si lo que quería decir era otra cosa, lo corrige él
+- [ ] **Sin gastos fijos, los pedidos necesarios son cero y no «ninguno».** Es la cuenta del [05 §10](docs/05-reglas-financieras.md#10-punto-de-equilibrio)
+      con el numerador en cero, y el documento no dice qué pintar cuando un negocio no tiene gastos
+      fijos registrados. La pantalla de la mitad Front decidirá si eso se muestra
+- [ ] **`vigentes()` no traía la categoría ni el pedido de cada movimiento**, y los dos llegaban
+      nulos al dominio. La caja libre de la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1) contaba entonces cero gastos fijos comprometidos, y
+      ninguna prueba lo veía porque las de dominio arman los movimientos a mano. **Entra arreglado en
+      esta tarea** porque el punto de equilibrio necesita la categoría, y conviene mirar si alguna
+      cifra ya publicada se leyó con ese cero
 
 ---
 
