@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.9.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -54,11 +54,11 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 3](#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 8 | 0 | 3 | 3 |
-| [Sprint 6](#sprint-6) · Reportes y KPIs | 10 | 4 | 0 | 6 | 9 |
+| [Sprint 6](#sprint-6) · Reportes y KPIs | 10 | 5 | 0 | 5 | 7,5 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 6 | 0 | 3 | 4,5 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **153** | **119** | **0** | **34** | **42,5** |
+| **Total** | **153** | **120** | **0** | **33** | **41** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -205,20 +205,20 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 |---|---|
 | **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.5](docs/08-plan-de-desarrollo.md#tarea-6-5) · [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6) · [6.7](docs/08-plan-de-desarrollo.md#tarea-6-7) · [7.5](docs/08-plan-de-desarrollo.md#tarea-7-5) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5) |
-| **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [6.4](docs/08-plan-de-desarrollo.md#tarea-6-4) · [6.9](docs/08-plan-de-desarrollo.md#tarea-6-9) · [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
+| **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [6.9](docs/08-plan-de-desarrollo.md#tarea-6-9) · [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **34 tareas y 42,5 días de trabajo** de 153 tareas del plan.
+Quedan **33 tareas y 41 días de trabajo** de 153 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 6,3 semanas | **9,3 semanas** |
-| 2 | 3,8 semanas | **6,8 semanas** |
-| 3 | 3,6 semanas | **6,6 semanas** |
+| 1 | 6,1 semanas | **9,1 semanas** |
+| 2 | 3,6 semanas | **6,6 semanas** |
+| 3 | 3,4 semanas | **6,4 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -978,7 +978,26 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       aunque la API todavía no sirva la ruta**, así que hoy lee su `40400` ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). El gráfico de doce
       meses ([6.4](docs/08-plan-de-desarrollo.md#tarea-6-4)), las alertas ([6.7](docs/08-plan-de-desarrollo.md#tarea-6-7)), los sobres ([7.8](docs/08-plan-de-desarrollo.md#tarea-7-8)) y «Descargar» ([6.9](docs/08-plan-de-desarrollo.md#tarea-6-9)) entran con su
       tarea. `prisma_front` en `0.25.0+31`, con 28 pruebas nuevas y 603 en total
-- [ ] ⚡ [**6.4**](docs/08-plan-de-desarrollo.md#tarea-6-4) Gráfico de 12 meses · Front
+- [x] [**6.4**](docs/08-plan-de-desarrollo.md#tarea-6-4) Gráfico de 12 meses · Front —
+      **el Inicio pinta «Últimos 12 meses», entre la línea que concilia y «Cuentas»**: barras de
+      utilidad y línea punteada de caja, que son las mismas dos cifras de arriba mes a mes y llegan
+      en la misma consulta. **La rejilla sale de los datos y no del mockup**: el prototipo fija el
+      marco entre $2,4 M y −$1,4 M porque sus doce meses son fijos, y con los de un año cualquiera
+      una barra se saldría. `EscalaDelGrafico` elige el paso de la serie de siempre —1, 2 y 5 por una
+      potencia de diez, desde $100.000—, deja el cero siempre dentro y no pasa de seis rayas. **Lo
+      que decidió**: que la escala viva aparte del pincel, porque lo que dibuja un `CustomPainter`
+      solo se afirma con goldens y aquí no hay ninguno, así que se prueba lo que decide —el paso, las
+      marcas y la altura de cada peso— y del lienzo salen solo las rayas, las barras y la línea; que
+      el rótulo del eje y el del mes sean **texto de verdad** y no letras dibujadas, lo que además
+      los deja desplazarse de lado en el celular sin arrastrar la página; que el rótulo vaya en
+      millones con un decimal y **sea exacto**, porque con el paso múltiplo de $100.000 ninguna marca
+      redondea; y que **el gráfico no interprete nada** —ni tendencia, ni promedio, ni «mejor mes»—,
+      porque ninguna de esas cifras viaja en el tablero. La barra guarda el color de su serie aunque
+      la utilidad sea negativa, que lo que dice el signo es hacia dónde crece, y el punto de la caja
+      se pone rojo cuando es negativo, como las tres cifras de arriba. **Para un lector de pantalla
+      es una sola imagen con su nombre**, que es el `role="img"` del mockup: veinticuatro cifras
+      leídas una por una y sin poder recorrerlas no dicen nada. `prisma_front` en `0.26.0+32`, con 43
+      pruebas nuevas y 646 en total
 - [ ] ⚡ [**6.5**](docs/08-plan-de-desarrollo.md#tarea-6-5) Reporte mensual y anual con promedio de ganancias · API, Front
 - [ ] ⚡ [**6.6**](docs/08-plan-de-desarrollo.md#tarea-6-6) Punto de equilibrio · API
 - [ ] ⚡ [**6.7**](docs/08-plan-de-desarrollo.md#tarea-6-7) Alertas: caja libre negativa, anticipos y pedidos estancados · API, Front
@@ -1632,6 +1651,16 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       de una sección solo puede escribirse en `registro_de_secciones.dart`, y el contrato no manda
       ningún destino para esa zona; las alertas sí lo traen, en `Alerta.destino`. Con un `destino` en
       `Pendientes` —o con el mismo criterio en otra zona— el botón entra sin que el front decida nada
+
+**Del gráfico de doce meses (6.4):**
+
+- [ ] **El contrato exige `doceMeses` pero no dice que traiga doce, ni qué se lee si llega vacía.**
+      `Tablero.doceMeses` es obligatorio y su esquema no pone `minItems`, así que una API que
+      devuelva la lista vacía cumple el contrato. Con la lista vacía **el panel no se pinta**, que es
+      lo mismo que el contrato manda para los sobres —«vacío mientras no haya configuración: el panel
+      no se pinta y nada se inventa»—, antes que inventar un «todavía no hay meses» que ningún
+      documento escribió. Si el Inicio de un taller recién abierto tiene que decir algo ahí, el texto
+      lo manda la API
 
 **De las tres cifras ([6.1](docs/08-plan-de-desarrollo.md#tarea-6-1)):**
 
