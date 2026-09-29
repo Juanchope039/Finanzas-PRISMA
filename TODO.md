@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.15.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.16.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -54,11 +54,11 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 3](#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 10 | 0 | 1 | 1 |
-| [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 7 | 0 | 4 | 6 |
+| [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 8 | 0 | 3 | 4 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 6 | 0 | 3 | 4,5 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **154** | **124** | **0** | **30** | **37,5** |
+| **Total** | **154** | **125** | **0** | **29** | **35,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -214,7 +214,8 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.5](docs/08-plan-de-desarrollo.md#tarea-6-5) · [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6) · [7.5](docs/08-plan-de-desarrollo.md#tarea-7-5) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6) · [7.5](docs/08-plan-de-desarrollo.md#tarea-7-5) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **Base** | [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8) |
 | **Front** | [6.9](docs/08-plan-de-desarrollo.md#tarea-6-9) · [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -222,13 +223,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **30 tareas y 37,5 días de trabajo** de 154 tareas del plan.
+Quedan **29 tareas y 35,5 días de trabajo** de 154 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 5,5 semanas | **8,5 semanas** |
-| 2 | 3,4 semanas | **6,4 semanas** |
-| 3 | 3,2 semanas | **6,2 semanas** |
+| 1 | 5,2 semanas | **8,2 semanas** |
+| 2 | 3,2 semanas | **6,2 semanas** |
+| 3 | 2,9 semanas | **5,9 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1008,8 +1009,8 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       es una sola imagen con su nombre**, que es el `role="img"` del mockup: veinticuatro cifras
       leídas una por una y sin poder recorrerlas no dicen nada. `prisma_front` en `0.26.0+32`, con 43
       pruebas nuevas y 646 en total
-- [ ] ⚡ [**6.5**](docs/08-plan-de-desarrollo.md#tarea-6-5) Reporte mensual y anual con promedio de ganancias · API, Front — **la
-      mitad API está hecha**: `POST /api/v0/consultas/reporte` arma el año mes a mes, con el promedio
+- [x] [**6.5**](docs/08-plan-de-desarrollo.md#tarea-6-5) Reporte mensual y anual con promedio de ganancias · API, Front — **la
+      mitad API estaba hecha**: `POST /api/v0/consultas/reporte` arma el año mes a mes, con el promedio
       de ganancias del [05 §9.1](docs/05-reglas-financieras.md#91-resultado) y su proyección a doce meses ([BDD-14-1](docs/03-requisitos-y-bdd.md#bdd-14-1)). **Un mes cerrado no se
       recalcula nunca**: viene tal cual de `cierres_mensuales`, que es la foto que congela la [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8)
       ([RN-16](docs/03-requisitos-y-bdd.md#rn-16)); los abiertos los calcula `CalcularUtilidadCausada`, y **el mes sin un solo registro no
@@ -1022,8 +1023,20 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       declaraba y el catálogo no tenía. **Y arregla un silencio**: `vigentes()` nunca traía la
       categoría ni el pedido de cada movimiento, así que los gastos fijos comprometidos de la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1)
       salían siempre en cero. `prisma_api` en 0.34.0, con 1444 pruebas sin base —veintinueve nuevas— y 340
-      contra ella —siete nuevas— ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). **Falta la pantalla**, del carril Front, y la tarea se marca
-      cuando aterricen las dos mitades ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración))
+      contra ella —siete nuevas— ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). **Y ahora se abre la pantalla**: «Reportes», «Cómo va el
+      año», con una sola llamada en `lib/datos/reportes.dart`. Arriba la utilidad acumulada del año
+      con el promedio mensual y su proyección a doce meses; debajo la lectura que la API redacta, la
+      tabla mes a mes —ingresos, costo directo, gastos, utilidad, margen y la utilidad sin
+      pro-labore al lado, que es la comparación del [05 §6.3](docs/05-reglas-financieras.md#63-el-pro-labore--la-trampa-del-trabajo-invisible-rn-08)— y el panel del punto de
+      equilibrio con sus términos. **Ni una cifra se calcula aquí** ([ADR-018](docs/adr/ADR-018-front-sin-decisiones.md)). **Y faltar no es
+      valer cero**: sin un mes cerrado no se pintan ni el promedio ni la proyección, sin margen de
+      contribución positivo no se pinta el punto de equilibrio, y un mes sin ingresos deja la celda
+      del margen en una raya; lo que se lee en su lugar es la lectura del año, que dice por qué
+      falta. **Lo que decidió**: que el punto de equilibrio se pinte aquí aunque sea de la [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6), que
+      es carril API y ya viaja dentro de esta respuesta; y que el año no se elija todavía, porque la
+      consulta va con el cuerpo vacío y cuál es el año del negocio lo decide la API en Bogotá
+      ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). La frontera estrena su tercera excepción, `nomina`, que es un campo del
+      contrato y no la sección. `prisma_front` en `0.29.0+35`, con 30 pruebas nuevas y 692 en total
 - [ ] ⚡ [**6.6**](docs/08-plan-de-desarrollo.md#tarea-6-6) Punto de equilibrio · API
 - [x] [**6.7**](docs/08-plan-de-desarrollo.md#tarea-6-7) Alertas: caja libre negativa, anticipos y pedidos estancados · API, Front —
       **el Inicio dice qué hay que atender.** `POST /api/v0/consultas/tablero` deja de mandar
@@ -1038,7 +1051,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       pedidos por entregar como los pendientes, y que la concentración con un solo cliente alerte
       ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). `prisma_api` en 0.36.0 con 21 pruebas nuevas, y `prisma_front` en `0.28.0+34` con 11
       nuevas y 662 en total
-- [ ] 🔒 [**6.8**](docs/08-plan-de-desarrollo.md#tarea-6-8) Cierre mensual con snapshot inmutable · Base, API
+- [ ] ⚡ [**6.8**](docs/08-plan-de-desarrollo.md#tarea-6-8) Cierre mensual con snapshot inmutable · Base, API
 - [ ] ⚡ [**6.9**](docs/08-plan-de-desarrollo.md#tarea-6-9) Inicio de solo consulta y su descarga en CSV o PDF ([RF-95](docs/03-requisitos-y-bdd.md#rf-95), [RF-96](docs/03-requisitos-y-bdd.md#rf-96)) · Front, API
 - [x] [**6.10**](docs/08-plan-de-desarrollo.md#tarea-6-10) Contrato de reportes, indicadores, alertas y cierre mensual · Contrato —
       v0.17.0: seis operaciones, veintiún esquemas y cinco códigos, cuatro de ellos en el rango
@@ -1353,7 +1366,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 - [ ] 🔒 [**8.2**](docs/08-plan-de-desarrollo.md#tarea-8-2) Liquidación de nómina en la base, descontando adelantos · Base
 - [ ] 🔒 [**8.3**](docs/08-plan-de-desarrollo.md#tarea-8-3) Adelantos como cuenta por cobrar · API
 - [ ] 🔒 [**8.4**](docs/08-plan-de-desarrollo.md#tarea-8-4) Desprendible PDF con acceso restringido al propio · API
-- [ ] 🔒 [**8.5**](docs/08-plan-de-desarrollo.md#tarea-8-5) Simulador de capacidad de pago · API, Front
+- [ ] ⚡ [**8.5**](docs/08-plan-de-desarrollo.md#tarea-8-5) Simulador de capacidad de pago · API, Front
 - [ ] 🔒 [**8.6**](docs/08-plan-de-desarrollo.md#tarea-8-6) Traducción a unidades de producto por vender · API
 - [ ] 🔒 [**8.7**](docs/08-plan-de-desarrollo.md#tarea-8-7) Horas pagadas contra horas facturadas · API, Front
 - [ ] ⚡ [**8.10**](docs/08-plan-de-desarrollo.md#tarea-8-10) Importador de CSV con mapeo y reporte de errores · API, Front — sin cadena asignada
@@ -1695,6 +1708,21 @@ a `anon`.
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**De la pantalla Reportes (6.5):**
+
+- [ ] ⚡ **El punto de equilibrio se pinta en Reportes aunque sea de la [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6).** La 6.6 es carril API y
+      su mitad ya viaja dentro de la respuesta del reporte, que es lo que el contrato de la [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10)
+      acordó. El [10 §4.6](docs/10-ux-y-mockups.md#46-reportes) lo pone dentro de esta pantalla, así que leerlo y no mostrarlo sería
+      guardar datos que nadie mira. Si la 6.6 tiene que entregar algo más, lo decide quien dirige
+- [ ] **El año no se elige: se pide el que la API decida.** La consulta va con el cuerpo vacío, como
+      la del Inicio, y sin `anio` la API responde el año en curso en Bogotá. El contrato admite el
+      campo y declara el `42260` para uno fuera de 2020..2100, así que el selector de años existe en
+      el acuerdo y no en el plan: entra cuando una tarea lo pida
+- [ ] **La columna «Contra el punto de equilibrio» del mockup no se pintó.** Esa barra sale de
+      restar los ingresos de cada mes menos las ventas necesarias, y restar plata en el front es
+      decidir ([ADR-018](docs/adr/ADR-018-front-sin-decisiones.md)). El contrato no manda esa diferencia por mes: si tiene que verse, la
+      calcula la API
 
 **De las alertas del Inicio (6.7):**
 
