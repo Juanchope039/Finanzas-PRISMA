@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.16.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.17.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -55,10 +55,10 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 10 | 0 | 1 | 1 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 8 | 0 | 3 | 4 |
-| [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 6 | 0 | 3 | 4,5 |
+| [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 7 | 0 | 2 | 3 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **154** | **125** | **0** | **29** | **35,5** |
+| **Total** | **154** | **126** | **0** | **28** | **34** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -169,6 +169,16 @@ el reporte se arma de tablas que leen los dos tipos de usuario: es el `40300` qu
 declaraba para esta ruta. **Y el punto de equilibrio es de la [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6)**, que el contrato acordado mete
 dentro de esta respuesta ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). **Falta su pantalla**, del carril Front, y con ella se marca la tarea.
 
+**Y el patrimonio ya se calcula, y todavía no hay dónde verlo.** La [7.5](docs/08-plan-de-desarrollo.md#tarea-7-5) está hecha:
+`POST /api/v0/consultas/patrimonio` devuelve aportes menos distribuciones más utilidades acumuladas
+([05 §6.4](docs/05-reglas-financieras.md#64-patrimonio-y-descapitalización)), con sus tres términos, los doce meses de la tasa de retiro ([05 §9.3](docs/05-reglas-financieras.md#93-estructura-y-patrimonio)) y cómo se
+partió el retiro del mes. **El pro-labore no se resta como retiro**: es gasto y ya está dentro de
+las utilidades. **Las utilidades son las causadas mes a mes**, la misma cuenta del Inicio y del
+reporte. El «no» a Operación lo pregunta la API, como en aquellas dos, porque las cifras salen del
+libro. **Su lectura viaja informativa** hasta que la [7.6](docs/08-plan-de-desarrollo.md#tarea-7-6) le ponga el umbral de la alerta.
+**Falta su pantalla**, que es el bloque del pie de «Inversiones y retiros» y todavía no tiene carril
+asignado ([§10](#10-decisiones-de-construcción-que-conviene-revisar)).
+
 **Lo siguiente, en cuanto alguien lo tome:** cerrar la base del [Sprint 1](docs/08-plan-de-desarrollo.md#sprint-1) destrabó lo que la estaba
 esperando. En el carril API **la prueba de permisos con sesión real ya está** ([1.7](docs/08-plan-de-desarrollo.md#tarea-1-7)), y con ella
 la tubería que corre lo que habla con la base: [C-01](docs/12-pruebas-y-calidad.md#c-01) y las demás **por fin gatean un PR**, que era el
@@ -214,7 +224,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6) · [7.5](docs/08-plan-de-desarrollo.md#tarea-7-5) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6) · [7.6](docs/08-plan-de-desarrollo.md#tarea-7-6) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8) |
 | **Front** | [6.9](docs/08-plan-de-desarrollo.md#tarea-6-9) · [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
@@ -223,12 +233,12 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **29 tareas y 35,5 días de trabajo** de 154 tareas del plan.
+Quedan **28 tareas y 34 días de trabajo** de 154 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 5,2 semanas | **8,2 semanas** |
-| 2 | 3,2 semanas | **6,2 semanas** |
+| 1 | 5,0 semanas | **8,0 semanas** |
+| 2 | 3,1 semanas | **6,1 semanas** |
 | 3 | 2,9 semanas | **5,9 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -1129,8 +1139,19 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       al retiro: un retiro que se pasa responde `40990` hasta que llegue confirmado. El «no» a
       Operación es de la base. Estrena el `40990`, el `42290`, el `42291` y el `42292`. `prisma_api`
       en `0.22.0`, con 33 pruebas nuevas y 11 contra la base local ([§10](#10-decisiones-de-construcción-que-conviene-revisar))
-- [ ] ⚡ [**7.5**](docs/08-plan-de-desarrollo.md#tarea-7-5) Cálculo de patrimonio · API
-- [ ] 🔒 [**7.6**](docs/08-plan-de-desarrollo.md#tarea-7-6) Alerta de descapitalización a 12 meses · API
+- [x] [**7.5**](docs/08-plan-de-desarrollo.md#tarea-7-5) Cálculo de patrimonio · API —
+      `POST /api/v0/consultas/patrimonio` devuelve lo que se ha construido y lo que se ha sacado:
+      aportes menos distribuciones más utilidades acumuladas ([05 §6.4](docs/05-reglas-financieras.md#64-patrimonio-y-descapitalización)), con sus tres términos, lo
+      repartido y lo generado en los últimos doce meses, la tasa de retiro que sale de ellos y cómo
+      se partió el retiro del mes en curso. **El pro-labore no se resta como retiro**: es gasto y ya
+      está dentro de las utilidades, así que restarlo otra vez lo contaría dos veces. **Las
+      utilidades son las causadas mes a mes**, la misma cuenta del Inicio y del reporte, y no la
+      suma del libro, que daría otra cifra con el mismo nombre en otra pantalla. La tasa falta
+      cuando las utilidades del período no son positivas, y la lectura lo dice en palabras. El «no»
+      a Operación lo pregunta la API con `fn_es_gerencia()`, como el tablero y el reporte. **La
+      lectura viaja informativa**: su umbral es la [7.6](docs/08-plan-de-desarrollo.md#tarea-7-6). No estrena ningún código. `prisma_api` en
+      `0.37.0`, con 12 pruebas nuevas y 2 contra la base local
+- [ ] ⚡ [**7.6**](docs/08-plan-de-desarrollo.md#tarea-7-6) Alerta de descapitalización a 12 meses · API
 - [x] [**7.7**](docs/08-plan-de-desarrollo.md#tarea-7-7) Los cuatro sobres con historial · API, Front — **las dos mitades
       aterrizaron**. La API: `PUT /api/v0/sobres/{id}` define desde hoy cómo se reparte cada peso que
       entra en efectivo —costo directo, gastos fijos, reserva y retiro ([05 §11](docs/05-reglas-financieras.md#11-la-regla-de-los-4-sobres))— y
@@ -1666,7 +1687,10 @@ a `anon`.
   del corte le subiría a la caja una plata que ya está en los saldos iniciales. Tampoco están en el
   libro las utilidades de antes del corte. Los activos sí pueden entrar sin movimiento, y el contrato
   de la [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) lo usa. Falta un patrimonio inicial —o aportes históricos sin movimiento— y se
-  decide en el [04](docs/04-modelo-de-datos.md) antes de la [7.5](docs/08-plan-de-desarrollo.md#tarea-7-5), que es la que lo calcula.
+  decide en el [04](docs/04-modelo-de-datos.md). **La [7.5](docs/08-plan-de-desarrollo.md#tarea-7-5) se hizo sin eso**: calcula con lo que hay en el libro, así
+  que el día del corte el patrimonio arranca en lo que digan los aportes y las utilidades
+  registradas, y no en lo que el taller ya valía. Lo que se decida entra como una fuente más de sus
+  dos primeros términos, sin cambiar la fórmula.
 - **Cinco lecturas del contrato llevan la clave de idempotencia de una escritura.**
   `consultas/clientes`, `/costeo`, `/movimientos`, `/pedidos` y `/productos` —las que agregaron la
   [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10), la [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) y la [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10)— copiaron la cabecera `Idempotency-Key` de una operación que escribe, y
