@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-27 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [7.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-29 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -11,7 +11,7 @@ cuánto dura el desarrollo según cuántos carriles avancen a la vez. Un carril 
 persona, un equipo o una sesión de trabajo; al plan le da igual.
 
 <!-- generado:plan-resumen · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**30,1 semanas con 1 carril**, **18,1 semanas con 2 carriles** y **14,9 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
+**30,3 semanas con 1 carril**, **18,3 semanas con 2 carriles** y **15,1 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
 <!-- /generado:plan-resumen -->
 
 > **El plan de 7 sprints daba por hecho que no había backend.**
@@ -119,13 +119,13 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 ### 1.1 Cuánto dura con 1, 2 o 3 carriles activos
 
 <!-- generado:plan-calendario · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**180,5 días de trabajo en 153 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
+**182 días de trabajo en 154 tareas.** Un carril avanza 6,59 días por semana, el ritmo del plan original; cada carril extra le quita un 10 % a todos por coordinación; y dos tareas del mismo carril y del mismo sprint no van a la vez.
 
 | Carriles activos | Desarrollo | Estabilización | Total | Frente a 1 carril |
 |:---:|---:|---:|---:|---:|
-| 1 | 27,1 semanas | 3 semanas | **30,1 semanas** | — |
-| 2 | 15,1 semanas | 3 semanas | **18,1 semanas** | −12,0 semanas |
-| 3 | 11,9 semanas | 3 semanas | **14,9 semanas** | −15,2 semanas |
+| 1 | 27,3 semanas | 3 semanas | **30,3 semanas** | — |
+| 2 | 15,3 semanas | 3 semanas | **18,3 semanas** | −12,1 semanas |
+| 3 | 12,1 semanas | 3 semanas | **15,1 semanas** | −15,3 semanas |
 
 | Hito | 1 carril | 2 carriles | 3 carriles |
 |---|:---:|:---:|:---:|
@@ -135,11 +135,11 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 | [H4](#h4) · Sprint 3 | semana 15 | semana 9 | semana 7 |
 | [H5](#h5) · Sprint 4 | semana 18 | semana 11 | semana 8 |
 | [H6](#h6) · Sprint 5 | semana 19 | semana 11 | semana 9 |
-| [H7](#h7) · Sprint 6 | semana 22 | semana 13 | semana 10 |
+| [H7](#h7) · Sprint 6 | semana 22 | semana 13 | semana 11 |
 | [H8](#h8) · Sprint 7 | semana 23 | semana 14 | semana 10 |
-| [H9](#h9) · Sprint 8 | semana 26 | semana 15 | semana 12 |
+| [H9](#h9) · Sprint 8 | semana 26 | semana 16 | semana 13 |
 | [H10](#h10) · Sprint 9 | semana 28 | semana 16 | semana 12 |
-| [H11](#h11) · go-live | semana 31 | semana 19 | semana 15 |
+| [H11](#h11) · go-live | semana 31 | semana 19 | semana 16 |
 <!-- /generado:plan-calendario -->
 
 **Cómo se calcula.** Se reparten las tareas en el tiempo respetando sus dependencias, siempre
@@ -253,10 +253,10 @@ gantt
     S3 :api3, 2026-10-09, 2026-11-01
     S4 :api4, 2026-10-25, 2026-11-09
     S5 :api5, 2026-10-28, 2026-11-11
-    S6 :api6, 2026-11-12, 2026-11-22
+    S6 :api6, 2026-11-12, 2026-11-24
     S7 :api7, 2026-11-04, 2026-11-24
-    S8 :api8, 2026-11-09, 2026-12-07
-    S9 :api9, 2026-11-25, 2026-12-04
+    S8 :api8, 2026-11-09, 2026-12-08
+    S9 :api9, 2026-11-26, 2026-12-05
 
     section Base
     S0 :base0, 2026-09-16, 2026-09-18
@@ -267,7 +267,7 @@ gantt
     S5 :base5, 2026-10-31, 2026-11-04
     S6 :base6, 2026-11-18, 2026-11-20
     S8 :base8, 2026-11-11, 2026-11-15
-    S9 :base9, 2026-11-24, 2026-11-25
+    S9 :base9, 2026-11-24, 2026-11-26
 
     section Front
     S0 :front0, 2026-09-15, 2026-10-03
@@ -295,9 +295,9 @@ gantt
     S9 :decisin9, 2026-09-16, 2026-10-04
 
     section Implantación
-    Estabilización y aprobación en UAT :est, 2026-12-07, 2026-12-21
-    Migración y capacitación :mig, 2026-12-21, 2026-12-28
-    Go-live :milestone, 2026-12-28, 0d
+    Estabilización y aprobación en UAT :est, 2026-12-08, 2026-12-22
+    Migración y capacitación :mig, 2026-12-22, 2026-12-29
+    Go-live :milestone, 2026-12-29, 0d
 ```
 <!-- /generado:plan-gantt -->
 
@@ -709,6 +709,7 @@ la venta se causa completa en abril.
 | <a id="tarea-6-8"></a>6.8 | Cierre mensual con snapshot inmutable | Base, API | [6.5](#tarea-6-5) | 1,5 |
 | <a id="tarea-6-9"></a>6.9 | El Inicio queda de solo consulta —ni crear, ni editar, ni anular— y se puede descargar en CSV o PDF lo que muestra ([RF-95](03-requisitos-y-bdd.md#rf-95), [RF-96](03-requisitos-y-bdd.md#rf-96)) | Front, API | [6.3](#tarea-6-3) | 1,5 |
 | <a id="tarea-6-10"></a>6.10 | **Contrato de reportes, indicadores, alertas y cierre mensual** | Contrato | [2.19](#tarea-2-19) | 0,5 |
+| <a id="tarea-6-11"></a>6.11 | La consulta que sirve el Inicio entero: las tres cifras, los saldos, los pendientes y los doce meses | API | [3.12](#tarea-3-12), [6.1](#tarea-6-1), [6.10](#tarea-6-10) | 1,5 |
 
 <!-- generado:plan-oleadas-6 · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **Qué puede ir a la vez en este sprint.** Cada oleada espera solo a las anteriores; dentro de una oleada, todo arranca junto.
@@ -716,7 +717,7 @@ la venta se causa completa en abril.
 | Oleada | Tareas | Carriles | Días |
 |:---:|---|---|---:|
 | 1 | [6.1](#tarea-6-1) · [6.10](#tarea-6-10) | API, Contrato | 2,5 |
-| 2 | [6.2](#tarea-6-2) · [6.3](#tarea-6-3) · [6.5](#tarea-6-5) · [6.6](#tarea-6-6) · [6.7](#tarea-6-7) | API, Front | 8 |
+| 2 | [6.2](#tarea-6-2) · [6.3](#tarea-6-3) · [6.5](#tarea-6-5) · [6.6](#tarea-6-6) · [6.7](#tarea-6-7) · [6.11](#tarea-6-11) | API, Front | 9,5 |
 | 3 | [6.4](#tarea-6-4) · [6.8](#tarea-6-8) · [6.9](#tarea-6-9) | Front, Base | 4,5 |
 <!-- /generado:plan-oleadas-6 -->
 

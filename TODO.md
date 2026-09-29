@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.13.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -54,11 +54,11 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 3](#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 9 | 0 | 2 | 2 |
-| [Sprint 6](#sprint-6) · Reportes y KPIs | 10 | 5 | 0 | 5 | 7,5 |
+| [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 6 | 0 | 5 | 7,5 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 6 | 0 | 3 | 4,5 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **153** | **121** | **0** | **32** | **40** |
+| **Total** | **154** | **122** | **0** | **32** | **40** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -222,7 +222,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **32 tareas y 40 días de trabajo** de 153 tareas del plan.
+Quedan **32 tareas y 40 días de trabajo** de 154 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
@@ -1032,6 +1032,19 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       v0.17.0: seis operaciones, veintiún esquemas y cinco códigos, cuatro de ellos en el rango
       `60`–`69`, el último que quedaba vacío. **Cierra el carril Contrato**: los diez módulos del
       plan quedan acordados antes de implementarse
+- [x] [**6.11**](docs/08-plan-de-desarrollo.md#tarea-6-11) La consulta que sirve el Inicio entero · API —
+      **el Inicio dejó de leer el «No se encontró lo que buscas» de una ruta que nadie servía.**
+      `POST /api/v0/consultas/tablero` devuelve el dashboard entero en una sola consulta ([10 §4.1](docs/10-ux-y-mockups.md#41-dashboard),
+      [CU-13](docs/02-casos-de-uso.md#cu-13)): las tres cifras del mes con la línea que las concilia —la redacta la API y lleva los
+      montos dentro—, los saldos por cuenta con su total, los pendientes y los doce meses del
+      gráfico de la [6.4](docs/08-plan-de-desarrollo.md#tarea-6-4). **No estrena una sola fórmula**: `ArmarTablero` junta los cuatro cálculos
+      de la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1) y les agrega lo que el Inicio pinta alrededor. Un mes cerrado sale de su snapshot
+      también en el gráfico ([RN-16](docs/03-requisitos-y-bdd.md#rn-16)), y por eso `CierreDelMes` ya lee el flujo de caja que
+      `cierres_mensuales` guardaba sin que nadie lo mirara. **Lo que decidió**: que las alertas
+      ([6.7](docs/08-plan-de-desarrollo.md#tarea-6-7)) y los sobres ([7.8](docs/08-plan-de-desarrollo.md#tarea-7-8)) viajen vacíos, que es lo que el contrato admite y lo que deja cada
+      regla en su tarea; que las cuentas por cobrar descuenten también el ingreso cobrado contra
+      entrega y no solo los anticipos; y que si llega solo el año o solo el mes, el que falta sea el
+      de hoy en Bogotá. `prisma_api` en 0.35.0 ([§10](#10-decisiones-de-construcción-que-conviene-revisar))
 
 <a id="sprint-7"></a>**[Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) · Capital, retiros y patrimonio**
 
@@ -1668,13 +1681,13 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 
 **Del Inicio (6.3):**
 
-- [ ] **`POST /api/v0/consultas/tablero` no existe en la API, y ninguna tarea del 08 lo reclama.** La
+- [ ] 🔒 **La tarea de API que faltaba entró como [6.11](docs/08-plan-de-desarrollo.md#tarea-6-11), y el número lo confirma quien dirige.** La
       6.1 dejó los cuatro cálculos como servicios puros y anotó que no traía endpoint; la 6.3 es
-      carril Front y la pantalla ya lo consume, porque el contrato es el acuerdo. Mientras la ruta no
-      exista, el Inicio de dev pinta el «No se encontró lo que buscas» de la API, tal cual. **Hace
-      falta una tarea de API en el 08**, y quien dirige decide su número: junta las tres cifras con
-      los saldos ([3.12](docs/08-plan-de-desarrollo.md#tarea-3-12)) y los pendientes, y sus tres listas —los doce meses ([6.4](docs/08-plan-de-desarrollo.md#tarea-6-4)), las alertas
-      ([6.7](docs/08-plan-de-desarrollo.md#tarea-6-7)) y los sobres ([7.8](docs/08-plan-de-desarrollo.md#tarea-7-8))— pueden viajar vacías hasta que cada una llegue
+      carril Front y la pantalla ya lo consumía, porque el contrato es el acuerdo, así que el Inicio
+      de dev pintaba el «No se encontró lo que buscas» de la API. Se numeró al final del sprint 6
+      porque el Inicio es su objetivo y porque una tarea solo puede depender de anteriores
+      ([ADR-043](docs/adr/ADR-043-dependencias-solo-hacia-atras.md)): depende de la [3.12](docs/08-plan-de-desarrollo.md#tarea-3-12), la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1) y la [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10), las tres hechas. La [6.3](docs/08-plan-de-desarrollo.md#tarea-6-3) y la
+      [6.4](docs/08-plan-de-desarrollo.md#tarea-6-4), que la consumen, son anteriores y no la declaran
 - [ ] **Las tres frases que el mockup pone debajo de cada cifra no viajan en el contrato.** «¿El
       negocio es rentable? — sí, 16,0% de margen» lleva una cifra que `Tablero` no manda, y «bajó, y
       es normal» es un juicio. La pantalla pinta la pregunta y la cifra, y lo que las explica es la
@@ -1694,6 +1707,24 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       no se pinta y nada se inventa»—, antes que inventar un «todavía no hay meses» que ningún
       documento escribió. Si el Inicio de un taller recién abierto tiene que decir algo ahí, el texto
       lo manda la API
+
+**Del tablero del Inicio ([6.11](docs/08-plan-de-desarrollo.md#tarea-6-11)):**
+
+- [ ] **Las cuentas por cobrar descuentan también lo cobrado contra entrega, y no solo los
+      anticipos.** `FichaDePedido.saldoPendiente()` resta únicamente los anticipos, y la entrega no
+      escribe uno por el saldo: escribe un `ingreso` con el pedido adentro ([CU-07 A1](docs/02-casos-de-uso.md#cu-07)). Sin contar ese
+      ingreso, un pedido cobrado del todo seguiría contándose por cobrar. La cifra nunca baja de
+      cero: cobrar de más es otra cosa y ninguna pantalla la pinta aquí
+- [ ] **Si llega solo el año o solo el mes, el que falta es el de hoy.** El contrato los declara
+      opcionales por separado y no como un par, y suponer enero cuando alguien pide un año entero
+      sería inventar un mes que nadie pidió
+- [ ] **La caja libre es la de hoy, aunque se mire otro mes.** Sus tres términos —el saldo, los
+      anticipos abiertos y los gastos fijos comprometidos— son del presente, y rehacer el saldo de un
+      día pasado pide el libro entero desde el principio. El mes que se mira manda en la utilidad, en
+      el flujo y en los gastos fijos que se comparan
+- [ ] **«Por entregar» son los pedidos en proceso y los parciales**, que es el mismo conjunto de
+      `v_anticipos_por_devengar`: una cotización todavía no compromete nada y un cancelado ya no se
+      va a entregar. Ningún documento enumera cuáles cuenta esa zona del [10 §4.1](docs/10-ux-y-mockups.md#41-dashboard)
 
 **Del costo congelado ([5.5](docs/08-plan-de-desarrollo.md#tarea-5-5)):**
 
