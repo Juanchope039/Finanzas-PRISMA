@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.13.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.14.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -53,12 +53,12 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 2](#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
 | [Sprint 3](#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 11 | 0 | 0 | 0 |
-| [Sprint 5](#sprint-5) · Productos y costeo | 11 | 9 | 0 | 2 | 2 |
+| [Sprint 5](#sprint-5) · Productos y costeo | 11 | 10 | 0 | 1 | 1 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 6 | 0 | 5 | 7,5 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 6 | 0 | 3 | 4,5 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **154** | **122** | **0** | **32** | **40** |
+| **Total** | **154** | **123** | **0** | **31** | **39** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -215,20 +215,20 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
 | **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.5](docs/08-plan-de-desarrollo.md#tarea-6-5) · [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6) · [6.7](docs/08-plan-de-desarrollo.md#tarea-6-7) · [7.5](docs/08-plan-de-desarrollo.md#tarea-7-5) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
-| **Front** | [5.9](docs/08-plan-de-desarrollo.md#tarea-5-9) · [6.9](docs/08-plan-de-desarrollo.md#tarea-6-9) · [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
+| **Front** | [6.9](docs/08-plan-de-desarrollo.md#tarea-6-9) · [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **32 tareas y 40 días de trabajo** de 154 tareas del plan.
+Quedan **31 tareas y 39 días de trabajo** de 154 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 5,9 semanas | **8,9 semanas** |
-| 2 | 3,6 semanas | **6,6 semanas** |
-| 3 | 3,4 semanas | **6,4 semanas** |
+| 1 | 5,8 semanas | **8,8 semanas** |
+| 2 | 3,5 semanas | **6,5 semanas** |
+| 3 | 3,3 semanas | **6,3 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1182,7 +1182,12 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       márgenes. Lo que faltaba era la prueba del [12 §3](docs/12-pruebas-y-calidad.md#3-pruebas-de-permisos): [P-02](docs/12-pruebas-y-calidad.md#p-02) va ahora **por HTTP, con la sesión real
       de Operación**, y recorre el sobre entero del catálogo sin encontrar una cifra; la vista previa,
       guardar y reactivar le responden `40300` sin dejar nada escrito. `prisma_api` sigue en `0.22.0`
-- [ ] ⚡ [**5.9**](docs/08-plan-de-desarrollo.md#tarea-5-9) Cuadro comparativo ordenable por margen por hora · Front
+- [x] [**5.9**](docs/08-plan-de-desarrollo.md#tarea-5-9) Cuadro comparativo ordenable por margen por hora · Front —
+      **el orden lo pone la API y el front solo lo pide**: «Ordenar por margen %» vuelve a pedir el
+      cuadro con `orden: margen_porcentual`, el título dice cuál se pidió y la tabla se pinta como
+      llega, sin reordenarla. El botón se decide por ausencia, como las columnas: sin cifras la API
+      manda el catálogo por nombre. La última columna estrena la barra del mockup, el margen por hora
+      contra el mayor del cuadro con el color del `nivel`. `prisma_front` sube a `0.27.0+33`
 - [x] [**5.10**](docs/08-plan-de-desarrollo.md#tarea-5-10) Contrato de productos, servicios y costeo · Contrato — v0.12.0: seis
       operaciones, once esquemas y dos códigos que estrenan el rango `40`–`49`. El formulario se
       guarda de una vez y el costo no se sobrescribe: si cambió, entra una fila nueva. **A Operación
@@ -2087,6 +2092,20 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       mockup pinta en rojo por debajo de `$30.000`, un número que no está en ningún documento y que
       escrito en `lib/` sería una regla del front. Se mapean `critica` a rojo y `alta` a ámbar, y un
       nivel que esta versión no conozca se pinta neutro
+
+**Del cuadro ordenable ([5.9](docs/08-plan-de-desarrollo.md#tarea-5-9)):**
+
+- [ ] **El panel «Lo que revela el cuadro» no se pintó, porque el contrato no declara sus frases.**
+      El mockup escribe dos hallazgos a mano; el contrato solo manda la `lectura` de cada producto,
+      y escoger aquí cuáles subir a ese panel sería decidir en el front ([ADR-018](docs/adr/ADR-018-front-sin-decisiones.md)). Si el panel
+      tiene que existir, sus frases las redacta la API en la respuesta del cuadro
+- [ ] **La barra usa el verde cuando el nivel no pide color, y no tiene largo con el margen a
+      pérdida.** El mockup la pinta roja o verde según el umbral de `$30.000` que el 5.2 ya descartó:
+      aquí `critica` y `alta` tiñen como la cifra y lo demás va en verde. Su escala es el mayor margen
+      por hora del cuadro, que es dibujo y no una cifra, como la del gráfico de la [6.4](docs/08-plan-de-desarrollo.md#tarea-6-4)
+- [ ] **La primera consulta no manda `orden`, y las siguientes sí.** Sin él la API ya ordena por
+      margen por hora, así que abrir la pantalla pide lo mismo que antes; una vez pulsado el botón,
+      cada recarga repite el orden elegido para que guardar no devuelva la tabla al otro
 
 **De la gestión de clientes (4.2):**
 
