@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.14.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.15.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -54,11 +54,11 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 3](#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 10 | 0 | 1 | 1 |
-| [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 6 | 0 | 5 | 7,5 |
+| [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 7 | 0 | 4 | 6 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 6 | 0 | 3 | 4,5 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **154** | **123** | **0** | **31** | **39** |
+| **Total** | **154** | **124** | **0** | **30** | **37,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -214,7 +214,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.5](docs/08-plan-de-desarrollo.md#tarea-6-5) · [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6) · [6.7](docs/08-plan-de-desarrollo.md#tarea-6-7) · [7.5](docs/08-plan-de-desarrollo.md#tarea-7-5) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.5](docs/08-plan-de-desarrollo.md#tarea-6-5) · [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6) · [7.5](docs/08-plan-de-desarrollo.md#tarea-7-5) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Front** | [6.9](docs/08-plan-de-desarrollo.md#tarea-6-9) · [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -222,13 +222,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **31 tareas y 39 días de trabajo** de 154 tareas del plan.
+Quedan **30 tareas y 37,5 días de trabajo** de 154 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 5,8 semanas | **8,8 semanas** |
-| 2 | 3,5 semanas | **6,5 semanas** |
-| 3 | 3,3 semanas | **6,3 semanas** |
+| 1 | 5,5 semanas | **8,5 semanas** |
+| 2 | 3,4 semanas | **6,4 semanas** |
+| 3 | 3,2 semanas | **6,2 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1025,7 +1025,19 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       contra ella —siete nuevas— ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). **Falta la pantalla**, del carril Front, y la tarea se marca
       cuando aterricen las dos mitades ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración))
 - [ ] ⚡ [**6.6**](docs/08-plan-de-desarrollo.md#tarea-6-6) Punto de equilibrio · API
-- [ ] ⚡ [**6.7**](docs/08-plan-de-desarrollo.md#tarea-6-7) Alertas: caja libre negativa, anticipos y pedidos estancados · API, Front
+- [x] [**6.7**](docs/08-plan-de-desarrollo.md#tarea-6-7) Alertas: caja libre negativa, anticipos y pedidos estancados · API, Front —
+      **el Inicio dice qué hay que atender.** `POST /api/v0/consultas/tablero` deja de mandar
+      `alertas` vacía: `DerivarAlertas` mira la caja libre y los pedidos por entregar y devuelve solo
+      las cuatro del [05 §3.4](docs/05-reglas-financieras.md#34-alertas-derivadas) que se cumplen, **con los montos y qué hacer en el texto** ([10 §6](docs/10-ux-y-mockups.md#6-micro-decisiones-que-importan)): la
+      caja libre negativa en rojo, aunque el mes sea rentable ([BDD-13-3](docs/03-requisitos-y-bdd.md#bdd-13-3)); los anticipos por encima
+      del saldo y cada pedido estancado en ámbar ([RF-24](docs/03-requisitos-y-bdd.md#rf-24)); y cada cliente con más del 40 % de los
+      anticipos sin alarma. Van por nivel, y los estancados del anticipo más viejo al más nuevo. El
+      front pinta «Alertas activas» debajo de la línea que concilia, que es el orden del [10 §4.1](docs/10-ux-y-mockups.md#41-dashboard), y
+      una alerta con destino lleva a su sección si la API la puso en el menú. **Lo que decidió**:
+      que el destino lo ponga la interfaz y no el dominio, que los anticipos se midan sobre los
+      pedidos por entregar como los pendientes, y que la concentración con un solo cliente alerte
+      ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). `prisma_api` en 0.36.0 con 21 pruebas nuevas, y `prisma_front` en `0.28.0+34` con 11
+      nuevas y 662 en total
 - [ ] 🔒 [**6.8**](docs/08-plan-de-desarrollo.md#tarea-6-8) Cierre mensual con snapshot inmutable · Base, API
 - [ ] ⚡ [**6.9**](docs/08-plan-de-desarrollo.md#tarea-6-9) Inicio de solo consulta y su descarga en CSV o PDF ([RF-95](docs/03-requisitos-y-bdd.md#rf-95), [RF-96](docs/03-requisitos-y-bdd.md#rf-96)) · Front, API
 - [x] [**6.10**](docs/08-plan-de-desarrollo.md#tarea-6-10) Contrato de reportes, indicadores, alertas y cierre mensual · Contrato —
@@ -1683,6 +1695,21 @@ a `anon`.
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**De las alertas del Inicio (6.7):**
+
+- [ ] **Con un solo cliente con anticipos, la concentración alerta siempre.** El [05 §3.4](docs/05-reglas-financieras.md#34-alertas-derivadas) dice «un
+      solo cliente concentra más del 40 %», y el único que tiene anticipos tiene el 100 %: un taller
+      con un pedido abierto ve la alerta informativa cada día. **Se escribió la regla tal cual**; si
+      hace falta un mínimo de clientes o de plata para que cuente, lo decide quien dirige
+- [ ] **La caja libre negativa y los anticipos sobre el saldo salen juntas casi siempre.** Si los
+      anticipos superan el saldo, la caja libre ya es negativa, así que la segunda nunca sale sola.
+      El documento las lista como dos y dicen cosas distintas —cuánto falta para usar y cuánto falta
+      para devolver—, así que viajan las dos
+- [ ] **El panel va debajo de la línea que concilia y no junto a los sobres, como en el mockup.**
+      El [10 §4.1](docs/10-ux-y-mockups.md#41-dashboard) las pone en ese orden —cifras, explicación, alertas— y el documento manda sobre el
+      dibujo. La etiqueta de cada alerta es su nivel y no su tipo, porque nombrar el tipo sería
+      redactar en el front
 
 **Del Inicio (6.3):**
 
