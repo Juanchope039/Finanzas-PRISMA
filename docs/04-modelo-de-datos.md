@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.16.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-27 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.17.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-29 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -664,6 +664,27 @@ baja, y `anulacion_con_motivo` exige el autor y el motivo cuando esa fecha exist
 promesa del contrato de que **ningún producto sale del catálogo sin motivo escrito**. Reactivar
 limpia las tres columnas, así que un producto vuelto a activar no arrastra el porqué de su baja
 anterior; el porqué de la reactivación queda en `auditoria`.
+
+**Leer ese historial hacia atrás es `fn_costeo_vigente(p_producto UUID, p_fecha DATE)`**, que escribió
+la tarea [5.5](08-plan-de-desarrollo.md#tarea-5-5) en el esquema `0.19.0`. Devuelve el costeo de la vigencia mayor que no pase de
+esa fecha y, si hay varios del mismo día, el último registrado por `creado_en`; sin costeo a esa
+fecha no devuelve ninguna fila, que no es un error.
+
+> **Es `SECURITY DEFINER`, como la función del [§5.4](#54-auditoría-por-triggers) y por la misma razón:** hace falta leer —o
+> escribir— algo que quien llama no alcanza. El pedido lo
+> registran los dos tipos de usuario ([CU-05](02-casos-de-uso.md#cu-05)) y `costos_solo_gerencia` no le devuelve a Operación ni una
+> fila de `costos_producto`, así que con `SECURITY INVOKER` el costo que un pedido congela dependería
+> de quién lo digitó: cero con Operación y el de verdad con Gerencia.
+>
+> **Y no abre la tabla a nadie:** contesta por un producto y una fecha, la llama el registro del
+> pedido, y el costo congelado no viaja en ninguna respuesta del contrato ([RF-34](03-requisitos-y-bdd.md#rf-34)).
+
+**De ahí salen `pedido_lineas.costo_unitario`, `pedido_lineas.horas_unitarias` y
+`pedidos.costo_directo`**, que hasta esa tarea se quedaban en cero. Se llenan al registrar el pedido,
+con el costeo que regía el día de `fecha_pedido`, y no se vuelven a tocar: así el margen bruto del
+[05 §9.1](05-reglas-financieras.md#9-catálogo-de-kpis) y el anticipo mínimo de [05 §5](05-reglas-financieras.md) leen lo que costaba producirlo entonces, y no lo que cuesta
+hoy. Las horas se guardan con los dos decimales del dominio `horas`; las del pedido se suman de los
+minutos exactos, para que el redondeo de un renglón no llegue al total.
 
 **Las dos tablas del cotizador las escribió la tarea [8.12](08-plan-de-desarrollo.md#tarea-8-12)**, en el esquema `0.15.0`. Estaban en el
 catálogo y en el diagrama desde el principio sin `CREATE TABLE`, y el contrato de la tarea [8.11](08-plan-de-desarrollo.md#tarea-8-11) ya
