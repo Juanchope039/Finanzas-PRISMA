@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.17.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.18.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -55,10 +55,10 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 10 | 0 | 1 | 1 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 8 | 0 | 3 | 4 |
-| [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 7 | 0 | 2 | 3 |
+| [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 8 | 0 | 1 | 2 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **154** | **126** | **0** | **28** | **34** |
+| **Total** | **154** | **127** | **0** | **27** | **33** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -175,7 +175,8 @@ dentro de esta respuesta ([§10](#10-decisiones-de-construcción-que-conviene-re
 partió el retiro del mes. **El pro-labore no se resta como retiro**: es gasto y ya está dentro de
 las utilidades. **Las utilidades son las causadas mes a mes**, la misma cuenta del Inicio y del
 reporte. El «no» a Operación lo pregunta la API, como en aquellas dos, porque las cifras salen del
-libro. **Su lectura viaja informativa** hasta que la [7.6](docs/08-plan-de-desarrollo.md#tarea-7-6) le ponga el umbral de la alerta.
+libro. **Y con la [7.6](docs/08-plan-de-desarrollo.md#tarea-7-6) esa tasa ya alerta**: en `critica` avisa que se está retirando más de lo
+que el negocio genera, sin esperar a que el patrimonio se ponga en rojo.
 **Falta su pantalla**, que es el bloque del pie de «Inversiones y retiros» y todavía no tiene carril
 asignado ([§10](#10-decisiones-de-construcción-que-conviene-revisar)).
 
@@ -224,7 +225,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6) · [7.6](docs/08-plan-de-desarrollo.md#tarea-7-6) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8) |
 | **Front** | [6.9](docs/08-plan-de-desarrollo.md#tarea-6-9) · [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
@@ -233,12 +234,12 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **28 tareas y 34 días de trabajo** de 154 tareas del plan.
+Quedan **27 tareas y 33 días de trabajo** de 154 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 5,0 semanas | **8,0 semanas** |
-| 2 | 3,1 semanas | **6,1 semanas** |
+| 1 | 4,9 semanas | **7,9 semanas** |
+| 2 | 2,8 semanas | **5,8 semanas** |
 | 3 | 2,9 semanas | **5,9 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -1151,7 +1152,15 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       a Operación lo pregunta la API con `fn_es_gerencia()`, como el tablero y el reporte. **La
       lectura viaja informativa**: su umbral es la [7.6](docs/08-plan-de-desarrollo.md#tarea-7-6). No estrena ningún código. `prisma_api` en
       `0.37.0`, con 12 pruebas nuevas y 2 contra la base local
-- [ ] ⚡ [**7.6**](docs/08-plan-de-desarrollo.md#tarea-7-6) Alerta de descapitalización a 12 meses · API
+- [x] [**7.6**](docs/08-plan-de-desarrollo.md#tarea-7-6) Alerta de descapitalización a 12 meses · API — la lectura del
+      patrimonio pasa a nivel `critica` cuando lo repartido en los últimos doce meses supera lo que
+      el negocio generó en el mismo período ([RF-49](docs/03-requisitos-y-bdd.md#rf-49), [BDD-24-1](docs/03-requisitos-y-bdd.md#bdd-24-1)): «Estás retirando más de lo que el
+      negocio genera», con los dos montos y cuánto salió del patrimonio en vez de la ganancia.
+      **No espera a que el patrimonio se ponga en rojo**, que es lo que la vuelve útil: el ejemplo
+      del [05 §6.4](docs/05-reglas-financieras.md#64-patrimonio-y-descapitalización) deja $1.000.000 de patrimonio y aun así alerta. **Y sin nada repartido no
+      alerta**, aunque el período haya dado pérdida ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). Por debajo del umbral dice cuántos
+      centavos de cada peso generado se retiran, que es la frase del [10 §6](docs/10-ux-y-mockups.md#6-micro-decisiones-que-importan). No estrena ningún
+      código ni mueve el contrato. `prisma_api` en `0.38.0`, con 3 pruebas nuevas
 - [x] [**7.7**](docs/08-plan-de-desarrollo.md#tarea-7-7) Los cuatro sobres con historial · API, Front — **las dos mitades
       aterrizaron**. La API: `PUT /api/v0/sobres/{id}` define desde hoy cómo se reparte cada peso que
       entra en efectivo —costo directo, gastos fijos, reserva y retiro ([05 §11](docs/05-reglas-financieras.md#11-la-regla-de-los-4-sobres))— y
@@ -2089,6 +2098,16 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **El retiro no tiene pantalla.** La 7.4 es solo API, y «Inversiones y retiros» ya pinta el
       pro-labore y los activos, pero no el retiro. Es la misma pregunta que ya estaba abierta para la [7.5](docs/08-plan-de-desarrollo.md#tarea-7-5) y
       la [7.6](docs/08-plan-de-desarrollo.md#tarea-7-6): o ganan mitad Front, o se dice cuál de las 7.x la lleva
+
+**De la alerta de descapitalización ([7.6](docs/08-plan-de-desarrollo.md#tarea-7-6)):**
+
+- [ ] **Sin nada repartido no alerta, aunque el período haya dado pérdida.** El [05 §6.4](docs/05-reglas-financieras.md#64-patrimonio-y-descapitalización) compara
+      retiros contra utilidades y no dice qué pasa cuando no hay retiros y las utilidades son
+      negativas, donde la comparación se cumple sola. La cifra que dispara la alerta es lo que se
+      sacó, así que sin retiros no hay aviso: un mes malo alertaría de un retiro que nadie hizo
+- [ ] **El umbral es «más que», no «más o igual».** Retirar exactamente lo generado deja el
+      patrimonio donde estaba, así que no descapitaliza. Es la regla tal cual, y se anota porque el
+      caso del empate no aparece en ningún documento
 
 **De los cuatro sobres ([7.7](docs/08-plan-de-desarrollo.md#tarea-7-7)), en su mitad Front:**
 
