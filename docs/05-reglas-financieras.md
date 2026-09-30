@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/05-reglas-financieras.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-30 | [Finanzas](INDICE.md#etiqueta-finanzas) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/05-reglas-financieras.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-30 | [Finanzas](INDICE.md#etiqueta-finanzas) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 > **El documento más importante del proyecto.** Aquí viven las fórmulas exactas que el sistema
 > debe implementar. Si algo en el código contradice este documento, el código está mal.
@@ -557,9 +557,13 @@ Ninguna de las dos es obvia sin este cuadro. Ese es el punto de tenerlo.
 | Horas pagadas | 160 |
 | Horas facturadas | 104 |
 | Tiempo ocioso | 56 h (35%) · $526.400 |
-| Punto de equilibrio | $4.769.231 |
-| Ventas sobre el punto de equilibrio | +$3.080.769 |
+| Punto de equilibrio | $4.871.272 |
+| Ventas sobre el punto de equilibrio | +$2.978.728 |
 | Índice de puntualidad de registro | 86% |
+
+El punto de equilibrio sale de los datos de este mes con la fórmula del [§10](#10-punto-de-equilibrio): $2.630.000 de
+gastos fijos —arriendo, servicios, internet y pro-labore— entre el 53,99 % de margen de
+contribución. **No es el $4.769.231 del ejemplo del [§10](#10-punto-de-equilibrio)**, que tiene sus propios números.
 
 ---
 
@@ -581,7 +585,7 @@ Caja libre  = Saldo total − Anticipos por devengar − Gastos fijos comprometi
 Si alguna de estas igualdades falla, hay un error de registro o de cálculo.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [Contrato](../contrato/README.md "Contrato de la API · v0.24.0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [Contrato](../contrato/README.md "Contrato de la API · v0.25.0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
