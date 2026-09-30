@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.18.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-29 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.19.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-30 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -54,11 +54,11 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 3](#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 10 | 0 | 1 | 1 |
-| [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 8 | 0 | 3 | 4 |
+| [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 9 | 0 | 2 | 2,5 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 8 | 0 | 1 | 2 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **154** | **127** | **0** | **27** | **33** |
+| **Total** | **154** | **128** | **0** | **26** | **31,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -227,20 +227,20 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 |---|---|
 | **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8) |
-| **Front** | [6.9](docs/08-plan-de-desarrollo.md#tarea-6-9) · [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
+| **Front** | [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **27 tareas y 33 días de trabajo** de 154 tareas del plan.
+Quedan **26 tareas y 31,5 días de trabajo** de 154 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 4,9 semanas | **7,9 semanas** |
-| 2 | 2,8 semanas | **5,8 semanas** |
-| 3 | 2,9 semanas | **5,9 semanas** |
+| 1 | 4,6 semanas | **7,6 semanas** |
+| 2 | 2,6 semanas | **5,6 semanas** |
+| 3 | 2,8 semanas | **5,8 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1063,7 +1063,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). `prisma_api` en 0.36.0 con 21 pruebas nuevas, y `prisma_front` en `0.28.0+34` con 11
       nuevas y 662 en total
 - [ ] ⚡ [**6.8**](docs/08-plan-de-desarrollo.md#tarea-6-8) Cierre mensual con snapshot inmutable · Base, API
-- [ ] ⚡ [**6.9**](docs/08-plan-de-desarrollo.md#tarea-6-9) Inicio de solo consulta y su descarga en CSV o PDF ([RF-95](docs/03-requisitos-y-bdd.md#rf-95), [RF-96](docs/03-requisitos-y-bdd.md#rf-96)) · Front, API
+- [x] [**6.9**](docs/08-plan-de-desarrollo.md#tarea-6-9) Inicio de solo consulta y su descarga en CSV o PDF ([RF-95](docs/03-requisitos-y-bdd.md#rf-95), [RF-96](docs/03-requisitos-y-bdd.md#rf-96)) · Front, API
 - [x] [**6.10**](docs/08-plan-de-desarrollo.md#tarea-6-10) Contrato de reportes, indicadores, alertas y cierre mensual · Contrato —
       v0.17.0: seis operaciones, veintiún esquemas y cinco códigos, cuatro de ellos en el rango
       `60`–`69`, el último que quedaba vacío. **Cierra el carril Contrato**: los diez módulos del
