@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.22.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-30 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.23.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-30 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -55,10 +55,10 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
-| [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 8 | 0 | 1 | 2 |
+| [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 9 | 0 | 0 | 0 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **154** | **131** | **0** | **23** | **28** |
+| **Total** | **154** | **132** | **0** | **22** | **26** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -148,8 +148,16 @@ los aportes ya entraron: pinta la barra de cuatro tramos y desde cuándo rige, *
 historial** —el requisito pide conservarlo, no mostrarlo— y **no suma los cuatro campos**, porque esa
 regla es de la base. Como el pro-labore, no estaba dibujado, y el mockup lo estrena
 ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). **Con él quedan cerradas las oleadas 1
-y 2 del [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7)**, y el carril Front se queda sin nada pendiente en este sprint hasta
-la [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8), que espera a la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1).
+y 2 del [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7)**.
+
+**Y lo repartido ya se mira contra lo gastado.** La [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8) pinta «Los 4 sobres» en el Inicio,
+detrás de «Cuentas»: la barra de cuatro tramos y, por sobre, lo asignado contra lo usado y lo
+disponible con su signo, en verde o en rojo, con el avance de la reserva hacia los tres meses de
+gastos fijos. **No pidió API ni contrato**: los cuatro sobres ya viajaban dentro del tablero, así
+que la tarea entera fue leerlos y pintarlos. **Lo que no se escribió es la frase con que el mockup
+cierra el panel**, «los gastos fijos consumieron el 49% de lo que entró»: es una lectura redactada
+sobre las cifras y le toca a la API ([§10](#10-decisiones-de-construcción-que-conviene-revisar)).
+**Con ella el [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) queda cerrado, 9 de 9**, y el Inicio no le debe nada al mockup.
 
 **La factura del pedido ya se sube, y ya hay desde dónde subirla.** Con la mitad Front, la [4.8](docs/08-plan-de-desarrollo.md#tarea-4-8)
 queda cerrada: `POST /api/v0/pedidos/{id}/adjuntos` cuelga la factura con la misma tubería que la
@@ -233,20 +241,20 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
 | **API** | [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
-| **Front** | [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
+| **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **23 tareas y 28 días de trabajo** de 154 tareas del plan.
+Quedan **22 tareas y 26 días de trabajo** de 154 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 4,1 semanas | **7,1 semanas** |
+| 1 | 3,8 semanas | **6,8 semanas** |
 | 2 | 2,4 semanas | **5,4 semanas** |
-| 3 | 2,7 semanas | **5,7 semanas** |
+| 3 | 2,6 semanas | **5,6 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1213,7 +1221,17 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       pone la pantalla**, los de la tarjeta del Inicio, porque el contrato manda cuatro claves
       sueltas y ninguna presentación ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). El panel no estaba dibujado y el mockup lo
       estrena. `prisma_front` en `0.22.0+27`, con 14 pruebas nuevas
-- [ ] ⚡ [**7.8**](docs/08-plan-de-desarrollo.md#tarea-7-8) Panel de sobres: asignado contra usado · Front
+- [x] [**7.8**](docs/08-plan-de-desarrollo.md#tarea-7-8) Panel de sobres: asignado contra usado · Front — el Inicio
+      estrena «Los 4 sobres», detrás de «Cuentas», que es el orden del [10 §4.1](docs/10-ux-y-mockups.md#41-dashboard). La barra de
+      cuatro tramos y, por sobre, lo asignado contra lo usado y lo disponible con su signo, en verde
+      o en rojo; la reserva enseña además su avance hacia los tres meses de gastos fijos
+      ([05 §11](docs/05-reglas-financieras.md#11-la-regla-de-los-4-sobres)). **No pidió API ni contrato**: los cuatro sobres ya viajaban dentro del
+      tablero desde la [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9), y esta tarea es solo leerlos y pintarlos. **Los nombres y los
+      colores los pone la pantalla**, los mismos del panel de la [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7), y una clave que el front
+      no conozca se pinta neutra con su clave por nombre. **Lo que no se escribe es la frase con que
+      el mockup cierra el panel** —«los gastos fijos consumieron el 49% de lo que entró»—, que es una
+      lectura redactada sobre las cifras y le toca a la API ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). Sin reparto configurado la
+      lista llega vacía y el panel no se pinta. `prisma_front` en `0.32.0+38`, con 12 pruebas nuevas
 - [x] [**7.9**](docs/08-plan-de-desarrollo.md#tarea-7-9) Contrato de inversiones, aportes, retiros, pro-labore y sobres · Contrato — v0.13.0:
       diez operaciones, veintitrés esquemas y cinco códigos que estrenan el rango `90`–`99`. El
       retiro se registra de una vez y se parte solo si no se dice cómo: pro-labore hasta completar
@@ -1787,6 +1805,22 @@ a `anon`.
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**Del panel de los cuatro sobres del Inicio ([7.8](docs/08-plan-de-desarrollo.md#tarea-7-8)):**
+
+- [ ] **La frase con que el mockup cierra el panel no se escribió.** El dibujo termina con «los
+      gastos fijos consumieron el 49% de lo que entró, no el 25% configurado. O se suben las
+      ventas, o se recalibran los porcentajes». Es una división y un consejo, y el front no
+      calcula ni redacta ([ADR-018](docs/adr/ADR-018-front-sin-decisiones.md)). **Su sitio es una alerta de la API**, que ya tiene tipo,
+      nivel y detalle redactado, y que el Inicio pinta encima. Mientras no exista, el panel enseña
+      las cifras y no las interpreta
+- [ ] **El encabezado tampoco dice sobre cuánta plata se repartió.** El mockup escribe «Sobre
+      $6.025.000 que entraron», y lo que entró en el mes no viaja en el contrato: sacarlo de lo
+      asignado entre el porcentaje sería calcular. Si esa cifra importa en pantalla, es un campo
+      más de la consulta del tablero y un PR de contrato
+- [ ] **Los nombres y los colores de los cuatro sobres los pone la pantalla**, como en la
+      [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7): el contrato manda la clave y ninguna presentación. Una clave que el front no
+      conozca se pinta neutra y con la clave por nombre, para no esconder lo que llegó
 
 **Del costeo de bordado (5.4):**
 
