@@ -642,6 +642,11 @@
             "minimum" : 1,
             "type" : "integer"
           },
+          "minutosMaquina" : {
+            "description" : "Los minutos en que una máquina trabaja sola por unidad, como en el formulario de producto. No cambian el costo unitario y sí el margen por hora, que divide entre el mayor de los dos tiempos (05 §7.2)",
+            "minimum" : 0,
+            "type" : "number"
+          },
           "minutosTrabajo" : {
             "minimum" : 0,
             "type" : "number"
@@ -1021,6 +1026,10 @@
             "format" : "int64",
             "type" : "integer"
           },
+          "minutosMaquina" : {
+            "description" : "Los minutos en que una máquina trabaja sola por unidad: los del bordado (RF-32). No le suman pesos al costo unitario —la máquina no cobra sueldo y su energía ya está entre los consumibles—, sí ocupan el taller, y por eso el margen por hora divide entre el mayor de los dos tiempos (05 §7.2)",
+            "type" : "number"
+          },
           "minutosTrabajo" : {
             "description" : "Los minutos de persona que lleva una unidad",
             "type" : "number"
@@ -1041,7 +1050,7 @@
             "type" : "string"
           }
         },
-        "required" : [ "costoConsumibles", "costoInsumo", "costoUnitario", "minutosTrabajo", "precioVenta", "tarifaHora", "vigenteDesde" ],
+        "required" : [ "costoConsumibles", "costoInsumo", "costoUnitario", "minutosMaquina", "minutosTrabajo", "precioVenta", "tarifaHora", "vigenteDesde" ],
         "type" : "object"
       },
       "CosteoCalculado" : {
@@ -1208,6 +1217,11 @@
             "format" : "int64",
             "minimum" : 0,
             "type" : "integer"
+          },
+          "minutosMaquina" : {
+            "description" : "Los minutos en que una máquina trabaja sola por unidad, con dos decimales como máximo; más decimales responden 42241. No le suman pesos al costo unitario, sí ocupan el taller: el margen por hora divide entre el mayor de los dos tiempos (05 §7.2). En cero en todo lo que no se borda",
+            "minimum" : 0,
+            "type" : "number"
           },
           "minutosTrabajo" : {
             "description" : "Los minutos de persona que lleva una unidad, con dos decimales como máximo, que es lo que guarda NUMERIC(6,2) (04 §4.1); más decimales responden 42240. En cero cuando el ítem no consume tiempo del taller: entonces su margen por hora no existe, y viaja vacío en vez de en cero",
@@ -4976,7 +4990,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.23.1"
+    "version" : "0.24.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -6562,7 +6576,7 @@
     },
     "/api/v0/consultas/costeo" : {
       "post" : {
-        "description" : "La vista previa que el formulario de producto pinta en vivo: el costo unitario, los tres márgenes, la lectura frente al resto del taller y el precio que habría que cobrar para el margen objetivo (RF-30, RF-31, RF-33). Las cuatro son plata o son reglas, así que las calcula la API y el front solo las pinta (ADR-018). No escribe nada: sirve para ver antes de guardar, y es también la sugerencia de precio de la tarea 5.7. Con productoId, ese producto queda fuera de la mediana con la que se compara. Solo Gerencia. Sin pro-labore definido responde 40940, y un tiempo con más de dos decimales, 42240. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902, 40940, 42200 con data.errores y 42240.",
+        "description" : "La vista previa que el formulario de producto pinta en vivo: el costo unitario, los tres márgenes, la lectura frente al resto del taller y el precio que habría que cobrar para el margen objetivo (RF-30, RF-31, RF-33). Las cuatro son plata o son reglas, así que las calcula la API y el front solo las pinta (ADR-018). No escribe nada: sirve para ver antes de guardar, y es también la sugerencia de precio de la tarea 5.7. Con productoId, ese producto queda fuera de la mediana con la que se compara. Solo Gerencia. Sin pro-labore definido responde 40940, y un tiempo con más de dos decimales, 42240 si es el de trabajo y 42241 si es el de máquina. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902, 40940, 42200 con data.errores, 42240 y 42241.",
         "operationId" : "costeo",
         "parameters" : [ {
           "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
@@ -10251,7 +10265,7 @@
     },
     "/api/v0/productos/{id}" : {
       "put" : {
-        "description" : "Da de alta algo que el taller vende, con su primer costeo (RF-28, RF-29, CU-09, CU-10). El id va en la ruta y no en el cuerpo: lo genera quien pide al decidir la acción, junto con la clave de idempotencia (ADR-020), así que reintentar la misma petición no crea dos productos, y si ese id ya existe responde 40900. El costo viaja con la ficha en una sola petición porque es una sola transacción (20 §5.1): la fila de productos y la primera de costos_producto caen juntas o no cae ninguna. La tarifa por hora no se manda: la API la saca del pro-labore vigente y la congela en el costeo (05 §7.1), y sin pro-labore definido responde 40940. Solo Gerencia. El formulario es «producto»; el tiempo con más de dos decimales no cabe en el descriptor y responde 42240. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 40940, 42200 con data.errores y 42240.",
+        "description" : "Da de alta algo que el taller vende, con su primer costeo (RF-28, RF-29, CU-09, CU-10). El id va en la ruta y no en el cuerpo: lo genera quien pide al decidir la acción, junto con la clave de idempotencia (ADR-020), así que reintentar la misma petición no crea dos productos, y si ese id ya existe responde 40900. El costo viaja con la ficha en una sola petición porque es una sola transacción (20 §5.1): la fila de productos y la primera de costos_producto caen juntas o no cae ninguna. La tarifa por hora no se manda: la API la saca del pro-labore vigente y la congela en el costeo (05 §7.1), y sin pro-labore definido responde 40940. Solo Gerencia. El formulario es «producto»; el tiempo con más de dos decimales no cabe en el descriptor y responde 42240 el de trabajo y 42241 el de máquina. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 40940, 42200 con data.errores, 42240 y 42241.",
         "operationId" : "crearProducto",
         "parameters" : [ {
           "description" : "El id del producto, que genera quien lo da de alta",
@@ -10403,7 +10417,7 @@
     },
     "/api/v0/productos/{id}/edicion" : {
       "post" : {
-        "description" : "Guarda el formulario entero, como el botón «Guardar cambios» del mockup: corrige la ficha y, si el costo o el precio cambiaron, agrega una fila nueva a costos_producto con la fecha de hoy, porque un costeo no se sobrescribe nunca (04 §4.5, RF-35). Así un pedido viejo conserva el costo que tenía cuando se produjo. Editar dos veces el mismo día deja dos filas con la misma vigencia, y la vigente es la última registrada. Solo Gerencia. Un producto que no existe responde 40400. El formulario es «producto», el mismo que crea. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902, 40940, 42200 con data.errores y 42240.",
+        "description" : "Guarda el formulario entero, como el botón «Guardar cambios» del mockup: corrige la ficha y, si el costo o el precio cambiaron, agrega una fila nueva a costos_producto con la fecha de hoy, porque un costeo no se sobrescribe nunca (04 §4.5, RF-35). Así un pedido viejo conserva el costo que tenía cuando se produjo. Editar dos veces el mismo día deja dos filas con la misma vigencia, y la vigente es la última registrada. Solo Gerencia. Un producto que no existe responde 40400. El formulario es «producto», el mismo que crea. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902, 40940, 42200 con data.errores, 42240 y 42241.",
         "operationId" : "editarProducto",
         "parameters" : [ {
           "description" : "El id del producto",
@@ -11850,6 +11864,13 @@
       "sprint" : 5
     },
     "status" : 42240
+  }, {
+    "cuando" : "Los minutos de máquina llegan con más de dos decimales, que es lo que guarda la columna NUMERIC(6,2). El error va en data.errores, sobre minutosMaquina",
+    "http" : 422,
+    "mensaje" : "El tiempo de máquina se registra con dos decimales como máximo.",
+    "modulo" : "PRODUCTOS_Y_COSTEO",
+    "nombre" : "TIEMPO_DE_MAQUINA_INVALIDO",
+    "status" : 42241
   }, {
     "cuando" : "Un retiro por encima de la caja libre que llega sin confirmado. El rango es el de capital porque quien lo emite es el retiro, no el reporte",
     "http" : 409,

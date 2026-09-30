@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.20.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-30 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.21.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-30 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -53,12 +53,12 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 2](#sprint-2) · Acceso, usuarios, cargos y canal firmado | 22 | 22 | 0 | 0 | 0 |
 | [Sprint 3](#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 11 | 0 | 0 | 0 |
-| [Sprint 5](#sprint-5) · Productos y costeo | 11 | 10 | 0 | 1 | 1 |
+| [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 10 | 0 | 1 | 1 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 8 | 0 | 1 | 2 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **154** | **129** | **0** | **25** | **30** |
+| **Total** | **154** | **130** | **0** | **24** | **29** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -124,8 +124,10 @@ las cuentas de abajo. **Queda ejercitarlo contra dev** con una sesión de Gerenc
 queda cerrada: «Activos del negocio» va debajo del pro-labore en «Inversiones y retiros», pinta lo
 que el taller compró del equipo más caro al más barato y estrena el botón que registra la compra,
 que el mockup no dibujaba ([§10](#10-decisiones-de-construcción-que-conviene-revisar)).
-**Y el costeo de bordado ([5.4](docs/08-plan-de-desarrollo.md#tarea-5-4)) sigue sin poder empezar**: cómo entra el tiempo de máquina en
-el costo unitario es una regla financiera que ningún documento cubre, así que espera a quien dirige.
+**Y el costeo de bordado ([5.4](docs/08-plan-de-desarrollo.md#tarea-5-4)) ya está, con la regla que le faltaba escrita en
+[05 §7.1](docs/05-reglas-financieras.md#71-costo-unitario)**: el tiempo de máquina no le suma pesos al costo unitario y sí ocupa el taller, así
+que el margen por hora divide entre el mayor de los dos tiempos. Con eso **el [Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) queda
+cerrado**.
 
 **Y la plata que entra desde afuera ya entra, y ya tiene su panel.** Con la mitad Front, la
 [7.2](docs/08-plan-de-desarrollo.md#tarea-7-2) queda cerrada: `PUT /api/v0/aportes/{id}` escribe el movimiento y su fila de
@@ -224,7 +226,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Front** | [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -232,13 +234,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **25 tareas y 30 días de trabajo** de 154 tareas del plan.
+Quedan **24 tareas y 29 días de trabajo** de 154 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 4,4 semanas | **7,4 semanas** |
-| 2 | 2,5 semanas | **5,5 semanas** |
-| 3 | 2,8 semanas | **5,8 semanas** |
+| 1 | 4,3 semanas | **7,3 semanas** |
+| 2 | 2,7 semanas | **5,7 semanas** |
+| 3 | 2,7 semanas | **5,7 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1221,7 +1223,21 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       de [05 §7.1](docs/05-reglas-financieras.md#71-costo-unitario): el costo partido en materia y tiempo, y la tarifa por hora que sale del
       pro-labore o del salario. Reproduce la tabla de [06 §4.1](docs/06-nomina-y-capacidad-de-pago.md#41-el-margen-de-contribución-correcto). Atar el costeo al historial de cada producto es
       la [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5), y el tiempo de máquina del bordado, la [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4)
-- [ ] ⚡ [**5.4**](docs/08-plan-de-desarrollo.md#tarea-5-4) Costeo de bordado por tiempo de máquina · API
+- [x] [**5.4**](docs/08-plan-de-desarrollo.md#tarea-5-4) Costeo de bordado por tiempo de máquina · API — **la columna
+      `minutos_maquina` existía desde el esquema inicial y no tenía regla; ya la tiene.** Los
+      minutos de máquina **no le suman pesos al costo unitario**: la tarifa por hora es un sueldo
+      entre horas productivas y la bordadora no cobra sueldo, y su energía ya estaba nombrada entre
+      los consumibles de [05 §7.1](docs/05-reglas-financieras.md#71-costo-unitario); cobrárselos a la tarifa de la persona contaría dos veces la
+      hora que esa persona dedica a otra cosa ([RN-17](docs/03-requisitos-y-bdd.md#rn-17)). Lo que sí hacen es **ocupar el taller**, así
+      que el margen por hora divide entre el mayor de los dos tiempos y no entre su suma: los dos
+      corren solapados, y mientras la bordadora anda no se puede empezar otro bordado. El bordado
+      de la tabla de [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes), declarado como cinco minutos de persona y veintidós de máquina,
+      baja de $11.800 a $9.136 de costo y sube a $43.265 por hora, con el mismo denominador de 22
+      minutos. **Nace en cero, así que nada de lo que hay hoy cambia de cifra.** Contrato `0.24.0`
+      con `minutosMaquina` en el formulario «producto», en la vista previa del costeo y en la
+      respuesta `Costeo`, y el `42241` nuevo para sus decimales. **No pidió migración ni tocó el
+      front**: el campo entra por el descriptor. `prisma_api` en `0.41.0`, con 1575 pruebas sin base
+      ([§10](#10-decisiones-de-construcción-que-conviene-revisar))
 - [x] [**5.5**](docs/08-plan-de-desarrollo.md#tarea-5-5) Historial de costos con fecha de vigencia · Base, API — el historial
       ya estaba; lo que faltaba era **leerlo hacia atrás**. `fn_costeo_vigente` dice qué costeo
       regía un día dado —la vigencia mayor que no pase de esa fecha, y el último registrado si hay
@@ -1751,6 +1767,19 @@ a `anon`.
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**Del costeo de bordado (5.4):**
+
+- [ ] ⚡ **Cómo entra el tiempo de máquina en el costo unitario lo decidió quien construyó.** Era la
+      regla que faltaba y la que tenía parada la tarea. Se decidió que **no entra en pesos y sí en
+      ocupación**: el costo del tiempo sigue siendo el de la persona, y el margen por hora divide
+      entre el mayor de los dos tiempos ([05 §7.1](docs/05-reglas-financieras.md#71-costo-unitario), [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes)). La razón es que la tarifa por hora es
+      un sueldo entre horas productivas y la máquina no cobra sueldo, y que cobrarle esos minutos a
+      la tarifa de la persona contaría dos veces la hora que la persona dedica a otra cosa ([RN-17](docs/03-requisitos-y-bdd.md#rn-17)).
+      **Se descartó una tarifa de máquina propia** —depreciación, energía y mantenimiento entre
+      horas de uso—, que es lo más fiel pero pide columna, panel e historial, y el [08](docs/08-plan-de-desarrollo.md) le da a la 5.4
+      un solo carril y un día. Si el taller quiere que la bordadora cueste plata por hora, eso es
+      esa tarifa y es otra tarea
 
 **De la pantalla Reportes (6.5):**
 
