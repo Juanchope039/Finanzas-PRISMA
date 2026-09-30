@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.19.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-30 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.20.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-30 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -54,11 +54,11 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 3](#sprint-3) · Movimientos | 25 | 25 | 0 | 0 | 0 |
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 10 | 0 | 1 | 1 |
-| [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 9 | 0 | 2 | 2,5 |
+| [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 10 | 0 | 1 | 1 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 8 | 0 | 1 | 2 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **154** | **128** | **0** | **26** | **31,5** |
+| **Total** | **154** | **129** | **0** | **25** | **30** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -87,7 +87,7 @@ Lo que tiene su commit en `develop` con la integración continua en verde, que e
 | **Front · el Inicio** | **«Cómo va el negocio», con las tres cifras del mes lado a lado** ([6.3](docs/08-plan-de-desarrollo.md#tarea-6-3)): utilidad causada, movimiento de caja y caja libre, y debajo la línea que las concilia **tal como la redacta la API**. El panel «Cuentas» trae cada saldo, el total y la escalera que lleva a la caja libre —menos los anticipos por devengar, menos los gastos fijos comprometidos—, y el de «Por entregar», las cinco cifras de los pendientes. **Todo llega de una sola consulta y con el cuerpo vacío**: cuál es el mes del negocio lo decide la API en Bogotá. **No escribe nada, y hay una prueba que lo afirma** ([RF-95](docs/03-requisitos-y-bdd.md#rf-95)). Se construyó contra el contrato acordado, que la API todavía no sirve ([§10](#10-decisiones-de-construcción-que-conviene-revisar)) | [6.3](docs/08-plan-de-desarrollo.md#tarea-6-3) |
 | **Front · sin conexión** | La PWA con su manifiesto en español y la cola local en IndexedDB: cada intención se guarda con su clave **antes** de intentar enviarse, y se reintenta con la espera de [17 §5.2](docs/17-resiliencia-offline-y-cache.md#52-cuánto-se-espera-entre-reintentos) hasta que la API la acepte o la rechace con motivo | [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) |
 | **Contrato** | El contrato v0.17.0 en [`contrato/openapi.json`](contrato/openapi.json), **entero**: el sobre, el descriptor con sus listas, cuentas y categorías, y **los sprints [2](docs/08-plan-de-desarrollo.md#sprint-2), [3](docs/08-plan-de-desarrollo.md#sprint-3), [4](docs/08-plan-de-desarrollo.md#sprint-4), [5](docs/08-plan-de-desarrollo.md#sprint-5), [6](docs/08-plan-de-desarrollo.md#sprint-6), [7](docs/08-plan-de-desarrollo.md#sprint-7) y [8](docs/08-plan-de-desarrollo.md#sprint-8) acordados antes de implementarlos** —`/sesiones`, `/usuarios`, `/cargos`, `/bitacora`, `/navegacion` y las tres cabeceras del canal firmado; los movimientos con su registro, su anulación, su adjunto y su libro con filtros; los clientes, los pedidos y sus anticipos; los productos con su costeo, su cuadro de márgenes y lo que Operación no recibe; y el capital: las inversiones, los aportes, el retiro partido en pro-labore y distribución, el pro-labore, los sobres y el patrimonio; y la nómina entera con el simulador, el cotizador y el importador; y los reportes: el Inicio en una sola consulta —las tres cifras, las alertas, los saldos, los sobres, los doce meses y los pendientes—, el año mes a mes con el promedio de ganancias y el punto de equilibrio, el cierre mensual y la descarga en CSV o PDF— | [0.15](docs/08-plan-de-desarrollo.md#tarea-0-15) · [0.18](docs/08-plan-de-desarrollo.md#tarea-0-18) · [1.17](docs/08-plan-de-desarrollo.md#tarea-1-17) · [2.19](docs/08-plan-de-desarrollo.md#tarea-2-19) · [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) · [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10) · [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) · [6.10](docs/08-plan-de-desarrollo.md#tarea-6-10) · [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) · [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) |
-| **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 30 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 64 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los dieciocho triggers de auditoría escribiendo y las 55 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. La semilla es fija, re-ejecutable y con filas en toda tabla que preguntan las pruebas de permisos, y `sembrar.ps1` la lleva a dev y a qa sin dejarla acercarse a uat ni a prod. Y esto ya no es solo dev: **qa quedó al día con la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)**, con sus 109 comprobaciones en `OK` y `schema_version` en `0.3.0`. Y con la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) el esquema estrena la tabla `adjuntos` —la ficha del soporte, con su trigger y sus dos flechas excluyentes— y el **bucket privado `soportes`**, que impone el techo de 5 MB y los cuatro tipos de contenido **antes** de que los bytes se guarden: son 123 comprobaciones en `OK` contra la base local, y `0.4.0` **todavía sin promover a dev ni a qa**. Y con la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) el libro impone al fin **las tres reglas de la cuenta de destino** —un gasto ya no llega con destino, y una transferencia ya no va de una cuenta a sí misma, que además le **bajaba el saldo** a esa cuenta— y **la fecha se juzga con el día de Bogotá y no con el huso de la sesión**, que de siete a doce de la noche aceptaba el mañana que la API rechaza: 141 comprobaciones en `OK`, y la `0.6.0` esperando promoción como la `0.4.0`. Y con la [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) **`pedidos` tiene dónde guardar la cancelación**, que el contrato prometía desde el `0.10.0`: cuándo, quién, por qué y qué pasó con el anticipo, sin cancelación muda y sin reusar las columnas de la anulación —un pedido cancelado y después anulado perdería una de las dos historias—. 199 comprobaciones en `OK`, y la `0.11.0` tampoco está promovida. Y con la [3.18](docs/08-plan-de-desarrollo.md#tarea-3-18) **editar una fila ya no tumba la escritura en cinco de las dieciséis tablas auditadas**: `fn_auditar` leía `anulado_en` también donde no existe, y el `UPDATE` se caía con `42703` dentro del trigger. 216 comprobaciones en `OK`, una edición por tabla auditada, y la `0.12.0` sin promover. Y con la [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19) **el libro tiene de dónde leer cómo se ve cada tipo**: `presentacion_tipos`, con las nueve lecturas que ya pintaba escritas por la migración, que leen los dos tipos y cambia solo Gerencia —la sesión de Operación no alcanza ninguna fila— y con el decimosexto trigger de auditoría. 235 comprobaciones en `OK`, y la `0.13.0` sin promover. Y con la [3.20](docs/08-plan-de-desarrollo.md#tarea-3-20) **anular ya no queda a medias**: `fn_anular_movimiento` anula el movimiento y lo que va con él —el anticipo de un pedido en proceso, el activo, el aporte, las dos mitades del retiro, que une la columna nueva `aportes_retiros.retiro_id`, o el adelanto sin descontar— con el mismo motivo, autor e instante, y rechaza entera la anulación de lo que ya siguió su vida. 259 comprobaciones, y la `0.14.0` sin promover. Y con la [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) **el cotizador tiene dónde guardar**: `cotizaciones` y `cotizacion_lineas`, que el contrato de la [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) prometía y la base no tenía, con la validez que no vence antes de emitirse, el pedido en que se convierte y la anulación con motivo. **Llevan RLS** porque anular es solo de Gerencia, y a Operación se lo niega la base con `42501`. 291 comprobaciones, y la `0.15.0` sin promover. Y con la [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5) **el historial de costos por fin se lee hacia atrás**: `fn_costeo_vigente` dice qué costeo regía un día dado, y es `SECURITY DEFINER` a propósito, porque el pedido lo registran los dos tipos de usuario y `costos_solo_gerencia` no le devuelve a Operación ni una fila: con `INVOKER`, el costo que un pedido congela dependería de quién lo digitó. 337 comprobaciones, y la `0.19.0` sin promover | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) · [2.4](docs/08-plan-de-desarrollo.md#tarea-2-4) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) · [3.18](docs/08-plan-de-desarrollo.md#tarea-3-18) · [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19) · [3.20](docs/08-plan-de-desarrollo.md#tarea-3-20) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
+| **Base** | **El esquema ya no está solo escrito: está probado contra una base.** 30 tablas con la semilla del mockup, los nueve dominios de [04 §4.1](docs/04-modelo-de-datos.md#41-tipos-y-convenciones-comunes) en sus 64 columnas, toda restricción con nombre explícito, `DELETE` y `TRUNCATE` revocados a todo el que no sea el dueño, los dieciocho triggers de auditoría escribiendo y las 55 políticas juzgando a una sesión de verdad —Operación no alcanza los retiros ni el pro-labore; Gerencia sí—, también sobre el catálogo de cargos, que lee todo el mundo y escribe solo Gerencia, y sobre las claves de idempotencia, que cada persona alcanza solo si son suyas, Gerencia incluida. `schema_version` y el rol `prisma_api`, con el que **RLS ya juzga a la API**. La semilla es fija, re-ejecutable y con filas en toda tabla que preguntan las pruebas de permisos, y `sembrar.ps1` la lleva a dev y a qa sin dejarla acercarse a uat ni a prod. Y esto ya no es solo dev: **qa quedó al día con la promoción de la [1.12](docs/08-plan-de-desarrollo.md#tarea-1-12)**, con sus 109 comprobaciones en `OK` y `schema_version` en `0.3.0`. Y con la [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) el esquema estrena la tabla `adjuntos` —la ficha del soporte, con su trigger y sus dos flechas excluyentes— y el **bucket privado `soportes`**, que impone el techo de 5 MB y los cuatro tipos de contenido **antes** de que los bytes se guarden: son 123 comprobaciones en `OK` contra la base local, y `0.4.0` **todavía sin promover a dev ni a qa**. Y con la [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) el libro impone al fin **las tres reglas de la cuenta de destino** —un gasto ya no llega con destino, y una transferencia ya no va de una cuenta a sí misma, que además le **bajaba el saldo** a esa cuenta— y **la fecha se juzga con el día de Bogotá y no con el huso de la sesión**, que de siete a doce de la noche aceptaba el mañana que la API rechaza: 141 comprobaciones en `OK`, y la `0.6.0` esperando promoción como la `0.4.0`. Y con la [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) **`pedidos` tiene dónde guardar la cancelación**, que el contrato prometía desde el `0.10.0`: cuándo, quién, por qué y qué pasó con el anticipo, sin cancelación muda y sin reusar las columnas de la anulación —un pedido cancelado y después anulado perdería una de las dos historias—. 199 comprobaciones en `OK`, y la `0.11.0` tampoco está promovida. Y con la [3.18](docs/08-plan-de-desarrollo.md#tarea-3-18) **editar una fila ya no tumba la escritura en cinco de las dieciséis tablas auditadas**: `fn_auditar` leía `anulado_en` también donde no existe, y el `UPDATE` se caía con `42703` dentro del trigger. 216 comprobaciones en `OK`, una edición por tabla auditada, y la `0.12.0` sin promover. Y con la [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19) **el libro tiene de dónde leer cómo se ve cada tipo**: `presentacion_tipos`, con las nueve lecturas que ya pintaba escritas por la migración, que leen los dos tipos y cambia solo Gerencia —la sesión de Operación no alcanza ninguna fila— y con el decimosexto trigger de auditoría. 235 comprobaciones en `OK`, y la `0.13.0` sin promover. Y con la [3.20](docs/08-plan-de-desarrollo.md#tarea-3-20) **anular ya no queda a medias**: `fn_anular_movimiento` anula el movimiento y lo que va con él —el anticipo de un pedido en proceso, el activo, el aporte, las dos mitades del retiro, que une la columna nueva `aportes_retiros.retiro_id`, o el adelanto sin descontar— con el mismo motivo, autor e instante, y rechaza entera la anulación de lo que ya siguió su vida. 259 comprobaciones, y la `0.14.0` sin promover. Y con la [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) **el cotizador tiene dónde guardar**: `cotizaciones` y `cotizacion_lineas`, que el contrato de la [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11) prometía y la base no tenía, con la validez que no vence antes de emitirse, el pedido en que se convierte y la anulación con motivo. **Llevan RLS** porque anular es solo de Gerencia, y a Operación se lo niega la base con `42501`. 291 comprobaciones, y la `0.15.0` sin promover. Y con la [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5) **el historial de costos por fin se lee hacia atrás**: `fn_costeo_vigente` dice qué costeo regía un día dado, y es `SECURITY DEFINER` a propósito, porque el pedido lo registran los dos tipos de usuario y `costos_solo_gerencia` no le devuelve a Operación ni una fila: con `INVOKER`, el costo que un pedido congela dependería de quién lo digitó. 337 comprobaciones, y la `0.19.0` sin promover. Y con la [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8) **un cierre guardado ya no se puede editar**: `UPDATE` sobre `cierres_mensuales` queda revocado para todos los roles de la aplicación, porque la foto que congela el mes la va a leer un reporte impreso meses después, y un `UPDATE` de la API la volvería una cifra más que se puede corregir en silencio. Un cierre equivocado se arregla con un ajuste en el mes corriente. 346 comprobaciones, y la `0.20.0` sin promover | [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4) · [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) · [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) · [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) … [1.5](docs/08-plan-de-desarrollo.md#tarea-1-5) · [1.11](docs/08-plan-de-desarrollo.md#tarea-1-11) · [1.13](docs/08-plan-de-desarrollo.md#tarea-1-13) · [2.3](docs/08-plan-de-desarrollo.md#tarea-2-3) · [2.4](docs/08-plan-de-desarrollo.md#tarea-2-4) · [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14) · [3.15](docs/08-plan-de-desarrollo.md#tarea-3-15) · [3.18](docs/08-plan-de-desarrollo.md#tarea-3-18) · [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19) · [3.20](docs/08-plan-de-desarrollo.md#tarea-3-20) · [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11) · [5.5](docs/08-plan-de-desarrollo.md#tarea-5-5) · [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8) · [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12) |
 | **Decisión** | Cuatro repositorios ([ADR-025](docs/adr/ADR-025-cuatro-repositorios.md)), Java 25 y Gradle ([ADR-024](docs/adr/ADR-024-java-25-y-gradle.md)), Railway con dev desde ya ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)), documentación versionada ([ADR-027](docs/adr/ADR-027-documentacion-versionada.md)), el esquema por etiqueta ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) y el mockup confirmado ([H0](docs/08-plan-de-desarrollo.md#h0)) | [1.20](docs/08-plan-de-desarrollo.md#tarea-1-20) |
 
 **1423 pruebas en verde en la API** —y 335 más contra la base local, que desde la [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7) sí corre la tubería— y 575 en el front. El dominio se prueba con las cifras de los
@@ -161,8 +161,7 @@ no hubiera señal. **Con ella se cierra el [Sprint 4](docs/08-plan-de-desarrollo
 **El año mes a mes ya se puede pedir, y todavía no hay dónde verlo.** La mitad API de la
 [6.5](docs/08-plan-de-desarrollo.md#tarea-6-5) está hecha: `POST /api/v0/consultas/reporte` devuelve los doce meses, el promedio de
 ganancias del [05 §9.1](docs/05-reglas-financieras.md#91-resultado) y el punto de equilibrio del [05 §10](docs/05-reglas-financieras.md#10-punto-de-equilibrio). **Un mes cerrado no se
-vuelve a calcular**: sale tal cual de `cierres_mensuales` ([RN-16](docs/03-requisitos-y-bdd.md#rn-16)), que es lo que la [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8) va a
-llenar; los abiertos se calculan, y el que no tiene registro no viaja. **El promedio se divide entre
+vuelve a calcular**: sale tal cual de `cierres_mensuales` ([RN-16](docs/03-requisitos-y-bdd.md#rn-16)), que es lo que llena la [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8); los abiertos se calculan, y el que no tiene registro no viaja. **El promedio se divide entre
 los meses cerrados**, no entre los que vinieron, que es lo que el [CU-14](docs/02-casos-de-uso.md#cu-14) pide, y sin ningún mes cerrado
 no hay promedio ni proyección. **El «no» a Operación lo pone el caso de uso y no la base**, porque
 el reporte se arma de tablas que leen los dos tipos de usuario: es el `40300` que el contrato ya
@@ -226,7 +225,6 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
 | **API** | [5.4](docs/08-plan-de-desarrollo.md#tarea-5-4) · [6.6](docs/08-plan-de-desarrollo.md#tarea-6-6) · [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
-| **Base** | [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8) |
 | **Front** | [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8) · [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -234,12 +232,12 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **26 tareas y 31,5 días de trabajo** de 154 tareas del plan.
+Quedan **25 tareas y 30 días de trabajo** de 154 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 4,6 semanas | **7,6 semanas** |
-| 2 | 2,6 semanas | **5,6 semanas** |
+| 1 | 4,4 semanas | **7,4 semanas** |
+| 2 | 2,5 semanas | **5,5 semanas** |
 | 3 | 2,8 semanas | **5,8 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -1023,7 +1021,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 - [x] [**6.5**](docs/08-plan-de-desarrollo.md#tarea-6-5) Reporte mensual y anual con promedio de ganancias · API, Front — **la
       mitad API estaba hecha**: `POST /api/v0/consultas/reporte` arma el año mes a mes, con el promedio
       de ganancias del [05 §9.1](docs/05-reglas-financieras.md#91-resultado) y su proyección a doce meses ([BDD-14-1](docs/03-requisitos-y-bdd.md#bdd-14-1)). **Un mes cerrado no se
-      recalcula nunca**: viene tal cual de `cierres_mensuales`, que es la foto que congela la [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8)
+      recalcula nunca**: viene tal cual de `cierres_mensuales`, la foto que congela la [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8)
       ([RN-16](docs/03-requisitos-y-bdd.md#rn-16)); los abiertos los calcula `CalcularUtilidadCausada`, y **el mes sin un solo registro no
       viaja**, para que un año a medias no pinte diez meses en cero. **El promedio se divide entre los
       meses cerrados** y no entre los que trae la lista, que es lo que dice el [CU-14](docs/02-casos-de-uso.md#cu-14): sin ninguno
@@ -1062,7 +1060,19 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       pedidos por entregar como los pendientes, y que la concentración con un solo cliente alerte
       ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). `prisma_api` en 0.36.0 con 21 pruebas nuevas, y `prisma_front` en `0.28.0+34` con 11
       nuevas y 662 en total
-- [ ] ⚡ [**6.8**](docs/08-plan-de-desarrollo.md#tarea-6-8) Cierre mensual con snapshot inmutable · Base, API
+- [x] [**6.8**](docs/08-plan-de-desarrollo.md#tarea-6-8) Cierre mensual con snapshot inmutable · Base, API —
+      **un mes se puede cerrar, y lo cerrado ya no se mueve.** `PUT /api/v0/cierres/{id}` congela las
+      nueve cifras del mes —el estado de resultados con su pro-labore, la utilidad causada, el flujo
+      de caja, la nómina, la caja libre y los anticipos abiertos— y `POST /api/v0/consultas/cierres`
+      las devuelve, del mes más reciente al más viejo ([RN-16](docs/03-requisitos-y-bdd.md#rn-16), [05 §8](docs/05-reglas-financieras.md)). Desde que el mes está
+      cerrado, un movimiento anotado después **no le mueve ninguna cifra**, y el reporte impreso meses
+      más tarde dice lo mismo que el día del cierre. **Y que lo cerrado no se edite lo impone la
+      base**: el esquema `0.20.0` revoca `UPDATE` sobre `cierres_mensuales` para todos los roles de la
+      aplicación, y `DELETE` lo estaba desde la [1.2](docs/08-plan-de-desarrollo.md#tarea-1-2). **Lo que decidió**: que las cifras sean
+      las que el Inicio mostraba ese día, del mismo `TableroDelMes` de la [6.1](docs/08-plan-de-desarrollo.md#tarea-6-1) y no de un cálculo
+      aparte; que la nómina vaya en cero hasta que exista su carril; y que el punto 4 del [05 §8](docs/05-reglas-financieras.md)
+      quede fuera ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). `prisma_db` publica el esquema `0.20.0` y `prisma_api` queda en 0.40.0, con
+      25 pruebas nuevas y 1563 en total, y 12 de integración
 - [x] [**6.9**](docs/08-plan-de-desarrollo.md#tarea-6-9) Inicio de solo consulta y su descarga en CSV o PDF ([RF-95](docs/03-requisitos-y-bdd.md#rf-95), [RF-96](docs/03-requisitos-y-bdd.md#rf-96)) · Front, API
 - [x] [**6.10**](docs/08-plan-de-desarrollo.md#tarea-6-10) Contrato de reportes, indicadores, alertas y cierre mensual · Contrato —
       v0.17.0: seis operaciones, veintiún esquemas y cinco códigos, cuatro de ellos en el rango
@@ -2399,7 +2409,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       nómina liquidada o una de las dos mitades de un retiro partido en pro-labore y distribución.
       Y el [CU-03](docs/02-casos-de-uso.md#cu-03) A3 dice que en un mes cerrado no se anula, sino que se corrige con un
       contra-asiento, así que la API tendrá que decir fila por fila cuál de las dos acciones
-      ofrece. Hoy eso no importa: sin el cierre mensual ([6.8](docs/08-plan-de-desarrollo.md#tarea-6-8)), ningún mes está cerrado.
+      ofrece. Con el cierre mensual ([6.8](docs/08-plan-de-desarrollo.md#tarea-6-8)) ya hecho, un mes se puede cerrar.
       Al escribir las tareas salieron **dos casos más**: el pago de una nómina, cuya fila de
       `nomina_detalle` no tiene columnas de anulación, y el ingreso con que se causó la venta de un
       pedido entregado. **Las reglas las propone el contrato de la tarea [3.17](docs/08-plan-de-desarrollo.md#tarea-3-17) y las aprueba quien
@@ -4435,8 +4445,8 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       una tabla de gastos fijos declarados, que ningún documento pide
 - [ ] **Un mes cerrado no dice cuáles de sus gastos eran fijos.** `cierres_mensuales` congela las
       cifras del estado de resultados, no sus categorías, así que el promedio de gastos fijos se arma
-      solo con los movimientos vigentes. Mientras la [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8) no exista no se nota; después, un año con
-      meses cerrados calcula su punto de equilibrio con menos meses de los que muestra
+      solo con los movimientos vigentes. Con la [6.8](docs/08-plan-de-desarrollo.md#tarea-6-8) ya hecha, un año con meses cerrados calcula
+      su punto de equilibrio con menos meses de los que muestra
 - [ ] **La nómina de un mes abierto va en cero.** El contrato la declara en cada mes, la foto del
       cierre la trae y el cálculo de un mes abierto no tiene de dónde sacarla: la nómina es del
       [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) y todavía no hay tabla. Es cero, no ausente, para que la pantalla no tenga que
@@ -4453,6 +4463,25 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       ninguna prueba lo veía porque las de dominio arman los movimientos a mano. **Entra arreglado en
       esta tarea** porque el punto de equilibrio necesita la categoría, y conviene mirar si alguna
       cifra ya publicada se leyó con ese cero
+
+**Del cierre mensual ([6.8](docs/08-plan-de-desarrollo.md#tarea-6-8)):**
+
+- [ ] **La nómina del snapshot va en cero, porque su carril todavía no existe.** El cierre congela
+      las nueve cifras del [05 §8](docs/05-reglas-financieras.md), y una de ellas es lo pagado a las empleadas: hoy eso entra como
+      gasto operativo y ninguna tabla lo separa. **Los meses que se cierren antes del [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8)
+      guardan un cero que después no se va a poder corregir**, porque la fila no se edita
+- [ ] **El punto 4 del [05 §8](docs/05-reglas-financieras.md) queda fuera de la tarea.** El documento pide que el ajuste de un mes
+      cerrado aparezca en el mes corriente **identificado como tal**, y marcarlo pide un campo en
+      `Movimiento` que el contrato no tiene. Lo que sí quedó es el punto 2 —el mes cerrado no admite
+      movimientos, y el `40960` lo dice—, así que el ajuste se registra, pero no se distingue
+- [ ] **El mes en curso no se cierra, y el `40961` lo dice.** Ningún documento decía qué pasa si
+      alguien pide cerrar un mes que no ha terminado: se decidió lo mínimo, que se cierra cuando pasó
+      su último día en `America/Bogota`, porque un snapshot de un mes a medias congelaría cifras que
+      todavía se están escribiendo. **Cerrar un mes viejo sí se puede**, y no se exige orden
+- [ ] **El contrato acordado tiene dos descuidos de redacción en `/api/v0/cierres/{id}`.** El
+      parámetro de la ruta se describe como «el id del retiro, que genera quien lo registra», y
+      `Idempotency-Key` usa el texto de una consulta y no el de una acción, que es el que llevan las
+      demás escrituras. **No se tocaron**: el contrato se corrige en su propio PR, y [C-04](docs/12-pruebas-y-calidad.md#c-04) los exige
 
 ---
 
