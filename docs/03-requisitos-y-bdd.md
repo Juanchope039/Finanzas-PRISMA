@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/03-requisitos-y-bdd.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [2.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/03-requisitos-y-bdd.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-30 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 ---
 
@@ -104,7 +104,7 @@ evalúa Row Level Security; el cargo es descriptivo y nunca decide un permiso.
 | <a id="rf-29"></a>RF-29 | Registrar el costo unitario: insumo + consumibles + tiempo | M | [CU-09](02-casos-de-uso.md#cu-09) |
 | <a id="rf-30"></a>RF-30 | Calcular margen porcentual y margen en pesos por unidad | M | [CU-09](02-casos-de-uso.md#cu-09) |
 | <a id="rf-31"></a>RF-31 | Calcular el **margen por hora de trabajo** de cada producto | M | [CU-09](02-casos-de-uso.md#cu-09) |
-| <a id="rf-32"></a>RF-32 | Costear servicios de bordado por tiempo de máquina | M | [CU-10](02-casos-de-uso.md#cu-10) |
+| <a id="rf-32"></a>RF-32 | Costear servicios de bordado por tiempo de máquina: no suma pesos, ocupa el taller ([05 §7.1](05-reglas-financieras.md#71-costo-unitario)) | M | [CU-10](02-casos-de-uso.md#cu-10) |
 | <a id="rf-33"></a>RF-33 | Sugerir precio de venta a partir de un margen objetivo | S | [CU-09](02-casos-de-uso.md#cu-09) |
 | <a id="rf-34"></a>RF-34 | Ocultar costos y márgenes al rol Operación | M | [CU-09](02-casos-de-uso.md#cu-09) |
 | <a id="rf-35"></a>RF-35 | Conservar el historial de cambios de costo y precio | S | [CU-09](02-casos-de-uso.md#cu-09) |
@@ -415,6 +415,14 @@ Formato Gherkin tabulado. Cada escenario se convierte en una prueba automática.
 | <a id="bdd-104-1"></a>BDD-104-1 | Cambiar cómo se lee un tipo no cambia las cifras | El anticipo recibido, que se lee «Anticipo · pasivo» y no cuenta ni en «Ingresos» ni en «Gastos», y un anticipo de $1.500.000 cobrado este mes | Gerencia lo pone a contar en «Ingresos», en verde | El libro pinta el anticipo en verde y lo muestra con el filtro «Ingresos», y la utilidad del mes no cambia: sigue siendo un pasivo |
 | <a id="bdd-104-2"></a>BDD-104-2 | Operación no cambia cómo se lee un tipo | Sesión con rol Operación | Intento cambiar el nombre con que se lee el gasto | La base de datos rechaza la operación, no solo la pantalla |
 
+### 4.14 Costeo por tiempo de máquina
+
+| ID | Escenario | Dado | Cuando | Entonces |
+|---|---|---|---|---|
+| <a id="bdd-32-2"></a>BDD-32-2 | El tiempo de máquina no le suma pesos al costo | Un bordado con cinco minutos de persona y veintidós de máquina, con la hora a $9.400 | Guardo el costeo | El costo unitario carga solo los cinco minutos de persona: la máquina no cobra sueldo y su energía ya está en los consumibles |
+| <a id="bdd-32-3"></a>BDD-32-3 | El margen por hora divide entre el tiempo que ocupa el taller | El mismo bordado, con $15.864 de margen | Miro el cuadro comparativo | El margen por hora se calcula sobre los veintidós minutos que la máquina ocupa, no sobre los cinco de la persona ni sobre la suma de los dos |
+| <a id="bdd-32-4"></a>BDD-32-4 | Sin tiempo de máquina nada cambia | Una camiseta con quince minutos de persona y ninguno de máquina | Miro su margen por hora | Es el mismo de siempre: el denominador sigue siendo el tiempo de persona |
+
 ---
 
 ## 5. Matriz de trazabilidad
@@ -427,7 +435,7 @@ Sin huérfanos en ninguna dirección.
 | [RF-01](#rf-01) … [RF-05](#rf-05) | [CU-28](02-casos-de-uso.md#cu-28) | [BDD-02-*](#bdd-02-1) | Todas (sesión) | `usuarios`, `auditoria` |
 | [RF-06](#rf-06) … [RF-17](#rf-17) | [CU-01](02-casos-de-uso.md#cu-01) · [CU-02](02-casos-de-uso.md#cu-02) · [CU-03](02-casos-de-uso.md#cu-03) · [CU-04](02-casos-de-uso.md#cu-04) | [BDD-01-*](#bdd-01-1), [BDD-03-*](#bdd-03-1), [BDD-04-1](#bdd-04-1), [BDD-11-1](#bdd-11-1) | 3 · Movimientos | `movimientos`, `cuentas`, `categorias`, `adjuntos` |
 | [RF-18](#rf-18) … [RF-27](#rf-27) | [CU-05](02-casos-de-uso.md#cu-05) · [CU-06](02-casos-de-uso.md#cu-06) · [CU-07](02-casos-de-uso.md#cu-07) · [CU-08](02-casos-de-uso.md#cu-08) | [BDD-06-*](#bdd-06-1), [BDD-07-*](#bdd-07-1), [BDD-08-1](#bdd-08-1) | 2 · Pedidos | `pedidos`, `pedido_lineas`, `clientes`, `anticipos` |
-| [RF-28](#rf-28) … [RF-35](#rf-35) | [CU-09](02-casos-de-uso.md#cu-09) · [CU-10](02-casos-de-uso.md#cu-10) | [BDD-02-2](#bdd-02-2) | 4 · Productos | `productos`, `costos_producto` |
+| [RF-28](#rf-28) … [RF-35](#rf-35) | [CU-09](02-casos-de-uso.md#cu-09) · [CU-10](02-casos-de-uso.md#cu-10) | [BDD-02-2](#bdd-02-2), [BDD-32-2](#bdd-32-2) … [BDD-32-4](#bdd-32-4) | 4 · Productos | `productos`, `costos_producto` |
 | [RF-36](#rf-36) … [RF-40](#rf-40) | [CU-11](02-casos-de-uso.md#cu-11) · [CU-12](02-casos-de-uso.md#cu-12) | [BDD-12-*](#bdd-12-1) | 8 · Cotizador | `cotizaciones`, `cotizacion_lineas` |
 | [RF-41](#rf-41) … [RF-53](#rf-53) | [CU-13](02-casos-de-uso.md#cu-13) · [CU-14](02-casos-de-uso.md#cu-14) · [CU-15](02-casos-de-uso.md#cu-15) · [CU-16](02-casos-de-uso.md#cu-16) · [CU-17](02-casos-de-uso.md#cu-17) · [CU-24](02-casos-de-uso.md#cu-24) · [CU-25](02-casos-de-uso.md#cu-25) | [BDD-13-*](#bdd-13-1), [BDD-15-1](#bdd-15-1), [BDD-16-*](#bdd-16-1), [BDD-24-1](#bdd-24-1), [BDD-25-*](#bdd-25-1) | 1 · Dashboard · 5 · Inversiones · 6 · Reportes | `movimientos`, `activos`, `aportes_retiros`, `sobres`, `cierres_mensuales` |
 | [RF-54](#rf-54) … [RF-63](#rf-63) | [CU-18](02-casos-de-uso.md#cu-18) · [CU-19](02-casos-de-uso.md#cu-19) · [CU-20](02-casos-de-uso.md#cu-20) · [CU-26](02-casos-de-uso.md#cu-26) · [CU-27](02-casos-de-uso.md#cu-27) | [BDD-18-*](#bdd-18-1), [BDD-19-1](#bdd-19-1), [BDD-26-*](#bdd-26-1), [BDD-27-1](#bdd-27-1) | 7 · Nómina | `empleados`, `nomina_periodos`, `nomina_detalle`, `adelantos` |
@@ -448,7 +456,7 @@ Sin huérfanos en ninguna dirección.
 37 casos de uso · 69 escenarios BDD · 11 pantallas.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.23.1") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-016](adr/ADR-016-flutter-web-pwa.md "ADR-016 · Flutter Web instalable como PWA") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.24.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-016](adr/ADR-016-flutter-web-pwa.md "ADR-016 · Flutter Web instalable como PWA") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

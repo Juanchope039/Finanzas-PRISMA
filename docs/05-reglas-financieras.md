@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/05-reglas-financieras.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Finanzas](INDICE.md#etiqueta-finanzas) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/05-reglas-financieras.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-30 | [Finanzas](INDICE.md#etiqueta-finanzas) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 > **El documento más importante del proyecto.** Aquí viven las fórmulas exactas que el sistema
 > debe implementar. Si algo en el código contradice este documento, el código está mal.
@@ -275,15 +275,37 @@ La tarifa por hora se deriva del pro-labore o del salario, según quién haga el
 Tarifa por hora = Costo mensual de quien produce ÷ Horas productivas del mes
 ```
 
+**El tiempo de máquina no entra en esta suma.** Hay trabajo que lo hace una máquina sola —el
+bordado es el caso, y por eso existe [RF-32](03-requisitos-y-bdd.md#rf-32)—: la persona monta la pieza, la máquina borda sus
+veintidós minutos y la persona, mientras tanto, está en otra cosa.
+
+Esos minutos no cuestan pesos aquí. La tarifa por hora es **un sueldo** entre horas productivas, y
+la bordadora no cobra sueldo; su energía ya está nombrada entre los consumibles de la fórmula.
+Cobrarle la tarifa de la persona a los minutos en que la persona produce otra cosa contaría dos
+veces la misma hora, que es justo lo que prohíbe [RN-17](03-requisitos-y-bdd.md#rn-17).
+
+Lo que el tiempo de máquina sí hace es **ocupar el taller**, y eso se cuenta en el margen por hora
+del [§7.2](#72-los-tres-márgenes).
+
 ### 7.2 Los tres márgenes
 
 ```
-Margen en pesos   = Precio de venta − Costo unitario
-Margen porcentual = Margen en pesos ÷ Precio de venta
-Margen por hora   = Margen en pesos ÷ (Minutos de trabajo ÷ 60)
+Margen en pesos     = Precio de venta − Costo unitario
+Margen porcentual   = Margen en pesos ÷ Precio de venta
+Tiempo que ocupa    = el mayor entre los minutos de trabajo y los minutos de máquina
+Margen por hora     = Margen en pesos ÷ (Tiempo que ocupa ÷ 60)
 ```
 
 **El tercero es el que casi nadie calcula y el que debe guiar las decisiones.**
+
+**El denominador es el tiempo que la unidad ocupa el taller, y no el que alguien le dedica.** El
+mayor de los dos, no la suma: los dos tiempos corren solapados, así que un bordado de cinco minutos
+de persona y veintidós de máquina ocupa veintidós. Mientras la bordadora corre no se puede empezar
+otro bordado, aunque nadie esté frente a ella, y la pregunta que este margen responde es
+precisamente qué producir cuando no alcanza el tiempo.
+
+En casi todo el taller los minutos de máquina son cero y el denominador es el de siempre, así que
+el cuadro de abajo no se mueve.
 
 | Producto | Costo | Precio | Margen $ | Margen % | Minutos | **Margen/hora** |
 |---|---:|---:|---:|---:|---:|---:|
@@ -292,6 +314,11 @@ Margen por hora   = Margen en pesos ÷ (Minutos de trabajo ÷ 60)
 | Camiseta DTF | $19.500 | $32.000 | $12.500 | 39% | 15 | **$50.000** |
 | Rompecabezas A4 | $14.200 | $22.000 | $7.800 | 35% | 18 | **$26.000** |
 | Bordado (logo mediano) | $11.800 | $25.000 | $13.200 | 53% | 22 | **$36.000** |
+
+El bordado de la última fila está contado con sus veintidós minutos **como si fueran de persona**,
+que es como se costeaba antes de [RF-32](03-requisitos-y-bdd.md#rf-32). Declararlos como lo que son —cinco de persona y veintidós
+de máquina— le baja el costo a $9.136 y le sube el margen por hora a $43.265, porque el margen
+crece y el denominador sigue siendo veintidós. La cifra que cambia es el costo, no la ocupación.
 
 **Lectura del cuadro.** Por margen porcentual el llavero parece el mejor y el rompecabezas el
 peor. Por margen **por hora**, la camiseta —que tiene el peor porcentaje— es la más rentable
@@ -315,7 +342,7 @@ Regla:
 
 ```
 Horas pagadas del mes    = Horas de nómina + Horas de pro-labore
-Horas facturadas del mes = Σ (horas por unidad × unidades entregadas)
+Horas facturadas del mes = Σ (horas de persona por unidad × unidades entregadas)
 Tiempo ocioso            = Horas pagadas − Horas facturadas
 Costo del tiempo ocioso  = Tiempo ocioso × Tarifa por hora
 ```
@@ -554,7 +581,7 @@ Caja libre  = Saldo total − Anticipos por devengar − Gastos fijos comprometi
 Si alguna de estas igualdades falla, hay un error de registro o de cálculo.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [Contrato](../contrato/README.md "Contrato de la API · v0.23.1") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [Contrato](../contrato/README.md "Contrato de la API · v0.24.0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
