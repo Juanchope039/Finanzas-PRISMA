@@ -2013,6 +2013,11 @@
             "description" : "La utilidad que daría el mismo mes sin descontar el pro-labore: la trampa del trabajo invisible de 05 §6.3, puesta al lado de la cifra buena para que se note. Nunca es la que manda",
             "format" : "int64",
             "type" : "integer"
+          },
+          "ventasSobreElPuntoDeEquilibrio" : {
+            "description" : "Lo que el mes vendió por encima del punto de equilibrio del año, o por debajo si es negativo (RF-52, 05 §12.5). La resta la hace la API: el front no calcula cifras (ADR-018). Ausente cuando el reporte no trae punto de equilibrio, porque sin listón no hay contra qué medir y un cero diría que el mes quedó justo en él",
+            "format" : "int64",
+            "type" : "integer"
           }
         },
         "required" : [ "anio", "cerrado", "costosDirectos", "gastosOperativos", "ingresosCausados", "mes", "nomina", "prolabore", "utilidadCausada", "utilidadSinProlabore" ],
@@ -4990,7 +4995,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.24.0"
+    "version" : "0.25.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
