@@ -1108,7 +1108,6 @@
             "type" : "string"
           },
           "fechaEmision" : {
-            "description" : null,
             "format" : "date",
             "type" : "string"
           },
@@ -1117,7 +1116,6 @@
             "type" : "string"
           },
           "lineas" : {
-            "description" : null,
             "items" : {
               "$ref" : "#/components/schemas/LineaDePedido"
             },
@@ -5065,7 +5063,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.26.0"
+    "version" : "0.26.2"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -6721,7 +6719,7 @@
         "description" : "Las cotizaciones de más reciente a más antigua, con filtros por estado, cliente y fechas. Sin filtros, las vigentes. Como la de pedidos, no pagina: los filtros de fecha ya acotan lo que vuelve. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902.",
         "operationId" : "cotizaciones",
         "parameters" : [ {
-          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
           "in" : "header",
           "name" : "Idempotency-Key",
           "required" : true,
@@ -8622,7 +8620,7 @@
           }
         } ],
         "responses" : {
-          "200" : {
+          "201" : {
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -8630,7 +8628,7 @@
                 }
               }
             },
-            "description" : "OK"
+            "description" : "Created"
           }
         },
         "summary" : "Convertir la cotización en pedido",

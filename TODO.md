@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.25.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-30 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.26.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-01 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -56,9 +56,9 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 9 | 0 | 1 | 2 |
-| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
+| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 3 | 0 | 9 | 13,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **155** | **132** | **0** | **23** | **28** |
+| **Total** | **155** | **133** | **0** | **22** | **26** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,7 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [7.10](docs/08-plan-de-desarrollo.md#tarea-7-10) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
@@ -250,13 +250,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **23 tareas y 28 días de trabajo** de 155 tareas del plan.
+Quedan **22 tareas y 26 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 4,1 semanas | **7,1 semanas** |
-| 2 | 2,3 semanas | **5,3 semanas** |
-| 3 | 2,6 semanas | **5,6 semanas** |
+| 1 | 3,8 semanas | **6,8 semanas** |
+| 2 | 2,2 semanas | **5,2 semanas** |
+| 3 | 2,2 semanas | **5,2 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1445,7 +1445,11 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 <a id="sprint-8"></a>**[Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8) · Cotizador**
 
-- [ ] ⚡ [**8.8**](docs/08-plan-de-desarrollo.md#tarea-8-8) Cotizaciones y remisiones en PDF con logo · API, Front
+- [x] [**8.8**](docs/08-plan-de-desarrollo.md#tarea-8-8) Cotizaciones y remisiones en PDF con logo · API, Front — seis rutas
+      del rango `80`–`89`: emitir, listar, aceptar, anular y los dos papeles. El total lo calcula la
+      API con el precio del catálogo del día, aceptar escribe el pedido y la cotización en la única
+      transacción de la petición, y el PDF se arma a mano, sin librería, con el membrete en la
+      configuración. Contrato `0.26.2`, que corrigió el `201` de la aceptación
 - [ ] ⚡ [**8.9**](docs/08-plan-de-desarrollo.md#tarea-8-9) Validador de anticipo mínimo · API
 - [x] [**8.11**](docs/08-plan-de-desarrollo.md#tarea-8-11) Contrato de nómina, simulador, cotizaciones e importación · Contrato — v0.15.0:
       25 operaciones, 46 esquemas y 17 códigos que estrenan a la vez los tres rangos que quedaban
@@ -4614,6 +4618,28 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **Un límite más bajo no invalida lo que ya está guardado.** Se decidió lo mínimo: el límite
       juzga la definición que llega, no las anteriores. Revisarlas pediría decir qué pasa con un
       costeo que ya tomó una tarifa de unas horas que hoy no cabrían
+
+**Del cotizador ([8.8](docs/08-plan-de-desarrollo.md#tarea-8-8)):**
+
+- [ ] **El membrete vive en la configuración de la API, no en la base.** El logo, el nombre y el pie
+      del papel son del taller y no de una cotización, así que son propiedades de `application.yml`
+      y el logo un recurso del artefacto. Si algún día hay más de un taller, eso es una tabla y un
+      PR de contrato
+- [ ] **El PDF se escribe a mano, sin librería.** Es una página con texto en Helvetica y una imagen,
+      y una dependencia nueva para eso pesa más que el código que se evita. Lo que se pierde es el
+      acomodo automático: el ancho de las columnas lo decide el código
+- [ ] **Una cotización vencida o ya aceptada también se imprime.** El papel es un registro de lo que
+      se ofreció, y negarlo obligaría a quien atiende a buscarlo por fuera. Solo se niega el de una
+      anulada (`40981`), porque ese papel ya no vale
+- [ ] **La hoja no la dibuja el front: la vista previa es el PDF que arma la API.** Así el papel que
+      firma el cliente y el que se imprime son el mismo byte a byte. El mockup dibuja una hoja en
+      pantalla, y dibujarla dos veces es tener dos papeles que se van a separar
+- [ ] **«Anular» se pinta para todo el mundo.** Ninguna consulta de navegación trae una bandera que
+      diga quién puede, y esconder el botón no protege nada: quien rechaza es la política
+      `cotizaciones_anulacion` en PostgreSQL, con su `42501`, y el front pinta el `40300` del sobre
+- [ ] **El `42501` de esa política se traducía a `50000`.** El adaptador de cotizaciones no
+      traducía el rechazo de la base, así que la seguridad funcionando se leía como «algo salió
+      mal». Se arregló copiando la traducción que ya hacía el de movimientos
 
 ---
 
