@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.24.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-01 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.25.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-01 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -153,8 +153,9 @@ y 2 del [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7)**.
 **Y lo repartido ya se mira contra lo gastado.** La [7.8](docs/08-plan-de-desarrollo.md#tarea-7-8) pinta «Los 4 sobres» en el Inicio,
 detrás de «Cuentas»: la barra de cuatro tramos y, por sobre, lo asignado contra lo usado y lo
 disponible con su signo, en verde o en rojo, con el avance de la reserva hacia los tres meses de
-gastos fijos. **No pidió API ni contrato**: los cuatro sobres ya viajaban dentro del tablero, así
-que la tarea entera fue leerlos y pintarlos. **Lo que no se escribió es la frase con que el mockup
+gastos fijos. **No pidió contrato, pero sí las dos mitades**: el [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) ya declaraba los cuatro
+sobres dentro del tablero, y la API los mandaba vacíos esperando esta tarea, así que `RepartirEnSobres`
+llegó con ella. **Lo que no se escribió es la frase con que el mockup
 cierra el panel**, «los gastos fijos consumieron el 49% de lo que entró»: es una lectura redactada
 sobre las cifras y le toca a la API ([§10](#10-decisiones-de-construcción-que-conviene-revisar)).
 **Con ella el [Sprint 7](docs/08-plan-de-desarrollo.md#sprint-7) queda cerrado, 9 de 9**, y el Inicio no le debe nada al mockup.
@@ -1226,8 +1227,15 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       estrena «Los 4 sobres», detrás de «Cuentas», que es el orden del [10 §4.1](docs/10-ux-y-mockups.md#41-dashboard). La barra de
       cuatro tramos y, por sobre, lo asignado contra lo usado y lo disponible con su signo, en verde
       o en rojo; la reserva enseña además su avance hacia los tres meses de gastos fijos
-      ([05 §11](docs/05-reglas-financieras.md#11-la-regla-de-los-4-sobres)). **No pidió API ni contrato**: los cuatro sobres ya viajaban dentro del
-      tablero desde la [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9), y esta tarea es solo leerlos y pintarlos. **Los nombres y los
+      ([05 §11](docs/05-reglas-financieras.md#11-la-regla-de-los-4-sobres)). **Aterrizó en dos mitades, y las dos hacían falta**: el
+      [7.9](docs/08-plan-de-desarrollo.md#tarea-7-9) declaró los cuatro sobres dentro del tablero, pero la API los venía mandando
+      vacíos a propósito desde la [6.11](docs/08-plan-de-desarrollo.md#tarea-6-11), así que el panel no habría pintado nada. En la API,
+      `RepartirEnSobres` aplica el porcentaje vigente de cada sobre a **lo que entró en efectivo en el
+      mes** y le resta lo gastado con cargo a él, y la fila de cada sobre entra también en el archivo
+      que se descarga del Inicio. **La reserva no gasta nada** —ningún movimiento se marca contra el
+      colchón— y es la única con acumulado y meta: lo apartado mes a mes, con el porcentaje que regía
+      en cada mes, contra tres meses de gasto fijo. El [08](docs/08-plan-de-desarrollo.md) le daba un solo carril, el Front
+      ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). `prisma_api` en `0.43.0`, con 19 pruebas nuevas. **Los nombres y los
       colores los pone la pantalla**, los mismos del panel de la [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7), y una clave que el front
       no conozca se pinta neutra con su clave por nombre. **Lo que no se escribe es la frase con que
       el mockup cierra el panel** —«los gastos fijos consumieron el 49% de lo que entró»—, que es una
@@ -1823,6 +1831,25 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **Los nombres y los colores de los cuatro sobres los pone la pantalla**, como en la
       [7.7](docs/08-plan-de-desarrollo.md#tarea-7-7): el contrato manda la clave y ninguna presentación. Una clave que el front no
       conozca se pinta neutra y con la clave por nombre, para no esconder lo que llegó
+- [ ] **A qué sobre carga cada salida lo decidió quien construyó**, porque ninguna columna lo dice:
+      el gasto de categoría fija y el pro-labore a gastos fijos —el [05 §11](docs/05-reglas-financieras.md#11-la-regla-de-los-4-sobres) los nombra juntos—,
+      el gasto que no es de categoría fija a costo directo, y el retiro de distribución a retiro. La
+      inversión y el adelanto a la empleada no cargan a ninguno: cambian plata por un activo o por
+      una cuenta por cobrar. **El día que una columna diga qué categoría es costo directo**, que es
+      la deuda ya declarada del reporte del año, ese reparto se afina solo
+- [ ] **La reserva no tiene usado.** Ningún movimiento se marca como hecho contra el colchón, así
+      que darle un criterio sería inventar una regla de negocio. Lo que enseña es su avance, y **su
+      meta son tres meses de gasto fijo medidos como los mide la caja libre**: lo pagado en
+      categorías fijas el mes anterior, con el pro-labore dentro. Ningún documento dice de dónde sale
+      la cifra mensual, y usar dos definiciones de «gasto fijo» en la misma tarjeta sería peor
+- [ ] **Lo asignado se reparte sobre las entradas de caja del mes**, que incluyen el aporte de
+      capital y el anticipo recibido: el [05 §11](docs/05-reglas-financieras.md#11-la-regla-de-los-4-sobres) dice «cada peso que entra en efectivo» y esas son
+      las entradas. La transferencia no reparte, porque es la misma plata en otro bolsillo. **Un mes
+      cerrado se reparte sobre el libro y no sobre su snapshot**, que congela el flujo neto y no las
+      entradas por separado
+- [ ] **La 7.8 llevó también su mitad de API, y el [08](docs/08-plan-de-desarrollo.md) la tenía como carril Front.** Sin ella el
+      panel no pinta nunca nada, y partirla en dos tareas habría dejado media tarea sin número. Si la
+      fila del 08 debe decir «API, Front», eso lo autoriza quien dirige
 
 **Del costeo de bordado (5.4):**
 
