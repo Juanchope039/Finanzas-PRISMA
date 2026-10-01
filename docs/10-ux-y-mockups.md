@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [6.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -649,14 +649,16 @@ desde el menú lateral sino desde el menú de la sesión. El detalle de sus deci
 
 Capa a pantalla completa, como la de Acceso. Aparece cuando el front arranca y descubre que la
 versión mayor que necesita no coincide con la que ofrece la API (`RF-101`). Muestra el logo, el
-título **«Esta versión ya no sirve con el servidor»**, una explicación sin jerga, **las dos
-versiones** —la que se tiene y la que el servidor necesita— y un único botón, **Reintentar**.
+título **«Esta versión ya no sirve con el servidor»**, una explicación sin jerga, **tres filas** —la
+versión que se tiene, el servidor que esta versión espera y el servidor que hay— y un único botón,
+**Reintentar**.
 
-Dos decisiones que merecen su razón:
+Tres decisiones que merecen su razón:
 
 | Decisión | Por qué |
 |---|---|
-| **Se muestran las dos versiones** | Es lo primero que pregunta quien atiende el reporte. Sin ellas, la llamada empieza con «no me deja entrar» y hay que ir a buscarlas al dispositivo de la persona |
+| **Se muestran las versiones** | Es lo primero que pregunta quien atiende el reporte. Sin ellas, la llamada empieza con «no me deja entrar» y hay que ir a buscarlas al dispositivo de la persona |
+| **Son tres filas y no dos** | El front y la API son dos SemVer independientes ([ADR-014](adr/ADR-014-semver.md)), y pueden coincidir en el número —0.1.0 y 0.1.0— sobre una pantalla que dice que no se entienden. Las dos últimas comparan lo mismo con lo mismo: el servidor que esta versión espera contra el que contestó. Y no se escribe «el servidor necesita tal versión» porque **la API no publica qué versión de aplicación necesita**: es la aplicación la que declara qué servidor espera ([19 §4.3](19-ambientes-y-entrega.md#43-el-contrato-de-compatibilidad)) |
 | **No hay forma de continuar** | Es el punto entero de la pantalla. Dejar seguir con un contrato roto no evita el fallo: lo aplaza hasta un campo nulo en la pantalla 7, donde ya nadie lo relaciona con la versión. Fallar ruidoso al arrancar es más barato que fallar tarde |
 
 El texto no dice «versión mayor incompatible» ni menciona la API: dice que la aplicación y el
@@ -939,7 +941,7 @@ El checklist de aprobación pantalla por pantalla está en
 [`09-plan-de-implantacion.md`](09-plan-de-implantacion.md) [§1](09-plan-de-implantacion.md#1-checklist-de-aprobación-del-mockup).
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.26.2") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.26.2") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-26 | [Calidad](INDICE.md#etiqueta-calidad) |
+| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [Calidad](INDICE.md#etiqueta-calidad) |
 
 ---
 
@@ -465,7 +465,7 @@ el contrato. Es **[BDD-101-1](03-requisitos-y-bdd.md#bdd-101-1)** convertido en 
 
 | Caso | Qué debe pasar |
 |---|---|
-| El front pide una MAJOR **menor** que la de la API | Pantalla `Esta versión de la aplicación ya no sirve con el servidor. Actualiza.` y ninguna pantalla más |
+| El front pide una MAJOR **menor** que la de la API | Pantalla «Esta versión ya no sirve con el servidor» y ninguna pantalla más |
 | El front pide una MAJOR **mayor** que la de la API | Lo mismo. Un front adelantado contra un servidor viejo se rompe igual |
 | Las dos MAJOR coinciden | Entra normal. Sin esta tercera no se sabe si la prueba está fallando por la razón correcta |
 

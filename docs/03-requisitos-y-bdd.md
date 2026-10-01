@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/03-requisitos-y-bdd.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/03-requisitos-y-bdd.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 ---
 
@@ -388,7 +388,7 @@ Formato Gherkin tabulado. Cada escenario se convierte en una prueba automática.
 | <a id="bdd-98-1"></a>BDD-98-1 | La insignia de versión y ambiente se ve | Una sesión abierta en el ambiente de QA | Miro el pie de la barra lateral, abajo a la izquierda | Veo `v0.4.2 · QA` en color de advertencia, y arriba sigue la franja fija que dice «Ambiente de QA · los datos no son reales» |
 | <a id="bdd-98-2"></a>BDD-98-2 | En producción no hay franja ni rótulo | Una sesión abierta en producción | Miro el pie de la barra lateral | Veo solo la versión, en color neutro, y no hay ninguna franja de ambiente: si no dice nada, es el de verdad |
 | <a id="bdd-100-1"></a>BDD-100-1 | «Acerca de» responde la primera pregunta de todo reporte de fallo | Una sesión abierta en QA | Abro «Acerca de» desde el menú de la sesión | Veo la versión del front, la de la API, la del esquema, el ambiente, la fecha de compilación y la referencia del commit |
-| <a id="bdd-101-1"></a>BDD-101-1 | El front rechaza una API con MAJOR incompatible | Un front compilado contra la MAJOR 1 de la API y un servidor que responde `2.0.0` en `POST /api/v0/consultas/version` | Abro la aplicación | La sesión no abre: aparece «Esta versión de la aplicación ya no sirve con el servidor. Actualiza.» y no hay forma de seguir |
+| <a id="bdd-101-1"></a>BDD-101-1 | El front rechaza una API con MAJOR incompatible | Un front compilado contra la MAJOR 1 de la API y un servidor que responde `2.0.0` en `POST /api/v0/consultas/version` | Abro la aplicación | La sesión no abre: aparece «Esta versión ya no sirve con el servidor», con las tres versiones del [10 §4.10](10-ux-y-mockups.md#410-versión-incompatible), y no hay forma de seguir |
 
 > **El número del medio de `BDD-98-*`, `BDD-100-1`, `BDD-101-1` y `BDD-104-*` es el del requisito, no
 > el de un caso de uso.** Es la única excepción del documento y no admite ambigüedad: los casos de
