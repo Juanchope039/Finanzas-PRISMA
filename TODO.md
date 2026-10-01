@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.27.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-01 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.28.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-01 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -57,8 +57,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 9 | 0 | 1 | 2 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 3 | 0 | 9 | 13,5 |
-| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 3 | 0 | 10 | 9,5 |
-| **Total** | **155** | **135** | **0** | **20** | **25** |
+| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 4 | 0 | 9 | 9 |
+| **Total** | **155** | **136** | **0** | **19** | **24,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,7 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) |
 | **Base** | [7.10](docs/08-plan-de-desarrollo.md#tarea-7-10) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
@@ -250,12 +250,12 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **20 tareas y 25 días de trabajo** de 155 tareas del plan.
+Quedan **19 tareas y 24,5 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
 | 1 | 3,6 semanas | **6,6 semanas** |
-| 2 | 2,1 semanas | **5,1 semanas** |
+| 2 | 2,0 semanas | **5,0 semanas** |
 | 3 | 2,2 semanas | **5,2 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -1507,7 +1507,12 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       documento. La pantalla se desviaba del mockup y **el documento se alineó al código**, con
       autorización. ✏️ queda la prueba contra una API real, escrita y sin correr: necesita qa
 - [ ] 🔒 [**9.10**](docs/08-plan-de-desarrollo.md#tarea-9-10) Etiquetar `1.0.0` del front y de la API · API, Front
-- [ ] ⚡ [**9.11**](docs/08-plan-de-desarrollo.md#tarea-9-11) Swagger detrás de autenticación en prod · API
+- [x] [**9.11**](docs/08-plan-de-desarrollo.md#tarea-9-11) Swagger detrás de autenticación en prod · API — autenticación básica en un
+      filtro propio, que es lo único que un navegador resuelve solo. **Y son cuatro puertas, no una**:
+      `/docs` solo redirige, el documento entero cuelga de `/docs/openapi` y la interfaz sale de
+      `/swagger-ui` y de `/webjars`, así que cerrar `/docs` dejaba el mapa igual de público. Se vio
+      probándolo contra la aplicación levantada. **Falla cerrado**: sin credencial configurada esas
+      rutas contestan como si no existieran. Se quitó el apagón provisional del perfil `prod`
 - [ ] ⚡ [**9.12**](docs/08-plan-de-desarrollo.md#tarea-9-12) Los proyectos uat y prod de Supabase, los dos de pago · Decisión — salió
       de partir la [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4); el expediente y la cifra están en el [§7.1](#71-el-expediente-de-uat-y-prod) y lo único que falta es la firma
 - [ ] ⚡ [**9.13**](docs/08-plan-de-desarrollo.md#tarea-9-13) Contraseña del rol `prisma_api` en qa y los seis secretos de GitHub para `permisos-en-qa` · Decisión — la configuración que el trabajo del CI ya espera desde la [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11); sin ella el trabajo se salta con aviso en cada empuje a `develop`

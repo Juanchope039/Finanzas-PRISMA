@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/09-plan-de-implantacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [Plan](INDICE.md#etiqueta-plan) · [Entrega](INDICE.md#etiqueta-entrega) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [5.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/09-plan-de-implantacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [Plan](INDICE.md#etiqueta-plan) · [Entrega](INDICE.md#etiqueta-entrega) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 Cómo se pasa de tener el software construido a que el negocio realmente lo use.
 
@@ -376,7 +376,7 @@ cuatro ambientes. Ninguno se salta.
 | 18 | La reversión está ensayada y se sabe a qué versión anterior se vuelve ([§7](#7-qué-se-hace-si-una-versión-rompe-prod)) | ⬜ |
 | 19 | La memoria de la JVM de prod está fijada por variable y **medida en qa**, no copiada de un ejemplo | ⬜ |
 | 20 | El alojamiento de la API de prod **no escala a cero** y no se pausa por inactividad | ⬜ |
-| 21 | Swagger está **detrás de autenticación en prod**; en dev, qa y uat queda abierto en `/docs` | ⬜ |
+| 21 | Swagger está **detrás de autenticación en prod**; en dev, qa y uat queda abierto en `/docs` | ⬜ El mecanismo existe desde la [9.11](08-plan-de-desarrollo.md#tarea-9-11) —autenticación básica, y apagado si no le configuraron la credencial—, así que lo que queda no es código: es poner `DOCS_USUARIO` y `DOCS_CLAVE` en el gestor de secretos de prod |
 | 22 | Una escritura repetida con la misma clave de idempotencia **no duplica**, probado contra prod antes de abrir | ⬜ |
 | 23 | El `openapi.json` publicado corresponde a la versión que está corriendo, y la integración continua lo comprobó | ⬜ |
 

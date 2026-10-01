@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-01 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [5.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-01 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -172,6 +172,8 @@ dentro del artefacto.
 | `DOMINIO_CORREO_SINTETICO` | Armar el correo interno del login ([ADR-009](adr/ADR-009-login-por-usuario.md)) | Fijo de por vida. El front nunca lo ve |
 | `ORIGENES_PERMITIDOS` | CORS: el dominio del front de ese ambiente, y solo ese | prod no acepta al front de qa. Varios se separan con comas |
 | `PUERTO_FRONT` | En una máquina no hay dominio: hay un puerto. De él salen los dos orígenes que la API acepta, `http://localhost` y `http://127.0.0.1`, que para el navegador **no son el mismo** | `8080` por defecto, el del `--web-port` del front. Solo se toca si ese puerto está ocupado. Donde hay dominio manda `ORIGENES_PERMITIDOS` y este número no se usa |
+| `DOCS_PROTEGIDA` | Si Swagger pide credencial. Solo prod lo pone en `true`, y lo hace su perfil | En dev, qa y uat queda abierto en `/docs` ([07 §9.4](07-arquitectura.md#94-swagger-generado-del-código)) |
+| `DOCS_USUARIO` · `DOCS_CLAVE` | La credencial con que se entra a Swagger en prod | **Obligatorias donde `DOCS_PROTEGIDA` esté en `true`: si faltan, las rutas del catálogo no se abren, contestan como si no existieran.** La clave es un secreto |
 | `SERVER_PORT` | Dónde escucha | Spring Boot la lee tal cual, sin código de por medio |
 | `SPRING_PROFILES_ACTIVE` | Qué perfil de configuración carga | Uno por ambiente. El perfil no trae secretos: trae qué se activa y qué no |
 | `JAVA_TOOL_OPTIONS` | Ajustes de la JVM, empezando por `-XX:MaxRAMPercentage=75` | Ver [§2.4](#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro). Sin esto la JVM reserva según la máquina anfitriona |
@@ -183,6 +185,7 @@ dentro del artefacto.
 | Claves de la API por ambiente | Gestor de secretos del proveedor de despliegue | En el repositorio |
 | Claves que necesita la integración continua | Secretos del repositorio, uno por ambiente | En el archivo del pipeline |
 | `SUPABASE_SERVICE_ROLE_KEY` | Secreto separado del de la base y del de las migraciones | En el front, y en cualquier conexión a PostgreSQL |
+| `DOCS_CLAVE`, la de Swagger en prod | Gestor de secretos del proveedor de despliegue | En el repositorio. En `.env.ejemplo` va su nombre, con el valor vacío |
 
 En el repositorio solo hay un `.env.ejemplo` con las claves y los valores vacíos. Sirve para
 saber qué hace falta, no para arrancar nada.

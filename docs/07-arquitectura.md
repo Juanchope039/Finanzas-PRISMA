@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-21 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
+| [5.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
 
 Tres partes —un front en Flutter multiplataforma, una API en Java 25 con Spring Boot y una capa
 de datos PostgreSQL siempre en línea—. Arquitectura hexagonal (puertos y adaptadores) sobre Clean
@@ -859,6 +859,12 @@ Un documento escrito a mano se desactualiza el primer día en que alguien tiene 
 
 En `dev`, `qa` y `uat` la interfaz queda abierta en `/docs`. En **producción va detrás de
 autenticación**: el catálogo de endpoints es un mapa del sistema y no tiene por qué ser público.
+
+> **Y son cuatro puertas, no una.** `/docs` no sirve la interfaz: redirige a `/swagger-ui/index.html`.
+> El documento entero cuelga de `/docs/openapi`, y los recursos de la interfaz salen de `/swagger-ui/…`
+> y de `/webjars/…`. Cerrar solo `/docs` deja el mapa igual de público por la puerta de al lado, así
+> que la autenticación cubre las cuatro familias. **Y falla cerrado:** si en producción nadie configuró
+> la credencial, esas rutas contestan como si no existieran, en vez de abrirse.
 
 Qué documenta cada operación —caso de uso, regla de negocio en español, códigos posibles, ejemplo
 real y quién puede llamarla— está en [`20-contrato-de-api.md`](20-contrato-de-api.md).
