@@ -1964,6 +1964,88 @@ tbody tr.fila-detalle:hover{background:none}
             </div>
           </div>
 
+          <!-- El registro de empleadas (RF-54, CU-19, tarea 8.1). Va antes de la liquidacion
+               porque sin ficha no hay a quien liquidar, y debajo del simulador porque la
+               pregunta de la seccion sigue siendo si se puede pagar. Es de Gerencia por la
+               politica empleados_insercion (04 §7), y no crea usuarios: se puede estar en
+               nomina sin entrar al sistema, y por eso son dos tablas (04 §4.2). -->
+          <div class="panel" id="panel-empleadas">
+            <div class="panel-head">
+              <h2 class="grow">Las empleadas</h2>
+              <span class="eyebrow">Quien está en nómina</span>
+              <button class="cta" id="btn-empleada" aria-expanded="false" aria-controls="form-empleada">+ Registrar empleada</button>
+            </div>
+
+            <div class="formulario" id="form-empleada" hidden>
+              <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px">
+                <h3 class="grow" id="em-titulo">Registrar una empleada</h3>
+                <span class="eyebrow" id="em-nota">El salario no es el neto del mes</span>
+              </div>
+              <div class="campos-form">
+                <div class="campo"><label for="em-nombre">Nombre y apellido</label>
+                  <input type="text" id="em-nombre" placeholder="Ana María Ocampo"></div>
+                <div class="campo"><label for="em-documento">Cédula <span class="eyebrow">opcional</span></label>
+                  <input type="text" id="em-documento" inputmode="numeric" placeholder="1.094.xxx.xxx"></div>
+                <div class="campo" id="campo-em-ingreso"><label for="em-ingreso">Fecha de ingreso</label>
+                  <input type="date" id="em-ingreso"></div>
+                <div class="campo"><label for="em-salario">Salario acordado del mes</label>
+                  <input type="text" id="em-salario" inputmode="numeric" placeholder="1.300.000"></div>
+                <div class="campo"><label for="em-horas">Horas pactadas del mes</label>
+                  <input type="text" id="em-horas" inputmode="decimal" placeholder="192"></div>
+                <div class="campo"><label for="em-usuario">Usuario con que entra</label>
+                  <select id="em-usuario"></select></div>
+              </div>
+
+              <p style="font-size:.78rem; color:var(--muted); margin-top:12px" id="em-techo"></p>
+              <p class="capa-error" id="em-error" role="alert" aria-live="polite" hidden style="margin-top:14px"></p>
+
+              <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; align-items:center">
+                <button class="cta" id="em-guardar">Guardar ficha</button>
+                <button class="ghost" id="em-cancelar">Cancelar</button>
+              </div>
+            </div>
+
+            <!-- Retirar y anular no son lo mismo, y por eso son dos operaciones del contrato:
+                 el retiro la saca de la nomina de los meses siguientes y le deja su historia;
+                 la anulacion dice que la ficha nunca debio existir, con motivo escrito (RN-13). -->
+            <div class="formulario" id="form-empleada-salida" hidden>
+              <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px">
+                <h3 class="grow" id="es-titulo">Retirar de la nómina</h3>
+                <span class="eyebrow" id="es-nota"></span>
+              </div>
+              <div class="campos-form">
+                <div class="campo" id="campo-es-fecha"><label for="es-fecha">Fecha de retiro</label>
+                  <input type="date" id="es-fecha"></div>
+                <div class="campo" id="campo-es-motivo" style="grid-column:span 2"><label for="es-motivo">Motivo</label>
+                  <input type="text" id="es-motivo" placeholder="¿Por qué se anula la ficha?"></div>
+              </div>
+
+              <p class="capa-error" id="es-error" role="alert" aria-live="polite" hidden style="margin-top:14px"></p>
+
+              <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; align-items:center">
+                <button class="cta" id="es-guardar">Guardar</button>
+                <button class="ghost" id="es-cancelar">Cancelar</button>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-bottom:12px">
+              <label style="display:flex; gap:7px; align-items:center; font-size:.82rem; color:var(--muted)">
+                <input type="checkbox" id="em-ver-retiradas"> Ver las retiradas</label>
+              <label style="display:flex; gap:7px; align-items:center; font-size:.82rem; color:var(--muted)">
+                <input type="checkbox" id="em-ver-anuladas"> Ver las anuladas</label>
+            </div>
+
+            <div class="tw"><table>
+              <thead><tr><th>Empleada</th><th>Usuario</th><th>Ingreso</th><th class="r r-mid">Salario acordado</th><th class="r">Horas del mes</th><th>Estado</th><th></th></tr></thead>
+              <tbody id="tb-empleadas"></tbody>
+            </table></div>
+
+            <p style="font-size:.78rem; color:var(--muted); margin-top:12px">
+              El valor de la hora ordinaria sale del salario acordado entre las horas pactadas, y
+              con él se pagan las extra. Las horas pactadas no pasan del máximo del mes que define
+              Gerencia en Capital.</p>
+          </div>
+
           <div class="grid g23">
             <div class="panel">
               <div class="panel-head"><h2 class="grow">Liquidación de septiembre</h2>
@@ -3506,6 +3588,311 @@ function guardarLimite(){
   pintarLimite();
 })();
 
+
+/* ---------- el registro de empleadas (RF-54, CU-19, tarea 8.1) ---------- */
+/* Una empleada no es un usuario: se puede estar en nomina sin entrar al sistema, y entrar sin
+   estar en nomina (04 §4.2). `usuarioId` las conecta cuando son la misma persona, y es UNIQUE:
+   dos fichas colgadas del mismo usuario le ensenarian el desprendible a quien no es (42253).
+   Editar escribe encima el salario, sin historial: lo ya liquidado conserva el suyo en
+   nomina_detalle.salario_base. */
+var EMPLEADAS = [
+  {id:'e1', nombre:'Ana María Ocampo', documento:'1094002211', ingreso:'2025-02-03',
+   salario:1300000, horas:192, usuario:null, retiro:null, anuladoMotivo:null},
+  {id:'e2', nombre:'Marcela Ospina Vélez', documento:'1094778004', ingreso:'2026-01-15',
+   salario:1450000, horas:192, usuario:'marcela', retiro:null, anuladoMotivo:null},
+  {id:'e3', nombre:'Lorena Sáenz Mejía', documento:'43887120', ingreso:'2024-08-01',
+   salario:1200000, horas:192, usuario:'lorena', retiro:'2026-06-30', anuladoMotivo:null}
+];
+var avisoEmpleadas  = null;
+var editandoEmpleada = null;   /* el id que se esta editando, o null si es una ficha nueva */
+var salidaEmpleada   = null;   /* {id, clase:'retiro'|'anulacion'} mientras su formulario este abierto */
+var verRetiradas = false;
+var verAnuladas  = false;
+
+function empleadaPorId(id){
+  return EMPLEADAS.filter(function(e){ return e.id === id; })[0];
+}
+
+/* Sigue en nomina quien no tiene fecha de retiro ni ficha anulada: es el `activa` del contrato. */
+function empleadaActiva(e){ return !e.retiro && !e.anuladoMotivo; }
+
+/* La hora ordinaria la calcula la API (06 §6.1): el salario entre las horas pactadas. Sin horas
+   no hay tarifa, y por eso el formulario no admite cero. */
+function horaOrdinaria(e){ return e.horas > 0 ? Math.round(e.salario / e.horas) : null; }
+
+function pastillaEmpleada(e){
+  if (e.anuladoMotivo) return '<span class="pill p-mut">Anulada</span>';
+  if (e.retiro) return '<span class="pill p-warn">Retirada · ' + fechaConAno(e.retiro) + '</span>';
+  return '<span class="pill p-ok">En nómina</span>';
+}
+
+function filaEmpleada(e){
+  var fuera = !empleadaActiva(e);
+  /* Una ficha anulada no se edita ni se retira: lo que queda es su motivo, a la vista. */
+  var acciones = e.anuladoMotivo
+    ? ''
+    : '<button class="ghost" style="padding:3px 9px" data-em-editar="' + e.id + '">Editar</button> ' +
+      (e.retiro ? '' :
+        '<button class="ghost" style="padding:3px 9px" data-em-retiro="' + e.id + '">Retirar</button> ') +
+      '<button class="ghost" style="padding:3px 9px" data-em-anular="' + e.id + '">Anular</button>';
+  var tarifa = horaOrdinaria(e);
+  return '<tr' + (fuera ? ' class="fila-baja"' : '') + '>' +
+    '<td style="font-weight:500' + (fuera ? '; color:var(--muted)' : '') + '">' + enTexto(e.nombre) +
+    (e.anuladoMotivo ? '<span style="display:block; font-size:.76rem; color:var(--muted)">«' +
+      enTexto(e.anuladoMotivo) + '»</span>' : '') +
+    '</td><td class="mono" style="color:var(--muted)">' +
+    (e.usuario ? enTexto(e.usuario) : 'No entra') +
+    '</td><td class="mono" style="color:var(--muted); white-space:nowrap">' + fechaConAno(e.ingreso) +
+    '</td><td class="r r-mid">' + fmt(e.salario) +
+    '</td><td class="r">' + horasTexto(e.horas) +
+    (tarifa ? '<span style="display:block; font-size:.76rem; color:var(--muted)">' + fmt(tarifa) +
+      ' la hora</span>' : '') +
+    '</td><td>' + pastillaEmpleada(e) +
+    '</td><td style="white-space:nowrap">' + acciones + '</td></tr>';
+}
+
+function tablaEmpleadas(){
+  var cuerpo = document.getElementById('tb-empleadas');
+  if (!cuerpo) return;
+  var aviso = avisoEmpleadas;
+  avisoEmpleadas = null;
+  var vivas  = EMPLEADAS.filter(empleadaActiva);
+  var fuera  = EMPLEADAS.filter(function(e){ return e.retiro && !e.anuladoMotivo && verRetiradas; });
+  var nulas  = EMPLEADAS.filter(function(e){ return e.anuladoMotivo && verAnuladas; });
+  var html   = filaAviso(aviso, 7);
+
+  /* Una tabla con cero filas no se distingue de una que no cargo, asi que se dice con palabras. */
+  if (!vivas.length && !fuera.length && !nulas.length){
+    cuerpo.innerHTML = html + '<tr><td colspan="7" style="color:var(--muted)">Todavía no hay ' +
+      'ninguna empleada en nómina.</td></tr>';
+    return;
+  }
+  html += vivas.map(filaEmpleada).join('');
+  if (fuera.length){
+    html += '<tr class="sep-baja"><td colspan="7">Retiradas · siguen con sus liquidaciones</td></tr>' +
+      fuera.map(filaEmpleada).join('');
+  }
+  if (nulas.length){
+    html += '<tr class="sep-baja"><td colspan="7">Anuladas · nada se borra, queda el motivo</td></tr>' +
+      nulas.map(filaEmpleada).join('');
+  }
+  cuerpo.innerHTML = html;
+
+  $$('#tb-empleadas [data-em-editar]').forEach(function(b){
+    b.addEventListener('click', function(){ abrirFormEmpleada(b.getAttribute('data-em-editar')); });
+  });
+  $$('#tb-empleadas [data-em-retiro]').forEach(function(b){
+    b.addEventListener('click', function(){ abrirSalida(b.getAttribute('data-em-retiro'), 'retiro'); });
+  });
+  $$('#tb-empleadas [data-em-anular]').forEach(function(b){
+    b.addEventListener('click', function(){ abrirSalida(b.getAttribute('data-em-anular'), 'anulacion'); });
+  });
+}
+
+/* El desplegable solo ofrece usuarios activos sin ficha: la que se edita conserva el suyo. Asi la
+   pantalla no provoca el 42253, que de todos modos lo responde la base. */
+function refrescarUsuariosEmpleada(e){
+  var sel = document.getElementById('em-usuario');
+  if (!sel) return;
+  var tomados = EMPLEADAS.filter(function(x){
+    return x.usuario && !x.anuladoMotivo && (!e || x.id !== e.id);
+  }).map(function(x){ return x.usuario; });
+  sel.innerHTML = '<option value="">Ninguno · no entra al sistema</option>' +
+    USUARIOS.filter(function(u){
+      return u.activo && tomados.indexOf(u.usuario) === -1;
+    }).map(function(u){
+      return '<option value="' + enAtributo(u.usuario) + '">' + enTexto(u.nombreCompleto) +
+        ' · ' + enTexto(u.usuario) + '</option>';
+    }).join('');
+  sel.value = (e && e.usuario) ? e.usuario : '';
+}
+
+function abrirFormEmpleada(id){
+  var btn = document.getElementById('btn-empleada');
+  var e   = id ? empleadaPorId(id) : null;
+  editandoEmpleada = e ? e.id : null;
+  cerrarSalida();
+  document.getElementById('em-nombre').value    = e ? e.nombre : '';
+  document.getElementById('em-documento').value = e && e.documento ? e.documento : '';
+  document.getElementById('em-ingreso').value   = e ? e.ingreso : '2026-09-30';
+  document.getElementById('em-salario').value   = e ? String(e.salario) : '';
+  document.getElementById('em-horas').value     = e ? horasTexto(e.horas) : '192';
+  refrescarUsuariosEmpleada(e);
+  /* La fecha de ingreso no se edita: moverla cambiaria de mes liquidaciones ya hechas, y por eso
+     el contrato no la trae en «edicion-de-empleada». */
+  document.getElementById('campo-em-ingreso').hidden = !!e;
+  document.getElementById('em-titulo').textContent = e
+    ? 'Editar la ficha de ' + e.nombre
+    : 'Registrar una empleada';
+  document.getElementById('em-nota').textContent = e
+    ? 'El aumento se escribe encima'
+    : 'El salario no es el neto del mes';
+  document.getElementById('em-techo').textContent = 'El máximo del mes son ' +
+    horasTexto(maximoDelMes(LIMITE_HORAS.semanales)) + ' horas, que salen del límite de ' +
+    horasTexto(LIMITE_HORAS.semanales) + ' horas de una semana que rige en Capital.';
+  avisoCampo('em-error', '');
+  document.getElementById('form-empleada').hidden = false;
+  btn.setAttribute('aria-expanded', 'true');
+  btn.textContent = 'Cerrar';
+  document.getElementById('form-empleada').scrollIntoView({block:'nearest'});
+  document.getElementById('em-nombre').focus();
+}
+
+function cerrarFormEmpleada(){
+  var btn = document.getElementById('btn-empleada');
+  if (!btn) return;
+  editandoEmpleada = null;
+  document.getElementById('form-empleada').hidden = true;
+  btn.setAttribute('aria-expanded', 'false');
+  btn.textContent = '+ Registrar empleada';
+  avisoCampo('em-error', '');
+}
+
+function fallaEmpleada(id, texto){
+  avisoCampo('em-error', texto);
+  document.getElementById(id).focus();
+}
+
+/* Las reglas y los mensajes son los del formulario «empleada» que manda la API: el nombre y la
+   fecha de ingreso son obligatorios, el salario es entero y mayor que cero, y las horas llevan
+   dos decimales como maximo (42294) y no pasan del maximo del mes (42295, RN-20). */
+function guardarEmpleada(){
+  var nombre    = (document.getElementById('em-nombre').value || '').trim();
+  var documento = (document.getElementById('em-documento').value || '').trim();
+  var ingreso   = document.getElementById('em-ingreso').value;
+  var salario   = soloDigitos(document.getElementById('em-salario').value);
+  var horasTxt  = (document.getElementById('em-horas').value || '').trim().replace(',', '.');
+  var usuario   = document.getElementById('em-usuario').value || null;
+  var e         = editandoEmpleada ? empleadaPorId(editandoEmpleada) : null;
+
+  if (!nombre) return fallaEmpleada('em-nombre', 'Escribe el nombre con que la llamas en el taller.');
+  if (!e && !ingreso) return fallaEmpleada('em-ingreso', 'Escribe desde cuándo trabaja.');
+  if (!salario) return fallaEmpleada('em-salario', 'El salario acordado tiene que ser mayor que cero.');
+  if (!/^\d+(\.\d{1,2})?$/.test(horasTxt)){
+    return fallaEmpleada('em-horas', 'Escribe las horas con dos decimales como máximo: 192 o 191,5.');
+  }
+  var horas  = +horasTxt;
+  var maximo = maximoDelMes(LIMITE_HORAS.semanales);
+  if (horas <= 0){
+    return fallaEmpleada('em-horas', 'Sin horas pactadas no hay con qué calcular el valor de la hora.');
+  }
+  if (horas > maximo){
+    return fallaEmpleada('em-horas', 'Las horas no pasan de ' + horasTexto(maximo) + ', que es el ' +
+      'máximo del mes que sale del límite de ' + horasTexto(LIMITE_HORAS.semanales) +
+      ' horas de una semana.');
+  }
+
+  if (e){
+    e.nombre = nombre; e.documento = documento || null;
+    e.salario = salario; e.horas = horas; e.usuario = usuario;
+    avisoEmpleadas = {tono:'info', titulo:'La ficha de ' + nombre + ' quedó al día',
+      texto:'El salario se escribió encima: lo que ya se liquidó conserva el suyo, así que ningún ' +
+        'desprendible de atrás cambia.'};
+  } else {
+    EMPLEADAS.push({id:'e' + (EMPLEADAS.length + 1), nombre:nombre, documento:documento || null,
+      ingreso:ingreso, salario:salario, horas:horas, usuario:usuario, retiro:null,
+      anuladoMotivo:null});
+    avisoEmpleadas = {tono:'info', titulo:nombre + ' ya está en nómina',
+      texto:usuario
+        ? 'Queda conectada con el usuario ' + usuario + ', así que verá su propio desprendible.'
+        : 'No entra al sistema: está en nómina sin usuario, y su desprendible lo entregas tú.'};
+  }
+  cerrarFormEmpleada();
+  tablaEmpleadas();
+}
+
+/* Retirar y anular comparten formulario porque solo piden un dato cada uno, y el titulo dice
+   cual de los dos se esta haciendo: confundirlos borra una historia que no se recupera. */
+function abrirSalida(id, clase){
+  var e = empleadaPorId(id);
+  if (!e) return;
+  salidaEmpleada = {id:id, clase:clase};
+  cerrarFormEmpleada();
+  var retiro = (clase === 'retiro');
+  document.getElementById('es-titulo').textContent = retiro
+    ? 'Retirar a ' + e.nombre + ' de la nómina'
+    : 'Anular la ficha de ' + e.nombre;
+  document.getElementById('es-nota').textContent = retiro
+    ? 'Conserva sus liquidaciones'
+    : 'La ficha nunca debió existir';
+  document.getElementById('campo-es-fecha').hidden  = !retiro;
+  document.getElementById('campo-es-motivo').hidden = retiro;
+  document.getElementById('es-fecha').value  = '2026-09-30';
+  document.getElementById('es-motivo').value = '';
+  avisoCampo('es-error', '');
+  document.getElementById('form-empleada-salida').hidden = false;
+  document.getElementById('form-empleada-salida').scrollIntoView({block:'nearest'});
+  document.getElementById(retiro ? 'es-fecha' : 'es-motivo').focus();
+}
+
+function cerrarSalida(){
+  var caja = document.getElementById('form-empleada-salida');
+  if (!caja) return;
+  salidaEmpleada = null;
+  caja.hidden = true;
+  avisoCampo('es-error', '');
+}
+
+/* El retiro anterior a la fecha de ingreso responde 42250, y una ficha anulada sin motivo no
+   existe: la columna es `motivo` y la base la exige (RN-13). */
+function guardarSalida(){
+  if (!salidaEmpleada) return;
+  var e = empleadaPorId(salidaEmpleada.id);
+  if (!e) return cerrarSalida();
+  if (salidaEmpleada.clase === 'retiro'){
+    var fecha = document.getElementById('es-fecha').value;
+    if (!fecha){
+      avisoCampo('es-error', 'Escribe desde cuándo dejó de estar en nómina.');
+      return document.getElementById('es-fecha').focus();
+    }
+    if (fecha < e.ingreso){
+      avisoCampo('es-error', 'El retiro no puede ser anterior al ingreso, que fue el ' +
+        fechaConAno(e.ingreso) + '.');
+      return document.getElementById('es-fecha').focus();
+    }
+    e.retiro = fecha;
+    verRetiradas = true;
+    document.getElementById('em-ver-retiradas').checked = true;
+    avisoEmpleadas = {tono:'info', titulo:e.nombre + ' queda fuera de la nómina',
+      texto:'No entra en las liquidaciones de los meses siguientes. Sus liquidaciones y sus ' +
+        'adelantos siguen ahí: esto no es una liquidación definitiva de contrato.'};
+  } else {
+    var motivo = (document.getElementById('es-motivo').value || '').trim();
+    if (!motivo){
+      avisoCampo('es-error', 'Escribe por qué se anula la ficha: queda guardado con tu nombre.');
+      return document.getElementById('es-motivo').focus();
+    }
+    e.anuladoMotivo = motivo;
+    verAnuladas = true;
+    document.getElementById('em-ver-anuladas').checked = true;
+    avisoEmpleadas = {tono:'info', titulo:'La ficha de ' + e.nombre + ' quedó anulada',
+      texto:'Nada se borra: queda el motivo, con quién la anuló y cuándo.'};
+  }
+  cerrarSalida();
+  tablaEmpleadas();
+}
+
+(function initEmpleadas(){
+  var btn = document.getElementById('btn-empleada');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    if (document.getElementById('form-empleada').hidden) abrirFormEmpleada(null);
+    else cerrarFormEmpleada();
+  });
+  document.getElementById('em-cancelar').addEventListener('click', cerrarFormEmpleada);
+  document.getElementById('em-guardar').addEventListener('click', guardarEmpleada);
+  document.getElementById('es-cancelar').addEventListener('click', cerrarSalida);
+  document.getElementById('es-guardar').addEventListener('click', guardarSalida);
+  document.getElementById('em-ver-retiradas').addEventListener('change', function(){
+    verRetiradas = this.checked;
+    tablaEmpleadas();
+  });
+  document.getElementById('em-ver-anuladas').addEventListener('change', function(){
+    verAnuladas = this.checked;
+    tablaEmpleadas();
+  });
+  tablaEmpleadas();
+})();
 /* ---------- los activos del negocio (RF-45, CU-15, tarea 7.1) ---------- */
 /* Comprar un equipo cambia plata por un bien: baja la caja y no toca la utilidad ni el patrimonio
    (RN-04). La lista llega del más caro al más barato y el panel no la reordena. La cuenta es
