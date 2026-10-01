@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.26.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-01 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.27.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-01 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -57,8 +57,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 9 | 0 | 1 | 2 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 3 | 0 | 9 | 13,5 |
-| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **155** | **133** | **0** | **22** | **26** |
+| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 2 | 0 | 11 | 10 |
+| **Total** | **155** | **134** | **0** | **21** | **25,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,7 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [7.10](docs/08-plan-de-desarrollo.md#tarea-7-10) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
@@ -250,12 +250,12 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **22 tareas y 26 días de trabajo** de 155 tareas del plan.
+Quedan **21 tareas y 25,5 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 3,8 semanas | **6,8 semanas** |
-| 2 | 2,2 semanas | **5,2 semanas** |
+| 1 | 3,7 semanas | **6,7 semanas** |
+| 2 | 2,1 semanas | **5,1 semanas** |
 | 3 | 2,2 semanas | **5,2 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -1495,7 +1495,11 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 - [ ] 🔒 [**9.5**](docs/08-plan-de-desarrollo.md#tarea-9-5) Prueba de permisos con sesión real en los cuatro ambientes · API
 - [ ] ⚡ [**9.6**](docs/08-plan-de-desarrollo.md#tarea-9-6) Pruebas de extremo a extremo de los flujos críticos en qa · API, Front
 - [ ] ⚡ [**9.7**](docs/08-plan-de-desarrollo.md#tarea-9-7) Rendimiento en celular real con 4G · Front
-- [ ] ⚡ [**9.8**](docs/08-plan-de-desarrollo.md#tarea-9-8) Repaso de secretos: nada en los repositorios y `service_role` solo en migraciones · API
+- [x] [**9.8**](docs/08-plan-de-desarrollo.md#tarea-9-8) Repaso de secretos: nada en los repositorios y `service_role` solo en migraciones · API — el
+      escaneo que pedía [RNF-24](docs/03-requisitos-y-bdd.md#rnf-24) y que no existía, buscando **valores** y no nombres: un JWT entero, una
+      referencia de proyecto, una credencial dentro de una cadena de conexión y un `.env.ejemplo` que
+      dejó de estar vacío. Va en su propia tarea de Gradle, porque dentro de `test` la caché lo daba
+      por bueno sin correrlo. Lo que se vio en los otros dos carriles quedó en el [§9](#titulo-9)
 - [ ] ⚡ [**9.9**](docs/08-plan-de-desarrollo.md#tarea-9-9) El front rechaza de verdad un MAJOR de API distinto · Front
 - [ ] 🔒 [**9.10**](docs/08-plan-de-desarrollo.md#tarea-9-10) Etiquetar `1.0.0` del front y de la API · API, Front
 - [ ] ⚡ [**9.11**](docs/08-plan-de-desarrollo.md#tarea-9-11) Swagger detrás de autenticación en prod · API
@@ -1812,6 +1816,18 @@ a `anon`.
 - **El servicio de Railway conectado a `prisma_front`** intentaba construir en cada push y fallaba,
   porque no había receta de construcción para Flutter. Ya la hay ([0.9](docs/08-plan-de-desarrollo.md#tarea-0-9)): falta revisar en la consola
   si ese servicio se reconfigura o se borra, para no terminar con dos y sin saber cuál es el bueno.
+
+- **El `.gitignore` de `prisma_front` no tiene el glob `.env.*` que sí tienen los otros dos.** Ignora
+  `.env` y nada más, así que un `.env.local` o un `.env.produccion` entrarían al repositorio sin que
+  nadie se diera cuenta. Se vio haciendo la [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8), que es del carril API y no toca el front: **es
+  un arreglo suelto de una línea en `prisma_front`**, y hoy no hay ningún archivo así en disco.
+
+- **`service_role` aparece en `prisma_db` fuera de las migraciones**, que es lo que la [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) promete
+  que no pasa: en `scripts/db/verificar-base.sql`, que comprueba que ese rol tampoco borre, y en los
+  tres archivos de la pila local, que pasan de largo lo que imprime `supabase status`. Los cuatro
+  tienen su justificación escrita y ninguno lleva un valor, así que **la promesa se cumple en lo que
+  importa y la frase de la tarea es la que está corta**. Queda por decidir si el escaneo de secretos
+  se replica en los otros dos repositorios o si basta con el de la API.
 
 ---
 

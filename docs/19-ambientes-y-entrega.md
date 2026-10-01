@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-21 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [5.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-01 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -339,6 +339,7 @@ Lo que comprueba cada etapa:
 | Análisis estático | `dart analyze --fatal-infos` en el front; compilación con `-Xlint:all -Werror` en la API | Hay un aviso sin resolver |
 | Regla de dependencias | El dominio no importa nada de infraestructura ni de HTTP. En la API lo verifica `ArchUnit` | Alguien la cruzó |
 | Pruebas unitarias | Las fórmulas financieras, sin base ni red ([`12-pruebas-y-calidad.md`](12-pruebas-y-calidad.md)) | Falla una |
+| **Secretos** | Recorre el repositorio entero buscando **valores** y no nombres: un JWT entero, una referencia de proyecto de Supabase, una cadena de conexión con la credencial adentro, o una variable de `.env.ejemplo` que dejó de estar vacía ([RNF-24](03-requisitos-y-bdd.md#rnf-24)) | Hay un secreto pegado en un archivo versionado |
 | **OpenAPI** | Regenera el documento desde los controladores y lo compara con el `openapi.json` versionado ([ADR-022](adr/ADR-022-openapi-generado.md)) | El regenerado difiere del versionado |
 | Compilación | `flutter build web` y la imagen de contenedor de `prisma_api` | No compila |
 | **Versión** | Compara con `develop` y exige que la versión del proyecto suba un paso si el PR cambia lo que se publica; en `prisma_db`, además, que ninguna migración vieja cambie ([C-05](12-pruebas-y-calidad.md#c-05), [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md)) | Cambió lo que se publica y la versión no subió, o subió más de un paso |
