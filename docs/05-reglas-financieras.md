@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/05-reglas-financieras.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-30 | [Finanzas](INDICE.md#etiqueta-finanzas) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/05-reglas-financieras.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [Finanzas](INDICE.md#etiqueta-finanzas) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 > **El documento más importante del proyecto.** Aquí viven las fórmulas exactas que el sistema
 > debe implementar. Si algo en el código contradice este documento, el código está mal.
@@ -256,6 +256,34 @@ ENTONCES alertar: "Estás retirando más de lo que el negocio genera."
 
 Es peligrosa justamente porque no se nota: cada mes puede ser rentable mientras el negocio se
 vacía por dentro.
+
+### 6.5 El límite de horas de una semana (RN-20)
+
+Las horas del mes son la base de dos cifras: la tarifa por hora del pro-labore, que es lo que un
+costeo cobra por el trabajo ([§7.2](#72-los-tres-márgenes)), y el valor de la hora ordinaria de cada empleada
+([06 §6.1](06-nomina-y-capacidad-de-pago.md#61-fórmulas)). **Unas horas imposibles no dan un error: dan una tarifa barata**, y con ella un
+costeo que parece sano y un precio que no cubre el trabajo.
+
+Por eso hay un límite, y **lo define Gerencia desde la aplicación**:
+
+```
+Horas del mes como máximo = Límite semanal × 52 ÷ 12
+```
+
+| Límite semanal | Horas del mes como máximo |
+|---:|---:|
+| 48 horas | 208,00 |
+| 44 horas | 190,67 |
+| 42 horas | 182,00 |
+
+- **Rige para las dos**: las horas productivas del pro-labore y las horas pactadas de cada
+  empleada. Una semana tiene las mismas horas para quien sea.
+- **El redondeo es `HALF_UP` a dos decimales**, que es lo que guarda la columna.
+- **Por omisión son 48 horas**, y el valor vive en la configuración de cada ambiente: así el día
+  que la jornada legal baje, nadie tiene que tocar código. Gerencia lo cambia cuando quiera, y
+  **nada se sobrescribe**: cada definición queda, con quién la escribió y desde cuándo rige.
+- **Es un límite, no una jornada.** No dice cuánto trabaja nadie: dice hasta dónde puede llegar un
+  número que, más alto, haría mentir una tarifa.
 
 ---
 
@@ -585,7 +613,7 @@ Caja libre  = Saldo total − Anticipos por devengar − Gastos fijos comprometi
 Si alguna de estas igualdades falla, hay un error de registro o de cálculo.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [Contrato](../contrato/README.md "Contrato de la API · v0.25.0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [Contrato](../contrato/README.md "Contrato de la API · v0.26.0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

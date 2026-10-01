@@ -1675,6 +1675,39 @@ tbody tr.fila-detalle:hover{background:none}
           <div id="prolabore-vigente"></div>
         </div>
 
+        <!-- El limite de horas (RN-20, 05 §6.5). Vive debajo del pro-labore porque es el techo de
+             sus horas, y es de Gerencia por la misma politica que el pro-labore (04 §7). Mientras
+             no haya ninguno definido rige el valor por omision del ambiente, que la API manda. -->
+        <div class="panel" id="panel-limite-horas">
+          <div class="panel-head">
+            <h2 class="grow">El límite de horas de una semana</h2>
+            <span class="eyebrow">El techo de las horas del mes</span>
+            <button class="cta" id="btn-limite" aria-expanded="false" aria-controls="form-limite">Definir límite</button>
+          </div>
+
+          <div class="formulario" id="form-limite" hidden>
+            <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px">
+              <h3 class="grow">Definir el límite de horas</h3>
+              <span class="eyebrow">Rige desde hoy</span>
+            </div>
+            <div class="campos-form">
+              <div class="campo"><label for="lh-horas">Horas de una semana</label>
+                <input type="text" id="lh-horas" inputmode="decimal" placeholder="48"></div>
+              <div class="campo" style="grid-column:span 2"><label for="lh-justificacion">Justificación</label>
+                <input type="text" id="lh-justificacion" placeholder="¿Con qué comparaste ese límite?"></div>
+            </div>
+
+            <p class="capa-error" id="lh-error" role="alert" aria-live="polite" hidden style="margin-top:14px"></p>
+
+            <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; align-items:center">
+              <button class="cta" id="lh-guardar">Guardar límite</button>
+              <button class="ghost" id="lh-cancelar">Cancelar</button>
+            </div>
+          </div>
+
+          <div id="limite-vigente"></div>
+        </div>
+
         <div class="grid g23">
           <div class="panel">
             <div class="panel-head"><h2 class="grow">Cómo se parte el retiro de septiembre</h2></div>
@@ -3344,6 +3377,10 @@ function guardarProlabore(){
   if (/\.\d{3,}$/.test(textoHoras)){
     return fallaProlabore('pl-horas', 'Las horas se registran con dos decimales como máximo.');
   }
+  if (textoHoras && +textoHoras > maximoDelMes(LIMITE_HORAS.semanales)){
+    return fallaProlabore('pl-horas', 'Esas horas pasan del límite que está definido para una ' +
+      'semana. Baja las horas, o cambia el límite.');
+  }
   if (!justificacion){
     return fallaProlabore('pl-justificacion', 'Escribe la justificación: con qué comparaste ese valor.');
   }
@@ -3366,6 +3403,107 @@ function guardarProlabore(){
   });
   document.getElementById('pl-cancelar').addEventListener('click', cerrarFormProlabore);
   document.getElementById('pl-guardar').addEventListener('click', guardarProlabore);
+})();
+
+/* ---------- el limite de horas de una semana (RN-20, 05 §6.5) ---------- */
+/* El techo de las horas del mes, que sale del limite semanal con 52 entre 12. Definirlo escribe
+   una fila nueva con su dia y no edita la anterior, como el pro-labore (04 §4.6). Mientras no
+   haya ninguna fila rige el valor por omision del ambiente, y la consulta lo dice con
+   `porOmision`: no es que no haya limite, es que no esta guardado. */
+var LIMITE_HORAS = {semanales:48, desde:null, justificacion:null, porOmision:true};
+var HISTORIAL_LIMITE = [];
+var avisoLimite = null;
+
+/* La cuenta la hace la API (05 §6.5): el limite semanal por 52 entre 12, con HALF_UP. */
+function maximoDelMes(semanales){ return Math.round(semanales * 52 / 12 * 100) / 100; }
+
+function pintarLimite(){
+  var caja = document.getElementById('limite-vigente');
+  if (!caja) return;
+  var aviso = avisoLimite;
+  avisoLimite = null;
+  var html = aviso
+    ? '<div class="alerta a-' + aviso.tono + '" style="margin-bottom:14px"><span class="tag">AVISO</span>' +
+      '<div><b>' + enTexto(aviso.titulo) + '</b><span>' + enTexto(aviso.texto) + '</span></div></div>'
+    : '';
+  var maximo = maximoDelMes(LIMITE_HORAS.semanales);
+  caja.innerHTML = html + '<div class="calc">' +
+    '<div><span>Horas de una semana</span><b id="lh-vigente-horas">' +
+    horasTexto(LIMITE_HORAS.semanales) + '</b></div>' +
+    '<div class="tot"><span>Máximo del mes · lo que admiten el pro-labore y una empleada</span>' +
+    '<b id="lh-maximo">' + horasTexto(maximo) + '</b></div></div>' +
+    '<p style="font-size:.78rem; color:var(--muted); margin-top:10px">' +
+    (LIMITE_HORAS.porOmision
+      ? 'Todavía no has definido ninguno: rige el que trae la aplicación. Cámbialo cuando quieras.'
+      : 'Rige desde el ' + fechaConAno(LIMITE_HORAS.desde) +
+        (LIMITE_HORAS.justificacion ? ' · «' + enTexto(LIMITE_HORAS.justificacion) + '»' : '')) +
+    '</p>';
+}
+
+function abrirFormLimite(){
+  var btn = document.getElementById('btn-limite');
+  ['lh-horas','lh-justificacion'].forEach(function(id){
+    document.getElementById(id).value = '';
+  });
+  avisoCampo('lh-error', '');
+  document.getElementById('form-limite').hidden = false;
+  btn.setAttribute('aria-expanded', 'true');
+  btn.textContent = 'Cerrar';
+  document.getElementById('form-limite').scrollIntoView({block:'nearest'});
+  document.getElementById('lh-horas').focus();
+}
+
+function cerrarFormLimite(){
+  var btn = document.getElementById('btn-limite');
+  if (!btn) return;
+  document.getElementById('form-limite').hidden = true;
+  btn.setAttribute('aria-expanded', 'false');
+  btn.textContent = 'Definir límite';
+  avisoCampo('lh-error', '');
+}
+
+function fallaLimite(id, texto){
+  avisoCampo('lh-error', texto);
+  document.getElementById(id).focus();
+}
+
+/* Las reglas y los mensajes son los del formulario «limite-de-horas» que manda la API: el limite
+   es obligatorio, va de 1 a 168 horas (42296) y la justificacion no queda en blanco. */
+function guardarLimite(){
+  var texto = (document.getElementById('lh-horas').value || '').trim().replace(',', '.');
+  var justificacion = (document.getElementById('lh-justificacion').value || '').trim();
+  if (!texto) return fallaLimite('lh-horas', 'Escribe hasta cuántas horas puede tener una semana.');
+  if (!/^\d+(\.\d+)?$/.test(texto)){
+    return fallaLimite('lh-horas', 'Escribe las horas con números: 48 o 47,5.');
+  }
+  var semanales = +texto;
+  if (semanales <= 0 || semanales > 168){
+    return fallaLimite('lh-horas', 'El límite va de 1 a 168 horas, que es lo que tiene una semana.');
+  }
+  if (!justificacion){
+    return fallaLimite('lh-justificacion', 'Escribe la justificación: con qué comparaste ese límite.');
+  }
+  if (!LIMITE_HORAS.porOmision) HISTORIAL_LIMITE.push(LIMITE_HORAS);
+  LIMITE_HORAS = {semanales:semanales, desde:'2026-09-30', justificacion:justificacion,
+    porOmision:false};
+  avisoLimite = {tono:'info', titulo:'El límite nuevo rige desde hoy',
+    texto:'Las definiciones nuevas del pro-labore y de una empleada tienen que caber en él. Lo ' +
+      'que ya está guardado no se toca.'};
+  cerrarFormLimite();
+  pintarLimite();
+  pintarProlabore();
+}
+
+(function initLimite(){
+  var btn = document.getElementById('btn-limite');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    if (document.getElementById('form-limite').hidden) abrirFormLimite();
+    else cerrarFormLimite();
+  });
+  document.getElementById('lh-cancelar').addEventListener('click', cerrarFormLimite);
+  document.getElementById('lh-guardar').addEventListener('click', guardarLimite);
+  pintarLimite();
 })();
 
 /* ---------- los activos del negocio (RF-45, CU-15, tarea 7.1) ---------- */

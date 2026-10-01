@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.23.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-30 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.24.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-01 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -55,10 +55,10 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
-| [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 9 | 9 | 0 | 0 | 0 |
+| [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 9 | 0 | 1 | 2 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 2 | 0 | 10 | 15,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 1 | 0 | 12 | 10,5 |
-| **Total** | **154** | **132** | **0** | **22** | **26** |
+| **Total** | **155** | **132** | **0** | **23** | **28** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -240,7 +240,8 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **API** | [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
+| **Base** | [7.10](docs/08-plan-de-desarrollo.md#tarea-7-10) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -248,12 +249,12 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **22 tareas y 26 días de trabajo** de 154 tareas del plan.
+Quedan **23 tareas y 28 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 3,8 semanas | **6,8 semanas** |
-| 2 | 2,4 semanas | **5,4 semanas** |
+| 1 | 4,1 semanas | **7,1 semanas** |
+| 2 | 2,3 semanas | **5,3 semanas** |
 | 3 | 2,6 semanas | **5,6 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -1237,6 +1238,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       retiro se registra de una vez y se parte solo si no se dice cómo: pro-labore hasta completar
       el del mes y el resto distribución. El pro-labore y los sobres no se editan: cada cambio es una
       fila nueva, vigente desde el día en que se guarda
+- [ ] ⚡ [**7.10**](docs/08-plan-de-desarrollo.md#tarea-7-10) El límite de horas de una semana, que define Gerencia · Base, API, Front
 
 ### Cadena B · el pedido
 
@@ -1456,7 +1458,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 La toma el carril que termine primero su cadena: es la funcionalidad más independiente del sistema.
 
-- [ ] ⚡ [**8.1**](docs/08-plan-de-desarrollo.md#tarea-8-1) Registro de empleadas · API, Front
+- [ ] 🔒 [**8.1**](docs/08-plan-de-desarrollo.md#tarea-8-1) Registro de empleadas · API, Front
 - [ ] 🔒 [**8.2**](docs/08-plan-de-desarrollo.md#tarea-8-2) Liquidación de nómina en la base, descontando adelantos · Base
 - [ ] 🔒 [**8.3**](docs/08-plan-de-desarrollo.md#tarea-8-3) Adelantos como cuenta por cobrar · API
 - [ ] 🔒 [**8.4**](docs/08-plan-de-desarrollo.md#tarea-8-4) Desprendible PDF con acceso restringido al propio · API
@@ -4565,6 +4567,26 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       parámetro de la ruta se describe como «el id del retiro, que genera quien lo registra», y
       `Idempotency-Key` usa el texto de una consulta y no el de una acción, que es el que llevan las
       demás escrituras. **No se tocaron**: el contrato se corrige en su propio PR, y [C-04](docs/12-pruebas-y-calidad.md#c-04) los exige
+
+**Del límite de horas ([7.10](docs/08-plan-de-desarrollo.md#tarea-7-10)):**
+
+- [ ] **El límite nace porque quien dirige lo pidió**, al revisar el `50000` de las horas del
+      pro-labore: el tope deja de ser un número del contrato, lo edita Gerencia y su valor por
+      omisión es parametrizable. Se descartó el `maximum` de 9.999,99 a secas, que era el arreglo
+      más corto, y un tope fijo de 744 horas, que sería una regla de negocio sin documento
+- [ ] **Rige para el pro-labore y para una empleada, y lo eligió quien dirige.** Una semana tiene
+      las mismas horas para cualquiera, así que hay una tabla, un código y un panel en vez de dos
+      de cada cosa. La mitad de la empleada la aplica la [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1), que por eso pasó a depender de esta
+- [ ] **El valor por omisión son 48 horas, y es el único que no deja inválido el 192 del [04 §4.7](docs/04-modelo-de-datos.md#47-personal-y-nómina).**
+      48 × 52 ÷ 12 son 208 horas al mes, y las 192 que la columna de la empleada trae por omisión
+      caben. Con 42 no cabrían. **No se inventó ninguna regla**: el número vive en la configuración
+      de cada ambiente y Gerencia lo cambia desde la aplicación
+- [ ] **La consulta trae `porOmision` en vez de devolver `data` en null.** Un null diría que no hay
+      límite, y sí lo hay: el que trae la API mientras nadie haya guardado uno. Es la diferencia con
+      el pro-labore, que sin definir de verdad no existe
+- [ ] **Un límite más bajo no invalida lo que ya está guardado.** Se decidió lo mínimo: el límite
+      juzga la definición que llega, no las anteriores. Revisarlas pediría decir qué pasa con un
+      costeo que ya tomó una tarifa de unas horas que hoy no cabrían
 
 ---
 

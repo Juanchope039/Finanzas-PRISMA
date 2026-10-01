@@ -1746,6 +1746,39 @@
         "required" : [ "detalle", "nivel", "titulo" ],
         "type" : "object"
       },
+      "LimiteDeHoras" : {
+        "description" : "El límite de horas de una semana que rige hoy, y el máximo del mes que sale de él (RN-20, 05 §6.5). No se sobrescribe: cada definición es una fila de horas_limite_config con su vigencia (04 §4.6)",
+        "properties" : {
+          "horasMensuales" : {
+            "description" : "El máximo que admiten las horas del pro-labore y las de una empleada: el límite semanal por 52 entre 12, redondeado con HALF_UP a dos decimales",
+            "type" : "number"
+          },
+          "horasSemanales" : {
+            "description" : "El límite que rige",
+            "type" : "number"
+          },
+          "id" : {
+            "description" : "Ausente mientras rige el valor por omisión del ambiente: entonces no hay ninguna fila",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "justificacion" : {
+            "description" : "Por qué ese límite. Ausente en una definición guardada sin ella, y mientras rige el valor por omisión",
+            "type" : "string"
+          },
+          "porOmision" : {
+            "description" : "Verdadero mientras Gerencia no haya definido ninguno: el que viaja es el valor por omisión del ambiente, y no está guardado",
+            "type" : "boolean"
+          },
+          "vigenteDesde" : {
+            "description" : "El día en que se guardó, en Bogotá. El vigente es el de la fecha mayor y, si hay varios del mismo día, el último registrado. Ausente mientras rige el valor por omisión",
+            "format" : "date",
+            "type" : "string"
+          }
+        },
+        "required" : [ "horasMensuales", "horasSemanales", "porOmision" ],
+        "type" : "object"
+      },
       "LineaDePedido" : {
         "description" : "Un renglón del pedido: qué producto, cuántos y a qué precio",
         "properties" : {
@@ -2544,6 +2577,23 @@
         "required" : [ "nombre" ],
         "type" : "object"
       },
+      "NuevoLimiteDeHoras" : {
+        "description" : "El formulario «limite-de-horas». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"limite-de-horas\"}",
+        "properties" : {
+          "horasSemanales" : {
+            "description" : "Hasta cuántas horas puede tener una semana de trabajo, con dos decimales como máximo. Una semana entera son 168, y por encima responde 42296. Cero tampoco sirve: dejaría el pro-labore sin horas posibles",
+            "maximum" : 168,
+            "minimum" : 0,
+            "type" : "number"
+          },
+          "justificacion" : {
+            "description" : "Por qué ese límite: con qué se comparó. La columna admite nulo, y el formulario la pide",
+            "type" : "string"
+          }
+        },
+        "required" : [ "horasSemanales", "justificacion" ],
+        "type" : "object"
+      },
       "NuevoMovimiento" : {
         "description" : "El formulario «movimiento». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"movimiento\"}",
         "properties" : {
@@ -2652,7 +2702,8 @@
         "description" : "El formulario «prolabore». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"prolabore\"}",
         "properties" : {
           "horasMensuales" : {
-            "description" : "Las horas del mes que la gerencia trabaja produciendo, con dos decimales como máximo, que es lo que guarda NUMERIC(6,2) (04 §4.1); más decimales responden 42294. Sin ellas, cero: el trabajo no le pone precio a ningún costeo, y costear responde 40940",
+            "description" : "Las horas del mes que la gerencia trabaja produciendo, con dos decimales como máximo, que es lo que guarda NUMERIC(6,2) (04 §4.1); más decimales responden 42294. No pasan del máximo del mes que sale del límite semanal vigente, que da POST /api/v0/consultas/limite-de-horas (RN-20, 05 §6.5): por encima responden 42295. Sin ellas, cero: el trabajo no le pone precio a ningún costeo, y costear responde 40940",
+            "maximum" : 9999.99,
             "minimum" : 0,
             "type" : "number"
           },
@@ -4057,6 +4108,25 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobreLimiteDeHoras" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/LimiteDeHoras",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreLiquidacion" : {
         "properties" : {
           "data" : {
@@ -4995,7 +5065,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.25.0"
+    "version" : "0.26.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -7192,6 +7262,63 @@
         "tags" : [ "Importación" ]
       }
     },
+    "/api/v0/consultas/limite-de-horas" : {
+      "post" : {
+        "description" : "El límite de horas de una semana que rige hoy, con el máximo del mes que sale de él (RN-20, 05 §6.5). Mientras Gerencia no haya definido ninguno viaja el valor por omisión del ambiente, con porOmision en verdadero: no hay fila guardada, y el límite rige igual. El historial se conserva en la base y no se lee: ninguna pantalla lo pinta. A una sesión de Operación la base no le devuelve la fila, por horas_limite_solo_gerencia (04 §7), así que le llega el valor por omisión. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902.",
+        "operationId" : "limiteDeHoras",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreLimiteDeHoras"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "El límite de horas vigente",
+        "tags" : [ "Capital" ]
+      }
+    },
     "/api/v0/consultas/movimientos" : {
       "post" : {
         "description" : "El libro único con sus filtros, por páginas: rango de fechas del movimiento, grupo del filtro «Todos · Ingresos · Gastos», tipo, categoría y cuenta, lo más reciente primero (RF-08 a RF-13, RF-104, CU-13, 10 §4.3). Cada movimiento trae el nombre de su cuenta y de su categoría, si llegó tarde, cómo se pinta su tipo, con qué registro va y si se deja anular: todo lo resuelve la API, porque el front no consulta de más, no cuenta días y no traduce tipos (ADR-018). La página trae el mes en curso de Bogotá, el máximo por página y si quien mira puede anular y ver anulados. Los anulados no salen salvo que se pidan, y pedirlos es solo de Gerencia (04 §5.5). Un rango con una sola fecha o al revés responde 42227; un límite por encima del máximo, 42200. Consultan los dos tipos de usuario. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902, 42200 con data.errores y 42227.",
@@ -9123,6 +9250,82 @@
         "tags" : [ "Importación" ]
       }
     },
+    "/api/v0/limite-de-horas/{id}" : {
+      "put" : {
+        "description" : "Define desde hoy hasta cuántas horas puede tener una semana de trabajo (RN-20, 05 §6.5). No edita la definición anterior: escribe una fila nueva de horas_limite_config, vigente desde el día en que se guarda en Bogotá, así que el historial queda entero (04 §4.6). De ese límite sale el máximo del mes que admiten las horas del pro-labore y las de una empleada, con 52 entre 12. Lo que ya está guardado no se toca: un límite más bajo no invalida un pro-labore anterior, y la próxima definición sí tiene que caber. El mismo id dos veces responde 40900 (ADR-020). Solo Gerencia, y lo rechaza la base con horas_limite_solo_gerencia (04 §7). El formulario es «limite-de-horas»; un límite de cero o de más de 168 horas no cabe en el descriptor y responde 42296. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 42200 con data.errores y 42296.",
+        "operationId" : "definirLimiteDeHoras",
+        "parameters" : [ {
+          "description" : "El id de esta definición del límite, que genera quien la guarda",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevoLimiteDeHoras"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreLimiteDeHoras"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Definir el límite de horas",
+        "tags" : [ "Capital" ]
+      }
+    },
     "/api/v0/movimientos/{id}" : {
       "put" : {
         "description" : "Registra un ingreso, un gasto o una transferencia con su fecha real y su fecha de digitación (RF-08 a RF-11, CU-01, CU-02). El id va en la ruta por lo mismo que en pedidos y clientes (ADR-020): lo genera quien registra al decidir la acción, así que en el cuerpo sobraría, y el mismo dos veces responde 40900 en vez de duplicar el libro. Quién registra lo pone la sesión y lo juzga mov_insercion (04 §7), no un if. Lo digitado más de 7 días después de ocurrido se guarda igual y llega marcado como registro tardío (RN-14). Registran los dos tipos de usuario. El formulario es «movimiento»; la fecha futura, la cuenta, la categoría y la cuenta de destino no caben en el descriptor y responden 42223, 42224, 42225 y 42226. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40302, 40900, 40901, 40902, 42200 con data.errores, 42223, 42224, 42225 y 42226.",
@@ -10564,7 +10767,7 @@
     },
     "/api/v0/prolabore/{id}" : {
       "put" : {
-        "description" : "Define desde hoy cuánto vale al mes el trabajo de la gerencia en el taller y cuántas horas produce (RF-47, CU-25, RN-08). No edita la definición anterior: escribe una fila nueva de prolabore_config, vigente desde el día en que se guarda en Bogotá, así que el historial queda entero (04 §4.6). Desde ese día los costeos nuevos toman de aquí su tarifa por hora (05 §7.1) —los ya guardados conservan la suya—, y cada retiro se parte con el pro-labore vigente en su fecha. El mismo id dos veces responde 40900 (ADR-020). Solo Gerencia, y lo rechaza la base con prolabore_solo_gerencia (04 §7). El formulario es «prolabore»; las horas con más de dos decimales no caben en el descriptor y responden 42294. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 42200 con data.errores y 42294.",
+        "description" : "Define desde hoy cuánto vale al mes el trabajo de la gerencia en el taller y cuántas horas produce (RF-47, CU-25, RN-08). No edita la definición anterior: escribe una fila nueva de prolabore_config, vigente desde el día en que se guarda en Bogotá, así que el historial queda entero (04 §4.6). Desde ese día los costeos nuevos toman de aquí su tarifa por hora (05 §7.1) —los ya guardados conservan la suya—, y cada retiro se parte con el pro-labore vigente en su fecha. El mismo id dos veces responde 40900 (ADR-020). Solo Gerencia, y lo rechaza la base con prolabore_solo_gerencia (04 §7). El formulario es «prolabore»; las horas con más de dos decimales no caben en el descriptor y responden 42294, y las que pasan del máximo del mes responden 42295 (RN-20). Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 42200 con data.errores, 42294 y 42295.",
         "operationId" : "definirProlabore",
         "parameters" : [ {
           "description" : "El id de esta definición del pro-labore, que genera quien la guarda",
@@ -11939,6 +12142,20 @@
       "sprint" : 7
     },
     "status" : 42294
+  }, {
+    "cuando" : "Definir el pro-labore o una empleada con horas por encima del máximo del mes, que sale del límite semanal vigente. El error va en data.errores, sobre horasMensuales",
+    "http" : 422,
+    "mensaje" : "Esas horas pasan del límite que está definido para una semana. Baja las horas, o cambia el límite.",
+    "modulo" : "CAPITAL_Y_PATRIMONIO",
+    "nombre" : "HORAS_SOBRE_EL_LIMITE",
+    "status" : 42295
+  }, {
+    "cuando" : "Definir el límite de horas en cero, o por encima de las 168 que tiene una semana. El error va en data.errores, sobre horasSemanales",
+    "http" : 422,
+    "mensaje" : "El límite va de 1 a 168 horas, que es lo que tiene una semana.",
+    "modulo" : "CAPITAL_Y_PATRIMONIO",
+    "nombre" : "LIMITE_DE_HORAS_INVALIDO",
+    "status" : 42296
   }, {
     "cuando" : "El simulador o la productividad, cuando no hay pro-labore vigente. También es lo que recibe Operación, a quien prolabore_config no le devuelve ninguna fila",
     "http" : 409,
