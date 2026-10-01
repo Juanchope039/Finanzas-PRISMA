@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [5.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -597,6 +597,35 @@ Arriba, el **simulador**: controles de reserva y salario tentativo que recalcula
 veredicto explícito y traducción a unidades de producto por vender. Abajo, la liquidación
 mensual con adelantos descontados y el desprendible en PDF.
 
+#### El registro de empleadas va antes de la liquidación, porque sin ficha no hay a quién liquidar
+
+La ficha de una empleada no es un usuario: se puede estar en nómina sin entrar al sistema, y entrar
+sin estar en nómina ([04 §4.2](04-modelo-de-datos.md#42-cargos-usuarios-y-cuentas)). El panel «Las empleadas» da de alta, edita, retira y anula, y
+vive debajo del simulador porque la pregunta de la pantalla sigue siendo si se puede pagar
+([RF-54](03-requisitos-y-bdd.md#rf-54), [CU-19](02-casos-de-uso.md#cu-19)).
+
+- **La tabla pinta el salario acordado y, debajo de las horas, el valor de la hora ordinaria**, que
+  es con lo que se pagan las extra ([06 §6.1](06-nomina-y-capacidad-de-pago.md#61-fórmulas)). La cuenta la hace la API, porque el front no calcula
+  cifras.
+- **«+ Registrar empleada» abre el formulario en la misma pantalla**, con el nombre, la cédula, la
+  fecha de ingreso, el salario acordado, las horas pactadas del mes y el usuario con que entra. El
+  nombre, la fecha y el salario son obligatorios; la cédula es opcional, y el usuario también: la
+  primera opción del desplegable dice «no entra al sistema».
+- **El desplegable solo ofrece usuarios activos sin ficha.** Dos fichas colgadas del mismo usuario le
+  enseñarían el desprendible a quien no es, y por eso la columna es única: la pantalla no provoca ese
+  error, y de todos modos lo rechaza la base.
+- **Las horas pactadas no pasan del máximo del mes**, el que sale del límite de horas que define
+  Gerencia en Capital ([RN-20](03-requisitos-y-bdd.md#rn-20)). El formulario dice cuál es el máximo y de qué límite viene, antes de
+  que la persona escriba.
+- **Editar no pide la fecha de ingreso**, porque moverla cambiaría de mes liquidaciones ya hechas. El
+  aumento se escribe encima, y el aviso dice que lo ya liquidado conserva su salario.
+- **Retirar y anular no son lo mismo, y el formulario lo dice en el título.** El retiro la saca de
+  las liquidaciones de los meses siguientes y le deja su historia, con su fecha, que no puede ser
+  anterior al ingreso. La anulación dice que la ficha nunca debió existir, y pide motivo escrito
+  ([RN-13](03-requisitos-y-bdd.md#rn-13)). Una ficha anulada no se edita ni se retira: lo que queda es su motivo, a la vista.
+- **Las retiradas y las anuladas no se pintan de entrada**, y dos casillas las traen, cada grupo bajo
+  su separador. Nada se borra: lo que sale de la nómina sigue ahí.
+
 ### 4.8 Cotizador
 
 **Pregunta:** *¿qué le cobro y cuánto anticipo le pido?*
@@ -910,7 +939,7 @@ El checklist de aprobación pantalla por pantalla está en
 [`09-plan-de-implantacion.md`](09-plan-de-implantacion.md) [§1](09-plan-de-implantacion.md#1-checklist-de-aprobación-del-mockup).
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.26.0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.26.1") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

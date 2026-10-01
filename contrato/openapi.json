@@ -1403,7 +1403,7 @@
             "type" : "string"
           },
           "horasMensuales" : {
-            "description" : null,
+            "description" : "Las horas pactadas al mes. No pasan del máximo del mes que sale del límite semanal vigente, que da POST /api/v0/consultas/limite-de-horas (RN-20, 05 §6.5): por encima responden 42295",
             "minimum" : 0,
             "type" : "number"
           },
@@ -2328,7 +2328,7 @@
           },
           "horasMensuales" : {
             "default" : 192,
-            "description" : "Las horas pactadas al mes. Sin ella, 192",
+            "description" : "Las horas pactadas al mes. Sin ella, 192. No pasan del máximo del mes que sale del límite semanal vigente, que da POST /api/v0/consultas/limite-de-horas (RN-20, 05 §6.5): por encima responden 42295",
             "minimum" : 0,
             "type" : "number"
           },
@@ -5065,7 +5065,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.26.0"
+    "version" : "0.26.1"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -8848,7 +8848,7 @@
     },
     "/api/v0/empleados/{id}" : {
       "put" : {
-        "description" : "Da de alta a quien entra a nómina, con su salario acordado y su fecha de ingreso (RF-54, CU-19). No crea un usuario: se puede estar en nómina sin entrar al sistema, y por eso son dos tablas (04 §4.2). El id va en la ruta por lo mismo que en movimientos (ADR-020): el mismo dos veces responde 40900. Solo Gerencia, y lo rechaza la base con empleados_insercion (04 §7). El formulario es «empleada»; un usuario que ya tiene ficha responde 42253, que es empleados_usuario_id_key. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 42200 con data.errores y 42253.",
+        "description" : "Da de alta a quien entra a nómina, con su salario acordado y su fecha de ingreso (RF-54, CU-19). No crea un usuario: se puede estar en nómina sin entrar al sistema, y por eso son dos tablas (04 §4.2). El id va en la ruta por lo mismo que en movimientos (ADR-020): el mismo dos veces responde 40900. Solo Gerencia, y lo rechaza la base con empleados_insercion (04 §7). El formulario es «empleada»; un usuario que ya tiene ficha responde 42253, que es empleados_usuario_id_key, y unas horas que pasan del máximo del mes responden 42295 (RN-20). Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 42200 con data.errores, 42253 y 42295.",
         "operationId" : "registrarEmpleada",
         "parameters" : [ {
           "description" : "El id de la empleada, que genera quien la registra",
@@ -9000,7 +9000,7 @@
     },
     "/api/v0/empleados/{id}/edicion" : {
       "post" : {
-        "description" : "Cambia el nombre, el documento, el salario acordado, las horas pactadas o el usuario al que se conecta. La fecha de ingreso no se edita: moverla cambiaría de mes liquidaciones ya hechas. El aumento se escribe encima —empleados no guarda historial de salario, a diferencia de costos_producto— y las liquidaciones anteriores conservan el suyo en nomina_detalle.salario_base. Solo Gerencia, y lo rechaza la base con empleados_actualizacion. El formulario es «edicion-de-empleada». Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40901, 40902, 42200 con data.errores y 42253.",
+        "description" : "Cambia el nombre, el documento, el salario acordado, las horas pactadas o el usuario al que se conecta. La fecha de ingreso no se edita: moverla cambiaría de mes liquidaciones ya hechas. El aumento se escribe encima —empleados no guarda historial de salario, a diferencia de costos_producto— y las liquidaciones anteriores conservan el suyo en nomina_detalle.salario_base. Solo Gerencia, y lo rechaza la base con empleados_actualizacion. El formulario es «edicion-de-empleada»; unas horas que pasan del máximo del mes responden 42295 (RN-20). Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40901, 40902, 42200 con data.errores, 42253 y 42295.",
         "operationId" : "editarEmpleada",
         "parameters" : [ {
           "description" : "El id de la empleada",
