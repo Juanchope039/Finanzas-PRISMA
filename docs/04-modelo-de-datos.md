@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.18.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-30 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.19.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -97,6 +97,7 @@ erDiagram
 | 28 | `presentacion_tipos` | Cómo se lee cada tipo de movimiento en el libro: el nombre, el color y el grupo del filtro | |
 | 29 | `exportaciones` | Qué se exportó, con qué alcance, cuánto pesaba y quién se lo llevó ([13 §8](13-respaldo-y-exportacion.md#8-tabla-de-registro)) | |
 | 30 | `schema_version` | Una fila por versión del esquema publicada: el historial, no un número que se pisa | |
+| 31 | `horas_limite_config` | El límite de horas de una semana que define Gerencia | ✅ |
 
 *Sensible = el acceso a la tabla está restringido por Row Level Security ([§7](#7-seguridad-por-tipo-de-usuario-rls)). En la mayoría eso
 significa «solo Gerencia», pero no en todas: en `usuarios`, `empleados`, `nomina_periodos`,
@@ -213,7 +214,7 @@ que hay que recordar y pasa a ser algo que el motor sabe.
 | `dinero` | `BIGINT` | `>= 0` | 23 | `cuentas.saldo_inicial`, `pedidos.costo_directo`, `pedido_lineas` (2), `productos.precio_actual`, `costos_producto` (4), `cotizacion_lineas.precio_unitario`, `prolabore_config.valor_mensual`, `nomina_detalle` (6), `cierres_mensuales` (6) |
 | `dinero_positivo` | `BIGINT` | `> 0` | 8 | `movimientos.valor`, `pedidos.valor_total`, `anticipos.valor`, `cotizaciones.valor_total`, `activos.valor_compra`, `aportes_retiros.valor`, `empleados.salario_acordado`, `adelantos.valor` |
 | `dinero_con_signo` | `BIGINT` | ninguna | 3 | `cierres_mensuales.utilidad_causada`, `.flujo_caja`, `.caja_libre_cierre` |
-| `horas` | `NUMERIC(6,2)` | `>= 0` | 5 | `pedidos.horas_trabajo`, `pedido_lineas.horas_unitarias`, `prolabore_config.horas_mensuales`, `empleados.horas_mensuales`, `nomina_detalle.horas_extra` |
+| `horas` | `NUMERIC(6,2)` | `>= 0` | 6 | `pedidos.horas_trabajo`, `pedido_lineas.horas_unitarias`, `prolabore_config.horas_mensuales`, `empleados.horas_mensuales`, `nomina_detalle.horas_extra`, `horas_limite_config.horas_semanales` |
 | `minutos` | `NUMERIC(6,2)` | `>= 0` | 2 | `costos_producto.minutos_trabajo` y `.minutos_maquina` |
 | `porcentaje` | `SMALLINT` | `0..100` | 6 | `pedidos.anticipo_pct`, `cotizaciones.anticipo_pct`, los cuatro `pct_` de `sobres_config` |
 | `anio` | `SMALLINT` | `2020..2100` | 2 | `nomina_periodos.anio`, `cierres_mensuales.anio` |
@@ -835,7 +836,24 @@ CREATE TABLE prolabore_config (
   creado_por     UUID NOT NULL REFERENCES usuarios(id),
   creado_en      TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+CREATE TABLE horas_limite_config (
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  vigente_desde   DATE NOT NULL,
+  horas_semanales horas NOT NULL
+    CONSTRAINT horas_limite_config_horas_semanales_check CHECK (horas_semanales > 0),
+  justificacion   TEXT,
+  creado_por      UUID NOT NULL REFERENCES usuarios(id),
+  creado_en       TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 ```
+
+**`horas_limite_config` es el techo de las horas de un mes**, el de [RN-20](03-requisitos-y-bdd.md#rn-20): el que vale es el de
+la fila vigente, y de él sale el máximo mensual con 52 ÷ 12 ([05 §6.5](05-reglas-financieras.md#65-el-límite-de-horas-de-una-semana-rn-20)). Es un historial como
+el del pro-labore, y **mientras no haya ninguna fila rige el valor por omisión que trae la API**,
+que es configuración de cada ambiente y no un número escrito en el código. Rige para
+`prolabore_config.horas_mensuales` y para `empleados.horas_mensuales`, porque una semana tiene las
+mismas horas para quien sea.
 
 `clase` separa los tres conceptos que hoy se confunden en uno solo: **aporte** de capital,
 **pro-labore** (gasto) y **distribución** de utilidades (no gasto).
@@ -1470,6 +1488,9 @@ El mismo trigger se registra sobre `pedidos`, `anticipos`, `productos`, `costos_
 `sobres_config`, `cierres_mensuales`, `cargos` y `adjuntos` ([§4.12](#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido)), que es el decimoquinto y
 entró con la [3.14](08-plan-de-desarrollo.md#tarea-3-14). El decimosexto es el de `presentacion_tipos` ([§4.13](#413-cómo-se-ve-cada-tipo-de-movimiento)), que llegó con la tarea [3.19](08-plan-de-desarrollo.md#tarea-3-19), en el esquema `0.13.0`. Y el decimoséptimo, el de `cotizaciones` ([§4.5](#45-productos-costeo-y-cotizaciones)), que llegó con la tarea [8.12](08-plan-de-desarrollo.md#tarea-8-12), en
 el esquema `0.15.0`; sus líneas no lo llevan, como las del pedido, porque nacen con ella y no cambian.
+El decimoctavo es el de `horas_limite_config` ([§4.6](#46-inversiones-capital-y-pro-labore)), que llega con la tarea [7.10](08-plan-de-desarrollo.md#tarea-7-10): define una
+cifra de la que cuelgan la tarifa del costeo y el valor de la hora de cada empleada, así que quién
+la cambió y cuándo es parte de la historia del negocio.
 
 **De dónde salen el dispositivo y la IP lo dicen dos funciones**, y no dos expresiones escritas en
 dos sitios (tarea [2.9](08-plan-de-desarrollo.md#tarea-2-9)):
@@ -2043,15 +2064,17 @@ hay que decidir, tabla por tabla, qué alcanza el tipo Operación.
 | `clientes` | Los lee todos y crea nuevos | Corregir y anular: Gerencia |
 | `activos` | Nada: conjunto vacío | Gerencia |
 | `prolabore_config` | Nada: conjunto vacío | Gerencia |
+| `horas_limite_config` | Nada: conjunto vacío | Gerencia |
 | `empleados` | **Su propia ficha**, por `usuario_id = auth.uid()` | Gerencia |
 | `nomina_periodos` | Solo los períodos donde tiene desprendible propio | Gerencia |
 | `adelantos` | **Los suyos**, los que se le descuentan | Gerencia |
 | `sobres_config` | Nada: conjunto vacío | Gerencia |
 | `cierres_mensuales` | Nada: conjunto vacío | Gerencia |
 
-Las cuatro filas de «nada» salen derecho de la matriz: «Registrar inversiones», «Definir el
+Las cinco filas de «nada» salen derecho de la matriz: «Registrar inversiones», «Definir el
 pro-labore», «Configurar los 4 sobres» y «Ver reportes mensuales y anuales» son ❌ para
 Operación, y `cierres_mensuales` guarda la utilidad causada y la caja libre de cada mes cerrado.
+`horas_limite_config` va con el pro-labore: es el techo de sus horas, y lo define quien lo define.
 
 Las otras cuatro necesitan explicación, porque no son un simple «sí» o «no»:
 
@@ -2086,6 +2109,8 @@ CREATE POLICY clientes_actualizacion ON clientes FOR UPDATE
 CREATE POLICY activos_solo_gerencia ON activos FOR ALL
   USING (fn_es_gerencia()) WITH CHECK (fn_es_gerencia());
 CREATE POLICY prolabore_solo_gerencia ON prolabore_config FOR ALL
+  USING (fn_es_gerencia()) WITH CHECK (fn_es_gerencia());
+CREATE POLICY horas_limite_solo_gerencia ON horas_limite_config FOR ALL
   USING (fn_es_gerencia()) WITH CHECK (fn_es_gerencia());
 CREATE POLICY sobres_solo_gerencia ON sobres_config FOR ALL
   USING (fn_es_gerencia()) WITH CHECK (fn_es_gerencia());
@@ -2124,10 +2149,11 @@ CREATE POLICY adelantos_insercion ON adelantos FOR INSERT WITH CHECK (fn_es_gere
 CREATE POLICY adelantos_actualizacion ON adelantos FOR UPDATE
   USING (fn_es_gerencia()) WITH CHECK (fn_es_gerencia());
 
--- Recién ahora, con todas las políticas escritas, se encienden las ocho tablas.
+-- Recién ahora, con todas las políticas escritas, se encienden las nueve tablas.
 ALTER TABLE clientes          ENABLE ROW LEVEL SECURITY;
 ALTER TABLE activos           ENABLE ROW LEVEL SECURITY;
 ALTER TABLE prolabore_config  ENABLE ROW LEVEL SECURITY;
+ALTER TABLE horas_limite_config ENABLE ROW LEVEL SECURITY;
 ALTER TABLE empleados         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nomina_periodos   ENABLE ROW LEVEL SECURITY;
 ALTER TABLE adelantos         ENABLE ROW LEVEL SECURITY;
@@ -2362,6 +2388,7 @@ ALTER TABLE costos_producto   FORCE ROW LEVEL SECURITY;
 ALTER TABLE clientes          FORCE ROW LEVEL SECURITY;
 ALTER TABLE activos           FORCE ROW LEVEL SECURITY;
 ALTER TABLE prolabore_config  FORCE ROW LEVEL SECURITY;
+ALTER TABLE horas_limite_config FORCE ROW LEVEL SECURITY;
 ALTER TABLE empleados         FORCE ROW LEVEL SECURITY;
 ALTER TABLE nomina_periodos   FORCE ROW LEVEL SECURITY;
 ALTER TABLE adelantos         FORCE ROW LEVEL SECURITY;
@@ -2734,7 +2761,7 @@ mismas reglas que la base— solo aguanta si esta prueba corre en cada despliegu
 capas que deciden se separan y ninguna avisa.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.25.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-020](adr/ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.26.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-020](adr/ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

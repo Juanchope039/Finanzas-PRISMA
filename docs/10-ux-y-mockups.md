@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-30 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [5.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -85,6 +85,7 @@ con la de la API?} -->|No| VI[Versión incompatible · no hay salida]
   N --> NL[Liquidación mensual]
 
   I --> IP[Pro-labore]
+  I --> IL[Límite de horas]
   I --> IS[Los 4 sobres]
 
   CF --> CA[Auditoría]
@@ -475,6 +476,24 @@ Gerencia.
 - **Guardar no edita la definición anterior**: la nueva rige desde hoy y la anterior queda en el
   historial, que no se pinta. Los costeos ya guardados conservan su tarifa, y un retiro se sigue
   partiendo con el pro-labore de su fecha.
+
+#### El límite de horas de una semana va debajo, porque es el techo de esas horas
+
+Unas horas imposibles no dan un error: dan una tarifa barata, y con ella un costeo que parece sano
+([RN-20](03-requisitos-y-bdd.md#rn-20), [05 §6.5](05-reglas-financieras.md#65-el-límite-de-horas-de-una-semana-rn-20)). El límite es lo que lo evita, y lo define Gerencia en el panel «El límite de
+horas de una semana», justo debajo del pro-labore.
+
+- **El panel pinta las horas de una semana y el máximo del mes que sale de ellas.** El máximo lo
+  calcula la API, con 52 entre 12, porque el front no calcula cifras.
+- **Mientras no haya ninguno definido, el panel dice que rige el que trae la aplicación**, y que se
+  puede cambiar. No dice que no haya límite, porque sí lo hay: la API manda el valor por omisión de
+  su ambiente, y la consulta lo marca.
+- **«Definir límite» abre el formulario en la misma pantalla**, con dos campos: las horas de una
+  semana y la justificación. Las dos son obligatorias, el límite va de 1 a 168 horas y las horas
+  llevan dos decimales como máximo.
+- **Guardar no edita la definición anterior**, como en el pro-labore. Y **no toca lo que ya está
+  guardado**: un límite más bajo no invalida un pro-labore anterior, y la próxima definición sí
+  tiene que caber.
 
 #### Un equipo se registra aquí, y se da de baja en el libro
 
@@ -891,7 +910,7 @@ El checklist de aprobación pantalla por pantalla está en
 [`09-plan-de-implantacion.md`](09-plan-de-implantacion.md) [§1](09-plan-de-implantacion.md#1-checklist-de-aprobación-del-mockup).
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.25.0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.26.0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
