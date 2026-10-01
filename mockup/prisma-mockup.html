@@ -906,7 +906,8 @@ tbody tr.fila-detalle:hover{background:none}
     <table class="vi-tabla">
       <tbody>
         <tr><td>Tienes la versión</td><td class="dato" id="vi-tiene">0.4.2</td></tr>
-        <tr><td>El servidor necesita</td><td class="dato" id="vi-necesita">1.0.0 o superior</td></tr>
+        <tr><td>Esta versión espera un servidor</td><td class="dato" id="vi-espera">0.x</td></tr>
+        <tr><td>El servidor está en la versión</td><td class="dato" id="vi-servidor">1.0.0</td></tr>
       </tbody>
     </table>
 
@@ -5974,8 +5975,11 @@ function mostrarAcceso(){
    prototipo, porque no hay API que consultar. */
 var versionIncompatible = false;
 
-/* La que el servidor exigiría. Es dato del prototipo: en el sistema real llega en /version. */
-var VERSION_API_EXIGIDA = '1.0.0 o superior';
+/* El MAJOR que esta aplicación espera —lo declara ella al compilar, con PRISMA_API_MAJOR— y la
+   versión que contestó el servidor. La segunda llega en /version; la primera viaja en el
+   artefacto, porque la API no publica qué versión de aplicación necesita (19 §4.3). */
+var MAJOR_QUE_ESPERA = '0.x';
+var VERSION_DEL_SERVIDOR = '1.0.0';
 
 function mostrarVersionIncompatible(){
   versionIncompatible = true;
@@ -5987,7 +5991,8 @@ function mostrarVersionIncompatible(){
   $('#acceso').hidden = true;
   $('#cambio-clave').hidden = true;
   $('#vi-tiene').textContent    = VERSIONES.front;
-  $('#vi-necesita').textContent = VERSION_API_EXIGIDA;
+  $('#vi-espera').textContent   = MAJOR_QUE_ESPERA;
+  $('#vi-servidor').textContent = VERSION_DEL_SERVIDOR;
   $('#version-incompatible').hidden = false;
   $('#vi-reintentar').focus();
 }

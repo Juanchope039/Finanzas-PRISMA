@@ -57,8 +57,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 9 | 0 | 1 | 2 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 3 | 0 | 9 | 13,5 |
-| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 2 | 0 | 11 | 10 |
-| **Total** | **155** | **134** | **0** | **21** | **25,5** |
+| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 3 | 0 | 10 | 9,5 |
+| **Total** | **155** | **135** | **0** | **20** | **25** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -243,18 +243,18 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 |---|---|
 | **API** | [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) · [9.11](docs/08-plan-de-desarrollo.md#tarea-9-11) |
 | **Base** | [7.10](docs/08-plan-de-desarrollo.md#tarea-7-10) |
-| **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) · [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) |
+| **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **21 tareas y 25,5 días de trabajo** de 155 tareas del plan.
+Quedan **20 tareas y 25 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 3,7 semanas | **6,7 semanas** |
+| 1 | 3,6 semanas | **6,6 semanas** |
 | 2 | 2,1 semanas | **5,1 semanas** |
 | 3 | 2,2 semanas | **5,2 semanas** |
 <!-- /generado:plan-restante -->
@@ -1500,7 +1500,12 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       referencia de proyecto, una credencial dentro de una cadena de conexión y un `.env.ejemplo` que
       dejó de estar vacío. Va en su propia tarea de Gradle, porque dentro de `test` la caché lo daba
       por bueno sin correrlo. Lo que se vio en los otros dos carriles quedó en el [§9](#titulo-9)
-- [ ] ⚡ [**9.9**](docs/08-plan-de-desarrollo.md#tarea-9-9) El front rechaza de verdad un MAJOR de API distinto · Front
+- [x] [**9.9**](docs/08-plan-de-desarrollo.md#tarea-9-9) El front rechaza de verdad un MAJOR de API distinto · Front — [C-02](docs/12-pruebas-y-calidad.md#c-02) ya
+      cubría sus tres casos, pero todos pasándole el MAJOR a mano: **nada probaba que la aplicación
+      usara `PRISMA_API_MAJOR`**, así que un `0` escrito en `main.dart` pasaba en verde. Ahora se
+      prueban el cableado, la consulta en el cable, que un sobre raro no plante y el texto del
+      documento. La pantalla se desviaba del mockup y **el documento se alineó al código**, con
+      autorización. ✏️ queda la prueba contra una API real, escrita y sin correr: necesita qa
 - [ ] 🔒 [**9.10**](docs/08-plan-de-desarrollo.md#tarea-9-10) Etiquetar `1.0.0` del front y de la API · API, Front
 - [ ] ⚡ [**9.11**](docs/08-plan-de-desarrollo.md#tarea-9-11) Swagger detrás de autenticación en prod · API
 - [ ] ⚡ [**9.12**](docs/08-plan-de-desarrollo.md#tarea-9-12) Los proyectos uat y prod de Supabase, los dos de pago · Decisión — salió
@@ -1821,6 +1826,13 @@ a `anon`.
   `.env` y nada más, así que un `.env.local` o un `.env.produccion` entrarían al repositorio sin que
   nadie se diera cuenta. Se vio haciendo la [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8), que es del carril API y no toca el front: **es
   un arreglo suelto de una línea en `prisma_front`**, y hoy no hay ningún archivo así en disco.
+
+- **La prueba de compatibilidad contra una API real está escrita y nunca ha corrido** (✏️). Vive en
+  `test/integracion/compatibilidad_contra_api_real_test.dart`, en `prisma_front`, y se salta sola
+  mientras no se le dé `PRISMA_API_URL_REAL`. Se escribió con la [9.9](docs/08-plan-de-desarrollo.md#tarea-9-9) porque es lo único que
+  comprueba que la ruta, el verbo y el nombre del campo son los que la API **de verdad** contesta: una
+  API simulada dice lo que uno escribió que dijera. **Hay que correrla en cuanto exista qa**, que es
+  la [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13), y hasta entonces la 9.9 está terminada solo en la mitad que se puede verificar.
 
 - **`service_role` aparece en `prisma_db` fuera de las migraciones**, que es lo que la [9.8](docs/08-plan-de-desarrollo.md#tarea-9-8) promete
   que no pasa: en `scripts/db/verificar-base.sql`, que comprueba que ese rol tampoco borre, y en los

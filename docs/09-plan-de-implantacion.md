@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/09-plan-de-implantacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Plan](INDICE.md#etiqueta-plan) · [Entrega](INDICE.md#etiqueta-entrega) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [5.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/09-plan-de-implantacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [Plan](INDICE.md#etiqueta-plan) · [Entrega](INDICE.md#etiqueta-entrega) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 Cómo se pasa de tener el software construido a que el negocio realmente lo use.
 
@@ -412,7 +412,7 @@ artefactos y quién tiene acceso a qué— vive en
 |---|---|
 | La API nueva falla y el front queda inservible | Se vuelve a la versión anterior de la API: **se despliega la etiqueta anterior de la imagen, que sigue publicada.** No se reconstruye nada |
 | El front nuevo falla y la API responde bien | Se republica el front anterior, que sigue siendo compatible con el mismo MAJOR de la API |
-| El front bloquea con «Esta versión de la aplicación ya no sirve con el servidor. Actualiza.» | Las dos versiones quedaron descuadradas: se vuelve la que se haya movido de último ([ADR-014](adr/ADR-014-semver.md)) |
+| El front bloquea con «Esta versión ya no sirve con el servidor» | Las dos versiones quedaron descuadradas: se vuelve la que se haya movido de último ([ADR-014](adr/ADR-014-semver.md)) |
 | Una migración dejó el esquema mal | **El esquema no se devuelve.** Se escribe otra migración que corrige y se promueve por los cuatro ambientes ([ADR-004](adr/ADR-004-base-solo-escritura.md), [ADR-013](adr/ADR-013-cuatro-ambientes.md)) |
 | Se dañaron o se perdieron datos | Restauración desde el respaldo más reciente y comparación con la última exportación ([CU-22](02-casos-de-uso.md#cu-22)) |
 
