@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.29.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-02 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.30.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-02 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -56,9 +56,9 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
-| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 3 | 0 | 9 | 13,5 |
+| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 4 | 0 | 8 | 12,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 4 | 0 | 9 | 9 |
-| **Total** | **155** | **137** | **0** | **18** | **22,5** |
+| **Total** | **155** | **138** | **0** | **17** | **21,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,7 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) |
+| **API** | [8.3](docs/08-plan-de-desarrollo.md#tarea-8-3) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -249,13 +249,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **18 tareas y 22,5 días de trabajo** de 155 tareas del plan.
+Quedan **17 tareas y 21,5 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 3,3 semanas | **6,3 semanas** |
-| 2 | 2,0 semanas | **5,0 semanas** |
-| 3 | 2,2 semanas | **5,2 semanas** |
+| 1 | 3,1 semanas | **6,1 semanas** |
+| 2 | 1,9 semanas | **4,9 semanas** |
+| 3 | 2,1 semanas | **5,1 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1478,9 +1478,9 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 La toma el carril que termine primero su cadena: es la funcionalidad más independiente del sistema.
 
-- [ ] ⚡ [**8.1**](docs/08-plan-de-desarrollo.md#tarea-8-1) Registro de empleadas · API, Front
+- [x] [**8.1**](docs/08-plan-de-desarrollo.md#tarea-8-1) Registro de empleadas · API, Front
 - [ ] 🔒 [**8.2**](docs/08-plan-de-desarrollo.md#tarea-8-2) Liquidación de nómina en la base, descontando adelantos · Base
-- [ ] 🔒 [**8.3**](docs/08-plan-de-desarrollo.md#tarea-8-3) Adelantos como cuenta por cobrar · API
+- [ ] ⚡ [**8.3**](docs/08-plan-de-desarrollo.md#tarea-8-3) Adelantos como cuenta por cobrar · API
 - [ ] 🔒 [**8.4**](docs/08-plan-de-desarrollo.md#tarea-8-4) Desprendible PDF con acceso restringido al propio · API
 - [ ] ⚡ [**8.5**](docs/08-plan-de-desarrollo.md#tarea-8-5) Simulador de capacidad de pago · API, Front
 - [ ] 🔒 [**8.6**](docs/08-plan-de-desarrollo.md#tarea-8-6) Traducción a unidades de producto por vender · API
