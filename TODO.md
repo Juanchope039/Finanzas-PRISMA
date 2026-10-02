@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.29.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-02 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.32.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-02 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -56,9 +56,9 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
-| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 3 | 0 | 9 | 13,5 |
+| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 5 | 0 | 7 | 11,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 4 | 0 | 9 | 9 |
-| **Total** | **155** | **137** | **0** | **18** | **22,5** |
+| **Total** | **155** | **139** | **0** | **16** | **20,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,7 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) |
+| **API** | [8.3](docs/08-plan-de-desarrollo.md#tarea-8-3) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -249,13 +249,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **18 tareas y 22,5 días de trabajo** de 155 tareas del plan.
+Quedan **16 tareas y 20,5 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 3,3 semanas | **6,3 semanas** |
-| 2 | 2,0 semanas | **5,0 semanas** |
-| 3 | 2,2 semanas | **5,2 semanas** |
+| 1 | 3,0 semanas | **6,0 semanas** |
+| 2 | 1,7 semanas | **4,7 semanas** |
+| 3 | 1,9 semanas | **4,9 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1245,17 +1245,16 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       retiro se registra de una vez y se parte solo si no se dice cómo: pro-labore hasta completar
       el del mes y el resto distribución. El pro-labore y los sobres no se editan: cada cambio es una
       fila nueva, vigente desde el día en que se guarda
-- [x] [**7.10**](docs/08-plan-de-desarrollo.md#tarea-7-10) El límite de horas de una semana, que define Gerencia · Base,
-      API, Front — **las tres mitades aterrizaron.** `horas_limite_config` guarda con historial el
-      límite que define Gerencia, y su política no deja que Operación lo cambie. La API lo sirve y
-      lo define en dos operaciones nuevas, y de él sale el máximo del mes —el semanal por 52 entre
-      12— que el pro-labore no puede pasar, con el 42295. **Con la tabla vacía rige el valor del
-      ambiente**, 48 horas, y la respuesta lo dice con `porOmision`: el día que baje la jornada
-      legal se cambia la configuración y la base no se toca. El panel vive en «Inversiones y
-      retiros», debajo del pro-labore porque es el techo de sus horas, y pinta el máximo del mes
-      como llega, sin calcularlo ([ADR-018](docs/adr/ADR-018-front-sin-decisiones.md)). Esquema `0.21.0`, contrato `0.26.0`, `prisma_api` en
-      `0.44.0` y `prisma_front` en `0.33.0+39`, con 57 pruebas nuevas entre las dos mitades de
-      código. **Desbloquea la 8.1**, que juzga contra este mismo límite las horas de cada empleada
+- [x] [**7.10**](docs/08-plan-de-desarrollo.md#tarea-7-10) El límite de horas de una semana, que define Gerencia · Base, API,
+      Front — de este número cuelgan tarifas ya cobradas, así que no se pisa: cada definición es
+      una fila de `horas_limite_config` con su vigencia, y «Inversiones y retiros» estrena el panel
+      debajo del pro-labore porque es el techo de sus horas ([RN-20](docs/03-requisitos-y-bdd.md#rn-20), [05 §6.5](docs/05-reglas-financieras.md)). El máximo del mes
+      es el límite semanal por 52 entre 12, y pasarse responde el `42295`. **La tabla puede estar
+      vacía a propósito**: mientras Gerencia no haya definido ninguno rige el valor por omisión del
+      ambiente, 48 horas, y la respuesta lo dice con `porOmision`, así que el día que la jornada
+      legal baje cambia la configuración y la base no se toca. Por lo mismo la migración no trae
+      ningún trigger que juzgue las horas: quien conoce ese valor es la API, y un trigger que no lo
+      conoce rechazaría lo que la aplicación acepta
 
 ### Cadena B · el pedido
 
@@ -1459,7 +1458,14 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       API con el precio del catálogo del día, aceptar escribe el pedido y la cotización en la única
       transacción de la petición, y el PDF se arma a mano, sin librería, con el membrete en la
       configuración. Contrato `0.26.2`, que corrigió el `201` de la aceptación
-- [ ] ⚡ [**8.9**](docs/08-plan-de-desarrollo.md#tarea-8-9) Validador de anticipo mínimo · API
+- [x] [**8.9**](docs/08-plan-de-desarrollo.md#tarea-8-9) Validador de anticipo mínimo · API — `POST /api/v0/consultas/anticipo-minimo`, que el formulario de pedido y el cotizador rehacen con
+      cada línea, antes de que exista nada que guardar. Cuenta el costo directo al costo vigente de
+      cada producto, lo divide entre el valor total y devuelve el faltante en pesos con el
+      porcentaje sugerido, el mínimo redondeado hacia arriba a múltiplo de cinco con cinco puntos
+      de holgura. **El costo lo lee de `costos_producto` y no de `fn_costeo_vigente`**: esa función
+      es `SECURITY DEFINER` para que las dos sesiones congelen el mismo costo sin verlo, y aquí el
+      costo sale en la pantalla, así que `costos_solo_gerencia` tiene que poder decir que no. Por
+      eso Operación recibe el mismo `40982` que un producto sin costear, dicho por la base
 - [x] [**8.11**](docs/08-plan-de-desarrollo.md#tarea-8-11) Contrato de nómina, simulador, cotizaciones e importación · Contrato — v0.15.0:
       25 operaciones, 46 esquemas y 17 códigos que estrenan a la vez los tres rangos que quedaban
       vacíos. Un archivo baja dentro del sobre, en base64: es el esquema `Documento`
@@ -1479,9 +1485,9 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 La toma el carril que termine primero su cadena: es la funcionalidad más independiente del sistema.
 
-- [ ] ⚡ [**8.1**](docs/08-plan-de-desarrollo.md#tarea-8-1) Registro de empleadas · API, Front
+- [x] [**8.1**](docs/08-plan-de-desarrollo.md#tarea-8-1) Registro de empleadas · API, Front
 - [ ] 🔒 [**8.2**](docs/08-plan-de-desarrollo.md#tarea-8-2) Liquidación de nómina en la base, descontando adelantos · Base
-- [ ] 🔒 [**8.3**](docs/08-plan-de-desarrollo.md#tarea-8-3) Adelantos como cuenta por cobrar · API
+- [ ] ⚡ [**8.3**](docs/08-plan-de-desarrollo.md#tarea-8-3) Adelantos como cuenta por cobrar · API
 - [ ] 🔒 [**8.4**](docs/08-plan-de-desarrollo.md#tarea-8-4) Desprendible PDF con acceso restringido al propio · API
 - [ ] ⚡ [**8.5**](docs/08-plan-de-desarrollo.md#tarea-8-5) Simulador de capacidad de pago · API, Front
 - [ ] 🔒 [**8.6**](docs/08-plan-de-desarrollo.md#tarea-8-6) Traducción a unidades de producto por vender · API
@@ -4682,6 +4688,22 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **El `42501` de esa política se traducía a `50000`.** El adaptador de cotizaciones no
       traducía el rechazo de la base, así que la seguridad funcionando se leía como «algo salió
       mal». Se arregló copiando la traducción que ya hacía el de movimientos
+
+**Del validador de anticipo mínimo ([8.9](docs/08-plan-de-desarrollo.md#tarea-8-9)):**
+
+- [ ] **El costo de esta consulta se lee de `costos_producto` y no de `fn_costeo_vigente`.** Esa
+      función es `SECURITY DEFINER` para que las dos sesiones congelen el mismo costo de un pedido
+      **sin verlo** ([5.5](docs/08-plan-de-desarrollo.md#tarea-5-5)), y aquí el costo sale en la pantalla. Si la consulta la usara, Operación
+      vería el costo directo y el margen de cada pedido, que es justo lo que `costos_solo_gerencia`
+      esconde. Así el contrato se cumple tal como está escrito —Operación recibe `40982`— y quien
+      rechaza sigue siendo la base. **Conviene revisar si Operación debería poder preguntar**, y en
+      ese caso qué se le contesta sin enseñarle el costo
+- [ ] **El mínimo redondea hacia arriba.** El [05 §5.2](docs/05-reglas-financieras.md#52-la-fórmula) solo dice que es el costo directo sobre el
+      valor total. Con 65,19 puntos, un 65 dejaría plata faltando y el nombre mentiría
+- [ ] **Unas líneas que no valen nada no dividen.** Con valor total cero el mínimo se fija en 100 y
+      no cubre, porque ningún porcentaje de cero paga un costo. Ningún documento cubre ese caso
+- [ ] **La lectura sale `alta` y no `critica`.** El pedido no está mal hecho: va a costar plata
+      mientras tanto. El [10 §3.1](docs/10-ux-y-mockups.md#31-color) pinta en ámbar lo que avisa y en rojo lo que no deja seguir
 
 ---
 
