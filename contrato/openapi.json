@@ -5063,7 +5063,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.26.2"
+    "version" : "0.27.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -12184,7 +12184,6 @@
     "mensaje" : "La fecha de retiro no puede ser anterior a la de ingreso.",
     "modulo" : "NOMINA_Y_ADELANTOS",
     "nombre" : "FECHA_DE_RETIRO_ANTERIOR_AL_INGRESO",
-    "pendienteDeEmitir" : true,
     "status" : 42250
   }, {
     "cuando" : "La llave foránea empleado_id de adelantos o de nomina_detalle: no existe, está anulada o ya se retiró",
@@ -12208,7 +12207,6 @@
     "mensaje" : "Ese usuario ya tiene ficha de nómina.",
     "modulo" : "NOMINA_Y_ADELANTOS",
     "nombre" : "EMPLEADA_YA_TIENE_USUARIO",
-    "pendienteDeEmitir" : true,
     "status" : 42253
   }, {
     "cuando" : "Aceptar o anular una cotización que ya tiene pedidoId",
