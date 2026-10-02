@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.28.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-01 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.29.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-02 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -55,10 +55,10 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 4](#sprint-4) · Pedidos y anticipos | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
-| [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 9 | 0 | 1 | 2 |
+| [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 3 | 0 | 9 | 13,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 4 | 0 | 9 | 9 |
-| **Total** | **155** | **136** | **0** | **19** | **24,5** |
+| **Total** | **155** | **137** | **0** | **18** | **22,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,8 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) |
-| **Base** | [7.10](docs/08-plan-de-desarrollo.md#tarea-7-10) |
+| **API** | [8.1](docs/08-plan-de-desarrollo.md#tarea-8-1) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -250,11 +249,11 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **19 tareas y 24,5 días de trabajo** de 155 tareas del plan.
+Quedan **18 tareas y 22,5 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 3,6 semanas | **6,6 semanas** |
+| 1 | 3,3 semanas | **6,3 semanas** |
 | 2 | 2,0 semanas | **5,0 semanas** |
 | 3 | 2,2 semanas | **5,2 semanas** |
 <!-- /generado:plan-restante -->
@@ -1246,7 +1245,16 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       retiro se registra de una vez y se parte solo si no se dice cómo: pro-labore hasta completar
       el del mes y el resto distribución. El pro-labore y los sobres no se editan: cada cambio es una
       fila nueva, vigente desde el día en que se guarda
-- [ ] ⚡ [**7.10**](docs/08-plan-de-desarrollo.md#tarea-7-10) El límite de horas de una semana, que define Gerencia · Base, API, Front
+- [x] [**7.10**](docs/08-plan-de-desarrollo.md#tarea-7-10) El límite de horas de una semana, que define Gerencia · Base, API,
+      Front — de este número cuelgan tarifas ya cobradas, así que no se pisa: cada definición es
+      una fila de `horas_limite_config` con su vigencia, y «Inversiones y retiros» estrena el panel
+      debajo del pro-labore porque es el techo de sus horas ([RN-20](docs/03-requisitos-y-bdd.md#rn-20), [05 §6.5](docs/05-reglas-financieras.md)). El máximo del mes
+      es el límite semanal por 52 entre 12, y pasarse responde el `42295`. **La tabla puede estar
+      vacía a propósito**: mientras Gerencia no haya definido ninguno rige el valor por omisión del
+      ambiente, 48 horas, y la respuesta lo dice con `porOmision`, así que el día que la jornada
+      legal baje cambia la configuración y la base no se toca. Por lo mismo la migración no trae
+      ningún trigger que juzgue las horas: quien conoce ese valor es la API, y un trigger que no lo
+      conoce rechazaría lo que la aplicación acepta
 
 ### Cadena B · el pedido
 
@@ -1470,7 +1478,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 
 La toma el carril que termine primero su cadena: es la funcionalidad más independiente del sistema.
 
-- [ ] 🔒 [**8.1**](docs/08-plan-de-desarrollo.md#tarea-8-1) Registro de empleadas · API, Front
+- [ ] ⚡ [**8.1**](docs/08-plan-de-desarrollo.md#tarea-8-1) Registro de empleadas · API, Front
 - [ ] 🔒 [**8.2**](docs/08-plan-de-desarrollo.md#tarea-8-2) Liquidación de nómina en la base, descontando adelantos · Base
 - [ ] 🔒 [**8.3**](docs/08-plan-de-desarrollo.md#tarea-8-3) Adelantos como cuenta por cobrar · API
 - [ ] 🔒 [**8.4**](docs/08-plan-de-desarrollo.md#tarea-8-4) Desprendible PDF con acceso restringido al propio · API
