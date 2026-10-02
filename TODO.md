@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.30.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-02 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.31.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-02 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -56,9 +56,9 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
-| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 4 | 0 | 8 | 12,5 |
+| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 5 | 0 | 7 | 11,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 4 | 0 | 9 | 9 |
-| **Total** | **155** | **138** | **0** | **17** | **21,5** |
+| **Total** | **155** | **139** | **0** | **16** | **20,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,7 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.3](docs/08-plan-de-desarrollo.md#tarea-8-3) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.9](docs/08-plan-de-desarrollo.md#tarea-8-9) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) |
+| **API** | [8.3](docs/08-plan-de-desarrollo.md#tarea-8-3) · [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -249,13 +249,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **17 tareas y 21,5 días de trabajo** de 155 tareas del plan.
+Quedan **16 tareas y 20,5 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 3,1 semanas | **6,1 semanas** |
-| 2 | 1,9 semanas | **4,9 semanas** |
-| 3 | 2,1 semanas | **5,1 semanas** |
+| 1 | 3,0 semanas | **6,0 semanas** |
+| 2 | 1,7 semanas | **4,7 semanas** |
+| 3 | 1,9 semanas | **4,9 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1458,7 +1458,14 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       API con el precio del catálogo del día, aceptar escribe el pedido y la cotización en la única
       transacción de la petición, y el PDF se arma a mano, sin librería, con el membrete en la
       configuración. Contrato `0.26.2`, que corrigió el `201` de la aceptación
-- [ ] ⚡ [**8.9**](docs/08-plan-de-desarrollo.md#tarea-8-9) Validador de anticipo mínimo · API
+- [x] [**8.9**](docs/08-plan-de-desarrollo.md#tarea-8-9) Validador de anticipo mínimo · API — `POST /api/v0/consultas/anticipo-minimo`, que el formulario de pedido y el cotizador rehacen con
+      cada línea, antes de que exista nada que guardar. Cuenta el costo directo al costo vigente de
+      cada producto, lo divide entre el valor total y devuelve el faltante en pesos con el
+      porcentaje sugerido, el mínimo redondeado hacia arriba a múltiplo de cinco con cinco puntos
+      de holgura. **El costo lo lee de `costos_producto` y no de `fn_costeo_vigente`**: esa función
+      es `SECURITY DEFINER` para que las dos sesiones congelen el mismo costo sin verlo, y aquí el
+      costo sale en la pantalla, así que `costos_solo_gerencia` tiene que poder decir que no. Por
+      eso Operación recibe el mismo `40982` que un producto sin costear, dicho por la base
 - [x] [**8.11**](docs/08-plan-de-desarrollo.md#tarea-8-11) Contrato de nómina, simulador, cotizaciones e importación · Contrato — v0.15.0:
       25 operaciones, 46 esquemas y 17 códigos que estrenan a la vez los tres rangos que quedaban
       vacíos. Un archivo baja dentro del sobre, en base64: es el esquema `Documento`
@@ -4681,6 +4688,22 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **El `42501` de esa política se traducía a `50000`.** El adaptador de cotizaciones no
       traducía el rechazo de la base, así que la seguridad funcionando se leía como «algo salió
       mal». Se arregló copiando la traducción que ya hacía el de movimientos
+
+**Del validador de anticipo mínimo ([8.9](docs/08-plan-de-desarrollo.md#tarea-8-9)):**
+
+- [ ] **El costo de esta consulta se lee de `costos_producto` y no de `fn_costeo_vigente`.** Esa
+      función es `SECURITY DEFINER` para que las dos sesiones congelen el mismo costo de un pedido
+      **sin verlo** ([5.5](docs/08-plan-de-desarrollo.md#tarea-5-5)), y aquí el costo sale en la pantalla. Si la consulta la usara, Operación
+      vería el costo directo y el margen de cada pedido, que es justo lo que `costos_solo_gerencia`
+      esconde. Así el contrato se cumple tal como está escrito —Operación recibe `40982`— y quien
+      rechaza sigue siendo la base. **Conviene revisar si Operación debería poder preguntar**, y en
+      ese caso qué se le contesta sin enseñarle el costo
+- [ ] **El mínimo redondea hacia arriba.** El [05 §5.2](docs/05-reglas-financieras.md#52-la-fórmula) solo dice que es el costo directo sobre el
+      valor total. Con 65,19 puntos, un 65 dejaría plata faltando y el nombre mentiría
+- [ ] **Unas líneas que no valen nada no dividen.** Con valor total cero el mínimo se fija en 100 y
+      no cubre, porque ningún porcentaje de cero paga un costo. Ningún documento cubre ese caso
+- [ ] **La lectura sale `alta` y no `critica`.** El pedido no está mal hecho: va a costar plata
+      mientras tanto. El [10 §3.1](docs/10-ux-y-mockups.md#31-color) pinta en ámbar lo que avisa y en rojo lo que no deja seguir
 
 ---
 
