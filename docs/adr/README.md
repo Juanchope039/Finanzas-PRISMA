@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.14.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-09-27 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
+| [1.15.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-10-03 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
 
 Registro de las decisiones técnicas importantes: qué se decidió, por qué, qué alternativas se
 consideraron y qué consecuencias tiene.
@@ -52,6 +52,7 @@ consideraron y qué consecuencias tiene.
 | [041](ADR-041-cuatro-lineas-por-parrafo.md) | Un párrafo de código o de commit tiene cuatro líneas como máximo | Aceptado |
 | [042](ADR-042-la-version-del-documento-es-la-de-la-api.md) | El documento OpenAPI declara la versión de la API, y la del contrato viaja en `x-prisma-contrato` | Aceptado |
 | [043](ADR-043-dependencias-solo-hacia-atras.md) | Una tarea solo depende de tareas anteriores | Aceptado |
+| [044](ADR-044-dos-ambientes-desplegados.md) | Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería | Aceptado |
 
 Son **43 decisiones** registradas: 34 aceptadas y 9 reemplazadas.
 

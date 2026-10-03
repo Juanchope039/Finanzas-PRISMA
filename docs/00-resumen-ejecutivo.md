@@ -151,7 +151,7 @@ base de datos y las pantallas. Con más carriles se termina antes, pero no en la
 que van en cadena y la puesta en marcha no se parte.
 
 <!-- generado:plan-resumen · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**30,6 semanas con 1 carril**, **18,4 semanas con 2 carriles** y **15,1 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](08-plan-de-desarrollo.md#1-cronograma-por-carriles).
+**30,6 semanas con 1 carril**, **18,4 semanas con 2 carriles** y **15,3 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](08-plan-de-desarrollo.md#1-cronograma-por-carriles).
 <!-- /generado:plan-resumen -->
 
 | Sprint | Entrega |
@@ -177,7 +177,7 @@ que van en cadena y la puesta en marcha no se parte.
 |:---:|---:|---:|---:|---:|
 | 1 | 27,6 semanas | 3 semanas | **30,6 semanas** | — |
 | 2 | 15,4 semanas | 3 semanas | **18,4 semanas** | −12,3 semanas |
-| 3 | 12,1 semanas | 3 semanas | **15,1 semanas** | −15,5 semanas |
+| 3 | 12,3 semanas | 3 semanas | **15,3 semanas** | −15,3 semanas |
 
 | Hito | 1 carril | 2 carriles | 3 carriles |
 |---|:---:|:---:|:---:|
@@ -185,10 +185,10 @@ que van en cadena y la puesta en marcha no se parte.
 | [H2](08-plan-de-desarrollo.md#h2) · Sprint 1 | semana 7 | semana 5 | semana 4 |
 | [H3](08-plan-de-desarrollo.md#h3) · Sprint 2 | semana 11 | semana 7 | semana 6 |
 | [H4](08-plan-de-desarrollo.md#h4) · Sprint 3 | semana 15 | semana 9 | semana 7 |
-| [H5](08-plan-de-desarrollo.md#h5) · Sprint 4 | semana 18 | semana 11 | semana 8 |
+| [H5](08-plan-de-desarrollo.md#h5) · Sprint 4 | semana 18 | semana 11 | semana 9 |
 | [H6](08-plan-de-desarrollo.md#h6) · Sprint 5 | semana 19 | semana 11 | semana 9 |
-| [H7](08-plan-de-desarrollo.md#h7) · Sprint 6 | semana 22 | semana 13 | semana 11 |
-| [H8](08-plan-de-desarrollo.md#h8) · Sprint 7 | semana 24 | semana 13 | semana 11 |
+| [H7](08-plan-de-desarrollo.md#h7) · Sprint 6 | semana 22 | semana 13 | semana 10 |
+| [H8](08-plan-de-desarrollo.md#h8) · Sprint 7 | semana 24 | semana 13 | semana 10 |
 | [H9](08-plan-de-desarrollo.md#h9) · Sprint 8 | semana 26 | semana 16 | semana 13 |
 | [H10](08-plan-de-desarrollo.md#h10) · Sprint 9 | semana 28 | semana 16 | semana 12 |
 | [H11](08-plan-de-desarrollo.md#h11) · go-live | semana 31 | semana 19 | semana 16 |
