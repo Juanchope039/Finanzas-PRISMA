@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.34.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-02 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.35.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -57,8 +57,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 7 | 0 | 5 | 7,5 |
-| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 4 | 0 | 9 | 9 |
-| **Total** | **155** | **141** | **0** | **14** | **16,5** |
+| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 5 | 0 | 8 | 7 |
+| **Total** | **155** | **142** | **0** | **13** | **14,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,7 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.6](docs/08-plan-de-desarrollo.md#tarea-8-6) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6) |
+| **API** | [8.6](docs/08-plan-de-desarrollo.md#tarea-8-6) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
 | **Base** | [8.2](docs/08-plan-de-desarrollo.md#tarea-8-2) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
@@ -250,13 +250,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **14 tareas y 16,5 días de trabajo** de 155 tareas del plan.
+Quedan **13 tareas y 14,5 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 2,4 semanas | **5,4 semanas** |
-| 2 | 1,5 semanas | **4,5 semanas** |
-| 3 | 1,1 semanas | **4,1 semanas** |
+| 1 | 2,0 semanas | **5,0 semanas** |
+| 2 | 1,2 semanas | **4,2 semanas** |
+| 3 | 1,0 semanas | **4,0 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1523,7 +1523,19 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 - [ ] 🔒 [**9.3**](docs/08-plan-de-desarrollo.md#tarea-9-3) Promoción de uat a prod sin recompilar · API, Front
 - [ ] ⚡ [**9.4**](docs/08-plan-de-desarrollo.md#tarea-9-4) Reversión ensayada en qa, con el tiempo medido · API, Front
 - [ ] 🔒 [**9.5**](docs/08-plan-de-desarrollo.md#tarea-9-5) Prueba de permisos con sesión real en los cuatro ambientes · API
-- [ ] ⚡ [**9.6**](docs/08-plan-de-desarrollo.md#tarea-9-6) Pruebas de extremo a extremo de los flujos críticos en qa · API, Front
+- [x] [**9.6**](docs/08-plan-de-desarrollo.md#tarea-9-6) Pruebas de extremo a extremo de los flujos críticos en qa · API,
+      Front — los siete flujos del [12 §11](docs/12-pruebas-y-calidad.md#11-flujos-críticos-de-extremo-a-extremo): entrar y recibir el menú, registrar un gasto y
+      **verlo mover la utilidad del mes por su valor**, cobrar un anticipo y verla **no moverse**,
+      anular con motivo y ver volver la cifra con la fila intacta, reenviar con la misma clave y
+      seguir con una sola fila, el PDF de la cotización y el veredicto del simulador.
+      **Escritos una vez y corriendo en dos sitios**: contra la aplicación que levanta la tubería,
+      en cada empuje, que es lo que prueba que las pruebas sirven; y contra la API desplegada, que
+      es lo que prueba que el ambiente sirve. La mitad de front los recorre **por el código del
+      front** y no por HTTP a mano, que es lo único que comprueba que la ruta, el verbo y el nombre
+      de cada campo son los que esta aplicación manda. ✏️ queda la corrida contra qa, escrita y sin
+      correr: **el ambiente qa de aplicación no existe todavía** ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)), así que el trabajo de la
+      tubería se salta nombrando lo que falta, y [M-03](docs/12-pruebas-y-calidad.md#m-03) no se pudo escribir porque su ruta está
+      acordada y sin implementar ([§10](#10-decisiones-de-construcción-que-conviene-revisar))
 - [ ] ⚡ [**9.7**](docs/08-plan-de-desarrollo.md#tarea-9-7) Rendimiento en celular real con 4G · Front
 - [x] [**9.8**](docs/08-plan-de-desarrollo.md#tarea-9-8) Repaso de secretos: nada en los repositorios y `service_role` solo en migraciones · API — el
       escaneo que pedía [RNF-24](docs/03-requisitos-y-bdd.md#rnf-24) y que no existía, buscando **valores** y no nombres: un JWT entero, una
@@ -1882,6 +1894,36 @@ a `anon`.
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**De la 9.6, los flujos críticos de extremo a extremo:**
+
+- [ ] ⚡ **Hace falta un secreto más de los que la [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) enumera: `QA_API_URL`.** La 9.13 pide la
+      contraseña del rol y los seis secretos de GitHub que `permisos-en-qa` espera, y esos secretos
+      apuntan a la **base** de qa. Correr los flujos contra la API **desplegada** necesita además su
+      URL, que no puede escribirse en este repositorio porque es público. El trabajo de la tubería
+      se salta nombrándola, así que no hay nada roto; lo que hay que decidir es si ese nombre entra
+      a la lista de la 9.13 o si la URL de qa se publica como variable y no como secreto
+- [ ] **[M-03](docs/12-pruebas-y-calidad.md#m-03) —entregar el pedido y cobrar el saldo— se quedó sin flujo automático.** `fn_entregar_pedido`
+      existe desde la [4.5](docs/08-plan-de-desarrollo.md#tarea-4-5), pero `POST /api/v0/pedidos/{id}/entrega` está acordada en el contrato y
+      **no implementada**: no aparece en la copia fijada de la API. Se descartó escribir la prueba
+      contra la ruta ausente, porque una roja que hay que acordarse de encender no es una prueba.
+      Es el octavo flujo del [12 §11](docs/12-pruebas-y-calidad.md#11-flujos-críticos-de-extremo-a-extremo) en cuanto la ruta entre, y **conviene mirar de qué tarea es**:
+      el recorrido manual del 12 la da por existente
+- [ ] **La respuesta guardada de un reintento no vuelve igual, y el orden de las claves no lo
+      explica.** La [1.14](docs/08-plan-de-desarrollo.md#tarea-1-14) dejó anotado más abajo que el `jsonb` reserializa —otro orden, otro
+      espaciado—, y eso lo absorbe comparar los dos JSON ya leídos. Pero el flujo [E-05](docs/12-pruebas-y-calidad.md#e-05) comparó los
+      dos sobres enteros de `PUT /api/v0/movimientos/{id}` y **salió rojo**, así que cambia algo más.
+      Queda afirmando lo que promete el [20 §5.2](docs/20-contrato-de-api.md) —el mismo `status`, el mismo id y el mismo valor, y
+      una sola fila—, y **qué campo difiere está sin averiguar**. Se intentó: la consola de Gradle
+      imprime `AssertionFailedError at FlujosCriticos.java:247` y nada más, y el mensaje vive en el
+      informe HTML, que es un artefacto que no se puede descargar desde donde se escribió esto. Para
+      que la próxima falla se lea en el registro hace falta `exceptionFormat = FULL` en el
+      `testLogging` de `build.gradle.kts`, que **sí pide versión**, así que va en un PR que ya la suba
+- [ ] **La mitad de front deja un movimiento anulado por corrida.** No habla con la base, así que no
+      puede borrar lo que escribe: registra un gasto de **un peso** con su descripción marcada y lo
+      anula con motivo, que es lo único que deshace algo ([ADR-004](docs/adr/ADR-004-base-solo-escritura.md)). En un ambiente con semilla
+      reproducible eso no molesta, pero **si qa deja de recrearse** conviene decidir si esa mitad
+      pasa a pedir también la base, como la de la API
 
 **Del panel de los cuatro sobres del Inicio ([7.8](docs/08-plan-de-desarrollo.md#tarea-7-8)):**
 

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [Calidad](INDICE.md#etiqueta-calidad) |
+| [4.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-02 | [Calidad](INDICE.md#etiqueta-calidad) |
 
 ---
 
@@ -80,11 +80,12 @@ que falla ahí no siempre significa que el código esté mal.
 | Vista previa de Operación ([§7.1](#71-la-vista-previa-de-operación)) | [A-17](#a-17) a [A-19](#a-19) | 3 |
 | Contrato entre las tres partes ([§9](#9-pruebas-del-contrato-entre-las-tres-partes)) | [C-01](#c-01) a [C-05](#c-05) | 5 |
 | Idempotencia, canal firmado y durabilidad ([§10](#10-idempotencia-canal-firmado-y-durabilidad)) | [I-01](#i-01), [I-02](#i-02), [F-01](#f-01), [F-02](#f-02), [T-01](#t-01), [T-02](#t-02), [RE-01](#re-01) | 7 |
-| **Total** | | **113** |
+| Flujos críticos de extremo a extremo ([§11](#11-flujos-críticos-de-extremo-a-extremo)) | [E-01](#e-01) a [E-07](#e-07) | 7 |
+| **Total** | | **120** |
 
-Son **102 automáticas, 10 manuales y 1 de operación trimestral** —[RE-01](#re-01), la restauración del
+Son **109 automáticas, 10 manuales y 1 de operación trimestral** —[RE-01](#re-01), la restauración del
 respaldo—. No son todas las que habrá: las unitarias del dominio serán muchas más y se miden por
-cobertura, no por lista. Estas 113 están escritas aquí una por una porque ninguna puede quedar al
+cobertura, no por lista. Estas 120 están escritas aquí una por una porque ninguna puede quedar al
 criterio de quien programe ese día.
 
 ---
@@ -628,6 +629,60 @@ El procedimiento y las políticas de retención están en
 [`13-respaldo-y-exportacion.md`](13-respaldo-y-exportacion.md) y en
 [`16-base-de-datos-y-snapshots.md`](16-base-de-datos-y-snapshots.md). Aquí solo queda fijado que
 **restaurar es una prueba con fecha, no una buena intención.**
+
+---
+
+## 11. Flujos críticos de extremo a extremo
+
+Las pruebas de los apartados anteriores miran **una cosa cada una**: una regla, un permiso, una
+restricción, una ruta. Estas siete miran lo otro, que es lo que se le rompe a quien usa el sistema:
+que **registrar un gasto mueva la cifra del tablero**, que **cobrar un anticipo no la mueva**, y que
+eso siga siendo cierto en el ambiente donde el artefacto está desplegado y no solo en la máquina de
+quien programa.
+
+Son la tarea [9.6](08-plan-de-desarrollo.md#tarea-9-6), y corren en dos sitios con el mismo código:
+
+| Dónde | Contra qué | Cuándo |
+|---|---|---|
+| **En cada empuje** | La aplicación levantada por la tubería, con su base recién migrada y sembrada | Dentro de las pruebas de integración de `prisma_api` |
+| **En qa** | La API **desplegada**, con su configuración y su base | A mano, y en cada empuje a `develop` |
+
+> **La que corre en cada empuje es la que da fe de que las pruebas sirven.** La que corre en qa es
+> la que da fe de que el ambiente sirve. Ninguna de las dos sustituye a la otra, y escribir los
+> flujos dos veces los dejaría divergiendo en el primer cambio de contrato: se escriben una vez.
+
+| # | Flujo | Qué afirma |
+|---|---|---|
+| <a id="e-01"></a>E-01 | Entrar, pedir el menú y la versión | La cadena entera contesta. El menú llega con secciones y lo decide la API ([ADR-018](adr/ADR-018-front-sin-decisiones.md)), y la versión que contesta es la del artefacto que corre |
+| <a id="e-02"></a>E-02 | Registrar un gasto y leerlo en el libro | Sale en el libro, y **baja la utilidad causada del mes exactamente por su valor** ([M-01](#m-01), [M-04](#m-04)) |
+| <a id="e-03"></a>E-03 | Registrar un pedido y cobrar su anticipo | Sube la caja por el valor cobrado y **la utilidad no se mueve**: un anticipo no es un ingreso ([RN-04](03-requisitos-y-bdd.md#rn-04), [M-02](#m-02)) |
+| <a id="e-04"></a>E-04 | Anular un movimiento | Un motivo en blanco se rechaza con `42200`; con motivo, la cifra vuelve a donde estaba y **la fila sigue ahí con su motivo** ([M-05](#m-05)) |
+| <a id="e-05"></a>E-05 | Reenviar la misma petición con la misma clave | La misma respuesta, y **una sola fila**: el reintento del celular sin señal no duplica el gasto ([ADR-020](adr/ADR-020-idempotencia.md)) |
+| <a id="e-06"></a>E-06 | Cotizar y pedir el documento | El PDF llega con el número de la cotización en el nombre y adentro ([M-06](#m-06)) |
+| <a id="e-07"></a>E-07 | El simulador de contratación | El veredicto llega dicho, y el presupuesto disponible es la utilidad promedio menos la reserva ([M-07](#m-07)) |
+
+**Entran por la puerta.** Las demás pruebas de integración siembran la sesión en la tabla y le
+fabrican su clave de firma; estas entran con usuario y contraseña, y de ahí sacan el token y la
+clave. Contra una API desplegada no hay otra forma, y es lo que las vuelve de extremo a extremo:
+entre la primera petición y la última están el filtro de sesión, el canal firmado, la idempotencia,
+GoTrue y RLS.
+
+**Ninguna cifra se afirma por su valor absoluto.** Se mide la diferencia entre antes y después,
+porque la semilla de un ambiente cambia con cada tarea y una prueba que fije el número se vuelve
+roja por algo que no es lo que ella vigila.
+
+**Nunca contra uat ni contra prod**, como todo lo que escribe ([§1.1](#11-dónde-corre-cada-nivel)). Dos cerrojos lo impiden: salir
+de la máquina hay que pedirlo por escrito, y la base tiene que traer la semilla, que es justo lo que
+no entra en los ambientes del negocio.
+
+**Lo que escriben lo borran**, como dueño y solo lo suyo, con ids fuera de los rangos de la semilla.
+La mitad de front —entrar, el menú, registrar y leer de vuelta, por el código del front y no por
+HTTP a mano— no habla con la base, así que deshace su gasto de un peso **anulándolo con motivo**,
+que es lo único que deshace algo aquí ([ADR-004](adr/ADR-004-base-solo-escritura.md)).
+
+> **El recorrido [M-03](#m-03) —entregar el pedido y cobrar el saldo— todavía no se puede automatizar.** La
+> función de la base existe desde la [4.5](08-plan-de-desarrollo.md#tarea-4-5), pero la ruta que la llama no está en la copia fijada del
+> contrato: está acordada y sin implementar. Cuando entre, es el octavo flujo de esta lista.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.27.0") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [ADR-037](adr/ADR-037-el-pr-se-abre-a-pedido.md "ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos") · [ADR-040](adr/ADR-040-rama-feature-y-pr-autorizado.md "ADR-040 · Toda rama empieza por feature/, y el PR se abre solo con autorización expresa, trayendo entonces la base") · [ADR-042](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md "ADR-042 · El documento OpenAPI declara la versión de la API, y la del contrato viaja en x-prisma-contrato") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
