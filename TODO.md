@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.44.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.45.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -57,8 +57,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 12 | 0 | 0 | 0 |
-| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 7 | 0 | 6 | 5 |
-| **Total** | **155** | **149** | **0** | **6** | **5** |
+| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 8 | 0 | 5 | 4 |
+| **Total** | **155** | **150** | **0** | **5** | **4** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,7 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.5](docs/08-plan-de-desarrollo.md#tarea-9-5) |
+| **API** | [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -249,13 +249,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **6 tareas y 5 días de trabajo** de 155 tareas del plan.
+Quedan **5 tareas y 4 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 0,6 semanas | **3,6 semanas** |
-| 2 | 0,5 semanas | **3,5 semanas** |
-| 3 | 0,6 semanas | **3,6 semanas** |
+| 1 | 0,5 semanas | **3,5 semanas** |
+| 2 | 0,3 semanas | **3,3 semanas** |
+| 3 | 0,4 semanas | **3,4 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1565,7 +1565,11 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       de git en `prisma.arbol`. uat y `main` comprueban por el árbol que es la misma y la marcan
       sin recompilar. **El despliegue a prod queda escrito pero sin ensayar**, porque prod no existe
 - [ ] ⚡ [**9.4**](docs/08-plan-de-desarrollo.md#tarea-9-4) Reversión ensayada en dev, con el tiempo medido · API, Front
-- [ ] ⚡ [**9.5**](docs/08-plan-de-desarrollo.md#tarea-9-5) Prueba de permisos con sesión real en cada etapa y contra dev · API
+- [x] [**9.5**](docs/08-plan-de-desarrollo.md#tarea-9-5) Prueba de permisos con sesión real en cada etapa y contra dev · API — [P-01](docs/12-pruebas-y-calidad.md#p-01) a
+      [P-32](docs/12-pruebas-y-calidad.md#p-32) ya corrían en cada etapa contra la base de la tubería, y en uat sobre su volumen. Lo que
+      cambia es el trabajo que las lanza contra un ambiente: `permisos-en-qa` pasa a
+      `permisos-en-dev`, con seis secretos `DEV_*`, en el empuje a las cuatro etapas y de a una
+      corrida. **Sin esos secretos se salta con aviso**, y cargarlos es la [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13)
 - [x] [**9.6**](docs/08-plan-de-desarrollo.md#tarea-9-6) Pruebas de extremo a extremo de los flujos críticos en qa · API,
       Front — los siete flujos del [12 §11](docs/12-pruebas-y-calidad.md#11-flujos-críticos-de-extremo-a-extremo): entrar y recibir el menú, registrar un gasto y
       **verlo mover la utilidad del mes por su valor**, cobrar un anticipo y verla **no moverse**,
@@ -1601,7 +1605,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 - [ ] ⚡ [**9.12**](docs/08-plan-de-desarrollo.md#tarea-9-12) El proyecto prod de Supabase, el único de pago · Decisión — salió
       de partir la [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4), y desde el [ADR-044](docs/adr/ADR-044-dos-ambientes-desplegados.md) ya no lleva uat; el expediente y la cifra están en el
       [§7.1](#71-el-expediente-de-uat-y-prod) y lo único que falta es la firma
-- [ ] ⚡ [**9.13**](docs/08-plan-de-desarrollo.md#tarea-9-13) Los secretos de GitHub para correr permisos y extremo a extremo contra dev · Decisión — la configuración que los trabajos del CI ya esperan desde la [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11) y la [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6), que apuntaban a qa y desde el [ADR-044](docs/adr/ADR-044-dos-ambientes-desplegados.md) apuntan a dev; sin ella se saltan con aviso
+- [ ] ⚡ [**9.13**](docs/08-plan-de-desarrollo.md#tarea-9-13) Los secretos de GitHub para correr permisos y extremo a extremo contra dev · Decisión — la configuración que los trabajos del CI ya esperan desde la [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11) y la [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6), que apuntaban a qa y desde el [ADR-044](docs/adr/ADR-044-dos-ambientes-desplegados.md) apuntan a dev; sin ella se saltan con aviso. Los de permisos ya se llaman `DEV_BASE_URL`, `DEV_BASE_CLAVE_DUENO`, `DEV_BASE_CLAVE_API`, `DEV_AUTH_URL`, `DEV_ANON_KEY` y `DEV_SERVICE_ROLE_KEY` ([9.5](docs/08-plan-de-desarrollo.md#tarea-9-5))
 
 ---
 
@@ -2075,6 +2079,14 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       publica el front de prod. Se cargan cuando prod tenga dominio
 - [ ] **Un arreglo empujado directo a `uat` o a `main` deja la etapa en rojo**, porque su árbol ya
       no es el que compiló qa. Es a propósito: el arreglo urgente también entra por develop y pasa por qa
+
+**De la 9.5, los permisos contra dev:**
+
+- [ ] **Los flujos de extremo a extremo siguen leyendo los secretos `QA_*`.** La 9.5 movió solo
+      el trabajo de permisos, que es el suyo. Pasar `extremo-a-extremo-en-qa` a dev es cambiar
+      tres nombres, y conviene hacerlo el mismo día que se carguen los de la [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13)
+- [ ] **La prueba escribe filas en dev, que es donde Gerencia aprueba.** Limpia lo suyo como
+      dueño, pero mientras corre se ven sus filas. Corre de a una por la `concurrency` del trabajo
 
 **De la 9.6, los flujos críticos de extremo a extremo:**
 
@@ -4651,10 +4663,12 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       público: un PR de fuera no puede leerlos, y un trabajo rojo por eso enseñaría a ignorar el
       rojo. Se salta con un aviso que dice cuál falta y dónde se carga, como ya hace el de
       integración con `PRISMA_DB_TOKEN`
-- [ ] **En uat esta prueba no va a poder correr tal como está.** El [12 §1.1](docs/12-pruebas-y-calidad.md#11-dónde-corre-cada-nivel) dice que [P-01](docs/12-pruebas-y-calidad.md#p-01) a
+- [x] **En uat esta prueba no va a poder correr tal como está.** El [12 §1.1](docs/12-pruebas-y-calidad.md#11-dónde-corre-cada-nivel) dice que [P-01](docs/12-pruebas-y-calidad.md#p-01) a
       [P-39](docs/12-pruebas-y-calidad.md#p-39) corren también en uat, con datos «realistas y anonimizados» —o sea, sin semilla—, y
       esta clase entra como Marcela con la contraseña de la semilla. O uat tiene sus propias
-      credenciales de prueba, o esas pruebas no son las mismas. La [9.5](docs/08-plan-de-desarrollo.md#tarea-9-5) se lo va a encontrar
+      credenciales de prueba, o esas pruebas no son las mismas. La [9.5](docs/08-plan-de-desarrollo.md#tarea-9-5) se lo va a encontrar —
+      **Ya no aplica**: desde el [ADR-044](docs/adr/ADR-044-dos-ambientes-desplegados.md) uat es una etapa, y su semilla es la fija con
+      volumen encima ([9.2](docs/08-plan-de-desarrollo.md#tarea-9-2)), así que Marcela está y la prueba corre igual
 
 **De la 2.9:**
 
