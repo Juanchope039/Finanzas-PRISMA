@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.39.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.40.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -56,9 +56,9 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
-| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 10 | 0 | 2 | 3 |
+| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 11 | 0 | 1 | 2 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 5 | 0 | 8 | 7 |
-| **Total** | **155** | **145** | **0** | **10** | **10** |
+| **Total** | **155** | **146** | **0** | **9** | **9** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,7 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.7](docs/08-plan-de-desarrollo.md#tarea-8-7) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
+| **API** | [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -249,11 +249,11 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **10 tareas y 10 días de trabajo** de 155 tareas del plan.
+Quedan **9 tareas y 9 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 1,4 semanas | **4,4 semanas** |
+| 1 | 1,2 semanas | **4,2 semanas** |
 | 2 | 0,8 semanas | **3,8 semanas** |
 | 3 | 0,9 semanas | **3,9 semanas** |
 <!-- /generado:plan-restante -->
@@ -1529,7 +1529,12 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       pide menos del 20 % de la jornada evaluada, el veredicto dice que la restricción no es la
       capacidad de producir sino la demanda** ([06 §4.2](docs/06-nomina-y-capacidad-de-pago.md#42-resultado-para-el-faltante-de-556000)). Contrato `0.26.2`, ya acordado, sin
       migración
-- [ ] ⚡ [**8.7**](docs/08-plan-de-desarrollo.md#tarea-8-7) Horas pagadas contra horas facturadas · API, Front
+- [x] [**8.7**](docs/08-plan-de-desarrollo.md#tarea-8-7) Horas pagadas contra horas facturadas · API, Front — la nómina
+      liquidada más el pro-labore, contra las horas congeladas de lo entregado en el mes, y lo que
+      cuesta la diferencia con la tarifa del pro-labore que regía ese mes ([06 §9](docs/06-nomina-y-capacidad-de-pago.md#9-horas-pagadas-vs-horas-facturadas)). Los tres
+      tramos los decide la API sobre el porcentaje con un decimal que se pinta; sin pro-labore es el
+      `40950`. El front lo pinta en Reportes, al lado del punto de equilibrio, con su propia
+      consulta. Contrato `0.26.2`, ya acordado, sin migración
 - [ ] ⚡ [**8.10**](docs/08-plan-de-desarrollo.md#tarea-8-10) Importador de CSV con mapeo y reporte de errores · API, Front — sin cadena asignada
 
 ---
@@ -1993,6 +1998,27 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       de márgenes por hora puesto al lado del faltante y «reducir tiempo ocioso» necesita las horas
       facturadas, que son la [8.7](docs/08-plan-de-desarrollo.md#tarea-8-7). Proponerlas sin sus números sería el consejo genérico que el
       documento quiere evitar
+
+**De la 8.7, las horas pagadas contra las facturadas:**
+
+- [ ] **Las horas de nómina son las pactadas, enteras.** El contrato dice «las horas pactadas de
+      quienes se liquidaron en el mes», y eso se sumó tal cual: `horas_mensuales` de cada ficha con
+      fila en `nomina_detalle`. No se prorratea por `dias_trabajados` ni se suman las horas extra,
+      porque ningún documento lo pide. Quien entró el 20 cuenta el mes entero de horas pagadas
+- [ ] **El pro-labore es el que regía el último día del mes**, o el de hoy si el mes no ha
+      terminado. El contrato dice «el vigente», sin decir a qué fecha. Con el de hoy, el ocio de
+      marzo se cobraría con la tarifa de octubre. Un mes anterior al primer pro-labore responde el
+      `40950`, porque ese mes no tenía con qué medirse
+- [ ] **El tramo se juzga sobre el porcentaje redondeado a un decimal**, que es el que se pinta. Los
+      bordes van así: menos de 15 es `informativa`, de 15 a 35 inclusive `alta` y más de 35
+      `critica`. El [06 §9](docs/06-nomina-y-capacidad-de-pago.md#9-horas-pagadas-vs-horas-facturadas) escribe «15% – 35%» sin decir de qué lado cae cada borde
+- [ ] **Un mes fuera de rango responde `42260`, como el tablero, y el contrato no lo enumera** entre
+      los códigos de esta ruta. Es la misma validación del período que ya usan el tablero y el
+      reporte; lo que falta es agregar el código a la descripción de la ruta en el contrato
+- [ ] **La copia fijada no es la ruta del contrato byte a byte.** Lleva la descripción de
+      `Idempotency-Key` que la API usa para todas las consultas desde el [ADR-030](docs/adr/ADR-030-contrato-sin-get.md), y no
+      la de las escrituras que tiene el contrato acordado. Le pasa igual a las demás consultas
+      fijadas, como la del simulador: es deuda del contrato, no de esta tarea
 
 **De la 9.6, los flujos críticos de extremo a extremo:**
 
