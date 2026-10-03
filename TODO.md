@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.38.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.39.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -3157,9 +3157,10 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       contrato dice que todo lo que no sea cambiar la clave, renovar, cerrar o pedir un formulario
       responde `40302`; hoy la única operación con sesión que lo comprueba es la navegación, que es
       la que decide qué se pinta. Cuando existan más habrá que decidir si esa regla vive en un filtro
-- [ ] **«Cambiar el tema» no entró al menú de la sesión**, aunque el [10 §5.3](docs/10-ux-y-mockups.md#53-la-sesión-en-el-topbar) lo lista. El front
-      sigue el tema del sistema y ninguna tarea ha pedido otra cosa: agregarlo sería inventar una
-      preferencia que nadie acordó dónde se guarda
+- [x] **«Cambiar el tema» ya entró al menú de la sesión**, donde el [10 §5.3](docs/10-ux-y-mockups.md#53-la-sesión-en-el-topbar) lo lista y el
+      mockup lo traía. Lo que faltaba era acordar dónde se guarda la preferencia, y queda en
+      `localStorage`: es cómo se ve la pantalla, no un dato del negocio ni un secreto. Sin nada
+      elegido se sigue al tema del sistema, igual que antes
 - [ ] **El formulario «cambio-de-clave» estrena el mínimo en un campo de tipo `clave`.** El
       generador de descriptores solo admitía `@Size` en un texto, y el contrato pide ocho caracteres
       en una contraseña. Una contraseña se cuenta igual que un texto; lo único que su tipo cambia es
