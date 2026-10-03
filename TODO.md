@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.40.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.41.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -56,9 +56,9 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
-| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 11 | 0 | 1 | 2 |
+| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 12 | 0 | 0 | 0 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 5 | 0 | 8 | 7 |
-| **Total** | **155** | **146** | **0** | **9** | **9** |
+| **Total** | **155** | **147** | **0** | **8** | **7** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,7 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
+| **API** | [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -249,13 +249,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **9 tareas y 9 días de trabajo** de 155 tareas del plan.
+Quedan **8 tareas y 7 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 1,2 semanas | **4,2 semanas** |
+| 1 | 0,9 semanas | **3,9 semanas** |
 | 2 | 0,8 semanas | **3,8 semanas** |
-| 3 | 0,9 semanas | **3,9 semanas** |
+| 3 | 0,8 semanas | **3,8 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1535,7 +1535,11 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       tramos los decide la API sobre el porcentaje con un decimal que se pinta; sin pro-labore es el
       `40950`. El front lo pinta en Reportes, al lado del punto de equilibrio, con su propia
       consulta. Contrato `0.26.2`, ya acordado, sin migración
-- [ ] ⚡ [**8.10**](docs/08-plan-de-desarrollo.md#tarea-8-10) Importador de CSV con mapeo y reporte de errores · API, Front — sin cadena asignada
+- [x] [**8.10**](docs/08-plan-de-desarrollo.md#tarea-8-10) Importador de CSV con mapeo y reporte de errores · API, Front — la API
+      lee el CSV sin escribir y lo confirma con su id, con el informe fila por fila y el `40970` de
+      las duplicadas. El front lo pinta en Movimientos, en el panel «Importar el histórico» que el
+      [10 §4.3](docs/10-ux-y-mockups.md#43-movimientos) dibujó para esta tarea: elegir, relacionar las columnas y revisar antes de cargar.
+      Contrato `0.26.2`, ya acordado, sin migración
 
 ---
 
@@ -2019,6 +2023,19 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       `Idempotency-Key` que la API usa para todas las consultas desde el [ADR-030](docs/adr/ADR-030-contrato-sin-get.md), y no
       la de las escrituras que tiene el contrato acordado. Le pasa igual a las demás consultas
       fijadas, como la del simulador: es deuda del contrato, no de esta tarea
+
+**De la 8.10, el importador en pantalla:**
+
+- [ ] **El panel se pinta con `puedeGestionarCuentas`**, el mismo permiso de «Cuentas de dinero».
+      La navegación no trae uno para importar, y agregarlo era un PR de contrato y otro de API por
+      un booleano que hoy vale lo mismo. Si un día importar y crear cuentas se separan, es un
+      `puedeImportar` en `Navegacion`
+- [ ] **La confirmación no pasa por la cola de pendientes.** Es una conversación: lo que se pinta
+      después es el informe que devuelve, y un CSV de 5 MB guardado para cuando vuelva la señal no
+      tendría a quién mostrárselo. El reintento sí vuelve al mismo id con la misma clave
+- [ ] **El botón dice cuántas se van a cargar sumando dos cifras de la API**: las válidas, y las
+      duplicadas si el interruptor está puesto. Es la única cuenta del panel. Si se quiere que ni
+      eso lo haga el front, el informe tendría que traer cuántas entrarían con y sin duplicadas
 
 **De la 9.6, los flujos críticos de extremo a extremo:**
 
@@ -4031,7 +4048,8 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **El importador tiene pantalla, y es Configuración**, que es lo que la matriz del [03](docs/03-requisitos-y-bdd.md) le pone a
       [RF-64](docs/03-requisitos-y-bdd.md#rf-64)–[RF-70](docs/03-requisitos-y-bdd.md#rf-70) y el [10 §2.1](docs/10-ux-y-mockups.md#21-navegación-por-rol) le da a Gerencia. **El mockup no la dibuja** y la lista de secciones del
       contrato tampoco la tiene —son ocho y Configuración no está—, que es la discrepancia ya anotada
-      más arriba. El Front la diseña antes de construir la [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10)
+      más arriba. El Front la diseña antes de construir la [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10). **Se diseñó en Movimientos y no en
+      Configuración** ([10 §4.3](docs/10-ux-y-mockups.md#43-movimientos)), por lo mismo que el pro-labore y los sobres
 - [ ] **Devolver un adjunto ya tiene forma y sigue sin operación.** El `openapi.json` decía «devolver
       el archivo todavía no está acordado»; ahora dice que la forma es `Documento` y que la operación
       es de la [3.6](docs/08-plan-de-desarrollo.md#tarea-3-6). No se metió aquí porque es del rango de movimientos y del carril de otra tarea
