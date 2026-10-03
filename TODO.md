@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.36.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.37.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -56,9 +56,9 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
-| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 8 | 0 | 4 | 5,5 |
+| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 9 | 0 | 3 | 4 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 5 | 0 | 8 | 7 |
-| **Total** | **155** | **143** | **0** | **12** | **12,5** |
+| **Total** | **155** | **144** | **0** | **11** | **11** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,7 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.4](docs/08-plan-de-desarrollo.md#tarea-8-4) · [8.6](docs/08-plan-de-desarrollo.md#tarea-8-6) · [8.7](docs/08-plan-de-desarrollo.md#tarea-8-7) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
+| **API** | [8.6](docs/08-plan-de-desarrollo.md#tarea-8-6) · [8.7](docs/08-plan-de-desarrollo.md#tarea-8-7) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -249,13 +249,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **12 tareas y 12,5 días de trabajo** de 155 tareas del plan.
+Quedan **11 tareas y 11 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 1,7 semanas | **4,7 semanas** |
-| 2 | 1,0 semanas | **4,0 semanas** |
-| 3 | 1,0 semanas | **4,0 semanas** |
+| 1 | 1,5 semanas | **4,5 semanas** |
+| 2 | 0,9 semanas | **3,9 semanas** |
+| 3 | 0,9 semanas | **3,9 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1503,7 +1503,15 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       registra gasto**: el de personal se reconoce entero en la liquidación ([RN-11](docs/03-requisitos-y-bdd.md#rn-11)). La antigüedad la
       calcula el caso de uso, que es quien tiene el reloj, y quién ve qué lo decide
       `adelantos_lectura`. Contrato `0.26.2`, ya acordado, sin migración
-- [ ] ⚡ [**8.4**](docs/08-plan-de-desarrollo.md#tarea-8-4) Desprendible PDF con acceso restringido al propio · API
+- [x] [**8.4**](docs/08-plan-de-desarrollo.md#tarea-8-4) Desprendible PDF con acceso restringido al propio · API —
+      `POST /api/v0/consultas/desprendible` devuelve el desprendible de una liquidación en PDF con el
+      logo, dentro del sobre y en base64: las seis secciones del [06 §8](docs/06-nomina-y-capacidad-de-pago.md#8-desprendible-de-pago), con cada adelanto en su
+      renglón con su fecha y el neto en números y en letras. **Que Operación vea únicamente el suyo
+      lo decide `nom_lectura`**, no la API: la fila de otra persona no vuelve de la consulta, así que
+      para la API no existe y responde `40400` ([RF-63](docs/03-requisitos-y-bdd.md#rf-63)). Las cinco tablas se leen en **una sola
+      consulta**, que es la [P-31](docs/12-pruebas-y-calidad.md#p-31): leídas por separado, una política demasiado estrecha en
+      `empleados` vaciaría el papel sin dar ningún error. El papel no se imprime si la resta no da el
+      neto liquidado. Esquema `0.22.0`, contrato `0.26.2`, ya acordado, sin migración
 - [x] [**8.5**](docs/08-plan-de-desarrollo.md#tarea-8-5) Simulador de capacidad de pago · API, Front — `POST
       /api/v0/consultas/simulacion-de-contratacion` promedia la utilidad operativa de los meses
       terminados con registro, aparta la reserva y compara lo que queda con el salario que se
@@ -1842,14 +1850,15 @@ a `anon`.
   que el día del corte el patrimonio arranca en lo que digan los aportes y las utilidades
   registradas, y no en lo que el taller ya valía. Lo que se decida entra como una fuente más de sus
   dos primeros términos, sin cambiar la fórmula.
-- **Cinco lecturas del contrato llevan la clave de idempotencia de una escritura.**
-  `consultas/clientes`, `/costeo`, `/movimientos`, `/pedidos` y `/productos` —las que agregaron la
-  [4.10](docs/08-plan-de-desarrollo.md#tarea-4-10), la [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) y la [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10)— copiaron la cabecera `Idempotency-Key` de una operación que escribe, y
-  dicen que la clave «se reutiliza en cada reintento». La API genera otro texto para todo lo que
-  cuelga de `/consultas/`, «UUID v4 nuevo en cada consulta» (`ConfiguracionDelContrato`), así que
-  el día que la API fije el contrato acordado la [C-04](docs/12-pruebas-y-calidad.md#c-04) fallaría en esas cinco. Las cinco lecturas
-  del `0.13.0` ya llevan el de lectura. Es un arreglo del contrato, y va con las correcciones del
-  carril Contrato.
+- **Diez lecturas del contrato llevan la clave de idempotencia de una escritura**, y cada tarea que
+  implementa una suma otra. `consultas/adelantos`, `/anticipo-minimo`, `/clientes`, `/costeo`,
+  `/desprendible`, `/empleados`, `/importacion`, `/movimientos`, `/productos` y
+  `/simulacion-de-contratacion` copiaron la cabecera `Idempotency-Key` de una operación que escribe,
+  y dicen que la clave «se reutiliza en cada reintento». La API genera otro texto para todo lo que
+  cuelga de `/consultas/`, «UUID v4 nuevo en cada consulta» (`ConfiguracionDelContrato`), así que la
+  copia fijada se aparta del acordado en esas diez y la [C-04](docs/12-pruebas-y-calidad.md#c-04) pasa igual, porque compara contra la
+  copia. Las lecturas del `0.13.0` ya llevan el de lectura. Es un arreglo del contrato, y va con las
+  correcciones del carril Contrato.
 - **Dinero con decimales en la frontera, y la comprobación está atrasada.** La [1.10](docs/08-plan-de-desarrollo.md#tarea-1-10) era el
   primer endpoint que recibe plata y ya está hecha, con veinte más detrás; **ninguna prueba manda
   `1500.5` en un campo de dinero** para ver que se rechaza en vez de truncarse a `1500` en silencio.
@@ -1939,6 +1948,28 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       `horas_limite_config_horas_semanales_check` termina en `_check`, que es lo que la fila de la
       [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) prohíbe. Las dos primeras son una línea cada una; la tercera es una migración de
       renombre **y** su fila en `prisma_api`, por [C-01](docs/12-pruebas-y-calidad.md#c-01)
+
+**De la 8.4, el desprendible de pago:**
+
+- [ ] **El desprendible de un mes ya cerrado sí se imprime.** El contrato enumera los códigos que la
+      ruta devuelve y no hay ninguno para el período cerrado, así que no se inventó: cerrar el mes
+      congela las cifras, y el papel de un mes congelado es justo el que alguien va a querer de
+      vuelta. Negarlo dejaría a la persona sin el desprendible del mes que ya le pagaron. Lo que hay
+      que decidir es si el papel de un mes cerrado lleva alguna marca que lo diga
+- [ ] **La fecha de pago de una liquidación sin movimiento sale del período, no de la base.** Es el
+      hueco que ya anotó la 8.2: la fecha vive solo en el movimiento, y sin neto no hay movimiento.
+      El papel lleva entonces el último día del mes liquidado, porque es la única fecha que la base
+      sabe y dejarla en blanco obligaría a quien dibuja a inventarse una. **El pie también va sin
+      cuenta de origen**, que es correcto: no hubo pago del cual sacarla
+- [ ] **El adelanto que se anuló después de descontarse va en un renglón sin fecha.**
+      `adelantos_desc` ya lo contó y la consulta ya no lo trae, así que sin ese renglón la resta no
+      daría el neto y **no se imprimiría ningún desprendible**. Se imprime como «Otros adelantos
+      descontados», con la diferencia. Lo que hay que decidir es si anular un adelanto ya descontado
+      debería estar prohibido, que es lo que haría innecesario este renglón
+- [ ] **El membrete del desprendible es el mismo de los papeles del cliente**, el de la
+      configuración de la [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8). No hay tabla que lo guarde, y el [06 §8](docs/06-nomina-y-capacidad-de-pago.md#8-desprendible-de-pago) solo pide «el logo y el
+      nombre del negocio». Si el desprendible necesita un membrete propio —un NIT, una dirección—,
+      eso es una tabla y es carril Base
 
 **De la 9.6, los flujos críticos de extremo a extremo:**
 
