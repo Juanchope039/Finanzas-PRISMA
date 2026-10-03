@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.37.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.38.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -56,9 +56,9 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
-| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 9 | 0 | 3 | 4 |
+| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 10 | 0 | 2 | 3 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 5 | 0 | 8 | 7 |
-| **Total** | **155** | **144** | **0** | **11** | **11** |
+| **Total** | **155** | **145** | **0** | **10** | **10** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,7 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.6](docs/08-plan-de-desarrollo.md#tarea-8-6) · [8.7](docs/08-plan-de-desarrollo.md#tarea-8-7) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
+| **API** | [8.7](docs/08-plan-de-desarrollo.md#tarea-8-7) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -249,12 +249,12 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **11 tareas y 11 días de trabajo** de 155 tareas del plan.
+Quedan **10 tareas y 10 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 1,5 semanas | **4,5 semanas** |
-| 2 | 0,9 semanas | **3,9 semanas** |
+| 1 | 1,4 semanas | **4,4 semanas** |
+| 2 | 0,8 semanas | **3,8 semanas** |
 | 3 | 0,9 semanas | **3,9 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -1521,7 +1521,14 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       mensual. El front lo pinta con dos deslizadores, el del salario y el de la reserva, que
       vuelven a preguntar 350 ms después del último movimiento. Contrato `0.26.2`, ya acordado, sin
       migración
-- [ ] ⚡ [**8.6**](docs/08-plan-de-desarrollo.md#tarea-8-6) Traducción a unidades de producto por vender · API
+- [x] [**8.6**](docs/08-plan-de-desarrollo.md#tarea-8-6) Traducción a unidades de producto por vender · API — cuando el
+      simulador dice que no alcanza, la misma respuesta trae un renglón por producto con cuántas
+      unidades más al mes y cuánto trabajo piden, y las horas del camino más barato ([06 §4](docs/06-nomina-y-capacidad-de-pago.md#4-ventas-adicionales-necesarias--la-traducción-a-unidades)). El
+      margen que traduce es el de contribución, `precio − (insumo + consumibles)`: descontar también
+      el tiempo contaría dos veces el gasto que se trata de cubrir ([RN-17](docs/03-requisitos-y-bdd.md#rn-17)). **Y cuando esa meta
+      pide menos del 20 % de la jornada evaluada, el veredicto dice que la restricción no es la
+      capacidad de producir sino la demanda** ([06 §4.2](docs/06-nomina-y-capacidad-de-pago.md#42-resultado-para-el-faltante-de-556000)). Contrato `0.26.2`, ya acordado, sin
+      migración
 - [ ] ⚡ [**8.7**](docs/08-plan-de-desarrollo.md#tarea-8-7) Horas pagadas contra horas facturadas · API, Front
 - [ ] ⚡ [**8.10**](docs/08-plan-de-desarrollo.md#tarea-8-10) Importador de CSV con mapeo y reporte de errores · API, Front — sin cadena asignada
 
@@ -1970,6 +1977,22 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       configuración de la [8.8](docs/08-plan-de-desarrollo.md#tarea-8-8). No hay tabla que lo guarde, y el [06 §8](docs/06-nomina-y-capacidad-de-pago.md#8-desprendible-de-pago) solo pide «el logo y el
       nombre del negocio». Si el desprendible necesita un membrete propio —un NIT, una dirección—,
       eso es una tabla y es carril Base
+
+**De la 8.6, la traducción a unidades por vender:**
+
+- [ ] **La meta va en unidades y no trae el plazo estimado que pide el [06 §5](docs/06-nomina-y-capacidad-de-pago.md#5-alternativas-cuando-no-es-viable).** «Aumentar ventas
+      primero» promete «meta mensual en unidades y plazo estimado», y el plazo necesita una tasa de
+      demanda —cuántas unidades al mes se venden hoy de ese producto— que ningún documento define y
+      que los pedidos entregados solo insinúan. Se entregó la meta sin el plazo antes que un plazo
+      inventado
+- [ ] **La lista se ordena por trabajo, y el contrato solo dice «el camino más barato».** Lo barato
+      se midió en horas de persona, que es lo escaso cuando se está evaluando contratar; medido en
+      unidades el primer renglón sería otro, el de margen más alto. Si la pantalla quiere el cuadro
+      en otro orden, es una decisión de [10 §4](docs/10-ux-y-mockups.md#4-las-11-pantallas) y no de la API
+- [ ] **Las otras dos alternativas del [06 §5](docs/06-nomina-y-capacidad-de-pago.md#5-alternativas-cuando-no-es-viable) siguen sin salir.** «Subir precios» necesita el cuadro
+      de márgenes por hora puesto al lado del faltante y «reducir tiempo ocioso» necesita las horas
+      facturadas, que son la [8.7](docs/08-plan-de-desarrollo.md#tarea-8-7). Proponerlas sin sus números sería el consejo genérico que el
+      documento quiere evitar
 
 **De la 9.6, los flujos críticos de extremo a extremo:**
 
