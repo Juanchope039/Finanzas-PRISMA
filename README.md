@@ -3,7 +3,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.6.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/README.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-13 | 2026-09-30 | [Negocio](docs/INDICE.md#etiqueta-negocio) · [Plan](docs/INDICE.md#etiqueta-plan) |
+| [1.7.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/README.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-13 | 2026-10-03 | [Negocio](docs/INDICE.md#etiqueta-negocio) · [Plan](docs/INDICE.md#etiqueta-plan) |
 
 > **PRISMA** = **P**lataforma de **R**egistro, **I**nversión, **S**eguimiento, **M**árgenes y **A**dministración.
 > Un solo lugar para saber cuánto entra, cuánto sale, cuánto queda y cuánto se puede pagar.
@@ -167,7 +167,7 @@ siempre en pantalla qué versión es y contra qué ambiente está hablando. El d
 | Documentación y plan | ✅ Completo |
 | Mockup navegable | ✅ Completo |
 | Validación del mockup con la gerencia | ✅ Confirmado en reunión el 16/09/2026 |
-| **[Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8)** · capital, retiros y patrimonio | 🔄 **En curso** |
+| **[Sprint 9](docs/08-plan-de-desarrollo.md#sprint-9)** · promoción, PWA y endurecimiento | 🔄 **En curso** |
 | Desarrollo MVP (Sprints 1 a 9) | 🔄 **Iniciado**: la tarea [1.9](docs/08-plan-de-desarrollo.md#tarea-1-9), `Dinero`, está hecha |
 | Implantación | ⬜ No iniciado |
 

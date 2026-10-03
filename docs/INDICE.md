@@ -154,7 +154,7 @@ Qué significa cada estado y cuándo sube una versión está en
 <!-- generado:estado-de-la-documentacion · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Documento | Versión | Estado | Actualizado | Etiquetas |
 |---|:---:|---|:---:|---|
-| [PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) | 1.6.0 | ✅ Vigente | 2026-09-30 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
+| [PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) | 1.7.0 | ✅ Vigente | 2026-10-03 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
 | [Tareas de PRISMA](../TODO.md) | 9.43.0 | 🔄 Vivo | 2026-10-03 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
 | [Índice navegable de la documentación](INDICE.md) | 1.10.0 | 🔄 Vivo | 2026-10-03 | — |
 | [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Finanzas](#etiqueta-finanzas) · [Plan](#etiqueta-plan) |
