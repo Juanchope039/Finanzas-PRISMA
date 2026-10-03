@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
+| [8.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/08-plan-de-desarrollo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-03 | [Plan](INDICE.md#etiqueta-plan) · [Paralelo](INDICE.md#etiqueta-paralelo) |
 
 **El plan se organiza por carriles y dependencias, no por personas.** Cada tarea dice en qué carril
 vive —API, Base, Front, Contrato o Decisión— y de qué depende. De esas dos columnas sale lo demás,
@@ -11,7 +11,7 @@ cuánto dura el desarrollo según cuántos carriles avancen a la vez. Un carril 
 persona, un equipo o una sesión de trabajo; al plan le da igual.
 
 <!-- generado:plan-resumen · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**30,6 semanas con 1 carril**, **18,4 semanas con 2 carriles** y **15,1 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
+**30,6 semanas con 1 carril**, **18,4 semanas con 2 carriles** y **15,3 semanas con 3 carriles**, contando las 3 de estabilización. El detalle está en el [cronograma por carriles](#1-cronograma-por-carriles).
 <!-- /generado:plan-resumen -->
 
 > **El plan de 7 sprints daba por hecho que no había backend.**
@@ -125,7 +125,7 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 |:---:|---:|---:|---:|---:|
 | 1 | 27,6 semanas | 3 semanas | **30,6 semanas** | — |
 | 2 | 15,4 semanas | 3 semanas | **18,4 semanas** | −12,3 semanas |
-| 3 | 12,1 semanas | 3 semanas | **15,1 semanas** | −15,5 semanas |
+| 3 | 12,3 semanas | 3 semanas | **15,3 semanas** | −15,3 semanas |
 
 | Hito | 1 carril | 2 carriles | 3 carriles |
 |---|:---:|:---:|:---:|
@@ -133,10 +133,10 @@ presupuestado. En dos o tres carriles, estas tareas son justamente lo que permit
 | [H2](#h2) · Sprint 1 | semana 7 | semana 5 | semana 4 |
 | [H3](#h3) · Sprint 2 | semana 11 | semana 7 | semana 6 |
 | [H4](#h4) · Sprint 3 | semana 15 | semana 9 | semana 7 |
-| [H5](#h5) · Sprint 4 | semana 18 | semana 11 | semana 8 |
+| [H5](#h5) · Sprint 4 | semana 18 | semana 11 | semana 9 |
 | [H6](#h6) · Sprint 5 | semana 19 | semana 11 | semana 9 |
-| [H7](#h7) · Sprint 6 | semana 22 | semana 13 | semana 11 |
-| [H8](#h8) · Sprint 7 | semana 24 | semana 13 | semana 11 |
+| [H7](#h7) · Sprint 6 | semana 22 | semana 13 | semana 10 |
+| [H8](#h8) · Sprint 7 | semana 24 | semana 13 | semana 10 |
 | [H9](#h9) · Sprint 8 | semana 26 | semana 16 | semana 13 |
 | [H10](#h10) · Sprint 9 | semana 28 | semana 16 | semana 12 |
 | [H11](#h11) · go-live | semana 31 | semana 19 | semana 16 |
@@ -175,7 +175,7 @@ que faltaba se escribió al final de la tabla de su sprint, y una tarea vieja pa
 ella.** Ninguna nueva puede aparecer sin que la verificación la nombre.
 
 <!-- generado:plan-dependencias-hacia-adelante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**47 dependencias apuntan a una tarea posterior, y 3 cruzan de sprint** (⚠️). Es deuda declarada de [ADR-043](adr/ADR-043-dependencias-solo-hacia-atras.md): la regla rige desde hoy, esta lista solo se encoge y ninguna nueva pasa la verificación.
+**45 dependencias apuntan a una tarea posterior, y 3 cruzan de sprint** (⚠️). Es deuda declarada de [ADR-043](adr/ADR-043-dependencias-solo-hacia-atras.md): la regla rige desde hoy, esta lista solo se encoge y ninguna nueva pasa la verificación.
 
 | La tarea | Espera a | Por qué la posterior nació después |
 |---|---|---|
@@ -223,8 +223,6 @@ ella.** Ninguna nueva puede aparecer sin que la verificación la nombre.
 | [8.8](#tarea-8-8) | [8.12](#tarea-8-12) | las tablas del cotizador aparecieron al acordar su contrato |
 | [8.9](#tarea-8-9) | [8.11](#tarea-8-11) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
 | [8.10](#tarea-8-10) | [8.11](#tarea-8-11) | el contrato por funcionalidad se numero al final del sprint (08 §0.2) |
-| [9.2](#tarea-9-2) | [9.12](#tarea-9-12) | la 0.4 se partio y los dos proyectos de pago quedaron al final del Sprint 9 |
-| [9.5](#tarea-9-5) | [9.13](#tarea-9-13) | los secretos de qa se numeraron al final del Sprint 9 |
 | [9.10](#tarea-9-10) | [9.11](#tarea-9-11) | etiquetar 1.0.0 espera a todo el sprint, Swagger en prod incluido |
 <!-- /generado:plan-dependencias-hacia-adelante -->
 
@@ -248,44 +246,44 @@ gantt
 
     section API
     S0 :api0, 2026-09-15, 2026-10-05
-    S1 :api1, 2026-09-22, 2026-10-07
-    S2 :api2, 2026-10-07, 2026-10-24
-    S3 :api3, 2026-10-09, 2026-11-01
-    S4 :api4, 2026-10-25, 2026-11-09
-    S5 :api5, 2026-10-28, 2026-11-11
-    S6 :api6, 2026-11-12, 2026-11-24
-    S7 :api7, 2026-11-04, 2026-11-23
-    S8 :api8, 2026-11-12, 2026-12-09
-    S9 :api9, 2026-11-27, 2026-12-06
+    S1 :api1, 2026-09-22, 2026-10-06
+    S2 :api2, 2026-10-06, 2026-10-24
+    S3 :api3, 2026-10-07, 2026-10-31
+    S4 :api4, 2026-10-25, 2026-11-12
+    S5 :api5, 2026-10-30, 2026-11-11
+    S6 :api6, 2026-11-11, 2026-11-24
+    S7 :api7, 2026-11-02, 2026-11-23
+    S8 :api8, 2026-11-04, 2026-12-10
+    S9 :api9, 2026-11-25, 2026-12-04
 
     section Base
     S0 :base0, 2026-09-16, 2026-09-18
-    S1 :base1, 2026-09-18, 2026-10-04
-    S2 :base2, 2026-10-04, 2026-10-22
+    S1 :base1, 2026-09-18, 2026-10-05
+    S2 :base2, 2026-10-05, 2026-10-22
     S3 :base3, 2026-10-16, 2026-10-30
-    S4 :base4, 2026-10-28, 2026-11-08
-    S5 :base5, 2026-10-31, 2026-11-04
+    S4 :base4, 2026-10-28, 2026-11-10
+    S5 :base5, 2026-11-01, 2026-11-08
     S6 :base6, 2026-11-18, 2026-11-20
-    S7 :base7, 2026-11-09, 2026-11-12
-    S8 :base8, 2026-11-11, 2026-11-26
-    S9 :base9, 2026-11-26, 2026-11-27
+    S7 :base7, 2026-11-12, 2026-11-14
+    S8 :base8, 2026-11-02, 2026-11-29
+    S9 :base9, 2026-11-24, 2026-11-25
 
     section Front
     S0 :front0, 2026-09-15, 2026-10-03
     S1 :front1, 2026-09-26, 2026-09-30
-    S2 :front2, 2026-10-06, 2026-10-16
-    S3 :front3, 2026-10-12, 2026-10-25
-    S5 :front5, 2026-11-08, 2026-11-09
-    S6 :front6, 2026-11-15, 2026-11-22
-    S7 :front7, 2026-11-22, 2026-11-24
-    S9 :front9, 2026-11-24, 2026-11-29
+    S2 :front2, 2026-10-06, 2026-10-17
+    S3 :front3, 2026-10-13, 2026-10-25
+    S5 :front5, 2026-11-10, 2026-11-12
+    S6 :front6, 2026-11-14, 2026-11-20
+    S7 :front7, 2026-11-20, 2026-11-23
+    S9 :front9, 2026-11-23, 2026-11-30
 
     section Contrato
     S1 :contrato1, 2026-09-24, 2026-09-25
     S2 :contrato2, 2026-10-05, 2026-10-06
-    S3 :contrato3, 2026-10-11, 2026-10-18
+    S3 :contrato3, 2026-10-12, 2026-10-18
     S4 :contrato4, 2026-10-27, 2026-10-28
-    S5 :contrato5, 2026-10-30, 2026-10-31
+    S5 :contrato5, 2026-10-31, 2026-11-01
     S6 :contrato6, 2026-11-01, 2026-11-02
     S7 :contrato7, 2026-11-02, 2026-11-03
     S8 :contrato8, 2026-11-02, 2026-11-03
@@ -293,12 +291,12 @@ gantt
     section Decisión
     S0 :decisin0, 2026-09-15, 2026-09-16
     S1 :decisin1, 2026-09-15, 2026-09-16
-    S9 :decisin9, 2026-09-16, 2026-10-04
+    S9 :decisin9, 2026-09-16, 2026-10-05
 
     section Implantación
-    Estabilización y aprobación en UAT :est, 2026-12-09, 2026-12-23
-    Migración y capacitación :mig, 2026-12-23, 2026-12-30
-    Go-live :milestone, 2026-12-30, 0d
+    Estabilización y aprobación en UAT :est, 2026-12-10, 2026-12-24
+    Migración y capacitación :mig, 2026-12-24, 2026-12-31
+    Go-live :milestone, 2026-12-31, 0d
 ```
 <!-- /generado:plan-gantt -->
 
@@ -318,7 +316,7 @@ gantt
 | <a id="h7"></a>**H7** | [Sprint 6](#sprint-6) | Las tres cifras cuadran con el ejemplo de septiembre del documento [05](05-reglas-financieras.md) |
 | <a id="h8"></a>**H8** | [Sprint 7](#sprint-7) | El retiro no reduce la utilidad; el patrimonio es correcto |
 | <a id="h9"></a>**H9** | [Sprint 8](#sprint-8) | El simulador responde la pregunta de la contratación |
-| <a id="h10"></a>**H10** | [Sprint 9](#sprint-9) | Gerencia aprueba en UAT exactamente el artefacto que irá a prod |
+| <a id="h10"></a>**H10** | [Sprint 9](#sprint-9) | Gerencia aprueba en dev el commit que pasó la etapa uat, y su artefacto queda listo para prod ([ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)) |
 | <a id="h11"></a>**H11** | Go-live | El Excel y el cuaderno dejan de usarse |
 
 > **[H1](#h1) vuelve a cumplirse de una sola vez** ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)). El [ADR-026](adr/ADR-026-railway-al-final.md) lo había partido
@@ -376,7 +374,7 @@ hoy, con lo que ya está hecho, está en [`TODO.md`](../TODO.md).
 | <a id="tarea-0-5"></a>0.5 | Rol `prisma_api` en los cuatro: sin `BYPASSRLS`, sin `SUPERUSER` y sin ser dueño de las tablas | Base | [0.4](#tarea-0-4) | 1 |
 | <a id="tarea-0-6"></a>0.6 | Secretos por ambiente fuera del repositorio: variables de entorno en la API, `--dart-define` en el front | API, Front | [0.1](#tarea-0-1), [0.3](#tarea-0-3) | 1 |
 | <a id="tarea-0-7"></a>0.7 | Integración continua: formato con `spotless`, análisis estático, pruebas y compilación en la API; `dart format`, `dart analyze`, pruebas y compilación en el front, **para cada proyecto por separado** | API, Front | [0.1](#tarea-0-1), [0.3](#tarea-0-3) | 2 |
-| <a id="tarea-0-8"></a>0.8 | **Imagen de contenedor de la API**: JRE 25 mínimo, memoria de la JVM acotada por variable, el puerto que inyecte el alojamiento y la sonda de disponibilidad mirando la base. **Arranque verificado en dev**; los otros tres ambientes, cuando existan ([9.2](#tarea-9-2), [9.3](#tarea-9-3)) | API | [0.1](#tarea-0-1) | 1 |
+| <a id="tarea-0-8"></a>0.8 | **Imagen de contenedor de la API**: JRE 25 mínimo, memoria de la JVM acotada por variable, el puerto que inyecte el alojamiento y la sonda de disponibilidad mirando la base. **Arranque verificado en dev**; prod, cuando exista ([9.3](#tarea-9-3)). qa y uat no se despliegan ([ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)) | API | [0.1](#tarea-0-1) | 1 |
 | <a id="tarea-0-9"></a>0.9 | Entrega a dev al fusionar en la rama principal: despliegue de la imagen de la API y publicación del front, con su receta de construcción | API, Front | [0.7](#tarea-0-7), [0.8](#tarea-0-8) | 1,5 |
 | <a id="tarea-0-10"></a>0.10 | SemVer en el `pubspec.yaml` del front y en el `build.gradle.kts` de la API, y migraciones numeradas con tabla `schema_version` | Base | [0.4](#tarea-0-4) | 1 |
 | <a id="tarea-0-11"></a>0.11 | `POST /api/v0/consultas/version`: versión de la API, versión del esquema y ambiente | API | [0.14](#tarea-0-14) | 0,5 |
@@ -805,45 +803,43 @@ pro-labore sí.
 
 | | |
 |---|---|
-| **Objetivo** | Que lo construido se pueda aprobar en UAT y publicar en prod sin sorpresas |
+| **Objetivo** | Que lo construido pase las cuatro etapas de la tubería y se pueda publicar en prod sin sorpresas |
 | **Requisitos** | [RF-70](03-requisitos-y-bdd.md#rf-70) |
 | **Riesgo** | Medio, pero es el único sprint que no se puede recortar: es el que hace publicable lo demás |
 
 | # | Tarea | Carril | Depende de | Días |
 |---|---|---|---|---:|
 | <a id="tarea-9-1"></a>9.1 | PWA instalable sobre la compilación web de Flutter y cola local persistente sin conexión, con su clave de idempotencia guardada **antes** de intentar enviar ([ADR-016](adr/ADR-016-flutter-web-pwa.md)) | Front | [1.19](#tarea-1-19) | 2 |
-| <a id="tarea-9-2"></a>9.2 | Ambiente uat en pie: datos realistas **anonimizados** y su propia semilla | Base, API | [0.9](#tarea-0-9), [1.11](#tarea-1-11), [9.12](#tarea-9-12) | 1 |
-| <a id="tarea-9-3"></a>9.3 | Promoción del artefacto aprobado de uat a prod **sin recompilar**, con la misma versión | API, Front | [9.2](#tarea-9-2) | 1 |
-| <a id="tarea-9-4"></a>9.4 | Procedimiento de reversión ensayado en qa: volver la API y el front a la versión anterior y medir cuánto tarda | API, Front | [0.9](#tarea-0-9) | 1,5 |
-| <a id="tarea-9-5"></a>9.5 | La prueba de permisos con sesión real corre en los cuatro ambientes, no solo en dev | API | [1.7](#tarea-1-7), [9.2](#tarea-9-2), [9.13](#tarea-9-13) | 1 |
+| <a id="tarea-9-2"></a>9.2 | **Las etapas qa y uat de la tubería** ([ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)): cada una corre lo de la anterior y más, contra la base que levanta la tubería, y uat con su propia semilla de datos realistas **anonimizados** | Base, API | [0.9](#tarea-0-9), [1.11](#tarea-1-11) | 1 |
+| <a id="tarea-9-3"></a>9.3 | El artefacto se construye **una vez**, en la etapa qa, y la etapa prod lo despliega **sin recompilar**, con la misma versión | API, Front | [9.2](#tarea-9-2) | 1 |
+| <a id="tarea-9-4"></a>9.4 | Procedimiento de reversión ensayado en dev, el único ambiente alojado antes de prod: volver la API y el front a la versión anterior y medir cuánto tarda | API, Front | [0.9](#tarea-0-9) | 1,5 |
+| <a id="tarea-9-5"></a>9.5 | La prueba de permisos con sesión real corre en cada etapa de la tubería y contra dev desplegado | API | [1.7](#tarea-1-7), [9.2](#tarea-9-2) | 1 |
 | <a id="tarea-9-6"></a>9.6 | Pruebas de extremo a extremo de los flujos críticos, ejecutadas en qa | API, Front | [0.9](#tarea-0-9) | 2 |
 | <a id="tarea-9-7"></a>9.7 | Rendimiento en celular real con 4G ([RNF-01](03-requisitos-y-bdd.md#rnf-01)) | Front | [0.9](#tarea-0-9) | 1 |
 | <a id="tarea-9-8"></a>9.8 | Repaso de secretos: nada en el repositorio y `service_role` solo en migraciones | API | [0.9](#tarea-0-9) | 0,5 |
 | <a id="tarea-9-9"></a>9.9 | Prueba de verdad del contrato de compatibilidad: el front rechaza un MAJOR de API distinto | Front | [0.9](#tarea-0-9), [0.13](#tarea-0-13) | 0,5 |
 | <a id="tarea-9-10"></a>9.10 | Etiquetar `1.0.0` del front y de la API para el go-live | API, Front | [9.1](#tarea-9-1), [9.3](#tarea-9-3), [9.4](#tarea-9-4), [9.5](#tarea-9-5), [9.6](#tarea-9-6), [9.7](#tarea-9-7), [9.8](#tarea-9-8), [9.9](#tarea-9-9), [9.11](#tarea-9-11) | 0,5 |
 | <a id="tarea-9-11"></a>9.11 | Swagger abierto en `/docs` en dev, qa y uat, y **detrás de autenticación en prod**: el catálogo de endpoints es un mapa del sistema | API | [0.9](#tarea-0-9) | 0,5 |
-| <a id="tarea-9-12"></a>9.12 | **Los proyectos uat y prod de Supabase, que son los dos de pago** ([19 §8.1](19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no)): contratados, cada uno con su base, sus claves y su almacenamiento. Lo que falta no es trabajo sino la firma de Gerencia, que es el paso 2 del [09 §3.1](09-plan-de-implantacion.md#31-alistamiento-técnico-de-los-ambientes) | Decisión | [0.4](#tarea-0-4) | 0,5 |
-| <a id="tarea-9-13"></a>9.13 | **Contraseña del rol `prisma_api` en qa y los seis secretos de GitHub** para `permisos-en-qa` ([2.11](#tarea-2-11)): la configuración del ambiente que no es código y que el trabajo del CI ya espera; sin ella el trabajo se salta con aviso | Decisión | [0.4](#tarea-0-4), [1.7](#tarea-1-7) | 0,5 |
+| <a id="tarea-9-12"></a>9.12 | **El proyecto prod de Supabase, el único de pago** ([19 §8.1](19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no), [ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)): contratado, con su base, sus claves y su almacenamiento. Lo que falta no es trabajo sino la firma de Gerencia, que es el paso 2 del [09 §3.1](09-plan-de-implantacion.md#31-alistamiento-técnico-de-los-ambientes) | Decisión | [0.4](#tarea-0-4) | 0,5 |
+| <a id="tarea-9-13"></a>9.13 | **Los secretos de GitHub para correr las pruebas contra dev**, que es el ambiente alojado desde el [ADR-044](adr/ADR-044-dos-ambientes-desplegados.md): los de la prueba de permisos ([2.11](#tarea-2-11)) y los de extremo a extremo ([9.6](#tarea-9-6)). Es configuración que no es código; sin ella esos trabajos se saltan con aviso | Decisión | [0.4](#tarea-0-4), [1.7](#tarea-1-7) | 0,5 |
 
 <!-- generado:plan-oleadas-9 · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 **Qué puede ir a la vez en este sprint.** Cada oleada espera solo a las anteriores; dentro de una oleada, todo arranca junto.
 
 | Oleada | Tareas | Carriles | Días |
 |:---:|---|---|---:|
-| 1 | [9.1](#tarea-9-1) · [9.4](#tarea-9-4) · [9.6](#tarea-9-6) · [9.7](#tarea-9-7) · [9.8](#tarea-9-8) · [9.9](#tarea-9-9) · [9.11](#tarea-9-11) · [9.12](#tarea-9-12) · [9.13](#tarea-9-13) | Front, API, Decisión | 9 |
-| 2 | [9.2](#tarea-9-2) | Base | 1 |
-| 3 | [9.3](#tarea-9-3) · [9.5](#tarea-9-5) | API | 2 |
-| 4 | [9.10](#tarea-9-10) | API | 0,5 |
+| 1 | [9.1](#tarea-9-1) · [9.2](#tarea-9-2) · [9.4](#tarea-9-4) · [9.6](#tarea-9-6) · [9.7](#tarea-9-7) · [9.8](#tarea-9-8) · [9.9](#tarea-9-9) · [9.11](#tarea-9-11) · [9.12](#tarea-9-12) · [9.13](#tarea-9-13) | Front, Base, API, Decisión | 10 |
+| 2 | [9.3](#tarea-9-3) · [9.5](#tarea-9-5) | API | 2 |
+| 3 | [9.10](#tarea-9-10) | API | 0,5 |
 <!-- /generado:plan-oleadas-9 -->
 
-> **Las tareas [0.8](#tarea-0-8) y [0.9](#tarea-0-9) ya no llegan aquí:** volvieron al [Sprint 0](#sprint-0) por [ADR-032](adr/ADR-032-railway-en-dev-ahora.md), y el sprint
-> queda en 12 días. Lo que sí sigue siendo de este sprint es todo lo que dependía de tener **los
-> otros tres ambientes**: contratar los dos que se pagan ([9.12](#tarea-9-12)), levantar uat ([9.2](#tarea-9-2)), promover
-> el artefacto sin recompilarlo ([9.3](#tarea-9-3)), ensayar la reversión ([9.4](#tarea-9-4)) y verificar el arranque de la
-> imagen donde todavía no corre.
+> **Las tareas [0.8](#tarea-0-8) y [0.9](#tarea-0-9) ya no llegan aquí:** volvieron al [Sprint 0](#sprint-0) por [ADR-032](adr/ADR-032-railway-en-dev-ahora.md).
+> Y desde el [ADR-044](adr/ADR-044-dos-ambientes-desplegados.md) **solo dev y prod se despliegan**: qa y uat son etapas de la tubería
+> ([9.2](#tarea-9-2)), el único proyecto que se paga es el de prod ([9.12](#tarea-9-12)) y la reversión se ensaya en dev
+> ([9.4](#tarea-9-4)).
 
-**Terminado cuando** — Gerencia aprueba en UAT y ese mismo artefacto, sin reconstruir, queda
-listo para prod.
+**Terminado cuando** — Gerencia aprueba en dev el commit que pasó la etapa uat, y el artefacto que
+construyó qa para ese commit, sin reconstruir, queda listo para prod.
 
 ---
 
@@ -1019,7 +1015,7 @@ El [Sprint 9](#sprint-9) va de último porque endurece lo que ya existe. No es r
 «funciona en mi computador» de «Gerencia lo aprobó y el taller lo tiene».
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.27.0") · [ADR-011](adr/ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [ADR-037](adr/ADR-037-el-pr-se-abre-a-pedido.md "ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos") · [ADR-038](adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md "ADR-038 · La pila local se orquesta desde prisma_db, y cada receta se apunta desde su .env") · [ADR-040](adr/ADR-040-rama-feature-y-pr-autorizado.md "ADR-040 · Toda rama empieza por feature/, y el PR se abre solo con autorización expresa, trayendo entonces la base") · [ADR-041](adr/ADR-041-cuatro-lineas-por-parrafo.md "ADR-041 · Un párrafo de código o de commit tiene cuatro líneas como máximo") · [ADR-043](adr/ADR-043-dependencias-solo-hacia-atras.md "ADR-043 · Una tarea solo depende de tareas anteriores") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
+**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.27.0") · [ADR-011](adr/ADR-011-stack-flutter-dart.md "ADR-011 · Stack: Flutter y Dart con API propia") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-028](adr/ADR-028-un-commit-por-tarea.md "ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-031](adr/ADR-031-commit-de-256-caracteres.md "ADR-031 · El mensaje de commit cabe en 256 caracteres") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [ADR-037](adr/ADR-037-el-pr-se-abre-a-pedido.md "ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos") · [ADR-038](adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md "ADR-038 · La pila local se orquesta desde prisma_db, y cada receta se apunta desde su .env") · [ADR-040](adr/ADR-040-rama-feature-y-pr-autorizado.md "ADR-040 · Toda rama empieza por feature/, y el PR se abre solo con autorización expresa, trayendo entonces la base") · [ADR-041](adr/ADR-041-cuatro-lineas-por-parrafo.md "ADR-041 · Un párrafo de código o de commit tiene cuatro líneas como máximo") · [ADR-043](adr/ADR-043-dependencias-solo-hacia-atras.md "ADR-043 · Una tarea solo depende de tareas anteriores") · [ADR-044](adr/ADR-044-dos-ambientes-desplegados.md "ADR-044 · Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería") · [CLAUDE](../CLAUDE.md "CLAUDE.md") · [README](../scripts/docs/README.md "Herramienta de documentación")
 <!-- /generado:referenciado-desde -->
 
 ---

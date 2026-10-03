@@ -2,14 +2,15 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-01 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [6.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-03 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
-> **Construcción: la integración continua corre y dev ya está alojado; qa, uat y prod todavía no.**
+> **Construcción: la integración continua corre y dev ya está alojado; prod todavía no.**
 > La API, el front, la base y esta especificación se verifican en cada push y cada PR ([§6.1](#61-en-cada-empuje-en-paralelo)). **Dev vive en
-> Railway** desde el [ADR-032](adr/ADR-032-railway-en-dev-ahora.md), con la API en un servicio y el front en otro; los otros tres
-> ambientes y la promoción entre ellos llegan en el [Sprint 9](08-plan-de-desarrollo.md#sprint-9). Este documento fija cómo deben quedar
+> Railway** desde el [ADR-032](adr/ADR-032-railway-en-dev-ahora.md), con la API en un servicio y el front en otro. Desde el [ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)
+> **solo dev y prod se despliegan**: qa y uat son etapas de la tubería ([§6.3](#63-las-cuatro-etapas-cada-una-más-exhaustiva)), y prod llega en el
+> [Sprint 9](08-plan-de-desarrollo.md#sprint-9), al final del desarrollo. Este documento fija cómo deben quedar
 > antes del go-live, para que la decisión se tome ahora y no la noche de la primera publicación.
 >
 > **Dev se duerme, y eso no es una avería.** Su proyecto de Supabase está en plan gratuito y se pausa
@@ -24,8 +25,8 @@ Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada
 | Ambiente | Para qué sirve | Quién entra | Datos |
 |---|---|---|---|
 | **dev** | Desarrollo diario | Quien desarrolla | Ficticios. Se pueden borrar y volver a sembrar |
-| **qa** | Pruebas automáticas y manuales | Desarrollo y pruebas | Ficticios, con semilla reproducible |
-| **uat** | Aprobación de Gerencia antes de publicar | Gerencia y la empleada | Realistas, **anonimizados** |
+| **qa** | Etapa de la tubería: extremo a extremo, permisos y el artefacto construido una vez. **No se aloja** | Nadie: corre en la tubería | Ficticios, con semilla reproducible |
+| **uat** | Etapa de la tubería: la batería entera sobre datos realistas. **No se aloja**: Gerencia aprueba en dev | Nadie: corre en la tubería | Realistas, **anonimizados** |
 | **prod** | El negocio de verdad | El equipo del taller | Reales |
 
 La semilla reproducible de qa es la que ya existe (`supabase/seed.sql`, en `prisma_db`), descrita
@@ -39,12 +40,13 @@ anonimizada ([9.2](08-plan-de-desarrollo.md#tarea-9-2)) y en prod los usuarios l
 
 ### 1.1 Las seis reglas
 
-1. **Cada ambiente es un proyecto de Supabase distinto**, con su propia base, sus propias claves
-   y su propio almacenamiento. Nunca comparten base.
+1. **Cada ambiente desplegado es un proyecto de Supabase distinto**, con su propia base, sus
+   propias claves y su propio almacenamiento. Nunca comparten base. Las etapas qa y uat usan la base
+   que levanta la tubería ([ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)).
 2. **Las migraciones se promueven en orden**: dev → qa → uat → prod. Nunca se aplica en prod una
    migración que no haya pasado por los tres anteriores.
 3. **Una migración ya aplicada no se edita jamás.** Si estaba mal, se escribe otra que corrige.
-4. **El artefacto se promueve, no se reconstruye.** Lo que se aprobó en UAT es exactamente lo
+4. **El artefacto se promueve, no se reconstruye.** Lo que pasó la etapa uat es exactamente lo
    que llega a prod, con la misma versión.
 5. **Nunca se copian datos de prod a otro ambiente sin anonimizar.** Los nombres completos, los
    documentos y los salarios de las empleadas son datos personales bajo la Ley 1581 de 2012, y
@@ -66,9 +68,10 @@ configuración de la regla 6, en el [§3](#3-la-configuración-de-cada-ambiente)
 dev ──▶ qa ──▶ uat ──▶ prod
 ```
 
-Una migración nace en dev, se aplica en qa cuando pasan las pruebas, llega a uat cuando Gerencia
-va a revisar, y solo entonces puede ir a prod. Saltarse un escalón deja prod con un esquema que
-nadie probó.
+Una migración nace en dev, pasa la etapa qa con sus pruebas, pasa la etapa uat sobre la semilla
+anonimizada, y solo entonces puede ir a prod. Saltarse un escalón deja prod con un esquema que
+nadie probó. En las dos etapas del medio la migración corre sobre la base que levanta la tubería,
+no sobre un proyecto alojado ([§6.3](#63-las-cuatro-etapas-cada-una-más-exhaustiva)).
 
 **Y en cada ambiente, la migración llega antes que la API que la necesita.** Viven en repositorios
 distintos ([ADR-025](adr/ADR-025-cuatro-repositorios.md)), así que nada obliga a publicarlas
@@ -96,9 +99,10 @@ no hay forma de saber cuál dice la verdad.
 
 ### 2.3 El artefacto se promueve, no se reconstruye
 
-Se compila **una vez**, en el paso a qa. Ese mismo archivo —el mismo `build/web` del front, la
-misma imagen de contenedor de `prisma_api`— es el que se aprueba en uat y el que se publica en
-prod. Lo único que cambia entre ambientes es la configuración del [§3](#3-la-configuración-de-cada-ambiente).
+Se compila **una vez**, en la etapa qa. Ese mismo archivo —el mismo `build/web` del front, la
+misma imagen de contenedor de `prisma_api`— es el que pasa la etapa uat y el que se publica en
+prod. Gerencia aprueba en dev el commit de ese artefacto, no el archivo mismo, porque uat no se
+aloja ([ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)). Lo único que cambia entre ambientes es la configuración del [§3](#3-la-configuración-de-cada-ambiente).
 
 > **Recompilar para prod sería aprobar una cosa y publicar otra.** Entre dos compilaciones cambia
 > la versión de una dependencia, la fecha, el compilador. Lo que Gerencia firmó en UAT dejaría de
@@ -112,7 +116,7 @@ prod. Lo único que cambia entre ambientes es la configuración del [§3](#3-la-
 
 Consecuencia práctica: la configuración del front **no puede compilarse dentro del artefacto de
 prod en el momento de publicar**, porque eso es recompilar. Cada ambiente compila su propio
-artefacto en el paso a qa con sus `--dart-define`, y el que se promueve es el del ambiente
+artefacto en la etapa qa con sus `--dart-define`, y el que se promueve es el del ambiente
 destino, construido desde el mismo commit ya aprobado.
 
 ### 2.4 El artefacto de la API: una imagen de contenedor con una JVM adentro
@@ -388,6 +392,24 @@ está actuando y la prueba falla, aunque en el ambiente de verdad nadie note nad
 > El único juez válido es PostgreSQL, y la única forma de comprobarlo es quitándole al juez de
 > encima todo lo que pueda estar respondiendo en su lugar.
 
+### 6.3 Las cuatro etapas, cada una más exhaustiva
+
+**Una etapa es una rama, y se promueve con un PR desde la anterior** ([ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)). Cada una corre lo
+de la anterior y le agrega lo que es más caro o más lento, para que lo barato falle primero. Solo la
+primera y la última despliegan.
+
+| Etapa | Rama | Lo que agrega | Despliega |
+|---|---|---|---|
+| develop | `develop` | Lo del [§6.1](#61-en-cada-empuje-en-paralelo), y la integración contra la base que levanta la tubería | dev, en Railway |
+| qa | `qa` | Extremo a extremo, permisos con sesión real y la traducción de errores del [§6.2](#62-en-cada-promoción). **Compila el artefacto una vez** y lo publica con su versión | Nada |
+| uat | `uat` | La semilla realista y anonimizada, y la batería entera sobre ella | Nada |
+| prod | `main` | Comprueba que el artefacto es el que compiló qa, sin recompilar | prod, cuando exista |
+
+> **Una etapa que no despliega sigue siendo una puerta.** Lo que el [§6.2](#62-en-cada-promoción) pedía «contra una base
+> real del ambiente destino» corre contra la base de Supabase que levanta la tubería, con sus
+> migraciones, su RLS y sus triggers. Lo único que ninguna etapa del medio ve es lo que solo falla
+> desplegado, y eso se ve en dev.
+
 ---
 
 ## 7. Publicar y volver atrás
@@ -397,9 +419,9 @@ está actuando y la prueba falla, aunque en el ambiente de verdad nadie note nad
 | # | Paso | Quién |
 |---|---|---|
 | 1 | Las pruebas del [§6.1](#61-en-cada-empuje-en-paralelo) pasan en verde en la rama | Automático |
-| 2 | Se compila el artefacto y se promueve a qa; corren las pruebas del [§6.2](#62-en-cada-promoción) | Automático |
-| 3 | Se promueve a uat con las migraciones y se avisa a Gerencia | Desarrollo |
-| 4 | Gerencia revisa en uat lo que pidió y lo aprueba | Gerencia |
+| 2 | Se promueve a la etapa qa, que compila el artefacto una vez y corre las pruebas del [§6.2](#62-en-cada-promoción) | Automático |
+| 3 | Se promueve a la etapa uat, que corre la batería entera sobre la semilla anonimizada, y se avisa a Gerencia | Desarrollo |
+| 4 | Gerencia revisa en dev, con ese mismo commit, lo que pidió y lo aprueba | Gerencia |
 | 5 | Se aplican las migraciones en prod | Desarrollo |
 | 6 | Se promueve **el mismo artefacto** a prod y se anota versión, commit, fecha y quién aprobó | Desarrollo |
 | 7 | Se comprueba `POST /api/v0/consultas/version` en prod y se abre una pantalla real | Desarrollo |
@@ -475,18 +497,18 @@ Dos cosas lo rompen, cada una por su lado:
 | Ambiente | Base de datos | Alojamiento de la API | Por qué |
 |---|---|---|---|
 | dev | Gratuito | Gratuito, o en la máquina de quien desarrolla | Que se pause por inactividad no molesta a nadie |
-| qa | Gratuito | Gratuito, y puede dormirse | La integración continua lo despierta cuando le toca correr |
-| uat | **De pago** | **De pago, sin dormirse** | Gerencia aprueba ahí; encontrarlo dormido invalida la revisión |
+| qa | Gratuito, y quieto | No se aloja | Es una etapa de la tubería ([ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)) |
+| uat | No tiene | No se aloja | Es una etapa de la tubería; Gerencia aprueba en dev |
 | prod | **De pago** | **De pago, sin dormirse** | «Siempre en línea» es el requisito |
 
-Son, como mínimo, **dos proyectos de Supabase de pago y dos instancias de la API encendidas**, con
-512 MB de memoria cada una como piso ([§2.4](#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro)). No es un impedimento: es una factura, y es pequeña.
+Es, como mínimo, **un proyecto de Supabase de pago y una instancia de la API encendida** —eran dos
+y dos hasta el [ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)—, con 512 MB de memoria como piso ([§2.4](#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro)). No es un impedimento: es una factura, y es pequeña.
 Pero es mayor de la que habría con un binario de unas decenas de megabytes, y decirlo es parte de
 haber elegido Java a conciencia y no por descuido.
 
 El alojamiento de la API y del front es **Railway**. **Dev se aloja desde ya**, en plan gratuito y
-asumiendo que se duerme; qa, uat y prod se contratan al final del desarrollo
-([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)). La máquina de quien desarrolla sigue siendo un dev
+asumiendo que se duerme; prod se contrata al final del desarrollo
+([ADR-032](adr/ADR-032-railway-en-dev-ahora.md), [ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)). La máquina de quien desarrolla sigue siendo un dev
 válido contra el mismo proyecto de Supabase: lo que cambia es que ahora hay además una URL que
 alguien de fuera puede abrir.
 
@@ -517,7 +539,7 @@ solo está **con qué configuración corre cada ambiente y cómo se mueve una ve
 | Qué forma tiene cada respuesta de la API y qué cabeceras lleva | [`20-contrato-de-api.md`](20-contrato-de-api.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [ADR-038](adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md "ADR-038 · La pila local se orquesta desde prisma_db, y cada receta se apunta desde su .env") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [ADR-038](adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md "ADR-038 · La pila local se orquesta desde prisma_db, y cada receta se apunta desde su .env") · [ADR-044](adr/ADR-044-dos-ambientes-desplegados.md "ADR-044 · Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.41.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.42.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -242,6 +242,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
 | **API** | [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
+| **Base** | [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -254,7 +255,7 @@ Quedan **8 tareas y 7 días de trabajo** de 155 tareas del plan.
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
 | 1 | 0,9 semanas | **3,9 semanas** |
-| 2 | 0,8 semanas | **3,8 semanas** |
+| 2 | 0,7 semanas | **3,7 semanas** |
 | 3 | 0,8 semanas | **3,8 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -1551,10 +1552,10 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       manifiesto en español con el tema del mockup, y la cola en IndexedDB que sobrevive a cerrar la
       aplicación: guarda la intención con su clave antes de enviarla, reintenta con la espera de
       [17 §5.2](docs/17-resiliencia-offline-y-cache.md#52-cuánto-se-espera-entre-reintentos) y deja «no sincronizada», con el mensaje de la API, lo que se rechazó con motivo
-- [ ] 🔒 [**9.2**](docs/08-plan-de-desarrollo.md#tarea-9-2) Ambiente uat con datos anonimizados y su semilla · Base, API
-- [ ] 🔒 [**9.3**](docs/08-plan-de-desarrollo.md#tarea-9-3) Promoción de uat a prod sin recompilar · API, Front
-- [ ] ⚡ [**9.4**](docs/08-plan-de-desarrollo.md#tarea-9-4) Reversión ensayada en qa, con el tiempo medido · API, Front
-- [ ] 🔒 [**9.5**](docs/08-plan-de-desarrollo.md#tarea-9-5) Prueba de permisos con sesión real en los cuatro ambientes · API
+- [ ] ⚡ [**9.2**](docs/08-plan-de-desarrollo.md#tarea-9-2) Las etapas qa y uat de la tubería, uat con su semilla anonimizada · Base, API
+- [ ] 🔒 [**9.3**](docs/08-plan-de-desarrollo.md#tarea-9-3) El artefacto se construye una vez en qa y llega a prod sin recompilar · API, Front
+- [ ] ⚡ [**9.4**](docs/08-plan-de-desarrollo.md#tarea-9-4) Reversión ensayada en dev, con el tiempo medido · API, Front
+- [ ] 🔒 [**9.5**](docs/08-plan-de-desarrollo.md#tarea-9-5) Prueba de permisos con sesión real en cada etapa y contra dev · API
 - [x] [**9.6**](docs/08-plan-de-desarrollo.md#tarea-9-6) Pruebas de extremo a extremo de los flujos críticos en qa · API,
       Front — los siete flujos del [12 §11](docs/12-pruebas-y-calidad.md#11-flujos-críticos-de-extremo-a-extremo): entrar y recibir el menú, registrar un gasto y
       **verlo mover la utilidad del mes por su valor**, cobrar un anticipo y verla **no moverse**,
@@ -1587,9 +1588,10 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       `/swagger-ui` y de `/webjars`, así que cerrar `/docs` dejaba el mapa igual de público. Se vio
       probándolo contra la aplicación levantada. **Falla cerrado**: sin credencial configurada esas
       rutas contestan como si no existieran. Se quitó el apagón provisional del perfil `prod`
-- [ ] ⚡ [**9.12**](docs/08-plan-de-desarrollo.md#tarea-9-12) Los proyectos uat y prod de Supabase, los dos de pago · Decisión — salió
-      de partir la [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4); el expediente y la cifra están en el [§7.1](#71-el-expediente-de-uat-y-prod) y lo único que falta es la firma
-- [ ] ⚡ [**9.13**](docs/08-plan-de-desarrollo.md#tarea-9-13) Contraseña del rol `prisma_api` en qa y los seis secretos de GitHub para `permisos-en-qa` · Decisión — la configuración que el trabajo del CI ya espera desde la [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11); sin ella el trabajo se salta con aviso en cada empuje a `develop`
+- [ ] ⚡ [**9.12**](docs/08-plan-de-desarrollo.md#tarea-9-12) El proyecto prod de Supabase, el único de pago · Decisión — salió
+      de partir la [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4), y desde el [ADR-044](docs/adr/ADR-044-dos-ambientes-desplegados.md) ya no lleva uat; el expediente y la cifra están en el
+      [§7.1](#71-el-expediente-de-uat-y-prod) y lo único que falta es la firma
+- [ ] ⚡ [**9.13**](docs/08-plan-de-desarrollo.md#tarea-9-13) Los secretos de GitHub para correr permisos y extremo a extremo contra dev · Decisión — la configuración que los trabajos del CI ya esperan desde la [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11) y la [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6), que apuntaban a qa y desde el [ADR-044](docs/adr/ADR-044-dos-ambientes-desplegados.md) apuntan a dev; sin ella se saltan con aviso
 
 ---
 
@@ -1623,6 +1625,11 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 
 ### 7.1 El expediente de uat y prod
 
+> **Desde el [ADR-044](docs/adr/ADR-044-dos-ambientes-desplegados.md) solo se contrata prod.** uat es una etapa de la tubería y no se aloja.
+> Con las mismas fuentes, la cifra baja a **≈ 45 USD al mes**: Supabase Pro con un solo proyecto son
+> 25 + 10 − 10 = **25 USD**, y Railway sigue en sus **20** del plan Pro, porque prod con 1 GB ya no cabe
+> en los 5 de Hobby. Lo de abajo se conserva como se escribió, con uat adentro.
+
 Lo que le falta a la fila 3 para poder decidirse. **Ningún documento del proyecto traía una cifra**:
 el [19 §8.1](docs/19-ambientes-y-entrega.md#81-qué-se-paga-y-qué-no) decía «es una factura, y es pequeña», y eso no es un número. Aquí están, **consultadas
 el 2026-09-18**, con su fuente, porque un precio sin fecha envejece sin avisar.
@@ -1653,9 +1660,10 @@ el 2026-09-18**, con su fuente, porque un precio sin fecha envejece sin avisar.
 
 **2 · Qué desbloquea**
 
-`9.12` → [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2) uat en pie → [9.3](docs/08-plan-de-desarrollo.md#tarea-9-3) promover sin recompilar y [9.5](docs/08-plan-de-desarrollo.md#tarea-9-5) permisos en los cuatro ambientes →
-[9.10](docs/08-plan-de-desarrollo.md#tarea-9-10) etiquetar `1.0.0` → [H10](docs/08-plan-de-desarrollo.md#h10) → go-live. **[H10](docs/08-plan-de-desarrollo.md#h10) es «Gerencia aprueba en UAT exactamente el
-artefacto que irá a prod»**, y sin uat contratado esa firma no tiene sobre qué hacerse.
+Desde el [ADR-044](docs/adr/ADR-044-dos-ambientes-desplegados.md), **ninguna tarea del plan espera a la `9.12`**: las etapas qa y uat ([9.2](docs/08-plan-de-desarrollo.md#tarea-9-2)) corren
+en la tubería, y la etapa prod ([9.3](docs/08-plan-de-desarrollo.md#tarea-9-3)) se deja lista y se salta con aviso mientras prod no exista. Lo
+que desbloquea es el go-live: sin el proyecto prod contratado, el artefacto aprobado no tiene adónde
+llegar.
 
 **3 · Qué pasa si se aplaza**
 
@@ -2036,6 +2044,16 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **El botón dice cuántas se van a cargar sumando dos cifras de la API**: las válidas, y las
       duplicadas si el interruptor está puesto. Es la única cuenta del panel. Si se quiere que ni
       eso lo haga el front, el informe tendría que traer cuántas entrarían con y sin duplicadas
+
+**Del [ADR-044](docs/adr/ADR-044-dos-ambientes-desplegados.md), dos ambientes desplegados:**
+
+- [ ] **El ensayo de la migración del histórico va a la pila local**, con los datos reales del
+      negocio en la máquina de quien la hace. El [09 §3](docs/09-plan-de-implantacion.md#3-los-cuatro-ambientes-en-la-puesta-en-marcha) lo ponía en qa, que ya no se aloja; en dev
+      quedarían datos personales en un ambiente compartido, contra la regla 5 del [19 §1.1](docs/19-ambientes-y-entrega.md#11-las-seis-reglas). Si
+      quien dirige no quiere esos datos fuera de prod, el ensayo se hace con el Excel anonimizado
+- [ ] **Gerencia firma en dev, y dev hay que sembrarlo con la semilla de uat antes.** Hoy
+      `sembrar.ps1` solo conoce la semilla ficticia. La [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2) escribe la de uat, y llevarla a dev
+      el día de la firma es un paso del [09 §6.1](docs/09-plan-de-implantacion.md#61-la-promoción-hasta-prod) que todavía no tiene guion
 
 **De la 9.6, los flujos críticos de extremo a extremo:**
 

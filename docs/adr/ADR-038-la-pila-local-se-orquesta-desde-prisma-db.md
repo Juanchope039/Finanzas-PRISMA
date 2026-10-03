@@ -110,5 +110,5 @@ variables hacen falta sin llevar el valor de nadie.
 ---
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** ningún otro documento lo cita todavía.
+**🔗 Referenciado desde:** [09](../09-plan-de-implantacion.md "09 · Plan de implantación")
 <!-- /generado:referenciado-desde -->

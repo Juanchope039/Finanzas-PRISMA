@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/21-trabajo-en-paralelo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-09-24 | [Paralelo](INDICE.md#etiqueta-paralelo) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [6.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/21-trabajo-en-paralelo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Paralelo](INDICE.md#etiqueta-paralelo) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo avanza PRISMA en varios carriles a la vez sin que se bloqueen ni se pisen. **Un carril no es
 una persona:** es un frente de trabajo, y puede llevarlo una persona, un equipo o una sesión de
@@ -280,8 +280,9 @@ sabe resolver solo.
   en una copia de `supabase/config.toml` que no se versiona. Sin eso, API y Base comparten el
   `54321` y el `54322`, y el `reset` de uno rompe las pruebas del otro a mitad de camino —y de paso
   la API de integración contra la que trabaja el Front—.
-- **dev, qa, uat y prod siguen siendo los cuatro de siempre.** No hay ambiente por carril.
-- **La puerta es `develop` con la integración continua en verde** hasta el [Sprint 9](08-plan-de-desarrollo.md#sprint-9), y **qa** desde
+- **dev, qa, uat y prod siguen siendo los cuatro de siempre**, y solo dev y prod se despliegan: qa y
+  uat son etapas de la tubería ([ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)). No hay ambiente por carril.
+- **La puerta es `develop` con la integración continua en verde** hasta el [Sprint 9](08-plan-de-desarrollo.md#sprint-9), y **la etapa qa** desde
   entonces. Lo de todos los carriles tiene que estar verde junto antes de promover.
 
 ### 6.5 Ramas e integración

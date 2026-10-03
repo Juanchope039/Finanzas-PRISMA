@@ -194,8 +194,6 @@ export const DEPENDENCIAS_HACIA_ADELANTE = [
   { de: '2.2', a: '2.14', motivo: 'la navegacion dictada por la API se numero despues del enrutamiento' },
   { de: '3.6', a: '3.16', motivo: 'el andamio del celular entro al sprint despues de la foto del recibo' },
   { de: '8.2', a: '8.3', motivo: 'la liquidacion en la base se numero antes de los adelantos que descuenta' },
-  { de: '9.2', a: '9.12', motivo: 'la 0.4 se partio y los dos proyectos de pago quedaron al final del Sprint 9' },
-  { de: '9.5', a: '9.13', motivo: 'los secretos de qa se numeraron al final del Sprint 9' },
   { de: '9.10', a: '9.11', motivo: 'etiquetar 1.0.0 espera a todo el sprint, Swagger en prod incluido' },
 ];
 

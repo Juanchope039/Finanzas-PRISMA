@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/09-plan-de-implantacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [Plan](INDICE.md#etiqueta-plan) · [Entrega](INDICE.md#etiqueta-entrega) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [6.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/09-plan-de-implantacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-03 | [Plan](INDICE.md#etiqueta-plan) · [Entrega](INDICE.md#etiqueta-entrega) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 Cómo se pasa de tener el software construido a que el negocio realmente lo use.
 
@@ -46,7 +46,7 @@ nada en prod.
 | Firma | Qué autoriza | Sobre qué se hace |
 |---|---|---|
 | Firma del mockup | Empezar a construir | El mockup HTML |
-| **Firma de UAT** | Publicar en prod | El sistema real corriendo en el ambiente uat |
+| **Firma de UAT** | Publicar en prod | El sistema real corriendo en dev, sembrado con la semilla anonimizada de la etapa uat ([ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)) |
 
 En UAT se verifica, además, lo que un prototipo no puede mostrar:
 
@@ -99,14 +99,18 @@ por promoción, en orden ([ADR-013](adr/ADR-013-cuatro-ambientes.md)). El proced
 completo vive en [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md); aquí va lo que le
 toca a la implantación.
 
+> **Desde el [ADR-044](adr/ADR-044-dos-ambientes-desplegados.md) solo dev y prod se despliegan.** qa y uat son etapas de la tubería y no
+> se pueden abrir en un navegador: lo que la tabla de abajo hacía en ellas se hace como dice cada
+> fila.
+
 | Ambiente | Qué pasa aquí durante la implantación | Datos |
 |---|---|---|
 | **dev** | Se prueba la importación con archivos inventados y se corrigen los mapeos de columnas | Ficticios |
-| **qa** | **Se ensaya la migración completa de punta a punta** y se cronometra la jornada de digitación | Ficticios, semilla reproducible |
-| **uat** | Gerencia recorre el checklist ([§1.1](#11-la-segunda-firma-el-mismo-checklist-en-uat)) contra el sistema real y firma la versión | Realistas, **anonimizados** |
-| **prod** | Recibe únicamente la versión firmada en uat, sin recompilar. Aquí entra el alistamiento de usuarios y la migración de verdad | Reales |
+| **qa** | Es una etapa de la tubería. **El ensayo de la migración completa va a la pila local** ([ADR-038](adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md)) de quien la hace, porque es el único sitio sin despliegue que no comparte los datos reales: ahí se cronometra la jornada de digitación | Reales, solo en esa máquina |
+| **uat** | Es una etapa de la tubería. Gerencia recorre el checklist ([§1.1](#11-la-segunda-firma-el-mismo-checklist-en-uat)) **en dev**, sembrado con la semilla de esta etapa, y firma la versión | Realistas, **anonimizados** |
+| **prod** | Recibe únicamente el artefacto que pasó la etapa uat, sin recompilar. Aquí entra el alistamiento de usuarios y la migración de verdad | Reales |
 
-> **Ensayo general antes del estreno.** La migración se ensaya completa en qa antes de hacerla
+> **Ensayo general antes del estreno.** La migración se ensaya completa antes de hacerla
 > en prod. La primera vez que se importe el Excel del negocio no puede ser también la primera
 > vez que alguien importa un Excel.
 
@@ -117,15 +121,15 @@ pasos cuestan plata y hay que decidirlos con tiempo.
 
 | # | Paso | Responsable | Cuándo |
 |---|---|---|---|
-| 1 | Crear los **cuatro proyectos de Supabase**: dev, qa, uat y prod. Cada uno con su propia base, sus claves y su almacenamiento | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
-| 2 | **Contratar lo que hay que pagar:** el plan de pago de Supabase en uat y prod, y el alojamiento de `prisma_api` en **uat y en prod**, que no se pueden apagar ([19 §2.4](19-ambientes-y-entrega.md#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro), condición 2 del [ADR-026](adr/ADR-026-railway-al-final.md)). dev y qa se quedan en planes gratuitos o apagables | Gerencia | Antes de levantar uat |
+| 1 | Crear los **proyectos de Supabase**: dev y qa en el [Sprint 0](08-plan-de-desarrollo.md#sprint-0), y prod al final. Cada uno con su propia base, sus claves y su almacenamiento. uat no tiene proyecto, y qa queda quieto ([ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)) | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) y [Sprint 9](08-plan-de-desarrollo.md#sprint-9) |
+| 2 | **Contratar lo que hay que pagar:** el plan de pago de Supabase en prod, y el alojamiento de `prisma_api` en **prod**, que no se puede apagar ([19 §2.4](19-ambientes-y-entrega.md#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro), condición 2 del [ADR-026](adr/ADR-026-railway-al-final.md)). dev y qa se quedan en planes gratuitos o apagables | Gerencia | Antes de levantar prod |
 | 3 | Crear el rol **`prisma_api`** en cada ambiente: sin `BYPASSRLS`, sin `SUPERUSER` y sin ser dueño de las tablas | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
-| 4 | **Levantar el alojamiento de la API en los cuatro ambientes**: una imagen de contenedor por versión, con su memoria y sus variables ([§3.2](#32-alojar-la-api-de-java-en-los-cuatro-ambientes)), en Railway ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)) | Apoyo técnico | dev, en el [Sprint 0](08-plan-de-desarrollo.md#sprint-0); los otros tres, en el [Sprint 9](08-plan-de-desarrollo.md#sprint-9) |
+| 4 | **Levantar el alojamiento de la API en los cuatro ambientes**: una imagen de contenedor por versión, con su memoria y sus variables ([§3.2](#32-alojar-la-api-de-java-en-los-cuatro-ambientes)), en Railway ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)) | Apoyo técnico | dev, en el [Sprint 0](08-plan-de-desarrollo.md#sprint-0); prod, en el [Sprint 9](08-plan-de-desarrollo.md#sprint-9). qa y uat no se alojan |
 | 5 | Cargar los **secretos de cada ambiente** fuera del repositorio: variables de entorno en la API, `--dart-define` al compilar el front | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
 | 6 | Guardar la clave `service_role` de cada ambiente en un **secreto aparte**, reservado para migraciones y para crear identidades contra GoTrue ([ADR-033](adr/ADR-033-service-role-solo-en-auth.md)) | Apoyo técnico | [Sprint 0](08-plan-de-desarrollo.md#sprint-0) |
 | 7 | Promover el esquema dev → qa → uat → prod y verificar `schema_version` en cada base | Apoyo técnico | Antes de cada hito |
 | 8 | Comprobar en cada ambiente que `POST /api/v0/consultas/version` responde el ambiente correcto y que la franja aparece donde debe | Apoyo técnico | Antes de cada hito |
-| 9 | Ejecutar la prueba de permisos con sesión real en los cuatro ambientes ([ADR-012](adr/ADR-012-identidad-a-postgres.md)) | Apoyo técnico | Antes del go-live |
+| 9 | Ejecutar la prueba de permisos con sesión real en cada etapa de la tubería, en dev y en prod ([ADR-012](adr/ADR-012-identidad-a-postgres.md)) | Apoyo técnico | Antes del go-live |
 
 > **Esto no es un impedimento, es una factura.** «Siempre en línea» significa que prod y uat no
 > pueden estar en el plan gratuito de Supabase: ese plan pausa el proyecto tras una semana de
@@ -133,7 +137,8 @@ pasos cuestan plata y hay que decidirlos con tiempo.
 > necesita un contenedor encendido, que también se paga: **en prod porque el taller trabaja, y en
 > uat porque la primera petición después de la siesta paga el arranque entero de la JVM y eso es lo
 > que Gerencia se encontraría al ir a aprobar** ([19 §2.4](19-ambientes-y-entrega.md#24-el-artefacto-de-la-api-una-imagen-de-contenedor-con-una-jvm-adentro)). Son **dos proyectos de Supabase
-> de pago y dos alojamientos de API encendidos**. Por eso **[RNF-14](03-requisitos-y-bdd.md#rnf-14) ya no exige costo cero sino costo mensual al
+> de pago y dos alojamientos de API encendidos**; desde el [ADR-044](adr/ADR-044-dos-ambientes-desplegados.md), uno y uno, porque uat
+> ya no se aloja. Por eso **[RNF-14](03-requisitos-y-bdd.md#rnf-14) ya no exige costo cero sino costo mensual al
 > mínimo sostenible**: el costo cero era incompatible con [RNF-20](03-requisitos-y-bdd.md#rnf-20), y sostener la contradicción en
 > el papel no la habría hecho desaparecer el día del go-live.
 
@@ -158,13 +163,13 @@ go-live:
 | Ambiente | Memoria mínima del contenedor | ¿Se acepta que arranque en frío? |
 |---|---:|---|
 | dev | 512 MB | Sí. Se puede apagar fuera de horario |
-| qa | 512 MB | Sí. Se enciende para la tanda de pruebas |
-| uat | 768 MB | Solo el de después de desplegar, avisándole a Gerencia: el primer clic de la sesión de aprobación puede tardar unos segundos. **Por inactividad no**, que es lo que obliga a pagarlo |
+| qa | — | No se aloja: es una etapa de la tubería ([ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)) |
+| uat | — | No se aloja: es una etapa de la tubería. Gerencia aprueba en dev |
 | **prod** | **1 GB** | **No.** [RNF-20](03-requisitos-y-bdd.md#rnf-20) exige estar siempre en línea; prod no baja a cero |
 
 > **La JVM pide memoria y eso no se negocia, se presupuesta.** Por debajo de 512 MB, Spring Boot
 > arranca al límite y el primer pico de trabajo lo tumba. Estas cifras son el punto de partida:
-> **se miden en qa con datos de verdad antes de fijarlas en prod**, y si el consumo real pide más,
+> **se miden en dev antes de fijarlas en prod**, y si el consumo real pide más,
 > se sube. Apretar la memoria para ahorrar unos pesos y que el taller encuentre la API caída es
 > ahorrar por el lado más caro.
 
@@ -337,14 +342,14 @@ segundos en total.
 
 ### 6.1 La promoción hasta prod
 
-El go-live no empieza el día −1: empieza cuando la versión firmada en UAT termina de recorrer los
-cuatro ambientes. Ninguno se salta.
+El go-live no empieza el día −1: empieza cuando la versión firmada termina de recorrer las cuatro
+etapas. Ninguna se salta. Desde el [ADR-044](adr/ADR-044-dos-ambientes-desplegados.md), qa y uat son etapas de la tubería, no ambientes alojados.
 
 | # | Paso | Quién | Qué tiene que pasar para seguir |
 |---|---|---|---|
-| 1 | Las migraciones pendientes se aplican en qa y pasan las pruebas | Apoyo técnico | Las pruebas de extremo a extremo pasan en qa |
-| 2 | El artefacto se promueve a uat y se siembra con datos anonimizados | Apoyo técnico | `POST /api/v0/consultas/version` en uat responde la versión candidata |
-| 3 | Gerencia recorre el checklist de UAT ([§1.1](#11-la-segunda-firma-el-mismo-checklist-en-uat)) y firma la versión | Gerencia | La firma queda con número de versión y fecha |
+| 1 | La versión se promueve a la etapa qa, que construye el artefacto una vez y corre sus pruebas | Apoyo técnico | Las pruebas de extremo a extremo pasan en la etapa qa |
+| 2 | Se promueve a la etapa uat, que corre la batería entera sobre la semilla anonimizada | Apoyo técnico | La etapa uat queda en verde |
+| 3 | Gerencia recorre el checklist de UAT ([§1.1](#11-la-segunda-firma-el-mismo-checklist-en-uat)) en dev, con ese mismo commit, y firma la versión | Gerencia | La firma queda con número de versión y fecha |
 | 4 | **El mismo artefacto** se promueve a prod, sin recompilar: la misma etiqueta de la imagen de la API y el mismo paquete web del front | Apoyo técnico | La versión en prod es idéntica a la firmada |
 | 5 | Alistamiento de usuarios y migración de datos en prod ([§4](#4-migración-de-datos-históricos)) | Gerencia + apoyo técnico | Los saldos cuadran con el dinero real |
 
