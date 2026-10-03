@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.45.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.46.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -57,8 +57,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 12 | 0 | 0 | 0 |
-| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 8 | 0 | 5 | 4 |
-| **Total** | **155** | **150** | **0** | **5** | **4** |
+| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 9 | 0 | 4 | 3 |
+| **Total** | **155** | **151** | **0** | **4** | **3** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -242,18 +242,17 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
 | **API** | [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
-| **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **5 tareas y 4 días de trabajo** de 155 tareas del plan.
+Quedan **4 tareas y 3 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 0,5 semanas | **3,5 semanas** |
+| 1 | 0,3 semanas | **3,3 semanas** |
 | 2 | 0,3 semanas | **3,3 semanas** |
 | 3 | 0,4 semanas | **3,4 semanas** |
 <!-- /generado:plan-restante -->
@@ -1583,7 +1582,11 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       correr: **el ambiente qa de aplicación no existe todavía** ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md)), así que el trabajo de la
       tubería se salta nombrando lo que falta, y [M-03](docs/12-pruebas-y-calidad.md#m-03) no se pudo escribir porque su ruta está
       acordada y sin implementar ([§10](#10-decisiones-de-construcción-que-conviene-revisar))
-- [ ] ⚡ [**9.7**](docs/08-plan-de-desarrollo.md#tarea-9-7) Rendimiento en celular real con 4G · Front
+- [x] [**9.7**](docs/08-plan-de-desarrollo.md#tarea-9-7) Rendimiento en celular real con 4G · Front — el trabajo
+      «Rendimiento con 4G» de la CI mide en cada empuje, con Chromium de celular, la CPU cuatro
+      veces más lenta y dos perfiles de red. **Las visitas siguientes cumplen** —1,3 s, y 1,1 s sin
+      red, desde el service worker— y son la puerta. **La primera no**: 3,6 MB, 4,5 s con 4G típico
+      y unos 20 s con el lento ([§10](#10-decisiones-de-construcción-que-conviene-revisar)). ✏️ queda la medición en un celular del taller, que es la del [RNF-01](docs/03-requisitos-y-bdd.md#rnf-01)
 - [x] [**9.8**](docs/08-plan-de-desarrollo.md#tarea-9-8) Repaso de secretos: nada en los repositorios y `service_role` solo en migraciones · API — el
       escaneo que pedía [RNF-24](docs/03-requisitos-y-bdd.md#rnf-24) y que no existía, buscando **valores** y no nombres: un JWT entero, una
       referencia de proyecto, una credencial dentro de una cadena de conexión y un `.env.ejemplo` que
@@ -1910,11 +1913,9 @@ a `anon`.
 - **Los íconos de la PWA siguen siendo los de la plantilla de Flutter.** El logo del taller es
   apaisado —760×253— y volverlo un ícono cuadrado de 192 y 512 píxeles es una decisión de diseño,
   no un recorte: hay que decidir si va la marca sola o el nombre sobre el color de la insignia.
-- **El service worker de la PWA no se ha visto funcionar en un navegador de verdad.** Lo genera
-  Flutter con su estrategia «offline-first» y el navegador integrado de las herramientas no deja
-  registrar ninguno, ni siquiera uno vacío. Falta abrir la compilación web en Edge o Chrome y
-  comprobar que se registra, que la aplicación abre sin red y que ofrece instalarse; y eso también
-  es parte de la [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) y de la [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6).
+- **Falta ver que la PWA ofrece instalarse.** Que el service worker se registra y que la
+  aplicación abre sin red ya lo comprueba la CI en cada empuje, en Chromium ([9.7](docs/08-plan-de-desarrollo.md#tarea-9-7)). Ofrecer la
+  instalación depende del navegador y de los íconos, y se ve a mano en un celular.
 - **La pantalla «Datos sin conexión» de [17 §7](docs/17-resiliencia-offline-y-cache.md#7-purga-de-la-caché-por-el-usuario) sigue sin existir**, y ya no espera a nadie: el
   aviso de «pendiente de sincronizar» que la [9.1](docs/08-plan-de-desarrollo.md#tarea-9-1) dejó listo para pintar tenía que llegar con el
   registro rápido ([3.5](docs/08-plan-de-desarrollo.md#tarea-3-5)), que está hecho. La cola cuenta cuántas esperan y nadie lo muestra;
@@ -2165,6 +2166,20 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       horas de uso—, que es lo más fiel pero pide columna, panel e historial, y el [08](docs/08-plan-de-desarrollo.md) le da a la 5.4
       un solo carril y un día. Si el taller quiere que la bordadora cueste plata por hora, eso es
       esa tarifa y es otra tarea
+
+**De la 9.7, el rendimiento con 4G:**
+
+- [ ] **La primera visita no cumple el [RNF-01](docs/03-requisitos-y-bdd.md#rnf-01), y no es cuestión de afinar.** Flutter Web con
+      CanvasKit baja 3,6 MB antes del primer cuadro: 2,4 MB de `canvaskit.wasm` y 1 MB de
+      `main.dart.js`. Con 4G típico son 4,5 s; con el lento, entre 19 y 21 s. Hay que decidir si el [RNF-01](docs/03-requisitos-y-bdd.md#rnf-01)
+      habla de la primera visita o de las siguientes, que cumplen con 1,3 s, o si se cambia el
+      motor de pintura. La CI la informa sin bloquear hasta que se decida
+- [ ] **El front baja la fuente Roboto de `fonts.gstatic.com` cada vez que abre sin caché.** Es una
+      dependencia de un tercero que el resto del artefacto evita con `--no-web-resources-cdn`. Empaquetarla
+      en los recursos del front la quita
+- [ ] **La medición es un sustituto.** Chromium en la CI con la red y la CPU frenadas no es el
+      celular del taller, y el criterio del [RNF-01](docs/03-requisitos-y-bdd.md#rnf-01) es «medición en dispositivo real». Falta abrir
+      dev en ese celular, con la caché vacía y después con ella llena, y anotar los dos tiempos
 
 **De la pantalla Reportes (6.5):**
 
