@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-03 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [6.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-03 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -412,6 +412,10 @@ primera y la última despliegan.
 | qa | `qa` | Extremo a extremo, permisos con sesión real y la traducción de errores del [§6.2](#62-en-cada-promoción). **Compila el artefacto una vez** y lo publica en GHCR con su versión ([§2.3](#23-el-artefacto-se-promueve-no-se-reconstruye)) | Nada |
 | uat | `uat` | La semilla realista y anonimizada, y la batería entera sobre ella. Comprueba que el artefacto es el de qa | Nada |
 | prod | `main` | Comprueba que el artefacto es el que compiló qa y lo marca `prod`, sin recompilar | prod, cuando exista |
+
+**La prueba de permisos corre en las cuatro**, dos veces ([9.5](08-plan-de-desarrollo.md#tarea-9-5)): contra la base que levanta la
+tubería, en el PR y en el empuje, y contra la base de dev en el empuje, porque una política puede
+estar en la migración y no en el ambiente.
 
 > **Una etapa que no despliega sigue siendo una puerta.** Lo que el [§6.2](#62-en-cada-promoción) pedía «contra una base
 > real del ambiente destino» corre contra la base de Supabase que levanta la tubería, con sus
