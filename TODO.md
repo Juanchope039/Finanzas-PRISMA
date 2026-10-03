@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.43.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.44.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -57,8 +57,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 12 | 0 | 0 | 0 |
-| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 6 | 0 | 7 | 6 |
-| **Total** | **155** | **148** | **0** | **7** | **6** |
+| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 7 | 0 | 6 | 5 |
+| **Total** | **155** | **149** | **0** | **6** | **5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,7 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [9.3](docs/08-plan-de-desarrollo.md#tarea-9-3) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.5](docs/08-plan-de-desarrollo.md#tarea-9-5) |
+| **API** | [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.5](docs/08-plan-de-desarrollo.md#tarea-9-5) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -249,13 +249,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **7 tareas y 6 días de trabajo** de 155 tareas del plan.
+Quedan **6 tareas y 5 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 0,8 semanas | **3,8 semanas** |
-| 2 | 0,7 semanas | **3,7 semanas** |
-| 3 | 0,8 semanas | **3,8 semanas** |
+| 1 | 0,6 semanas | **3,6 semanas** |
+| 2 | 0,5 semanas | **3,5 semanas** |
+| 3 | 0,6 semanas | **3,6 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1560,7 +1560,10 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       y otras tres que solo fallan en Supabase, donde `postgres` no es superusuario y no podía
       hacer `SET ROLE prisma_api`. Nadie las había visto porque ninguna tubería corría el informe.
       El CHECK del límite de horas pasó a `horas_limite_config_horas_positivas`, en el esquema `0.23.0`
-- [ ] ⚡ [**9.3**](docs/08-plan-de-desarrollo.md#tarea-9-3) El artefacto se construye una vez en qa y llega a prod sin recompilar · API, Front
+- [x] [**9.3**](docs/08-plan-de-desarrollo.md#tarea-9-3) El artefacto se construye una vez en qa y llega a prod sin recompilar · API, Front — la
+      etapa qa publica en GHCR la imagen de la API y la de prod del front, con su versión y el árbol
+      de git en `prisma.arbol`. uat y `main` comprueban por el árbol que es la misma y la marcan
+      sin recompilar. **El despliegue a prod queda escrito pero sin ensayar**, porque prod no existe
 - [ ] ⚡ [**9.4**](docs/08-plan-de-desarrollo.md#tarea-9-4) Reversión ensayada en dev, con el tiempo medido · API, Front
 - [ ] ⚡ [**9.5**](docs/08-plan-de-desarrollo.md#tarea-9-5) Prueba de permisos con sesión real en cada etapa y contra dev · API
 - [x] [**9.6**](docs/08-plan-de-desarrollo.md#tarea-9-6) Pruebas de extremo a extremo de los flujos críticos en qa · API,
@@ -2061,6 +2064,17 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **Gerencia firma en dev, y dev hay que sembrarlo con la semilla de uat antes.** Hoy
       `sembrar.ps1` solo conoce la semilla ficticia. La [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2) escribe la de uat, y llevarla a dev
       el día de la firma es un paso del [09 §6.1](docs/09-plan-de-implantacion.md#61-la-promoción-hasta-prod) que todavía no tiene guion
+
+**De la 9.3, el artefacto que se promueve:**
+
+- [ ] **El registro es GHCR**, porque es gratis y entra con el mismo token del flujo, sin otra
+      cuenta. Si prod se aloja en Railway, para traer una imagen privada de GHCR necesita una
+      credencial de lectura: es un paso de la [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) que hoy nadie ha escrito
+- [ ] ⚡ **El front de prod necesita dos variables de repositorio: `PROD_API_URL` y
+      `PROD_API_MAJOR`.** Sin ellas el trabajo se salta con aviso, y por eso hoy ninguna etapa
+      publica el front de prod. Se cargan cuando prod tenga dominio
+- [ ] **Un arreglo empujado directo a `uat` o a `main` deja la etapa en rojo**, porque su árbol ya
+      no es el que compiló qa. Es a propósito: el arreglo urgente también entra por develop y pasa por qa
 
 **De la 9.6, los flujos críticos de extremo a extremo:**
 

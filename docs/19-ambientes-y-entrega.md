@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-03 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [6.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-03 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -109,10 +109,18 @@ aloja ([ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)). Lo único que cambi
 > ser lo que corre en el taller, y la firma no valdría nada.
 
 > **Dev es la excepción, y es deliberada** ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)). Railway construye dev desde el repositorio en
-> cada fusión, sin publicar la imagen en ningún registro: hoy no hay registro al que publicarla, y
-> montarlo es trabajo de la promoción del [Sprint 9](08-plan-de-desarrollo.md#sprint-9) ([9.3](08-plan-de-desarrollo.md#tarea-9-3)). La regla de arriba gobierna **qa → uat →
-> prod**, que es donde una firma depende de ella. Dev construye desde su rama porque dev es
-> precisamente donde se comprueba que la imagen construye.
+> cada fusión, sin pasar por el registro. La regla de arriba gobierna **qa → uat → prod**, que es
+> donde una firma depende de ella. Dev construye desde su rama porque dev es precisamente donde se
+> comprueba que la imagen construye.
+
+**El registro es GHCR** ([9.3](08-plan-de-desarrollo.md#tarea-9-3)), con una imagen por repositorio:
+
+| Paso | Qué pasa |
+|---|---|
+| Se publica | La etapa qa construye y publica `ghcr.io/juanchope039/finanzas-prisma-api:<versión>` y `…-front:<versión>`. El `+` del front pasa a `_`, que Docker no admite |
+| Se reconoce | Cada imagen lleva el árbol de git del que salió, en la etiqueta OCI `prisma.arbol`. «Es la misma» se juzga por el árbol y no por el commit, porque los PR de promoción crean commits de fusión con el mismo contenido |
+| No se repite | Si qa encuentra su versión ya publicada con otro árbol, falla: una versión es un solo artefacto. Con el mismo árbol, no recompila |
+| Se promueve | uat y prod comprueban que la imagen de su versión trae su árbol, y mueven la etiqueta `uat` o `prod` hacia ella **sin recompilar**. Lo que llegó a uat o a `main` sin pasar por qa no encuentra su imagen y se queda en rojo |
 
 Consecuencia práctica: la configuración del front **no puede compilarse dentro del artefacto de
 prod en el momento de publicar**, porque eso es recompilar. Cada ambiente compila su propio
@@ -401,9 +409,9 @@ primera y la última despliegan.
 | Etapa | Rama | Lo que agrega | Despliega |
 |---|---|---|---|
 | develop | `develop` | Lo del [§6.1](#61-en-cada-empuje-en-paralelo), y la integración contra la base que levanta la tubería | dev, en Railway |
-| qa | `qa` | Extremo a extremo, permisos con sesión real y la traducción de errores del [§6.2](#62-en-cada-promoción). **Compila el artefacto una vez** y lo publica con su versión | Nada |
-| uat | `uat` | La semilla realista y anonimizada, y la batería entera sobre ella | Nada |
-| prod | `main` | Comprueba que el artefacto es el que compiló qa, sin recompilar | prod, cuando exista |
+| qa | `qa` | Extremo a extremo, permisos con sesión real y la traducción de errores del [§6.2](#62-en-cada-promoción). **Compila el artefacto una vez** y lo publica en GHCR con su versión ([§2.3](#23-el-artefacto-se-promueve-no-se-reconstruye)) | Nada |
+| uat | `uat` | La semilla realista y anonimizada, y la batería entera sobre ella. Comprueba que el artefacto es el de qa | Nada |
+| prod | `main` | Comprueba que el artefacto es el que compiló qa y lo marca `prod`, sin recompilar | prod, cuando exista |
 
 > **Una etapa que no despliega sigue siendo una puerta.** Lo que el [§6.2](#62-en-cada-promoción) pedía «contra una base
 > real del ambiente destino» corre contra la base de Supabase que levanta la tubería, con sus
