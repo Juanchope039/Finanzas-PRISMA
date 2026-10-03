@@ -718,6 +718,20 @@ tbody tr.bit-foco,tbody tr.bit-foco:hover{background:var(--accent-soft)}
 }
 .interruptor[aria-checked="true"]{background:var(--warn-soft); border-color:var(--warn); color:var(--warn)}
 .interruptor[aria-checked="true"] .luz{background:var(--warn); border-color:var(--warn)}
+
+/* Importar el histórico (tarea 8.10). El mapeo es una rejilla de dos columnas que en el celular
+   se vuelve una: la etiqueta encima de su <select>, como cualquier campo. */
+.imp-mapeo{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.2fr); gap:10px 14px; align-items:center}
+.imp-mapeo .obl{font-family:var(--mono); font-size:.62rem; color:var(--neg); margin-left:6px}
+.imp-mapeo select{width:100%; min-width:0}
+.imp-cifras{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:16px 0}
+.imp-cargar{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:14px}
+.imp-cargar .grow{flex:1}
+@media (max-width:720px){
+  .imp-mapeo{grid-template-columns:1fr; gap:4px}
+  .imp-mapeo select{margin-bottom:8px}
+  .imp-cifras{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 .interruptor[aria-checked="true"] .luz::after{background:var(--on-accent); transform:translateX(15px)}
 /* Con los anulados a la vista el panel cambia de aspecto: el 04 §5.5 pide que ese modo no se
    confunda nunca con el libro de siempre. */
@@ -1525,6 +1539,64 @@ tbody tr.fila-detalle:hover{background:none}
               <thead><tr><th>Tipo</th><th>Se lee como</th><th>Cuenta en</th><th>Utilidad</th><th>Caja</th><th>Patrimonio</th><th class="r"></th></tr></thead>
               <tbody id="tb-tipos-mov"></tbody>
             </table></div>
+          </div>
+        </div>
+
+        <!-- Importar el histórico (RF-64, RF-65, CU-21, tarea 8.10). Vive aquí por lo mismo que el
+             pro-labore y los sobres: «Configuración» no tiene clave en el menú. Lo que se importa
+             son movimientos, y este es su libro. Se pinta con el mismo permiso que «Cuentas de
+             dinero»; que importar sea de Gerencia lo impone la base, no la pantalla. -->
+        <div class="panel" id="panel-importar" data-ger>
+          <div class="panel-head">
+            <h2 class="grow">Importar el histórico</h2>
+            <span class="eyebrow">Solo gerencia</span>
+          </div>
+          <p class="bajada">Para cargar de una vez lo que llevabas en Excel. Nada se guarda hasta
+          que revises fila por fila qué entra, qué no y por qué.</p>
+
+          <!-- Paso 1: el archivo. Elegirlo ya lo manda, sin mapeo: la API contesta qué columnas
+               trae y cuáles necesita. -->
+          <div class="imp-paso" id="imp-paso-archivo">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+              <button type="button" class="cta" id="imp-elegir">Elegir archivo CSV</button>
+              <span class="mono" id="imp-nombre" style="font-size:.8rem; color:var(--muted)">Ningún archivo elegido</span>
+            </div>
+            <p class="capa-ayuda" style="margin-top:8px">CSV de hasta 5 MB, con una fila de
+            encabezado. Separado por punto y coma o por coma.</p>
+          </div>
+
+          <!-- Paso 2: relacionar. Una fila por columna que el importador necesita, con las del
+               archivo en un <select>. Las dos listas llegan de la API; ninguna es del front. -->
+          <div class="imp-paso" id="imp-paso-mapeo" hidden>
+            <h3 style="margin:16px 0 4px">Relaciona las columnas</h3>
+            <p class="bajada" style="margin:0 0 12px">A la izquierda, lo que PRISMA necesita; a la
+            derecha, la columna de tu archivo que lo trae.</p>
+            <div class="imp-mapeo" id="imp-mapeo"></div>
+            <p class="capa-error" id="imp-error" role="alert" aria-live="polite" hidden
+               style="margin-top:12px"></p>
+            <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap">
+              <button type="button" class="cta" id="imp-revisar">Revisar el archivo</button>
+              <button type="button" class="ghost" id="imp-otro">Elegir otro archivo</button>
+            </div>
+          </div>
+
+          <!-- Paso 3: el informe. Las cuatro cifras y la tabla llegan contadas de la API; la
+               pantalla no juzga ninguna fila. Las duplicadas no entran sin el interruptor:
+               sin él la API responde 40970 y no escribe nada. -->
+          <div class="imp-paso" id="imp-paso-informe" hidden>
+            <div class="imp-cifras" id="imp-cifras" aria-live="polite"></div>
+            <div class="tw" style="margin-bottom:0"><table>
+              <thead><tr><th>Fila</th><th>Estado</th><th>Qué pasa</th></tr></thead>
+              <tbody id="tb-importar"></tbody>
+            </table></div>
+            <div class="imp-cargar" id="imp-cargar">
+              <button type="button" class="interruptor" id="imp-duplicadas" role="switch"
+                      aria-checked="false">Cargar también las que ya existen<span class="luz" aria-hidden="true"></span></button>
+              <span class="grow"></span>
+              <button type="button" class="ghost" id="imp-volver">Cambiar las columnas</button>
+              <button type="button" class="cta" id="imp-confirmar"></button>
+            </div>
+            <p class="pill p-ok" id="imp-hecho" role="status" hidden style="margin-top:12px"></p>
           </div>
         </div>
       </section>
@@ -7245,6 +7317,136 @@ function pedirMotivoCargo(id, boton){
   });
   document.getElementById('cf-cancelar').addEventListener('click', cerrarFormCargo);
   document.getElementById('cf-guardar').addEventListener('click', guardarCargo);
+})();
+
+/* ---------- importar el histórico (RF-64, RF-65, tarea 8.10) ---------- */
+/* El prototipo no lee ningún archivo: hace como si hubiera llegado uno de ejemplo y pinta lo
+   que la API contestaría. En el sistema real las columnas esperadas, las del archivo, el
+   veredicto de cada fila y su motivo llegan en el informe, y la pantalla no juzga nada. */
+var IMP_ARCHIVO = 'historico-2025.csv';
+var IMP_COLUMNAS = ['Fecha', 'Detalle', 'Monto', 'Medio de pago', 'Rubro', 'Clase'];
+var IMP_ESPERADAS = [
+  {clave:'fechaMovimiento', etiqueta:'Fecha del movimiento', obligatoria:true},
+  {clave:'tipo',            etiqueta:'Tipo',                 obligatoria:true},
+  {clave:'valor',           etiqueta:'Valor',                obligatoria:true},
+  {clave:'cuenta',          etiqueta:'Cuenta',               obligatoria:true},
+  {clave:'categoria',       etiqueta:'Categoría',            obligatoria:false},
+  {clave:'descripcion',     etiqueta:'Descripción',          obligatoria:false}
+];
+var IMP_FILAS = [
+  {numero:2, estado:'valida'},
+  {numero:3, estado:'valida'},
+  {numero:4, estado:'invalida', campo:'Fecha', motivo:'La fecha 31/02/2025 no existe.'},
+  {numero:5, estado:'valida'},
+  {numero:6, estado:'duplicada', motivo:'Ya está en el libro: misma fecha, valor, cuenta y descripción.'},
+  {numero:7, estado:'invalida', campo:'Monto', motivo:'«doce mil» no es un valor en pesos. Escríbelo en números, sin decimales.'},
+  {numero:8, estado:'valida'},
+  {numero:9, estado:'valida'}
+];
+var IMP_ESTADOS = {
+  valida:   '<span class="pill p-ok">Entra</span>',
+  invalida: '<span class="pill p-neg">No entra</span>',
+  duplicada:'<span class="pill p-warn">Ya existe</span>',
+  escrita:  '<span class="pill p-ok">Cargada</span>'
+};
+var imp = {mapeo:{}, duplicadas:false, cargado:false};
+
+function impPaso(cual){
+  ['archivo', 'mapeo', 'informe'].forEach(function(p){
+    /* El archivo elegido queda siempre a la vista, encima del paso en que se va. */
+    document.getElementById('imp-paso-' + p).hidden = (p !== 'archivo' && p !== cual);
+  });
+}
+
+function impMapeo(){
+  var opciones = function(clave){
+    return '<option value="">Sin columna</option>' + IMP_COLUMNAS.map(function(c){
+      return '<option' + (imp.mapeo[clave] === c ? ' selected' : '') + '>' + c + '</option>';
+    }).join('');
+  };
+  document.getElementById('imp-mapeo').innerHTML = IMP_ESPERADAS.map(function(e){
+    var id = 'imp-col-' + e.clave;
+    return '<label for="' + id + '">' + e.etiqueta +
+      (e.obligatoria ? '<span class="obl">obligatoria</span>' : '') + '</label>' +
+      '<select id="' + id + '" data-clave="' + e.clave + '">' + opciones(e.clave) + '</select>';
+  }).join('');
+}
+
+function impCuenta(estado){
+  return IMP_FILAS.filter(function(f){ return f.estado === estado; }).length;
+}
+
+function impInforme(){
+  var filas = imp.cargado ? IMP_FILAS.map(function(f){
+    var entra = f.estado === 'valida' || (f.estado === 'duplicada' && imp.duplicadas);
+    return entra ? {numero:f.numero, estado:'escrita'} : f;
+  }) : IMP_FILAS;
+  var validas = impCuenta('valida'), duplicadas = impCuenta('duplicada');
+  var cifra = function(etq, n, color){
+    return '<div class="panel"><div class="kpi"><span>' + etq + '</span><b' +
+      (color ? ' style="color:var(--' + color + ')"' : '') + '>' + n + '</b></div></div>';
+  };
+  document.getElementById('imp-cifras').innerHTML =
+    cifra('Filas en el archivo', IMP_FILAS.length) +
+    cifra(imp.cargado ? 'Cargadas' : 'Entran', imp.cargado
+      ? validas + (imp.duplicadas ? duplicadas : 0) : validas, 'pos') +
+    cifra('No entran', impCuenta('invalida'), 'neg') +
+    cifra('Ya existían', duplicadas, 'warn');
+  document.getElementById('tb-importar').innerHTML = filas.map(function(f){
+    var que = f.motivo ? (f.campo ? '<b>' + f.campo + '</b> · ' : '') + f.motivo
+                       : (f.estado === 'escrita' ? 'Quedó en el libro.' : 'Se puede cargar.');
+    return '<tr><td class="mono">' + f.numero + '</td><td>' + IMP_ESTADOS[f.estado] +
+      '</td><td style="white-space:normal">' + que + '</td></tr>';
+  }).join('');
+  var n = validas + (imp.duplicadas ? duplicadas : 0);
+  document.getElementById('imp-confirmar').textContent = 'Cargar ' + n + ' movimientos';
+  document.getElementById('imp-duplicadas').hidden = !duplicadas;
+  document.getElementById('imp-duplicadas').setAttribute('aria-checked', imp.duplicadas ? 'true' : 'false');
+  document.getElementById('imp-cargar').hidden = imp.cargado;
+  var hecho = document.getElementById('imp-hecho');
+  hecho.hidden = !imp.cargado;
+  hecho.textContent = n + ' movimientos cargados al libro';
+}
+
+(function initImportar(){
+  var elegir = document.getElementById('imp-elegir');
+  if (!elegir) return;
+  var error = document.getElementById('imp-error');
+
+  elegir.addEventListener('click', function(){
+    imp = {mapeo:{}, duplicadas:false, cargado:false};
+    document.getElementById('imp-nombre').textContent = IMP_ARCHIVO + ' · ' + IMP_FILAS.length + ' filas';
+    error.hidden = true;
+    impMapeo();
+    impPaso('mapeo');
+  });
+  document.getElementById('imp-mapeo').addEventListener('change', function(ev){
+    var c = ev.target.getAttribute('data-clave');
+    if (c) imp.mapeo[c] = ev.target.value;
+  });
+  /* Que falte una obligatoria lo dice la API con el 42270; el prototipo lo imita con su texto. */
+  document.getElementById('imp-revisar').addEventListener('click', function(){
+    var falta = IMP_ESPERADAS.filter(function(e){ return e.obligatoria && !imp.mapeo[e.clave]; });
+    if (falta.length){
+      error.textContent = 'Falta relacionar ' + falta.map(function(e){ return '«' + e.etiqueta + '»'; })
+        .join(', ') + '. Sin esas columnas no hay con qué registrar un movimiento.';
+      error.hidden = false;
+      return;
+    }
+    error.hidden = true;
+    impInforme();
+    impPaso('informe');
+  });
+  document.getElementById('imp-otro').addEventListener('click', function(){ elegir.click(); });
+  document.getElementById('imp-volver').addEventListener('click', function(){ impPaso('mapeo'); });
+  document.getElementById('imp-duplicadas').addEventListener('click', function(){
+    imp.duplicadas = !imp.duplicadas;
+    impInforme();
+  });
+  document.getElementById('imp-confirmar').addEventListener('click', function(){
+    imp.cargado = true;
+    impInforme();
+  });
 })();
 
 /* ---------- arranque ---------- */

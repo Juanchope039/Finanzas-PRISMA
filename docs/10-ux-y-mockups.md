@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [6.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-03 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -435,6 +435,39 @@ Arranca con lo que el libro ya pintaba:
 > **En el prototipo, anular solo cambia el libro, y el PDF no se abre.** Las cifras de las otras
 > pantallas son de ejemplo y no se recalculan. En el sistema real, la API saca el movimiento de
 > las tres cifras y anula el registro hermano en la misma transacción.
+
+#### El histórico se importa aquí, y tampoco en una «Configuración»
+
+Lo que trae el Excel de antes son movimientos, y este es su libro. Es el caso del pro-labore y de
+los sobres ([§4.5](#45-inversiones-y-retiros)): el menú no tiene clave para «Configuración», y dársela sería un cambio de contrato.
+El panel **«Importar el histórico»** va debajo de «Cuentas de dinero», y existe con el mismo permiso
+que ella. Son tres pasos en el mismo panel ([RF-64](03-requisitos-y-bdd.md#rf-64), [RF-65](03-requisitos-y-bdd.md#rf-65), [CU-21](02-casos-de-uso.md#cu-21)):
+
+1. **Elegir el archivo.** «Elegir archivo CSV» y, al lado, su nombre. Elegirlo ya lo manda, sin
+   mapeo, y la API contesta qué columnas trae y cuáles necesita ([BDD-21-1](03-requisitos-y-bdd.md#bdd-21-1)).
+2. **Relacionar las columnas.** Una fila por cada columna que PRISMA necesita, con su etiqueta y un
+   `<select>` con las del archivo; las obligatorias lo dicen. Ninguna viene elegida: adivinar por el
+   nombre sería decidir qué significa la columna de otro. Si falta una obligatoria, el aviso del
+   `42270` va debajo, en rojo.
+3. **Revisar y cargar.** Cuatro cifras —filas en el archivo, cuántas entran, cuántas no y cuántas ya
+   existían— y la tabla de todas las filas, no solo las malas ([BDD-21-2](03-requisitos-y-bdd.md#bdd-21-2)): el número de la línea,
+   «Entra», «No entra» o «Ya existe», y el motivo con su columna. **«Cargar N movimientos»**
+   confirma, y la tabla pasa a decir «Cargada» en lo que entró.
+
+**Las que ya existen no entran sin pedirlo** ([BDD-21-3](03-requisitos-y-bdd.md#bdd-21-3)). Si hay alguna, aparece el interruptor
+«Cargar también las que ya existen», y el botón cuenta con él. Sin el interruptor, la API respondería
+`40970` y no escribiría nada.
+
+| Lo dicta la API | Lo hace la pantalla |
+|---|---|
+| Qué columnas necesita, cómo se llaman y cuáles son obligatorias | Pinta una fila por cada una |
+| Las columnas que trae el archivo | Las ofrece en cada `<select>` |
+| Qué pasa con cada fila, en qué columna está el problema y con qué palabras | Pinta la píldora y el motivo |
+| Cuántas entran, cuántas no, cuántas ya existían y cuántas se escribieron | Pinta las cuatro cifras |
+| Que falta una columna obligatoria, que el archivo pasa de 5 MB o que no es un CSV | Pinta el aviso |
+
+> **En el prototipo no se lee ningún archivo.** «Elegir archivo CSV» hace como si hubiera llegado
+> uno de ejemplo con ocho filas, y lo que pasa con cada una está escrito a mano.
 
 ### 4.4 Productos y servicios
 
