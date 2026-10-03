@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.42.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.43.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -57,8 +57,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 12 | 0 | 0 | 0 |
-| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 5 | 0 | 8 | 7 |
-| **Total** | **155** | **147** | **0** | **8** | **7** |
+| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 6 | 0 | 7 | 6 |
+| **Total** | **155** | **148** | **0** | **7** | **6** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,8 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
-| **Base** | [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2) |
+| **API** | [9.3](docs/08-plan-de-desarrollo.md#tarea-9-3) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) · [9.5](docs/08-plan-de-desarrollo.md#tarea-9-5) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -250,11 +249,11 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **8 tareas y 7 días de trabajo** de 155 tareas del plan.
+Quedan **7 tareas y 6 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 0,9 semanas | **3,9 semanas** |
+| 1 | 0,8 semanas | **3,8 semanas** |
 | 2 | 0,7 semanas | **3,7 semanas** |
 | 3 | 0,8 semanas | **3,8 semanas** |
 <!-- /generado:plan-restante -->
@@ -1552,10 +1551,18 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       manifiesto en español con el tema del mockup, y la cola en IndexedDB que sobrevive a cerrar la
       aplicación: guarda la intención con su clave antes de enviarla, reintenta con la espera de
       [17 §5.2](docs/17-resiliencia-offline-y-cache.md#52-cuánto-se-espera-entre-reintentos) y deja «no sincronizada», con el mensaje de la API, lo que se rechazó con motivo
-- [ ] ⚡ [**9.2**](docs/08-plan-de-desarrollo.md#tarea-9-2) Las etapas qa y uat de la tubería, uat con su semilla anonimizada · Base, API
-- [ ] 🔒 [**9.3**](docs/08-plan-de-desarrollo.md#tarea-9-3) El artefacto se construye una vez en qa y llega a prod sin recompilar · API, Front
+- [x] [**9.2**](docs/08-plan-de-desarrollo.md#tarea-9-2) Las etapas qa y uat de la tubería, uat con su semilla anonimizada · Base, API — la
+      rama del PR o del empuje dice qué etapa corre, y a mano se elige sobre cualquier rama. En la
+      base, qa levanta Supabase y **exige el informe entero en `OK`**, y uat le suma
+      `semilla-uat.sql` —la semilla fija más 200 clientes, 600 pedidos y 5 000 movimientos
+      sintéticos— y lo vuelve a pedir. En la API, qa construye la imagen y uat corre la integración
+      sobre ese volumen. **La primera corrida encontró seis filas rojas**: las tres de la [7.10](docs/08-plan-de-desarrollo.md#tarea-7-10),
+      y otras tres que solo fallan en Supabase, donde `postgres` no es superusuario y no podía
+      hacer `SET ROLE prisma_api`. Nadie las había visto porque ninguna tubería corría el informe.
+      El CHECK del límite de horas pasó a `horas_limite_config_horas_positivas`, en el esquema `0.23.0`
+- [ ] ⚡ [**9.3**](docs/08-plan-de-desarrollo.md#tarea-9-3) El artefacto se construye una vez en qa y llega a prod sin recompilar · API, Front
 - [ ] ⚡ [**9.4**](docs/08-plan-de-desarrollo.md#tarea-9-4) Reversión ensayada en dev, con el tiempo medido · API, Front
-- [ ] 🔒 [**9.5**](docs/08-plan-de-desarrollo.md#tarea-9-5) Prueba de permisos con sesión real en cada etapa y contra dev · API
+- [ ] ⚡ [**9.5**](docs/08-plan-de-desarrollo.md#tarea-9-5) Prueba de permisos con sesión real en cada etapa y contra dev · API
 - [x] [**9.6**](docs/08-plan-de-desarrollo.md#tarea-9-6) Pruebas de extremo a extremo de los flujos críticos en qa · API,
       Front — los siete flujos del [12 §11](docs/12-pruebas-y-calidad.md#11-flujos-críticos-de-extremo-a-extremo): entrar y recibir el menú, registrar un gasto y
       **verlo mover la utilidad del mes por su valor**, cobrar un anticipo y verla **no moverse**,
@@ -1966,12 +1973,12 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       sale de «la llave foránea `empleado_id` de `adelantos` o de `nomina_detalle`», y en la API solo
       la de `adelantos` está en las traducciones propias; la otra sigue con el transversal. Es una
       fila, y va en el PR de la API que implemente la liquidación
-- [ ] 🔒 **Tres filas del informe de la base quedaron en rojo desde la [7.10](docs/08-plan-de-desarrollo.md#tarea-7-10)**, y la 8.2 las dejó como
+- [x] **Tres filas del informe de la base quedaron en rojo desde la [7.10](docs/08-plan-de-desarrollo.md#tarea-7-10)**, y la 8.2 las dejó como
       estaban porque no son suyas: el conteo de columnas con dominio espera 68 y hay 69, la lista de
       tablas que audita `fn_auditar` no nombra a `horas_limite_config`, y
       `horas_limite_config_horas_semanales_check` termina en `_check`, que es lo que la fila de la
       [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) prohíbe. Las dos primeras son una línea cada una; la tercera es una migración de
-      renombre **y** su fila en `prisma_api`, por [C-01](docs/12-pruebas-y-calidad.md#c-01)
+      renombre **y** su fila en `prisma_api`, por [C-01](docs/12-pruebas-y-calidad.md#c-01). **Las arregló la [9.2](docs/08-plan-de-desarrollo.md#tarea-9-2)**, porque la etapa qa no podía nacer roja
 
 **De la 8.4, el desprendible de pago:**
 

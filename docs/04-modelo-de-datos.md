@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.19.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [5.20.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-03 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -841,7 +841,7 @@ CREATE TABLE horas_limite_config (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   vigente_desde   DATE NOT NULL,
   horas_semanales horas NOT NULL
-    CONSTRAINT horas_limite_config_horas_semanales_check CHECK (horas_semanales > 0),
+    CONSTRAINT horas_limite_config_horas_positivas CHECK (horas_semanales > 0),
   justificacion   TEXT,
   creado_por      UUID NOT NULL REFERENCES usuarios(id),
   creado_en       TIMESTAMPTZ NOT NULL DEFAULT NOW()
