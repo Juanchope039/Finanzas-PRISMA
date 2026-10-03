@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.35.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.36.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -56,9 +56,9 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
-| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 7 | 0 | 5 | 7,5 |
+| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 8 | 0 | 4 | 5,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 5 | 0 | 8 | 7 |
-| **Total** | **155** | **142** | **0** | **13** | **14,5** |
+| **Total** | **155** | **143** | **0** | **12** | **12,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,8 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.6](docs/08-plan-de-desarrollo.md#tarea-8-6) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
-| **Base** | [8.2](docs/08-plan-de-desarrollo.md#tarea-8-2) |
+| **API** | [8.4](docs/08-plan-de-desarrollo.md#tarea-8-4) · [8.6](docs/08-plan-de-desarrollo.md#tarea-8-6) · [8.7](docs/08-plan-de-desarrollo.md#tarea-8-7) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -250,12 +249,12 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **13 tareas y 14,5 días de trabajo** de 155 tareas del plan.
+Quedan **12 tareas y 12,5 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 2,0 semanas | **5,0 semanas** |
-| 2 | 1,2 semanas | **4,2 semanas** |
+| 1 | 1,7 semanas | **4,7 semanas** |
+| 2 | 1,0 semanas | **4,0 semanas** |
 | 3 | 1,0 semanas | **4,0 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -1487,7 +1486,16 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 La toma el carril que termine primero su cadena: es la funcionalidad más independiente del sistema.
 
 - [x] [**8.1**](docs/08-plan-de-desarrollo.md#tarea-8-1) Registro de empleadas · API, Front
-- [ ] ⚡ [**8.2**](docs/08-plan-de-desarrollo.md#tarea-8-2) Liquidación de nómina en la base, descontando adelantos · Base
+- [x] [**8.2**](docs/08-plan-de-desarrollo.md#tarea-8-2) Liquidación de nómina en la base, descontando adelantos · Base — `fn_liquidar_nomina`,
+      la segunda función de negocio del [04 §10](docs/04-modelo-de-datos.md#10-funciones-de-negocio-atómicas): en una sola transacción escribe el movimiento del
+      pago, la fila de `nomina_detalle` con las cifras del [06 §6.1](docs/06-nomina-y-capacidad-de-pago.md#61-fórmulas) y la marca `descontado_en` de los
+      adelantos pendientes de esa persona. Al devengado entran el salario del período y el total de
+      las horas extra, y **no las tarifas por hora**, que son el precio de una hora y dan los
+      1.366.019 que el [06 §6.2](docs/06-nomina-y-capacidad-de-pago.md#62-ejemplo-de-liquidación) llama el error frecuente. **El movimiento vale el neto y no el
+      devengado**: es la plata que de verdad sale de la cuenta —el adelanto ya había salido— y el
+      gasto de personal lo causa `nomina_detalle`, como la venta la causa el pedido. Un solo
+      rechazo, el del mes cerrado, cuyo texto la API traduce al `40951`; lo demás ya tiene quien lo
+      rechace. Esquema `0.22.0`, sin restricciones nuevas
 - [x] [**8.3**](docs/08-plan-de-desarrollo.md#tarea-8-3) Adelantos como cuenta por cobrar · API — las tres rutas de
       `/adelantos`: entregar uno escribe en la misma transacción el adelanto y un movimiento de tipo
       `adelanto_empleada`, anularlo deshace los dos de una vez con `fn_anular_movimiento`, y la
@@ -1495,7 +1503,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       registra gasto**: el de personal se reconoce entero en la liquidación ([RN-11](docs/03-requisitos-y-bdd.md#rn-11)). La antigüedad la
       calcula el caso de uso, que es quien tiene el reloj, y quién ve qué lo decide
       `adelantos_lectura`. Contrato `0.26.2`, ya acordado, sin migración
-- [ ] 🔒 [**8.4**](docs/08-plan-de-desarrollo.md#tarea-8-4) Desprendible PDF con acceso restringido al propio · API
+- [ ] ⚡ [**8.4**](docs/08-plan-de-desarrollo.md#tarea-8-4) Desprendible PDF con acceso restringido al propio · API
 - [x] [**8.5**](docs/08-plan-de-desarrollo.md#tarea-8-5) Simulador de capacidad de pago · API, Front — `POST
       /api/v0/consultas/simulacion-de-contratacion` promedia la utilidad operativa de los meses
       terminados con registro, aparta la reserva y compara lo que queda con el salario que se
@@ -1506,7 +1514,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       vuelven a preguntar 350 ms después del último movimiento. Contrato `0.26.2`, ya acordado, sin
       migración
 - [ ] ⚡ [**8.6**](docs/08-plan-de-desarrollo.md#tarea-8-6) Traducción a unidades de producto por vender · API
-- [ ] 🔒 [**8.7**](docs/08-plan-de-desarrollo.md#tarea-8-7) Horas pagadas contra horas facturadas · API, Front
+- [ ] ⚡ [**8.7**](docs/08-plan-de-desarrollo.md#tarea-8-7) Horas pagadas contra horas facturadas · API, Front
 - [ ] ⚡ [**8.10**](docs/08-plan-de-desarrollo.md#tarea-8-10) Importador de CSV con mapeo y reporte de errores · API, Front — sin cadena asignada
 
 ---
@@ -1894,6 +1902,43 @@ a `anon`.
 
 Las tomó quien construyó, no quien dirige el proyecto. Ninguna contradice a los documentos: son
 huecos que los documentos no cubrían y que el código tuvo que llenar para poder existir.
+
+**De la 8.2, la liquidación de nómina en la base:**
+
+- [ ] **El movimiento del pago vale el neto, y con eso el gasto de personal del mes hay que leerlo de
+      `nomina_detalle` y no del apunte.** El [06 §6.3](docs/06-nomina-y-capacidad-de-pago.md#63-el-efecto-correcto-sobre-utilidad-y-caja) le pide a la liquidación dos cifras distintas
+      —gasto 1.350.784 y salida de caja 1.050.784— y un `gasto` le hace lo mismo a la utilidad que a
+      la caja. Se resolvió como la [4.5](docs/08-plan-de-desarrollo.md#tarea-4-5) con el ingreso de la entrega: el apunte vale la plata
+      que de verdad salió, porque el adelanto ya había salido y lo contrario diría que se pagó
+      1.650.784. **Queda pendiente del lado de la API**: quien sume los gastos operativos tiene que
+      tomar la nómina de `nomina_detalle`, igual que ya toma los ingresos causados de los pedidos
+      entregados, o el mes contará de menos lo adelantado
+- [ ] **Si los adelantos pendientes suman más que el devengado, la liquidación se cae entera.** El
+      [06 §6.1](docs/06-nomina-y-capacidad-de-pago.md#61-fórmulas) dice que los descuentos son los adelantos pendientes, y nada dice qué pasa cuando no
+      caben: el neto daría negativo y lo rechaza `dinero_no_negativo`, sin escribir nada.
+      **Partirlo entre dos meses sería inventar una regla de negocio**, así que no se hizo. Lo que
+      hay que decidir es si un adelanto se descuenta hasta donde alcance y el resto sigue vivo
+- [ ] **Nada prohíbe una ficha de empleada con cero horas pactadas.** El dominio `horas` admite el
+      cero y la API también, así que la función tuvo que decidir qué vale la hora ordinaria en ese
+      caso: **cero**, porque una división por cero la tiraría con un `22012` por una ficha que el
+      sistema deja guardar. Con eso la hora extra tampoco vale nada. Si las horas pactadas no pueden
+      ser cero, le falta su `CHECK` con nombre a `empleados`, y entonces también su fila en la tabla
+      de traducción de la API
+- [ ] **`nomina_detalle` no tiene dónde guardar el recargo de la hora extra ni la fecha de pago**, y
+      el contrato las devuelve las dos. El recargo viaja en el formulario porque `empleados` no tiene
+      columna —lo dice el contrato de la [8.11](docs/08-plan-de-desarrollo.md#tarea-8-11)— y la fecha de pago vive solo en el movimiento,
+      así que una liquidación de neto cero no la guarda en ninguna parte. Al leer una liquidación
+      vieja, la API no puede decir con qué recargo se pagó
+- [ ] **`nomina_detalle_empleado_id_fkey` todavía no da el `42251`.** El contrato dice que ese código
+      sale de «la llave foránea `empleado_id` de `adelantos` o de `nomina_detalle`», y en la API solo
+      la de `adelantos` está en las traducciones propias; la otra sigue con el transversal. Es una
+      fila, y va en el PR de la API que implemente la liquidación
+- [ ] 🔒 **Tres filas del informe de la base quedaron en rojo desde la [7.10](docs/08-plan-de-desarrollo.md#tarea-7-10)**, y la 8.2 las dejó como
+      estaban porque no son suyas: el conteo de columnas con dominio espera 68 y hay 69, la lista de
+      tablas que audita `fn_auditar` no nombra a `horas_limite_config`, y
+      `horas_limite_config_horas_semanales_check` termina en `_check`, que es lo que la fila de la
+      [1.1](docs/08-plan-de-desarrollo.md#tarea-1-1) prohíbe. Las dos primeras son una línea cada una; la tercera es una migración de
+      renombre **y** su fila en `prisma_api`, por [C-01](docs/12-pruebas-y-calidad.md#c-01)
 
 **De la 9.6, los flujos críticos de extremo a extremo:**
 
