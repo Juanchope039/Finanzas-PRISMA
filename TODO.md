@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.34.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-02 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.35.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -56,9 +56,9 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
-| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 6 | 0 | 6 | 10 |
+| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 7 | 0 | 5 | 7,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 5 | 0 | 8 | 7 |
-| **Total** | **155** | **141** | **0** | **14** | **17** |
+| **Total** | **155** | **142** | **0** | **13** | **14,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,7 +241,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.5](docs/08-plan-de-desarrollo.md#tarea-8-5) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
+| **API** | [8.6](docs/08-plan-de-desarrollo.md#tarea-8-6) · [8.10](docs/08-plan-de-desarrollo.md#tarea-8-10) · [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
 | **Base** | [8.2](docs/08-plan-de-desarrollo.md#tarea-8-2) |
 | **Front** | [9.7](docs/08-plan-de-desarrollo.md#tarea-9-7) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
@@ -250,13 +250,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **14 tareas y 17 días de trabajo** de 155 tareas del plan.
+Quedan **13 tareas y 14,5 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 2,4 semanas | **5,4 semanas** |
-| 2 | 1,3 semanas | **4,3 semanas** |
-| 3 | 1,5 semanas | **4,5 semanas** |
+| 1 | 2,0 semanas | **5,0 semanas** |
+| 2 | 1,2 semanas | **4,2 semanas** |
+| 3 | 1,0 semanas | **4,0 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1496,8 +1496,16 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       calcula el caso de uso, que es quien tiene el reloj, y quién ve qué lo decide
       `adelantos_lectura`. Contrato `0.26.2`, ya acordado, sin migración
 - [ ] 🔒 [**8.4**](docs/08-plan-de-desarrollo.md#tarea-8-4) Desprendible PDF con acceso restringido al propio · API
-- [ ] ⚡ [**8.5**](docs/08-plan-de-desarrollo.md#tarea-8-5) Simulador de capacidad de pago · API, Front
-- [ ] 🔒 [**8.6**](docs/08-plan-de-desarrollo.md#tarea-8-6) Traducción a unidades de producto por vender · API
+- [x] [**8.5**](docs/08-plan-de-desarrollo.md#tarea-8-5) Simulador de capacidad de pago · API, Front — `POST
+      /api/v0/consultas/simulacion-de-contratacion` promedia la utilidad operativa de los meses
+      terminados con registro, aparta la reserva y compara lo que queda con el salario que se
+      evalúa. **La utilidad ya trae el pro-labore descontado**, que es el error del [06 §3.2](docs/06-nomina-y-capacidad-de-pago.md#32-por-qué-el-pro-labore-es-obligatorio-en-este-cálculo-rn-09): por eso
+      la consulta se bloquea con el `40950` cuando no hay pro-labore vigente en vez de contestar una
+      cifra inflada. Cuando no alcanza propone media jornada o pago por obra, con el faltante
+      mensual. El front lo pinta con dos deslizadores, el del salario y el de la reserva, que
+      vuelven a preguntar 350 ms después del último movimiento. Contrato `0.26.2`, ya acordado, sin
+      migración
+- [ ] ⚡ [**8.6**](docs/08-plan-de-desarrollo.md#tarea-8-6) Traducción a unidades de producto por vender · API
 - [ ] 🔒 [**8.7**](docs/08-plan-de-desarrollo.md#tarea-8-7) Horas pagadas contra horas facturadas · API, Front
 - [ ] ⚡ [**8.10**](docs/08-plan-de-desarrollo.md#tarea-8-10) Importador de CSV con mapeo y reporte de errores · API, Front — sin cadena asignada
 
@@ -4764,6 +4772,26 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **La fecha del adelanto es opcional y sin ella es hoy.** El esquema `NuevoAdelanto` del
       contrato acordado la deja opcional y dice «Sin ella, hoy», mientras el `contrato/README` de la
       API la lista como obligatoria. Se siguió el esquema, que es lo que compara [C-04](docs/12-pruebas-y-calidad.md#c-04)
+
+**Del simulador ([8.5](docs/08-plan-de-desarrollo.md#tarea-8-5)):**
+
+- [ ] **Las alternativas viajan sin las ventas en unidades, y van vacías.** Traducir el faltante a
+      unidades de producto es el [RF-60](docs/03-requisitos-y-bdd.md#rf-60) y es la [8.6](docs/08-plan-de-desarrollo.md#tarea-8-6), que depende de esta. Una alternativa sin sus
+      números es el consejo genérico que el [06 §5](docs/06-nomina-y-capacidad-de-pago.md#5-alternativas-cuando-no-es-viable) quiere evitar, así que el campo existe y queda
+      vacío hasta que entre la [8.6](docs/08-plan-de-desarrollo.md#tarea-8-6)
+- [ ] **El mes en curso no entra en el promedio.** Un mes a medio registrar siempre parece peor de
+      lo que es, y hundiría la utilidad promedio justo cuando se está decidiendo contratar. Ningún
+      documento dice qué hacer con él
+- [ ] **Se promedian los meses con registro, no los seis del calendario.** Un mes sin nada anotado
+      no ganó cero: no se sabe. Por eso viajan los dos conteos y, cuando difieren, el aviso de que
+      la proyección es menos confiable. El [06 §3](docs/06-nomina-y-capacidad-de-pago.md) habla de «seis meses» sin decir qué pasa si faltan
+- [ ] **No alcanzar se lee `alta` y no `critica`.** Contratar sin plata no es un dato mal escrito:
+      es una decisión que conviene no tomar. El [10 §3.1](docs/10-ux-y-mockups.md#31-color) pinta en ámbar lo que avisa y en rojo lo que
+      no deja seguir, y aquí no hay nada que no deje seguir
+- [ ] **El mockup dibuja un deslizador de pro-labore y el front no lo tiene.** La API lee el
+      pro-labore vigente de la base y no admite uno tentativo, así que el deslizador no tendría
+      dónde mandar su número. Se dejaron los dos que sí decide quien pregunta, el salario y la
+      reserva, y **conviene revisar si el pro-labore debería poder simularse**
 
 ---
 
