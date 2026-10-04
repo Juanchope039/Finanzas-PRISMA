@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-04 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [6.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-04 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -230,7 +230,12 @@ corriendo».
 ### 4.2 Las reglas
 
 - **Antes del go-live todo es `0.y.z`.** La primera publicación en prod es `1.0.0`. Es lo que
-  dice SemVer y evita fingir una estabilidad que todavía no existe.
+  dice SemVer y evita fingir una estabilidad que todavía no existe. **Ya está puesto**: la
+  [tarea 9.10](08-plan-de-desarrollo.md#tarea-9-10) dejó la API en `1.0.0` y el front en `1.0.0+47`, y de ahí en adelante un MAJOR
+  significa que el contrato rompió y no «todavía no hay nada que prometer».
+- **Cada versión lleva su etiqueta de git, `v<versión>`, y la pone la tubería.** En cada empuje a
+  `develop`, sobre el commit con que esa versión entró, y sin mover nunca una que ya exista. A mano
+  se saltaba: en `prisma_db` ocho veces seguidas. Las anteriores a la `1.0.0` no la tienen.
 - **MAJOR** de la API: cambio que rompe el contrato con el front —un campo que desaparece, un
   tipo que cambia, un endpoint que se va—.
 - **MINOR**: funcionalidad nueva compatible hacia atrás.
@@ -264,6 +269,22 @@ Para que ser independientes no signifique romperse en silencio:
 > **Fallar ruidoso es mejor que fallar en la pantalla 7 con un campo nulo.** Una pantalla que
 > dice qué pasa y qué hacer cuesta una vez; un formulario que se cae a medio pedido cuesta cada
 > día, y nadie sabe por qué.
+
+**Subir el MAJOR es un despliegue coordinado, y deja una ventana.** La comprobación exige
+**igualdad** en las dos direcciones: un front viejo contra una API nueva se planta, y uno adelantado
+contra una API vieja también. Así que entre el despliegue de uno y el del otro **el front se planta,
+y es correcto que se plante**: lo que hay en medio es un front hablándole a un contrato que no es el
+suyo.
+
+| Qué hacer | Por qué |
+|---|---|
+| Fusionar los dos PR seguidos, y mirar los dos despliegues | La ventana es de minutos, no de horas: lo que la cierra es el segundo despliegue |
+| No empezarlo a media jornada del taller | La pantalla no deja trabajar, y con razón. Es el único cambio de versión del que eso se puede decir |
+| Si algo sale mal, revertir **el que se publicó último** | Es la cuarta fila del [§7.2](#72-volver-atrás), y vuelve a dejar los dos del mismo lado en los segundos que midió el [§7.4](#74-el-ensayo-en-dev-con-el-reloj-en-la-mano) |
+
+**El prefijo de la ruta no es el MAJOR de SemVer.** Todo cuelga de `/api/v0` por el
+[ADR-030](adr/ADR-030-contrato-sin-get.md), y el paso a `1.0.0` no lo movió: el contrato no rompió, solo dejó de ser
+provisional. Si algún día rompe, es ese ADR el que decide qué pasa con la ruta.
 
 ---
 

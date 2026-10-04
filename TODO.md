@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.47.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-04 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.48.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-04 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -57,8 +57,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 12 | 0 | 0 | 0 |
-| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 10 | 0 | 3 | 1,5 |
-| **Total** | **155** | **152** | **0** | **3** | **1,5** |
+| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 11 | 0 | 2 | 1 |
+| **Total** | **155** | **153** | **0** | **2** | **1** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,14 +241,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [9.10](docs/08-plan-de-desarrollo.md#tarea-9-10) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **3 tareas y 1,5 días de trabajo** de 155 tareas del plan.
+Quedan **2 tareas y 1 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
@@ -1606,8 +1605,19 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       usara `PRISMA_API_MAJOR`**, así que un `0` escrito en `main.dart` pasaba en verde. Ahora se
       prueban el cableado, la consulta en el cable, que un sobre raro no plante y el texto del
       documento. La pantalla se desviaba del mockup y **el documento se alineó al código**, con
-      autorización. ✏️ queda la prueba contra una API real, escrita y sin correr: necesita qa
-- [ ] ⚡ [**9.10**](docs/08-plan-de-desarrollo.md#tarea-9-10) Etiquetar `1.0.0` del front y de la API · API, Front
+      autorización. **La prueba contra una API real ya corrió**, contra dev y con la [9.10](docs/08-plan-de-desarrollo.md#tarea-9-10): no le
+      faltaba ambiente, le faltaba poder salir a la red —el arnés de Flutter sustituye el cliente
+      HTTP y la petición nacía en su reloj falso—, y eso se arregló ahí
+- [x] [**9.10**](docs/08-plan-de-desarrollo.md#tarea-9-10) Etiquetar `1.0.0` del front y de la API · API, Front — la API queda en
+      `1.0.0` y el front en `1.0.0+47`, y **la etiqueta `v<versión>` la pone la tubería**: un flujo
+      por repositorio la crea en cada empuje a `develop`, sobre el commit con que esa versión entró,
+      y nunca mueve una que ya exista. A mano se saltaba —en la base, ocho veces seguidas—. Las
+      anteriores a la `1.0.0` se quedan sin etiqueta: ponerlas ahora sería inventar fechas.
+      **Subir el MAJOR es un despliegue coordinado**: el front exige igualdad en las dos
+      direcciones, así que entre los dos despliegues se planta, y es correcto. Lo que eso pide está
+      en el [19 §4.3](docs/19-ambientes-y-entrega.md#43-el-contrato-de-compatibilidad). El MAJOR que el front exige estaba escrito en cuatro sitios y **ninguna
+      prueba los cruzaba**: ahora `ambiente_test` falla si se desincronizan. La ruta sigue siendo
+      `/api/v0`: el prefijo no es el MAJOR de SemVer ([ADR-030](docs/adr/ADR-030-contrato-sin-get.md))
 - [x] [**9.11**](docs/08-plan-de-desarrollo.md#tarea-9-11) Swagger detrás de autenticación en prod · API — autenticación básica en un
       filtro propio, que es lo único que un navegador resuelve solo. **Y son cuatro puertas, no una**:
       `/docs` solo redirige, el documento entero cuelga de `/docs/openapi` y la interfaz sale de
