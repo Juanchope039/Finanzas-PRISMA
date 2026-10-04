@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/03-requisitos-y-bdd.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [3.0.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/03-requisitos-y-bdd.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 ---
 
@@ -440,7 +440,7 @@ Sin huérfanos en ninguna dirección.
 | [RF-36](#rf-36) … [RF-40](#rf-40) | [CU-11](02-casos-de-uso.md#cu-11) · [CU-12](02-casos-de-uso.md#cu-12) | [BDD-12-*](#bdd-12-1) | 8 · Cotizador | `cotizaciones`, `cotizacion_lineas` |
 | [RF-41](#rf-41) … [RF-53](#rf-53) | [CU-13](02-casos-de-uso.md#cu-13) · [CU-14](02-casos-de-uso.md#cu-14) · [CU-15](02-casos-de-uso.md#cu-15) · [CU-16](02-casos-de-uso.md#cu-16) · [CU-17](02-casos-de-uso.md#cu-17) · [CU-24](02-casos-de-uso.md#cu-24) · [CU-25](02-casos-de-uso.md#cu-25) | [BDD-13-*](#bdd-13-1), [BDD-15-1](#bdd-15-1), [BDD-16-*](#bdd-16-1), [BDD-24-1](#bdd-24-1), [BDD-25-*](#bdd-25-1) | 1 · Dashboard · 5 · Inversiones · 6 · Reportes | `movimientos`, `activos`, `aportes_retiros`, `sobres`, `cierres_mensuales` |
 | [RF-54](#rf-54) … [RF-63](#rf-63) | [CU-18](02-casos-de-uso.md#cu-18) · [CU-19](02-casos-de-uso.md#cu-19) · [CU-20](02-casos-de-uso.md#cu-20) · [CU-26](02-casos-de-uso.md#cu-26) · [CU-27](02-casos-de-uso.md#cu-27) | [BDD-18-*](#bdd-18-1), [BDD-19-1](#bdd-19-1), [BDD-26-*](#bdd-26-1), [BDD-27-1](#bdd-27-1) | 7 · Nómina | `empleados`, `nomina_periodos`, `nomina_detalle`, `adelantos` |
-| [RF-64](#rf-64) … [RF-70](#rf-70) | [CU-21](02-casos-de-uso.md#cu-21) · [CU-22](02-casos-de-uso.md#cu-22) · [CU-23](02-casos-de-uso.md#cu-23) | [BDD-21-*](#bdd-21-1), [BDD-23-1](#bdd-23-1), [BDD-02-5](#bdd-02-5) | Configuración | `importaciones`, `exportaciones`, `auditoria` |
+| [RF-64](#rf-64) … [RF-70](#rf-70) | [CU-21](02-casos-de-uso.md#cu-21) · [CU-22](02-casos-de-uso.md#cu-22) · [CU-23](02-casos-de-uso.md#cu-23) | [BDD-21-*](#bdd-21-1), [BDD-23-1](#bdd-23-1), [BDD-02-5](#bdd-02-5) | Configuración | `exportaciones`, `auditoria` |
 | [RF-71](#rf-71) … [RF-83](#rf-83) | [CU-28](02-casos-de-uso.md#cu-28) · [CU-29](02-casos-de-uso.md#cu-29) · [CU-30](02-casos-de-uso.md#cu-30) · [CU-31](02-casos-de-uso.md#cu-31) · [CU-32](02-casos-de-uso.md#cu-32) · [CU-33](02-casos-de-uso.md#cu-33) | [BDD-28-*](#bdd-28-1), [BDD-29-*](#bdd-29-1), [BDD-30-1](#bdd-30-1), [BDD-32-1](#bdd-32-1), [BDD-33-1](#bdd-33-1) | 0 · Acceso · 9 · Gestión de usuarios | `usuarios`, `cargos`, `auditoria` |
 | [RF-84](#rf-84) … [RF-94](#rf-94) | [CU-30](02-casos-de-uso.md#cu-30) · [CU-34](02-casos-de-uso.md#cu-34) · [CU-35](02-casos-de-uso.md#cu-35) · [CU-36](02-casos-de-uso.md#cu-36) | [BDD-34-*](#bdd-34-1), [BDD-35-*](#bdd-35-1), [BDD-36-1](#bdd-36-1) | 9 · Gestión de usuarios | `usuarios`, `cargos`, `auditoria` |
 | [RF-95](#rf-95) … [RF-97](#rf-97) | [CU-13](02-casos-de-uso.md#cu-13) · [CU-37](02-casos-de-uso.md#cu-37) | [BDD-13-4](#bdd-13-4) | 1 · Dashboard · 3 · Movimientos | `cuentas`, `movimientos`, `exportaciones` |

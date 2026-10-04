@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.51.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-04 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.52.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-04 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -4112,13 +4112,14 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       `nomina_detalle` guarda el resultado, `valor_horas_extra`, no la tarifa. Se decidió lo mínimo:
       el formulario `liquidacion` lo pide con 25 % puesto, que es la cifra del ejemplo del documento.
       Si quien dirige lo quiere en la ficha, son una columna y una tarea de Base
-- [ ] **El importador no guarda historial, y por eso no necesita tabla.** La matriz del
-      [03](docs/03-requisitos-y-bdd.md) nombra una tabla `importaciones` que **ningún documento define** —lo mismo que pasaba con
+- [x] **El importador no guarda historial, y por eso no necesita tabla.** La matriz del
+      [03](docs/03-requisitos-y-bdd.md) nombraba una tabla `importaciones` que **ningún documento definía** —lo mismo que pasaba con
       `adjuntos`—. En vez de inventarla, la importación se parte en dos llamadas sin estado entre
       ellas: la consulta lee y no escribe, y `PUT /api/v0/importaciones/{id}` vuelve a recibir el
       archivo y escribe. El mismo id confirmado dos veces responde `40900` por la idempotencia que ya
       existe ([ADR-020](docs/adr/ADR-020-idempotencia.md)), y los duplicados del [BDD-21-3](docs/03-requisitos-y-bdd.md#bdd-21-3) se detectan contra `movimientos`. Si se
-      quiere un historial de importaciones, es una tarea nueva
+      quiere un historial de importaciones, es una tarea nueva. **Resuelto:** quien dirige decidió
+      quitarla de la matriz, y el [03 §5](docs/03-requisitos-y-bdd.md#5-matriz-de-trazabilidad) ya no la nombra
 - [ ] **El simulador sin pro-labore responde `40950`, y a Operación le responde lo mismo.** El
       [BDD-18-2](docs/03-requisitos-y-bdd.md#bdd-18-2) pide bloquearlo sin pro-labore y el [BDD-02-3](docs/03-requisitos-y-bdd.md#bdd-02-3) pide que a Operación la rechace la base.
       `prolabore_config` lleva RLS y le devuelve cero filas, así que **desde la API los dos casos son
@@ -5055,11 +5056,6 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **El [`23-diagramas-de-casos-de-uso.md`](docs/23-diagramas-de-casos-de-uso.md) nace en 🔍 En revisión y no ✅ Vigente.** Los dibujos
       son fieles a lo que hoy dicen los documentos y el contrato, pero la derivación la hizo quien
       construye. Pasa a 1.0.0 cuando quien dirige los apruebe
-- [ ] **El [03 §5](docs/03-requisitos-y-bdd.md#5-matriz-de-trazabilidad) le atribuye a [CU-21](docs/02-casos-de-uso.md#cu-21) una tabla `importaciones` que no existe en ninguna parte.** El
-      contrato dice lo contrario con todas las palabras: «no hay estado guardado entre el análisis y
-      esta llamada … por eso no hace falta una tabla de importaciones». El anexo del 23 escribió lo
-      que el contrato y el 04 sostienen, así que **la matriz del 03 y el anexo del 23 no dicen lo
-      mismo**, y uno de los dos hay que corregir
 - [ ] **La reactivación de un cargo está en el contrato y no la pide ningún requisito.** [RF-81](docs/03-requisitos-y-bdd.md#rf-81)
       enumera «crear, renombrar, reordenar y desactivar», y `POST /api/v0/cargos/{id}/reactivacion`
       existe desde el [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2). Se documentó en [CU-33](docs/02-casos-de-uso.md#cu-33) porque está construida, pero **le falta su
