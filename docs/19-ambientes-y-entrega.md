@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [7.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-04 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [8.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-04 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -164,9 +164,14 @@ dentro del artefacto.
 |---|---|---|---|
 | `PRISMA_API_URL` | Dónde vive `prisma_api` | `https://api-dev.prisma.com` | `https://api.prisma.com` |
 | `PRISMA_AMBIENTE` | Cuál de los ambientes es | `dev` | `prod` |
-| `PRISMA_API_MAJOR` | Qué MAJOR de la API exige ([§4.3](#43-el-contrato-de-compatibilidad)) | `0` | `1` |
+| `PRISMA_API_MAJOR` | Qué MAJOR de la API exige ([§4.3](#43-el-contrato-de-compatibilidad)) | `1` | `1` |
 | `PRISMA_COMMIT` | Referencia del commit compilado | `a3f19c4` | `a3f19c4` |
 | `PRISMA_FECHA_COMPILACION` | Cuándo se compiló, ISO 8601 | `2026-09-15T09:40:00-05:00` | `2026-09-15T09:40:00-05:00` |
+
+> **`PRISMA_API_MAJOR` no se configura en el alojamiento.** Sale del repositorio del front:
+> del `ARG` del `Dockerfile` y de los dos respaldos del `ci.yml`, que `ambiente_test` obliga a
+> coincidir con `Config.apiMajor`. Una copia en el panel del alojamiento no la mira nadie, y la
+> que había en dev se quedó en `0` hasta plantar el front contra una API `1.1.0`.
 
 > **En el front no entra ningún secreto, nunca.** Todo lo que se compila en un Flutter Web queda
 > a la vista de cualquiera que abra las herramientas del navegador. Una URL no es un secreto; una
