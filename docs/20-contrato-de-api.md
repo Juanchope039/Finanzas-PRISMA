@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.13.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-09-27 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.14.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-04 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
@@ -621,6 +621,7 @@ contrato que ese artefacto implementa viaja al lado, en `x-prisma-contrato` ([AD
 | dev | `/docs` | Abierto |
 | qa | `/docs` | Abierto |
 | uat | `/docs` | Abierto |
+| **pre-prod** | `/docs` | **Detrás de autenticación** ([ADR-045](adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md)) |
 | **prod** | `/docs` | **Detrás de autenticación** |
 
 En producción va cerrado a propósito: **el catálogo de endpoints es un mapa del sistema** y no

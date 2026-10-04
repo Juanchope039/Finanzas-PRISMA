@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [4.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-02 | [Calidad](INDICE.md#etiqueta-calidad) |
+| [4.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/12-pruebas-y-calidad.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [Calidad](INDICE.md#etiqueta-calidad) |
 
 ---
 
@@ -56,7 +56,8 @@ el front y la API es el contrato de versiones, y eso está en la sección 9.
 | **dev** | Unidad y widget en cada guardado; integración sobre su propio contenedor de PostgreSQL | Ficticios, se pueden borrar |
 | **qa** | Todo, en cada integración a `develop`. **Es la que bloquea la promoción** | Ficticios, con semilla reproducible |
 | **uat** | [P-01](#p-01) a [P-39](#p-39) —[P-32](#p-32) sin su paso 3, ver 3.1— y los recorridos manuales, antes de la aprobación de Gerencia. Además, [RE-01](#re-01) una vez por trimestre ([§10.4](#104-re-01--un-respaldo-que-nunca-se-restauró-no-es-un-respaldo)) | Realistas y anonimizados |
-| **prod** | Pruebas de humo de solo lectura, después de publicar | Reales |
+| **pre-prod** | Pruebas de humo después de desplegar, y los recorridos manuales de la aprobación de Gerencia ([ADR-045](adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md)) | Realistas y anonimizados |
+| **prod** | Pruebas de humo de solo lectura, después de publicar. Vive en otro repositorio | Reales |
 
 > **Ninguna prueba automática escribe en prod.** Las de integración siembran filas y las borran;
 > en la base del negocio eso no es una prueba, es un daño. Contra prod solo corren lecturas después
