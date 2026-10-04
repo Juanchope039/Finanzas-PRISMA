@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-04 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [6.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-04 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -391,6 +391,16 @@ Lo que comprueba cada etapa:
 > comprobaciones antes de construir dev ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)): si falla, marca el despliegue `SKIPPED` y el
 > ambiente **se queda en la versión anterior**, en verde, sin una sola señal en la pantalla. Fusionar
 > no es entregar: entregar es lo que pasa **después** de que las comprobaciones pasen.
+
+> **Y en verde tampoco despliega solo: alguien tiene que aprobarlo.** Railway deja cada despliegue
+> de dev en `NEEDS_APPROVAL` hasta que una persona lo apruebe **en el panel**, y eso **no se puede
+> hacer por API**: no lo expone ni la interfaz del proveedor ni su propio agente. Es una fricción
+> puesta a propósito, y aquí se escribe porque el efecto es el mismo que el de arriba.
+>
+> Se descubrió el 2026-10-04, con **cuatro despliegues en espera** —los de las tareas [9.4](08-plan-de-desarrollo.md#tarea-9-4) y
+> [9.10](08-plan-de-desarrollo.md#tarea-9-10), en los dos servicios— y dev contestando todavía la versión de antes, en verde y sin
+> avisar de nada. **Mirar que la fusión entró no es mirar que dev se movió**: eso se pregunta al
+> ambiente, que es lo que hace `revertir.sh ahora <url>` ([§7.4](#74-el-ensayo-en-dev-con-el-reloj-en-la-mano)).
 
 > **Y si lo que está roto es el archivo del flujo, no hay ni registros que abrir.** GitHub no llega a
 > crear ningún trabajo: la ejecución aparece con el nombre de la ruta en vez del suyo, y ahí se acaba
