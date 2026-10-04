@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.49.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-04 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.50.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-04 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -57,8 +57,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 12 | 0 | 0 | 0 |
-| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 15 | 11 | 0 | 4 | 2,5 |
-| **Total** | **157** | **153** | **0** | **4** | **2,5** |
+| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 15 | 12 | 0 | 3 | 1,5 |
+| **Total** | **157** | **154** | **0** | **3** | **1,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,14 +241,13 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [9.14](docs/08-plan-de-desarrollo.md#tarea-9-14) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **4 tareas y 2,5 días de trabajo** de 157 tareas del plan.
+Quedan **3 tareas y 1,5 días de trabajo** de 157 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
@@ -1630,9 +1629,12 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       pre-prod, y el prod del taller vive en otro repositorio. El expediente y la cifra están en el
       [§7.1](#71-el-expediente-de-uat-y-prod) y lo único que falta es la firma
 - [ ] ⚡ [**9.13**](docs/08-plan-de-desarrollo.md#tarea-9-13) Los secretos de GitHub para correr permisos y extremo a extremo contra dev · Decisión — la configuración que los trabajos del CI ya esperan desde la [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11) y la [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6), que apuntaban a qa y desde el [ADR-044](docs/adr/ADR-044-dos-ambientes-desplegados.md) apuntan a dev; sin ella se saltan con aviso. Los de permisos ya se llaman `DEV_BASE_URL`, `DEV_BASE_CLAVE_DUENO`, `DEV_BASE_CLAVE_API`, `DEV_AUTH_URL`, `DEV_ANON_KEY` y `DEV_SERVICE_ROLE_KEY` ([9.5](docs/08-plan-de-desarrollo.md#tarea-9-5))
-- [ ] ⚡ [**9.14**](docs/08-plan-de-desarrollo.md#tarea-9-14) El nombre pre-prod en el código · API, Front, Base — `pre-prod` se suma
-      al contrato, a `PRISMA_AMBIENTE`, al perfil de Spring, a la franja, a CORS, a GHCR y a las
-      variables de la CI del front. `prod` no se borra: sigue nombrando el ambiente del taller
+- [x] [**9.14**](docs/08-plan-de-desarrollo.md#tarea-9-14) El nombre pre-prod en el código · API, Front — `pre-prod` entra al
+      contrato (`0.28.0`), a `PRISMA_AMBIENTE` y a un perfil de Spring con Swagger cerrado, igual
+      que prod. En el front, con franja y «Preproducción». **El front se compila una vez por
+      destino**: qa construye `…-front-pre-prod` con `PRE_PROD_*` y `…-front` con `PROD_*`, y `main`
+      marca `:pre-prod` en la API y en el front de pre-prod. `:prod` queda para la entrega ([9.15](docs/08-plan-de-desarrollo.md#tarea-9-15)).
+      La base no cambió: `sembrar.ps1` y `promover.ps1` ya se niegan con pre-prod hasta que exista
 - [ ] 🔒 [**9.15**](docs/08-plan-de-desarrollo.md#tarea-9-15) La entrega del release a prod, en otro repositorio · Decisión — falta
       que quien dirige diga qué repositorio es, qué recibe (la imagen de GHCR o el código) y quién la
       dispara (la tubería al fusionar en `main` o una persona)
