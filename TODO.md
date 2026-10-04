@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.50.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-04 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.51.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-04 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -5044,6 +5044,33 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       problema** porque `--dart-define` le deja el commit dentro de la compilación. Agregárselo al
       sobre de `POST /api/v0/consultas/version` **sería cambiar el contrato**, y eso se acuerda antes
       de implementarse, así que queda para quien dirige
+
+**Del detalle de los 37 casos de uso y sus diagramas, que no es una tarea del 08:**
+
+- [ ] **Los 20 casos que solo vivían como fila de la tabla maestra se detallaron a partir de los
+      requisitos, del contrato y del modelo, no de una decisión nueva.** Donde el 03 y el contrato
+      coincidían, el flujo salió de los dos; donde solo lo decía el contrato, salió de él. **Ningún
+      flujo nuevo inventa una regla de negocio**, y vale la pena que quien dirige lea los de [CU-13](docs/02-casos-de-uso.md#cu-13),
+      [CU-19](docs/02-casos-de-uso.md#cu-19) y [CU-25](docs/02-casos-de-uso.md#cu-25), que son los que tocan plata y nómina
+- [ ] **El [`23-diagramas-de-casos-de-uso.md`](docs/23-diagramas-de-casos-de-uso.md) nace en 🔍 En revisión y no ✅ Vigente.** Los dibujos
+      son fieles a lo que hoy dicen los documentos y el contrato, pero la derivación la hizo quien
+      construye. Pasa a 1.0.0 cuando quien dirige los apruebe
+- [ ] **El [03 §5](docs/03-requisitos-y-bdd.md#5-matriz-de-trazabilidad) le atribuye a [CU-21](docs/02-casos-de-uso.md#cu-21) una tabla `importaciones` que no existe en ninguna parte.** El
+      contrato dice lo contrario con todas las palabras: «no hay estado guardado entre el análisis y
+      esta llamada … por eso no hace falta una tabla de importaciones». El anexo del 23 escribió lo
+      que el contrato y el 04 sostienen, así que **la matriz del 03 y el anexo del 23 no dicen lo
+      mismo**, y uno de los dos hay que corregir
+- [ ] **La reactivación de un cargo está en el contrato y no la pide ningún requisito.** [RF-81](docs/03-requisitos-y-bdd.md#rf-81)
+      enumera «crear, renombrar, reordenar y desactivar», y `POST /api/v0/cargos/{id}/reactivacion`
+      existe desde el [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2). Se documentó en [CU-33](docs/02-casos-de-uso.md#cu-33) porque está construida, pero **le falta su
+      requisito en el 03**
+- [ ] **[CU-22](docs/02-casos-de-uso.md#cu-22), el respaldo con manifiesto de [RF-66](docs/03-requisitos-y-bdd.md#rf-66), no tiene ruta ni tarea.** Su diseño está entero
+      en el 13 y su tabla ya existe, así que el caso se detalló y se dibujó con lo que ese documento
+      manda; el diagrama técnico lo dice en una nota. **Lo que falta es decidir si entra al 08**
+- [ ] **[CU-23](docs/02-casos-de-uso.md#cu-23) se dibujó con la mitad que existe.** `POST /api/v0/consultas/bitacora` trae los
+      cambios de usuarios y cargos y **no los inicios de sesión**, que sí se escriben en
+      `auditoria`. La consulta filtrable de toda la auditoría que pide [RF-67](docs/03-requisitos-y-bdd.md#rf-67) no tiene operación, y
+      también está sin decidir si entra al 08
 
 ---
 
