@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.46.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-03 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.47.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-04 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -57,8 +57,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 12 | 0 | 0 | 0 |
-| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 9 | 0 | 4 | 3 |
-| **Total** | **155** | **151** | **0** | **4** | **3** |
+| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 10 | 0 | 3 | 1,5 |
+| **Total** | **155** | **152** | **0** | **3** | **1,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,20 +241,20 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [9.4](docs/08-plan-de-desarrollo.md#tarea-9-4) |
+| **API** | [9.10](docs/08-plan-de-desarrollo.md#tarea-9-10) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **4 tareas y 3 días de trabajo** de 155 tareas del plan.
+Quedan **3 tareas y 1,5 días de trabajo** de 155 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 0,3 semanas | **3,3 semanas** |
-| 2 | 0,3 semanas | **3,3 semanas** |
-| 3 | 0,4 semanas | **3,4 semanas** |
+| 1 | 0,2 semanas | **3,2 semanas** |
+| 2 | 0,2 semanas | **3,2 semanas** |
+| 3 | 0,2 semanas | **3,2 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1563,7 +1563,16 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       etapa qa publica en GHCR la imagen de la API y la de prod del front, con su versión y el árbol
       de git en `prisma.arbol`. uat y `main` comprueban por el árbol que es la misma y la marcan
       sin recompilar. **El despliegue a prod queda escrito pero sin ensayar**, porque prod no existe
-- [ ] ⚡ [**9.4**](docs/08-plan-de-desarrollo.md#tarea-9-4) Reversión ensayada en dev, con el tiempo medido · API, Front
+- [x] [**9.4**](docs/08-plan-de-desarrollo.md#tarea-9-4) Reversión ensayada en dev, con el tiempo medido · API, Front — se revirtieron
+      los dos carriles en dev y se volvieron a adelantar, midiendo de la hora del disparo a la hora
+      en que la versión anterior contestó por HTTP: **la API en 17 s y 19 s, con cuatro o cinco
+      segundos sin contestar; el front en 10 s y 10 s, sin hueco**. Medio minuto, no media hora, y
+      eso vuelve la reversión la primera respuesta y no el último recurso. En cada repositorio de
+      código `.github/scripts/revertir.sh` pregunta qué versión hay publicada, espera a la que tiene
+      que volver y, en el front, juzga el commit. **Un intento del front falló al preparar la imagen
+      y la versión publicada siguió atendiendo**: reintentado sin cambiar nada, entró. La base no se
+      tocó, y la API anterior habló con el esquema de hoy. Lo que el ensayo dejó a la vista está en
+      el [19 §7.4](docs/19-ambientes-y-entrega.md#74-el-ensayo-en-dev-con-el-reloj-en-la-mano) y la decisión que abrió, en el [§10](#titulo-10)
 - [x] [**9.5**](docs/08-plan-de-desarrollo.md#tarea-9-5) Prueba de permisos con sesión real en cada etapa y contra dev · API — [P-01](docs/12-pruebas-y-calidad.md#p-01) a
       [P-32](docs/12-pruebas-y-calidad.md#p-32) ya corrían en cada etapa contra la base de la tubería, y en uat sobre su volumen. Lo que
       cambia es el trabajo que las lanza contra un ambiente: `permisos-en-qa` pasa a
@@ -1598,7 +1607,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       prueban el cableado, la consulta en el cable, que un sobre raro no plante y el texto del
       documento. La pantalla se desviaba del mockup y **el documento se alineó al código**, con
       autorización. ✏️ queda la prueba contra una API real, escrita y sin correr: necesita qa
-- [ ] 🔒 [**9.10**](docs/08-plan-de-desarrollo.md#tarea-9-10) Etiquetar `1.0.0` del front y de la API · API, Front
+- [ ] ⚡ [**9.10**](docs/08-plan-de-desarrollo.md#tarea-9-10) Etiquetar `1.0.0` del front y de la API · API, Front
 - [x] [**9.11**](docs/08-plan-de-desarrollo.md#tarea-9-11) Swagger detrás de autenticación en prod · API — autenticación básica en un
       filtro propio, que es lo único que un navegador resuelve solo. **Y son cuatro puertas, no una**:
       `/docs` solo redirige, el documento entero cuelga de `/docs/openapi` y la interfaz sale de
@@ -5004,6 +5013,17 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       pro-labore vigente de la base y no admite uno tentativo, así que el deslizador no tendría
       dónde mandar su número. Se dejaron los dos que sí decide quien pregunta, el salario y la
       reserva, y **conviene revisar si el pro-labore debería poder simularse**
+
+**De la 9.4:**
+
+- [ ] **La API no publica por ninguna parte de qué commit salió, y el front sí.** Al revertir, lo
+      único que la API dice de sí misma es su versión, y dos despliegues seguidos pueden llevar la
+      misma: a `develop` entran cambios que no la suben y la [C-05](docs/12-pruebas-y-calidad.md#c-05) los exime. En el ensayo los tres
+      últimos despliegues de dev llevaban `0.55.0`, así que hubo que ir al último con otro número
+      para poder comprobar desde fuera que la reversión había ocurrido. **El front no tiene el
+      problema** porque `--dart-define` le deja el commit dentro de la compilación. Agregárselo al
+      sobre de `POST /api/v0/consultas/version` **sería cambiar el contrato**, y eso se acuerda antes
+      de implementarse, así que queda para quien dirige
 
 ---
 

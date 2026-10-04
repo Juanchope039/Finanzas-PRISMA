@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-03 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [6.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-04 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -488,6 +488,66 @@ Para el caso extremo —datos mal escritos que hay que recuperar— el respaldo 
 `PITR` siguen siendo la red de seguridad, descrita en
 [`16-base-de-datos-y-snapshots.md`](16-base-de-datos-y-snapshots.md) y en
 [`13-respaldo-y-exportacion.md`](13-respaldo-y-exportacion.md).
+
+---
+
+### 7.4 El ensayo en dev, con el reloj en la mano
+
+Un procedimiento que nadie ha ejecutado es una intención. El de arriba se ensayó en **dev**, que es
+el único ambiente alojado antes de prod ([ADR-044](adr/ADR-044-dos-ambientes-desplegados.md)), el **2026-10-04**: los dos carriles, de uno en uno
+y sin tocar la base ([tarea 9.4](08-plan-de-desarrollo.md#tarea-9-4)).
+
+**Cómo se dispara.** En el alojamiento se vuelve a publicar el despliegue anterior. No se recompila:
+se republica la construcción que ya estaba guardada, que es el paso 1 del [§7.2](#72-volver-atrás). Es **una sola acción**
+—en el panel del alojamiento o por su interfaz—, y la decide una persona mirando: una reversión se
+resuelve en minutos y a la vista, no a ciegas desde un script.
+
+**Cómo se comprueba, desde fuera y por HTTP.** Que el panel del alojamiento diga «desplegado» no es
+que la versión anterior esté contestando: en medio están el arranque, la conexión a la base y el
+chequeo de salud. El reloj que importa es el de la persona del taller.
+
+| Carril | Qué se pregunta | Qué contesta |
+|---|---|---|
+| API | `POST /api/v0/consultas/version` y `/actuator/health/readiness` | La versión que está corriendo, y si está lista |
+| Front | `/version.json`, que la compilación web de Flutter escribe sola | La versión con su número de compilación |
+| Front | El commit dentro de `main.dart.js`, que `--dart-define` deja al compilar ([§3.1](#31-el-front---dart-define-al-compilar)) | De qué commit salió lo que se sirve |
+
+En cada repositorio de código, `.github/scripts/revertir.sh` hace esas preguntas: `ahora` dice qué
+hay publicado —se anota antes de tocar nada—, `vigilar` espera a la versión que tiene que volver y
+dice a qué hora llegó, y en el front `confirmar` juzga el commit. Fallan si no vuelve en el plazo.
+
+**Lo que se midió.** De la hora del disparo a la hora en que la versión anterior contestó por HTTP:
+
+| Carril | Qué se hizo | Tardó | Sin respuesta en medio |
+|---|---|---:|---|
+| API | Volver a la versión anterior | 17 s | ~4 s |
+| API | Volver a la versión al día | 19 s | ~5 s |
+| Front | Volver a la versión anterior | 10 s | No se vio ninguno |
+| Front | Volver a la versión al día | 10 s | No se vio ninguno |
+
+**Medio minuto, no media hora**, y eso cambia la conversación: una reversión no es el último recurso
+del que hay que tener miedo, es la primera respuesta ante cualquiera de las dos situaciones que el
+[§7.2](#72-volver-atrás) manda revertir de inmediato.
+
+Y cuatro cosas más, que es para lo que sirve ensayar:
+
+- **La API deja un hueco de cuatro o cinco segundos sin contestar; el front no deja ninguno.** El
+  front cambia de contenedor con el nuevo ya listo, y la API tiene que arrancar la JVM y pasar su
+  sonda. Quien revierte la API durante la jornada avisa; quien revierte el front, no hace falta.
+- **Un intento de reversión puede fallar sin tumbar lo que está sirviendo.** Uno de los dos intentos
+  del front falló al preparar la imagen, y la versión que estaba publicada siguió atendiendo todo
+  ese tiempo. Se reintentó sin cambiar nada y entró. **Una reversión que falla no es una caída.**
+- **Dos despliegues con la misma versión son indistinguibles desde fuera.** En dev pasa y es
+  legítimo: a `develop` entran cambios que no suben la versión ([C-05](12-pruebas-y-calidad.md#c-05) exime las pruebas, los
+  flujos y las guías), así que los tres últimos despliegues de la API llevaban el mismo número y el
+  ensayo tuvo que ir al último que llevaba otro. El front se salva porque publica su commit, y **la
+  API no publica el suyo por ninguna parte** ([TODO §10](../TODO.md#10-decisiones-de-construcción-que-conviene-revisar)).
+- **La base no se tocó, y la versión anterior de la API habló con el esquema de hoy.** Es el paso 4
+  del [§7.2](#72-volver-atrás) comprobado, no supuesto, y es la regla del [§7.3](#73-las-migraciones-no-se-deshacen) mirada desde el otro lado.
+
+**Qué de esto vale para prod, y qué no.** El procedimiento y las comprobaciones, enteros. Los
+números, como piso y no como promesa: en prod la reversión apunta al artefacto que ya pasó por las
+cuatro etapas ([§2.3](#23-el-artefacto-se-promueve-no-se-reconstruye)), con su imagen etiquetada, y prod todavía no existe ([9.12](08-plan-de-desarrollo.md#tarea-9-12)).
 
 ---
 
