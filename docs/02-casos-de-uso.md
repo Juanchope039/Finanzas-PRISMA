@@ -2,10 +2,13 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/02-casos-de-uso.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-23 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [1.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/02-casos-de-uso.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) |
 
-Los 37 casos de uso del MVP. Cada uno indica el **rol autorizado**, y esa autorización se
-implementa en la base de datos, no en la pantalla.
+Los 37 casos de uso del MVP, **todos con su flujo paso a paso** en el [§2](#2-casos-de-uso-detallados). Cada uno indica el
+**rol autorizado**, y esa autorización se implementa en la base de datos, no en la pantalla.
+
+Los diagramas de los 37 —uno para negocio y uno técnico por caso— están en
+[`23-diagramas-de-casos-de-uso.md`](23-diagramas-de-casos-de-uso.md).
 
 **Actores:**
 
@@ -22,38 +25,38 @@ implementa en la base de datos, no en la pantalla.
 | ID | Caso de uso | Rol | Precondición | Postcondición |
 |---|---|:---:|---|---|
 | [CU-01](#cu-01) | Registrar ingreso | GER · OPE | Sesión activa, cuenta creada | Movimiento con doble fecha, saldo actualizado, auditoría escrita |
-| <a id="cu-02"></a>CU-02 | Registrar gasto con recibo | GER · OPE | Sesión activa | Movimiento y adjunto almacenados |
+| [CU-02](#cu-02) | Registrar gasto con recibo | GER · OPE | Sesión activa | Movimiento y adjunto almacenados |
 | [CU-03](#cu-03) | Anular movimiento errado | GER | Movimiento no anulado | Marcado anulado con motivo; **nunca borrado** |
-| <a id="cu-04"></a>CU-04 | Corregir por contra-asiento | GER | Movimiento existente | Movimiento nuevo que reversa el original; ambos visibles |
-| <a id="cu-05"></a>CU-05 | Registrar pedido de venta | GER · OPE | Cliente existente o nuevo | Pedido en estado `en_proceso` |
+| [CU-04](#cu-04) | Corregir por contra-asiento | GER | Movimiento existente | Movimiento nuevo que reversa el original; ambos visibles |
+| [CU-05](#cu-05) | Registrar pedido de venta | GER · OPE | Cliente existente o nuevo | Pedido en estado `en_proceso` |
 | [CU-06](#cu-06) | Cobrar anticipo | GER · OPE | Pedido creado | Anticipo registrado **como pasivo**, no como ingreso |
 | [CU-07](#cu-07) | Entregar y cobrar saldo | GER · OPE | Pedido `en_proceso` | Venta causada, anticipo liberado, estado `entregado` |
-| <a id="cu-08"></a>CU-08 | Consultar pedidos por fecha | GER · OPE | — | Listado filtrable con pendientes resaltados |
-| <a id="cu-09"></a>CU-09 | Costear un producto | GER | Producto existente | Costo, margen y margen por hora recalculados |
-| <a id="cu-10"></a>CU-10 | Costear servicio de bordado | GER | — | Costo por tiempo de máquina y puntadas registrado |
-| <a id="cu-11"></a>CU-11 | Generar cotización PDF | GER · OPE | Productos costeados | PDF con logo listo para WhatsApp |
+| [CU-08](#cu-08) | Consultar pedidos por fecha | GER · OPE | — | Listado filtrable con pendientes resaltados |
+| [CU-09](#cu-09) | Costear un producto | GER | Producto existente | Costo, margen y margen por hora recalculados |
+| [CU-10](#cu-10) | Costear servicio de bordado | GER | — | Costo por tiempo de máquina y puntadas registrado |
+| [CU-11](#cu-11) | Generar cotización PDF | GER · OPE | Productos costeados | PDF con logo listo para WhatsApp |
 | [CU-12](#cu-12) | Validar anticipo mínimo | SIS | Cotización con costo directo | Advertencia si el anticipo no cubre el material |
-| <a id="cu-13"></a>CU-13 | Ver utilidad, caja y caja libre | GER | Movimientos del mes | Las tres cifras conciliadas |
-| <a id="cu-14"></a>CU-14 | Ver promedio de ganancias | GER | ≥1 mes cerrado | Promedio mensual y proyección anual |
-| <a id="cu-15"></a>CU-15 | Registrar inversión en activo | GER | — | Activo registrado; **no reduce la utilidad** |
+| [CU-13](#cu-13) | Ver utilidad, caja y caja libre | GER | Movimientos del mes | Las tres cifras conciliadas |
+| [CU-14](#cu-14) | Ver promedio de ganancias | GER | ≥1 mes cerrado | Promedio mensual y proyección anual |
+| [CU-15](#cu-15) | Registrar inversión en activo | GER | — | Activo registrado; **no reduce la utilidad** |
 | [CU-16](#cu-16) | Registrar retiro | GER | Caja libre suficiente | Retiro registrado; **no afecta utilidad**, sí caja y patrimonio |
-| <a id="cu-17"></a>CU-17 | Configurar los 4 sobres | GER | — | Porcentajes guardados con historial de cambios |
+| [CU-17](#cu-17) | Configurar los 4 sobres | GER | — | Porcentajes guardados con historial de cambios |
 | [CU-18](#cu-18) | Simular capacidad de pago | GER | ≥6 meses de historia | Salario máximo sostenible y ventas necesarias |
-| <a id="cu-19"></a>CU-19 | Liquidar nómina del mes | GER | Empleada activa | Liquidación y desprendible PDF; adelantos descontados |
-| <a id="cu-20"></a>CU-20 | Ver el propio desprendible | GER · OPE | Nómina liquidada | Ve **solo** su desprendible |
-| <a id="cu-21"></a>CU-21 | Importar histórico de Excel | GER | Archivo CSV | Movimientos cargados con reporte de errores por fila |
-| <a id="cu-22"></a>CU-22 | Exportar respaldo | GER | — | Archivo con manifiesto; **descarga manual** |
-| <a id="cu-23"></a>CU-23 | Consultar auditoría | GER | — | Quién, cuándo, desde dónde y qué cambió |
-| <a id="cu-24"></a>CU-24 | Alertar descapitalización | SIS | 12 meses de historia | Aviso si los retiros superan las utilidades |
-| <a id="cu-25"></a>CU-25 | Definir el pro-labore | GER | — | Sueldo propio como **gasto**; el resto como distribución |
+| [CU-19](#cu-19) | Liquidar nómina del mes | GER | Empleada activa | Liquidación y desprendible PDF; adelantos descontados |
+| [CU-20](#cu-20) | Ver el propio desprendible | GER · OPE | Nómina liquidada | Ve **solo** su desprendible |
+| [CU-21](#cu-21) | Importar histórico de Excel | GER | Archivo CSV | Movimientos cargados con reporte de errores por fila |
+| [CU-22](#cu-22) | Exportar respaldo | GER | — | Archivo con manifiesto; **descarga manual** |
+| [CU-23](#cu-23) | Consultar auditoría | GER | — | Quién, cuándo, desde dónde y qué cambió |
+| [CU-24](#cu-24) | Alertar descapitalización | SIS | 12 meses de historia | Aviso si los retiros superan las utilidades |
+| [CU-25](#cu-25) | Definir el pro-labore | GER | — | Sueldo propio como **gasto**; el resto como distribución |
 | [CU-26](#cu-26) | Registrar adelanto a empleada | GER | Empleada activa | Cuenta por cobrar; **no es gasto** hasta descontarse |
 | [CU-27](#cu-27) | Ver horas pagadas vs. facturadas | GER | Pedidos con tiempo cargado | Tiempo ocioso del mes y su costo |
 | [CU-28](#cu-28) | Iniciar sesión con usuario y contraseña | GER · OPE | Usuario activo | Sesión abierta con nombre, cargo y tipo cargados |
 | [CU-29](#cu-29) | Crear un usuario | GER | Cargo existente en el catálogo | Usuario activo con clave temporal y cambio obligatorio |
 | [CU-30](#cu-30) | Desactivar un usuario | GER | Usuario activo que no sea la última Gerencia | Marcado inactivo con motivo; **nunca borrado** |
 | [CU-31](#cu-31) | Restablecer la contraseña de un usuario | GER | Usuario existente | Clave temporal entregada en persona; cambio obligatorio al entrar |
-| <a id="cu-32"></a>CU-32 | Cambiar la propia contraseña | GER · OPE | Sesión activa | Contraseña actualizada; `debe_cambiar_clave` en falso |
-| <a id="cu-33"></a>CU-33 | Administrar el catálogo de cargos | GER | — | Cargo creado, renombrado o desactivado con motivo |
+| [CU-32](#cu-32) | Cambiar la propia contraseña | GER · OPE | Sesión activa | Contraseña actualizada; `debe_cambiar_clave` en falso |
+| [CU-33](#cu-33) | Administrar el catálogo de cargos | GER | — | Cargo creado, renombrado o desactivado con motivo |
 | [CU-34](#cu-34) | Reactivar un usuario desactivado | GER | Usuario desactivado | Acceso devuelto con motivo escrito y cambio de clave obligatorio |
 | [CU-35](#cu-35) | Revertir un cambio desde la bitácora | GER | Entrada reversible y aún no revertida | Entrada nueva que deshace el cambio; la original queda marcada, **nunca borrada** |
 | [CU-36](#cu-36) | Previsualizar el sistema como lo ve Operación | GER | Sesión de tipo Gerencia | Interfaz pintada como para Operación, con aviso permanente y salida a un clic |
@@ -63,8 +66,14 @@ implementa en la base de datos, no en la pantalla.
 
 ## 2. Casos de uso detallados
 
-Se desarrollan los casos con reglas de negocio no evidentes. Los demás siguen el patrón estándar
-de alta, consulta y modificación descrito en la tabla maestra.
+**Los 37 llevan sección, y todas tienen la misma forma:** el actor y el objetivo, la precondición
+y la frecuencia, el flujo principal paso a paso, la tabla de flujos alternativos, la
+postcondición y las reglas de negocio enlazadas. Donde la regla no es evidente, lleva además un
+bloque **Regla de negocio central** que dice por qué es así y no de la otra manera.
+
+**Los diagramas están en [`23-diagramas-de-casos-de-uso.md`](23-diagramas-de-casos-de-uso.md)**, dos por caso: un flujo para quien
+dirige el negocio y una secuencia front → API → PostgreSQL para quien programa. Allí está también
+el anexo que amarra cada caso con su operación del contrato, sus tablas y sus escenarios.
 
 ---
 
@@ -101,6 +110,50 @@ de alta, consulta y modificación descrito en la tabla maestra.
 **Postcondición** — Movimiento persistido, saldo actualizado, auditoría escrita.
 
 **Reglas de negocio** — [RN-01](03-requisitos-y-bdd.md#rn-01) (doble fecha), [RN-02](03-requisitos-y-bdd.md#rn-02) (pesos enteros), [RN-14](03-requisitos-y-bdd.md#rn-14) (registro tardío).
+
+
+---
+
+### <a id="cu-02"></a>CU-02 · Registrar gasto con recibo
+
+| | |
+|---|---|
+| **Actor** | Gerencia · Operación |
+| **Objetivo** | Dejar el gasto registrado con su soporte, sin tener que archivar el papel |
+| **Precondición** | Sesión activa y al menos una cuenta creada |
+| **Frecuencia** | Varias veces al día |
+
+**Flujo principal**
+
+1. El actor abre el registro rápido y elige *Gasto*.
+2. Escribe el valor en pesos enteros, la categoría, la cuenta de origen y la fecha del
+   movimiento, que el sistema propone en hoy.
+3. Opcionalmente escribe una nota.
+4. Confirma. El sistema guarda el movimiento igual que en [CU-01](#cu-01): con sus dos fechas, bajando el
+   saldo de la cuenta y con la auditoría escrita por el trigger.
+5. **El soporte se sube aparte, sobre el movimiento ya guardado.** El actor toma la foto del
+   recibo o elige el PDF de la factura.
+6. El archivo **pasa por la API**, que lo guarda en el almacenamiento privado y escribe su ficha
+   en `adjuntos`, con quién lo subió, desde qué dispositivo y de qué movimiento cuelga.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | No hay recibo que adjuntar | Se guarda el gasto igual: el soporte es opcional y su falta no bloquea el registro |
+| A2 | El archivo pasa de 5 MB | Se rechaza el adjunto, no el gasto: el movimiento ya quedó guardado |
+| A3 | El archivo no es JPEG, PNG, WebP ni PDF | Se rechaza con el tipo permitido a la vista |
+| A4 | Se reintenta la subida tras perder la señal | El adjunto lleva el id que generó el front, así que dos intentos de la misma intención dejan **un** archivo |
+| A5 | El gasto se registró mal | No se edita: se anula con motivo ([CU-03](#cu-03)) o se corrige por contra-asiento ([CU-04](#cu-04)) |
+
+**Postcondición** — Movimiento de gasto persistido con su saldo al día, y su soporte guardado en
+el almacenamiento privado con la ficha que dice de qué cuelga.
+
+**Reglas de negocio** — [RF-09](03-requisitos-y-bdd.md#rf-09) (gasto con adjunto), [RF-12](03-requisitos-y-bdd.md#rf-12) (fotos o PDF), [RN-02](03-requisitos-y-bdd.md#rn-02) (pesos enteros).
+Los dos límites del adjunto —el tamaño y los cuatro tipos— se imponen a la vez en el
+almacenamiento y en la tabla, porque cada mitad tiene que poder defenderse sola
+([04 §4.12](04-modelo-de-datos.md#412-adjuntos--el-soporte-de-un-movimiento-o-de-un-pedido), [ADR-015](adr/ADR-015-validacion-tres-capas.md)).
+
 
 ---
 
@@ -164,6 +217,86 @@ Estas reglas las propuso el contrato de la tarea [3.17](08-plan-de-desarrollo.md
 **Postcondición** — Movimiento invisible en reportes, visible en el modo *ver anulados*,
 íntegro en la base de datos. Su registro hermano, si lo tiene, queda anulado con él.
 
+
+---
+
+### <a id="cu-04"></a>CU-04 · Corregir por contra-asiento
+
+| | |
+|---|---|
+| **Actor** | Gerencia (exclusivo) |
+| **Objetivo** | Dejar las cifras bien sin tocar un registro que ya no se puede tocar |
+| **Precondición** | El movimiento existe, y se corrige en lugar de anularse |
+| **Frecuencia** | Ocasional |
+
+**Flujo principal**
+
+1. Gerencia localiza el movimiento en el libro y elige *Corregir*.
+2. El sistema abre el mismo formulario de un movimiento cualquiera, con las mismas reglas y los
+   mismos rechazos: un contra-asiento **es** un movimiento.
+3. Gerencia escribe lo que reversa el error —el valor, la fecha y la cuenta que debieron ser— y
+   confirma.
+4. El sistema escribe un movimiento nuevo que queda **apuntando al que corrige**, y el original
+   no se toca.
+5. El libro muestra los dos, y la historia cuenta también el error.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | El movimiento es de un mes cerrado | Es justo el caso para el que existe esto: no se anula, se corrige ([CU-03](#cu-03), A3) |
+| A2 | Quien intenta corregir es de tipo Operación | La base de datos lo rechaza: registrar sigue siendo de los dos tipos, y lo que la política juzga es quién apunta a un movimiento anterior |
+| A3 | Se reintenta la misma corrección | El contra-asiento lleva su propio id, generado al decidir la acción, así que el reintento no duplica el libro |
+| A4 | El movimiento que se corrige no existe o está anulado | Se informa y no se escribe nada |
+
+**Postcondición** — Dos movimientos visibles: el errado, intacto, y el que lo reversa, con el
+enlace entre los dos. Ninguna cifra cuenta el error dos veces, y nada se borró.
+
+**Reglas de negocio** — [RF-15](03-requisitos-y-bdd.md#rf-15) (corrección sin modificar el original), [RN-13](03-requisitos-y-bdd.md#rn-13) (nada se borra).
+Es el mismo mecanismo con que la bitácora revierte un cambio ([CU-35](#cu-35)): una **escritura
+compensatoria**, nunca un borrado ([04 §5.3](04-modelo-de-datos.md#53-corrección-por-contra-asiento)).
+
+
+---
+
+### <a id="cu-05"></a>CU-05 · Registrar pedido de venta
+
+| | |
+|---|---|
+| **Actor** | Gerencia · Operación |
+| **Objetivo** | Dejar el pedido escrito, con lo que vale y lo que se cobra al confirmar |
+| **Precondición** | El cliente existe, o se crea en el mismo paso; los productos están en el catálogo |
+| **Frecuencia** | Varias veces a la semana |
+
+**Flujo principal**
+
+1. El actor abre Pedidos y elige **+ Nuevo pedido**.
+2. Elige el cliente, o lo crea ahí mismo con nombre, contacto y notas.
+3. Agrega las líneas: producto, cantidad y precio. **El valor total no se teclea**: sale de las
+   líneas y lo calcula la API, porque el front no calcula plata ([ADR-018](adr/ADR-018-front-sin-decisiones.md)).
+4. Mientras arma las líneas, el sistema le muestra las tres cifras del pedido: lo que vale, el
+   anticipo que se cobra al confirmar y el saldo contra entrega.
+5. Si el anticipo no cubre el costo directo, aparece la advertencia de [CU-12](#cu-12).
+6. Confirma. El pedido queda en estado `en_proceso`, con su número visible puesto por la API.
+7. Opcionalmente se adjunta la foto o el PDF de la factura, que cuelga del pedido.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | El pedido viene de una cotización aceptada | No se vuelve a digitar nada: la cotización se convierte en pedido con sus mismas líneas, su cliente y su anticipo, y **con los precios que se le sostuvieron al cliente**, no con los del catálogo de hoy ([RF-40](03-requisitos-y-bdd.md#rf-40)) |
+| A2 | El pedido no tiene líneas, o una cantidad no es positiva, o el producto no existe | Se rechaza: un pedido sin qué entregar no es un pedido |
+| A3 | El cliente no existe o está anulado | Se rechaza y se ofrece crearlo |
+| A4 | Se reintenta el registro tras perder la señal | El pedido lleva el id que generó quien registra, así que el reintento no crea dos pedidos |
+| A5 | El pedido se registró por error | Se **anula** con motivo, que no es lo mismo que cancelarlo: se anula lo que no debió registrarse y se cancela lo que se registró bien y no va a entregarse ([CU-07](#cu-07), A3) |
+
+**Postcondición** — Pedido en `en_proceso` con sus líneas, su valor calculado, su saldo pendiente
+y su cliente, listo para cobrar el anticipo ([CU-06](#cu-06)).
+
+**Reglas de negocio** — [RF-18](03-requisitos-y-bdd.md#rf-18) (clientes), [RF-19](03-requisitos-y-bdd.md#rf-19) (pedido con líneas), [RF-27](03-requisitos-y-bdd.md#rf-27) (factura adjunta),
+[RF-40](03-requisitos-y-bdd.md#rf-40) (cotización aceptada sin redigitar).
+
+
 ---
 
 ### <a id="cu-06"></a>CU-06 · Cobrar anticipo
@@ -196,6 +329,7 @@ Estas reglas las propuso el contrato de la tarea [3.17](08-plan-de-desarrollo.md
 | A2 | El anticipo no cubre el costo directo | Se muestra la advertencia de [CU-12](#cu-12) |
 | A3 | El cliente paga todo por adelantado | Se registra el 100% como pasivo hasta la entrega |
 
+
 ---
 
 ### <a id="cu-07"></a>CU-07 · Entregar pedido y cobrar saldo
@@ -226,6 +360,165 @@ Estas reglas las propuso el contrato de la tarea [3.17](08-plan-de-desarrollo.md
 
 **Postcondición** — La utilidad del mes de entrega refleja el pedido completo.
 
+
+---
+
+### <a id="cu-08"></a>CU-08 · Consultar pedidos por fecha
+
+| | |
+|---|---|
+| **Actor** | Gerencia · Operación |
+| **Objetivo** | Saber qué hay que entregar, y qué lleva demasiado tiempo esperando |
+| **Precondición** | — |
+| **Frecuencia** | Todos los días |
+
+**Flujo principal**
+
+1. El actor abre Pedidos y ve el listado **ordenado por fecha**, los más recientes primero.
+2. Filtra por estado, por cliente o por rango de fechas.
+3. Cada fila trae lo anticipado, el saldo pendiente y si el pedido está estancado. **Las tres las
+   calcula la API**: el front no calcula plata ni decide qué resaltar ([ADR-018](adr/ADR-018-front-sin-decisiones.md)).
+4. Los pedidos con anticipo cobrado y sin entregar hace 15 días o más aparecen resaltados como
+   pendientes críticos.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | Hay pedidos anulados en el rango | No salen, salvo que se pidan expresamente |
+| A2 | La sesión es de tipo Operación | Ve el listado: entregar es su trabajo. Lo que no ve son los costos ni los márgenes de cada línea ([RF-34](03-requisitos-y-bdd.md#rf-34)) |
+| A3 | El filtro no deja ninguna fila | Se dice que no hay pedidos con ese filtro, en lugar de una tabla vacía sin explicación |
+
+**Postcondición** — Listado filtrable en pantalla, con los pendientes críticos a la vista. No
+escribe nada.
+
+**Reglas de negocio** — [RF-20](03-requisitos-y-bdd.md#rf-20) (orden por fecha y filtros), [RF-23](03-requisitos-y-bdd.md#rf-23) (saldo pendiente),
+[RF-24](03-requisitos-y-bdd.md#rf-24) (resaltar los estancados). El escenario que lo fija es [BDD-08-1](03-requisitos-y-bdd.md#bdd-08-1).
+
+
+---
+
+### <a id="cu-09"></a>CU-09 · Costear un producto
+
+| | |
+|---|---|
+| **Actor** | Gerencia (exclusivo) |
+| **Objetivo** | Saber cuánto cuesta de verdad cada cosa que el taller vende, y cuánto deja por hora |
+| **Precondición** | El pro-labore está definido ([CU-25](#cu-25)): de él sale la tarifa por hora |
+| **Frecuencia** | Al dar de alta un producto, y cuando cambia un insumo |
+
+**Flujo principal**
+
+1. Gerencia abre Productos y da de alta el producto o el servicio, con su unidad y su precio.
+2. Escribe el costeo: el insumo, los consumibles y el tiempo —el de trabajo y, si lo hay, el de
+   máquina ([CU-10](#cu-10))—.
+3. **La tarifa por hora no se teclea.** La API la saca del pro-labore vigente y la **congela** en
+   ese costeo, así que un costeo viejo conserva la tarifa con la que se calculó.
+4. Mientras escribe, el sistema le pinta en vivo el costo unitario, los tres márgenes, el precio
+   que habría que cobrar para el margen objetivo y la lectura frente al resto del taller.
+5. Confirma. La ficha del producto y su primer costeo **caen juntos o no cae ninguno**: es una
+   sola transacción.
+6. Al editar después, el costeo **no se sobrescribe**: si el costo o el precio cambiaron, se
+   agrega una fila nueva con la fecha de hoy, y la vigente es la última registrada.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | No hay pro-labore definido | Se bloquea: sin tarifa por hora el costo del tiempo sería cero y el margen mentiría ([CU-25](#cu-25)) |
+| A2 | La sesión es de tipo Operación | Ve el nombre, el tipo, la unidad y el precio, y **ni el costeo ni los márgenes**, porque la base no le devuelve esas filas ([RF-34](03-requisitos-y-bdd.md#rf-34), [BDD-02-2](03-requisitos-y-bdd.md#bdd-02-2)) |
+| A3 | El tiempo lleva más de dos decimales | Se rechaza con la regla a la vista |
+| A4 | El producto deja de venderse | Se **desactiva**, no se borra; deja de ofrecerse y los pedidos viejos conservan el suyo |
+| A5 | Se edita dos veces el mismo día | Quedan dos filas de costeo con la misma vigencia, y manda la última: el historial no se recorta |
+
+**Postcondición** — Producto con su costeo vigente, sus tres márgenes y su margen por hora
+recalculados, y el historial de costos y precios intacto.
+
+**Reglas de negocio** — [RF-28](03-requisitos-y-bdd.md#rf-28) a [RF-31](03-requisitos-y-bdd.md#rf-31), [RF-33](03-requisitos-y-bdd.md#rf-33) (precio sugerido), [RF-34](03-requisitos-y-bdd.md#rf-34) (Operación no ve costos),
+[RF-35](03-requisitos-y-bdd.md#rf-35) (historial). Las fórmulas están en [05 §7](05-reglas-financieras.md#7-costeo-por-producto-y-margen-por-hora).
+
+
+---
+
+### <a id="cu-10"></a>CU-10 · Costear servicio de bordado
+
+| | |
+|---|---|
+| **Actor** | Gerencia (exclusivo) |
+| **Objetivo** | Cobrar un bordado por lo que de verdad ocupa el taller, no por lo que la persona tarda |
+| **Precondición** | El pro-labore está definido; el servicio está en el catálogo |
+| **Frecuencia** | Al costear cada servicio de bordado |
+
+**Flujo principal**
+
+1. Gerencia abre el costeo del servicio y escribe, por separado, el **tiempo de persona** y el
+   **tiempo de máquina**.
+2. El sistema carga al costo **solo el tiempo de persona**: la máquina no cobra sueldo, y su
+   energía ya está contada en los consumibles.
+3. Para el **margen por hora**, el sistema divide entre el tiempo que el pedido ocupa el taller,
+   que es el de máquina cuando lo hay.
+4. El cuadro comparativo muestra el servicio frente al resto del catálogo con esa cifra.
+
+**Ejemplo**
+
+> Bordado con 5 minutos de persona y 22 de máquina, con la hora a $9.400.
+> El costo carga los 5 minutos de persona. Con $15.864 de margen, el **margen por hora** se
+> calcula sobre los 22 minutos de máquina, no sobre los 5 de persona ni sobre la suma.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | El producto no tiene tiempo de máquina | Nada cambia: el denominador del margen por hora sigue siendo el tiempo de persona |
+| A2 | El tiempo de máquina lleva más de dos decimales | Se rechaza, con su propio mensaje, distinto del del tiempo de trabajo |
+| A3 | No hay pro-labore definido | Se bloquea, igual que [CU-09](#cu-09) A1 |
+
+**Postcondición** — Servicio costeado con sus dos tiempos guardados por separado, su costo sin el
+tiempo de máquina y su margen por hora calculado sobre el tiempo que ocupa el taller.
+
+**Reglas de negocio** — [RF-32](03-requisitos-y-bdd.md#rf-32), y la fórmula del [05 §7.1](05-reglas-financieras.md#71-costo-unitario). Los tres escenarios que lo fijan son
+[BDD-32-2](03-requisitos-y-bdd.md#bdd-32-2), [BDD-32-3](03-requisitos-y-bdd.md#bdd-32-3) y [BDD-32-4](03-requisitos-y-bdd.md#bdd-32-4).
+
+
+---
+
+### <a id="cu-11"></a>CU-11 · Generar cotización PDF
+
+| | |
+|---|---|
+| **Actor** | Gerencia · Operación |
+| **Objetivo** | Pasarle al cliente por WhatsApp un papel con el logo, en menos de un minuto |
+| **Precondición** | Los productos de las líneas están costeados |
+| **Frecuencia** | Varias veces a la semana |
+
+**Flujo principal**
+
+1. El actor abre el Cotizador y arma las líneas, igual que en un pedido: comparten esquema.
+2. Indica hasta cuándo vale la cotización. **El valor total lo calcula la API** de las líneas.
+3. Mientras arma las líneas, el validador de [CU-12](#cu-12) le dice si el anticipo cubre el costo directo.
+4. Confirma: la cotización queda emitida con su número.
+5. Pide el documento. El sistema devuelve el **PDF con el logo del negocio**, listo para pasarlo
+   por WhatsApp. **No lleva costos ni márgenes**: es el papel del cliente.
+6. Cuando el cliente acepta, la cotización se convierte en pedido sin redigitar nada ([CU-05](#cu-05), A1).
+7. Al entregar, el papel que corresponde es la **remisión**, que cuelga del pedido y no de la
+   cotización: lo entregado es un pedido, y una cotización puede no haberse aceptado nunca.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | La cotización no tiene líneas | Se rechaza |
+| A2 | La validez es anterior al día de emisión | Se rechaza: nacería vencida |
+| A3 | Se pide el PDF de una cotización anulada | Se rechaza: el papel afirmaría un precio que el negocio ya retiró |
+| A4 | La cotización se venció y el cliente aparece después | No se acepta: se emite otra, con los precios de hoy |
+| A5 | La sesión es de tipo Operación | Cotiza y genera el PDF: el documento no lleva costos ni márgenes, así que no hay nada que ocultarle |
+
+**Postcondición** — Cotización emitida con su valor calculado y su PDF generado, sin costos ni
+márgenes, y con el camino abierto para convertirla en pedido.
+
+**Reglas de negocio** — [RF-36](03-requisitos-y-bdd.md#rf-36) (PDF con logo), [RF-37](03-requisitos-y-bdd.md#rf-37) (remisión), [RF-40](03-requisitos-y-bdd.md#rf-40) (conversión a pedido).
+
+
 ---
 
 ### <a id="cu-12"></a>CU-12 · Validar anticipo mínimo *(automático)*
@@ -248,6 +541,130 @@ Estas reglas las propuso el contrato de la tarea [3.17](08-plan-de-desarrollo.md
 > Pedido de $520.000 en rompecabezas. Costo directo $338.000 (65%).
 > Anticipo del 50% = $260.000. **Faltan $78.000.**
 > Mensaje: *"Con el 50% pones $78.000 de tu bolsillo hasta la entrega. Anticipo sugerido: 70%."*
+
+
+---
+
+### <a id="cu-13"></a>CU-13 · Ver utilidad, caja y caja libre
+
+| | |
+|---|---|
+| **Actor** | Gerencia (exclusivo) |
+| **Objetivo** | Responder «¿cuánto gané?» sin confundirlo con «¿cuánta plata hay?» |
+| **Precondición** | Movimientos registrados en el mes |
+| **Frecuencia** | Todos los días |
+
+**Flujo principal**
+
+1. Gerencia abre el Inicio. El sistema pide **el panel entero en una sola consulta**, porque
+   ninguna de sus zonas se explica sola y juntarlas en el front sería dejar que decida ([ADR-018](adr/ADR-018-front-sin-decisiones.md)).
+2. El panel trae las **tres cifras** con la línea que las concilia:
+   - **utilidad causada** — lo que el negocio ganó, por los pedidos entregados en el mes;
+   - **movimiento de caja** — la plata que entró y salió;
+   - **caja libre** — lo que de verdad se puede comprometer, descontados los anticipos por
+     devengar y los gastos fijos ya comprometidos.
+3. Trae además los saldos por cuenta, los cuatro sobres con lo asignado contra lo usado, los doce
+   meses del gráfico, los pendientes y las alertas activas.
+4. **El Inicio no escribe nada.** No hay un botón que cree, edite o anule: solo cifras, alertas,
+   listados, enlaces y la descarga de lo que ya está en pantalla ([CU-37](#cu-37)).
+5. Cuando el mes termina, Gerencia lo **cierra**: el sistema calcula las cifras del mes y las
+   congela en un snapshot que ya no cambia.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | La caja libre queda negativa | Alerta roja, **aunque el mes sea rentable**: hay plata de anticipos comprometida ([BDD-13-3](03-requisitos-y-bdd.md#bdd-13-3)) |
+| A2 | No se dice qué mes | El mes en curso en Bogotá |
+| A3 | La sesión es de tipo Operación | No ve ni la utilidad ni la caja libre ([BDD-02-1](03-requisitos-y-bdd.md#bdd-02-1)) |
+| A4 | Se intenta cerrar dos veces el mismo mes | Se rechaza: el snapshot de un mes existe una sola vez |
+| A5 | Se intenta cerrar el mes en curso, o uno que todavía no llega | Se rechaza: no hay mes que congelar |
+| A6 | Llega un movimiento con fecha de un mes ya cerrado | Se acepta —nunca se pierde información—, se marca como ajuste de período anterior y aparece en el mes corriente, sin mover el reporte cerrado |
+
+**Postcondición** — Las tres cifras conciliadas en pantalla, y, cuando el mes se cierra, un
+snapshot inmutable del que salen los reportes de ese mes.
+
+**Reglas de negocio** — [RF-41](03-requisitos-y-bdd.md#rf-41) a [RF-43](03-requisitos-y-bdd.md#rf-43) (las tres cifras), [RF-52](03-requisitos-y-bdd.md#rf-52) (punto de equilibrio),
+[RF-53](03-requisitos-y-bdd.md#rf-53) (cierre con snapshot), [RF-95](03-requisitos-y-bdd.md#rf-95) (el Inicio no escribe), [RN-16](03-requisitos-y-bdd.md#rn-16) (un mes cerrado no se
+recalcula). Las fórmulas están en [05 §3](05-reglas-financieras.md#3-anticipos-causación-y-caja-libre) y el cierre en [05 §8](05-reglas-financieras.md#8-cierre-mensual).
+
+
+---
+
+### <a id="cu-14"></a>CU-14 · Ver promedio de ganancias
+
+| | |
+|---|---|
+| **Actor** | Gerencia (exclusivo) |
+| **Objetivo** | Saber cuánto deja el negocio en un mes normal, y qué da eso al año |
+| **Precondición** | Al menos un mes cerrado |
+| **Frecuencia** | Mensual |
+
+**Flujo principal**
+
+1. Gerencia abre Reportes.
+2. El sistema presenta el año **mes a mes**: ingresos, costos, gastos, utilidad y margen.
+3. Los meses **cerrados salen de su snapshot y no se recalculan**; los abiertos se calculan con
+   lo que hay hasta hoy.
+4. Presenta el **promedio de ganancias** mensual con su proyección anual, y el punto de
+   equilibrio en pesos y en pedidos.
+5. Cada mes trae además la utilidad **sin** descontar el pro-labore, para poder comparar las dos
+   lecturas lado a lado.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | No hay ningún mes cerrado | El promedio **falta**, y la pantalla explica por qué, en lugar de mandar un cero que parece una cifra |
+| A2 | El margen de contribución no es positivo | El punto de equilibrio falta, con la misma explicación en palabras |
+| A3 | Hay menos de doce meses de historia | Se presenta lo que hay y se advierte que la proyección es menos confiable |
+| A4 | La sesión es de tipo Operación | No alcanza la pantalla |
+
+**Postcondición** — Promedio mensual y proyección anual en pantalla, con la lectura que dice de
+cuántos meses salen. No escribe nada.
+
+**Reglas de negocio** — [RF-44](03-requisitos-y-bdd.md#rf-44) (promedio y proyección), [RF-52](03-requisitos-y-bdd.md#rf-52) (punto de equilibrio),
+[RN-16](03-requisitos-y-bdd.md#rn-16) (los meses cerrados no se recalculan). El escenario es [BDD-14-1](03-requisitos-y-bdd.md#bdd-14-1) y las fórmulas, [05 §9](05-reglas-financieras.md#9-catálogo-de-kpis).
+
+
+---
+
+### <a id="cu-15"></a>CU-15 · Registrar inversión en activo
+
+| | |
+|---|---|
+| **Actor** | Gerencia (exclusivo) |
+| **Objetivo** | Comprar un equipo sin que el mes parezca malo por haberlo comprado |
+| **Precondición** | — |
+| **Frecuencia** | Pocas veces al año |
+
+**Flujo principal**
+
+1. Gerencia abre Inversiones y registra el equipo o la herramienta: qué es, cuánto costó, de qué
+   cuenta salió la plata y la fecha.
+2. El sistema escribe, en la misma transacción, **el activo y un movimiento de inversión**.
+3. Ese movimiento **baja la caja y no toca la utilidad ni el patrimonio**: el negocio cambió
+   plata por una cosa que vale lo mismo.
+4. El activo aparece en la tabla de Inversiones, de mayor a menor valor de compra, y suma en el
+   patrimonio.
+5. Un **aporte de capital** se registra por el camino hermano: plata que entra desde afuera, que
+   **sube la caja y sube el patrimonio**, y tampoco es utilidad.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | El equipo ya lo tenía el taller antes de empezar a usar el sistema | Se registra **sin cuenta**: queda el activo y no se escribe movimiento, porque esa plata ya no está en ningún saldo ([09 §4](09-plan-de-implantacion.md#4-migración-de-datos-históricos)) |
+| A2 | La fecha es futura, o la cuenta no sirve | Se rechaza con el campo señalado |
+| A3 | La compra se registró mal | Se anula con motivo, y el activo se anula con el movimiento, en la misma transacción ([CU-03](#cu-03)) |
+| A4 | La sesión es de tipo Operación | La base de datos no le devuelve ni un activo, así que la tabla le llega vacía; y escribir lo rechaza la propia base |
+
+**Postcondición** — Activo registrado, caja más baja por lo que se pagó y utilidad intacta. El
+patrimonio refleja lo que el negocio tiene, no lo que le queda en la cuenta.
+
+**Reglas de negocio** — [RF-45](03-requisitos-y-bdd.md#rf-45) (inversión sin afectar la utilidad), [RF-46](03-requisitos-y-bdd.md#rf-46) (aportes de capital),
+[RF-48](03-requisitos-y-bdd.md#rf-48) (patrimonio). El escenario es [BDD-15-1](03-requisitos-y-bdd.md#bdd-15-1) y la naturaleza de cada uno, [05 §2](05-reglas-financieras.md#2-naturaleza-de-cada-movimiento).
+
 
 ---
 
@@ -282,6 +699,44 @@ Estas reglas las propuso el contrato de la tarea [3.17](08-plan-de-desarrollo.md
 | A1 | La caja libre no alcanza | Se advierte que se estaría usando plata de anticipos; requiere confirmación explícita |
 | A2 | Los retiros del año superan las utilidades | Se dispara la alerta de [CU-24](#cu-24) |
 
+
+---
+
+### <a id="cu-17"></a>CU-17 · Configurar los 4 sobres
+
+| | |
+|---|---|
+| **Actor** | Gerencia (exclusivo) |
+| **Objetivo** | Decidir en qué se reparte cada peso que entra, antes de gastarlo |
+| **Precondición** | — |
+| **Frecuencia** | Pocas veces al año |
+
+**Flujo principal**
+
+1. Gerencia abre la configuración de los sobres y ve los cuatro vigentes: **costo directo**,
+   **gastos fijos**, **reserva** y **retiro**.
+2. Cambia los porcentajes. Cada uno va de 0 a 100 y **los cuatro tienen que sumar 100**.
+3. Confirma. El sistema **no edita la configuración anterior**: escribe una definición nueva,
+   vigente desde hoy, y la vieja queda con su período.
+4. Desde ese día, el Inicio reparte las entradas de caja del mes con los porcentajes nuevos y
+   muestra lo asignado contra lo usado en cada sobre.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | Los cuatro no suman 100 | Se rechaza en la base de datos, no solo en la pantalla: la restricción se llama por su nombre y de ese nombre cuelga el mensaje |
+| A2 | Se configura dos veces el mismo día | Quedan dos definiciones con la misma vigencia, y manda la última registrada; el historial no se recorta ([RF-51](03-requisitos-y-bdd.md#rf-51)) |
+| A3 | La sesión es de tipo Operación | La base de datos lo rechaza |
+| A4 | La reserva no alcanza todavía la meta de tres meses de gastos fijos | No se bloquea nada: el sistema muestra el avance hacia la meta |
+
+**Postcondición** — Cuatro porcentajes vigentes desde hoy, sumando 100, y el historial de
+cambios entero, con quién los cambió y desde cuándo rigen.
+
+**Reglas de negocio** — [RF-50](03-requisitos-y-bdd.md#rf-50) (porcentajes configurables), [RF-51](03-requisitos-y-bdd.md#rf-51) (historial). La regla completa,
+con los porcentajes de arranque y la meta de la reserva, está en [05 §11](05-reglas-financieras.md#11-la-regla-de-los-4-sobres).
+
+
 ---
 
 ### <a id="cu-18"></a>CU-18 · Simular capacidad de pago
@@ -315,6 +770,318 @@ Estas reglas las propuso el contrato de la tarea [3.17](08-plan-de-desarrollo.md
 | A2 | El presupuesto disponible es negativo o muy bajo | El sistema lo declara **no viable** y sugiere alternativas: medio tiempo, por obra, o crecer primero |
 | A3 | No hay pro-labore definido | Se bloquea el simulador y se pide definirlo ([CU-25](#cu-25)) |
 
+
+---
+
+### <a id="cu-19"></a>CU-19 · Liquidar nómina del mes
+
+| | |
+|---|---|
+| **Actor** | Gerencia (exclusivo) |
+| **Objetivo** | Pagar bien, descontar los adelantos una sola vez y entregar el desprendible |
+| **Precondición** | La empleada tiene ficha con su salario acordado y su fecha de ingreso |
+| **Frecuencia** | Mensual |
+
+**Flujo principal**
+
+1. Gerencia da de alta a la empleada, si no tiene ficha. **Dar de alta en nómina no crea un
+   usuario**: se puede estar en nómina sin entrar al sistema, y por eso son dos fichas distintas.
+2. Abre el **período** del mes que va a liquidar. Es único por año y mes.
+3. Liquida a cada empleada con los días trabajados, las horas extra y los otros conceptos.
+4. **El sistema no rehace los pasos por su cuenta:** una sola función de la base de datos, en una
+   sola transacción, escribe la liquidación, **marca los adelantos pendientes como descontados** y
+   escribe el movimiento del pago.
+5. Las cifras son las del [06 §6.1](06-nomina-y-capacidad-de-pago.md#61-fórmulas): el valor de la hora ordinaria sale del salario entre las horas
+   pactadas, la extra lleva su recargo, y **al devengado solo entran el salario del período y el
+   total de las horas extra**, nunca las tarifas por hora.
+6. Gerencia descarga el **desprendible en PDF**, con los devengados, los descuentos con la fecha
+   de cada adelanto, el neto en números y en letras y la cuenta de origen.
+7. Cuando ya no falta nadie, **cierra el período**: desde ahí no admite más liquidaciones.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | La empleada ya fue liquidada en ese período | Se rechaza: una liquidación por persona y por mes, y lo impone una clave única |
+| A2 | El período está cerrado | Se rechaza. Lo que haya que corregir después va por contra-asiento ([CU-04](#cu-04)) |
+| A3 | Hay adelantos pendientes | Se descuentan del neto, **una sola vez**, y la cuenta por cobrar queda cancelada ([CU-26](#cu-26)) |
+| A4 | Los adelantos pendientes suman más que el devengado | El neto daría negativo y la base lo rechaza: la liquidación no se escribe. Partirlo entre dos meses sería inventar una regla de negocio |
+| A5 | La empleada sale del taller | Se la retira de la nómina; la ficha no se borra |
+| A6 | La sesión es de tipo Operación | La base de datos lo rechaza, no solo la pantalla |
+
+**Postcondición** — Liquidación escrita, adelantos marcados como descontados, movimiento del pago
+en el libro y desprendible disponible. El salario **sí reduce la utilidad** ([BDD-19-1](03-requisitos-y-bdd.md#bdd-19-1)).
+
+**Reglas de negocio** — [RF-54](03-requisitos-y-bdd.md#rf-54) (ficha de la empleada), [RF-55](03-requisitos-y-bdd.md#rf-55) (liquidación mensual),
+[RF-56](03-requisitos-y-bdd.md#rf-56) y [RN-11](03-requisitos-y-bdd.md#rn-11) (el adelanto se descuenta una vez), [RF-57](03-requisitos-y-bdd.md#rf-57) (desprendible). El cálculo completo está
+en [06 §6](06-nomina-y-capacidad-de-pago.md#6-liquidación-mensual) y el efecto sobre utilidad y caja, en [06 §6.3](06-nomina-y-capacidad-de-pago.md#63-el-efecto-correcto-sobre-utilidad-y-caja).
+
+
+---
+
+### <a id="cu-20"></a>CU-20 · Ver el propio desprendible
+
+| | |
+|---|---|
+| **Actor** | Gerencia · Operación |
+| **Objetivo** | Que cada quien pueda ver y bajar lo que le pagaron, y solo eso |
+| **Precondición** | La nómina del período está liquidada |
+| **Frecuencia** | Mensual |
+
+**Flujo principal**
+
+1. La persona abre Nómina y ve los períodos en los que tiene desprendible.
+2. Elige uno y el sistema le devuelve el PDF con el logo del negocio: devengados, descuentos con
+   la fecha de cada adelanto, el neto en números y en letras, y la cuenta de origen.
+
+**Regla de negocio central ([RF-63](03-requisitos-y-bdd.md#rf-63))**
+
+> **Operación ve únicamente el suyo, y eso lo decide PostgreSQL.** La política de lectura no le
+> devuelve la fila de otra persona, así que para la API **esa liquidación no existe** y responde
+> «no existe», no «no puedes». No es que la pantalla esconda el botón: es que el dato no sale de
+> la base ([ADR-006](adr/ADR-006-rls-por-rol.md)).
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | Se pide el desprendible de otra persona por acceso directo | La base de datos no devuelve la fila y la respuesta es «no existe» |
+| A2 | La sesión es de Gerencia | Ve los de todas: es quien liquida |
+| A3 | El período todavía no está liquidado | No hay desprendible que bajar, y se dice así |
+
+**Postcondición** — PDF del propio desprendible en poder de quien lo pidió, y ninguna fila ajena
+a la vista.
+
+**Reglas de negocio** — [RF-57](03-requisitos-y-bdd.md#rf-57) (desprendible en PDF), [RF-63](03-requisitos-y-bdd.md#rf-63) (solo el propio). Los escenarios son
+[BDD-02-4](03-requisitos-y-bdd.md#bdd-02-4) y [BDD-02-6](03-requisitos-y-bdd.md#bdd-02-6), y el contenido del documento, [06 §8](06-nomina-y-capacidad-de-pago.md#8-desprendible-de-pago).
+
+
+---
+
+### <a id="cu-21"></a>CU-21 · Importar histórico de Excel
+
+| | |
+|---|---|
+| **Actor** | Gerencia (exclusivo) |
+| **Objetivo** | Traer lo que ya estaba en la hoja de cálculo sin volver a teclearlo |
+| **Precondición** | Un archivo CSV con los movimientos |
+| **Frecuencia** | Una vez al arrancar, y después casi nunca |
+
+**Flujo principal**
+
+1. Gerencia sube el archivo. **El archivo pasa por la API**, igual que un adjunto, y la primera
+   pasada **no escribe ni una fila**.
+2. El sistema devuelve las columnas que trae el archivo y las que el importador necesita, para
+   que Gerencia las relacione. Las columnas pueden venir en cualquier orden.
+3. Con el mapeo puesto, el sistema devuelve el **informe fila por fila**: las válidas, las que no
+   sirven y por qué, y las que coinciden con un movimiento que ya existe.
+4. Gerencia revisa el informe y confirma.
+5. El sistema escribe los movimientos de las filas válidas y devuelve el mismo informe con lo que
+   entró de verdad.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | Hay 3 filas inválidas de 200 | Se cargan 197 y se reportan las 3 con su motivo ([BDD-21-2](03-requisitos-y-bdd.md#bdd-21-2)) |
+| A2 | Hay filas que coinciden con movimientos que ya existen | **No se escribe nada** hasta que Gerencia confirme que acepta los duplicados ([BDD-21-3](03-requisitos-y-bdd.md#bdd-21-3)) |
+| A3 | Se confirma dos veces el mismo archivo | Se rechaza: es lo que impide cargarlo repetido |
+| A4 | No queda ni una fila válida | Se rechaza y no se escribe nada |
+| A5 | El archivo pasa de 5 MB, o no es un CSV | Se rechaza antes de leerlo |
+| A6 | La sesión es de tipo Operación | No alcanza la operación |
+
+**Postcondición** — Los movimientos de las filas válidas en el libro, con su fecha de movimiento
+original, y el informe de lo que no entró, con el motivo de cada fila.
+
+**Reglas de negocio** — [RF-64](03-requisitos-y-bdd.md#rf-64) (mapeo de columnas), [RF-65](03-requisitos-y-bdd.md#rf-65) (errores por fila). Los escenarios son
+[BDD-21-1](03-requisitos-y-bdd.md#bdd-21-1), [BDD-21-2](03-requisitos-y-bdd.md#bdd-21-2) y [BDD-21-3](03-requisitos-y-bdd.md#bdd-21-3).
+
+
+---
+
+### <a id="cu-22"></a>CU-22 · Exportar respaldo
+
+| | |
+|---|---|
+| **Actor** | Gerencia (exclusivo) |
+| **Objetivo** | Tener una copia completa y verificable, fuera del sistema |
+| **Precondición** | — |
+| **Frecuencia** | Mensual, o antes de cualquier cambio grande |
+
+**Flujo principal**
+
+1. Gerencia pide la exportación con su **alcance** —la base entera o un mes— y su formato.
+2. **La API arma el archivo**, no el navegador: abre la transacción con la identidad de quien
+   pidió y lee lo que la base le permita leer.
+3. Calcula el `sha256` de cada archivo, escribe el `manifiesto.json` con los totales de control y
+   deja la fila en el registro de exportaciones: quién sacó qué, y cuándo.
+4. Gerencia **baja el archivo con una acción explícita**. No hay envío automático a ningún sitio.
+
+**Regla de negocio central**
+
+> **El manifiesto lo firma el servidor, y por eso vale.** Un `sha256` calculado en el navegador
+> certifica lo que el navegador quiso certificar; calculado donde están los datos, y en la misma
+> transacción que los leyó, certifica lo que salió de la base.
+>
+> **Esto es el respaldo, y la descarga de pantalla de [CU-37](#cu-37) no lo es.** Si el archivo puede
+> reconstruir el estado del sistema, es respaldo y lleva manifiesto; si solo responde una
+> pregunta del momento, es descarga de pantalla y no lo lleva.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | La sesión es de tipo Operación | La exportación se rechaza **en la base de datos**, no después en la API ([BDD-02-5](03-requisitos-y-bdd.md#bdd-02-5)) |
+| A2 | El respaldo es grande | Lo arma la API y lo entrega: no depende de la memoria del navegador |
+| A3 | El archivo se va a usar para restaurar | Sirve, porque lleva manifiesto: es lo que permite comprobar que no se corrompió |
+| A4 | Se pide un respaldo anonimizado para pruebas | También lleva manifiesto, y su `ambiente` dice de dónde salió |
+
+**Postcondición** — Archivo en poder de Gerencia con su `manifiesto.json`, sus `sha256` y sus
+totales de control, y una fila nueva que deja constancia de qué salió del sistema y cuándo.
+
+**Reglas de negocio** — [RF-66](03-requisitos-y-bdd.md#rf-66) (exportar con descarga manual), [ADR-008](adr/ADR-008-exportacion.md). El contenido del
+manifiesto, el alcance por rol y quién arma el archivo están en [13-respaldo-y-exportacion.md](13-respaldo-y-exportacion.md).
+
+
+---
+
+### <a id="cu-23"></a>CU-23 · Consultar auditoría
+
+| | |
+|---|---|
+| **Actor** | Gerencia (exclusivo) |
+| **Objetivo** | Responder «¿quién hizo esto, y cuándo?» sin depender de la memoria de nadie |
+| **Precondición** | — |
+| **Frecuencia** | Ocasional, y siempre que algo no cuadra |
+
+**Flujo principal**
+
+1. Gerencia abre la bitácora y la filtra por fecha, por persona o por qué se tocó.
+2. Cada entrada dice **quién, cuándo, desde qué dispositivo, desde qué IP y qué cambió**, con el
+   estado anterior y el posterior.
+3. Los cambios sobre usuarios y cargos se leen además en la **Bitácora de cambios** de Gestión de
+   usuarios, que es la misma información filtrada, y desde ahí se pueden revertir ([CU-35](#cu-35)).
+4. Los inicios de sesión —los que entraron y los que fallaron— quedan registrados con su fecha,
+   su dispositivo y su IP, y **nunca con la contraseña tecleada**, ni completa ni parcial.
+
+**Regla de negocio central**
+
+> **La auditoría no la escribe la aplicación: la escriben triggers de la base de datos**
+> ([ADR-005](adr/ADR-005-auditoria-por-triggers.md)). Así queda escrita aunque el cambio entre por otro camino, y **ninguna de sus filas
+> se edita ni se borra** ([ADR-004](adr/ADR-004-base-solo-escritura.md)). Una bitácora editable no sirve para nada.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | La sesión es de tipo Operación | La base de datos no le devuelve ninguna fila de auditoría ([BDD-02-6](03-requisitos-y-bdd.md#bdd-02-6)) |
+| A2 | Se busca un cambio que alguien revirtió | Salen las dos entradas: la original, marcada como revertida, y la reversión ([CU-35](#cu-35)) |
+| A3 | Se busca quién borró algo | No hay borrados que buscar: lo que se deja sin efecto queda anulado con su motivo ([CU-03](#cu-03)) |
+
+**Postcondición** — En pantalla, quién hizo qué, cuándo, desde dónde y qué cambió. La consulta no
+escribe nada en la auditoría salvo lo que ya registra cualquier acceso.
+
+**Reglas de negocio** — [RF-05](03-requisitos-y-bdd.md#rf-05) (cada inicio de sesión registrado), [RF-67](03-requisitos-y-bdd.md#rf-67) (bitácora filtrable),
+[RF-88](03-requisitos-y-bdd.md#rf-88) (todo cambio sobre usuarios y cargos). El escenario es [BDD-23-1](03-requisitos-y-bdd.md#bdd-23-1), y cómo se escribe,
+[04 §5.4](04-modelo-de-datos.md#54-auditoría-por-triggers).
+
+
+---
+
+### <a id="cu-24"></a>CU-24 · Alertar descapitalización *(automático)*
+
+| | |
+|---|---|
+| **Actor** | Sistema |
+| **Disparador** | La consulta del Inicio y la del patrimonio, con 12 meses de historia |
+| **Frecuencia** | En cada consulta |
+
+**Flujo principal**
+
+1. El sistema suma las **distribuciones** de los últimos 12 meses y las **utilidades** del mismo
+   período.
+2. Calcula la **tasa de retiro**: cuánto de lo que el negocio generó se sacó de él.
+3. Si los retiros superan las utilidades, la lectura que acompaña al patrimonio pasa a nivel
+   crítico y el Inicio muestra la alerta.
+4. La alerta dice la cifra, no solo el color: cuánto se retiró, cuánto se generó y la diferencia.
+
+**Regla de negocio central**
+
+> **Retirar más de lo que el negocio genera se está comiendo el patrimonio, y eso no se ve en la
+> utilidad del mes.** Un mes puede ser rentable y la alerta seguir encendida: mide doce meses, no
+> uno, porque un retiro grande se nota en el año y no en la semana.
+
+**Ejemplo**
+
+> Retiros de $20.000.000 y utilidades de $18.000.000 en 12 meses.
+> El negocio devolvió $2.000.000 más de lo que ganó: la alerta se enciende aunque el último mes
+> haya cerrado bien.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | Hay menos de 12 meses de historia | Se calcula con lo que hay y la lectura dice de cuántos meses sale |
+| A2 | El pro-labore está definido | No cuenta como distribución: es gasto, y ya bajó la utilidad ([CU-25](#cu-25)) |
+| A3 | La sesión es de tipo Operación | No alcanza ni el Inicio ni el patrimonio |
+
+**Postcondición** — Alerta visible mientras la tasa de retiro siga por encima de lo que el
+negocio genera. No escribe nada: se recalcula en cada consulta.
+
+**Reglas de negocio** — [RF-49](03-requisitos-y-bdd.md#rf-49) (alertar cuando los retiros de 12 meses superan las utilidades),
+[RF-48](03-requisitos-y-bdd.md#rf-48) (patrimonio). El escenario es [BDD-24-1](03-requisitos-y-bdd.md#bdd-24-1) y la tasa de retiro, [05 §9.3](05-reglas-financieras.md#93-estructura-y-patrimonio).
+
+
+---
+
+### <a id="cu-25"></a>CU-25 · Definir el pro-labore
+
+| | |
+|---|---|
+| **Actor** | Gerencia (exclusivo) |
+| **Objetivo** | Ponerle precio al trabajo propio, para que la utilidad diga la verdad |
+| **Precondición** | — |
+| **Frecuencia** | Pocas veces al año |
+
+**Flujo principal**
+
+1. Gerencia define **cuánto vale al mes su trabajo en el taller** y **cuántas horas produce**.
+2. El sistema **no edita la definición anterior**: escribe una nueva, vigente desde hoy, y la
+   vieja queda con su período.
+3. Desde ese día:
+   - los costeos **nuevos** toman de aquí su tarifa por hora, y los ya guardados conservan la
+     suya ([CU-09](#cu-09));
+   - cada retiro se parte con el pro-labore **vigente en la fecha del retiro** ([CU-16](#cu-16));
+   - el simulador de contratación deja de estar bloqueado ([CU-18](#cu-18)).
+4. El pro-labore se registra **como gasto**: baja la utilidad, la caja y el patrimonio. Lo que se
+   saque por encima de él es distribución, y esa no baja la utilidad.
+
+**Regla de negocio central ([RN-08](03-requisitos-y-bdd.md#rn-08))**
+
+> **El trabajo propio también produce, así que también cuesta.** Una utilidad que no descuenta el
+> trabajo de quien dirige no es la utilidad del negocio: es la utilidad de un negocio con un
+> empleado gratis, y ese negocio no existe. Es la cifra con la que se decide si se puede
+> contratar, y por eso el simulador la exige ([RN-09](03-requisitos-y-bdd.md#rn-09)).
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | Las horas pasan del máximo que admite el mes | Se rechaza: el límite sale de las horas de una semana de trabajo por 52 entre 12 ([RN-20](03-requisitos-y-bdd.md#rn-20)) |
+| A2 | Las horas llevan más de dos decimales | Se rechaza, con su propio mensaje |
+| A3 | Se define dos veces el mismo día | Quedan dos definiciones con la misma vigencia y manda la última; el historial no se recorta |
+| A4 | La sesión es de tipo Operación | La base de datos lo rechaza, y además no le devuelve la definición vigente |
+| A5 | Antes no había pro-labore | La utilidad de los meses siguientes baja, y eso es lo correcto: antes estaba inflada ([BDD-25-2](03-requisitos-y-bdd.md#bdd-25-2)) |
+
+**Postcondición** — Pro-labore vigente desde hoy, con su historial entero, y las tres cosas que
+dependen de él al día: la tarifa de los costeos nuevos, la división de los retiros y el
+simulador.
+
+**Reglas de negocio** — [RF-47](03-requisitos-y-bdd.md#rf-47) (retiros partidos en pro-labore y distribución), [RN-08](03-requisitos-y-bdd.md#rn-08) (el
+pro-labore es gasto), [RN-09](03-requisitos-y-bdd.md#rn-09) (el simulador lo exige), [RN-20](03-requisitos-y-bdd.md#rn-20) (el límite de horas). Los escenarios
+son [BDD-25-1](03-requisitos-y-bdd.md#bdd-25-1) y [BDD-25-2](03-requisitos-y-bdd.md#bdd-25-2).
+
+
 ---
 
 ### <a id="cu-26"></a>CU-26 · Registrar adelanto a la empleada
@@ -339,6 +1106,7 @@ Estas reglas las propuso el contrato de la tarea [3.17](08-plan-de-desarrollo.md
 > Registrar el adelanto como gasto y después pagar el salario completo cuenta el mismo dinero
 > dos veces. El gasto se reconoce una sola vez, en la liquidación.
 
+
 ---
 
 ### <a id="cu-27"></a>CU-27 · Horas pagadas vs. horas facturadas
@@ -361,6 +1129,7 @@ Estas reglas las propuso el contrato de la tarea [3.17](08-plan-de-desarrollo.md
 
 **Interpretación documentada** — Una diferencia alta indica falta de demanda, exceso de
 capacidad o trabajo que no se está cobrando: ajustes, repeticiones, diseños regalados.
+
 
 ---
 
@@ -413,6 +1182,7 @@ capacidad o trabajo que no se está cobrando: ajustes, repeticiones, diseños re
 **Postcondición** — Sesión abierta con nombre, cargo y tipo cargados, `ultimo_acceso`
 actualizado y `inicio_sesion` escrito en auditoría.
 
+
 ---
 
 ### <a id="cu-29"></a>CU-29 · Crear un usuario
@@ -456,6 +1226,7 @@ actualizado y `inicio_sesion` escrito en auditoría.
 **Postcondición** — Usuario activo con clave temporal y cambio de contraseña obligatorio en el
 primer ingreso.
 
+
 ---
 
 ### <a id="cu-30"></a>CU-30 · Desactivar un usuario
@@ -495,6 +1266,7 @@ primer ingreso.
 | A4 | La persona está en nómina | El registro de `empleados` no se toca: se quita el acceso, no el vínculo laboral |
 
 **Postcondición** — Usuario sin acceso, marcado inactivo con motivo, íntegro en la base de datos.
+
 
 ---
 
@@ -538,6 +1310,91 @@ primer ingreso.
 
 **Postcondición** — Usuario con una contraseña temporal conocida por Gerencia, obligado a cambiarla
 al entrar, y sin ninguna sesión anterior en pie.
+
+
+---
+
+### <a id="cu-32"></a>CU-32 · Cambiar la propia contraseña
+
+| | |
+|---|---|
+| **Actor** | Gerencia · Operación |
+| **Objetivo** | Que cada quien ponga una contraseña que solo ella sepa |
+| **Precondición** | Sesión activa |
+| **Frecuencia** | En el primer ingreso, y después cuando se quiera |
+
+**Flujo principal**
+
+1. La persona entra por una de dos puertas, y **son la misma operación**:
+   - «Crea tu contraseña», que aparece en lugar del tablero cuando el cambio es obligatorio;
+   - «Cambiar mi contraseña», en el menú de la sesión, cuando se quiere cambiar.
+2. Escribe la contraseña nueva dos veces. **No se le pide la actual**: ya tiene la sesión abierta,
+   y pedirla no agregaría nada que la sesión no haya probado.
+3. Confirma. El sistema cambia la contraseña en el proveedor de identidad, deja de exigir el
+   cambio y escribe el evento en la auditoría.
+4. **La sesión sigue en pie**: el token y la clave de firma no cambian, así que no hay que volver
+   a entrar.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | Las dos contraseñas no coinciden | Se rechaza con el campo señalado |
+| A2 | La contraseña tiene menos de 8 caracteres | Se rechaza y se muestra la regla completa |
+| A3 | El cambio era obligatorio y se intenta saltar la pantalla | No hay forma de llegar al tablero sin cambiarla: la única salida es cerrar sesión ([CU-28](#cu-28), A4) |
+| A4 | La persona olvidó la contraseña y **no** tiene sesión abierta | Esto no le sirve: lo que corresponde es que Gerencia la restablezca en persona ([CU-31](#cu-31)) |
+
+**Postcondición** — Contraseña cambiada, el cambio obligatorio apagado, el evento en la
+auditoría y la sesión abierta sin interrupción.
+
+**Reglas de negocio** — [RF-79](03-requisitos-y-bdd.md#rf-79) (cambio obligatorio en el primer ingreso y tras un
+restablecimiento), [RF-80](03-requisitos-y-bdd.md#rf-80) (cada quien cambia la suya). El escenario es [BDD-32-1](03-requisitos-y-bdd.md#bdd-32-1).
+
+
+---
+
+### <a id="cu-33"></a>CU-33 · Administrar el catálogo de cargos
+
+| | |
+|---|---|
+| **Actor** | Gerencia (exclusivo) |
+| **Objetivo** | Que los cargos del taller se llamen como se llaman, sin tocar permisos |
+| **Precondición** | — |
+| **Frecuencia** | Pocas veces al año |
+
+**Flujo principal**
+
+1. Gerencia abre el catálogo de cargos, dentro de Gestión de usuarios.
+2. **Crea** un cargo, que se agrega al final del catálogo.
+3. **Renombra** uno que ya existe: quienes lo tienen pasan a leerse con el nombre nuevo.
+4. **Reordena** el catálogo, que es el orden en que se ofrece al crear un usuario.
+5. **Desactiva** uno con motivo escrito: deja de ofrecerse, y **quien lo tenía lo conserva**.
+6. Cada uno de estos cambios deja su entrada en la bitácora, y desde ahí se puede revertir
+   ([CU-35](#cu-35)).
+
+**Regla de negocio central**
+
+> **El cargo describe el oficio y no da ni quita un permiso.** Eso lo decide el **tipo** —Gerencia
+> u Operación—, que es lo que evalúa la base de datos. Dos personas con el mismo cargo pueden
+> tener tipos distintos, y renombrar un cargo no cambia lo que nadie puede ver.
+
+**Flujos alternativos**
+
+| # | Situación | Comportamiento |
+|---|---|---|
+| A1 | El nombre ya existe, con otras mayúsculas | Se rechaza: el catálogo no distingue mayúsculas |
+| A2 | El cargo todavía lo tienen personas **activas** | No se desactiva: primero se les cambia el cargo |
+| A3 | El cargo ya está inactivo | Se informa y no se hace nada |
+| A4 | Se crea un usuario después de desactivar un cargo | El cargo ya no aparece en la lista, y quienes lo tenían lo conservan en su ficha ([BDD-33-1](03-requisitos-y-bdd.md#bdd-33-1)) |
+| A5 | Un usuario conserva un cargo que ya está inactivo | Se permite dejárselo; lo que no se permite es **cambiárselo** por uno inactivo |
+| A6 | La sesión es de tipo Operación | La base de datos lo rechaza, no solo la pantalla |
+
+**Postcondición** — Catálogo con el cargo creado, renombrado, reordenado o desactivado con su
+motivo, el historial en la bitácora y ningún permiso cambiado.
+
+**Reglas de negocio** — [RF-74](03-requisitos-y-bdd.md#rf-74) (cada usuario con un cargo del catálogo), [RF-81](03-requisitos-y-bdd.md#rf-81) (crear, renombrar,
+reordenar y desactivar). El escenario es [BDD-33-1](03-requisitos-y-bdd.md#bdd-33-1).
+
 
 ---
 
@@ -590,6 +1447,7 @@ al entrar, y sin ninguna sesión anterior en pie.
 **Postcondición** — Usuario activo con cambio de contraseña obligatorio, las tres columnas de
 desactivación limpias y la entrada `Reactivado` escrita en la bitácora. Es la contraparte exacta
 de [CU-30](#cu-30), y por eso revertir una desactivación desde la bitácora ([CU-35](#cu-35)) equivale a reactivar.
+
 
 ---
 
@@ -646,6 +1504,7 @@ contra-asiento de [CU-04](#cu-04).
 tablas `usuarios` y `cargos`. Ninguna de sus filas se edita ni se elimina, que es lo que fija
 [`ADR-004`](adr/ADR-004-base-solo-escritura.md).
 
+
 ---
 
 ### <a id="cu-36"></a>CU-36 · Previsualizar el sistema como lo ve Operación
@@ -688,6 +1547,7 @@ tablas `usuarios` y `cargos`. Ninguna de sus filas se edita ni se elimina, que e
 **Postcondición** — La interfaz se comporta como para Operación mientras el modo esté activo,
 con el aviso siempre visible. El tipo real de la sesión **nunca cambia**: sigue siendo Gerencia
 y es lo que evalúa la base de datos.
+
 
 ---
 
@@ -732,8 +1592,6 @@ y es lo que evalúa la base de datos.
 **Postcondición** — Archivo CSV o PDF en poder de Gerencia, sin manifiesto, y una fila nueva en
 `exportaciones` que deja constancia de qué salió del sistema y cuándo.
 
----
-
 ## 3. Trazabilidad
 
 La matriz que conecta cada caso de uso con su requisito, su escenario BDD, su pantalla del
@@ -756,7 +1614,7 @@ de los dos quede mal descrito. Tampoco agrega tablas: reutiliza `exportaciones` 
 puntos 2.1 y 8).
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [15](15-glosario.md "15 · Glosario") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.28.0") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades")
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [15](15-glosario.md "15 · Glosario") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [23](23-diagramas-de-casos-de-uso.md "23 · Diagramas de los casos de uso") · [Contrato](../contrato/README.md "Contrato de la API · v0.28.0") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades")
 <!-- /generado:referenciado-desde -->
 
 ---

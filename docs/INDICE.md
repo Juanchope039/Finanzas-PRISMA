@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/INDICE.md "Historial de cambios") | [🔄 Vivo](22-documentacion.md#estados) | 2026-09-15 | 2026-10-04 | — |
+| [1.12.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/INDICE.md "Historial de cambios") | [🔄 Vivo](22-documentacion.md#estados) | 2026-09-15 | 2026-10-04 | — |
 
 > Guía para moverte por toda la documentación de PRISMA **sin perderte y sin saber de programación**.
 > Cada documento dice para qué sirve, en lenguaje sencillo, y está marcado si es técnico.
@@ -22,7 +22,7 @@
 | 🧑‍💼 **Dueña o gerente del negocio** | [Resumen ejecutivo](00-resumen-ejecutivo.md) → abre el [mockup](../mockup/prisma-mockup.html) → [Reglas financieras](05-reglas-financieras.md) |
 | 👷 **Trabajas en el negocio (Operación)** | [Resumen ejecutivo](00-resumen-ejecutivo.md) → abre el [mockup](../mockup/prisma-mockup.html) |
 | 🧾 **Eres el contador** | [Reglas financieras](05-reglas-financieras.md) → [Nómina y capacidad de pago](06-nomina-y-capacidad-de-pago.md) → [Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) |
-| 💻 **Vas a programar** | [Visión y alcance](01-vision-y-alcance.md) → [Casos de uso](02-casos-de-uso.md) → [Requisitos y BDD](03-requisitos-y-bdd.md) → [Modelo de datos](04-modelo-de-datos.md) → [Arquitectura](07-arquitectura.md) → [Contrato de API](20-contrato-de-api.md) |
+| 💻 **Vas a programar** | [Visión y alcance](01-vision-y-alcance.md) → [Casos de uso](02-casos-de-uso.md) → [Diagramas de los casos de uso](23-diagramas-de-casos-de-uso.md) → [Requisitos y BDD](03-requisitos-y-bdd.md) → [Modelo de datos](04-modelo-de-datos.md) → [Arquitectura](07-arquitectura.md) → [Contrato de API](20-contrato-de-api.md) |
 | 📚 **Solo quieres entender una palabra** | [Glosario](15-glosario.md) |
 
 ---
@@ -37,6 +37,7 @@
 | ¿Cuánto le puedo pagar a una empleada sin quebrar? | 📗 [Nómina y capacidad de pago](06-nomina-y-capacidad-de-pago.md) |
 | ¿Quién puede hacer qué dentro del sistema? | 📘 [Visión y alcance](01-vision-y-alcance.md) |
 | ¿Qué cosas se pueden hacer, paso a paso? | 📘 [Casos de uso](02-casos-de-uso.md) |
+| ¿Me lo puedes dibujar? | 📘 [Diagramas de los casos de uso](23-diagramas-de-casos-de-uso.md) |
 | ¿Está mi información segura y protegida? | 📘 [Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) |
 | ¿Qué pasa si se daña el computador? (respaldos) | 📘 [Respaldo y exportación](13-respaldo-y-exportacion.md) |
 | ¿Cuándo va a estar listo y cómo lo empezamos a usar? | 📘 [Plan de desarrollo](08-plan-de-desarrollo.md) · [Plan de implantación](09-plan-de-implantacion.md) |
@@ -74,6 +75,7 @@
 | 20 | [Contrato de API](20-contrato-de-api.md) | Cómo le habla el front a la API: qué responde siempre, cómo se evita cobrar dos veces lo mismo y cómo se protege el camino. | 🔧 |
 | 21 | [Trabajo en paralelo](21-trabajo-en-paralelo.md) | Cómo avanzan varios carriles de trabajo a la vez —personas, equipos o sesiones— y qué reglas impiden que se pisen. | 🔧 |
 | 22 | [Documentación: versiones, estados y referencias](22-documentacion.md) | Cómo se lleva la documentación: qué dice el encabezado de cada documento, cuándo sube su versión y cómo se enlazan las referencias. | 📘 |
+| 23 | [Diagramas de los casos de uso](23-diagramas-de-casos-de-uso.md) | Los 37 casos de uso dibujados dos veces: uno para quien dirige el negocio y uno para quien programa. | 📘 |
 | — | [Decisiones de arquitectura (ADRs)](adr/) | Por qué se tomó cada decisión técnica importante. | 🔧 |
 
 ---
@@ -156,11 +158,11 @@ Qué significa cada estado y cuándo sube una versión está en
 | Documento | Versión | Estado | Actualizado | Etiquetas |
 |---|:---:|---|:---:|---|
 | [PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) | 1.7.0 | ✅ Vigente | 2026-10-03 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
-| [Tareas de PRISMA](../TODO.md) | 9.50.0 | 🔄 Vivo | 2026-10-04 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
-| [Índice navegable de la documentación](INDICE.md) | 1.11.0 | 🔄 Vivo | 2026-10-04 | — |
+| [Tareas de PRISMA](../TODO.md) | 9.51.0 | 🔄 Vivo | 2026-10-04 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
+| [Índice navegable de la documentación](INDICE.md) | 1.12.0 | 🔄 Vivo | 2026-10-04 | — |
 | [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Finanzas](#etiqueta-finanzas) · [Plan](#etiqueta-plan) |
 | [01 · Visión y alcance](01-vision-y-alcance.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Requisitos](#etiqueta-requisitos) |
-| [02 · Casos de uso](02-casos-de-uso.md) | 1.3.0 | ✅ Vigente | 2026-09-23 | [Requisitos](#etiqueta-requisitos) · [Negocio](#etiqueta-negocio) |
+| [02 · Casos de uso](02-casos-de-uso.md) | 1.4.0 | ✅ Vigente | 2026-10-04 | [Requisitos](#etiqueta-requisitos) · [Negocio](#etiqueta-negocio) |
 | [03 · Requisitos, reglas de negocio y escenarios BDD](03-requisitos-y-bdd.md) | 3.0.0 | ✅ Vigente | 2026-10-01 | [Requisitos](#etiqueta-requisitos) · [Calidad](#etiqueta-calidad) |
 | [04 · Modelo de datos](04-modelo-de-datos.md) | 5.20.0 | ✅ Vigente | 2026-10-03 | [Base de datos](#etiqueta-base-de-datos) · [Arquitectura](#etiqueta-arquitectura) |
 | [05 · Reglas financieras y KPIs](05-reglas-financieras.md) | 2.1.0 | ✅ Vigente | 2026-10-01 | [Finanzas](#etiqueta-finanzas) · [Negocio](#etiqueta-negocio) |
@@ -180,7 +182,8 @@ Qué significa cada estado y cuándo sube una versión está en
 | [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 8.0.0 | ✅ Vigente | 2026-10-04 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
 | [20 · Contrato de la API](20-contrato-de-api.md) | 2.14.0 | ✅ Vigente | 2026-10-04 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) | 6.1.0 | ✅ Vigente | 2026-10-03 | [Paralelo](#etiqueta-paralelo) · [Proceso](#etiqueta-proceso) |
-| [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 2.2.0 | ✅ Vigente | 2026-09-27 | [Proceso](#etiqueta-proceso) |
+| [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 2.2.1 | ✅ Vigente | 2026-10-04 | [Proceso](#etiqueta-proceso) |
+| [23 · Diagramas de los casos de uso](23-diagramas-de-casos-de-uso.md) | 0.1.0 | 🔍 En revisión | 2026-10-04 | [Requisitos](#etiqueta-requisitos) · [Negocio](#etiqueta-negocio) · [Arquitectura](#etiqueta-arquitectura) |
 | [Contrato de la API · v0.28.0](../contrato/README.md) | 3.22.0 | ✅ Vigente | 2026-10-04 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [Decisiones de arquitectura (ADR)](adr/README.md) | 1.16.0 | 🔄 Vivo | 2026-10-04 | [Arquitectura](#etiqueta-arquitectura) |
 | [ADR-001 · Stack tecnológico](adr/ADR-001-stack.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) |
@@ -242,7 +245,7 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 <!-- generado:etiquetas · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 ### <a id="etiqueta-negocio"></a>Negocio
 
-[PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) · [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) · [01 · Visión y alcance](01-vision-y-alcance.md) · [02 · Casos de uso](02-casos-de-uso.md) · [05 · Reglas financieras y KPIs](05-reglas-financieras.md) · [06 · Nómina y capacidad de pago](06-nomina-y-capacidad-de-pago.md) · [09 · Plan de implantación](09-plan-de-implantacion.md) · [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) · [14 · Roadmap e ideas de valor](14-roadmap-e-ideas.md) · [15 · Glosario](15-glosario.md)
+[PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) · [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) · [01 · Visión y alcance](01-vision-y-alcance.md) · [02 · Casos de uso](02-casos-de-uso.md) · [05 · Reglas financieras y KPIs](05-reglas-financieras.md) · [06 · Nómina y capacidad de pago](06-nomina-y-capacidad-de-pago.md) · [09 · Plan de implantación](09-plan-de-implantacion.md) · [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) · [14 · Roadmap e ideas de valor](14-roadmap-e-ideas.md) · [15 · Glosario](15-glosario.md) · [23 · Diagramas de los casos de uso](23-diagramas-de-casos-de-uso.md)
 
 ### <a id="etiqueta-finanzas"></a>Finanzas
 
@@ -254,7 +257,7 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-requisitos"></a>Requisitos
 
-[01 · Visión y alcance](01-vision-y-alcance.md) · [02 · Casos de uso](02-casos-de-uso.md) · [03 · Requisitos, reglas de negocio y escenarios BDD](03-requisitos-y-bdd.md)
+[01 · Visión y alcance](01-vision-y-alcance.md) · [02 · Casos de uso](02-casos-de-uso.md) · [03 · Requisitos, reglas de negocio y escenarios BDD](03-requisitos-y-bdd.md) · [23 · Diagramas de los casos de uso](23-diagramas-de-casos-de-uso.md)
 
 ### <a id="etiqueta-ux"></a>UX
 
@@ -262,7 +265,7 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-arquitectura"></a>Arquitectura
 
-[04 · Modelo de datos](04-modelo-de-datos.md) · [07 · Arquitectura técnica](07-arquitectura.md) · [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) · [Decisiones de arquitectura (ADR)](adr/README.md) · [ADR-001 · Stack tecnológico](adr/ADR-001-stack.md) · [ADR-002 · Arquitectura hexagonal con regla de dependencias verificada](adr/ADR-002-arquitectura-hexagonal.md) · [ADR-011 · Stack: Flutter y Dart con API propia](adr/ADR-011-stack-flutter-dart.md) · [ADR-015 · Validación en tres capas, con la base como juez](adr/ADR-015-validacion-tres-capas.md) · [ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API](adr/ADR-017-api-en-java.md) · [ADR-018 · Tres partes, y el front no toma decisiones](adr/ADR-018-front-sin-decisiones.md)
+[04 · Modelo de datos](04-modelo-de-datos.md) · [07 · Arquitectura técnica](07-arquitectura.md) · [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) · [23 · Diagramas de los casos de uso](23-diagramas-de-casos-de-uso.md) · [Decisiones de arquitectura (ADR)](adr/README.md) · [ADR-001 · Stack tecnológico](adr/ADR-001-stack.md) · [ADR-002 · Arquitectura hexagonal con regla de dependencias verificada](adr/ADR-002-arquitectura-hexagonal.md) · [ADR-011 · Stack: Flutter y Dart con API propia](adr/ADR-011-stack-flutter-dart.md) · [ADR-015 · Validación en tres capas, con la base como juez](adr/ADR-015-validacion-tres-capas.md) · [ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API](adr/ADR-017-api-en-java.md) · [ADR-018 · Tres partes, y el front no toma decisiones](adr/ADR-018-front-sin-decisiones.md)
 
 ### <a id="etiqueta-api"></a>API
 
