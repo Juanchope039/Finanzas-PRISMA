@@ -163,7 +163,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Finanzas](#etiqueta-finanzas) · [Plan](#etiqueta-plan) |
 | [01 · Visión y alcance](01-vision-y-alcance.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Requisitos](#etiqueta-requisitos) |
 | [02 · Casos de uso](02-casos-de-uso.md) | 1.4.0 | ✅ Vigente | 2026-10-04 | [Requisitos](#etiqueta-requisitos) · [Negocio](#etiqueta-negocio) |
-| [03 · Requisitos, reglas de negocio y escenarios BDD](03-requisitos-y-bdd.md) | 3.0.0 | ✅ Vigente | 2026-10-01 | [Requisitos](#etiqueta-requisitos) · [Calidad](#etiqueta-calidad) |
+| [03 · Requisitos, reglas de negocio y escenarios BDD](03-requisitos-y-bdd.md) | 3.0.1 | ✅ Vigente | 2026-10-04 | [Requisitos](#etiqueta-requisitos) · [Calidad](#etiqueta-calidad) |
 | [04 · Modelo de datos](04-modelo-de-datos.md) | 5.20.0 | ✅ Vigente | 2026-10-03 | [Base de datos](#etiqueta-base-de-datos) · [Arquitectura](#etiqueta-arquitectura) |
 | [05 · Reglas financieras y KPIs](05-reglas-financieras.md) | 2.1.0 | ✅ Vigente | 2026-10-01 | [Finanzas](#etiqueta-finanzas) · [Negocio](#etiqueta-negocio) |
 | [06 · Nómina y capacidad de pago](06-nomina-y-capacidad-de-pago.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Nómina](#etiqueta-nomina) · [Finanzas](#etiqueta-finanzas) · [Negocio](#etiqueta-negocio) |
