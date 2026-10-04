@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.48.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-04 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.49.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-04 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -57,8 +57,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 12 | 0 | 0 | 0 |
-| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 13 | 11 | 0 | 2 | 1 |
-| **Total** | **155** | **153** | **0** | **2** | **1** |
+| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 15 | 11 | 0 | 4 | 2,5 |
+| **Total** | **157** | **153** | **0** | **4** | **2,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,19 +241,20 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
+| **API** | [9.14](docs/08-plan-de-desarrollo.md#tarea-9-14) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **2 tareas y 1 días de trabajo** de 155 tareas del plan.
+Quedan **4 tareas y 2,5 días de trabajo** de 157 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
 | 1 | 0,2 semanas | **3,2 semanas** |
-| 2 | 0,2 semanas | **3,2 semanas** |
-| 3 | 0,2 semanas | **3,2 semanas** |
+| 2 | 0,3 semanas | **3,3 semanas** |
+| 3 | 0,3 semanas | **3,3 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1624,10 +1625,17 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       `/swagger-ui` y de `/webjars`, así que cerrar `/docs` dejaba el mapa igual de público. Se vio
       probándolo contra la aplicación levantada. **Falla cerrado**: sin credencial configurada esas
       rutas contestan como si no existieran. Se quitó el apagón provisional del perfil `prod`
-- [ ] ⚡ [**9.12**](docs/08-plan-de-desarrollo.md#tarea-9-12) El proyecto prod de Supabase, el único de pago · Decisión — salió
-      de partir la [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4), y desde el [ADR-044](docs/adr/ADR-044-dos-ambientes-desplegados.md) ya no lleva uat; el expediente y la cifra están en el
+- [ ] ⚡ [**9.12**](docs/08-plan-de-desarrollo.md#tarea-9-12) El proyecto pre-prod de Supabase, el único de pago de este proyecto · Decisión — salió
+      de partir la [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4), y desde el [ADR-044](docs/adr/ADR-044-dos-ambientes-desplegados.md) ya no lleva uat. Desde el [ADR-045](docs/adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md) se llama
+      pre-prod, y el prod del taller vive en otro repositorio. El expediente y la cifra están en el
       [§7.1](#71-el-expediente-de-uat-y-prod) y lo único que falta es la firma
 - [ ] ⚡ [**9.13**](docs/08-plan-de-desarrollo.md#tarea-9-13) Los secretos de GitHub para correr permisos y extremo a extremo contra dev · Decisión — la configuración que los trabajos del CI ya esperan desde la [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11) y la [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6), que apuntaban a qa y desde el [ADR-044](docs/adr/ADR-044-dos-ambientes-desplegados.md) apuntan a dev; sin ella se saltan con aviso. Los de permisos ya se llaman `DEV_BASE_URL`, `DEV_BASE_CLAVE_DUENO`, `DEV_BASE_CLAVE_API`, `DEV_AUTH_URL`, `DEV_ANON_KEY` y `DEV_SERVICE_ROLE_KEY` ([9.5](docs/08-plan-de-desarrollo.md#tarea-9-5))
+- [ ] ⚡ [**9.14**](docs/08-plan-de-desarrollo.md#tarea-9-14) El nombre pre-prod en el código · API, Front, Base — `pre-prod` se suma
+      al contrato, a `PRISMA_AMBIENTE`, al perfil de Spring, a la franja, a CORS, a GHCR y a las
+      variables de la CI del front. `prod` no se borra: sigue nombrando el ambiente del taller
+- [ ] 🔒 [**9.15**](docs/08-plan-de-desarrollo.md#tarea-9-15) La entrega del release a prod, en otro repositorio · Decisión — falta
+      que quien dirige diga qué repositorio es, qué recibe (la imagen de GHCR o el código) y quién la
+      dispara (la tubería al fusionar en `main` o una persona)
 
 ---
 
@@ -1637,7 +1645,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 |---|---|---|---|---|
 | 1 | Dónde se aloja la API | Quien dirige | Tarea [0.8](docs/08-plan-de-desarrollo.md#tarea-0-8) | ✅ Railway, y **dev desde ya** ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md), que reemplazó al [ADR-026](docs/adr/ADR-026-railway-al-final.md)); qa, uat y prod al final |
 | 2 | Dónde se publica el front web | Quien dirige | Tarea [0.9](docs/08-plan-de-desarrollo.md#tarea-0-9) | ✅ Railway, y **dev desde ya** ([ADR-032](docs/adr/ADR-032-railway-en-dev-ahora.md), que reemplazó al [ADR-026](docs/adr/ADR-026-railway-al-final.md)); qa, uat y prod al final |
-| 3 | El pago de uat y prod, los dos proyectos de Supabase que faltan | Quien dirige crea; Gerencia paga | Tarea [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) | 🟡 dev y qa quedaron configurados, con el esquema y la semilla aplicados, y con ellos se cerró la [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4). **El expediente está listo y la cifra es ≈ 55 USD al mes** ([§7.1](#71-el-expediente-de-uat-y-prod)); falta la firma de Gerencia, que es el paso 2 del [09 §3.1](docs/09-plan-de-implantacion.md#31-alistamiento-técnico-de-los-ambientes) |
+| 3 | El pago de pre-prod, el proyecto de Supabase que falta ([ADR-045](docs/adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md)) | Quien dirige crea; Gerencia paga | Tarea [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) | 🟡 dev y qa quedaron configurados, con el esquema y la semilla aplicados, y con ellos se cerró la [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4). **El expediente está listo y la cifra es ≈ 55 USD al mes** ([§7.1](#71-el-expediente-de-uat-y-prod)); falta la firma de Gerencia, que es el paso 2 del [09 §3.1](docs/09-plan-de-implantacion.md#31-alistamiento-técnico-de-los-ambientes) |
 | 4 | PostgreSQL para desarrollar sin Docker | Quien dirige | Tareas [0.5](docs/08-plan-de-desarrollo.md#tarea-0-5) y [0.10](docs/08-plan-de-desarrollo.md#tarea-0-10) | ✅ El proyecto dev de Supabase, mientras Docker no arranque |
 | 5 | Remotos de los repositorios | Quien dirige | Integración continua | ✅ Los cuatro en GitHub |
 | 6 | Cómo consiguen la API y su CI el esquema de `prisma_db` | Carril API | Tareas [1.7](docs/08-plan-de-desarrollo.md#tarea-1-7), [1.8](docs/08-plan-de-desarrollo.md#tarea-1-8) y [1.15](docs/08-plan-de-desarrollo.md#tarea-1-15) | ✅ Por etiqueta, con el Supabase CLI en la tubería ([ADR-029](docs/adr/ADR-029-esquema-por-etiqueta.md)) |

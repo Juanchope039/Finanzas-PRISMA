@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/13-respaldo-y-exportacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Datos personales](INDICE.md#etiqueta-datos-personales) |
+| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/13-respaldo-y-exportacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Datos personales](INDICE.md#etiqueta-datos-personales) |
 
 > **Construcción: diseñado, no construido.** La exportación se especifica aquí en detalle para que
 > el modelo de datos y la arquitectura la soporten desde el primer día, pero su construcción
@@ -30,6 +30,7 @@ igual sería caro y, peor, confundiría lo que hay que proteger de verdad.
 | Ambiente | Qué respaldo necesita | Por qué |
 |---|---|---|
 | **prod** | Los tres niveles, completos | Es el único con datos reales. Lo que se pierda ahí no está en ninguna otra parte |
+| **pre-prod** | Ninguno. Se vuelve a sembrar | Sus datos son la misma siembra anonimizada de uat ([ADR-045](adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md)) |
 | **uat** | Ninguno. Se vuelve a sembrar | Sus datos son una siembra anonimizada (1.2). Si se pierden, se generan otra vez |
 | **qa** | Ninguno. Es desechable | Migraciones y semilla reproducible lo devuelven al mismo estado: [`16-base-de-datos-y-snapshots.md`](16-base-de-datos-y-snapshots.md) |
 | **dev** | Ninguno. Es desechable | Lo mismo, y además cada quien tiene la suya |
@@ -169,7 +170,7 @@ Todo archivo de exportación incluye un `manifiesto.json`:
 | `registros` por archivo | Detecta una exportación truncada |
 | `version_esquema` | Permite saber si el respaldo corresponde a una estructura anterior |
 | `version_api` | Dice qué versión de `prisma_api` armó el archivo. Es la que genera, así que es la que responde |
-| `ambiente` | Dice de qué ambiente salió: `dev`, `qa`, `uat` o `prod` |
+| `ambiente` | Dice de qué ambiente salió: `dev`, `qa`, `uat`, `pre-prod` o `prod` |
 | `totales_control` | Permite verificar el respaldo **sin abrirlo**: si los totales no coinciden con los del sistema, algo falló |
 | `zona_horaria` | Evita que las fechas se reinterpreten mal al abrir el archivo en otro lugar |
 

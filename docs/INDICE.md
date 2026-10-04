@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.10.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/INDICE.md "Historial de cambios") | [🔄 Vivo](22-documentacion.md#estados) | 2026-09-15 | 2026-10-03 | — |
+| [1.11.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/INDICE.md "Historial de cambios") | [🔄 Vivo](22-documentacion.md#estados) | 2026-09-15 | 2026-10-04 | — |
 
 > Guía para moverte por toda la documentación de PRISMA **sin perderte y sin saber de programación**.
 > Cada documento dice para qué sirve, en lenguaje sencillo, y está marcado si es técnico.
@@ -129,6 +129,7 @@ a una pregunta concreta. Ver el [índice de ADRs](adr/README.md).
 | [042](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md) | La página técnica de la API muestra la misma versión que «Acerca de»: la del programa que está corriendo. La del acuerdo con el front sigue anotada al lado | ¿Por qué la página técnica de la API mostraba un número distinto al de «Acerca de»? |
 | [043](adr/ADR-043-dependencias-solo-hacia-atras.md) | Ninguna tarea del plan espera a otra que esté más abajo en la lista, y una herramienta lo comprueba en cada cambio | ¿Puedo confiar en que el orden del plan es el orden en que se puede trabajar? |
 | [044](adr/ADR-044-dos-ambientes-desplegados.md) | Solo hay dos copias del sistema en línea: la de pruebas y la del taller. Las revisiones intermedias las hace la tubería antes de publicar, sin pagar por más servidores | ¿Dónde se prueba una versión antes de que llegue al taller, y cuánto cuesta? |
+| [045](adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md) | La copia en línea donde Gerencia aprueba se llama pre-prod y no tiene datos reales. El taller trabaja en prod, que vive en otro repositorio y recibe cada versión aprobada | ¿Dónde aprueba Gerencia, y dónde trabaja el taller? |
 
 Del 017 al 026 están las decisiones del modelo de tres partes: el cambio de Dart a Java en la
 API, que el front no decide nada, el contrato de respuesta, la idempotencia, el canal firmado,
@@ -155,8 +156,8 @@ Qué significa cada estado y cuándo sube una versión está en
 | Documento | Versión | Estado | Actualizado | Etiquetas |
 |---|:---:|---|:---:|---|
 | [PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) | 1.7.0 | ✅ Vigente | 2026-10-03 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
-| [Tareas de PRISMA](../TODO.md) | 9.48.0 | 🔄 Vivo | 2026-10-04 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
-| [Índice navegable de la documentación](INDICE.md) | 1.10.0 | 🔄 Vivo | 2026-10-03 | — |
+| [Tareas de PRISMA](../TODO.md) | 9.49.0 | 🔄 Vivo | 2026-10-04 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
+| [Índice navegable de la documentación](INDICE.md) | 1.11.0 | 🔄 Vivo | 2026-10-04 | — |
 | [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Finanzas](#etiqueta-finanzas) · [Plan](#etiqueta-plan) |
 | [01 · Visión y alcance](01-vision-y-alcance.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Requisitos](#etiqueta-requisitos) |
 | [02 · Casos de uso](02-casos-de-uso.md) | 1.3.0 | ✅ Vigente | 2026-09-23 | [Requisitos](#etiqueta-requisitos) · [Negocio](#etiqueta-negocio) |
@@ -165,23 +166,23 @@ Qué significa cada estado y cuándo sube una versión está en
 | [05 · Reglas financieras y KPIs](05-reglas-financieras.md) | 2.1.0 | ✅ Vigente | 2026-10-01 | [Finanzas](#etiqueta-finanzas) · [Negocio](#etiqueta-negocio) |
 | [06 · Nómina y capacidad de pago](06-nomina-y-capacidad-de-pago.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Nómina](#etiqueta-nomina) · [Finanzas](#etiqueta-finanzas) · [Negocio](#etiqueta-negocio) |
 | [07 · Arquitectura técnica](07-arquitectura.md) | 5.2.0 | ✅ Vigente | 2026-10-01 | [Arquitectura](#etiqueta-arquitectura) · [API](#etiqueta-api) · [Front](#etiqueta-front) · [Base de datos](#etiqueta-base-de-datos) · [Seguridad](#etiqueta-seguridad) |
-| [08 · Plan de desarrollo](08-plan-de-desarrollo.md) | 8.0.0 | ✅ Vigente | 2026-10-03 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
-| [09 · Plan de implantación](09-plan-de-implantacion.md) | 6.0.0 | ✅ Vigente | 2026-10-03 | [Plan](#etiqueta-plan) · [Entrega](#etiqueta-entrega) · [Negocio](#etiqueta-negocio) |
-| [10 · Diseño de experiencia y mockups](10-ux-y-mockups.md) | 6.1.0 | ✅ Vigente | 2026-10-03 | [UX](#etiqueta-ux) · [Front](#etiqueta-front) |
+| [08 · Plan de desarrollo](08-plan-de-desarrollo.md) | 8.1.0 | ✅ Vigente | 2026-10-04 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
+| [09 · Plan de implantación](09-plan-de-implantacion.md) | 7.0.0 | ✅ Vigente | 2026-10-04 | [Plan](#etiqueta-plan) · [Entrega](#etiqueta-entrega) · [Negocio](#etiqueta-negocio) |
+| [10 · Diseño de experiencia y mockups](10-ux-y-mockups.md) | 6.2.0 | ✅ Vigente | 2026-10-04 | [UX](#etiqueta-ux) · [Front](#etiqueta-front) |
 | [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) | 2.0.0 | ✅ Vigente | 2026-09-18 | [Seguridad](#etiqueta-seguridad) · [Datos personales](#etiqueta-datos-personales) · [Negocio](#etiqueta-negocio) |
-| [12 · Pruebas y calidad](12-pruebas-y-calidad.md) | 4.1.0 | ✅ Vigente | 2026-10-02 | [Calidad](#etiqueta-calidad) |
-| [13 · Respaldo y exportación](13-respaldo-y-exportacion.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Base de datos](#etiqueta-base-de-datos) · [Datos personales](#etiqueta-datos-personales) |
+| [12 · Pruebas y calidad](12-pruebas-y-calidad.md) | 4.2.0 | ✅ Vigente | 2026-10-04 | [Calidad](#etiqueta-calidad) |
+| [13 · Respaldo y exportación](13-respaldo-y-exportacion.md) | 1.2.0 | ✅ Vigente | 2026-10-04 | [Base de datos](#etiqueta-base-de-datos) · [Datos personales](#etiqueta-datos-personales) |
 | [14 · Roadmap e ideas de valor](14-roadmap-e-ideas.md) | 1.0.0 | 🔄 Vivo | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
 | [15 · Glosario](15-glosario.md) | 1.1.0 | ✅ Vigente | 2026-09-17 | [Negocio](#etiqueta-negocio) |
 | [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) | 3.4.0 | ✅ Vigente | 2026-09-23 | [Base de datos](#etiqueta-base-de-datos) · [Calidad](#etiqueta-calidad) |
 | [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) | 1.1.0 | ✅ Vigente | 2026-09-22 | [Front](#etiqueta-front) · [API](#etiqueta-api) · [Arquitectura](#etiqueta-arquitectura) |
 | [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) | 0.1.0 | 💡 Propuesta | 2026-09-16 | [Entrega](#etiqueta-entrega) · [Front](#etiqueta-front) |
-| [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 6.5.0 | ✅ Vigente | 2026-10-04 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
-| [20 · Contrato de la API](20-contrato-de-api.md) | 2.13.0 | ✅ Vigente | 2026-09-27 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
+| [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 7.0.0 | ✅ Vigente | 2026-10-04 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
+| [20 · Contrato de la API](20-contrato-de-api.md) | 2.14.0 | ✅ Vigente | 2026-10-04 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) | 6.1.0 | ✅ Vigente | 2026-10-03 | [Paralelo](#etiqueta-paralelo) · [Proceso](#etiqueta-proceso) |
 | [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 2.2.0 | ✅ Vigente | 2026-09-27 | [Proceso](#etiqueta-proceso) |
 | [Contrato de la API · v0.27.0](../contrato/README.md) | 3.21.0 | ✅ Vigente | 2026-10-02 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
-| [Decisiones de arquitectura (ADR)](adr/README.md) | 1.15.0 | 🔄 Vivo | 2026-10-03 | [Arquitectura](#etiqueta-arquitectura) |
+| [Decisiones de arquitectura (ADR)](adr/README.md) | 1.16.0 | 🔄 Vivo | 2026-10-04 | [Arquitectura](#etiqueta-arquitectura) |
 | [ADR-001 · Stack tecnológico](adr/ADR-001-stack.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) |
 | [ADR-002 · Arquitectura hexagonal con regla de dependencias verificada](adr/ADR-002-arquitectura-hexagonal.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) · [API](#etiqueta-api) |
 | [ADR-003 · Dinero como entero de pesos](adr/ADR-003-dinero-entero.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Finanzas](#etiqueta-finanzas) · [API](#etiqueta-api) · [Base de datos](#etiqueta-base-de-datos) |
@@ -225,7 +226,8 @@ Qué significa cada estado y cuándo sube una versión está en
 | [ADR-041 · Un párrafo de código o de commit tiene cuatro líneas como máximo](adr/ADR-041-cuatro-lineas-por-parrafo.md) | 1.0.0 | ✅ Aceptado | 2026-09-24 | [Proceso](#etiqueta-proceso) · [Calidad](#etiqueta-calidad) |
 | [ADR-042 · El documento OpenAPI declara la versión de la API, y la del contrato viaja en x-prisma-contrato](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md) | 1.0.0 | ✅ Aceptado | 2026-09-26 | [API](#etiqueta-api) · [Contrato](#etiqueta-contrato) · [Calidad](#etiqueta-calidad) |
 | [ADR-043 · Una tarea solo depende de tareas anteriores](adr/ADR-043-dependencias-solo-hacia-atras.md) | 1.0.0 | ✅ Aceptado | 2026-09-27 | [Plan](#etiqueta-plan) · [Proceso](#etiqueta-proceso) |
-| [ADR-044 · Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería](adr/ADR-044-dos-ambientes-desplegados.md) | 1.0.0 | ✅ Aceptado | 2026-10-03 | [Entrega](#etiqueta-entrega) · [Plan](#etiqueta-plan) |
+| [ADR-044 · Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería](adr/ADR-044-dos-ambientes-desplegados.md) | 1.1.0 | ✅ Aceptado | 2026-10-04 | [Entrega](#etiqueta-entrega) · [Plan](#etiqueta-plan) |
+| [ADR-045 · El ambiente alojado al final se llama pre-prod, y prod vive en otro repositorio](adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md) | 1.0.0 | ✅ Aceptado | 2026-10-04 | [Entrega](#etiqueta-entrega) · [Plan](#etiqueta-plan) |
 | [AGENTS.md](../AGENTS.md) | 1.3.0 | ✅ Vigente | 2026-09-27 | [Proceso](#etiqueta-proceso) |
 | [CLAUDE.md](../CLAUDE.md) | 12.0.0 | ✅ Vigente | 2026-09-27 | [Proceso](#etiqueta-proceso) |
 | [Herramienta de documentación](../scripts/docs/README.md) | 2.2.0 | ✅ Vigente | 2026-09-27 | [Proceso](#etiqueta-proceso) |
@@ -288,11 +290,11 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-entrega"></a>Entrega
 
-[09 · Plan de implantación](09-plan-de-implantacion.md) · [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) · [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) · [ADR-013 · Cuatro ambientes y promoción de migraciones](adr/ADR-013-cuatro-ambientes.md) · [ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad](adr/ADR-014-semver.md) · [ADR-024 · Java 25, Gradle y Spring Boot 4 en la API](adr/ADR-024-java-25-y-gradle.md) · [ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo](adr/ADR-026-railway-al-final.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) · [ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final](adr/ADR-032-railway-en-dev-ahora.md) · [ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige](adr/ADR-034-la-version-sube-en-cada-pr.md) · [ADR-044 · Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería](adr/ADR-044-dos-ambientes-desplegados.md)
+[09 · Plan de implantación](09-plan-de-implantacion.md) · [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) · [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) · [ADR-013 · Cuatro ambientes y promoción de migraciones](adr/ADR-013-cuatro-ambientes.md) · [ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad](adr/ADR-014-semver.md) · [ADR-024 · Java 25, Gradle y Spring Boot 4 en la API](adr/ADR-024-java-25-y-gradle.md) · [ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo](adr/ADR-026-railway-al-final.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) · [ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final](adr/ADR-032-railway-en-dev-ahora.md) · [ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige](adr/ADR-034-la-version-sube-en-cada-pr.md) · [ADR-044 · Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería](adr/ADR-044-dos-ambientes-desplegados.md) · [ADR-045 · El ambiente alojado al final se llama pre-prod, y prod vive en otro repositorio](adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md)
 
 ### <a id="etiqueta-plan"></a>Plan
 
-[PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) · [Tareas de PRISMA](../TODO.md) · [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) · [08 · Plan de desarrollo](08-plan-de-desarrollo.md) · [09 · Plan de implantación](09-plan-de-implantacion.md) · [14 · Roadmap e ideas de valor](14-roadmap-e-ideas.md) · [ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo](adr/ADR-026-railway-al-final.md) · [ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué](adr/ADR-028-un-commit-por-tarea.md) · [ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final](adr/ADR-032-railway-en-dev-ahora.md) · [ADR-043 · Una tarea solo depende de tareas anteriores](adr/ADR-043-dependencias-solo-hacia-atras.md) · [ADR-044 · Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería](adr/ADR-044-dos-ambientes-desplegados.md)
+[PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) · [Tareas de PRISMA](../TODO.md) · [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) · [08 · Plan de desarrollo](08-plan-de-desarrollo.md) · [09 · Plan de implantación](09-plan-de-implantacion.md) · [14 · Roadmap e ideas de valor](14-roadmap-e-ideas.md) · [ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo](adr/ADR-026-railway-al-final.md) · [ADR-028 · Cada tarea hecha es un commit, y el commit explica por qué](adr/ADR-028-un-commit-por-tarea.md) · [ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final](adr/ADR-032-railway-en-dev-ahora.md) · [ADR-043 · Una tarea solo depende de tareas anteriores](adr/ADR-043-dependencias-solo-hacia-atras.md) · [ADR-044 · Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería](adr/ADR-044-dos-ambientes-desplegados.md) · [ADR-045 · El ambiente alojado al final se llama pre-prod, y prod vive en otro repositorio](adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md)
 
 ### <a id="etiqueta-paralelo"></a>Paralelo
 
