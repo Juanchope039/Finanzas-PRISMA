@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.14.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-04 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.15.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-05 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
@@ -190,7 +190,8 @@ Así `42213` se lee de un vistazo: **HTTP 422, módulo de usuarios, caso 3 de es
 El rango `01`–`09` cubre **sesión, seguridad y transporte**: lo que ocurre *antes* de que la
 petición llegue a un módulo de negocio. Ahí viven los códigos del canal firmado —`40101` firma
 inválida, `40102` marca de tiempo fuera de ventana, `40103` nonce repetido— y los de idempotencia
-—`40901` clave repetida con petición distinta, `40902` operación en curso—. No son excepciones al
+—`40901` clave repetida con petición distinta, `40902` operación en curso—, y los de la cuenta de
+administrador del primer arranque, `40303` y `40903`. No son excepciones al
 reparto: son un módulo más, el del transporte.
 
 Y el primer límite deja de ser un problema por lo que significa cuando aparece:
@@ -408,13 +409,14 @@ La regla ya no cuelga del verbo, porque desde [ADR-030](adr/ADR-030-contrato-sin
 `/api/v0/consultas/…` y cualquier otra cosa escribe. Así la frontera se comprueba con una prueba
 en vez de recordarse en cuatro sitios distintos.
 
-Se eximen dos operaciones, y por una razón que no es comodidad: `POST /api/v0/sesiones` y
-`POST /api/v0/sesiones/renovacion`. Cuando se piden todavía no hay clave de firma con qué firmar,
+Se eximen tres operaciones, y por una razón que no es comodidad: `POST /api/v0/sesiones`,
+`POST /api/v0/sesiones/renovacion` y `POST /api/v0/sesiones/administrador`, la que crea la primera
+cuenta de Gerencia (tarea [9.16](08-plan-de-desarrollo.md#tarea-9-16)). Cuando se piden todavía no hay clave de firma con qué firmar,
 y su respuesta trae secretos que no deben quedar guardados en la tabla de idempotencia.
 
 > **Eximir de la clave no exime de la transacción.** Quien abre la transacción de una petición es el
 > filtro de esta cabecera ([§5.5](#55-la-regla-que-hace-que-esto-sea-real-y-no-decorativo)), así que una ruta exenta se queda sin ella y toda consulta suya
-> viajaría sin identidad. En las dos exentas la abre el adaptador del caso de uso, que es donde por
+> viajaría sin identidad. En las tres exentas la abre el adaptador del caso de uso, que es donde por
 > fin se sabe quién pregunta: [`07-arquitectura.md`](07-arquitectura.md) [§7.2](07-arquitectura.md#72-la-solución-obligatoria) y [T-02](12-pruebas-y-calidad.md#t-02).
 
 > **La clave la genera el front en el momento en que la persona decide la acción**, no en cada
@@ -844,7 +846,7 @@ firma se arma igual que en una escritura, con `sha256` del cuerpo vacío; y esta
 | Con qué configuración corre cada ambiente y cómo se publica | [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.28.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [ADR-042](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md "ADR-042 · El documento OpenAPI declara la versión de la API, y la del contrato viaja en x-prisma-contrato") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.29.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [ADR-042](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md "ADR-042 · El documento OpenAPI declara la versión de la API, y la del contrato viaja en x-prisma-contrato") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
