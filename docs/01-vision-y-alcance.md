@@ -182,7 +182,7 @@ solo tiene dos columnas porque solo hay dos tipos.
 | Multi-sucursal | Un solo taller | Roadmap #24 |
 
 > **El exportador de respaldos salió de esta tabla.** Estuvo aquí como «se diseña ahora, se construye
-> después» hasta el [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md), que lo metió al [Sprint 8](08-plan-de-desarrollo.md#sprint-8) con las tareas [8.13](08-plan-de-desarrollo.md#tarea-8-13) a [8.17](08-plan-de-desarrollo.md#tarea-8-17). Lo que sigue fuera
+> después» hasta el [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md), que lo metió al [Sprint 8](08-plan-de-desarrollo.md#sprint-8) con las tareas [8.13](08-plan-de-desarrollo.md#tarea-8-13) a [8.17](08-plan-de-desarrollo.md#tarea-8-17). Lo que sigue fuera
 > es **restaurar**, que es la fila de arriba y no la misma cosa: el [13 §9](13-respaldo-y-exportacion.md#9-fuera-de-alcance-de-esta-versión) lo explica.
 
 ---

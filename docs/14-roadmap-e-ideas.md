@@ -17,10 +17,10 @@ esfuerzo**, no por qué tan llamativo suena.
 | <a id="d-02"></a>D-02 | Parafiscales y seguridad social | Requiere formalización previa | Antes de contratar formalmente |
 | <a id="d-03"></a>D-03 | Escenarios jurídicos y factor prestacional | Diferido | Al decidir la figura jurídica |
 | <a id="d-04"></a>D-04 | Parámetros legales versionados por año | Diferido | Junto con [D-02](#d-02) |
-| <a id="d-05"></a>D-05 | ~~Construcción del exportador de respaldos~~ | **Ya no está diferido:** el [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md) lo metió al [Sprint 8](08-plan-de-desarrollo.md#sprint-8) | Tareas [8.13](08-plan-de-desarrollo.md#tarea-8-13) a [8.17](08-plan-de-desarrollo.md#tarea-8-17) |
+| <a id="d-05"></a>D-05 | ~~Construcción del exportador de respaldos~~ | **Ya no está diferido:** el [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) lo metió al [Sprint 8](08-plan-de-desarrollo.md#sprint-8) | Tareas [8.13](08-plan-de-desarrollo.md#tarea-8-13) a [8.17](08-plan-de-desarrollo.md#tarea-8-17) |
 | <a id="d-06"></a>D-06 | Procedimiento y simulacro de restauración | Fase posterior | Mes 2 post go-live. **Sigue diferido**, aunque [D-05](#d-05) ya no lo esté |
 
-> **Sobre [D-05](#d-05), que ya no es una deuda.** El [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md) metió el respaldo con manifiesto al [Sprint 8](08-plan-de-desarrollo.md#sprint-8), y
+> **Sobre [D-05](#d-05), que ya no es una deuda.** El [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) metió el respaldo con manifiesto al [Sprint 8](08-plan-de-desarrollo.md#sprint-8), y
 > con él se fue la idea 01 de la Fase A. **Las dos filas se quedan tachadas en lugar de borrarse**:
 > un número asignado no se reusa, y quien buscara [D-05](#d-05) por una referencia vieja tiene que encontrar
 > dónde terminó.
@@ -44,7 +44,7 @@ Alto impacto, esfuerzo bajo o medio. Son las que más rápido devuelven el traba
 
 | # | Idea | Qué resuelve | Esfuerzo |
 |---|---|---|:---:|
-| 01 | ~~**Exportación de respaldos**~~ ([D-05](#d-05)) | **Entró al [Sprint 8](08-plan-de-desarrollo.md#sprint-8)** con el [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md). El número no se reusa | — |
+| 01 | ~~**Exportación de respaldos**~~ ([D-05](#d-05)) | **Entró al [Sprint 8](08-plan-de-desarrollo.md#sprint-8)** con el [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md). El número no se reusa | — |
 | 02 | **Recordatorio diario de registro** | El riesgo número uno: que se deje de registrar | S |
 | 03 | **Inventario de insumos con alerta de mínimos** | Quedarse sin DTF a mitad de un pedido | M |
 | 04 | **Plantillas de gasto recurrente** | Arriendo y servicios en un toque | S |
@@ -178,7 +178,7 @@ Al final de cada sprint se revisa esta lista y se decide si algo merece entrar a
 **La respuesta por defecto es no.**
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-046 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8")
+**🔗 Referenciado desde:** [00](00-resumen-ejecutivo.md "00 · Resumen ejecutivo") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8")
 <!-- /generado:referenciado-desde -->
 
 ---

@@ -131,7 +131,7 @@ entrada no está en ninguna parte: no se atenúa, no se deshabilita, no existe (
 
 > **Configuración vuelve a la lista, y esta vez el prototipo la tiene.** Estuvo en esta tabla todo
 > el tiempo, pero el mockup la había disuelto: el pro-labore y los sobres se fueron a Inversiones y
-> la importación a Movimientos, y la entrada quedó sin inquilinos. Con el [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md) tiene dos —el
+> la importación a Movimientos, y la entrada quedó sin inquilinos. Con el [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) tiene dos —el
 > respaldo y la auditoría— y el [§4.11](#411-configuración-solo-gerencia) los describe. Así el menú de Gerencia son nueve entradas, las
 > nueve de arriba.
 
@@ -710,7 +710,7 @@ taller, no en una consola.
 La entrada vuelve al menú lateral de Gerencia, donde el [§2](#2-mapa-de-navegación) ya la dibujaba y el [§2.1](#21-navegación-por-rol) ya la listaba.
 Se había disuelto porque sus tres inquilinos de entonces —el pro-labore, los sobres y la
 importación— encontraron mejor casa dentro de Inversiones y de Movimientos. Estos dos no la tienen,
-y el [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md) los puso en el [Sprint 8](08-plan-de-desarrollo.md#sprint-8).
+y el [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) los puso en el [Sprint 8](08-plan-de-desarrollo.md#sprint-8).
 
 Son dos paneles, y nada más. Para Operación la entrada **no existe**: ni atenuada ni deshabilitada
 ([principio 6](#principio-6)), y la vista previa la hace desaparecer igual.
@@ -1030,7 +1030,7 @@ El checklist de aprobación pantalla por pantalla está en
 [`09-plan-de-implantacion.md`](09-plan-de-implantacion.md) [§1](09-plan-de-implantacion.md#1-checklist-de-aprobación-del-mockup).
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.28.0") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-046 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.28.0") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

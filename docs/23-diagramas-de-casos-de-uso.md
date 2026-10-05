@@ -1578,7 +1578,7 @@ las de `contrato/openapi.json`, las tablas las del [04 §4](04-modelo-de-datos.m
 [03 §4](03-requisitos-y-bdd.md#4-escenarios-bdd).
 
 > **Seis rutas de esta tabla todavía no están en el contrato: las de [CU-22](02-casos-de-uso.md#cu-22) y la de la auditoría
-> completa de [CU-23](02-casos-de-uso.md#cu-23).** El [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md) las puso en el plan y su diseño está en la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13), que es la
+> completa de [CU-23](02-casos-de-uso.md#cu-23).** El [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) las puso en el plan y su diseño está en la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13), que es la
 > que las escribe. La tabla las nombra porque ya están decididas, no porque ya existan.
 
 | Caso | Operación del contrato | Tablas | Función o trigger | Escenarios |
@@ -1632,7 +1632,7 @@ trae el id que generó quien registra.
 **Esto no es una lista de pendientes del proyecto** —esa es [`TODO.md`](../TODO.md)—, sino lo que hay que saber
 para no leer un diagrama de más.
 
-**Los dos casos que antes no tenían ruta ya la tienen decidida.** Hasta el [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md), el respaldo con
+**Los dos casos que antes no tenían ruta ya la tienen decidida.** Hasta el [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md), el respaldo con
 manifiesto de [CU-22](02-casos-de-uso.md#cu-22) no tenía operación ni tarea, y [CU-23](02-casos-de-uso.md#cu-23) solo tenía la mitad administrativa.
 Ahora los dos están en el [Sprint 8](08-plan-de-desarrollo.md#sprint-8) y sus diagramas técnicos dibujan la ruta; lo que falta es que la
 tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13) la escriba en el contrato.
@@ -1650,7 +1650,7 @@ se tome, el diagrama técnico de esos casos muestra la flecha de vuelta saliendo
 es exactamente lo que significa.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-046 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8")
 <!-- /generado:referenciado-desde -->
 
 ---

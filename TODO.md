@@ -1482,7 +1482,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       **falta promoverla a dev y a qa**
 
 
-### Respaldo y auditoría · las puso el [ADR-046](docs/adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md)
+### Respaldo y auditoría · las puso el [ADR-047](docs/adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md)
 
 Entraron al final del sprint, con el sprint ya en 12 de 12. **Sus siete dependencias están hechas**
 —[8.11](docs/08-plan-de-desarrollo.md#tarea-8-11), [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12),
@@ -5080,7 +5080,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       existe desde el [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2). Se documentó en [CU-33](docs/02-casos-de-uso.md#cu-33) porque está construida, pero **le falta su
       requisito en el 03**
 - [x] **[CU-22](docs/02-casos-de-uso.md#cu-22) y [CU-23](docs/02-casos-de-uso.md#cu-23) entraron al 08.** Quien dirige lo decidió, y lo escribe el
-      [ADR-046](docs/adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md): el respaldo con manifiesto de [RF-66](docs/03-requisitos-y-bdd.md#rf-66) y la consulta filtrable de toda la
+      [ADR-047](docs/adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md): el respaldo con manifiesto de [RF-66](docs/03-requisitos-y-bdd.md#rf-66) y la consulta filtrable de toda la
       auditoría de [RF-67](docs/03-requisitos-y-bdd.md#rf-67) son las tareas [8.13](docs/08-plan-de-desarrollo.md#tarea-8-13) a [8.19](docs/08-plan-de-desarrollo.md#tarea-8-19). La auditoría va en ruta nueva,
       `POST /api/v0/consultas/auditoria`: la bitácora no cambia de forma
 - [ ] **Confirmar que «Configuración» vuelve al menú de Gerencia.** El [10 §2](docs/10-ux-y-mockups.md#2-mapa-de-navegación) la dibujaba y el [10 §2.1](docs/10-ux-y-mockups.md#21-navegación-por-rol) la
@@ -5088,7 +5088,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       fueron a Inversiones y la importación a Movimientos. Vuelve porque el respaldo y la auditoría
       no tienen otra casa, y con ella las pantallas pasan de once a doce. **Lo decide quien dirige**
 - [ ] 🔒 **Entraron siete tareas nuevas al plan y el total pasa de 157 a 164.** Las puso el
-      [ADR-046](docs/adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md) al final del [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8), que ya estaba en 12 de 12, y le suman unos diez
+      [ADR-047](docs/adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) al final del [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8), que ya estaba en 12 de 12, y le suman unos diez
       días. Todas sus dependencias están hechas, así que la [8.13](docs/08-plan-de-desarrollo.md#tarea-8-13) se puede tomar ya. **Conviene
       revisar si el sprint aguanta siete tareas más o si conviene partirlo**
 - [ ] **El respaldo necesita un bucket nuevo y nadie ha mirado cuánto pesa.** La retención de doce
