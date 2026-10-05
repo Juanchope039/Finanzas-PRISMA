@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.15.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/INDICE.md "Historial de cambios") | [🔄 Vivo](22-documentacion.md#estados) | 2026-09-15 | 2026-10-05 | — |
+| [1.16.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/INDICE.md "Historial de cambios") | [🔄 Vivo](22-documentacion.md#estados) | 2026-09-15 | 2026-10-05 | — |
 
 > Guía para moverte por toda la documentación de PRISMA **sin perderte y sin saber de programación**.
 > Cada documento dice para qué sirve, en lenguaje sencillo, y está marcado si es técnico.
@@ -135,6 +135,7 @@ a una pregunta concreta. Ver el [índice de ADRs](adr/README.md).
 | [046](adr/ADR-046-pre-prod-se-construye-desde-su-rama.md) | La copia donde aprueba Gerencia se arma igual que la de pruebas: desde su propia rama, cada vez que se le pasa una versión aprobada en uat | ¿Cómo llega una versión a la copia donde aprueba Gerencia? |
 | [047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) | Bajar una copia completa y verificable de todo, y ver quién entró y quién cambió qué, se construyen antes de arrancar y no después. Estaban diseñados y nadie los había puesto en el calendario | ¿Cuándo podremos llevarnos nuestra información, y revisar quién hizo qué? |
 | [048](adr/ADR-048-las-ramas-principales-las-protege-github.md) | Las cinco ramas de las que vive el producto no se pueden borrar, y para entrar en ellas hay que pasar por la revisión automática: en la del día a día basta con que haya corrido, y en las que se publican tiene que estar en verde | ¿Quién cuida que nadie borre o rompa lo que ya funciona? |
+| [049](adr/ADR-049-sin-docs-clave-swagger-toma-la-clave-de-gerencia.md) | El catálogo técnico de la aplicación, que solo ve el equipo, se abre con su propia clave; y si nadie la configuró, con la clave inicial de Gerencia, en vez de quedar cerrado sin remedio | ¿Con qué clave entra el equipo técnico a ver el catálogo de la aplicación? |
 
 Del 017 al 026 están las decisiones del modelo de tres partes: el cambio de Dart a Java en la
 API, que el front no decide nada, el contrato de respuesta, la idempotencia, el canal firmado,
@@ -162,7 +163,7 @@ Qué significa cada estado y cuándo sube una versión está en
 |---|:---:|---|:---:|---|
 | [PRISMA — Sistema de Gestión Administrativa y Financiera](../README.md) | 1.7.0 | ✅ Vigente | 2026-10-03 | [Negocio](#etiqueta-negocio) · [Plan](#etiqueta-plan) |
 | [Tareas de PRISMA](../TODO.md) | 9.55.0 | 🔄 Vivo | 2026-10-05 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
-| [Índice navegable de la documentación](INDICE.md) | 1.15.0 | 🔄 Vivo | 2026-10-05 | — |
+| [Índice navegable de la documentación](INDICE.md) | 1.16.0 | 🔄 Vivo | 2026-10-05 | — |
 | [00 · Resumen ejecutivo](00-resumen-ejecutivo.md) | 1.0.0 | ✅ Vigente | 2026-09-16 | [Negocio](#etiqueta-negocio) · [Finanzas](#etiqueta-finanzas) · [Plan](#etiqueta-plan) |
 | [01 · Visión y alcance](01-vision-y-alcance.md) | 2.0.0 | ✅ Vigente | 2026-10-04 | [Negocio](#etiqueta-negocio) · [Requisitos](#etiqueta-requisitos) |
 | [02 · Casos de uso](02-casos-de-uso.md) | 1.5.0 | ✅ Vigente | 2026-10-04 | [Requisitos](#etiqueta-requisitos) · [Negocio](#etiqueta-negocio) |
@@ -182,13 +183,13 @@ Qué significa cada estado y cuándo sube una versión está en
 | [16 · Base de datos: snapshots y datos de prueba](16-base-de-datos-y-snapshots.md) | 3.4.0 | ✅ Vigente | 2026-09-23 | [Base de datos](#etiqueta-base-de-datos) · [Calidad](#etiqueta-calidad) |
 | [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) | 1.1.0 | ✅ Vigente | 2026-09-22 | [Front](#etiqueta-front) · [API](#etiqueta-api) · [Arquitectura](#etiqueta-arquitectura) |
 | [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) | 0.1.0 | 💡 Propuesta | 2026-09-16 | [Entrega](#etiqueta-entrega) · [Front](#etiqueta-front) |
-| [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 9.1.0 | ✅ Vigente | 2026-10-05 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
+| [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 9.2.0 | ✅ Vigente | 2026-10-05 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
 | [20 · Contrato de la API](20-contrato-de-api.md) | 2.15.0 | ✅ Vigente | 2026-10-05 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) | 6.2.0 | ✅ Vigente | 2026-10-05 | [Paralelo](#etiqueta-paralelo) · [Proceso](#etiqueta-proceso) |
 | [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 2.2.1 | ✅ Vigente | 2026-10-04 | [Proceso](#etiqueta-proceso) |
 | [23 · Diagramas de los casos de uso](23-diagramas-de-casos-de-uso.md) | 0.2.0 | 🔍 En revisión | 2026-10-04 | [Requisitos](#etiqueta-requisitos) · [Negocio](#etiqueta-negocio) · [Arquitectura](#etiqueta-arquitectura) |
 | [Contrato de la API · v0.29.0](../contrato/README.md) | 3.23.0 | ✅ Vigente | 2026-10-05 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
-| [Decisiones de arquitectura (ADR)](adr/README.md) | 1.19.0 | 🔄 Vivo | 2026-10-05 | [Arquitectura](#etiqueta-arquitectura) |
+| [Decisiones de arquitectura (ADR)](adr/README.md) | 1.20.0 | 🔄 Vivo | 2026-10-05 | [Arquitectura](#etiqueta-arquitectura) |
 | [ADR-001 · Stack tecnológico](adr/ADR-001-stack.md) | 1.0.0 | ⛔ Reemplazado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) |
 | [ADR-002 · Arquitectura hexagonal con regla de dependencias verificada](adr/ADR-002-arquitectura-hexagonal.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Arquitectura](#etiqueta-arquitectura) · [API](#etiqueta-api) |
 | [ADR-003 · Dinero como entero de pesos](adr/ADR-003-dinero-entero.md) | 1.0.0 | ✅ Aceptado | 2026-09-16 | [Finanzas](#etiqueta-finanzas) · [API](#etiqueta-api) · [Base de datos](#etiqueta-base-de-datos) |
@@ -237,6 +238,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [ADR-046 · pre-prod se construye desde su rama, como dev, y es la última etapa de la tubería](adr/ADR-046-pre-prod-se-construye-desde-su-rama.md) | 1.0.0 | ✅ Aceptado | 2026-10-05 | [Entrega](#etiqueta-entrega) |
 | [ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) | 1.0.0 | ✅ Aceptado | 2026-10-04 | [Plan](#etiqueta-plan) · [Base de datos](#etiqueta-base-de-datos) · [Seguridad](#etiqueta-seguridad) |
 | [ADR-048 · Las cinco ramas principales las protege GitHub, y la tubería es la puerta para entrar](adr/ADR-048-las-ramas-principales-las-protege-github.md) | 1.0.0 | ✅ Aceptado | 2026-10-05 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
+| [ADR-049 · Sin DOCS_CLAVE, Swagger toma PREPROD_GERENCIA_CLAVE](adr/ADR-049-sin-docs-clave-swagger-toma-la-clave-de-gerencia.md) | 1.0.0 | ✅ Aceptado | 2026-10-05 | [Entrega](#etiqueta-entrega) · [Seguridad](#etiqueta-seguridad) |
 | [AGENTS.md](../AGENTS.md) | 1.4.0 | ✅ Vigente | 2026-10-05 | [Proceso](#etiqueta-proceso) |
 | [CLAUDE.md](../CLAUDE.md) | 12.1.0 | ✅ Vigente | 2026-10-05 | [Proceso](#etiqueta-proceso) |
 | [Herramienta de documentación](../scripts/docs/README.md) | 2.2.0 | ✅ Vigente | 2026-09-27 | [Proceso](#etiqueta-proceso) |
@@ -288,7 +290,7 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-seguridad"></a>Seguridad
 
-[07 · Arquitectura técnica](07-arquitectura.md) · [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) · [ADR-005 · Auditoría por triggers, no por la aplicación](adr/ADR-005-auditoria-por-triggers.md) · [ADR-006 · Permisos con Row Level Security](adr/ADR-006-rls-por-rol.md) · [ADR-009 · Acceso con nombre de usuario, no con correo](adr/ADR-009-login-por-usuario.md) · [ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario](adr/ADR-010-almacenamiento-contrasenas.md) · [ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando](adr/ADR-012-identidad-a-postgres.md) · [ADR-021 · Canal firmado contra repetición y manipulación](adr/ADR-021-canal-firmado.md) · [ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0](adr/ADR-030-contrato-sin-get.md) · [ADR-033 · La clave de servicio entra, pero solo para crear identidades](adr/ADR-033-service-role-solo-en-auth.md) · [ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md)
+[07 · Arquitectura técnica](07-arquitectura.md) · [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) · [ADR-005 · Auditoría por triggers, no por la aplicación](adr/ADR-005-auditoria-por-triggers.md) · [ADR-006 · Permisos con Row Level Security](adr/ADR-006-rls-por-rol.md) · [ADR-009 · Acceso con nombre de usuario, no con correo](adr/ADR-009-login-por-usuario.md) · [ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario](adr/ADR-010-almacenamiento-contrasenas.md) · [ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando](adr/ADR-012-identidad-a-postgres.md) · [ADR-021 · Canal firmado contra repetición y manipulación](adr/ADR-021-canal-firmado.md) · [ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0](adr/ADR-030-contrato-sin-get.md) · [ADR-033 · La clave de servicio entra, pero solo para crear identidades](adr/ADR-033-service-role-solo-en-auth.md) · [ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) · [ADR-049 · Sin DOCS_CLAVE, Swagger toma PREPROD_GERENCIA_CLAVE](adr/ADR-049-sin-docs-clave-swagger-toma-la-clave-de-gerencia.md)
 
 ### <a id="etiqueta-datos-personales"></a>Datos personales
 
@@ -300,7 +302,7 @@ Cada etiqueta del encabezado de un documento lleva aquí.
 
 ### <a id="etiqueta-entrega"></a>Entrega
 
-[09 · Plan de implantación](09-plan-de-implantacion.md) · [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) · [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) · [ADR-013 · Cuatro ambientes y promoción de migraciones](adr/ADR-013-cuatro-ambientes.md) · [ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad](adr/ADR-014-semver.md) · [ADR-024 · Java 25, Gradle y Spring Boot 4 en la API](adr/ADR-024-java-25-y-gradle.md) · [ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo](adr/ADR-026-railway-al-final.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) · [ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final](adr/ADR-032-railway-en-dev-ahora.md) · [ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige](adr/ADR-034-la-version-sube-en-cada-pr.md) · [ADR-044 · Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería](adr/ADR-044-dos-ambientes-desplegados.md) · [ADR-045 · El ambiente alojado al final se llama pre-prod, y prod vive en otro repositorio](adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md) · [ADR-046 · pre-prod se construye desde su rama, como dev, y es la última etapa de la tubería](adr/ADR-046-pre-prod-se-construye-desde-su-rama.md) · [ADR-048 · Las cinco ramas principales las protege GitHub, y la tubería es la puerta para entrar](adr/ADR-048-las-ramas-principales-las-protege-github.md)
+[09 · Plan de implantación](09-plan-de-implantacion.md) · [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) · [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) · [ADR-013 · Cuatro ambientes y promoción de migraciones](adr/ADR-013-cuatro-ambientes.md) · [ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad](adr/ADR-014-semver.md) · [ADR-024 · Java 25, Gradle y Spring Boot 4 en la API](adr/ADR-024-java-25-y-gradle.md) · [ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo](adr/ADR-026-railway-al-final.md) · [ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase](adr/ADR-029-esquema-por-etiqueta.md) · [ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final](adr/ADR-032-railway-en-dev-ahora.md) · [ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige](adr/ADR-034-la-version-sube-en-cada-pr.md) · [ADR-044 · Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería](adr/ADR-044-dos-ambientes-desplegados.md) · [ADR-045 · El ambiente alojado al final se llama pre-prod, y prod vive en otro repositorio](adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md) · [ADR-046 · pre-prod se construye desde su rama, como dev, y es la última etapa de la tubería](adr/ADR-046-pre-prod-se-construye-desde-su-rama.md) · [ADR-048 · Las cinco ramas principales las protege GitHub, y la tubería es la puerta para entrar](adr/ADR-048-las-ramas-principales-las-protege-github.md) · [ADR-049 · Sin DOCS_CLAVE, Swagger toma PREPROD_GERENCIA_CLAVE](adr/ADR-049-sin-docs-clave-swagger-toma-la-clave-de-gerencia.md)
 
 ### <a id="etiqueta-plan"></a>Plan
 
