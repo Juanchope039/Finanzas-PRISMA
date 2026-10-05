@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [5.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
+| [6.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/07-arquitectura.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [Arquitectura](INDICE.md#etiqueta-arquitectura) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) · [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Seguridad](INDICE.md#etiqueta-seguridad) |
 
 Tres partes —un front en Flutter multiplataforma, una API en Java 25 con Spring Boot y una capa
 de datos PostgreSQL siempre en línea—. Arquitectura hexagonal (puertos y adaptadores) sobre Clean
@@ -915,14 +915,19 @@ El diseño completo está en
 | Nivel | Qué | Frecuencia | Responsable |
 |---|---|---|---|
 | Automático del proveedor | Toda la base de datos | Diario | Supabase |
-| Exportación manual | Base completa o un mes | Cuando se decida | Gerencia ([CU-22](02-casos-de-uso.md#cu-22)) |
+| Exportación con manifiesto | Base completa, un mes, un rango o una tabla | A demanda o programada | Gerencia ([CU-22](02-casos-de-uso.md#cu-22)) |
 | Repositorio de código | Todo el proyecto | Cada cambio | Control de versiones |
 
 Un respaldo que nunca se restauró no es un respaldo: en UAT, una vez por trimestre, se restaura el
 respaldo de producción anonimizado y se comprueba que el sistema arranca contra él.
 
-El diseño de la exportación está en [`13-respaldo-y-exportacion.md`](13-respaldo-y-exportacion.md).
-Su construcción queda programada para después del go-live.
+El diseño de la exportación está en [`13-respaldo-y-exportacion.md`](13-respaldo-y-exportacion.md), y
+**se construye en el [Sprint 8](08-plan-de-desarrollo.md#sprint-8)**, en las tareas [8.13](08-plan-de-desarrollo.md#tarea-8-13) a [8.17](08-plan-de-desarrollo.md#tarea-8-17), desde el [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md). Lo arma la API, nunca
+el navegador: el `sha256` y los totales de control se calculan en la misma transacción que leyó los
+datos, que es lo que hace que el manifiesto valga.
+
+Lo que sigue diferido es **restaurar**, no exportar. El simulacro de arriba necesita el procedimiento
+escrito, que es la deuda [D-06](14-roadmap-e-ideas.md#d-06) del 14.
 
 ---
 
@@ -979,7 +984,7 @@ el viejo se marca **Reemplazado**, con su cuerpo intacto. El valor de un ADR ree
 constancia de lo que se pensó entonces y por qué.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [01](01-vision-y-alcance.md "01 · Visión y alcance") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-002](adr/ADR-002-arquitectura-hexagonal.md "ADR-002 · Arquitectura hexagonal con regla de dependencias verificada") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-019](adr/ADR-019-contrato-de-respuesta.md "ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos") · [ADR-021](adr/ADR-021-canal-firmado.md "ADR-021 · Canal firmado contra repetición y manipulación")
+**🔗 Referenciado desde:** [01](01-vision-y-alcance.md "01 · Visión y alcance") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [ADR-002](adr/ADR-002-arquitectura-hexagonal.md "ADR-002 · Arquitectura hexagonal con regla de dependencias verificada") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-017](adr/ADR-017-api-en-java.md "ADR-017 · Stack: Flutter en el front, Java con Spring Boot en la API") · [ADR-019](adr/ADR-019-contrato-de-respuesta.md "ADR-019 · Contrato de respuesta y catálogo de códigos de cinco dígitos") · [ADR-021](adr/ADR-021-canal-firmado.md "ADR-021 · Canal firmado contra repetición y manipulación") · [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8")
 <!-- /generado:referenciado-desde -->
 
 ---

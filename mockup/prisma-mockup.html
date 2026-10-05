@@ -2390,6 +2390,145 @@ tbody tr.fila-detalle:hover{background:none}
         </p>
       </section>
 
+      <!-- ===== 10 · CONFIGURACIÓN ===== -->
+      <!-- Vuelve al menú con dos inquilinos y una razón para cada uno (10 §4.11, ADR-047). Se había
+           disuelto cuando el pro-labore y los sobres se fueron a Inversiones y la importación a
+           Movimientos; el respaldo y la auditoría no tienen otra casa. -->
+      <section id="s-configuracion" class="stack" hidden>
+        <div class="pagehead">
+          <div><div class="eyebrow">Solo Gerencia</div><h1 tabindex="-1">Configuración</h1>
+          <p>Llevarse la información del negocio, y saber quién hizo qué. Las dos cosas son de
+          Gerencia y las dos dejan rastro: sacar datos del sistema también se audita.</p></div>
+        </div>
+
+        <div class="panel" id="panel-respaldo">
+          <div class="panel-head"><h2 class="grow">Exportar respaldo</h2></div>
+          <p class="bajada">Una copia completa y verificable, fuera del sistema. El manifiesto lo
+          firma el servidor.</p>
+
+          <div class="campos">
+            <div class="campo"><label for="rb-alcance">Alcance</label>
+              <select id="rb-alcance">
+                <option value="total">Toda la base</option>
+                <option value="mes" selected>Un mes</option>
+                <option value="rango">Un rango de fechas</option>
+                <option value="tabla">Una sola tabla</option>
+              </select></div>
+            <div class="campo"><label for="rb-formato">Formato</label>
+              <select id="rb-formato">
+                <option value="csv_zip" selected>ZIP con un CSV por tabla</option>
+                <option value="excel">Excel, una hoja por tabla</option>
+                <option value="json">JSON con las relaciones</option>
+              </select></div>
+            <div class="campo" id="rb-c-mes"><label for="rb-mes">Mes</label>
+              <input type="month" id="rb-mes" value="2026-09"></div>
+            <div class="campo" id="rb-c-desde" hidden><label for="rb-desde">Desde</label>
+              <input type="date" id="rb-desde" value="2026-07-01"></div>
+            <div class="campo" id="rb-c-hasta" hidden><label for="rb-hasta">Hasta</label>
+              <input type="date" id="rb-hasta" value="2026-09-30"></div>
+            <div class="campo" id="rb-c-tabla" hidden><label for="rb-tabla">Tabla</label>
+              <select id="rb-tabla">
+                <option>movimientos</option><option>pedidos</option><option>productos</option>
+                <option>aportes_retiros</option><option>nomina_detalle</option>
+              </select></div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; align-items:center">
+            <button class="cta" type="button" id="rb-generar">Generar respaldo</button>
+            <p class="capa-ayuda" style="margin:0">Generar arma el archivo en el servidor. Bajarlo es
+            la acción de abajo, y es la que queda registrada.</p>
+          </div>
+
+          <div class="tw" style="margin-top:18px"><table>
+            <thead><tr>
+              <th>Cuándo se generó</th><th>Alcance</th><th>Formato</th>
+              <th class="r r-mid">Tamaño</th><th class="r r-mid">Registros</th>
+              <th>¿Se bajó?</th><th></th>
+            </tr></thead>
+            <tbody id="tb-respaldos"></tbody>
+          </table></div>
+
+          <div class="campos" style="margin-top:18px; grid-template-columns:1fr 2fr">
+            <div class="campo"><label for="rb-programacion">Programación automática</label>
+              <select id="rb-programacion">
+                <option value="no">Desactivada · solo a demanda</option>
+                <option value="mensual">Mensual · el día 1, del mes anterior completo</option>
+                <option value="cierre" selected>Al cerrar el mes</option>
+              </select></div>
+            <div class="campo" style="justify-content:flex-end">
+              <p class="capa-ayuda" style="margin:0" id="rb-prog-ayuda"></p></div>
+          </div>
+
+          <p class="nota-mock">
+            El manifiesto no se enseña aquí: baja dentro del archivo. Lleva el sha256 de cada
+            archivo, cuántos registros trae y tres totales de control, y se calcula en la misma
+            transacción que leyó los datos. Comparar tres números basta para saber si el respaldo
+            es confiable (13 §4).
+          </p>
+
+          <p class="nota-mock">
+            La retención guarda los últimos doce y descarta los anteriores. La columna «¿Se bajó?»
+            no es un adorno: un respaldo que nadie bajó sigue dentro del sistema del que se quería
+            independizar, así que no protege de nada.
+          </p>
+
+          <p class="nota-mock">
+            Esto no es la descarga del Inicio. Si el archivo puede reconstruir el estado del
+            sistema es respaldo y lleva manifiesto; si solo responde una pregunta del momento, es
+            descarga de pantalla y no lo lleva (CU-22, CU-37).
+          </p>
+        </div>
+
+        <div class="panel" id="panel-auditoria">
+          <div class="panel-head"><h2 class="grow">Auditoría</h2></div>
+          <p class="bajada">Quién entró, quién cambió qué, cuándo y desde dónde. Nada se edita.</p>
+
+          <div class="campos">
+            <div class="campo"><label for="au-desde">Desde</label>
+              <input type="date" id="au-desde" value="2026-09-01"></div>
+            <div class="campo"><label for="au-hasta">Hasta</label>
+              <input type="date" id="au-hasta" value="2026-09-30"></div>
+            <div class="campo"><label for="au-quien">Persona</label>
+              <select id="au-quien"><option value="">Cualquiera</option></select></div>
+            <div class="campo"><label for="au-que">Qué pasó</label>
+              <select id="au-que">
+                <option value="">Todo</option>
+                <option value="acceso">Accesos: ingresos, cierres e intentos fallidos</option>
+                <option value="usuarios">Cambios sobre usuarios y cargos</option>
+                <option value="negocio">Cambios sobre el resto del libro</option>
+              </select></div>
+          </div>
+
+          <div class="tw" style="margin-top:18px"><table>
+            <thead><tr>
+              <th>Cuándo</th><th>Quién</th><th>Qué pasó</th><th>Sobre qué</th>
+              <th>Dispositivo</th><th>IP</th><th>Detalle</th>
+            </tr></thead>
+            <tbody id="tb-auditoria"></tbody>
+          </table></div>
+
+          <div class="bit-pie"><button class="ghost" type="button" id="au-mas" hidden></button></div>
+
+          <p class="nota-mock">
+            Aquí no hay un solo botón que cambie nada, y es a propósito: la auditoría la escriben
+            triggers de la base y ninguna de sus filas se edita ni se borra. Revertir un cambio se
+            hace desde la bitácora de Gestión de usuarios, que es donde está el contexto para
+            entender qué se va a deshacer (CU-35).
+          </p>
+
+          <p class="nota-mock">
+            De un intento fallido se guarda el usuario tecleado, la fecha, el dispositivo y la IP.
+            Nunca la contraseña, ni completa ni parcial, ni aquí ni en ninguna otra parte (RNF-18).
+          </p>
+
+          <p class="nota-mock">
+            La «Bitácora de cambios» de Gestión de usuarios es esta misma tabla filtrada por
+            usuarios y cargos. No es otra fuente: es la misma auditoría, recortada a lo que se
+            puede revertir.
+          </p>
+        </div>
+      </section>
+
       <p class="nota-mock">
         Prototipo navegable · datos de ejemplo · las cifras corresponden al mes de verificación
         documentado en <span style="color:var(--accent)">docs/05-reglas-financieras.md §12</span>
@@ -2465,6 +2604,7 @@ var SECCIONES = [
   {id:'reportes',    nom:'Reportes',              ger:true},
   {id:'nomina',      nom:'Nómina',                ger:true},
   {id:'cotizador',   nom:'Cotizador',             ger:false},
+  {id:'configuracion',nom:'Configuración',        ger:true},
   {id:'usuarios',    nom:'Gestión de usuarios',   ger:true, oculta:true}
 ];
 
@@ -7447,6 +7587,244 @@ function impInforme(){
     imp.cargado = true;
     impInforme();
   });
+})();
+
+/* ---------- Configuración · respaldo y auditoría (CU-22, CU-23) ---------- */
+/* Las dos tablas son de lectura. La del respaldo tiene una acción, bajar el archivo, que en el
+   sistema real sella descargado_en y descargado_por; la de la auditoría no tiene ninguna, y eso
+   no es un olvido: ADR-004 y ADR-005. */
+(function(){
+
+var ALCANCES = {total:'Toda la base', mes:'Un mes', rango:'Un rango', tabla:'Una tabla'};
+var FORMATOS = {csv_zip:'ZIP con CSV', excel:'Excel', json:'JSON'};
+
+/* Doce es lo que la retención del 13 §5 guarda. Aquí van seis para que la tabla se lea. */
+var RESPALDOS = [
+  {id:6, cuando:new Date(2026, 8, 30, 18, 42), alcance:'mes',    detalle:'septiembre 2026',
+   formato:'csv_zip', tam:'4,2 MB',  registros:18420, bajado:null},
+  {id:5, cuando:new Date(2026, 8,  1,  0,  5), alcance:'mes',    detalle:'agosto 2026',
+   formato:'csv_zip', tam:'3,9 MB',  registros:17110, bajado:new Date(2026, 8, 1, 9, 20)},
+  {id:4, cuando:new Date(2026, 7, 14, 11, 30), alcance:'total',  detalle:'todo el histórico',
+   formato:'json',    tam:'21,7 MB', registros:96044, bajado:new Date(2026, 7, 14, 11, 38)},
+  {id:3, cuando:new Date(2026, 7,  1,  0,  5), alcance:'mes',    detalle:'julio 2026',
+   formato:'csv_zip', tam:'3,4 MB',  registros:15880, bajado:null},
+  {id:2, cuando:new Date(2026, 6, 20, 16,  3), alcance:'tabla',  detalle:'movimientos',
+   formato:'excel',   tam:'1,1 MB',  registros:9204,  bajado:new Date(2026, 6, 20, 16, 5)},
+  {id:1, cuando:new Date(2026, 6,  2, 10, 15), alcance:'rango',  detalle:'1 abr a 30 jun 2026',
+   formato:'csv_zip', tam:'2,8 MB',  registros:12337, bajado:new Date(2026, 6, 2, 10, 44)}
+];
+
+/* La auditoría de verdad sale de la tabla `auditoria`, que guarda los accesos y los cambios de
+   todas las tablas. Estas filas son una muestra de las tres clases que la pantalla distingue. */
+var AUDITORIA = [
+  {cuando:new Date(2026, 8, 30, 18, 42), quien:'yuliana', clase:'negocio',
+   que:'Respaldo generado', sobre:'Septiembre 2026, ZIP con CSV',
+   disp:'Chrome · Windows', ip:'186.154.22.8', detalle:'18.420 registros · sha256 verificado'},
+  {cuando:new Date(2026, 8, 30,  8,  2), quien:'marcela', clase:'acceso',
+   que:'Inicio de sesión', sobre:'Marcela Ospina Vélez',
+   disp:'Chrome · Android', ip:'190.85.14.212', detalle:'—'},
+  {cuando:new Date(2026, 8, 30,  7, 58), quien:'marcela', clase:'acceso',
+   que:'Intento fallido', sobre:'usuario tecleado: marcela',
+   disp:'Chrome · Android', ip:'190.85.14.212', detalle:'Contraseña incorrecta'},
+  {cuando:new Date(2026, 8, 29, 17, 20), quien:'yuliana', clase:'usuarios',
+   que:'Cargo cambiado', sobre:'Daniela Cortés Ramírez',
+   disp:'Chrome · Windows', ip:'186.154.22.8', detalle:'Domiciliaria → Empleada de producción'},
+  {cuando:new Date(2026, 8, 29, 12,  6), quien:'daniela', clase:'negocio',
+   que:'Movimiento anulado', sobre:'Gasto de $184.000 del 27 sep',
+   disp:'Safari · iPhone', ip:'191.102.8.44', detalle:'Motivo: se registró dos veces'},
+  {cuando:new Date(2026, 8, 29,  9, 41), quien:'daniela', clase:'acceso',
+   que:'Cierre de sesión', sobre:'Daniela Cortés Ramírez',
+   disp:'Safari · iPhone', ip:'191.102.8.44', detalle:'—'},
+  {cuando:new Date(2026, 8, 28, 15, 12), quien:'', clase:'acceso',
+   que:'Intento fallido', sobre:'usuario tecleado: admin',
+   disp:'Firefox · Linux', ip:'45.231.90.7', detalle:'El usuario no existe'},
+  {cuando:new Date(2026, 8, 28, 10, 33), quien:'yuliana', clase:'usuarios',
+   que:'Clave restablecida', sobre:'Marcela Ospina Vélez',
+   disp:'Chrome · Windows', ip:'186.154.22.8', detalle:'Clave temporal entregada en persona'}
+];
+
+var AUDITORIA_VISIBLES = 6;
+var auditoriaTodas = false;
+
+function alcanceTexto(r){ return ALCANCES[r.alcance] + ' · ' + r.detalle; }
+
+/* El campo que acompaña al alcance cambia con él: un mes no se pide igual que un rango. */
+function camposDeAlcance(){
+  var sel = document.getElementById('rb-alcance');
+  if (!sel) return;
+  var v = sel.value;
+  var mostrar = {
+    'rb-c-mes':   v === 'mes',
+    'rb-c-desde': v === 'rango',
+    'rb-c-hasta': v === 'rango',
+    'rb-c-tabla': v === 'tabla'
+  };
+  Object.keys(mostrar).forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.hidden = !mostrar[id];
+  });
+}
+
+function ayudaProgramacion(){
+  var sel = document.getElementById('rb-programacion');
+  var ayuda = document.getElementById('rb-prog-ayuda');
+  if (!sel || !ayuda) return;
+  ayuda.textContent =
+    sel.value === 'cierre'
+      ? 'La recomendada: el archivo queda atado a un mes ya cerrado y verificado, no a un momento cualquiera.'
+      : sel.value === 'mensual'
+        ? 'El día 1 de cada mes, con el mes anterior completo. Sale aunque nadie haya cerrado nada.'
+        : 'Solo lo que alguien pida a mano. Nada sale del sistema sin que una persona lo decida.';
+}
+
+function tablaRespaldos(){
+  var cuerpo = document.getElementById('tb-respaldos');
+  if (!cuerpo) return;
+  cuerpo.innerHTML = RESPALDOS.map(function(r){
+    var pastilla = r.bajado
+      ? '<span class="pill p-ok">Sí · ' + fmtFechaHora(r.bajado).split(',')[0] + '</span>'
+      : '<span class="pill p-warn">Todavía no</span>';
+    return '<tr>' +
+      '<td class="mono" style="white-space:nowrap; color:var(--muted)">' + fmtFechaHora(r.cuando) +
+      '</td><td style="font-weight:500">' + enTexto(alcanceTexto(r)) +
+      '</td><td>' + enTexto(FORMATOS[r.formato]) +
+      '</td><td class="r r-mid mono">' + enTexto(r.tam) +
+      '</td><td class="r r-mid mono">' + r.registros.toLocaleString('es-CO') +
+      '</td><td style="white-space:nowrap">' + pastilla +
+      '</td><td style="white-space:nowrap">' +
+        '<button class="ghost" type="button" data-bajar="' + r.id + '">Descargar</button>' +
+      '</td></tr>';
+  }).join('');
+
+  $$('#tb-respaldos [data-bajar]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var r = RESPALDOS.filter(function(x){ return x.id === +b.getAttribute('data-bajar'); })[0];
+      if (!r) return;
+      /* Bajar no se simula con un archivo: lo que importa del gesto es que queda registrado. */
+      if (!r.bajado) r.bajado = new Date();
+      tablaRespaldos();
+    });
+  });
+}
+
+function opcionesPersona(){
+  var sel = document.getElementById('au-quien');
+  if (!sel) return;
+  var vistos = {};
+  var nombres = AUDITORIA.filter(function(e){
+    if (!e.quien || vistos[e.quien]) return false;
+    vistos[e.quien] = true;
+    return true;
+  });
+  sel.innerHTML = '<option value="">Cualquiera</option>' + nombres.map(function(e){
+    var u = USUARIOS.filter(function(x){ return x.usuario === e.quien; })[0];
+    return '<option value="' + enTexto(e.quien) + '">' +
+      enTexto(u ? u.nombreCompleto : e.quien) + '</option>';
+  }).join('');
+}
+
+function auditoriaFiltrada(){
+  var quien = (document.getElementById('au-quien')  || {}).value || '';
+  var clase = (document.getElementById('au-que')    || {}).value || '';
+  var desde = (document.getElementById('au-desde')  || {}).value || '';
+  var hasta = (document.getElementById('au-hasta')  || {}).value || '';
+  return AUDITORIA.filter(function(e){
+    if (quien && e.quien !== quien) return false;
+    if (clase && e.clase !== clase) return false;
+    /* La comparación va por el día, que es como se piden las dos fechas del filtro. */
+    var dia = e.cuando.getFullYear() + '-' +
+      String(e.cuando.getMonth() + 1).padStart(2, '0') + '-' +
+      String(e.cuando.getDate()).padStart(2, '0');
+    if (desde && dia < desde) return false;
+    if (hasta && dia > hasta) return false;
+    return true;
+  });
+}
+
+function tablaAuditoria(){
+  var cuerpo = document.getElementById('tb-auditoria');
+  if (!cuerpo) return;
+  var todas  = auditoriaFiltrada();
+  var faltan = todas.length - AUDITORIA_VISIBLES;
+  var lista  = (auditoriaTodas || faltan <= 0) ? todas : todas.slice(0, AUDITORIA_VISIBLES);
+
+  cuerpo.innerHTML = lista.length
+    ? lista.map(function(e){
+        var u = USUARIOS.filter(function(x){ return x.usuario === e.quien; })[0];
+        var autor = e.quien ? (u ? u.nombreCompleto : e.quien) : 'Nadie: no había sesión';
+        return '<tr>' +
+          '<td class="mono" style="white-space:nowrap; color:var(--muted)">' + fmtFechaHora(e.cuando) +
+          '</td><td>' + enTexto(autor) +
+          '</td><td style="font-weight:500">' + enTexto(e.que) +
+          '</td><td>' + enTexto(e.sobre) +
+          '</td><td style="color:var(--muted)">' + enTexto(e.disp) +
+          '</td><td class="mono" style="color:var(--muted)">' + enTexto(e.ip) +
+          '</td><td style="color:var(--muted)">' + enTexto(e.detalle) + '</td></tr>';
+      }).join('')
+    : '<tr><td colspan="7" style="color:var(--faint)">Ninguna entrada con esos filtros. ' +
+      'La auditoría no borra nada: lo que no sale es porque el filtro lo deja fuera.</td></tr>';
+
+  var mas = document.getElementById('au-mas');
+  if (mas){
+    mas.hidden = (faltan <= 0);
+    mas.textContent = auditoriaTodas
+      ? 'Ver solo las ' + AUDITORIA_VISIBLES + ' más recientes'
+      : 'Ver todas · faltan ' + faltan;
+  }
+}
+
+var alc = document.getElementById('rb-alcance');
+if (alc) alc.addEventListener('change', camposDeAlcance);
+
+var prog = document.getElementById('rb-programacion');
+if (prog) prog.addEventListener('change', ayudaProgramacion);
+
+var gen = document.getElementById('rb-generar');
+if (gen) gen.addEventListener('click', function(){
+  var r = {
+    id: RESPALDOS.length ? RESPALDOS[0].id + 1 : 1,
+    cuando: new Date(),
+    alcance: (document.getElementById('rb-alcance') || {}).value || 'total',
+    formato: (document.getElementById('rb-formato') || {}).value || 'csv_zip',
+    tam: '4,4 MB', registros: 18611, bajado: null
+  };
+  r.detalle = r.alcance === 'mes'   ? ((document.getElementById('rb-mes')   || {}).value || '')
+            : r.alcance === 'tabla' ? ((document.getElementById('rb-tabla') || {}).value || '')
+            : r.alcance === 'rango' ? (((document.getElementById('rb-desde') || {}).value || '') +
+                                       ' a ' + ((document.getElementById('rb-hasta') || {}).value || ''))
+            : 'todo el histórico';
+  RESPALDOS.unshift(r);
+  /* La retención descarta los anteriores al doce: el prototipo hace lo mismo. */
+  if (RESPALDOS.length > 12) RESPALDOS.length = 12;
+  tablaRespaldos();
+  /* Generar un respaldo también se audita: sacar información del sistema siempre deja rastro. */
+  AUDITORIA.unshift({
+    cuando: r.cuando, quien: 'yuliana', clase: 'negocio',
+    que: 'Respaldo generado', sobre: alcanceTexto(r) + ', ' + FORMATOS[r.formato],
+    disp: 'Chrome · Windows', ip: '186.154.22.8',
+    detalle: r.registros.toLocaleString('es-CO') + ' registros · con manifiesto'
+  });
+  tablaAuditoria();
+});
+
+['au-quien', 'au-que', 'au-desde', 'au-hasta'].forEach(function(id){
+  var el = document.getElementById(id);
+  if (el) el.addEventListener('change', function(){ auditoriaTodas = false; tablaAuditoria(); });
+});
+
+var mas = document.getElementById('au-mas');
+if (mas) mas.addEventListener('click', function(){
+  auditoriaTodas = !auditoriaTodas;
+  tablaAuditoria();
+});
+
+/* Se pinta al cargar y no desde el arranque de abajo: nada de aquí depende del rol ni de la
+   sesión, porque la sección entera es de Gerencia y el menú ya lo impone. */
+camposDeAlcance();
+ayudaProgramacion();
+opcionesPersona();
+tablaRespaldos();
+tablaAuditoria();
 })();
 
 /* ---------- arranque ---------- */

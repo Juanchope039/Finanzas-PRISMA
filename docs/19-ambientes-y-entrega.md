@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [8.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-04 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [9.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-05 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -102,16 +102,19 @@ no hay forma de saber cuál dice la verdad.
 ### 2.3 El artefacto se promueve, no se reconstruye
 
 Se compila **una vez**, en la etapa qa. Ese mismo archivo —el mismo `build/web` del front, la
-misma imagen de contenedor de `prisma_api`— es el que pasa la etapa uat, el que corre en pre-prod
-y el que se entrega a prod. Gerencia aprueba en pre-prod ese archivo mismo, no su commit en dev
-([ADR-045](adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md)). Lo único que cambia entre ambientes es la configuración del [§3](#3-la-configuración-de-cada-ambiente).
+misma imagen de contenedor de `prisma_api`— es el que pasa la etapa uat y el que se entrega a prod.
+Lo único que cambia entre ambientes es la configuración del [§3](#3-la-configuración-de-cada-ambiente).
+
+> **pre-prod no corre ese archivo: se construye desde su rama, como dev** ([ADR-046](adr/ADR-046-pre-prod-se-construye-desde-su-rama.md)).
+> El árbol es el mismo que compiló qa, porque la etapa pre-prod lo comprueba; lo que puede diferir
+> es la compilación. Gerencia aprueba en pre-prod ese árbol, no el archivo que llega a prod.
 
 > **Recompilar para prod sería aprobar una cosa y publicar otra.** Entre dos compilaciones cambia
 > la versión de una dependencia, la fecha, el compilador. Lo que Gerencia firmó en UAT dejaría de
 > ser lo que corre en el taller, y la firma no valdría nada.
 
 > **Dev es la excepción, y es deliberada** ([ADR-032](adr/ADR-032-railway-en-dev-ahora.md)). Railway construye dev desde el repositorio en
-> cada fusión, sin pasar por el registro. La regla de arriba gobierna **qa → uat → pre-prod → prod**, que es
+> cada fusión, sin pasar por el registro, y pre-prod igual desde el [ADR-046](adr/ADR-046-pre-prod-se-construye-desde-su-rama.md). La regla de arriba gobierna **qa → uat → prod**, que es
 > donde una firma depende de ella. Dev construye desde su rama porque dev es precisamente donde se
 > comprueba que la imagen construye.
 
@@ -122,12 +125,12 @@ y el que se entrega a prod. Gerencia aprueba en pre-prod ese archivo mismo, no s
 | Se publica | La etapa qa construye y publica `ghcr.io/juanchope039/finanzas-prisma-api:<versión>` y `…-front:<versión>`. El `+` del front pasa a `_`, que Docker no admite |
 | Se reconoce | Cada imagen lleva el árbol de git del que salió, en la etiqueta OCI `prisma.arbol`. «Es la misma» se juzga por el árbol y no por el commit, porque los PR de promoción crean commits de fusión con el mismo contenido |
 | No se repite | Si qa encuentra su versión ya publicada con otro árbol, falla: una versión es un solo artefacto. Con el mismo árbol, no recompila |
-| Se promueve | uat y pre-prod comprueban que la imagen de su versión trae su árbol, y mueven la etiqueta `uat` o `pre-prod` hacia ella **sin recompilar**. La etiqueta `prod` la mueve la entrega a prod ([9.15](08-plan-de-desarrollo.md#tarea-9-15)). Lo que llegó a uat o a `main` sin pasar por qa no encuentra su imagen y se queda en rojo |
+| Se promueve | uat y pre-prod comprueban que la imagen de su versión trae su árbol, y mueven la etiqueta `uat` o `pre-prod` hacia ella **sin recompilar**. La etiqueta `prod` la mueve la entrega a prod ([9.15](08-plan-de-desarrollo.md#tarea-9-15)). Lo que llegó a uat o a `pre-prod` sin pasar por qa no encuentra su imagen y se queda en rojo |
 
 Consecuencia práctica: la configuración del front **no puede compilarse dentro del artefacto de
 prod en el momento de publicar**, porque eso es recompilar. Cada ambiente compila su propio
-artefacto en la etapa qa con sus `--dart-define` —pre-prod y prod tienen cada uno el suyo—, y el que
-se promueve es el del ambiente destino, construido desde el mismo commit ya aprobado.
+artefacto: el de prod lo compila la etapa qa con sus `--dart-define`, y el de pre-prod lo compila
+Railway desde la rama `pre-prod`, con su configuración ([ADR-046](adr/ADR-046-pre-prod-se-construye-desde-su-rama.md)).
 
 ### 2.4 El artefacto de la API: una imagen de contenedor con una JVM adentro
 
@@ -449,7 +452,7 @@ primera y la última despliegan.
 | develop | `develop` | Lo del [§6.1](#61-en-cada-empuje-en-paralelo), y la integración contra la base que levanta la tubería | dev, en Railway |
 | qa | `qa` | Extremo a extremo, permisos con sesión real y la traducción de errores del [§6.2](#62-en-cada-promoción). **Compila el artefacto una vez** y lo publica en GHCR con su versión ([§2.3](#23-el-artefacto-se-promueve-no-se-reconstruye)) | Nada |
 | uat | `uat` | La semilla realista y anonimizada, y la batería entera sobre ella. Comprueba que el artefacto es el de qa | Nada |
-| pre-prod | `main` | Comprueba que el artefacto es el que compiló qa y lo marca `pre-prod`, sin recompilar | pre-prod, cuando exista ([ADR-045](adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md)) |
+| pre-prod | `pre-prod` | Comprueba que el árbol es el que compiló qa | pre-prod, en Railway, construido desde la rama ([ADR-046](adr/ADR-046-pre-prod-se-construye-desde-su-rama.md)) |
 | prod | — | La entrega del mismo artefacto al otro repositorio, tras cada release ([9.15](08-plan-de-desarrollo.md#tarea-9-15)) | prod, fuera de este proyecto |
 
 **La prueba de permisos corre en las cuatro**, dos veces ([9.5](08-plan-de-desarrollo.md#tarea-9-5)): contra la base que levanta la
@@ -472,7 +475,7 @@ estar en la migración y no en el ambiente.
 | 1 | Las pruebas del [§6.1](#61-en-cada-empuje-en-paralelo) pasan en verde en la rama | Automático |
 | 2 | Se promueve a la etapa qa, que compila el artefacto una vez y corre las pruebas del [§6.2](#62-en-cada-promoción) | Automático |
 | 3 | Se promueve a la etapa uat, que corre la batería entera sobre la semilla anonimizada, y se avisa a Gerencia | Desarrollo |
-| 4 | Se fusiona en `main`: se aplican las migraciones en pre-prod y se despliega ahí **el mismo artefacto** | Desarrollo |
+| 4 | Se fusiona `uat` en `pre-prod`: se aplican las migraciones en pre-prod y Railway construye ahí **el mismo árbol** | Desarrollo |
 | 5 | Gerencia revisa en pre-prod lo que pidió y lo aprueba | Gerencia |
 | 6 | Se entregan a prod, en el otro repositorio, las migraciones y después **el mismo artefacto**, y se anota versión, commit, fecha y quién aprobó ([9.15](08-plan-de-desarrollo.md#tarea-9-15)) | Desarrollo |
 | 7 | Se comprueba `POST /api/v0/consultas/version` en prod y se abre una pantalla real | Desarrollo |
@@ -652,7 +655,7 @@ solo está **con qué configuración corre cada ambiente y cómo se mueve una ve
 | Qué forma tiene cada respuesta de la API y qué cabeceras lleva | [`20-contrato-de-api.md`](20-contrato-de-api.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [ADR-038](adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md "ADR-038 · La pila local se orquesta desde prisma_db, y cada receta se apunta desde su .env") · [ADR-044](adr/ADR-044-dos-ambientes-desplegados.md "ADR-044 · Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería") · [ADR-045](adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md "ADR-045 · El ambiente alojado al final se llama pre-prod, y prod vive en otro repositorio") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [ADR-038](adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md "ADR-038 · La pila local se orquesta desde prisma_db, y cada receta se apunta desde su .env") · [ADR-044](adr/ADR-044-dos-ambientes-desplegados.md "ADR-044 · Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería") · [ADR-045](adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md "ADR-045 · El ambiente alojado al final se llama pre-prod, y prod vive en otro repositorio") · [ADR-046](adr/ADR-046-pre-prod-se-construye-desde-su-rama.md "ADR-046 · pre-prod se construye desde su rama, como dev, y es la última etapa de la tubería") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

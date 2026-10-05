@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/02-casos-de-uso.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [1.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/02-casos-de-uso.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 Los 37 casos de uso del MVP, **todos con su flujo paso a paso** en el [§2](#2-casos-de-uso-detallados). Cada uno indica el
 **rol autorizado**, y esa autorización se implementa en la base de datos, no en la pantalla.
@@ -910,7 +910,8 @@ original, y el informe de lo que no entró, con el motivo de cada fila.
 
 **Flujo principal**
 
-1. Gerencia pide la exportación con su **alcance** —la base entera o un mes— y su formato.
+1. Gerencia pide la exportación con su **alcance** —la base entera, un mes, un rango de fechas o
+   una sola tabla— y su formato: ZIP con un CSV por tabla, Excel o JSON.
 2. **La API arma el archivo**, no el navegador: abre la transacción con la identidad de quien
    pidió y lee lo que la base le permita leer.
 3. Calcula el `sha256` de cada archivo, escribe el `manifiesto.json` con los totales de control y
@@ -935,12 +936,15 @@ original, y el informe de lo que no entró, con el motivo de cada fila.
 | A2 | El respaldo es grande | Lo arma la API y lo entrega: no depende de la memoria del navegador |
 | A3 | El archivo se va a usar para restaurar | Sirve, porque lleva manifiesto: es lo que permite comprobar que no se corrompió |
 | A4 | Se pide un respaldo anonimizado para pruebas | También lleva manifiesto, y su `ambiente` dice de dónde salió |
+| A5 | Nadie lo pide y la programación está activa | Se genera igual, mensual o al cerrar el mes, y espera a que alguien lo baje. La retención guarda los últimos doce |
 
 **Postcondición** — Archivo en poder de Gerencia con su `manifiesto.json`, sus `sha256` y sus
 totales de control, y una fila nueva que deja constancia de qué salió del sistema y cuándo.
 
-**Reglas de negocio** — [RF-66](03-requisitos-y-bdd.md#rf-66) (exportar con descarga manual), [ADR-008](adr/ADR-008-exportacion.md). El contenido del
-manifiesto, el alcance por rol y quién arma el archivo están en [13-respaldo-y-exportacion.md](13-respaldo-y-exportacion.md).
+**Reglas de negocio** — [RF-66](03-requisitos-y-bdd.md#rf-66) (exportar con descarga manual), [ADR-008](adr/ADR-008-exportacion.md) y [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md), que lo puso en el
+[Sprint 8](08-plan-de-desarrollo.md#sprint-8). El contenido del manifiesto, el alcance por rol, los formatos, la retención, la
+programación y quién arma el archivo están en [13-respaldo-y-exportacion.md](13-respaldo-y-exportacion.md). Los escenarios son
+[BDD-22-1](03-requisitos-y-bdd.md#bdd-22-1), [BDD-22-2](03-requisitos-y-bdd.md#bdd-22-2) y [BDD-02-5](03-requisitos-y-bdd.md#bdd-02-5).
 
 
 ---
@@ -982,8 +986,12 @@ manifiesto, el alcance por rol y quién arma el archivo están en [13-respaldo-y
 escribe nada en la auditoría salvo lo que ya registra cualquier acceso.
 
 **Reglas de negocio** — [RF-05](03-requisitos-y-bdd.md#rf-05) (cada inicio de sesión registrado), [RF-67](03-requisitos-y-bdd.md#rf-67) (bitácora filtrable),
-[RF-88](03-requisitos-y-bdd.md#rf-88) (todo cambio sobre usuarios y cargos). El escenario es [BDD-23-1](03-requisitos-y-bdd.md#bdd-23-1), y cómo se escribe,
-[04 §5.4](04-modelo-de-datos.md#54-auditoría-por-triggers).
+[RF-88](03-requisitos-y-bdd.md#rf-88) (todo cambio sobre usuarios y cargos). Los escenarios son [BDD-23-1](03-requisitos-y-bdd.md#bdd-23-1) y [BDD-23-2](03-requisitos-y-bdd.md#bdd-23-2), y cómo se
+escribe, [04 §5.4](04-modelo-de-datos.md#54-auditoría-por-triggers).
+
+> **Son dos consultas y no una, y el [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) dice por qué.** La auditoría completa —todas las tablas
+> y los accesos, filtrable— es la operación de este caso. La bitácora de usuarios y cargos es una
+> vista filtrada de lo mismo, vive en Gestión de usuarios y es desde donde se revierte ([CU-35](#cu-35)).
 
 
 ---
@@ -1614,7 +1622,7 @@ de los dos quede mal descrito. Tampoco agrega tablas: reutiliza `exportaciones` 
 puntos 2.1 y 8).
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [15](15-glosario.md "15 · Glosario") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [23](23-diagramas-de-casos-de-uso.md "23 · Diagramas de los casos de uso") · [Contrato](../contrato/README.md "Contrato de la API · v0.28.0") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades")
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [15](15-glosario.md "15 · Glosario") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [23](23-diagramas-de-casos-de-uso.md "23 · Diagramas de los casos de uso") · [Contrato](../contrato/README.md "Contrato de la API · v0.28.0") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8")
 <!-- /generado:referenciado-desde -->
 
 ---

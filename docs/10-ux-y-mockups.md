@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [6.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -125,10 +125,15 @@ sino a **Crea tu contraseña**, y de ahí no sale sin cambiarla.
 | **Gerencia** | Dashboard · Pedidos · Movimientos · Productos · Reportes · Inversiones · Nómina · Cotizador · Configuración |
 | **Operación** | Inicio · Pedidos · Movimientos · Productos (sin costos) · Cotizador · Mi desprendible |
 
-**Gestión de usuarios no aparece en ninguna de las dos listas**, porque ya no es una entrada del
-menú lateral: se alcanza desde el menú de la sesión y allí solo existe para Gerencia. En el
-prototipo el menú lateral de Gerencia baja por eso de nueve entradas a ocho. Para Operación la
+**Gestión de usuarios no aparece en ninguna de las dos listas**, porque no es una entrada del menú
+lateral: se alcanza desde el menú de la sesión y allí solo existe para Gerencia. Para Operación la
 entrada no está en ninguna parte: no se atenúa, no se deshabilita, no existe ([principio 6](#principio-6)).
+
+> **Configuración vuelve a la lista, y esta vez el prototipo la tiene.** Estuvo en esta tabla todo
+> el tiempo, pero el mockup la había disuelto: el pro-labore y los sobres se fueron a Inversiones y
+> la importación a Movimientos, y la entrada quedó sin inquilinos. Con el [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) tiene dos —el
+> respaldo y la auditoría— y el [§4.11](#411-configuración-solo-gerencia) los describe. Así el menú de Gerencia son nueve entradas, las
+> nueve de arriba.
 
 ---
 
@@ -204,7 +209,7 @@ petición, siempre. Cubre `RF-102`.
 
 ---
 
-## 4. Las 11 pantallas
+## 4. Las 12 pantallas
 
 ### 4.0 Acceso
 
@@ -698,6 +703,52 @@ El texto no dice «versión mayor incompatible» ni menciona la API: dice que la
 servidor no se entienden y que casi siempre se arregla actualizando. Quien la lee está en un
 taller, no en una consola.
 
+### 4.11 Configuración *(solo Gerencia)*
+
+**Pregunta:** *¿me puedo llevar todo, y quién hizo qué?*
+
+La entrada vuelve al menú lateral de Gerencia, donde el [§2](#2-mapa-de-navegación) ya la dibujaba y el [§2.1](#21-navegación-por-rol) ya la listaba.
+Se había disuelto porque sus tres inquilinos de entonces —el pro-labore, los sobres y la
+importación— encontraron mejor casa dentro de Inversiones y de Movimientos. Estos dos no la tienen,
+y el [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) los puso en el [Sprint 8](08-plan-de-desarrollo.md#sprint-8).
+
+Son dos paneles, y nada más. Para Operación la entrada **no existe**: ni atenuada ni deshabilitada
+([principio 6](#principio-6)), y la vista previa la hace desaparecer igual.
+
+**Panel «Exportar respaldo»** ([CU-22](02-casos-de-uso.md#cu-22), tarea [8.17](08-plan-de-desarrollo.md#tarea-8-17))
+
+Arriba, lo que se pide: **alcance** —toda la base, un mes, un rango de fechas o una sola tabla— y
+**formato** —ZIP con un CSV por tabla, Excel o JSON—. El botón dice **Generar respaldo**, no
+«Descargar»: lo que hace es armar el archivo, y bajarlo es el paso siguiente.
+
+Abajo, la tabla de los **últimos doce**, que es lo que la retención del
+[13 §5](13-respaldo-y-exportacion.md#5-generación-y-descarga) guarda: cuándo se generó, su alcance, su formato, su tamaño, cuántos registros trae y
+**si ya se bajó o todavía no**. Esa última columna es la que distingue un respaldo generado de uno
+que de verdad salió del sistema, y por eso se enseña.
+
+| Decisión | Por qué |
+|---|---|
+| **Generar y bajar son dos acciones** | El archivo se arma en el servidor y queda disponible; bajarlo es una decisión aparte, de un momento concreto, y es la que queda registrada ([13 §5](13-respaldo-y-exportacion.md#5-generación-y-descarga)) |
+| **La columna «¿se bajó?» está a la vista** | Un respaldo que nadie bajó no protege de nada: sigue dentro del sistema del que se quería independizar |
+| **El manifiesto no se enseña, se baja con el archivo** | Son hashes y totales de control: no son para leer en pantalla, son para comprobar el archivo cuando haga falta |
+| **La programación vive aquí y no en otra pantalla** | Es la misma decisión —cada cuánto sale información del sistema— y separarla invita a configurarla y olvidarla |
+
+**Panel «Auditoría»** ([CU-23](02-casos-de-uso.md#cu-23), tarea [8.19](08-plan-de-desarrollo.md#tarea-8-19))
+
+La tabla de toda la auditoría, lo más reciente primero, con cuatro filtros: **fecha**, **persona**,
+**qué se tocó** y **qué pasó**. Cada fila dice quién, cuándo, desde qué dispositivo, desde qué IP y
+qué cambió, con el antes y el después; y se abre para ver el detalle completo.
+
+Trae lo que la «Bitácora de cambios» del [§5.5](#55-bitácora-de-cambios) no trae: **los inicios de sesión, los cierres y los
+intentos fallidos**, y los cambios sobre el resto de las tablas. De un intento fallido se ve el
+usuario tecleado, la fecha, el dispositivo y la IP, y **nunca la contraseña**, ni completa ni parcial
+([RNF-18](03-requisitos-y-bdd.md#rnf-18)).
+
+> **Nada de esta pantalla se edita, y no lleva ni un botón que lo insinúe.** La auditoría la escriben
+> triggers ([ADR-005](adr/ADR-005-auditoria-por-triggers.md)) y ninguna de sus filas se toca ([ADR-004](adr/ADR-004-base-solo-escritura.md)). Revertir un cambio no se hace
+> desde aquí: se hace desde la bitácora de Gestión de usuarios, que es donde está el contexto para
+> entender qué se va a deshacer ([CU-35](02-casos-de-uso.md#cu-35)).
+
 ---
 
 ## 5. La sesión: acceso y gestión de usuarios
@@ -825,6 +876,11 @@ cambio, sobre quién, qué pasó, el detalle —`de → a`, o el motivo escrito�
 > error.** Si alguien desactivó a la persona equivocada, la bitácora tiene que mostrar las dos
 > cosas: que se desactivó y que se corrigió. Borrar la primera entrada convertiría la bitácora
 > en un relato editable, y una bitácora editable no sirve como evidencia.
+
+> **Esta bitácora es media auditoría, y la otra media está en Configuración.** Aquí se ven los
+> cambios sobre usuarios y cargos, que son los que se pueden revertir y los que tienen el contexto
+> para entender qué se deshace. Los inicios de sesión, los intentos fallidos y los cambios del resto
+> de las tablas están en el panel «Auditoría» del [§4.11](#411-configuración-solo-gerencia): es la misma `auditoria`, sin el filtro.
 
 No es una idea nueva en el proyecto: es la misma que ya resuelve el «me equivoqué» del dinero.
 Un movimiento errado no se edita, se reversa con un contra-asiento, y los dos quedan visibles
@@ -974,7 +1030,7 @@ El checklist de aprobación pantalla por pantalla está en
 [`09-plan-de-implantacion.md`](09-plan-de-implantacion.md) [§1](09-plan-de-implantacion.md#1-checklist-de-aprobación-del-mockup).
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.28.0") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.28.0") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
