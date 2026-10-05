@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [12.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-09-27 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [12.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-05 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 Las reglas de PRISMA, para cualquier sesión en cualquiera de los cuatro repositorios.
 
@@ -61,6 +61,18 @@ ni referencias de proyectos, ni nombres de clientes.
   rama nueva: se enseña lo que hay y se pregunta qué hacer con ello. El paso a paso: la skill `tarea`.
 - **Se empuja siempre**, desde su primer commit y sin que haya que pedirlo. `develop`, `main`, `qa`,
   `uat` y `prod` no se mueven por cuenta propia.
+
+**Las cinco ramas principales las protege GitHub, no la costumbre** ([ADR-048](docs/adr/ADR-048-las-ramas-principales-las-protege-github.md)).
+- `develop`, `qa`, `uat`, `pre-prod` y `main` **no se pueden borrar**, y a ninguna se entra sin PR.
+  La especificación no tiene `develop`: su base es `main`.
+- **A `develop` se entra con la tubería terminada**, aunque haya terminado mal: es la rama de
+  integración diaria. **A las otras cuatro, con la tubería en verde**, porque de ahí sale lo que se
+  despliega. Lo exigen los checks «Tubería completa» y «Tubería en verde», dos trabajos al final del
+  `ci.yml` de cada repositorio.
+- La definición vive en `scripts/github/politicas-de-ramas.json` y la pone su herramienta, no el
+  panel. **En los tres repositorios de código todavía no se puede aplicar**: son privados y el plan
+  Free de GitHub no tiene reglas de rama. Lo que falta para levantarlo está en
+  `scripts/github/README.md`.
 
 **Una tarea es una rama en cada repositorio que toca, y un PR** ([21 §6.5](docs/21-trabajo-en-paralelo.md#65-ramas-e-integración)).
 - Se trabaja y **se deja la documentación al día antes de avisar que la rama está lista**.
