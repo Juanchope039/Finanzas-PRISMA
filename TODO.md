@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.53.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-04 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.54.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-05 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -57,8 +57,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 19 | 12 | 0 | 7 | 10 |
-| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 15 | 12 | 0 | 3 | 1,5 |
-| **Total** | **164** | **154** | **0** | **10** | **11,5** |
+| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 15 | 13 | 0 | 2 | 1 |
+| **Total** | **164** | **155** | **0** | **9** | **11** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -249,7 +249,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **10 tareas y 11,5 días de trabajo** de 164 tareas del plan.
+Quedan **9 tareas y 11 días de trabajo** de 164 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
@@ -1654,9 +1654,18 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       destino**: qa construye `…-front-pre-prod` con `PRE_PROD_*` y `…-front` con `PROD_*`, y `main`
       marca `:pre-prod` en la API y en el front de pre-prod. `:prod` queda para la entrega ([9.15](docs/08-plan-de-desarrollo.md#tarea-9-15)).
       La base no cambió: `sembrar.ps1` y `promover.ps1` ya se niegan con pre-prod hasta que exista
-- [ ] 🔒 [**9.15**](docs/08-plan-de-desarrollo.md#tarea-9-15) La entrega del release a prod, en otro repositorio · Decisión — falta
-      que quien dirige diga qué repositorio es, qué recibe (la imagen de GHCR o el código) y quién la
-      dispara (la tubería al fusionar en `main` o una persona)
+- [x] [**9.15**](docs/08-plan-de-desarrollo.md#tarea-9-15) La entrega del release a prod, en el repositorio del taller · Base,
+      Decisión — quien dirige respondió las tres preguntas, y el [ADR-048](docs/adr/ADR-048-la-entrega-del-release-a-prod.md) las escribe: un solo
+      repositorio espejo de la cuenta del taller, que recibe **el árbol de la rama `pre-prod` y
+      además las dos imágenes** que compiló qa —copiadas con `imagetools create`, sin recompilar y
+      con su `prisma.arbol` intacto—, y **la dispara una persona**, nunca un empuje.
+      `entregar-release.yml` vive en `prisma_db`, pide quién aprobó y el nombre del espejo escrito
+      entero, y viene en seco por omisión. La etiqueta `entrega-vN` que empuja es lo que arranca el
+      pipeline del otro lado. ✏️ **la entrega no ha corrido nunca**: faltan las variables
+      `PROD_API_URL` y `PROD_API_MAJOR` del front, sin las cuales qa no compila el artefacto de
+      prod, el repositorio espejo con su llave, la credencial de paquetes de esa cuenta y el
+      proyecto de Supabase de prod, que paga ese lado. Las puertas que miran el sobre se vieron
+      fallar una por una; las tres que le preguntan al registro necesitan esas credenciales
 
 ---
 

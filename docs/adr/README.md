@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.18.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-10-05 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
+| [1.19.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-10-05 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
 
 Registro de las decisiones técnicas importantes: qué se decidió, por qué, qué alternativas se
 consideraron y qué consecuencias tiene.
@@ -56,8 +56,9 @@ consideraron y qué consecuencias tiene.
 | [045](ADR-045-pre-prod-y-prod-en-otro-repositorio.md) | El ambiente alojado al final se llama pre-prod, y prod vive en otro repositorio | Aceptado |
 | [046](ADR-046-pre-prod-se-construye-desde-su-rama.md) | pre-prod se construye desde su rama, como dev, y es la última etapa de la tubería | Aceptado |
 | [047](ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) | El respaldo con manifiesto y la auditoría completa entran al [Sprint 8](../08-plan-de-desarrollo.md#sprint-8) | Aceptado |
+| [048](ADR-048-la-entrega-del-release-a-prod.md) | La entrega del release a prod va a un repositorio espejo del taller, la dispara una persona y no recompila nada | Aceptado |
 
-Son **43 decisiones** registradas: 34 aceptadas y 9 reemplazadas.
+Son **44 decisiones** registradas: 35 aceptadas y 9 reemplazadas.
 
 > **Sobre la numeración.** El cambio de stack se planeó como [ADR-010](ADR-010-almacenamiento-contrasenas.md) y [ADR-011](ADR-011-stack-flutter-dart.md), pero el 010 ya
 > estaba ocupado por la decisión de contraseñas. Un número asignado no se reutiliza, así que el
