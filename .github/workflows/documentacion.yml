@@ -33,3 +33,36 @@ jobs:
         env:
           BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: node scripts/docs/documentar.mjs verificar --base "$BASE"
+
+  tuberia-completa:
+    name: Tubería completa
+    # La puerta que pide `develop` en los repositorios de código: que la tubería haya llegado al
+    # final, sin juzgar el resultado (ADR-048). Aquí no hay `develop` y nadie la exige: existe
+    # para que las ramas de los cuatro repositorios se pidan con los mismos dos nombres.
+    runs-on: ubuntu-latest
+    needs: [verificar]
+    if: always()
+
+    steps:
+      - name: Qué resultado trajo cada trabajo
+        env:
+          RESULTADOS: ${{ toJSON(needs) }}
+        run: echo "$RESULTADOS"
+
+  tuberia-en-verde:
+    name: Tubería en verde
+    # Lo que `main` exige para recibir un PR: ningún trabajo en rojo ni cancelado (ADR-048). Un
+    # trabajo saltado no la rompe, porque GitHub lo reporta como `skipped` y eso no es un fallo.
+    runs-on: ubuntu-latest
+    needs: [verificar]
+    if: always()
+
+    steps:
+      - name: Qué resultado trajo cada trabajo
+        env:
+          RESULTADOS: ${{ toJSON(needs) }}
+        run: echo "$RESULTADOS"
+
+      - name: Ningún trabajo en rojo
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1

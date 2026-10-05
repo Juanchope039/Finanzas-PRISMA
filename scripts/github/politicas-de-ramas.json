@@ -1,0 +1,67 @@
+{
+  "reglas": "Las de ADR-048. Este archivo es la definicion, no una copia de lo que hay en GitHub.",
+  "puertas": {
+    "completa": "Tubería completa",
+    "en-verde": "Tubería en verde",
+    "integracion": 15368
+  },
+  "conjuntos": [
+    {
+      "clave": "sin-borrar",
+      "nombre": "Las ramas principales no se borran",
+      "porque": "Ni por cuenta propia ni por descuido: una rama principal no se borra nunca."
+    },
+    {
+      "clave": "tuberia-completa",
+      "nombre": "A develop se entra por PR, con la tuberia terminada",
+      "porque": "La tuberia tiene que haber corrido hasta el final. No se le exige terminar bien."
+    },
+    {
+      "clave": "tuberia-en-verde",
+      "nombre": "A las demas ramas principales se entra por PR, con la tuberia en verde",
+      "porque": "Una etapa no recibe nada que su tuberia no haya aprobado entero."
+    }
+  ],
+  "repositorios": [
+    {
+      "nombre": "Finanzas-PRISMA",
+      "proyecto": "la especificacion",
+      "visibilidad": "publico",
+      "ramas": {
+        "sin-borrar": ["main"],
+        "tuberia-completa": [],
+        "tuberia-en-verde": ["main"]
+      }
+    },
+    {
+      "nombre": "Finanzas-PRISMA-DB",
+      "proyecto": "prisma_db",
+      "visibilidad": "privado",
+      "ramas": {
+        "sin-borrar": ["main", "develop", "qa", "uat", "pre-prod"],
+        "tuberia-completa": ["develop"],
+        "tuberia-en-verde": ["qa", "uat", "pre-prod", "main"]
+      }
+    },
+    {
+      "nombre": "Finanzas-PRISMA-API",
+      "proyecto": "prisma_api",
+      "visibilidad": "privado",
+      "ramas": {
+        "sin-borrar": ["main", "develop", "qa", "uat", "pre-prod"],
+        "tuberia-completa": ["develop"],
+        "tuberia-en-verde": ["qa", "uat", "pre-prod", "main"]
+      }
+    },
+    {
+      "nombre": "Finanzas-PRISMA-Front",
+      "proyecto": "prisma_front",
+      "visibilidad": "privado",
+      "ramas": {
+        "sin-borrar": ["main", "develop", "qa", "uat", "pre-prod"],
+        "tuberia-completa": ["develop"],
+        "tuberia-en-verde": ["qa", "uat", "pre-prod", "main"]
+      }
+    }
+  ]
+}
