@@ -108,5 +108,5 @@ la próxima sesión vuelva a empujar con el nombre que traía.
 ---
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [ADR-037](ADR-037-el-pr-se-abre-a-pedido.md "ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos") · [CLAUDE](../../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [21](../21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [ADR-037](ADR-037-el-pr-se-abre-a-pedido.md "ADR-037 · La rama sale de la base al día, y el PR se abre a pedido y sin conflictos") · [ADR-048](ADR-048-las-ramas-principales-las-protege-github.md "ADR-048 · Las cinco ramas principales las protege GitHub, y la tubería es la puerta para entrar") · [CLAUDE](../../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->

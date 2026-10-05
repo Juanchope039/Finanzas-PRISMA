@@ -3127,6 +3127,35 @@
         "required" : [ "color", "efecto", "grupo", "seLeeComo", "tipo" ],
         "type" : "object"
       },
+      "PrimerAdministrador" : {
+        "description" : "El formulario «primer-administrador». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"primer-administrador\"}",
+        "properties" : {
+          "clave" : {
+            "type" : "string"
+          },
+          "claveTemporal" : {
+            "description" : "Su contraseña. No se pinta, no se guarda y nunca llega a la auditoría",
+            "type" : "string"
+          },
+          "nombreCompleto" : {
+            "type" : "string"
+          },
+          "repeticion" : {
+            "description" : "La misma contraseña otra vez. Que coincidan lo comprueba la API: 42210",
+            "type" : "string"
+          },
+          "usuario" : {
+            "description" : "La API lo pasa a minúsculas antes de comprobar el formato",
+            "type" : "string"
+          },
+          "usuarioTemporal" : {
+            "description" : "El usuario temporal con que se entró al acceso, que respondió 40303. No se pinta: el front lo guarda en memoria",
+            "type" : "string"
+          }
+        },
+        "required" : [ "clave", "claveTemporal", "nombreCompleto", "repeticion", "usuario", "usuarioTemporal" ],
+        "type" : "object"
+      },
       "Productividad" : {
         "description" : "Horas pagadas contra horas facturadas, y lo que cuesta la diferencia (06 §9, CU-27)",
         "properties" : {
@@ -5061,9 +5090,9 @@
     }
   },
   "info" : {
-    "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion y el formulario «acceso». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
+    "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion, POST /api/v0/sesiones/administrador y los formularios «acceso» y «primer-administrador». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.28.0"
+    "version" : "0.29.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -7108,7 +7137,7 @@
     },
     "/api/v0/consultas/formularios" : {
       "post" : {
-        "description" : "Qué campos tiene, en qué orden, y las reglas de cada uno como datos: obligatorio, mínimo, máximo y el texto que se muestra cuando no se cumplen. Ese texto es el mismo que devuelve data.errores cuando la regla falla en el servidor. Sin sesión solo responde el formulario «acceso»; los demás piden sesión y firma. Puede devolver 20000, 40100, 40101, 40102, 40103 y 40400.",
+        "description" : "Qué campos tiene, en qué orden, y las reglas de cada uno como datos: obligatorio, mínimo, máximo y el texto que se muestra cuando no se cumplen. Ese texto es el mismo que devuelve data.errores cuando la regla falla en el servidor. Sin sesión solo responden los formularios «acceso» y «primer-administrador»; los demás piden sesión y firma. Puede devolver 20000, 40100, 40101, 40102, 40103 y 40400.",
         "operationId" : "descriptor",
         "parameters" : [ {
           "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
@@ -10917,7 +10946,7 @@
     },
     "/api/v0/sesiones" : {
       "post" : {
-        "description" : "Entra con el nombre de usuario y la contraseña, sin correo (RF-01, CU-28). La API pasa el usuario a minúsculas, arma el correo sintético y llama al proveedor: el correo nunca viaja por aquí (ADR-009). No lleva sesión, firma ni Idempotency-Key: todavía no hay clave con qué firmar, y la respuesta trae secretos que no se guardan en la tabla de idempotencia. Responde el token, la clave de firma y quién entró; la renovación va aparte, en la cookie prisma_renovacion. Un usuario que no existe y una contraseña equivocada responden lo mismo, 40104, para no revelar quién trabaja en el taller; 40301 solo sale con la contraseña correcta. Escribe inicio_sesion o inicio_sesion_fallido en la auditoría, nunca con la contraseña tecleada. El formulario es «acceso». Puede devolver 20100, 40000, 40104, 40301 y 42200 con data.errores.",
+        "description" : "Entra con el nombre de usuario y la contraseña, sin correo (RF-01, CU-28). La API pasa el usuario a minúsculas, arma el correo sintético y llama al proveedor: el correo nunca viaja por aquí (ADR-009). No lleva sesión, firma ni Idempotency-Key: todavía no hay clave con qué firmar, y la respuesta trae secretos que no se guardan en la tabla de idempotencia. Responde el token, la clave de firma y quién entró; la renovación va aparte, en la cookie prisma_renovacion. Un usuario que no existe y una contraseña equivocada responden lo mismo, 40104, para no revelar quién trabaja en el taller; 40301 solo sale con la contraseña correcta. Escribe inicio_sesion o inicio_sesion_fallido en la auditoría, nunca con la contraseña tecleada. Con la credencial temporal del ambiente y sin ninguna Gerencia activa no abre sesión: responde 40303, que pide crear la cuenta de administrador; con una Gerencia ya creada esa credencial no es nada y responde 40104. El formulario es «acceso». Puede devolver 20100, 40000, 40104, 40301, 40303 y 42200 con data.errores.",
         "operationId" : "iniciarSesion",
         "requestBody" : {
           "content" : {
@@ -11082,6 +11111,44 @@
           }
         },
         "summary" : "Cambiar mi contraseña",
+        "tags" : [ "Acceso" ]
+      }
+    },
+    "/api/v0/sesiones/administrador" : {
+      "post" : {
+        "description" : "Crea la primera cuenta de Gerencia de una base sin nadie y entra con ella (tarea 9.16). Lleva la credencial temporal del ambiente con que el acceso respondió 40303, y el usuario, el nombre y la contraseña que la persona elige. La cuenta es Gerencia, con el cargo Gerente y sin contraseña pendiente; escribe usuario_creado e inicio_sesion en la auditoría y responde la sesión abierta, como el inicio de sesión. Con una Gerencia ya creada responde 40903, también a un reintento. Como el inicio de sesión, no lleva sesión, firma ni Idempotency-Key. El formulario es «primer-administrador». Puede devolver 20100, 40000, 40104, 40903, 42200, 42210, 42211 y 42212; los cuatro últimos con data.errores.",
+        "operationId" : "crearPrimerAdministrador",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PrimerAdministrador"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreSesion"
+                }
+              }
+            },
+            "description" : "Created",
+            "headers" : {
+              "Set-Cookie" : {
+                "description" : "La cookie prisma_renovacion: HttpOnly, Secure, SameSite=None, Path=/api/v0/sesiones y 30 días de vida que vuelven a empezar con cada renovación. El front nunca la lee. Trae la de esta sesión",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Crear la cuenta de administrador",
         "tags" : [ "Acceso" ]
       }
     },
@@ -11714,6 +11781,13 @@
     "nombre" : "DEBE_CAMBIAR_CLAVE",
     "status" : 40302
   }, {
+    "cuando" : "Inicio de sesión con la credencial temporal del ambiente cuando la base no tiene ninguna Gerencia activa. No abre sesión: el front pinta el formulario «primer-administrador»",
+    "http" : 403,
+    "mensaje" : "Todavía no hay cuenta de administrador. Créala para continuar.",
+    "modulo" : "SESION_Y_TRANSPORTE",
+    "nombre" : "FALTA_LA_CUENTA_DE_ADMINISTRADOR",
+    "status" : 40303
+  }, {
     "cuando" : "La ruta o el recurso pedido no existe, o fue anulado",
     "http" : 404,
     "mensaje" : "No se encontró lo que buscas.",
@@ -11741,6 +11815,13 @@
     "modulo" : "SESION_Y_TRANSPORTE",
     "nombre" : "OPERACION_EN_CURSO",
     "status" : 40902
+  }, {
+    "cuando" : "Crear la cuenta de administrador cuando la base ya tiene una Gerencia activa, también en el reintento de un alta que sí entró",
+    "http" : 409,
+    "mensaje" : "Ya hay una cuenta de administrador. Entra con ella.",
+    "modulo" : "SESION_Y_TRANSPORTE",
+    "nombre" : "YA_HAY_ADMINISTRADOR",
+    "status" : 40903
   }, {
     "cuando" : "Desactivar, quitarle el tipo Gerencia o revertir un cambio sobre el último usuario activo de Gerencia. Lo rechaza la base",
     "http" : 409,

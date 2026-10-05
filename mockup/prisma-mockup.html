@@ -856,6 +856,9 @@ tbody tr.fila-detalle:hover{background:none}
           <b>Camila Restrepo Arango</b><span>Asistente administrativa · Operación · debe cambiar la clave</span></button>
         <button type="button" class="ghost demo-btn" data-usuario="lorena" data-clave="prisma2026">
           <b>Lorena Sáenz Mejía</b><span>Empleada de producción · inactiva · para ver el rechazo</span></button>
+        <button type="button" class="ghost demo-btn" data-usuario="Admin" data-clave="Admin"
+                data-instalacion-nueva>
+          <b>Instalación nueva</b><span>Base sin nadie · entra con la credencial temporal</span></button>
       </div>
     </div>
 
@@ -863,6 +866,59 @@ tbody tr.fila-detalle:hover{background:none}
       En este prototipo las contraseñas se comprueban en el navegador, contra un arreglo de
       JavaScript. En el sistema real la verificación ocurre en el servidor y los permisos los
       aplica la base de datos.
+    </p>
+  </div>
+</div>
+
+<!-- ===== 0a · LA CUENTA DE ADMINISTRADOR DEL PRIMER ARRANQUE (tarea 9.16) ===== -->
+<div class="capa" id="primer-admin" hidden>
+  <div class="capa-caja">
+    <span class="logo" role="img" aria-label="Prisma M&amp;Y Estampados"></span>
+    <div>
+      <div class="eyebrow">Instalación nueva</div>
+      <h1>Crea la cuenta de administrador</h1>
+    </div>
+    <p class="capa-intro">Entraste con la credencial temporal, que solo sirve para esto. La
+    cuenta que crees aquí es de Gerencia y tiene todos los permisos. Al guardarla, la temporal
+    deja de funcionar.</p>
+
+    <form class="capa-form" id="form-primer-admin" autocomplete="on" novalidate>
+      <div class="campo">
+        <label for="pa-nombre">Nombre completo</label>
+        <input type="text" id="pa-nombre" name="nombre-completo" autocomplete="name"
+               placeholder="Yuliana Martínez Ríos">
+      </div>
+      <div class="campo">
+        <label for="pa-usuario">Usuario</label>
+        <input type="text" id="pa-usuario" name="usuario" autocomplete="username"
+               autocapitalize="none" autocorrect="off" spellcheck="false"
+               placeholder="yuliana">
+      </div>
+      <div class="campo">
+        <label for="pa-clave">Contraseña</label>
+        <div class="clave-caja">
+          <input type="password" id="pa-clave" name="clave" autocomplete="new-password">
+          <button type="button" class="clave-ver" id="pa-ver-clave"
+                  aria-controls="pa-clave" aria-pressed="false">Mostrar</button>
+        </div>
+      </div>
+      <div class="campo">
+        <label for="pa-clave2">Repite la contraseña</label>
+        <input type="password" id="pa-clave2" name="clave-repetida" autocomplete="new-password">
+      </div>
+      <p class="capa-ayuda">Mínimo 8 caracteres. El usuario va en minúsculas, de 3 a 20
+      caracteres, y es con lo que vas a entrar de aquí en adelante.</p>
+      <p class="capa-error" id="pa-error" role="alert" aria-live="polite" hidden></p>
+      <button type="submit" class="cta" id="pa-crear">Crear la cuenta y entrar</button>
+    </form>
+
+    <div class="capa-pie">
+      <button type="button" class="ghost" id="pa-salir">Salir</button>
+    </div>
+
+    <p class="nota-mock">
+      La credencial temporal no es una cuenta: la API la compara en memoria y la base decide si
+      todavía vale. Cada ambiente pone la suya en su panel; sin ella, Admin y Admin.
     </p>
   </div>
 </div>
@@ -6177,6 +6233,7 @@ function pintarSesionTopbar(){
 function mostrarAcceso(){
   verShell(false);
   $('#cambio-clave').hidden = true;
+  $('#primer-admin').hidden = true;
   $('#acceso').hidden = false;
   $('#acc-usuario').focus();
 }
@@ -6202,6 +6259,7 @@ function mostrarVersionIncompatible(){
   verShell(false);
   $('#acceso').hidden = true;
   $('#cambio-clave').hidden = true;
+  $('#primer-admin').hidden = true;
   $('#vi-tiene').textContent    = VERSIONES.front;
   $('#vi-espera').textContent   = MAJOR_QUE_ESPERA;
   $('#vi-servidor').textContent = VERSION_DEL_SERVIDOR;
@@ -6235,6 +6293,7 @@ function abrirSesion(){
   sesion.ultimoAcceso = new Date();
   $('#acceso').hidden = true;
   $('#cambio-clave').hidden = true;
+  $('#primer-admin').hidden = true;
   verShell(true);
   pintarSesionTopbar();
 
@@ -6261,11 +6320,38 @@ function cerrarSesion(){
   mostrarAcceso();
 }
 
+/* Tarea 9.16. La credencial temporal del ambiente solo abre algo mientras no hay ninguna
+   Gerencia activa. En el prototipo la semilla trae Gerencia, así que la base sin nadie la enciende
+   el botón «Instalación nueva»; sin él, Admin y Admin responden como cualquier clave mala. */
+var CREDENCIAL_TEMPORAL = {usuario:'admin', clave:'Admin'};
+var instalacionNueva = false;
+
+function hayGerencia(){
+  if (instalacionNueva) return false;
+  return USUARIOS.some(function(u){ return u.tipo === 'gerencia' && u.activo; });
+}
+
+function mostrarPrimerAdmin(){
+  $('#acceso').hidden = true;
+  verShell(false);
+  ['pa-nombre', 'pa-usuario', 'pa-clave', 'pa-clave2'].forEach(function(id){ $('#' + id).value = ''; });
+  ocultarClave('pa-ver-clave', 'pa-clave');
+  avisoCampo('pa-error', '');
+  $('#primer-admin').hidden = false;
+  $('#pa-nombre').focus();
+}
+
 /* CU-28. El mensaje es el mismo para usuario inexistente y para clave mala: si fuera distinto,
    cualquiera averiguaría qué usuarios existen probando nombres. */
 function enviarAcceso(){
   var u     = usuarioPorNombre($('#acc-usuario').value);
   var clave = $('#acc-clave').value || '';
+  var escrito = String($('#acc-usuario').value || '').trim().toLowerCase();
+  if (escrito === CREDENCIAL_TEMPORAL.usuario && clave === CREDENCIAL_TEMPORAL.clave && !hayGerencia()){
+    avisoCampo('acc-error', '');
+    mostrarPrimerAdmin();
+    return;
+  }
   if (!u || u.clave !== clave){
     avisoCampo('acc-error', 'Usuario o contraseña incorrectos');
     $('#acc-clave').value = '';
@@ -6292,11 +6378,57 @@ function enviarAcceso(){
   /* Entrada rápida: rellena los dos campos y envía, igual que si los escribiera una persona. */
   $$('.demo-btn').forEach(function(b){
     b.addEventListener('click', function(){
+      if (b.hasAttribute('data-instalacion-nueva')) instalacionNueva = true;
       $('#acc-usuario').value = b.getAttribute('data-usuario');
       $('#acc-clave').value   = b.getAttribute('data-clave');
       if (typeof form.requestSubmit === 'function') form.requestSubmit();
       else enviarAcceso();
     });
+  });
+})();
+
+/* Tarea 9.16. La cuenta nace de Gerencia, con el cargo Gerente y sin contraseña pendiente; al
+   crearla hay Gerencia, y la credencial temporal deja de abrir nada. */
+(function initPrimerAdmin(){
+  var form = $('#form-primer-admin');
+  if (!form) return;
+
+  conectarVerClave('pa-ver-clave', 'pa-clave');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var nombre  = String($('#pa-nombre').value || '').trim();
+    var usuario = String($('#pa-usuario').value || '').trim().toLowerCase();
+    var clave   = $('#pa-clave').value  || '';
+    var otra    = $('#pa-clave2').value || '';
+    var error = nombre.length < 3 ? ['pa-nombre', 'Escribe el nombre completo.']
+      : !PATRON_USUARIO.test(usuario) ? ['pa-usuario', 'El usuario va en minúsculas, de 3 a 20 caracteres: letras, números, punto, guion o guion bajo.']
+      : usuarioPorNombre(usuario) ? ['pa-usuario', 'Ese usuario ya existe. Elige otro.']
+      : clave.length < 8 ? ['pa-clave', 'La contraseña debe tener mínimo 8 caracteres.']
+      : clave !== otra ? ['pa-clave2', 'Las dos contraseñas no coinciden. Escríbelas otra vez.']
+      : null;
+    if (error){
+      avisoCampo('pa-error', error[1]);
+      $('#' + error[0]).focus();
+      return;
+    }
+    if (hayGerencia()){
+      avisoCampo('pa-error', 'Ya hay una cuenta de administrador. Entra con ella.');
+      return;
+    }
+    avisoCampo('pa-error', '');
+    var u = {usuario:usuario, clave:clave, nombreCompleto:nombre,
+             cargoId:1, tipo:'gerencia', activo:true, debeCambiar:false,
+             ultimoAcceso:null, desactivadoEn:null, desactivadoPor:'', desactivadoMotivo:''};
+    USUARIOS.push(u);
+    instalacionNueva = false;
+    sesion = u;
+    abrirSesion();
+  });
+
+  $('#pa-salir').addEventListener('click', function(){
+    instalacionNueva = false;
+    cerrarSesion();
   });
 })();
 
