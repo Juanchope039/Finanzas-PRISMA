@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.17.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-10-05 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
+| [1.18.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-10-05 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
 
 Registro de las decisiones técnicas importantes: qué se decidió, por qué, qué alternativas se
 consideraron y qué consecuencias tiene.
@@ -55,6 +55,7 @@ consideraron y qué consecuencias tiene.
 | [044](ADR-044-dos-ambientes-desplegados.md) | Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería | Aceptado |
 | [045](ADR-045-pre-prod-y-prod-en-otro-repositorio.md) | El ambiente alojado al final se llama pre-prod, y prod vive en otro repositorio | Aceptado |
 | [046](ADR-046-pre-prod-se-construye-desde-su-rama.md) | pre-prod se construye desde su rama, como dev, y es la última etapa de la tubería | Aceptado |
+| [047](ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) | El respaldo con manifiesto y la auditoría completa entran al [Sprint 8](../08-plan-de-desarrollo.md#sprint-8) | Aceptado |
 
 Son **43 decisiones** registradas: 34 aceptadas y 9 reemplazadas.
 
