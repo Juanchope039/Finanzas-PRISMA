@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.54.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-05 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.55.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-05 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -57,8 +57,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 19 | 12 | 0 | 7 | 10 |
-| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 15 | 12 | 0 | 3 | 1,5 |
-| **Total** | **164** | **154** | **0** | **10** | **11,5** |
+| [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 16 | 13 | 0 | 3 | 1,5 |
+| **Total** | **165** | **155** | **0** | **10** | **11,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -249,7 +249,7 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **10 tareas y 11,5 días de trabajo** de 164 tareas del plan.
+Quedan **10 tareas y 11,5 días de trabajo** de 165 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
@@ -1657,6 +1657,9 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 - [ ] 🔒 [**9.15**](docs/08-plan-de-desarrollo.md#tarea-9-15) La entrega del release a prod, en otro repositorio · Decisión — falta
       que quien dirige diga qué repositorio es, qué recibe (la imagen de GHCR o el código) y quién la
       dispara (la tubería al fusionar en `main` o una persona)
+- [x] [**9.16**](docs/08-plan-de-desarrollo.md#tarea-9-16) La cuenta de administrador del primer arranque · Base, API, Front — una
+      credencial temporal por ambiente, `Admin`/`Admin` por defecto, que solo sirve para crear la
+      primera cuenta de Gerencia cuando no hay ninguna, y que se apaga sola cuando esa cuenta existe
 
 ---
 
