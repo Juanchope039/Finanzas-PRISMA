@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.52.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-04 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.53.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-04 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -56,9 +56,9 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
-| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 12 | 12 | 0 | 0 | 0 |
+| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 19 | 12 | 0 | 7 | 10 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 15 | 12 | 0 | 3 | 1,5 |
-| **Total** | **157** | **154** | **0** | **3** | **1,5** |
+| **Total** | **164** | **154** | **0** | **10** | **11,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,19 +241,21 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
+| **Base** | [8.14](docs/08-plan-de-desarrollo.md#tarea-8-14) |
+| **Contrato** | [8.13](docs/08-plan-de-desarrollo.md#tarea-8-13) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **3 tareas y 1,5 días de trabajo** de 157 tareas del plan.
+Quedan **10 tareas y 11,5 días de trabajo** de 164 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 0,2 semanas | **3,2 semanas** |
-| 2 | 0,3 semanas | **3,3 semanas** |
-| 3 | 0,3 semanas | **3,3 semanas** |
+| 1 | 1,5 semanas | **4,5 semanas** |
+| 2 | 1,1 semanas | **4,1 semanas** |
+| 3 | 1,2 semanas | **4,2 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1479,6 +1481,23 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       PostgreSQL 16 de la [3.19](docs/08-plan-de-desarrollo.md#tarea-3-19), ahora con el `pg_cron` de verdad. **Le deja doce filas a la API**, y
       **falta promoverla a dev y a qa**
 
+
+### Respaldo y auditoría · las puso el [ADR-046](docs/adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md)
+
+Entraron al final del sprint, con el sprint ya en 12 de 12. **Sus siete dependencias están hechas**
+—[8.11](docs/08-plan-de-desarrollo.md#tarea-8-11), [8.12](docs/08-plan-de-desarrollo.md#tarea-8-12),
+[6.8](docs/08-plan-de-desarrollo.md#tarea-6-8), [2.14](docs/08-plan-de-desarrollo.md#tarea-2-14),
+[2.21](docs/08-plan-de-desarrollo.md#tarea-2-21), [1.4](docs/08-plan-de-desarrollo.md#tarea-1-4) y
+[3.14](docs/08-plan-de-desarrollo.md#tarea-3-14)—, así que la primera se puede tomar ya.
+
+- [ ] ⚡ [**8.13**](docs/08-plan-de-desarrollo.md#tarea-8-13) Contrato del respaldo y de la auditoría completa · Contrato
+- [ ] ⚡ [**8.14**](docs/08-plan-de-desarrollo.md#tarea-8-14) El bucket `respaldos` y lo que la base impone · Base
+- [ ] 🔒 [**8.15**](docs/08-plan-de-desarrollo.md#tarea-8-15) El respaldo en la API · API
+- [ ] 🔒 [**8.16**](docs/08-plan-de-desarrollo.md#tarea-8-16) La programación automática del respaldo · Base, API
+- [ ] 🔒 [**8.17**](docs/08-plan-de-desarrollo.md#tarea-8-17) La pantalla «Configuración» y el panel «Exportar respaldo» · Front
+- [ ] 🔒 [**8.18**](docs/08-plan-de-desarrollo.md#tarea-8-18) La auditoría completa en la API · API
+- [ ] 🔒 [**8.19**](docs/08-plan-de-desarrollo.md#tarea-8-19) El panel «Auditoría» en Configuración · Front
+
 ### Amortiguador · Nómina
 
 La toma el carril que termine primero su cadena: es la funcionalidad más independiente del sistema.
@@ -2049,7 +2068,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **La lista se ordena por trabajo, y el contrato solo dice «el camino más barato».** Lo barato
       se midió en horas de persona, que es lo escaso cuando se está evaluando contratar; medido en
       unidades el primer renglón sería otro, el de margen más alto. Si la pantalla quiere el cuadro
-      en otro orden, es una decisión de [10 §4](docs/10-ux-y-mockups.md#4-las-11-pantallas) y no de la API
+      en otro orden, es una decisión de [10 §4](docs/10-ux-y-mockups.md#4-las-12-pantallas) y no de la API
 - [ ] **Las otras dos alternativas del [06 §5](docs/06-nomina-y-capacidad-de-pago.md#5-alternativas-cuando-no-es-viable) siguen sin salir.** «Subir precios» necesita el cuadro
       de márgenes por hora puesto al lado del faltante y «reducir tiempo ocioso» necesita las horas
       facturadas, que son la [8.7](docs/08-plan-de-desarrollo.md#tarea-8-7). Proponerlas sin sus números sería el consejo genérico que el
@@ -5060,13 +5079,21 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       enumera «crear, renombrar, reordenar y desactivar», y `POST /api/v0/cargos/{id}/reactivacion`
       existe desde el [Sprint 2](docs/08-plan-de-desarrollo.md#sprint-2). Se documentó en [CU-33](docs/02-casos-de-uso.md#cu-33) porque está construida, pero **le falta su
       requisito en el 03**
-- [ ] **[CU-22](docs/02-casos-de-uso.md#cu-22), el respaldo con manifiesto de [RF-66](docs/03-requisitos-y-bdd.md#rf-66), no tiene ruta ni tarea.** Su diseño está entero
-      en el 13 y su tabla ya existe, así que el caso se detalló y se dibujó con lo que ese documento
-      manda; el diagrama técnico lo dice en una nota. **Lo que falta es decidir si entra al 08**
-- [ ] **[CU-23](docs/02-casos-de-uso.md#cu-23) se dibujó con la mitad que existe.** `POST /api/v0/consultas/bitacora` trae los
-      cambios de usuarios y cargos y **no los inicios de sesión**, que sí se escriben en
-      `auditoria`. La consulta filtrable de toda la auditoría que pide [RF-67](docs/03-requisitos-y-bdd.md#rf-67) no tiene operación, y
-      también está sin decidir si entra al 08
+- [x] **[CU-22](docs/02-casos-de-uso.md#cu-22) y [CU-23](docs/02-casos-de-uso.md#cu-23) entraron al 08.** Quien dirige lo decidió, y lo escribe el
+      [ADR-046](docs/adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md): el respaldo con manifiesto de [RF-66](docs/03-requisitos-y-bdd.md#rf-66) y la consulta filtrable de toda la
+      auditoría de [RF-67](docs/03-requisitos-y-bdd.md#rf-67) son las tareas [8.13](docs/08-plan-de-desarrollo.md#tarea-8-13) a [8.19](docs/08-plan-de-desarrollo.md#tarea-8-19). La auditoría va en ruta nueva,
+      `POST /api/v0/consultas/auditoria`: la bitácora no cambia de forma
+- [ ] **Confirmar que «Configuración» vuelve al menú de Gerencia.** El [10 §2](docs/10-ux-y-mockups.md#2-mapa-de-navegación) la dibujaba y el [10 §2.1](docs/10-ux-y-mockups.md#21-navegación-por-rol) la
+      listaba desde siempre, pero el mockup la había disuelto cuando el pro-labore y los sobres se
+      fueron a Inversiones y la importación a Movimientos. Vuelve porque el respaldo y la auditoría
+      no tienen otra casa, y con ella las pantallas pasan de once a doce. **Lo decide quien dirige**
+- [ ] 🔒 **Entraron siete tareas nuevas al plan y el total pasa de 157 a 164.** Las puso el
+      [ADR-046](docs/adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md) al final del [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8), que ya estaba en 12 de 12, y le suman unos diez
+      días. Todas sus dependencias están hechas, así que la [8.13](docs/08-plan-de-desarrollo.md#tarea-8-13) se puede tomar ya. **Conviene
+      revisar si el sprint aguanta siete tareas más o si conviene partirlo**
+- [ ] **El respaldo necesita un bucket nuevo y nadie ha mirado cuánto pesa.** La retención de doce
+      del [13 §5](docs/13-respaldo-y-exportacion.md#5-generación-y-descarga), con los cuatro alcances y los tres formatos, puede crecer bastante más que
+      `soportes`. La [8.14](docs/08-plan-de-desarrollo.md#tarea-8-14) crea el bucket; **cuánto se le pone de tope no lo dice ningún documento**
 
 ---
 

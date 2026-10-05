@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/01-vision-y-alcance.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Negocio](INDICE.md#etiqueta-negocio) · [Requisitos](INDICE.md#etiqueta-requisitos) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/01-vision-y-alcance.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [Negocio](INDICE.md#etiqueta-negocio) · [Requisitos](INDICE.md#etiqueta-requisitos) |
 
 ---
 
@@ -176,11 +176,14 @@ solo tiene dos columnas porque solo hay dos tipos.
 | Cálculo de parafiscales y seguridad social | Requiere formalización previa | Roadmap #2 |
 | Escenarios jurídicos y factor prestacional | Diferido | Roadmap #3 |
 | Parámetros legales versionados por año | Diferido | Roadmap #4 |
-| Construcción del exportador de respaldos | Se diseña ahora, se construye después | Roadmap #5 + doc [13](13-respaldo-y-exportacion.md) |
-| Procedimiento de restauración | Fase posterior | Roadmap #6 |
+| Procedimiento y simulacro de restauración | Fase posterior | Roadmap #6 |
 | Inventario de insumos con control de existencias | No prioritario para el MVP | Roadmap #9 |
 | Integración con pasarelas de pago | No requerido | Roadmap #18 |
 | Multi-sucursal | Un solo taller | Roadmap #24 |
+
+> **El exportador de respaldos salió de esta tabla.** Estuvo aquí como «se diseña ahora, se construye
+> después» hasta el [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md), que lo metió al [Sprint 8](08-plan-de-desarrollo.md#sprint-8) con las tareas [8.13](08-plan-de-desarrollo.md#tarea-8-13) a [8.17](08-plan-de-desarrollo.md#tarea-8-17). Lo que sigue fuera
+> es **restaurar**, que es la fila de arriba y no la misma cosa: el [13 §9](13-respaldo-y-exportacion.md#9-fuera-de-alcance-de-esta-versión) lo explica.
 
 ---
 

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [0.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/23-diagramas-de-casos-de-uso.md "Historial de cambios") | [🔍 En revisión](22-documentacion.md#estados) | 2026-10-04 | 2026-10-04 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [0.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/23-diagramas-de-casos-de-uso.md "Historial de cambios") | [🔍 En revisión](22-documentacion.md#estados) | 2026-10-04 | 2026-10-04 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Los 37 casos de uso dibujados, **dos veces cada uno**: una para quien dirige el negocio y una para
 quien programa. Los pasos, los flujos alternativos y las reglas están en
@@ -40,7 +40,7 @@ cada caso con su operación del contrato.
   primer mensaje a la base y no se repite en cada paso.
 - **El rechazo por permiso lo dibuja la base, no la API.** Donde la flecha de vuelta sale de
   PostgreSQL, el permiso lo negó Row Level Security ([ADR-006](adr/ADR-006-rls-por-rol.md)); donde sale de la API, es una
-  decisión que todavía está en la capa de aplicación, y el [§6](#6-los-dos-casos-que-todavía-no-tienen-ruta-y-las-negativas-que-no-vienen-de-la-base) dice cuáles son.
+  decisión que todavía está en la capa de aplicación, y el [§6](#6-las-negativas-que-no-vienen-de-la-base) dice cuáles son.
 - **Toda respuesta viaja en el sobre `{status, mensaje, data}`** con su código de cinco dígitos
   ([ADR-019](adr/ADR-019-contrato-de-respuesta.md)). En los diagramas se escribe solo el código, que es lo que distingue un caso de otro.
 
@@ -1060,13 +1060,15 @@ sequenceDiagram
     participant F as prisma_front
     participant A as prisma_api
     participant D as PostgreSQL
-    Note over F,A: Esta operación todavía no está en el contrato: ver el §6
-    F->>A: pide la exportación con su alcance y su formato
+    F->>A: POST /api/v0/respaldos · alcance y formato · Idempotency-Key
     A->>D: ConIdentidad: la transacción con la identidad de quien pidió
     Note over D: El alcance por rol lo decide RLS, no un filtro posterior de la API
-    D-->>A: lo que la sesión puede leer
+    D-->>A: lo que la sesión puede leer, con las filas anuladas adentro
     A->>A: arma los archivos, calcula los sha256 y el manifiesto.json
     A->>D: INSERT exportaciones, con su manifiesto
+    A-->>F: 20100 · la ficha del respaldo, todavía sin bajar
+    F->>A: POST /api/v0/respaldos/{id}/descarga
+    A->>D: UPDATE exportaciones: descargado_en y descargado_por
     A-->>F: el archivo, que baja con una acción explícita de la persona
 ```
 
@@ -1092,12 +1094,15 @@ sequenceDiagram
     participant F as prisma_front
     participant A as prisma_api
     participant D as PostgreSQL
-    F->>A: POST /api/v0/consultas/bitacora · filtros
-    A->>D: ConIdentidad + SELECT sobre la vista de auditoria
+    F->>A: POST /api/v0/consultas/auditoria · fecha, persona, tabla y acción
+    A->>D: ConIdentidad + SELECT sobre auditoria entera
     Note over D: Escrita por triggers, nunca por la aplicación · ninguna fila se edita
-    D-->>A: entradas de usuarios y cargos, con si hoy se pueden revertir
+    D-->>A: todas las tablas y los tres eventos de acceso, con dispositivo e IP
     A-->>F: 20000 · a Operación la base no le devuelve ninguna fila
-    Note over F,A: La auditoría completa —los accesos y el resto del libro— no tiene ruta: §6
+    F->>A: POST /api/v0/consultas/bitacora · la vista de usuarios y cargos
+    A->>D: ConIdentidad + SELECT sobre la vista del 04
+    D-->>A: entradas de usuarios y cargos, con si hoy se pueden revertir
+    A-->>F: 20000 · es la misma auditoría, filtrada para Gestión de usuarios
 ```
 
 ### CU-24 · Alertar descapitalización *(automático)*
@@ -1570,7 +1575,11 @@ sequenceDiagram
 
 **Lo que esta tabla promete es que ningún caso de uso queda sin dónde agarrarlo.** Las rutas son
 las de `contrato/openapi.json`, las tablas las del [04 §4](04-modelo-de-datos.md#4-esquema-sql) y los escenarios los del
-[03 §4](03-requisitos-y-bdd.md#4-escenarios-bdd). Las dos filas sin ruta están explicadas en el [§6](#6-los-dos-casos-que-todavía-no-tienen-ruta-y-las-negativas-que-no-vienen-de-la-base).
+[03 §4](03-requisitos-y-bdd.md#4-escenarios-bdd).
+
+> **Seis rutas de esta tabla todavía no están en el contrato: las de [CU-22](02-casos-de-uso.md#cu-22) y la de la auditoría
+> completa de [CU-23](02-casos-de-uso.md#cu-23).** El [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md) las puso en el plan y su diseño está en la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13), que es la
+> que las escribe. La tabla las nombra porque ya están decididas, no porque ya existan.
 
 | Caso | Operación del contrato | Tablas | Función o trigger | Escenarios |
 |---|---|---|---|---|
@@ -1595,8 +1604,8 @@ las de `contrato/openapi.json`, las tablas las del [04 §4](04-modelo-de-datos.m
 | [CU-19](02-casos-de-uso.md#cu-19) | `PUT /nomina/periodos/{id}` · `PUT /nomina/liquidaciones/{id}` · `POST /nomina/periodos/{id}/cierre` | `nomina_periodos`, `nomina_detalle`, `adelantos`, `empleados`, `movimientos` | `fn_liquidar_nomina`, `nom_escritura` | [BDD-19-1](03-requisitos-y-bdd.md#bdd-19-1), [BDD-26-2](03-requisitos-y-bdd.md#bdd-26-2) |
 | [CU-20](02-casos-de-uso.md#cu-20) | `POST /consultas/desprendible` · `POST /consultas/periodos-de-nomina` | `nomina_detalle`, `nomina_periodos` | `nom_lectura`, `nom_per_lectura` | [BDD-02-4](03-requisitos-y-bdd.md#bdd-02-4), [BDD-02-6](03-requisitos-y-bdd.md#bdd-02-6) |
 | [CU-21](02-casos-de-uso.md#cu-21) | `POST /consultas/importacion` · `PUT /importaciones/{id}` | `movimientos` | — | [BDD-21-1](03-requisitos-y-bdd.md#bdd-21-1) a [BDD-21-3](03-requisitos-y-bdd.md#bdd-21-3) |
-| [CU-22](02-casos-de-uso.md#cu-22) | **sin ruta todavía** ([§6](#6-los-dos-casos-que-todavía-no-tienen-ruta-y-las-negativas-que-no-vienen-de-la-base)) | `exportaciones` ([13 §8](13-respaldo-y-exportacion.md#8-tabla-de-registro)) | RLS de cada tabla leída | [BDD-02-5](03-requisitos-y-bdd.md#bdd-02-5) |
-| [CU-23](02-casos-de-uso.md#cu-23) | `POST /consultas/bitacora`, **parcial** ([§6](#6-los-dos-casos-que-todavía-no-tienen-ruta-y-las-negativas-que-no-vienen-de-la-base)) | `auditoria` | `fn_auditar`, `fn_auditar_usuarios` | [BDD-23-1](03-requisitos-y-bdd.md#bdd-23-1), [BDD-02-6](03-requisitos-y-bdd.md#bdd-02-6) |
+| [CU-22](02-casos-de-uso.md#cu-22) | `POST /respaldos` · `POST /respaldos/{id}/descarga` · `POST /consultas/respaldos` · `PUT /respaldos/programacion` · `POST /consultas/respaldos/programacion`, **las escribe la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13)** | `exportaciones` ([13 §8](13-respaldo-y-exportacion.md#8-tabla-de-registro)) | RLS de cada tabla leída | [BDD-22-1](03-requisitos-y-bdd.md#bdd-22-1), [BDD-22-2](03-requisitos-y-bdd.md#bdd-22-2), [BDD-02-5](03-requisitos-y-bdd.md#bdd-02-5) |
+| [CU-23](02-casos-de-uso.md#cu-23) | `POST /consultas/auditoria`, **la escribe la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13)** · `POST /consultas/bitacora` | `auditoria` | `fn_auditar`, `fn_auditar_usuarios`, `fn_registrar_evento` | [BDD-23-1](03-requisitos-y-bdd.md#bdd-23-1), [BDD-23-2](03-requisitos-y-bdd.md#bdd-23-2), [BDD-02-6](03-requisitos-y-bdd.md#bdd-02-6) |
 | [CU-24](02-casos-de-uso.md#cu-24) | `POST /consultas/patrimonio` · `POST /consultas/tablero` | `aportes_retiros`, `movimientos` | — | [BDD-24-1](03-requisitos-y-bdd.md#bdd-24-1) |
 | [CU-25](02-casos-de-uso.md#cu-25) | `PUT /prolabore/{id}` · `POST /consultas/prolabore` | `prolabore_config`, `horas_limite_config` | `prolabore_solo_gerencia` | [BDD-25-1](03-requisitos-y-bdd.md#bdd-25-1), [BDD-25-2](03-requisitos-y-bdd.md#bdd-25-2) |
 | [CU-26](02-casos-de-uso.md#cu-26) | `PUT /adelantos/{id}` · `POST /adelantos/{id}/anulacion` · `POST /consultas/adelantos` | `adelantos`, `movimientos` | `adelantos_insercion`, `adelantos_lectura` | [BDD-26-1](03-requisitos-y-bdd.md#bdd-26-1), [BDD-26-2](03-requisitos-y-bdd.md#bdd-26-2) |
@@ -1618,22 +1627,20 @@ trae el id que generó quien registra.
 
 ---
 
-## 6. Los dos casos que todavía no tienen ruta, y las negativas que no vienen de la base
+## 6. Las negativas que no vienen de la base
 
 **Esto no es una lista de pendientes del proyecto** —esa es [`TODO.md`](../TODO.md)—, sino lo que hay que saber
 para no leer un diagrama de más.
 
-**[CU-22](02-casos-de-uso.md#cu-22), el respaldo con manifiesto, no tiene operación en el contrato.** Su diseño está completo
-en [`13-respaldo-y-exportacion.md`](13-respaldo-y-exportacion.md) —quién arma el archivo, qué lleva el manifiesto y qué alcance
-tiene cada rol— y la tabla `exportaciones` ya existe con su `CHECK` que exige manifiesto a todo lo
-que no sea una descarga de pantalla. Lo que no existe es la ruta: hoy la única exportación
-construida es la de [CU-37](02-casos-de-uso.md#cu-37), que **no es un respaldo** y no lo reemplaza. El propio contrato lo dice
-en la descripción de `POST /consultas/descarga`.
+**Los dos casos que antes no tenían ruta ya la tienen decidida.** Hasta el [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md), el respaldo con
+manifiesto de [CU-22](02-casos-de-uso.md#cu-22) no tenía operación ni tarea, y [CU-23](02-casos-de-uso.md#cu-23) solo tenía la mitad administrativa.
+Ahora los dos están en el [Sprint 8](08-plan-de-desarrollo.md#sprint-8) y sus diagramas técnicos dibujan la ruta; lo que falta es que la
+tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13) la escriba en el contrato.
 
-**[CU-23](02-casos-de-uso.md#cu-23) tiene ruta solo para la mitad administrativa.** `POST /consultas/bitacora` devuelve los
-cambios sobre usuarios y cargos, y **no trae los inicios de sesión**, que sí se escriben en
-`auditoria`. La consulta filtrable de toda la auditoría que pide [RF-67](03-requisitos-y-bdd.md#rf-67) todavía no tiene operación,
-así que el diagrama técnico de ese caso dibuja lo que hay y lo dice.
+> **La descarga de pantalla de [CU-37](02-casos-de-uso.md#cu-37) sigue sin ser un respaldo.** Es la frontera que defienden
+> el [13 §2.1](13-respaldo-y-exportacion.md#21-la-descarga-del-inicio-es-una-exportación-parcial) y la regla central de [CU-22](02-casos-de-uso.md#cu-22), y el contrato la repite en la descripción de
+> `POST /consultas/descarga`: si el archivo puede reconstruir el estado del sistema lleva manifiesto;
+> si solo responde una pregunta del momento, no.
 
 **Siete lecturas de Gerencia las niega hoy la API y no la base**, con `40300`: el tablero, el
 patrimonio, los saldos por cuenta, el reporte anual, el costeo, la presentación de los tipos y la
@@ -1643,7 +1650,7 @@ se tome, el diagrama técnico de esos casos muestra la flecha de vuelta saliendo
 es exactamente lo que significa.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-046 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8")
 <!-- /generado:referenciado-desde -->
 
 ---

@@ -2,11 +2,15 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/13-respaldo-y-exportacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Datos personales](INDICE.md#etiqueta-datos-personales) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/13-respaldo-y-exportacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Datos personales](INDICE.md#etiqueta-datos-personales) |
 
-> **Construcción: diseñado, no construido.** La exportación se especifica aquí en detalle para que
-> el modelo de datos y la arquitectura la soporten desde el primer día, pero su construcción
-> queda programada para después del go-live. Ver [`14-roadmap-e-ideas.md`](14-roadmap-e-ideas.md).
+> **Construcción: en el [Sprint 8](08-plan-de-desarrollo.md#sprint-8), no después del go-live.** El [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md) metió el respaldo al plan,
+> en las tareas [8.13](08-plan-de-desarrollo.md#tarea-8-13) a [8.17](08-plan-de-desarrollo.md#tarea-8-17), y retiró del 14 la deuda [D-05](14-roadmap-e-ideas.md#d-05) y la idea 01. Lo que este documento
+> describe se construye, no se difiere.
+>
+> **Lo único que sigue diferido es restaurar**: el procedimiento y su simulacro son [D-06](14-roadmap-e-ideas.md#d-06), y están en
+> el [13 §9](#9-fuera-de-alcance-de-esta-versión). Un respaldo que nunca se restauró sigue siendo una suposición; lo que cambia es que
+> ahora existirá el archivo.
 
 ---
 
@@ -15,7 +19,7 @@
 | Nivel | Qué cubre | Frecuencia | Quién lo hace | Estado |
 |---|---|---|---|---|
 | 1 · Proveedor | Toda la base de datos de prod | Diaria automática | Supabase | ✅ Desde el día 1 |
-| 2 · Exportación | Base completa o un mes | A demanda o programada | Gerencia | ⬜ Fase posterior |
+| 2 · Exportación | Base completa, un mes, un rango o una tabla | A demanda o programada | Gerencia | ⬜ [Sprint 8](08-plan-de-desarrollo.md#sprint-8), tareas [8.13](08-plan-de-desarrollo.md#tarea-8-13) a [8.17](08-plan-de-desarrollo.md#tarea-8-17) |
 | 3 · Código | Los dos proyectos, `prisma_front` y `prisma_api` | Cada cambio | Control de versiones | ✅ Desde el día 1 |
 
 El nivel 1 protege contra fallas técnicas. **El nivel 2 protege contra algo distinto:** la
@@ -245,6 +249,15 @@ más porque **la base no se lo entrega**, no porque la API lo filtre después.
 La opción recomendada es **al cerrar el mes**: el respaldo queda asociado a un estado
 consistente y verificado, no a un momento arbitrario.
 
+**Quién la ejecuta y dónde se guarda la elección: la tarea [8.16](08-plan-de-desarrollo.md#tarea-8-16).** La programación corre con
+`pg_cron`, la misma extensión con la que ya se purgan las claves de idempotencia, los nonce vistos y
+las sesiones vencidas; y la tercera opción se engancha al cierre mensual de la tarea [6.8](08-plan-de-desarrollo.md#tarea-6-8), que es lo
+que la vuelve recomendable.
+
+> **Una programación que nadie mira genera archivos pesados igual.** La retención de doce del [13 §5](#5-generación-y-descarga)
+> es lo único que la acota, y con los cuatro alcances y los tres formatos del [13 §2](#2-alcance-seleccionable) y [§3](#3-formatos) puede crecer
+> más de lo previsto. Conviene mirar el tamaño del bucket en los primeros meses.
+
 ---
 
 ## 7. Alcance por rol
@@ -309,18 +322,26 @@ de cifras del Inicio lleva `0`, y eso ya distingue un reporte de un respaldo vac
 
 | Tema | Cuándo |
 |---|---|
-| Procedimiento de restauración documentado | Fase posterior |
-| Simulacro de restauración | Fase posterior |
+| Procedimiento de restauración documentado | Fase posterior · [D-06](14-roadmap-e-ideas.md#d-06) |
+| Simulacro de restauración | Fase posterior · [D-06](14-roadmap-e-ideas.md#d-06) |
 | Envío automático a almacenamiento externo | No previsto |
 | Cifrado del archivo de exportación | Fase posterior |
 
-> **Nota honesta:** un respaldo que nunca se ha restaurado es una suposición, no una garantía.
-> El procedimiento de restauración y su prueba quedan explícitamente diferidos, y eso es una
-> limitación real de esta versión, no un olvido. Mientras tanto, el respaldo diario automático
-> del proveedor es la protección efectiva contra pérdida de datos.
+**Lo que ya no está en esta tabla: construir el exportador.** Estuvo diferido hasta el [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md), que
+lo metió al [Sprint 8](08-plan-de-desarrollo.md#sprint-8). Lo que queda fuera es restaurar, no exportar.
+
+> **Nota honesta:** un respaldo que nunca se ha restaurado es una suposición, no una garantía. El
+> procedimiento de restauración y su prueba siguen explícitamente diferidos en [D-06](14-roadmap-e-ideas.md#d-06), y eso es una
+> limitación real de esta versión, no un olvido. Lo que cambia con el [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md) es que ahora existirá
+> el archivo que algún día se restaure; mientras tanto, el respaldo diario automático del proveedor
+> es la protección efectiva contra pérdida de datos.
+>
+> **Y la prueba [RE-01](12-pruebas-y-calidad.md#re-01) del 12 depende de [D-06](14-roadmap-e-ideas.md#d-06), no de esto.** Restaurar en uat el respaldo anonimizado
+> de prod, una vez por trimestre, necesita el procedimiento escrito. Tener el exportador no la
+> habilita.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [01](01-vision-y-alcance.md "01 · Visión y alcance") · [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [23](23-diagramas-de-casos-de-uso.md "23 · Diagramas de los casos de uso") · [ADR-008](adr/ADR-008-exportacion.md "ADR-008 · Exportación con descarga manual")
+**🔗 Referenciado desde:** [01](01-vision-y-alcance.md "01 · Visión y alcance") · [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [23](23-diagramas-de-casos-de-uso.md "23 · Diagramas de los casos de uso") · [ADR-008](adr/ADR-008-exportacion.md "ADR-008 · Exportación con descarga manual") · [ADR-046](adr/ADR-046-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-046 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8")
 <!-- /generado:referenciado-desde -->
 
 ---
