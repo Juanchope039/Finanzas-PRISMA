@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.54.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-05 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.55.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-05 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -5097,6 +5097,11 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] **El respaldo necesita un bucket nuevo y nadie ha mirado cuánto pesa.** La retención de doce
       del [13 §5](docs/13-respaldo-y-exportacion.md#5-generación-y-descarga), con los cuatro alcances y los tres formatos, puede crecer bastante más que
       `soportes`. La [8.14](docs/08-plan-de-desarrollo.md#tarea-8-14) crea el bucket; **cuánto se le pone de tope no lo dice ningún documento**
+- [ ] **En un PR a `main` o a `pre-prod`, la tubería de `prisma_db` no corre ningún trabajo.** Sus
+      dos trabajos son solo para `develop`, `qa` y `uat`, así que la puerta «Tubería en verde» que
+      pide el [ADR-048](docs/adr/ADR-048-las-ramas-principales-las-protege-github.md) se reporta verde sin haber comprobado nada. Se dejó así para no tocar la
+      condición de un trabajo que ya existía; **lo que hay que decidir es si el informe de la base
+      tiene que correr también en esas dos ramas**
 
 ---
 
