@@ -3718,8 +3718,7 @@ function guardarProlabore(){
   PROLABORE = {valor:soloDigitos(textoValor), horas:textoHoras ? +textoHoras : 0,
     desde:'2026-09-30', justificacion:justificacion};
   avisoProlabore = {tono:'info', titulo:'El pro-labore nuevo rige desde hoy',
-    texto:'Los costeos nuevos toman su tarifa por hora y los guardados conservan la suya. El ' +
-      'retiro de septiembre ya se partió con el anterior.'};
+    texto:'El retiro de septiembre ya se partio con el anterior.'};
   cerrarFormProlabore();
   pintarProlabore();
 }
