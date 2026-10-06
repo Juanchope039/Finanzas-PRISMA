@@ -1819,7 +1819,7 @@
         "description" : "Lo que dice el margen de un producto cuando se lo pone al lado del resto del taller. La decide la API con su texto y su nivel; el front la pinta y no la calcula (ADR-018)",
         "properties" : {
           "detalle" : {
-            "description" : "La explicación con los montos de este producto, porque «Deja $26.000 por hora contra $48.000 de la mediana» orienta y «revisa tu margen» no (10 §6)",
+            "description" : "La explicación con los montos de este producto, porque «Deja $7.800 por unidad contra $12.500 de la mediana» orienta y «revisa tu margen» no (10 §6)",
             "type" : "string"
           },
           "medianaDelResto" : {
@@ -1833,7 +1833,7 @@
             "type" : "string"
           },
           "titulo" : {
-            "description" : "La frase corta que encabeza la lectura: «Rinde bien por hora de trabajo», «Rinde menos que el resto del taller», «A este precio vendes a pérdida», «No consume tiempo de taller» o «Todavía no tiene precio»",
+            "description" : "La frase corta que encabeza la lectura: «Rinde bien por unidad», «Rinde menos que el resto del taller», «A este precio vendes a pérdida» o «Todavía no tiene precio»",
             "type" : "string"
           }
         },
