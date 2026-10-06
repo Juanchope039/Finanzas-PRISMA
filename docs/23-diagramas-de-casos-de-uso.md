@@ -1583,7 +1583,7 @@ sequenceDiagram
 las de `contrato/openapi.json`, las tablas las del [04 §4](04-modelo-de-datos.md#4-esquema-sql) y los escenarios los del
 [03 §4](03-requisitos-y-bdd.md#4-escenarios-bdd).
 
-> **Seis rutas de esta tabla las escribió la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13) en el contrato `0.31.0`: las de [CU-22](02-casos-de-uso.md#cu-22) y la de la auditoría
+> **Seis rutas de esta tabla las escribió la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13) en el contrato `0.32.0`: las de [CU-22](02-casos-de-uso.md#cu-22) y la de la auditoría
 > completa de [CU-23](02-casos-de-uso.md#cu-23).** El [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) las puso en el plan. Están acordadas pero todavía no las sirve la API: las
 > construyen las tareas [8.15](08-plan-de-desarrollo.md#tarea-8-15), [8.16](08-plan-de-desarrollo.md#tarea-8-16) y [8.18](08-plan-de-desarrollo.md#tarea-8-18).
 
@@ -1640,7 +1640,7 @@ para no leer un diagrama de más.
 
 **Los dos casos que antes no tenían ruta ya la tienen en el contrato.** Hasta el [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md), el respaldo con
 manifiesto de [CU-22](02-casos-de-uso.md#cu-22) no tenía operación ni tarea, y [CU-23](02-casos-de-uso.md#cu-23) solo tenía la mitad administrativa.
-Ahora los dos están en el [Sprint 8](08-plan-de-desarrollo.md#sprint-8) y la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13) escribió sus rutas en el contrato `0.31.0`; lo que falta es
+Ahora los dos están en el [Sprint 8](08-plan-de-desarrollo.md#sprint-8) y la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13) escribió sus rutas en el contrato `0.32.0`; lo que falta es
 construirlas, en las tareas [8.15](08-plan-de-desarrollo.md#tarea-8-15) a [8.19](08-plan-de-desarrollo.md#tarea-8-19).
 
 > **La descarga de pantalla de [CU-37](02-casos-de-uso.md#cu-37) sigue sin ser un respaldo.** Es la frontera que defienden
