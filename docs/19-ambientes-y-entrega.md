@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-05 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [9.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/19-ambientes-y-entrega.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-06 | [Entrega](INDICE.md#etiqueta-entrega) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo se configura, se prueba, se publica y —si hace falta— se devuelve cada versión de PRISMA.
 
@@ -125,7 +125,7 @@ Lo único que cambia entre ambientes es la configuración del [§3](#3-la-config
 | Se publica | La etapa qa construye y publica `ghcr.io/juanchope039/finanzas-prisma-api:<versión>` y `…-front:<versión>`. El `+` del front pasa a `_`, que Docker no admite |
 | Se reconoce | Cada imagen lleva el árbol de git del que salió, en la etiqueta OCI `prisma.arbol`. «Es la misma» se juzga por el árbol y no por el commit, porque los PR de promoción crean commits de fusión con el mismo contenido |
 | No se repite | Si qa encuentra su versión ya publicada con otro árbol, falla: una versión es un solo artefacto. Con el mismo árbol, no recompila |
-| Se promueve | uat y pre-prod comprueban que la imagen de su versión trae su árbol, y mueven la etiqueta `uat` o `pre-prod` hacia ella **sin recompilar**. La etiqueta `prod` la mueve la entrega a prod ([9.15](08-plan-de-desarrollo.md#tarea-9-15)). Lo que llegó a uat o a `pre-prod` sin pasar por qa no encuentra su imagen y se queda en rojo |
+| Se promueve | uat y pre-prod comprueban que la imagen de su versión trae su árbol, y mueven la etiqueta `uat` o `pre-prod` hacia ella **sin recompilar**. La etiqueta `prod` la mueve la entrega del [§7.5](#75-la-entrega-a-prod-en-el-repositorio-del-taller), que además copia la imagen al registro del taller. Lo que llegó a uat o a `pre-prod` sin pasar por qa no encuentra su imagen y se queda en rojo |
 
 Consecuencia práctica: la configuración del front **no puede compilarse dentro del artefacto de
 prod en el momento de publicar**, porque eso es recompilar. Cada ambiente compila su propio
@@ -463,7 +463,7 @@ despliegan la primera y pre-prod; `main`, la última, solo comprueba ([ADR-050](
 | uat | `uat` | La semilla realista y anonimizada, y la batería entera sobre ella. Comprueba que el artefacto es el de qa | Nada |
 | pre-prod | `pre-prod` | Comprueba que el árbol es el que compiló qa | pre-prod, en Railway, construido desde la rama ([ADR-046](adr/ADR-046-pre-prod-se-construye-desde-su-rama.md)) |
 | main | `main` | Comprueba que el árbol es el que compiló qa, igual que pre-prod, en el PR desde `pre-prod` y en el empuje de su fusión ([ADR-050](adr/ADR-050-main-vuelve-a-ser-la-ultima-etapa.md)) | Nada |
-| prod | — | La entrega del mismo artefacto al otro repositorio, tras cada release ([9.15](08-plan-de-desarrollo.md#tarea-9-15)) | prod, fuera de este proyecto |
+| prod | — | No es una etapa: es la entrega del [§7.5](#75-la-entrega-a-prod-en-el-repositorio-del-taller), que una persona dispara desde `prisma_db` leyendo `main` | prod, fuera de este proyecto |
 
 **La prueba de permisos corre en las cuatro**, dos veces ([9.5](08-plan-de-desarrollo.md#tarea-9-5)): contra la base que levanta la
 tubería, en el PR y en el empuje, y contra la base de dev en el empuje, porque una política puede
@@ -487,8 +487,9 @@ estar en la migración y no en el ambiente.
 | 3 | Se promueve a la etapa uat, que corre la batería entera sobre la semilla anonimizada, y se avisa a Gerencia | Desarrollo |
 | 4 | Se fusiona `uat` en `pre-prod`: se aplican las migraciones en pre-prod y Railway construye ahí **el mismo árbol** | Desarrollo |
 | 5 | Gerencia revisa en pre-prod lo que pidió y lo aprueba | Gerencia |
-| 6 | Se entregan a prod, en el otro repositorio, las migraciones y después **el mismo artefacto**, y se anota versión, commit, fecha y quién aprobó ([9.15](08-plan-de-desarrollo.md#tarea-9-15)) | Desarrollo |
-| 7 | Se comprueba `POST /api/v0/consultas/version` en prod y se abre una pantalla real | Desarrollo |
+| 6 | Se fusiona `pre-prod` en `main`, la quinta etapa, que vuelve a comprobar que el árbol es el que compiló qa ([ADR-050](adr/ADR-050-main-vuelve-a-ser-la-ultima-etapa.md)) | Desarrollo |
+| 7 | Se dispara la entrega del [§7.5](#75-la-entrega-a-prod-en-el-repositorio-del-taller), que lee `main`: al repositorio del taller llegan las migraciones y **el mismo artefacto**, y queda anotado versión, commit, fecha y quién aprobó | Desarrollo |
+| 8 | Se comprueba `POST /api/v0/consultas/version` en prod y se abre una pantalla real | Desarrollo |
 
 Las migraciones van antes que el artefacto a propósito: el esquema nuevo tiene que estar listo
 cuando llegue el código que lo usa.
@@ -604,6 +605,58 @@ vale solo si el otro repositorio lo adopta** ([ADR-045](adr/ADR-045-pre-prod-y-p
 
 ---
 
+### 7.5 La entrega a prod, en el repositorio del taller
+
+**Prod no es una etapa de la tubería: es una entrega**, y la dispara una persona desde `prisma_db`,
+con `.github/workflows/entregar-release.yml`, después del paso 6 ([ADR-052](adr/ADR-052-la-entrega-del-release-a-prod.md)). El destino es un
+repositorio espejo de la cuenta del taller, al que los documentos llaman **prisma-estampados**: su
+propietario y su nombre salen de dos variables del repositorio, porque esta especificación es
+pública.
+
+**Sale de `main`**, que desde el [ADR-050](adr/ADR-050-main-vuelve-a-ser-la-ultima-etapa.md) es la quinta y última etapa: lo que Gerencia aprobó en
+pre-prod entra ahí por PR y su CI vuelve a comprobar que el árbol es el que compiló qa. Era lo que
+ese ADR dejó a vigilar para cuando se decidiera esta tarea.
+
+**Qué recibe.** El árbol fuente de `main` de los tres repositorios —la API, el front y las
+migraciones— y, además, las dos imágenes que compiló qa, copiadas al registro de esa cuenta con
+`imagetools create`: el manifiesto y las capas, sin recompilar y conservando el label
+`prisma.arbol`. El pipeline del taller despliega la imagen; el código viaja para que lo tenga.
+
+| Qué va en el sobre | Para qué |
+|---|---|
+| `api/`, `front/`, `db/` | El árbol aprobado. Está para auditar, no para compilar |
+| `entrega/release.json` | Las tres versiones, los tres commits, los tres árboles, las dos imágenes, la fecha y quién aprobó |
+| `entrega/HISTORIAL.md` | Una fila por entrega, que escribe el flujo |
+| `entrega/DESPLIEGUE.md` y `compose.yaml` | El orden —migraciones y después el artefacto— y con qué se levanta |
+| `entrega/revertir.md` | El procedimiento del [§7.2](#72-volver-atrás) y del [§7.4](#74-el-ensayo-en-dev-con-el-reloj-en-la-mano), para que el taller lo adopte |
+| `entrega/plantillas/desplegar.yml` | Un pipeline de referencia. El `.github/` del espejo es del taller y la entrega no lo toca |
+
+**Qué no va.** La semilla, ni la de uat; ningún `.env`; `pila/` ni los guiones de promoción. De la
+base sale una lista explícita y corta en vez de una exclusión, porque una exclusión se olvida más
+fácil. En prod los usuarios los crea Gerencia desde la aplicación.
+
+**Las dos llaves y las seis puertas.** Hay que decir quién aprobó y escribir entero el nombre del
+repositorio espejo, como `promover.ps1` pide la referencia del proyecto; y `en-seco` viene
+encendido. Antes de escribir nada, el flujo comprueba que la imagen de cada pieza existe, que su
+`prisma.arbol` es el árbol de `main`, que la etiqueta `:uat` apunta a ese mismo árbol, que la API
+no pide un esquema que la base no publique, que el sobre no lleva nada con forma de secreto, y que
+el nombre coincide.
+
+> **La puerta mira `:uat` y no una etiqueta de etapa posterior.** Con `main` no se marca ninguna
+> imagen ([ADR-050](adr/ADR-050-main-vuelve-a-ser-la-ultima-etapa.md)), y el front no marca pre-prod, porque su única imagen es la de prod ([ADR-046](adr/ADR-046-pre-prod-se-construye-desde-su-rama.md)).
+> uat es la última etapa que marca las dos piezas por igual.
+
+**Un commit y una etiqueta `entrega-vN` por entrega**, y nada del desarrollo interno. Ese empuje,
+que va con una llave de despliegue, es lo que dispara el pipeline del otro lado: un empuje hecho
+con el `GITHUB_TOKEN` del flujo no dispararía nada.
+
+**Lo que hace falta antes de la primera entrega** no es código: las variables `PROD_API_URL` y
+`PROD_API_MAJOR` en `prisma_front`, sin las cuales la etapa qa se salta el artefacto de prod con un
+aviso; el repositorio espejo con su llave de despliegue; la credencial de paquetes de esa cuenta;
+un token con lectura de la API y del front, que son privados ([ADR-051](adr/ADR-051-la-visibilidad-de-un-repositorio-no-se-cambia.md)); y el proyecto de Supabase
+de prod, que lo paga ese lado.
+
+---
 ## 8. El costo, dicho sin adornos
 
 [ADR-001](adr/ADR-001-stack.md) declaró **presupuesto de operación cero**. Ese objetivo ya no se
@@ -665,7 +718,7 @@ solo está **con qué configuración corre cada ambiente y cómo se mueve una ve
 | Qué forma tiene cada respuesta de la API y qué cabeceras lleva | [`20-contrato-de-api.md`](20-contrato-de-api.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [ADR-038](adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md "ADR-038 · La pila local se orquesta desde prisma_db, y cada receta se apunta desde su .env") · [ADR-044](adr/ADR-044-dos-ambientes-desplegados.md "ADR-044 · Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería") · [ADR-045](adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md "ADR-045 · El ambiente alojado al final se llama pre-prod, y prod vive en otro repositorio") · [ADR-046](adr/ADR-046-pre-prod-se-construye-desde-su-rama.md "ADR-046 · pre-prod se construye desde su rama, como dev, y es la última etapa de la tubería") · [ADR-048](adr/ADR-048-las-ramas-principales-las-protege-github.md "ADR-048 · Las cinco ramas principales las protege GitHub, y la tubería es la puerta para entrar") · [ADR-049](adr/ADR-049-sin-docs-clave-swagger-toma-la-clave-de-gerencia.md "ADR-049 · Sin DOCS_CLAVE, Swagger toma PREPROD_GERENCIA_CLAVE") · [ADR-050](adr/ADR-050-main-vuelve-a-ser-la-ultima-etapa.md "ADR-050 · main vuelve a ser la última etapa, y pre-prod entra en ella por PR") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [18](18-distribucion-y-pipelines.md "18 · Distribución multiplataforma y automatización (pipelines)") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-024](adr/ADR-024-java-25-y-gradle.md "ADR-024 · Java 25, Gradle y Spring Boot 4 en la API") · [ADR-025](adr/ADR-025-cuatro-repositorios.md "ADR-025 · Cuatro repositorios: la base de datos sale de la API") · [ADR-026](adr/ADR-026-railway-al-final.md "ADR-026 · Railway aloja la API y el front, y el despliegue va al final del desarrollo") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-034](adr/ADR-034-la-version-sube-en-cada-pr.md "ADR-034 · La versión sube un paso en cada PR, y la integración continua lo exige") · [ADR-038](adr/ADR-038-la-pila-local-se-orquesta-desde-prisma-db.md "ADR-038 · La pila local se orquesta desde prisma_db, y cada receta se apunta desde su .env") · [ADR-044](adr/ADR-044-dos-ambientes-desplegados.md "ADR-044 · Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería") · [ADR-045](adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md "ADR-045 · El ambiente alojado al final se llama pre-prod, y prod vive en otro repositorio") · [ADR-046](adr/ADR-046-pre-prod-se-construye-desde-su-rama.md "ADR-046 · pre-prod se construye desde su rama, como dev, y es la última etapa de la tubería") · [ADR-048](adr/ADR-048-las-ramas-principales-las-protege-github.md "ADR-048 · Las cinco ramas principales las protege GitHub, y la tubería es la puerta para entrar") · [ADR-049](adr/ADR-049-sin-docs-clave-swagger-toma-la-clave-de-gerencia.md "ADR-049 · Sin DOCS_CLAVE, Swagger toma PREPROD_GERENCIA_CLAVE") · [ADR-050](adr/ADR-050-main-vuelve-a-ser-la-ultima-etapa.md "ADR-050 · main vuelve a ser la última etapa, y pre-prod entra en ella por PR") · [ADR-051](adr/ADR-051-la-visibilidad-de-un-repositorio-no-se-cambia.md "ADR-051 · La visibilidad de un repositorio no se cambia") · [ADR-052](adr/ADR-052-la-entrega-del-release-a-prod.md "ADR-052 · La entrega del release a prod va a un repositorio espejo del taller, la dispara una persona y no recompila nada") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/scripts/github/README.md "Historial de cambios") | [✅ Vigente](../../docs/22-documentacion.md#estados) | 2026-10-05 | 2026-10-05 | [Proceso](../../docs/INDICE.md#etiqueta-proceso) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/scripts/github/README.md "Historial de cambios") | [✅ Vigente](../../docs/22-documentacion.md#estados) | 2026-10-05 | 2026-10-06 | [Proceso](../../docs/INDICE.md#etiqueta-proceso) |
 
 Pone en GitHub las protecciones de las cinco ramas principales de los cuatro repositorios: que no se
 borren, y qué tiene que haber pasado para entrar en cada una. La decisión está en
@@ -56,8 +56,9 @@ vuelve a aplicar en cuanto la rama con el nombre nuevo esté en la base.
 
 - **Los tres repositorios de código son privados y la cuenta está en el plan Free.** La API contesta
   `403 Upgrade to GitHub Pro or make this repository public`, y el panel tampoco ofrece las reglas.
-  Hay dos salidas: pasar la cuenta a GitHub Pro, o hacer el repositorio público. Mientras siga así,
-  la herramienta lo dice y no inventa nada.
+  **De las dos salidas que nombra GitHub, la segunda está prohibida**: la visibilidad de un
+  repositorio no se cambia ([ADR-051](../../docs/adr/ADR-051-la-visibilidad-de-un-repositorio-no-se-cambia.md)). Queda una, pasar la cuenta a GitHub Pro, y
+  mientras no esté, la herramienta lo dice y no inventa nada.
 - **La especificación es pública y sí las admite**, pero hace falta el token del dueño.
 
 ## A mano, en el panel
