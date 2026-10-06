@@ -1744,11 +1744,11 @@ tbody tr.fila-detalle:hover{background:none}
           <div class="panel-head"><h2 class="grow">Lo que revela el cuadro</h2></div>
           <div class="grid g2" style="gap:12px">
             <div class="alerta a-info"><span class="tag">1</span>
-              <div><b>La camiseta tiene el peor margen porcentual y es la más rentable del taller</b>
-              <span>39% de margen, pero $50.000 por hora de trabajo. El porcentaje engaña cuando los tiempos son distintos.</span></div></div>
+              <div><b>El llavero tiene el mejor margen porcentual y es el que menos deja</b>
+              <span>70% de margen, pero $4.900 por unidad. El porcentaje engaña cuando los precios son distintos.</span></div></div>
             <div class="alerta a-alta"><span class="tag">2</span>
-              <div><b>El rompecabezas rinde la mitad que todo lo demás</b>
-              <span>$26.000 por hora contra $48.000–$50.000. Y su anticipo del 50% ni siquiera cubre el material.</span></div></div>
+              <div><b>El rompecabezas es el que menos deja de lo que se vende caro</b>
+              <span>$7.800 por unidad contra los $12.500 de la camiseta y los $13.200 del bordado. Y su anticipo del 50% ni siquiera cubre el material.</span></div></div>
           </div>
         </div>
       </section>
@@ -2023,17 +2023,6 @@ tbody tr.fila-detalle:hover{background:none}
             <p style="font-size:.8rem; color:var(--muted); margin-top:12px">
               Con un ticket promedio de $186.905, son <b>26 pedidos al mes</b>. Cada peso vendido
               por encima de ese punto deja 52 centavos.</p>
-          </div>
-          <div class="panel">
-            <div class="panel-head"><h2 class="grow">Tiempo pagado contra tiempo vendido</h2></div>
-            <div class="calc">
-              <div><span>Horas pagadas en septiembre</span><b>160 h</b></div>
-              <div><span>Horas cargadas a pedidos</span><b>104 h</b></div>
-              <div class="tot"><span>Capacidad sin vender</span><b style="color:var(--neg)">56 h · $526.400</b></div>
-            </div>
-            <p style="font-size:.8rem; color:var(--muted); margin-top:12px">
-              El 35% de la jornada se paga y no se factura. Antes de contratar a alguien más,
-              conviene vender las horas que ya se están pagando.</p>
           </div>
         </div>
       </section>
@@ -3643,9 +3632,6 @@ var PROLABORE = {valor:1500000, horas:160, desde:'2026-09-01',
 var HISTORIAL_PROLABORE = [];
 var avisoProlabore = null;
 
-/* La tarifa la calcula la API (05 §7.1): valor entre horas, redondeado a peso. Sin horas no hay. */
-function tarifaHora(p){ return p.horas > 0 ? Math.round(p.valor / p.horas) : null; }
-
 function horasTexto(h){ return String(h).replace('.', ','); }
 
 /* El día con su año, como lo escribe el front: «1 sep 2026», que es su `fechaCorta`. Lo usan la
@@ -3666,20 +3652,16 @@ function pintarProlabore(){
     : '';
   if (!PROLABORE){
     caja.innerHTML = html + '<div class="alerta a-alta"><span class="tag">FALTA</span>' +
-      '<div><b>Todavía no has definido tu pro-labore</b><span>Sin él tu trabajo no tiene precio: el ' +
-      'costeo no puede calcular lo que cuesta producir y el simulador de capacidad de pago se ' +
-      'bloquea.</span></div></div>';
+      '<div><b>Todavía no has definido tu pro-labore</b><span>Sin él tu trabajo no entra como ' +
+      'gasto, la utilidad queda inflada y el simulador de capacidad de pago se bloquea.' +
+      '</span></div></div>';
     return;
   }
-  var t = tarifaHora(PROLABORE);
   caja.innerHTML = html + '<div class="calc">' +
     '<div><span>Valor mensual</span><b id="pl-vigente-valor">' + fmt(PROLABORE.valor) + '</b></div>' +
-    '<div><span>Horas productivas del mes</span><b id="pl-vigente-horas">' + horasTexto(PROLABORE.horas) +
-    '</b></div>' +
-    '<div class="tot"><span>Tarifa por hora · la toman los costeos nuevos</span><b id="pl-tarifa">' +
-    (t === null ? '—' : fmt(t)) + '</b></div></div>' +
+    '<div class="tot"><span>Horas productivas del mes</span><b id="pl-vigente-horas">' +
+    horasTexto(PROLABORE.horas) + '</b></div></div>' +
     '<p style="font-size:.78rem; color:var(--muted); margin-top:10px">' +
-    (t === null ? 'Sin horas productivas, tu trabajo no le pone precio a ningún costeo. ' : '') +
     'Rige desde el ' + fechaConAno(PROLABORE.desde) +
     (PROLABORE.justificacion ? ' · «' + enTexto(PROLABORE.justificacion) + '»' : '') + '</p>';
 }
