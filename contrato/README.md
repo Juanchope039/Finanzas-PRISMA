@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Contrato | Etiquetas |
 |---|---|---|---|---|---|
-| [4.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/contrato/README.md "Historial de cambios") | [✅ Vigente](../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-06 | [0.33.0](openapi.json) | [Contrato](../docs/INDICE.md#etiqueta-contrato) · [API](../docs/INDICE.md#etiqueta-api) · [Front](../docs/INDICE.md#etiqueta-front) |
+| [4.4.1](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/contrato/README.md "Historial de cambios") | [✅ Vigente](../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-06 | [0.33.0](openapi.json) | [Contrato](../docs/INDICE.md#etiqueta-contrato) · [API](../docs/INDICE.md#etiqueta-api) · [Front](../docs/INDICE.md#etiqueta-front) |
 
 Este es **el contrato entre `prisma_front` y `prisma_api`**: lo que viaja por el cable, dicho en
 un solo archivo. Vive aquí, y no en ninguno de los repositorios de código, porque no le pertenece
@@ -364,7 +364,7 @@ distribución. Un pro-labore mayor que el retiro responde `42292` sobre `prolabo
 | `campo` | `etiqueta` | `tipo` | Reglas | `mensajes` | Lo demás |
 |---|---|---|---|---|---|
 | `valorMensual` | Pro-labore mensual | `dinero` | obligatorio · `minimo` 0 | obligatorio: «Escribe cuánto vale al mes tu trabajo en el taller.» · minimo: «El pro-labore no puede ser negativo.» | `teclado`: `numerico` · `ayuda`: «Lo que tendrías que pagarle a alguien para que hiciera lo que tú haces en el taller. No es lo que necesitas para vivir: es lo que vale el trabajo.» |
-| `horasMensuales` | Horas productivas al mes | `numero` | `minimo` 0 | minimo: «Las horas no pueden ser negativas.» | `teclado`: `numerico` · `ayuda`: «Las horas del mes que trabajas produciendo. De ellas sale hasta dónde puede llegar el pro-labore del mes, y con ellas compara el simulador al contratar.» |
+| `horasMensuales` | Horas productivas al mes | `numero` | `minimo` 0 | minimo: «Las horas no pueden ser negativas.» | `teclado`: `numerico` · `ayuda`: «Las horas del mes que trabajas produciendo. De ellas sale hasta dónde puede llegar el pro-labore del mes.» |
 | `justificacion` | Justificación | `texto` | obligatorio | obligatorio: «Escribe por qué ese valor: con qué lo comparaste.» | `ayuda`: «Queda junto al valor, para que dentro de un año se sepa de dónde salió.» |
 
 **No se edita: se vuelve a definir.** Cada vez que se guarda entra una fila nueva en
