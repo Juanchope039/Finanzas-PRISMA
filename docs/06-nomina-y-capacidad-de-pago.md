@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/06-nomina-y-capacidad-de-pago.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-06 | [Nómina](INDICE.md#etiqueta-nomina) · [Finanzas](INDICE.md#etiqueta-finanzas) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/06-nomina-y-capacidad-de-pago.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-06 | [Nómina](INDICE.md#etiqueta-nomina) · [Finanzas](INDICE.md#etiqueta-finanzas) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 > **Módulo exclusivo del tipo Gerencia.** El tipo Operación solo puede ver su propio desprendible.
 
@@ -94,41 +94,45 @@ Saber que "faltan $556.000" no orienta. Saber cuántos mugs hay que vender sí.
 
 ### 4.1 El margen de contribución correcto
 
-Para este cálculo **no se incluye el tiempo de trabajo en el costo**: precisamente el trabajo
-es el gasto fijo que se está tratando de cubrir. Incluirlo sería contarlo dos veces ([RN-17](03-requisitos-y-bdd.md#rn-17)).
+Para este cálculo **no se incluye la mano de obra en el costo**: precisamente el trabajo es el
+gasto fijo que se está tratando de cubrir. Incluirlo sería contarlo dos veces ([RN-17](03-requisitos-y-bdd.md#rn-17)).
 
 ```
 Margen de contribución unitario = Precio − (Insumo + Consumibles)
 Unidades adicionales necesarias = Faltante ÷ Margen de contribución unitario
 ```
 
-Con tarifa de trabajo de **$9.400/hora** ($156,67 por minuto):
-
-| Producto | Costo total | − Tiempo | = Insumo | Precio | **MC unitario** |
+| Producto | Costo total | − Mano de obra | = Materiales | Precio | **MC unitario** |
 |---|---:|---:|---:|---:|---:|
-| Mug estampado | $8.400 | 12 min → $1.880 | $6.520 | $18.000 | **$11.480** |
-| Camiseta DTF | $19.500 | 15 min → $2.350 | $17.150 | $32.000 | **$14.850** |
-| Llavero acrílico | $2.100 | 6 min → $940 | $1.160 | $7.000 | **$5.840** |
-| Rompecabezas A4 | $14.200 | 18 min → $2.820 | $11.380 | $22.000 | **$10.620** |
-| Bordado mediano | $11.800 | 22 min → $3.447 | $8.353 | $25.000 | **$16.647** |
+| Mug estampado | $8.400 | $1.880 | $6.520 | $18.000 | **$11.480** |
+| Camiseta DTF | $19.500 | $2.350 | $17.150 | $32.000 | **$14.850** |
+| Llavero acrílico | $2.100 | $940 | $1.160 | $7.000 | **$5.840** |
+| Rompecabezas A4 | $14.200 | $2.820 | $11.380 | $22.000 | **$10.620** |
+| Bordado mediano | $11.800 | $3.447 | $8.353 | $25.000 | **$16.647** |
+
+La mano de obra se escribe en pesos por producto ([05 §7.1](05-reglas-financieras.md#71-costo-unitario)), así que aquí se resta tal cual:
+antes salía de unos minutos por unidad y una tarifa por hora, y las cifras son las mismas.
 
 ### 4.2 Resultado para el faltante de $556.000
 
-| Producto | Unidades adicionales al mes | Tiempo que requieren |
-|---|---:|---:|
-| Camisetas DTF | **38** | 9,5 h |
-| Bordados medianos | **34** | 12,5 h |
-| Mugs estampados | **49** | 9,8 h |
-| Rompecabezas | **53** | 15,9 h |
-| Llaveros | **96** | 9,6 h |
+| Producto | Unidades adicionales al mes |
+|---|---:|
+| Camisetas DTF | **38** |
+| Bordados medianos | **34** |
+| Mugs estampados | **49** |
+| Rompecabezas | **53** |
+| Llaveros | **96** |
 
-> **Lectura clave.** Cualquiera de esas metas requiere menos de 16 horas de trabajo al mes —
-> una fracción mínima de lo que aporta una persona de tiempo completo. **La restricción no es
-> la capacidad de producir: es la demanda.** Contratar no resuelve un problema de ventas; lo
-> agrava, porque agrega costo fijo sin agregar clientes.
->
-> El sistema muestra esta conclusión explícitamente cuando el tiempo requerido es menor al 20%
-> de la jornada que se está evaluando contratar.
+> **Lectura clave.** El faltante se lee en unidades, que es la forma en que alguien lo puede
+> decidir: «38 camisetas más al mes» se compara con lo que el taller ya vende, y «$556.000» no.
+> **Contratar no resuelve un problema de ventas**: agrega costo fijo sin agregar clientes.
+
+> **⛔ Retirado el 2026-10-06: cuánto trabajo piden esas unidades.** El cuadro traía una columna
+> de horas, y con ella la regla de que una meta por debajo del 20% de la jornada evaluada
+> significaba que la restricción era la demanda y no la capacidad de producir. Las dos salían de
+> los minutos por unidad del costeo, y el catálogo dejó de pedir tiempo ([05 §7.1](05-reglas-financieras.md#71-costo-unitario)): sin ese dato
+> no hay de dónde calcularlas, y una cifra que ningún producto nuevo puede llenar se leería como
+> que esas ventas no cuestan trabajo.
 
 ---
 

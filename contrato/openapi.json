@@ -197,7 +197,7 @@
             "type" : "integer"
           },
           "costoDirecto" : {
-            "description" : "La suma del costo de las líneas: insumo, consumibles y tiempo, al costo vigente de cada producto",
+            "description" : "La suma del costo de las líneas: insumo, consumibles y mano de obra, al costo vigente de cada producto",
             "format" : "int64",
             "type" : "integer"
           },
@@ -967,8 +967,8 @@
             "type" : "boolean"
           },
           "orden" : {
-            "description" : "Los dos órdenes del cuadro de 10 §4.4, y los dos los decide la API. Sin él, margen_por_hora, que es el que orienta la decisión cuando hay más pedidos que tiempo (05 §7.2). A una sesión de Operación el catálogo le llega por nombre: ordenar por margen exige leer lo que la base no le deja ver",
-            "enum" : [ "margen_por_hora", "margen_porcentual" ],
+            "description" : "Los dos órdenes del cuadro de 10 §4.4, y los dos los decide la API. Sin él, margen_en_pesos, que es el que orienta la decisión porque es lo que entra a la caja por unidad (05 §7.2). A una sesión de Operación el catálogo le llega por nombre: ordenar por margen exige leer lo que la base no le deja ver",
+            "enum" : [ "margen_en_pesos", "margen_porcentual" ],
             "type" : "string"
           }
         },
@@ -3917,14 +3917,9 @@
             "format" : "int64",
             "type" : "integer"
           },
-          "horasRequeridas" : {
-            "description" : "Cuánto trabajo piden las ventas adicionales, por el camino más barato",
-            "minimum" : 0,
-            "type" : "number"
-          },
           "lectura" : {
             "$ref" : "#/components/schemas/Lectura",
-            "description" : "El veredicto, con sus montos. Cuando las horas requeridas son menos del 20% de la jornada evaluada, dice que la restricción no es la capacidad sino la demanda (06 §4.2)"
+            "description" : "El veredicto, con sus montos. Cuando no alcanza, dice en unidades de qué producto se cubre el faltante por el camino más corto (06 §4.2)"
           },
           "mesesPedidos" : {
             "description" : "Cuántos se pidieron",
@@ -5339,13 +5334,8 @@
         "type" : "object"
       },
       "VentaAdicional" : {
-        "description" : "Cuánto hay que vender de un producto para cubrir el faltante. El margen de contribución no incluye el costo del tiempo: el tiempo es justo el gasto fijo que se trata de cubrir, y contarlo sería contarlo dos veces (RN-17, 06 §4.1)",
+        "description" : "Cuánto hay que vender de un producto para cubrir el faltante. El margen de contribución no incluye la mano de obra: el trabajo es justo el gasto fijo que se trata de cubrir, y contarlo sería contarlo dos veces (RN-17, 06 §4.1)",
         "properties" : {
-          "horas" : {
-            "description" : "Cuánto trabajo piden esas unidades",
-            "minimum" : 0,
-            "type" : "number"
-          },
           "margenContribucion" : {
             "description" : "Precio menos insumo y consumibles",
             "format" : "int64",
@@ -5365,7 +5355,7 @@
             "type" : "integer"
           }
         },
-        "required" : [ "horas", "margenContribucion", "producto", "productoId", "unidades" ],
+        "required" : [ "margenContribucion", "producto", "productoId", "unidades" ],
         "type" : "object"
       },
       "Version" : {
@@ -5392,7 +5382,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion, POST /api/v0/sesiones/administrador y los formularios «acceso» y «primer-administrador». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.32.0"
+    "version" : "0.33.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -11208,7 +11198,7 @@
     },
     "/api/v0/prolabore/{id}" : {
       "put" : {
-        "description" : "Define desde hoy cuánto vale al mes el trabajo de la gerencia en el taller y cuántas horas produce (RF-47, CU-25, RN-08). No edita la definición anterior: escribe una fila nueva de prolabore_config, vigente desde el día en que se guarda en Bogotá, así que el historial queda entero (04 §4.6). Desde ese día los costeos nuevos toman de aquí su tarifa por hora (05 §7.1) —los ya guardados conservan la suya—, y cada retiro se parte con el pro-labore vigente en su fecha. El mismo id dos veces responde 40900 (ADR-020). Solo Gerencia, y lo rechaza la base con prolabore_solo_gerencia (04 §7). El formulario es «prolabore»; las horas con más de dos decimales no caben en el descriptor y responden 42294, y las que pasan del máximo del mes responden 42295 (RN-20). Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 42200 con data.errores, 42294 y 42295.",
+        "description" : "Define desde hoy cuánto vale al mes el trabajo de la gerencia en el taller y cuántas horas produce (RF-47, CU-25, RN-08). No edita la definición anterior: escribe una fila nueva de prolabore_config, vigente desde el día en que se guarda en Bogotá, así que el historial queda entero (04 §4.6). Cada retiro se parte con el pro-labore vigente en su fecha. El mismo id dos veces responde 40900 (ADR-020). Solo Gerencia, y lo rechaza la base con prolabore_solo_gerencia (04 §7). El formulario es «prolabore»; las horas con más de dos decimales no caben en el descriptor y responden 42294, y las que pasan del máximo del mes responden 42295 (RN-20). Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 42200 con data.errores, 42294 y 42295.",
         "operationId" : "definirProlabore",
         "parameters" : [ {
           "description" : "El id de esta definición del pro-labore, que genera quien la guarda",
