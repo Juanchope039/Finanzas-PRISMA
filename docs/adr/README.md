@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.21.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-10-05 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
+| [1.22.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-10-06 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
 
 Registro de las decisiones técnicas importantes: qué se decidió, por qué, qué alternativas se
 consideraron y qué consecuencias tiene.
@@ -59,8 +59,9 @@ consideraron y qué consecuencias tiene.
 | [048](ADR-048-las-ramas-principales-las-protege-github.md) | Las cinco ramas principales las protege GitHub, y la tubería es la puerta para entrar | Aceptado |
 | [049](ADR-049-sin-docs-clave-swagger-toma-la-clave-de-gerencia.md) | Sin `DOCS_CLAVE`, Swagger toma `PREPROD_GERENCIA_CLAVE` | Aceptado |
 | [050](ADR-050-main-vuelve-a-ser-la-ultima-etapa.md) | `main` vuelve a ser la última etapa, y `pre-prod` entra en ella por PR | Aceptado |
+| [051](ADR-051-la-visibilidad-de-un-repositorio-no-se-cambia.md) | La visibilidad de un repositorio no se cambia | Aceptado |
 
-Son **43 decisiones** registradas: 34 aceptadas y 9 reemplazadas.
+Son **44 decisiones** registradas: 35 aceptadas y 9 reemplazadas.
 
 > **Sobre la numeración.** El cambio de stack se planeó como [ADR-010](ADR-010-almacenamiento-contrasenas.md) y [ADR-011](ADR-011-stack-flutter-dart.md), pero el 010 ya
 > estaba ocupado por la decisión de contraseñas. Un número asignado no se reutiliza, así que el
