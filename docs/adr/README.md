@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.20.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-10-05 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
+| [1.21.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-10-05 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
 
 Registro de las decisiones técnicas importantes: qué se decidió, por qué, qué alternativas se
 consideraron y qué consecuencias tiene.
@@ -58,6 +58,7 @@ consideraron y qué consecuencias tiene.
 | [047](ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) | El respaldo con manifiesto y la auditoría completa entran al [Sprint 8](../08-plan-de-desarrollo.md#sprint-8) | Aceptado |
 | [048](ADR-048-las-ramas-principales-las-protege-github.md) | Las cinco ramas principales las protege GitHub, y la tubería es la puerta para entrar | Aceptado |
 | [049](ADR-049-sin-docs-clave-swagger-toma-la-clave-de-gerencia.md) | Sin `DOCS_CLAVE`, Swagger toma `PREPROD_GERENCIA_CLAVE` | Aceptado |
+| [050](ADR-050-main-vuelve-a-ser-la-ultima-etapa.md) | `main` vuelve a ser la última etapa, y `pre-prod` entra en ella por PR | Aceptado |
 
 Son **43 decisiones** registradas: 34 aceptadas y 9 reemplazadas.
 
