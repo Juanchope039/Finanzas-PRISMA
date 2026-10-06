@@ -1819,7 +1819,7 @@
         "description" : "Lo que dice el margen de un producto cuando se lo pone al lado del resto del taller. La decide la API con su texto y su nivel; el front la pinta y no la calcula (ADR-018)",
         "properties" : {
           "detalle" : {
-            "description" : "La explicación con los montos de este producto, porque «Deja $7.800 por unidad contra $12.500 de la mediana» orienta y «revisa tu margen» no (10 §6)",
+            "description" : "La explicación con los montos de este producto, porque «Deja $4.900 por unidad contra $11.050 de la mediana» orienta y «revisa tu margen» no (10 §6)",
             "type" : "string"
           },
           "medianaDelResto" : {
