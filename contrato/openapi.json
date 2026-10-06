@@ -677,21 +677,18 @@
             "minimum" : 0,
             "type" : "integer"
           },
+          "costoManoObra" : {
+            "description" : "Lo que vale el trabajo de una unidad, en pesos enteros (05 §7.1). Se escribe a mano: desde el 2026-10-06 el catálogo no pide tiempo, así que no sale de unos minutos por una tarifa",
+            "format" : "int64",
+            "minimum" : 0,
+            "type" : "integer"
+          },
           "margenObjetivo" : {
             "description" : "Sobre qué margen se quiere el precio sugerido, en puntos (RF-33). El mockup lo mueve entre 20 y 80 de cinco en cinco. Sin él, la respuesta no trae precio sugerido",
             "format" : "int32",
             "maximum" : 99,
             "minimum" : 1,
             "type" : "integer"
-          },
-          "minutosMaquina" : {
-            "description" : "Los minutos en que una máquina trabaja sola por unidad, como en el formulario de producto. No cambian el costo unitario y sí el margen por hora, que divide entre el mayor de los dos tiempos (05 §7.2)",
-            "minimum" : 0,
-            "type" : "number"
-          },
-          "minutosTrabajo" : {
-            "minimum" : 0,
-            "type" : "number"
           },
           "precioVenta" : {
             "format" : "int64",
@@ -958,24 +955,8 @@
         },
         "type" : "object"
       },
-      "ConsultaDeProductividad" : {
-        "description" : "El cuerpo de POST /api/v0/consultas/productividad. Sin nada, el mes en curso en Bogotá (RNF-08)",
-        "properties" : {
-          "anio" : {
-            "description" : null,
-            "format" : "int32",
-            "type" : "integer"
-          },
-          "mes" : {
-            "description" : "De 1 a 12",
-            "format" : "int32",
-            "type" : "integer"
-          }
-        },
-        "type" : "object"
-      },
       "ConsultaDeProductos" : {
-        "description" : "El cuerpo de POST /api/v0/consultas/productos. Todo es opcional: sin nada, lo que se vende hoy ordenado por margen por hora",
+        "description" : "El cuerpo de POST /api/v0/consultas/productos. Todo es opcional: sin nada, lo que se vende hoy ordenado por margen en pesos",
         "properties" : {
           "incluirInactivos" : {
             "description" : "Con true salen también los desactivados, que es el panel «Productos desactivados» del mockup. Solo para Gerencia",
@@ -1063,26 +1044,18 @@
             "format" : "int64",
             "type" : "integer"
           },
-          "costoUnitario" : {
-            "description" : "Materia más tiempo: lo que cuesta producir una unidad (05 §7.1). Lo calcula la API, y viaja aquí y no en los márgenes porque un producto sin precio también lo tiene",
+          "costoManoObra" : {
+            "description" : "Lo que valía el trabajo de una unidad cuando se registró este costeo, en pesos (05 §7.1)",
             "format" : "int64",
             "type" : "integer"
           },
-          "minutosMaquina" : {
-            "description" : "Los minutos en que una máquina trabaja sola por unidad: los del bordado (RF-32). No le suman pesos al costo unitario —la máquina no cobra sueldo y su energía ya está entre los consumibles—, sí ocupan el taller, y por eso el margen por hora divide entre el mayor de los dos tiempos (05 §7.2)",
-            "type" : "number"
-          },
-          "minutosTrabajo" : {
-            "description" : "Los minutos de persona que lleva una unidad",
-            "type" : "number"
+          "costoUnitario" : {
+            "description" : "Insumo, consumibles y mano de obra: lo que cuesta producir una unidad (05 §7.1). Lo calcula la API, y viaja aquí y no en los márgenes porque un producto sin precio también lo tiene",
+            "format" : "int64",
+            "type" : "integer"
           },
           "precioVenta" : {
             "description" : "A cuánto se vendía la unidad con este costeo",
-            "format" : "int64",
-            "type" : "integer"
-          },
-          "tarifaHora" : {
-            "description" : "Lo que costaba una hora de quien produce cuando se registró este costeo: el costo mensual dividido entre las horas productivas del mes (05 §7.1). La pone la API y se congela aquí, porque recalcularla con el pro-labore de hoy cambiaría los costos de los pedidos viejos",
             "format" : "int64",
             "type" : "integer"
           },
@@ -1092,14 +1065,14 @@
             "type" : "string"
           }
         },
-        "required" : [ "costoConsumibles", "costoInsumo", "costoUnitario", "minutosMaquina", "minutosTrabajo", "precioVenta", "tarifaHora", "vigenteDesde" ],
+        "required" : [ "costoConsumibles", "costoInsumo", "costoManoObra", "costoUnitario", "precioVenta", "vigenteDesde" ],
         "type" : "object"
       },
       "CosteoCalculado" : {
         "description" : "Lo que el formulario de producto pinta en vivo: el costo, los márgenes, la lectura frente al resto del taller y el precio que habría que cobrar para el margen objetivo",
         "properties" : {
           "costoUnitario" : {
-            "description" : "Materia más tiempo (05 §7.1)",
+            "description" : "Insumo, consumibles y mano de obra (05 §7.1)",
             "format" : "int64",
             "type" : "integer"
           },
@@ -1114,14 +1087,9 @@
             "description" : "El precio que deja el margen objetivo sobre este costo (RF-33). Ausente si la consulta no trae margenObjetivo",
             "format" : "int64",
             "type" : "integer"
-          },
-          "tarifaHora" : {
-            "description" : "La que la API tomó del pro-labore vigente para cobrar los minutos de trabajo",
-            "format" : "int64",
-            "type" : "integer"
           }
         },
-        "required" : [ "costoUnitario", "lectura", "tarifaHora" ],
+        "required" : [ "costoUnitario", "lectura" ],
         "type" : "object"
       },
       "Cotizacion" : {
@@ -1258,15 +1226,11 @@
             "minimum" : 0,
             "type" : "integer"
           },
-          "minutosMaquina" : {
-            "description" : "Los minutos en que una máquina trabaja sola por unidad, con dos decimales como máximo; más decimales responden 42241. No le suman pesos al costo unitario, sí ocupan el taller: el margen por hora divide entre el mayor de los dos tiempos (05 §7.2). En cero en todo lo que no se borda",
+          "costoManoObra" : {
+            "description" : "Lo que vale el trabajo de una unidad, en pesos enteros (05 §7.1). Se escribe a mano: desde el 2026-10-06 el catálogo no pide tiempo, así que no sale de unos minutos por una tarifa",
+            "format" : "int64",
             "minimum" : 0,
-            "type" : "number"
-          },
-          "minutosTrabajo" : {
-            "description" : "Los minutos de persona que lleva una unidad, con dos decimales como máximo, que es lo que guarda NUMERIC(6,2) (04 §4.1); más decimales responden 42240. En cero cuando el ítem no consume tiempo del taller: entonces su margen por hora no existe, y viaja vacío en vez de en cero",
-            "minimum" : 0,
-            "type" : "number"
+            "type" : "integer"
           },
           "nombre" : {
             "description" : "Cómo se llama en el taller",
@@ -1368,7 +1332,7 @@
             "type" : "string"
           },
           "tipo" : {
-            "description" : "clave es un texto que se pinta oculto, con un botón para mostrarlo; teclado de texto. numero es una cantidad que no es plata —los minutos de trabajo, un porcentaje—, con teclado numérico",
+            "description" : "clave es un texto que se pinta oculto, con un botón para mostrarlo; teclado de texto. numero es una cantidad que no es plata —las horas productivas de un mes, un porcentaje—, con teclado numérico",
             "enum" : [ "dinero", "texto", "fecha", "lista", "casilla", "clave", "numero" ],
             "type" : "string"
           }
@@ -1855,7 +1819,7 @@
             "type" : "string"
           },
           "medianaDelResto" : {
-            "description" : "La mediana del margen por hora de los demás productos del cuadro, contra la que se leyó este. Ausente si este no tiene margen por hora o si ningún otro lo tiene",
+            "description" : "La mediana del margen en pesos de los demás productos del cuadro, contra la que se leyó este. Ausente si ningún otro tiene margen",
             "format" : "int64",
             "type" : "integer"
           },
@@ -2052,15 +2016,10 @@
         "type" : "object"
       },
       "Margenes" : {
-        "description" : "Los tres márgenes de 05 §7.2: margen en pesos = precio − costo unitario; porcentual = margen en pesos ÷ precio; por hora = margen en pesos ÷ (minutos ÷ 60). El tercero es el que guía la decisión cuando hay más pedidos que tiempo",
+        "description" : "Los dos márgenes de 05 §7.2: margen en pesos = precio − costo unitario; porcentual = margen en pesos ÷ precio. El primero es el que guía la decisión, porque es lo que entra a la caja por unidad",
         "properties" : {
           "enPesos" : {
             "description" : "Precio de venta menos costo unitario. Negativo cuando se vende por debajo de lo que cuesta producirlo",
-            "format" : "int64",
-            "type" : "integer"
-          },
-          "porHora" : {
-            "description" : "Lo que deja una hora de trabajo. Ausente —y no en cero— cuando el ítem no consume tiempo del taller: en cero quedaría de último en el cuadro como si fuera el peor negocio",
             "format" : "int64",
             "type" : "integer"
           },
@@ -2840,7 +2799,7 @@
         "description" : "El formulario «prolabore». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"prolabore\"}",
         "properties" : {
           "horasMensuales" : {
-            "description" : "Las horas del mes que la gerencia trabaja produciendo, con dos decimales como máximo, que es lo que guarda NUMERIC(6,2) (04 §4.1); más decimales responden 42294. No pasan del máximo del mes que sale del límite semanal vigente, que da POST /api/v0/consultas/limite-de-horas (RN-20, 05 §6.5): por encima responden 42295. Sin ellas, cero: el trabajo no le pone precio a ningún costeo, y costear responde 40940",
+            "description" : "Las horas del mes que la gerencia trabaja produciendo, con dos decimales como máximo, que es lo que guarda NUMERIC(6,2) (04 §4.1); más decimales responden 42294. No pasan del máximo del mes que sale del límite semanal vigente, que da POST /api/v0/consultas/limite-de-horas (RN-20, 05 §6.5): por encima responden 42295. Sin ellas, cero",
             "maximum" : 9999.99,
             "minimum" : 0,
             "type" : "number"
@@ -3417,66 +3376,6 @@
         "required" : [ "clave", "claveTemporal", "nombreCompleto", "repeticion", "usuario", "usuarioTemporal" ],
         "type" : "object"
       },
-      "Productividad" : {
-        "description" : "Horas pagadas contra horas facturadas, y lo que cuesta la diferencia (06 §9, CU-27)",
-        "properties" : {
-          "anio" : {
-            "description" : null,
-            "format" : "int32",
-            "type" : "integer"
-          },
-          "costoDelOcio" : {
-            "description" : "Horas ociosas por la tarifa de la hora",
-            "format" : "int64",
-            "type" : "integer"
-          },
-          "horasFacturadas" : {
-            "description" : "Los minutos por unidad de lo entregado en el mes, divididos entre 60",
-            "minimum" : 0,
-            "type" : "number"
-          },
-          "horasOciosas" : {
-            "description" : "Pagadas menos facturadas",
-            "minimum" : 0,
-            "type" : "number"
-          },
-          "horasPagadas" : {
-            "description" : "Nómina más pro-labore",
-            "minimum" : 0,
-            "type" : "number"
-          },
-          "horasPagadasNomina" : {
-            "description" : "Las horas pactadas de quienes se liquidaron en el mes",
-            "minimum" : 0,
-            "type" : "number"
-          },
-          "horasPagadasProlabore" : {
-            "description" : "Las horas del pro-labore vigente",
-            "minimum" : 0,
-            "type" : "number"
-          },
-          "lectura" : {
-            "$ref" : "#/components/schemas/Lectura",
-            "description" : "Cuál de los tres tramos del 06 §9 es —menos del 15%, entre 15 y 35, o más de 35— y qué conviene hacer"
-          },
-          "mes" : {
-            "description" : null,
-            "format" : "int32",
-            "type" : "integer"
-          },
-          "porcentajeOcioso" : {
-            "description" : "Horas ociosas sobre horas pagadas, en puntos",
-            "type" : "number"
-          },
-          "tarifaHora" : {
-            "description" : "La que la API tomó del pro-labore vigente",
-            "format" : "int64",
-            "type" : "integer"
-          }
-        },
-        "required" : [ "anio", "costoDelOcio", "horasFacturadas", "horasOciosas", "horasPagadas", "horasPagadasNomina", "horasPagadasProlabore", "lectura", "mes", "porcentajeOcioso", "tarifaHora" ],
-        "type" : "object"
-      },
       "Producto" : {
         "properties" : {
           "activo" : {
@@ -3501,7 +3400,7 @@
           },
           "margenes" : {
             "$ref" : "#/components/schemas/Margenes",
-            "description" : "Los tres márgenes de 05 §7.2. Solo a Gerencia, y ausente también para ella cuando el producto todavía no tiene precio"
+            "description" : "Los dos márgenes de 05 §7.2. Solo a Gerencia, y ausente también para ella cuando el producto todavía no tiene precio"
           },
           "nombre" : {
             "type" : "string"
@@ -3553,11 +3452,6 @@
           "justificacion" : {
             "description" : "Ausente en una definición que se guardó sin ella: la columna lo permite",
             "type" : "string"
-          },
-          "tarifaHora" : {
-            "description" : "Lo que cuesta una hora de ese trabajo: el valor mensual entre las horas productivas, redondeado a peso (05 §7.1). Es la que toman los costeos nuevos desde que esta definición rige. Ausente con cero horas",
-            "format" : "int64",
-            "type" : "integer"
           },
           "valorMensual" : {
             "description" : "Pesos enteros",
@@ -5060,25 +4954,6 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
-      "SobreProductividad" : {
-        "properties" : {
-          "data" : {
-            "$ref" : "#/components/schemas/Productividad",
-            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
-          },
-          "mensaje" : {
-            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
-            "type" : "string"
-          },
-          "status" : {
-            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
-            "format" : "int32",
-            "type" : "integer"
-          }
-        },
-        "required" : [ "mensaje", "status" ],
-        "type" : "object"
-      },
       "SobreProducto" : {
         "properties" : {
           "data" : {
@@ -5513,7 +5388,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion, POST /api/v0/sesiones/administrador y los formularios «acceso» y «primer-administrador». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.30.0"
+    "version" : "0.31.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -7166,7 +7041,7 @@
     },
     "/api/v0/consultas/costeo" : {
       "post" : {
-        "description" : "La vista previa que el formulario de producto pinta en vivo: el costo unitario, los tres márgenes, la lectura frente al resto del taller y el precio que habría que cobrar para el margen objetivo (RF-30, RF-31, RF-33). Las cuatro son plata o son reglas, así que las calcula la API y el front solo las pinta (ADR-018). No escribe nada: sirve para ver antes de guardar, y es también la sugerencia de precio de la tarea 5.7. Con productoId, ese producto queda fuera de la mediana con la que se compara. Solo Gerencia. Sin pro-labore definido responde 40940, y un tiempo con más de dos decimales, 42240 si es el de trabajo y 42241 si es el de máquina. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902, 40940, 42200 con data.errores, 42240 y 42241.",
+        "description" : "La vista previa que el formulario de producto pinta en vivo: el costo unitario, los dos márgenes, la lectura frente al resto del taller y el precio que habría que cobrar para el margen objetivo (RF-30, RF-33). Las cuatro son plata o son reglas, así que las calcula la API y el front solo las pinta (ADR-018). No escribe nada: sirve para ver antes de guardar, y es también la sugerencia de precio de la tarea 5.7. Con productoId, ese producto queda fuera de la mediana con la que se compara. Solo Gerencia. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902 y 42200 con data.errores.",
         "operationId" : "costeo",
         "parameters" : [ {
           "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
@@ -8283,76 +8158,9 @@
         "tags" : [ "Movimientos" ]
       }
     },
-    "/api/v0/consultas/productividad" : {
-      "post" : {
-        "description" : "Cuánto tiempo pagado no se convirtió en ventas (RF-62, CU-27, BDD-27-1, 06 §9). Suma las horas de nómina y las del pro-labore, les resta las horas cargadas a lo entregado en el mes según el costeo, y pone precio a la diferencia. Es el contrapeso del simulador: antes de agregar horas pagadas conviene vender las que ya se pagan. Sin pro-labore definido responde 40950, por la misma razón que el simulador. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901, 40902 y 40950.",
-        "operationId" : "productividad",
-        "parameters" : [ {
-          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
-          "in" : "header",
-          "name" : "Idempotency-Key",
-          "required" : true,
-          "schema" : {
-            "format" : "uuid",
-            "type" : "string"
-          }
-        }, {
-          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
-          "in" : "header",
-          "name" : "X-Prisma-Firma",
-          "required" : true,
-          "schema" : {
-            "pattern" : "^[0-9a-f]{64}$",
-            "type" : "string"
-          }
-        }, {
-          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
-          "in" : "header",
-          "name" : "X-Prisma-Nonce",
-          "required" : true,
-          "schema" : {
-            "format" : "uuid",
-            "type" : "string"
-          }
-        }, {
-          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
-          "in" : "header",
-          "name" : "X-Prisma-Timestamp",
-          "required" : true,
-          "schema" : {
-            "format" : "date-time",
-            "type" : "string"
-          }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/ConsultaDeProductividad"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/SobreProductividad"
-                }
-              }
-            },
-            "description" : "OK"
-          }
-        },
-        "summary" : "Horas pagadas contra horas facturadas",
-        "tags" : [ "Nómina" ]
-      }
-    },
     "/api/v0/consultas/productos" : {
       "post" : {
-        "description" : "El catálogo con su costeo vigente, sus tres márgenes y lo que dicen frente al resto del taller, en el orden que se pida (RF-28, RF-30, RF-31, CU-09). Es el cuadro de 10 §4.4, y quien lo ordena y quien lo lee es la API: el front no vuelve a ordenar ni decide qué pinta en rojo (ADR-018). A una sesión de Operación le llegan el nombre, el tipo, la unidad y el precio, y ni el costeo ni los márgenes ni la lectura, porque costos_producto lleva RLS y PostgreSQL no le devuelve esas filas (ADR-006, RF-34, BDD-02-2); por eso a Operación el catálogo le llega por nombre. Los desactivados no salen salvo que se pidan. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901, 40902 y 42200 con data.errores.",
+        "description" : "El catálogo con su costeo vigente, sus dos márgenes y lo que dicen frente al resto del taller, en el orden que se pida (RF-28, RF-30, CU-09). Es el cuadro de 10 §4.4, y quien lo ordena y quien lo lee es la API: el front no vuelve a ordenar ni decide qué pinta en rojo (ADR-018). A una sesión de Operación le llegan el nombre, el tipo, la unidad y el precio, y ni el costeo ni los márgenes ni la lectura, porque costos_producto lleva RLS y PostgreSQL no le devuelve esas filas (ADR-006, RF-34, BDD-02-2); por eso a Operación el catálogo le llega por nombre. Los desactivados no salen salvo que se pidan. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901, 40902 y 42200 con data.errores.",
         "operationId" : "productos",
         "parameters" : [ {
           "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
@@ -8419,7 +8227,7 @@
     },
     "/api/v0/consultas/prolabore" : {
       "post" : {
-        "description" : "La definición del pro-labore que rige hoy, con la tarifa por hora que de ella toman los costeos (CU-25, 05 §7.1). Sin ninguna definida, data llega en null: es lo que bloquea el simulador de capacidad de pago (BDD-18-2) y el costeo (40940). El historial se conserva en la base y no se lee: ninguna pantalla lo pinta. A una sesión de Operación la base no le devuelve la fila, por prolabore_solo_gerencia (P-21), así que le llega lo mismo que si no hubiera pro-labore. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902.",
+        "description" : "La definición del pro-labore que rige hoy (CU-25). Sin ninguna definida, data llega en null: es lo que bloquea el simulador de capacidad de pago (BDD-18-2). El historial se conserva en la base y no se lee: ninguna pantalla lo pinta. A una sesión de Operación la base no le devuelve la fila, por prolabore_solo_gerencia (P-21), así que le llega lo mismo que si no hubiera pro-labore. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40901 y 40902.",
         "operationId" : "prolabore",
         "parameters" : [ {
           "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
@@ -11102,7 +10910,7 @@
     },
     "/api/v0/productos/{id}" : {
       "put" : {
-        "description" : "Da de alta algo que el taller vende, con su primer costeo (RF-28, RF-29, CU-09, CU-10). El id va en la ruta y no en el cuerpo: lo genera quien pide al decidir la acción, junto con la clave de idempotencia (ADR-020), así que reintentar la misma petición no crea dos productos, y si ese id ya existe responde 40900. El costo viaja con la ficha en una sola petición porque es una sola transacción (20 §5.1): la fila de productos y la primera de costos_producto caen juntas o no cae ninguna. La tarifa por hora no se manda: la API la saca del pro-labore vigente y la congela en el costeo (05 §7.1), y sin pro-labore definido responde 40940. Solo Gerencia. El formulario es «producto»; el tiempo con más de dos decimales no cabe en el descriptor y responde 42240 el de trabajo y 42241 el de máquina. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 40940, 42200 con data.errores, 42240 y 42241.",
+        "description" : "Da de alta algo que el taller vende, con su primer costeo (RF-28, RF-29, CU-09). El id va en la ruta y no en el cuerpo: lo genera quien pide al decidir la acción, junto con la clave de idempotencia (ADR-020), así que reintentar la misma petición no crea dos productos, y si ese id ya existe responde 40900. El costo viaja con la ficha en una sola petición porque es una sola transacción (20 §5.1): la fila de productos y la primera de costos_producto caen juntas o no cae ninguna. El tiempo no se manda: desde el 2026-10-06 la mano de obra se escribe en pesos y el catálogo no pide minutos (05 §7.1). Solo Gerencia. El formulario es «producto». Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902 y 42200 con data.errores.",
         "operationId" : "crearProducto",
         "parameters" : [ {
           "description" : "El id del producto, que genera quien lo da de alta",
@@ -11254,7 +11062,7 @@
     },
     "/api/v0/productos/{id}/edicion" : {
       "post" : {
-        "description" : "Guarda el formulario entero, como el botón «Guardar cambios» del mockup: corrige la ficha y, si el costo o el precio cambiaron, agrega una fila nueva a costos_producto con la fecha de hoy, porque un costeo no se sobrescribe nunca (04 §4.5, RF-35). Así un pedido viejo conserva el costo que tenía cuando se produjo. Editar dos veces el mismo día deja dos filas con la misma vigencia, y la vigente es la última registrada. Solo Gerencia. Un producto que no existe responde 40400. El formulario es «producto», el mismo que crea. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902, 40940, 42200 con data.errores, 42240 y 42241.",
+        "description" : "Guarda el formulario entero, como el botón «Guardar cambios» del mockup: corrige la ficha y, si el costo o el precio cambiaron, agrega una fila nueva a costos_producto con la fecha de hoy, porque un costeo no se sobrescribe nunca (04 §4.5, RF-35). Así un pedido viejo conserva el costo que tenía cuando se produjo. Editar dos veces el mismo día deja dos filas con la misma vigencia, y la vigente es la última registrada. Solo Gerencia. Un producto que no existe responde 40400. El formulario es «producto», el mismo que crea. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40400, 40900, 40901, 40902 y 42200 con data.errores.",
         "operationId" : "editarProducto",
         "parameters" : [ {
           "description" : "El id del producto",
@@ -12499,7 +12307,7 @@
     "description" : "Los pedidos del taller, y la entrega que causa la venta",
     "name" : "Pedidos"
   }, {
-    "description" : "El catálogo de lo que el taller vende, con su costo y su margen por hora",
+    "description" : "El catálogo de lo que el taller vende, con su costo y su margen en pesos",
     "name" : "Productos"
   }, {
     "description" : "Las tres cifras, el año mes a mes, las alertas y el cierre de cada mes",
@@ -12713,17 +12521,6 @@
       "sprint" : 4
     },
     "status" : 40932
-  }, {
-    "cuando" : "Registrar o editar un costeo cuando no hay pro-labore definido con horas productivas: sin él la hora de trabajo no tiene precio, y el costo unitario no se puede calcular (05 §7.1, RN-08)",
-    "http" : 409,
-    "mensaje" : "Todavía no está definido el pro-labore, así que el trabajo no tiene precio. Defínelo antes de costear.",
-    "modulo" : "PRODUCTOS_Y_COSTEO",
-    "nombre" : "SIN_TARIFA_POR_HORA",
-    "pendienteDeEmitir" : {
-      "quien" : "Tarea 5.2: catálogo de productos y servicios",
-      "sprint" : 5
-    },
-    "status" : 40940
   }, {
     "cuando" : "Los datos llegaron bien formados pero no pasan las reglas; cada campo va en data.errores",
     "http" : 422,
@@ -12967,24 +12764,6 @@
     },
     "status" : 42235
   }, {
-    "cuando" : "Los minutos de trabajo llegan con más de dos decimales, que es lo que guarda la columna NUMERIC(6,2). El error va en data.errores, sobre minutosTrabajo",
-    "http" : 422,
-    "mensaje" : "El tiempo de trabajo se registra con dos decimales como máximo.",
-    "modulo" : "PRODUCTOS_Y_COSTEO",
-    "nombre" : "TIEMPO_DE_TRABAJO_INVALIDO",
-    "pendienteDeEmitir" : {
-      "quien" : "Tarea 5.2: catálogo de productos y servicios",
-      "sprint" : 5
-    },
-    "status" : 42240
-  }, {
-    "cuando" : "Los minutos de máquina llegan con más de dos decimales, que es lo que guarda la columna NUMERIC(6,2). El error va en data.errores, sobre minutosMaquina",
-    "http" : 422,
-    "mensaje" : "El tiempo de máquina se registra con dos decimales como máximo.",
-    "modulo" : "PRODUCTOS_Y_COSTEO",
-    "nombre" : "TIEMPO_DE_MAQUINA_INVALIDO",
-    "status" : 42241
-  }, {
     "cuando" : "Un retiro por encima de la caja libre que llega sin confirmado. El rango es el de capital porque quien lo emite es el retiro, no el reporte",
     "http" : 409,
     "mensaje" : "Ese retiro se pasa de la caja libre: usaría plata de anticipos de clientes. Confírmalo si aun así quieres hacerlo.",
@@ -13062,7 +12841,7 @@
     "nombre" : "LIMITE_DE_HORAS_INVALIDO",
     "status" : 42296
   }, {
-    "cuando" : "El simulador o la productividad, cuando no hay pro-labore vigente. También es lo que recibe Operación, a quien prolabore_config no le devuelve ninguna fila",
+    "cuando" : "El simulador, cuando no hay pro-labore vigente. También es lo que recibe Operación, a quien prolabore_config no le devuelve ninguna fila",
     "http" : 409,
     "mensaje" : "Define primero el pro-labore de la gerencia. Sin él, el simulador daría una cifra inflada.",
     "modulo" : "NOMINA_Y_ADELANTOS",

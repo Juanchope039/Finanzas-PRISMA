@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [0.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/23-diagramas-de-casos-de-uso.md "Historial de cambios") | [🔍 En revisión](22-documentacion.md#estados) | 2026-10-04 | 2026-10-05 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [0.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/23-diagramas-de-casos-de-uso.md "Historial de cambios") | [🔍 En revisión](22-documentacion.md#estados) | 2026-10-04 | 2026-10-06 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Los 37 casos de uso dibujados, **dos veces cada uno**: una para quien dirige el negocio y una para
 quien programa. Los pasos, los flujos alternativos y las reglas están en
@@ -585,12 +585,9 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-    A(["Gerencia"]) --> B{"¿Hay pro-labore definido?"}
-    B -- No --> B1[/"Se bloquea: sin tarifa por hora el margen mentiría. CU-25"/]
-    B -- Sí --> C["Da de alta el producto con su unidad y su precio"]
-    C --> D["Escribe el costeo: insumo, consumibles y tiempo"]
-    D --> E["El sistema congela la tarifa por hora del pro-labore vigente"]
-    E --> F["Pinta en vivo el costo, los tres márgenes y el precio sugerido"]
+    A(["Gerencia"]) --> C["Da de alta el producto con su unidad y su precio"]
+    C --> D["Escribe el costeo: insumo, consumibles y mano de obra en pesos"]
+    D --> F["Pinta en vivo el costo, los dos márgenes y el precio sugerido"]
     F --> G["Confirma: la ficha y su primer costeo caen juntos"]
     G --> H{"¿Después cambia el costo o el precio?"}
     H -- Sí --> H1["Se agrega una fila nueva de costeo con la fecha de hoy"]
@@ -618,6 +615,9 @@ sequenceDiagram
 ```
 
 ### CU-10 · Costear servicio de bordado
+
+> **⛔ Retirado el 2026-10-06**, con su caso de uso ([CU-10](02-casos-de-uso.md#cu-10)). Los diagramas quedan como
+> estaban, para que se entienda qué regía antes.
 
 **Negocio**
 
@@ -1150,11 +1150,9 @@ flowchart TD
     B --> C{"¿Las horas caben en el máximo del mes?"}
     C -- No --> C1[/"Se rechaza: el límite sale de las horas de una semana por 52 entre 12"/]
     C -- Sí --> D["Se escribe una definición nueva, vigente desde hoy"]
-    D --> E["Los costeos nuevos toman de aquí su tarifa por hora"]
     D --> F["Cada retiro se parte con el pro-labore vigente en su fecha"]
     D --> G["El simulador de contratación deja de estar bloqueado"]
-    E --> H[/"El pro-labore es gasto: baja la utilidad, la caja y el patrimonio"/]
-    F --> H
+    F --> H[/"El pro-labore es gasto: baja la utilidad, la caja y el patrimonio"/]
     G --> H
 ```
 
@@ -1212,6 +1210,9 @@ sequenceDiagram
 ```
 
 ### CU-27 · Horas pagadas vs. horas facturadas
+
+> **⛔ Retirado el 2026-10-06**, con su caso de uso ([CU-27](02-casos-de-uso.md#cu-27)). Los diagramas quedan como
+> estaban, para que se entienda qué regía antes.
 
 **Negocio**
 
@@ -1582,7 +1583,7 @@ sequenceDiagram
 las de `contrato/openapi.json`, las tablas las del [04 §4](04-modelo-de-datos.md#4-esquema-sql) y los escenarios los del
 [03 §4](03-requisitos-y-bdd.md#4-escenarios-bdd).
 
-> **Seis rutas de esta tabla las escribió la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13) en el contrato `0.30.0`: las de [CU-22](02-casos-de-uso.md#cu-22) y la de la auditoría
+> **Seis rutas de esta tabla las escribió la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13) en el contrato `0.31.0`: las de [CU-22](02-casos-de-uso.md#cu-22) y la de la auditoría
 > completa de [CU-23](02-casos-de-uso.md#cu-23).** El [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) las puso en el plan. Están acordadas pero todavía no las sirve la API: las
 > construyen las tareas [8.15](08-plan-de-desarrollo.md#tarea-8-15), [8.16](08-plan-de-desarrollo.md#tarea-8-16) y [8.18](08-plan-de-desarrollo.md#tarea-8-18).
 
@@ -1639,7 +1640,7 @@ para no leer un diagrama de más.
 
 **Los dos casos que antes no tenían ruta ya la tienen en el contrato.** Hasta el [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md), el respaldo con
 manifiesto de [CU-22](02-casos-de-uso.md#cu-22) no tenía operación ni tarea, y [CU-23](02-casos-de-uso.md#cu-23) solo tenía la mitad administrativa.
-Ahora los dos están en el [Sprint 8](08-plan-de-desarrollo.md#sprint-8) y la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13) escribió sus rutas en el contrato `0.30.0`; lo que falta es
+Ahora los dos están en el [Sprint 8](08-plan-de-desarrollo.md#sprint-8) y la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13) escribió sus rutas en el contrato `0.31.0`; lo que falta es
 construirlas, en las tareas [8.15](08-plan-de-desarrollo.md#tarea-8-15) a [8.19](08-plan-de-desarrollo.md#tarea-8-19).
 
 > **La descarga de pantalla de [CU-37](02-casos-de-uso.md#cu-37) sigue sin ser un respaldo.** Es la frontera que defienden
