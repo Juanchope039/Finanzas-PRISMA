@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.55.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-05 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.56.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-06 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -58,7 +58,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 19 | 12 | 0 | 7 | 10 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 16 | 13 | 0 | 3 | 1,5 |
-| **Total** | **165** | **155** | **0** | **10** | **11,5** |
+| [Sprint 10](#sprint-10) · La retroalimentación de Gerencia | 3 | 0 | 0 | 3 | 5 |
+| **Total** | **168** | **155** | **0** | **13** | **16,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,7 +242,9 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **Base** | [8.14](docs/08-plan-de-desarrollo.md#tarea-8-14) |
+| **API** | [10.2](docs/08-plan-de-desarrollo.md#tarea-10-2) |
+| **Base** | [8.14](docs/08-plan-de-desarrollo.md#tarea-8-14) · [10.3](docs/08-plan-de-desarrollo.md#tarea-10-3) |
+| **Front** | [10.1](docs/08-plan-de-desarrollo.md#tarea-10-1) |
 | **Contrato** | [8.13](docs/08-plan-de-desarrollo.md#tarea-8-13) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -249,12 +252,12 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **10 tareas y 11,5 días de trabajo** de 165 tareas del plan.
+Quedan **13 tareas y 16,5 días de trabajo** de 168 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 1,5 semanas | **4,5 semanas** |
-| 2 | 1,1 semanas | **4,1 semanas** |
+| 1 | 2,3 semanas | **5,3 semanas** |
+| 2 | 1,3 semanas | **4,3 semanas** |
 | 3 | 1,2 semanas | **4,2 semanas** |
 <!-- /generado:plan-restante -->
 
@@ -1261,13 +1264,13 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
 <a id="sprint-5"></a>**[Sprint 5](docs/08-plan-de-desarrollo.md#sprint-5) · Productos y costeo**
 
 - [x] [**5.1**](docs/08-plan-de-desarrollo.md#tarea-5-1) Dominio `Producto` y servicio `calcularMargenes` · API — los tres márgenes de
-      [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes) reproducidos producto por producto, con el margen por hora vacío —no en cero—
+      [05 §7.2](docs/05-reglas-financieras.md#72-los-dos-márgenes) reproducidos producto por producto, con el margen por hora vacío —no en cero—
       cuando el ítem no consume tiempo
 - [x] [**5.2**](docs/08-plan-de-desarrollo.md#tarea-5-2) Catálogo de productos y servicios · API, Front — **las dos mitades
       aterrizaron.** La API trae las seis rutas del contrato de la [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) —crear con su primer
       costeo, guardar, desactivar y reactivar, el cuadro y la vista previa del formulario—, los
       códigos `40940` y `42240` y el tipo `numero` del descriptor, con el esquema `0.17.0`. La tarifa
-      sale del pro-labore y se congela en el costeo; con la semilla, el cuadro es el de [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes).
+      sale del pro-labore y se congela en el costeo; con la semilla, el cuadro es el de [05 §7.2](docs/05-reglas-financieras.md#72-los-dos-márgenes).
       **Y en el front se abre «Productos y servicios»**: la tabla de ocho columnas, y **las cinco de
       cifras se pintan solo si llegó el costeo**, así que a Operación le quedan el producto y el
       precio ([BDD-02-2](docs/03-requisitos-y-bdd.md#bdd-02-2)) sin que el front pregunte quién mira. El formulario lo describe la API y
@@ -1287,7 +1290,7 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       hora que esa persona dedica a otra cosa ([RN-17](docs/03-requisitos-y-bdd.md#rn-17)). Lo que sí hacen es **ocupar el taller**, así
       que el margen por hora divide entre el mayor de los dos tiempos y no entre su suma: los dos
       corren solapados, y mientras la bordadora anda no se puede empezar otro bordado. El bordado
-      de la tabla de [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes), declarado como cinco minutos de persona y veintidós de máquina,
+      de la tabla de [05 §7.2](docs/05-reglas-financieras.md#72-los-dos-márgenes), declarado como cinco minutos de persona y veintidós de máquina,
       baja de $11.800 a $9.136 de costo y sube a $43.265 por hora, con el mismo denominador de 22
       minutos. **Nace en cero, así que nada de lo que hay hoy cambia de cifra.** Contrato `0.24.0`
       con `minutosMaquina` en el formulario «producto», en la vista previa del costeo y en la
@@ -1305,13 +1308,13 @@ códigos ([21 §4.3](docs/21-trabajo-en-paralelo.md#43-fase-2--rebanadas-vertica
       declara ningún campo de costo en el pedido ([RF-34](docs/03-requisitos-y-bdd.md#rf-34))
 - [x] [**5.6**](docs/08-plan-de-desarrollo.md#tarea-5-6) Margen por hora · API — `CompararMargenes` arma el cuadro de [10 §4.4](docs/10-ux-y-mockups.md#44-productos-y-servicios),
       ordenado por margen por hora y también por porcentaje, y lee cada producto contra la mediana de
-      los demás: con la tabla de [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes), solo el rompecabezas rinde menos. Trae la lectura, su nivel y el
+      los demás: con la tabla de [05 §7.2](docs/05-reglas-financieras.md#72-los-dos-márgenes), solo el rompecabezas rinde menos. Trae la lectura, su nivel y el
       texto con los montos; el endpoint es la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) y su contrato, la [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10)
 - [x] [**5.7**](docs/08-plan-de-desarrollo.md#tarea-5-7) Sugerencia de precio por margen objetivo · API — la vista
       previa de `POST /api/v0/consultas/costeo` dice **a cuánto habría que vender**: con
       `margenObjetivo` en el cuerpo devuelve el `precioSugerido` ([RF-33](docs/03-requisitos-y-bdd.md#rf-33)), que es el costo dividido por
       lo que queda del precio después del margen. **No es una fórmula nueva**: es despejar la
-      definición de margen porcentual de [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes), y el llavero del cuadro —$2.100 al 70 %— da sus
+      definición de margen porcentual de [05 §7.2](docs/05-reglas-financieras.md#72-los-dos-márgenes), y el llavero del cuadro —$2.100 al 70 %— da sus
       $7.000. Sale en pesos enteros **sin redondeo comercial**, y **no depende del precio escrito**:
       con el precio en cero los márgenes no viajan y el sugerido sí, que es cuando más sirve
 - [x] [**5.8**](docs/08-plan-de-desarrollo.md#tarea-5-8) Costos y márgenes ocultos al tipo Operación: la API no los envía · API —
@@ -1661,9 +1664,26 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       credencial temporal por ambiente, `Admin`/`Admin` por defecto, que solo sirve para crear la
       primera cuenta de Gerencia cuando no hay ninguna, y que se apaga sola cuando esa cuenta existe
 
+**<a id="sprint-10"></a>[Sprint 10](docs/08-plan-de-desarrollo.md#sprint-10) · la retroalimentación de Gerencia**
+
+**Las tres salen de usar la aplicación**, no de diseñarla: Gerencia las dijo el 2026-10-06 mirando
+dev. Cada una pasa primero por la especificación y el mockup, porque las tres cambian lo acordado.
+
+- [ ] [**10.1**](docs/08-plan-de-desarrollo.md#tarea-10-1) El asterisco de los campos obligatorios · Front — la etiqueta de un campo
+      obligatorio termina en asterisco rojo y su lector de pantalla lee «obligatorio». Lo dicta el
+      descriptor, que ya trae `obligatorio`, así que el contrato no cambia
+- [ ] [**10.2**](docs/08-plan-de-desarrollo.md#tarea-10-2) Un solo medio de pago, y el destino solo en la transferencia · API, Front — la
+      pantalla de un gasto pedía una cuenta de destino para después avisar que sobraba. El front
+      vuelve a pedir el formulario con el tipo elegido y la API contesta con los campos que aplican
+- [ ] [**10.3**](docs/08-plan-de-desarrollo.md#tarea-10-3) Fuera el tiempo, y el margen por producto · Base, API, Front — el catálogo deja
+      de pedir minutos, la mano de obra se escribe en pesos y el margen por hora sale de la pantalla
+      y del contrato. Con el tiempo se retiran [RF-31](docs/03-requisitos-y-bdd.md#rf-31), [RF-32](docs/03-requisitos-y-bdd.md#rf-32), [RF-62](docs/03-requisitos-y-bdd.md#rf-62), [CU-10](docs/02-casos-de-uso.md#cu-10) y [CU-27](docs/02-casos-de-uso.md#cu-27)
+
 ---
 
 ## <a id="titulo-7"></a>7. Decisiones pendientes
+
+
 
 | # | Decisión | Quién | Bloquea | Estado |
 |---|---|---|---|---|
@@ -1916,11 +1936,11 @@ a `anon`.
   `desactivacion_con_motivo` y `anulacion_con_motivo`. **`pedidos` no las necesita**, porque cancelar
   no es apagar y sus cuatro columnas las escribió la [4.11](docs/08-plan-de-desarrollo.md#tarea-4-11).
 - **La semilla y los documentos no dicen la misma tarifa por hora.** `prolabore_config` siembra
-  $1.500.000 sobre 160 horas, que dan **$9.375**; el [05 §7.4](docs/05-reglas-financieras.md#74-el-indicador-que-concilia-los-dos-mundos) y el [06 §4.1](docs/06-nomina-y-capacidad-de-pago.md#41-el-margen-de-contribución-correcto) trabajan con **$9.400**, que
+  $1.500.000 sobre 160 horas, que dan **$9.375**; el [05 §7](docs/05-reglas-financieras.md#7-costeo-por-producto-y-margen) y el [06 §4.1](docs/06-nomina-y-capacidad-de-pago.md#41-el-margen-de-contribución-correcto) trabajan con **$9.400**, que
   es lo que la semilla escribe a mano en `costos_producto.tarifa_hora`. Mientras la tarifa fuera un
   número de ejemplo daba igual; desde el contrato de la [5.10](docs/08-plan-de-desarrollo.md#tarea-5-10) la calcula la API con esa división,
   y **desde la [5.2](docs/08-plan-de-desarrollo.md#tarea-5-2) ya sale así**: un costeo nuevo congela $9.375, 25 pesos por hora por debajo del
-  documento, y los cinco de la semilla conservan sus $9.400. El cuadro de [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes) da igual por eso.
+  documento, y los cinco de la semilla conservan sus $9.400. El cuadro de [05 §7.2](docs/05-reglas-financieras.md#72-los-dos-márgenes) da igual por eso.
 - **Anular desde el libro un movimiento que pertenece a otro registro lo deja cojo.** La anulación
   del contrato de la [3.13](docs/08-plan-de-desarrollo.md#tarea-3-13) sirve para cualquier movimiento, y varios no están solos: el de un
   anticipo tiene su fila en `anticipos`, el de una inversión en `activos`, el de un aporte o un retiro
@@ -2210,7 +2230,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
 - [ ] ⚡ **Cómo entra el tiempo de máquina en el costo unitario lo decidió quien construyó.** Era la
       regla que faltaba y la que tenía parada la tarea. Se decidió que **no entra en pesos y sí en
       ocupación**: el costo del tiempo sigue siendo el de la persona, y el margen por hora divide
-      entre el mayor de los dos tiempos ([05 §7.1](docs/05-reglas-financieras.md#71-costo-unitario), [05 §7.2](docs/05-reglas-financieras.md#72-los-tres-márgenes)). La razón es que la tarifa por hora es
+      entre el mayor de los dos tiempos ([05 §7.1](docs/05-reglas-financieras.md#71-costo-unitario), [05 §7.2](docs/05-reglas-financieras.md#72-los-dos-márgenes)). La razón es que la tarifa por hora es
       un sueldo entre horas productivas y la máquina no cobra sueldo, y que cobrarle esos minutos a
       la tarifa de la persona contaría dos veces la hora que la persona dedica a otra cosa ([RN-17](docs/03-requisitos-y-bdd.md#rn-17)).
       **Se descartó una tarifa de máquina propia** —depreciación, energía y mantenimiento entre

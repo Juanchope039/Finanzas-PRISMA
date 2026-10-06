@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/06-nomina-y-capacidad-de-pago.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-16 | [Nómina](INDICE.md#etiqueta-nomina) · [Finanzas](INDICE.md#etiqueta-finanzas) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/06-nomina-y-capacidad-de-pago.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-06 | [Nómina](INDICE.md#etiqueta-nomina) · [Finanzas](INDICE.md#etiqueta-finanzas) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 > **Módulo exclusivo del tipo Gerencia.** El tipo Operación solo puede ver su propio desprendible.
 
@@ -17,7 +17,7 @@
 | Adelantos y descuentos | Provisión de prestaciones sociales |
 | Neto a pagar y desprendible en PDF | Factor prestacional por figura jurídica |
 | Simulador de capacidad de pago | Liquidación definitiva de contrato |
-| Horas pagadas vs. horas facturadas | Parámetros legales versionados por año |
+| El pro-labore y las horas pagadas del mes | Parámetros legales versionados por año |
 
 La nómina es **simple y de control interno**. No es una liquidación laboral legal.
 Antes de formalizar una contratación, esos cálculos deben revisarse con un contador.
@@ -140,13 +140,13 @@ Cuando el presupuesto disponible no alcanza, el sistema no se limita a decir "no
 |---|---|---|
 | **Medio tiempo** | El presupuesto cubre la mitad | Costo y veredicto recalculados |
 | **Por obra o pedido** | La demanda es irregular | Costo por pedido y punto en que conviene fijo |
-| **Aumentar ventas primero** | El tiempo ocioso es alto | Meta mensual en unidades y plazo estimado |
-| **Subir precios** | Hay productos con margen por hora bajo | Cuánto subir cada producto para cerrar la brecha |
-| **Reducir tiempo ocioso** | Más del 35% de horas no facturadas | Costo del tiempo ocioso y su equivalencia en salario |
+| **Aumentar ventas primero** | La utilidad no alcanza para el salario | Meta mensual en unidades y plazo estimado |
+| **Subir precios** | Hay productos con margen en pesos bajo | Cuánto subir cada producto para cerrar la brecha |
+| **Cambiar la mezcla** | Se vende sobre todo lo que menos deja | Qué productos dan más margen en pesos por unidad |
 
-> El último punto suele ser el más revelador: en el ejemplo de septiembre el tiempo ocioso
-> costó **$526.400**, casi exactamente el faltante de $556.000. Es decir, **la capacidad para
-> pagar ya existe; lo que falta es venderla.**
+> La tercera suele ser la más reveladora: vender lo mismo cambiando qué se empuja no cuesta un
+> peso más de nómina, y el faltante de $556.000 del ejemplo cabe en la diferencia de margen entre
+> un producto y otro.
 
 ---
 
@@ -247,6 +247,11 @@ aplicada por Row Level Security en `nomina_detalle` (política `nom_lectura`).
 
 ## 9. Horas pagadas vs. horas facturadas
 
+> **⛔ Retirado el 2026-10-06.** Las horas facturadas se sacaban del tiempo por unidad del costeo,
+> y el catálogo dejó de pedir tiempo ([05 §7.1](05-reglas-financieras.md#71-costo-unitario)). Las horas pagadas se siguen viendo en
+> nómina y en el pro-labore; lo que ya no existe es contra qué compararlas, así que el tiempo
+> ocioso no se calcula. Lo que sigue queda escrito para que se entienda qué regía antes.
+
 ```
 Horas pagadas    = Horas de nómina + Horas de pro-labore
 Horas facturadas = Σ (minutos por unidad × unidades entregadas) ÷ 60
@@ -260,7 +265,7 @@ Costo del ocio   = Tiempo ocioso × Tarifa por hora
 | 15% – 35% | Hay capacidad libre sin vender | Buscar demanda antes de contratar |
 | > 35% | Exceso de capacidad o trabajo no cobrado | Revisar ajustes, repeticiones y diseños regalados |
 
-Este indicador es el contrapeso del simulador: **antes de agregar horas pagadas conviene vender
+Este indicador era el contrapeso del simulador: **antes de agregar horas pagadas conviene vender
 las que ya se pagan.**
 
 ---
@@ -289,7 +294,7 @@ simulador, por tanto, entrega una cota **optimista**: si con estos números no a
 números completos tampoco.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [Contrato](../contrato/README.md "Contrato de la API · v0.29.0")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [Contrato](../contrato/README.md "Contrato de la API · v0.30.0")
 <!-- /generado:referenciado-desde -->
 
 ---

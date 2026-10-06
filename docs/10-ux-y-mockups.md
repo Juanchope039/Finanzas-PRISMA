@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-06 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [7.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-06 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -498,13 +498,16 @@ que ella. Son tres pasos en el mismo panel ([RF-64](03-requisitos-y-bdd.md#rf-64
 
 **Pregunta:** *¿qué me deja más plata?*
 
-Tabla ordenable con costo, precio, margen en pesos, margen porcentual y **margen por hora**.
-Ordenar por margen por hora es la vista por defecto, porque es la que orienta la decisión.
-El bordado se costea por tiempo de máquina: el formulario pide **los minutos de máquina aparte de
-los de persona**, y con ellos el margen por hora se calcula sobre el tiempo que la unidad ocupa el
-taller, que es el mayor de los dos ([05 §7.2](05-reglas-financieras.md#72-los-tres-márgenes)). El campo va en cero en todo lo que no se borda, y
-entonces la tabla dice lo mismo de siempre. **El rol Operación ve la tabla sin las columnas de
-costo ni margen.**
+Tabla ordenable con costo, precio, **margen en pesos** y margen porcentual. Ordenar por margen en
+pesos es la vista por defecto, porque es lo que de verdad entra a la caja por unidad
+([05 §7.2](05-reglas-financieras.md#72-los-dos-márgenes)).
+
+**La pantalla no pide tiempo y no lo muestra.** Ni minutos de trabajo ni minutos de máquina: el
+formulario pide el insumo, los consumibles y **el costo de mano de obra en pesos**, que es lo que
+una unidad cuesta de trabajo. Quien conoce el taller sabe esa cifra; los minutos eran un dato que
+había que cronometrar para llegar a ella.
+
+**El rol Operación ve la tabla sin las columnas de costo ni margen.**
 
 ### 4.5 Inversiones y retiros
 
@@ -521,12 +524,10 @@ ninguna que se llame así, y una clave que el front no conoce no se pinta. Toda 
 Gerencia.
 
 - **El panel «El pro-labore» pinta lo que rige hoy**: el valor mensual, las horas productivas del
-  mes, la tarifa por hora que de ellos toman los costeos nuevos, desde cuándo rige y con qué se
-  justificó. La tarifa la calcula la API —el valor entre las horas, redondeado a peso
-  ([05 §7.1](05-reglas-financieras.md#71-costo-unitario))—, y con cero horas no hay tarifa: el panel dice que el trabajo no le pone precio a
-  ningún costeo.
-- **Sin pro-labore definido, el panel lo dice y explica lo que eso bloquea**: el costeo no le pone
-  precio al trabajo y el simulador de capacidad de pago no arranca ([RN-08](03-requisitos-y-bdd.md#rn-08)).
+  mes, desde cuándo rige y con qué se justificó. **El costeo ya no toma nada de aquí**: desde el
+  2026-10-06 la mano de obra de un producto se escribe en pesos ([05 §7.1](05-reglas-financieras.md#71-costo-unitario)).
+- **Sin pro-labore definido, el panel lo dice y explica lo que eso bloquea**: el simulador de
+  capacidad de pago no arranca ([RN-08](03-requisitos-y-bdd.md#rn-08)).
 - **«Definir pro-labore» abre el formulario en la misma pantalla**, con tres campos: el valor mensual,
   las horas productivas y la justificación. El valor y la justificación son obligatorios; las horas
   llevan dos decimales como máximo. La ayuda de la justificación es la pregunta del [05 §6.3](05-reglas-financieras.md#63-el-pro-labore--la-trampa-del-trabajo-invisible-rn-08): cuánto
@@ -1050,7 +1051,7 @@ El checklist de aprobación pantalla por pantalla está en
 [`09-plan-de-implantacion.md`](09-plan-de-implantacion.md) [§1](09-plan-de-implantacion.md#1-checklist-de-aprobación-del-mockup).
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.29.0") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [Contrato](../contrato/README.md "Contrato de la API · v0.30.0") · [ADR-014](adr/ADR-014-semver.md "ADR-014 · SemVer independiente por proyecto y contrato de compatibilidad") · [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

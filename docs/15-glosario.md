@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/15-glosario.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-17 | [Negocio](INDICE.md#etiqueta-negocio) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/15-glosario.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-06 | [Negocio](INDICE.md#etiqueta-negocio) |
 
 Vocabulario compartido entre el negocio, la contabilidad y el sistema. Cuando haya duda sobre
 qué significa algo, este documento manda.
@@ -76,9 +76,9 @@ gasto fijo que se busca cubrir.
 Utilidad causada dividida entre ingresos. Lo que realmente queda de cada peso vendido.
 
 **Margen por hora**
-Margen en pesos dividido entre las horas de trabajo que exige el producto. **Es el indicador
-que debe guiar qué priorizar** cuando hay más pedidos que tiempo disponible, no el margen
-porcentual.
+⛔ Retirado el 2026-10-06. Era el margen en pesos dividido entre las horas que exigía el producto,
+y guiaba qué priorizar cuando había más pedidos que tiempo. El catálogo dejó de pedir tiempo, así
+que hoy se prioriza por **margen en pesos** por unidad.
 
 **Patrimonio**
 Aportes menos distribuciones más utilidades acumuladas. Lo que se ha construido.

@@ -172,7 +172,7 @@ function insertarAnclas(archivos, ctx) {
     lineas.forEach((l, i) => {
       if (enCodigo[i] || generadas[i]) return;
       if (esPlan) {
-        const s = l.match(/^###\s+(?:<a id="[^"]*"><\/a>)?Sprint (\d)\b/);
+        const s = l.match(/^###\s+(?:<a id="[^"]*"><\/a>)?Sprint (\d{1,2})\b/);
         if (s) {
           sprint = Number(s[1]);
           lineas[i] = ponerAncla(l, `sprint-${sprint}`);
@@ -184,7 +184,7 @@ function insertarAnclas(archivos, ctx) {
       if (esUx && /^##\s/.test(l)) enPrincipios = /principios/i.test(l);
       if (!l.startsWith('|')) return;
       const primera = l.replace(/^\|/, '').split('|')[0].trim();
-      if (esPlan && sprint !== null && /^(?:<a id="[^"]*"><\/a>)?\d\.\d{1,2}$/.test(primera)) {
+      if (esPlan && sprint !== null && /^(?:<a id="[^"]*"><\/a>)?\d{1,2}\.\d{1,2}$/.test(primera)) {
         const id = primera.replace(/<[^>]*>/g, '');
         const ancla = `tarea-${id.replace('.', '-')}`;
         lineas[i] = ponerAncla(l, ancla);
@@ -225,8 +225,8 @@ const REFERENCIA = new RegExp(
     String.raw`(?<![\p{L}])(?<docPalabra>(?:[Dd]ocumentos?|docs?)\s+)(?<docLista>[0-2]\d(?:(?:\s*,\s*|\s+y\s+|\s+o\s+)[0-2]\d)*)(?![\p{N}])`,
     String.raw`(?<![\p{L}\p{N}-])(?<adr>ADR-\d{3})(?![\p{L}\p{N}-])`,
     String.raw`(?<![\p{L}\p{N}_-])(?<id>BDD-(?:RNF-)?\d{2,3}-(?:\d+|\\?\*)|RNF-\d{2}|RF-\d{2,3}|RN-\d{2}|CU-\d{2}|RE-\d{2}|[RPAMIFTCD]-\d{2}|H(?:1[01]|\d)|S[1-5])(?![\p{L}\p{N}_-])`,
-    String.raw`(?<![\p{L}])(?<tareaPalabra>[Tt]areas?\s+)(?<tareaLista>\d\.\d{1,2}(?:(?:\s*,\s*|\s+y\s+|\s+o\s+|\s+a\s+)\d\.\d{1,2})*)(?![\p{N}])`,
-    String.raw`(?<tareaNegrita>\*\*(?<tareaNum>\d\.\d{1,2})\*\*)`,
+    String.raw`(?<![\p{L}])(?<tareaPalabra>[Tt]areas?\s+)(?<tareaLista>\d{1,2}\.\d{1,2}(?:(?:\s*,\s*|\s+y\s+|\s+o\s+|\s+a\s+)\d{1,2}\.\d{1,2})*)(?![\p{N}])`,
+    String.raw`(?<tareaNegrita>\*\*(?<tareaNum>\d{1,2}\.\d{1,2})\*\*)`,
     String.raw`(?<![\p{L}])(?<sprint>Sprint\s+(?<sprintNum>\d))(?![\p{N}]|[.,]\d)`,
     String.raw`(?<![\p{L}])(?<principio>principio\s+(?<principioNum>\d{1,2}))(?![\p{N}])`,
     String.raw`(?<secDoc>§(?<secDocNum>\d+(?:\.\d+)*)\s+del\s+(?:documento|doc)\s+(?<secDocDoc>[0-2]\d))(?![\p{N}])`,
@@ -315,7 +315,7 @@ function enlazarLinea(linea, indice, archivo, ctx, noResueltos, estado) {
     }
     if (g.tareaLista) {
       let hubo = false;
-      const lista = g.tareaLista.replace(/\d\.\d{1,2}/g, (n) => {
+      const lista = g.tareaLista.replace(/\d{1,2}\.\d{1,2}/g, (n) => {
         const def = ctx.definiciones.get(`tarea:${n}`);
         if (!def || linea.includes(`<a id="${def.ancla}"></a>`)) return n;
         hubo = true;
@@ -618,7 +618,7 @@ function bloquesDelIndice(archivos, ctx) {
 
 // El número de tarea de una línea del tablero: el del enlace al plan, o el que va en negrita.
 function tareaDeLinea(linea) {
-  const m = linea.match(/#tarea-(\d)-(\d{1,2})\)/) || linea.match(/\*\*(\d)\.(\d{1,2})\*\*/);
+  const m = linea.match(/#tarea-(\d{1,2})-(\d{1,2})\)/) || linea.match(/\*\*(\d{1,2})\.(\d{1,2})\*\*/);
   return m ? `${m[1]}.${m[2]}` : null;
 }
 
@@ -685,7 +685,7 @@ function anclasDeSprints(todo) {
     const sinAnclas = l.replace(/<a id="[^"]*"><\/a>/g, '');
     const encabezado = sinAnclas.match(/^#{2,6}\s+(.*)$/);
     const titulo = encabezado ? encabezado[1] : /^\*\*.*\*\*\s*$/.test(sinAnclas) ? sinAnclas : null;
-    const m = titulo && md.textoDeEncabezado(titulo).match(/^(?:\d+(?:\.\d+)*\.?\s+)?Sprint (\d) ·/);
+    const m = titulo && md.textoDeEncabezado(titulo).match(/^(?:\d+(?:\.\d+)*\.?\s+)?Sprint (\d{1,2}) ·/);
     if (!m || conSeccion.has(Number(m[1]))) return;
     conSeccion.add(Number(m[1]));
     sprintDeLinea.set(i, Number(m[1]));
@@ -694,7 +694,7 @@ function anclasDeSprints(todo) {
     .map((l, i) => {
       if (enCodigo[i] || generadas[i]) return l;
       const ancla = sprintDeLinea.has(i) ? `<a id="sprint-${sprintDeLinea.get(i)}"></a>` : null;
-      const limpia = l.replace(/<a id="sprint-\d"><\/a>/g, (a) => (a === ancla ? a : ''));
+      const limpia = l.replace(/<a id="sprint-\d{1,2}"><\/a>/g, (a) => (a === ancla ? a : ''));
       if (!ancla || limpia.includes(ancla)) return limpia;
       if (/^#{2,6}\s/.test(limpia)) return limpia.replace(/^(#{2,6}\s+(?:\d+(?:\.\d+)*\.?\s+)?)/, `$1${ancla}`);
       return ancla + limpia;
@@ -739,7 +739,8 @@ function bloquesDelPlan(ctx, errores) {
     plan.bloqueDependenciasHaciaAdelante(tareas, enlaceEn(plan08)),
   );
   ponerBloque(plan08, 'plan-gantt', plan.bloqueGantt(tareas));
-  for (let s = 0; s <= 9; s++) ponerBloque(plan08, `plan-oleadas-${s}`, plan.bloqueOleadas(tareas, s, enlaceEn(plan08)));
+  const ultimoSprint = tareas.reduce((max, t) => Math.max(max, Number(t.id.split('.')[0])), 0);
+  for (let s = 0; s <= ultimoSprint; s++) ponerBloque(plan08, `plan-oleadas-${s}`, plan.bloqueOleadas(tareas, s, enlaceEn(plan08)));
 
   const todo = ctx.porRuta.get(cfg.DOC_TAREAS);
   if (!todo) return;

@@ -1249,13 +1249,8 @@ tbody tr.fila-detalle:hover{background:none}
               </div>
               <div class="alerta a-alta" data-ger>
                 <span class="tag">MARGEN</span>
-                <div><b>El rompecabezas deja la mitad por hora que los demás</b>
-                <span>$26.000/hora contra $48.000 del mug. Conviene subir el precio o bajar el tiempo</span></div>
-              </div>
-              <div class="alerta a-crit" data-ger>
-                <span class="tag">OCIO</span>
-                <div><b>56 horas pagadas sin facturar este mes</b>
-                <span>Equivalen a $526.400 de capacidad sin vender — el 35% de la jornada</span></div>
+                <div><b>El rompecabezas es el que menos deja de todos</b>
+                <span>$7.800 por unidad contra $13.200 del bordado. Conviene subirle el precio</span></div>
               </div>
             </div>
           </div>
@@ -1665,13 +1660,13 @@ tbody tr.fila-detalle:hover{background:none}
       <section id="s-productos" class="stack" hidden>
         <div class="pagehead">
           <div><div class="eyebrow">Catálogo y costeo</div><h1>Productos y servicios</h1>
-          <p data-ger>La columna que decide no es el margen porcentual sino el <b>margen por hora</b>:
-          cuando hay más pedidos que tiempo, es la que dice qué priorizar.</p>
+          <p data-ger>La columna que decide no es el margen porcentual sino el <b>margen en pesos</b>:
+          es lo que de verdad entra a la caja cada vez que sale una unidad.</p>
           <p data-ope hidden>Catálogo de productos con sus precios de venta.</p></div>
         </div>
         <div class="panel">
           <div class="panel-head">
-            <h2 class="grow">Ordenado por margen por hora</h2>
+            <h2 class="grow">Ordenado por margen en pesos</h2>
             <button class="ghost" id="ordenar" data-ger>Ordenar por margen %</button>
             <button class="cta" id="btn-producto" data-ger aria-expanded="false" aria-controls="form-producto">+ Nuevo producto</button>
           </div>
@@ -1679,7 +1674,7 @@ tbody tr.fila-detalle:hover{background:none}
           <div class="formulario" id="form-producto" hidden>
             <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px">
               <h3 class="grow" id="pf-titulo">Nuevo producto</h3>
-              <span class="eyebrow">El margen por hora se calcula solo</span>
+              <span class="eyebrow">El margen se calcula solo</span>
             </div>
             <div class="campos-form">
               <div class="campo"><label for="pf-nombre" class="req">Nombre<span class="solo-lectores">, obligatorio</span></label>
@@ -1689,8 +1684,8 @@ tbody tr.fila-detalle:hover{background:none}
                   <option value="producto">Producto</option>
                   <option value="servicio">Servicio</option>
                 </select></div>
-              <div class="campo"><label for="pf-min">Minutos de trabajo</label>
-                <input type="number" id="pf-min" value="12" min="1" max="600"></div>
+              <div class="campo"><label for="pf-mano">Costo de mano de obra</label>
+                <input type="number" id="pf-mano" value="1880" step="100" min="0"></div>
               <div class="campo"><label for="pf-precio">Precio de venta</label>
                 <input type="number" id="pf-precio" value="18000" step="500" min="0"></div>
             </div>
@@ -1711,7 +1706,6 @@ tbody tr.fila-detalle:hover{background:none}
               <div><span>Costo unitario</span><b id="pf-o-costo">$0</b></div>
               <div><span>Margen en pesos</span><b id="pf-o-margen">$0</b></div>
               <div><span>Margen porcentual</span><b id="pf-o-pct">0%</b></div>
-              <div><span>Margen por hora</span><b id="pf-o-hora">$0</b></div>
             </div>
 
             <div id="pf-alerta" class="alerta a-info" style="margin-top:14px">
@@ -1727,10 +1721,10 @@ tbody tr.fila-detalle:hover{background:none}
 
           <div class="tw"><table>
             <thead><tr>
-              <th>Producto</th><th>Tiempo</th>
+              <th>Producto</th>
               <th class="r r-mid" data-ger>Costo</th><th class="r r-mid">Precio</th>
               <th class="r r-mid" data-ger>Margen $</th><th class="r r-mid" data-ger>Margen %</th>
-              <th class="r r-mid" data-ger>Margen / hora</th><th data-ger></th><th data-ger></th>
+              <th data-ger></th><th data-ger></th>
             </tr></thead>
             <tbody id="tb-prod"></tbody>
           </table></div>
@@ -2686,20 +2680,19 @@ var CUENTAS = [
 var PALETA_CUENTAS = ['var(--ink)','var(--accent)','var(--pos)','var(--anticipo)','var(--warn)','var(--neg)'];
 var GASTOS_FIJOS_COMPROMETIDOS = 0;
 
-var TARIFA = 9400;
+/* La mano de obra es un numero en pesos por producto (05 7.1). El catalogo
+   dejo de pedir tiempo el 2026-10-06, asi que aqui no hay minutos ni tarifa. */
 var PRODUCTOS = [
-  {n:'Camiseta DTF',           costo:19500, precio:32000, min:15},
-  {n:'Llavero acrílico',       costo: 2100, precio: 7000, min: 6},
-  {n:'Mug estampado',          costo: 8400, precio:18000, min:12},
-  {n:'Bordado logo mediano',   costo:11800, precio:25000, min:22},
-  {n:'Rompecabezas A4',        costo:14200, precio:22000, min:18}
+  {n:'Camiseta DTF',           costo:19500, precio:32000, mano:2350},
+  {n:'Llavero acrílico',       costo: 2100, precio: 7000, mano: 940},
+  {n:'Mug estampado',          costo: 8400, precio:18000, mano:1880},
+  {n:'Bordado logo mediano',   costo:11800, precio:25000, mano:3447},
+  {n:'Rompecabezas A4',        costo:14200, precio:22000, mano:2820}
 ];
 function derivar(p){
-  p.tiempo = Math.round(p.min / 60 * TARIFA);
-  p.costo  = p.insumo + p.tiempo;
+  p.costo  = p.insumo + p.mano;
   p.margen = p.precio - p.costo;
   p.pct    = p.precio ? p.margen / p.precio : 0;
-  p.hora   = p.min ? Math.round(p.margen * 60 / p.min) : 0;
   p.mc     = p.precio - p.insumo;
   return p;
 }
@@ -2707,7 +2700,7 @@ var secuenciaProd = 0;
 PRODUCTOS.forEach(function(p){
   p.id     = ++secuenciaProd;
   p.tipo   = p.tipo || 'producto';
-  p.insumo = p.costo - Math.round(p.min / 60 * TARIFA);
+  p.insumo = p.costo - p.mano;
   p.baja   = null;
   derivar(p);
 });
@@ -4949,28 +4942,26 @@ function pedirMotivoAnularMov(id, boton){
   });
 }
 
-var ordenPorHora = true;
+var ordenPorPesos = true;
 function tablaProductos(){
   var lista = activos().slice().sort(function(a, b){
-    return ordenPorHora ? b.hora - a.hora : b.pct - a.pct;
+    return ordenPorPesos ? b.margen - a.margen : b.pct - a.pct;
   });
-  var maxH = Math.max.apply(null, activos().map(function(p){ return Math.max(p.hora, 1); }).concat([1]));
+  var maxH = Math.max.apply(null, activos().map(function(p){ return Math.max(p.margen, 1); }).concat([1]));
   var ger = (rol === 'gerencia');
   var cuerpo = $('#tb-prod');
   /* Misma razón que en tablaPedidos(): se rehace el innerHTML y el panel abierto se va con él. */
   if (filaAbierta && cuerpo.contains(filaAbierta)) filaAbierta = null;
   cuerpo.innerHTML = lista.map(function(p){
-    var bajo = p.hora < 30000;
-    return '<tr><td style="font-weight:500">' + enTexto(p.n) + '</td><td class="mono" style="color:var(--muted)">' +
-      p.min + ' min</td>' +
+    var bajo = p.margen < 8000;
+    return '<tr><td style="font-weight:500">' + enTexto(p.n) + '</td>' +
       (ger ? '<td class="r r-mid">' + fmt(p.costo) + '</td>' : '') +
       '<td class="r r-mid">' + fmt(p.precio) + '</td>' +
-      (ger ? '<td class="r r-mid">' + fmt(p.margen) + '</td>' +
+      (ger ? '<td class="r r-mid" style="font-weight:700; color:' + (bajo ? 'var(--neg)' : 'var(--pos)') + '">' +
+               fmt(p.margen) + '</td>' +
              '<td class="r r-mid">' + Math.round(p.pct*100) + '%</td>' +
-             '<td class="r r-mid" style="font-weight:700; color:' + (bajo ? 'var(--neg)' : 'var(--pos)') + '">' +
-               fmt(p.hora) + '</td>' +
              '<td style="width:90px"><div class="bar"><i style="width:' +
-               Math.max(0, Math.round(p.hora/maxH*100)) + '%; background:' + (bajo ? 'var(--neg)' : 'var(--pos)') +
+               Math.max(0, Math.round(p.margen/maxH*100)) + '%; background:' + (bajo ? 'var(--neg)' : 'var(--pos)') +
                '"></i></div></td>' +
              '<td class="r" style="white-space:nowrap">' +
                '<button class="ghost" style="padding:3px 9px" data-editar="' + p.id + '">Editar</button> ' +
@@ -5043,10 +5034,10 @@ function pedirMotivoBaja(id, boton){
   });
 }
 if ($('#ordenar')) $('#ordenar').addEventListener('click', function(){
-  ordenPorHora = !ordenPorHora;
-  this.textContent = ordenPorHora ? 'Ordenar por margen %' : 'Ordenar por margen / hora';
+  ordenPorPesos = !ordenPorPesos;
+  this.textContent = ordenPorPesos ? 'Ordenar por margen %' : 'Ordenar por margen $';
   $('#s-productos .panel-head h2').textContent =
-    ordenPorHora ? 'Ordenado por margen por hora' : 'Ordenado por margen porcentual';
+    ordenPorPesos ? 'Ordenado por margen en pesos' : 'Ordenado por margen porcentual';
   tablaProductos();
 });
 
@@ -5070,7 +5061,6 @@ function tablaReporte(){
 
 /* ---------- simulador de capacidad de pago ---------- */
 var UTILIDAD_ANTES_PROLABORE = 2680000;   /* 1.180.000 + 1.500.000 */
-var JORNADA = 192;
 
 function simular(){
   var reserva   = +$('#r-reserva').value;
@@ -5109,23 +5099,17 @@ function simular(){
   bloque.hidden = false;
 
   var faltante = -dif;
-  var horas = 0;
+  var minimo = 0;
   $('#unidades').innerHTML = activos().slice().sort(function(a,b){ return b.mc - a.mc; })
     .map(function(p){
       var u = Math.ceil(faltante / p.mc);
-      var h = u * p.min / 60;
-      if (!horas || h < horas) horas = h;
+      if (!minimo || u < minimo) minimo = u;
       return '<div class="unidad"><b>' + u + '</b><span>' + enTexto(p.n.split(' ')[0].toLowerCase()) + '</span></div>';
     }).join('');
 
-  var pct = horas / JORNADA;
-  $('#nota-unidades').innerHTML = pct < 0.2
-    ? 'La opción más rápida exige unas <b>' + horas.toFixed(1).replace('.', ',') +
-      ' horas más de trabajo al mes</b>, el ' + Math.round(pct*100) +
-      '% de una jornada. <b>La restricción no es la capacidad de producir: es la demanda.</b> ' +
-      'Contratar no resuelve un problema de ventas.'
-    : 'La opción más rápida exige unas <b>' + horas.toFixed(1).replace('.', ',') +
-      ' horas más al mes</b>, el ' + Math.round(pct*100) + '% de una jornada.';
+  $('#nota-unidades').innerHTML = 'La opción más corta son <b>' + minimo +
+    ' unidades más al mes</b>. <b>Mira primero si hay quien las compre:</b> contratar no ' +
+    'resuelve un problema de ventas.';
 }
 ['#r-reserva','#r-salario','#r-prolabore'].forEach(function(s){
   var el = $(s); if (el) el.addEventListener('input', simular);
@@ -5446,7 +5430,7 @@ function leerFormProducto(){
   return derivar({
     n     : (document.getElementById('pf-nombre').value || '').trim(),
     tipo  : document.getElementById('pf-tipo').value,
-    min   : Math.max(1, +document.getElementById('pf-min').value || 1),
+    mano  : Math.max(0, +document.getElementById('pf-mano').value || 0),
     precio: Math.max(0, +document.getElementById('pf-precio').value || 0),
     insumo: Math.max(0, +document.getElementById('pf-insumo').value || 0)
   });
@@ -5462,11 +5446,11 @@ function pintarFormProducto(){
   document.getElementById('pf-o-costo').textContent  = fmt(d.costo);
   document.getElementById('pf-o-margen').textContent = fmt(d.margen);
   document.getElementById('pf-o-pct').textContent    = Math.round(d.pct * 100) + '%';
-  document.getElementById('pf-o-hora').textContent   = fmt(d.hora);
+
 
   var refs = activos().filter(function(x){ return !editandoProd || x.id !== editandoProd; });
   var mediana = refs.length
-    ? refs.map(function(x){ return x.hora; }).sort(function(a,b){ return a-b; })[Math.floor(refs.length/2)]
+    ? refs.map(function(x){ return x.margen; }).sort(function(a,b){ return a-b; })[Math.floor(refs.length/2)]
     : 0;
   var al = document.getElementById('pf-alerta');
   if (d.margen <= 0){
@@ -5474,17 +5458,17 @@ function pintarFormProducto(){
     document.getElementById('pf-alerta-t').textContent = 'A este precio vendes a pérdida';
     document.getElementById('pf-alerta-s').textContent =
       'El costo unitario es ' + fmt(d.costo) + ' y el precio ' + fmt(d.precio) + '.';
-  } else if (mediana && d.hora < mediana * 0.7){
+  } else if (mediana && d.margen < mediana * 0.7){
     al.className = 'alerta a-alta';
-    document.getElementById('pf-alerta-t').textContent = 'Rinde menos que el resto del taller';
+    document.getElementById('pf-alerta-t').textContent = 'Deja menos que el resto del taller';
     document.getElementById('pf-alerta-s').innerHTML =
-      'Deja <b>' + fmt(d.hora) + ' por hora</b> contra ' + fmt(mediana) +
+      'Deja <b>' + fmt(d.margen) + ' por unidad</b> contra ' + fmt(mediana) +
       ' de la mediana. Con margen objetivo del ' + obj + '% el precio sería <b>' + fmt(sug) + '</b>.';
   } else {
     al.className = 'alerta a-info';
-    document.getElementById('pf-alerta-t').textContent = 'Rinde bien por hora de trabajo';
+    document.getElementById('pf-alerta-t').textContent = 'Deja bien por unidad';
     document.getElementById('pf-alerta-s').innerHTML =
-      'Deja <b>' + fmt(d.hora) + ' por hora</b>' +
+      'Deja <b>' + fmt(d.margen) + ' por unidad</b>' +
       (mediana ? ', contra ' + fmt(mediana) + ' de la mediana del taller.' : '.');
   }
 }
@@ -5499,7 +5483,7 @@ function abrirFormProducto(id){
   document.getElementById('pf-guardar').textContent = p ? 'Guardar cambios' : 'Guardar producto';
   document.getElementById('pf-nombre').value = p ? p.n : '';
   document.getElementById('pf-tipo').value   = p ? p.tipo : 'producto';
-  document.getElementById('pf-min').value    = p ? p.min : 12;
+  document.getElementById('pf-mano').value   = p ? p.mano : 1880;
   document.getElementById('pf-precio').value = p ? p.precio : 18000;
   document.getElementById('pf-insumo').value = p ? p.insumo : 6520;
 
@@ -5549,7 +5533,7 @@ function refrescarSelectores(){
   });
   document.getElementById('pf-cancelar').addEventListener('click', cerrarFormProducto);
 
-  ['pf-min','pf-precio','pf-insumo','pf-obj'].forEach(function(id){
+  ['pf-mano','pf-precio','pf-insumo','pf-obj'].forEach(function(id){
     document.getElementById(id).addEventListener('input', pintarFormProducto);
   });
 
@@ -5564,7 +5548,7 @@ function refrescarSelectores(){
     var d = leerFormProducto();
     if (editandoProd){
       var p = porId(editandoProd);
-      p.n = d.n; p.tipo = d.tipo; p.min = d.min; p.precio = d.precio; p.insumo = d.insumo;
+      p.n = d.n; p.tipo = d.tipo; p.mano = d.mano; p.precio = d.precio; p.insumo = d.insumo;
       derivar(p);
     } else {
       d.id = ++secuenciaProd;
