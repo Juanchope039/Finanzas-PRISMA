@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.15.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-05 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [2.16.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-06 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
@@ -342,7 +342,8 @@ Idempotency-Key: 0c8a5e21-4b73-4f16-9d40-7a1e5c2b9f63
 }
 ```
 
-Es **uno de los siete campos** que trae «movimiento», y ahí se ve la primera regla de abajo: como el
+Es **uno de los seis campos** que trae «movimiento» —siete, si la petición dice que el tipo es
+transferencia—, y ahí se ve la primera regla de abajo: como el
 valor no tiene tope, ni `maximo` ni su mensaje viajan —no viajan en `null`, sencillamente no están—.
 
 Un nombre que no existe responde `404` con `40400`. Y **un cuerpo sin `nombre`, o con el nombre en
@@ -358,6 +359,7 @@ sería mentir— ni `42200`, que es para datos que llegan bien formados y no pas
 | `minimo` y `maximo` se leen según el tipo | En `dinero` son pesos; en `texto` y en `clave`, caracteres; en `numero`, la cantidad misma |
 | `teclado` es `numerico` o `texto` | Y no viaja en `fecha`, `lista` ni `casilla`, que se eligen y no abren teclado; una `clave` abre el de texto y un `numero`, el numérico |
 | **Una `lista` trae `opciones` o `origen`, nunca los dos ni ninguno** | Las opciones fijas —el tipo de una cuenta— viajan en el descriptor. Las que salen de datos —la categoría madre— dicen de qué ruta salen: una consulta del contrato, bajo `/api/v0/consultas/…`, cuya `data` es una lista de objetos con `id` y `nombre`, y el `id` es el valor. **El front no decide ni los valores ni a dónde pedirlos**, y la API vuelve a comprobar que lo elegido está entre ellos |
+| **Una elección puede cambiar qué campos trae el formulario**, y entonces la petición la lleva | `{"nombre": "movimiento", "tipo": "transferencia"}` contesta con el medio de pago de origen y el de destino; sin `tipo`, o con cualquier otro, contesta con uno solo. La elección viaja tal como la hizo quien registra, y **quien decide qué campos aplican sigue siendo la API**: el front vuelve a pedir el formulario y pinta lo que llegue, sin esconder nada por su cuenta ([§4.4](#44-las-reglas-que-caben-y-por-qué-no-caben-más)). Una elección que el formulario no conoce se ignora, no responde error |
 | `mensajes` trae un texto **por cada regla que el campo tiene** | Es el mismo texto que llega en `data.errores` cuando esa regla falla en el servidor ([§8.2](#82-los-datos-no-pasan-las-reglas--42200)), y la prueba `DescriptorContraValidacionTest` lo compara palabra por palabra |
 
 ### 4.4 Las reglas que caben, y por qué no caben más
@@ -380,6 +382,11 @@ Una regla así sigue pudiendo existir: la comprueba la API cuando llega la petic
 vuelve en `data.errores`. Lo que no puede es **anunciarse en el descriptor**, y quien diseña el
 formulario lo sabe al arrancar la API, no cuando una empleada ve un error que la pantalla nunca
 le avisó.
+
+**Pedir el formulario con una elección no rompe este borde.** Decir «el tipo es transferencia» y
+recibir un campo más no es una regla que mire dos campos: es la API devolviendo **otro
+formulario**, con sus propios campos y sus propios mensajes. El front no evalúa nada; vuelve a
+preguntar y pinta. La diferencia está en quién decide, que es lo que vigila el [ADR-018](adr/ADR-018-front-sin-decisiones.md).
 
 **Y hay un caso más, que no es una regla sino una forma: un campo que es una lista de renglones.**
 Las líneas de un pedido no son un campo con un valor, son una tabla que se agrega y se quita, y el

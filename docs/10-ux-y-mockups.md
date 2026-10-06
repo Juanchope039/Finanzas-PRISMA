@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
+| [6.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/10-ux-y-mockups.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-06 | [UX](INDICE.md#etiqueta-ux) · [Front](INDICE.md#etiqueta-front) |
 
 Prototipo navegable: [`../mockup/prisma-mockup.html`](../mockup/prisma-mockup.html)
 
@@ -196,8 +196,21 @@ exactas** del aviso cuando una regla no se cumple. El front lee ese descriptor y
 |---|---|
 | Qué campos hay y en qué orden | Los dibuja en ese orden, sin reordenarlos |
 | Qué regla aplica a cada campo | La comprueba mientras se escribe, sin ir al servidor |
+| Cuál campo es obligatorio | Le pone un asterisco a la etiqueta |
+| Qué campos trae el formulario | Los vuelve a pedir cuando una elección los cambia |
 | Con qué palabras se avisa | Muestra el texto tal cual, sin redactar nada |
 | Qué teclado conviene | Abre el numérico donde va plata, el de texto donde va texto |
+
+**El obligatorio se ve antes de equivocarse.** La etiqueta de un campo obligatorio termina en un
+asterisco rojo, y la etiqueta entera se lee «Valor, obligatorio» para quien usa lector de pantalla.
+No es una regla nueva: es la que el descriptor ya trae en `obligatorio`, dicha donde se llena y no
+cuando el servidor contesta.
+
+**Un campo que no viene al caso no se pinta, y eso también lo decide la API.** Cuando una elección
+cambia qué campos aplican —el tipo de un movimiento es el caso—, el front **vuelve a pedir el
+formulario con esa elección** y pinta lo que le contesten. No esconde nada por su cuenta: el
+descriptor sigue sin saber decir «este campo depende de aquel», que es la regla de dos campos que
+el [20 §4.4](20-contrato-de-api.md#44-las-reglas-que-caben-y-por-qué-no-caben-más) deja fuera a propósito.
 
 > **La pantalla no sabe por qué existe la regla.** No sabe que un gasto tiene que ser mayor que
 > cero: sabe que hay una regla llamada `minimo` con valor 1 y un mensaje que mostrar si no se
@@ -351,9 +364,16 @@ clave que el front no conoce no se pinta.
 **Pregunta:** *¿en qué se fue la plata?*
 
 Registro rápido en un panel que se abre con el botón flotante, y ese botón flota sobre todas las
-pantallas menos el Inicio: valor, tipo, categoría, cuenta, fecha (hoy por defecto), foto. El
-Inicio queda fuera porque no escribe ([principio 8](#principio-8)). Debajo va **el libro**: la lista con filtros,
-la marca de registro tardío y la acción de anular con motivo obligatorio.
+pantallas menos el Inicio: valor, tipo, categoría, **medio de pago**, fecha (hoy por defecto),
+foto. El Inicio queda fuera porque no escribe ([principio 8](#principio-8)). Debajo va **el libro**: la lista con
+filtros, la marca de registro tardío y la acción de anular con motivo obligatorio.
+
+**El medio de pago es un solo campo.** Quien registra elige de dónde entró o salió la plata y no
+ve nada más: el campo se llama «Medio de pago» y las opciones son las cuentas del taller. El
+segundo campo, «A qué medio de pago llega», aparece **solo cuando el tipo es transferencia**, que
+es el único movimiento que toca dos bolsillos: al cambiar el tipo el front vuelve a pedir el
+formulario y pinta lo que le contesten ([§3.4](#34-el-descriptor-de-formulario)). En un gasto no
+aparece, así que ya no se puede llenar para que después le digan que sobraba.
 
 **El libro.** Una tabla por mes, con lo más reciente primero, ordenada por la fecha en que ocurrió
 cada movimiento y no por la de digitación ([RN-01](03-requisitos-y-bdd.md#rn-01)). De arriba abajo:

@@ -174,7 +174,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [07 · Arquitectura técnica](07-arquitectura.md) | 6.0.0 | ✅ Vigente | 2026-10-04 | [Arquitectura](#etiqueta-arquitectura) · [API](#etiqueta-api) · [Front](#etiqueta-front) · [Base de datos](#etiqueta-base-de-datos) · [Seguridad](#etiqueta-seguridad) |
 | [08 · Plan de desarrollo](08-plan-de-desarrollo.md) | 9.1.0 | ✅ Vigente | 2026-10-05 | [Plan](#etiqueta-plan) · [Paralelo](#etiqueta-paralelo) |
 | [09 · Plan de implantación](09-plan-de-implantacion.md) | 7.0.0 | ✅ Vigente | 2026-10-04 | [Plan](#etiqueta-plan) · [Entrega](#etiqueta-entrega) · [Negocio](#etiqueta-negocio) |
-| [10 · Diseño de experiencia y mockups](10-ux-y-mockups.md) | 6.3.0 | ✅ Vigente | 2026-10-04 | [UX](#etiqueta-ux) · [Front](#etiqueta-front) |
+| [10 · Diseño de experiencia y mockups](10-ux-y-mockups.md) | 6.4.0 | ✅ Vigente | 2026-10-06 | [UX](#etiqueta-ux) · [Front](#etiqueta-front) |
 | [11 · Riesgos y protección de datos](11-riesgos-y-proteccion-de-datos.md) | 2.0.0 | ✅ Vigente | 2026-09-18 | [Seguridad](#etiqueta-seguridad) · [Datos personales](#etiqueta-datos-personales) · [Negocio](#etiqueta-negocio) |
 | [12 · Pruebas y calidad](12-pruebas-y-calidad.md) | 4.2.1 | ✅ Vigente | 2026-10-04 | [Calidad](#etiqueta-calidad) |
 | [13 · Respaldo y exportación](13-respaldo-y-exportacion.md) | 2.0.0 | ✅ Vigente | 2026-10-04 | [Base de datos](#etiqueta-base-de-datos) · [Datos personales](#etiqueta-datos-personales) |
@@ -184,7 +184,7 @@ Qué significa cada estado y cuándo sube una versión está en
 | [17 · Resiliencia, trabajo sin conexión y caché](17-resiliencia-offline-y-cache.md) | 1.1.0 | ✅ Vigente | 2026-09-22 | [Front](#etiqueta-front) · [API](#etiqueta-api) · [Arquitectura](#etiqueta-arquitectura) |
 | [18 · Distribución multiplataforma y automatización (pipelines)](18-distribucion-y-pipelines.md) | 0.1.0 | 💡 Propuesta | 2026-09-16 | [Entrega](#etiqueta-entrega) · [Front](#etiqueta-front) |
 | [19 · Ambientes, versionado y entrega](19-ambientes-y-entrega.md) | 9.2.0 | ✅ Vigente | 2026-10-05 | [Entrega](#etiqueta-entrega) · [Proceso](#etiqueta-proceso) |
-| [20 · Contrato de la API](20-contrato-de-api.md) | 2.15.0 | ✅ Vigente | 2026-10-05 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
+| [20 · Contrato de la API](20-contrato-de-api.md) | 2.16.0 | ✅ Vigente | 2026-10-06 | [Contrato](#etiqueta-contrato) · [API](#etiqueta-api) · [Front](#etiqueta-front) |
 | [21 · Trabajo en paralelo por carriles](21-trabajo-en-paralelo.md) | 6.2.0 | ✅ Vigente | 2026-10-05 | [Paralelo](#etiqueta-paralelo) · [Proceso](#etiqueta-proceso) |
 | [22 · Documentación: versiones, estados y referencias](22-documentacion.md) | 2.2.1 | ✅ Vigente | 2026-10-04 | [Proceso](#etiqueta-proceso) |
 | [23 · Diagramas de los casos de uso](23-diagramas-de-casos-de-uso.md) | 0.2.0 | 🔍 En revisión | 2026-10-04 | [Requisitos](#etiqueta-requisitos) · [Negocio](#etiqueta-negocio) · [Arquitectura](#etiqueta-arquitectura) |
