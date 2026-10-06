@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.57.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-06 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.58.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-06 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -58,8 +58,8 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
 | [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 19 | 12 | 0 | 7 | 10 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 16 | 14 | 0 | 2 | 1 |
-| [Sprint 10](#sprint-10) · La retroalimentación de Gerencia | 3 | 0 | 0 | 3 | 5 |
-| **Total** | **168** | **156** | **0** | **12** | **16** |
+| [Sprint 10](#sprint-10) · La retroalimentación de Gerencia | 3 | 1 | 0 | 2 | 4,5 |
+| **Total** | **168** | **157** | **0** | **11** | **15,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -244,7 +244,6 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 |---|---|
 | **API** | [10.2](docs/08-plan-de-desarrollo.md#tarea-10-2) |
 | **Base** | [8.14](docs/08-plan-de-desarrollo.md#tarea-8-14) · [10.3](docs/08-plan-de-desarrollo.md#tarea-10-3) |
-| **Front** | [10.1](docs/08-plan-de-desarrollo.md#tarea-10-1) |
 | **Contrato** | [8.13](docs/08-plan-de-desarrollo.md#tarea-8-13) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
@@ -252,11 +251,11 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **12 tareas y 16 días de trabajo** de 168 tareas del plan.
+Quedan **11 tareas y 15,5 días de trabajo** de 168 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 2,3 semanas | **5,3 semanas** |
+| 1 | 2,2 semanas | **5,2 semanas** |
 | 2 | 1,3 semanas | **4,3 semanas** |
 | 3 | 1,2 semanas | **4,2 semanas** |
 <!-- /generado:plan-restante -->
@@ -1680,7 +1679,7 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
 **Las tres salen de usar la aplicación**, no de diseñarla: Gerencia las dijo el 2026-10-06 mirando
 dev. Cada una pasa primero por la especificación y el mockup, porque las tres cambian lo acordado.
 
-- [ ] [**10.1**](docs/08-plan-de-desarrollo.md#tarea-10-1) El asterisco de los campos obligatorios · Front — la etiqueta de un campo
+- [x] [**10.1**](docs/08-plan-de-desarrollo.md#tarea-10-1) El asterisco de los campos obligatorios · Front — la etiqueta de un campo
       obligatorio termina en asterisco rojo y su lector de pantalla lee «obligatorio». Lo dicta el
       descriptor, que ya trae `obligatorio`, así que el contrato no cambia
 - [ ] [**10.2**](docs/08-plan-de-desarrollo.md#tarea-10-2) Un solo medio de pago, y el destino solo en la transferencia · API, Front — la
