@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.55.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-05 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.56.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-05 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -56,9 +56,9 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
-| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 19 | 12 | 0 | 7 | 10 |
+| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 19 | 13 | 0 | 6 | 9 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 16 | 13 | 0 | 3 | 1,5 |
-| **Total** | **165** | **155** | **0** | **10** | **11,5** |
+| **Total** | **165** | **156** | **0** | **9** | **10,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -241,21 +241,21 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
+| **API** | [8.18](docs/08-plan-de-desarrollo.md#tarea-8-18) |
 | **Base** | [8.14](docs/08-plan-de-desarrollo.md#tarea-8-14) |
-| **Contrato** | [8.13](docs/08-plan-de-desarrollo.md#tarea-8-13) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **10 tareas y 11,5 días de trabajo** de 165 tareas del plan.
+Quedan **9 tareas y 10,5 días de trabajo** de 165 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 1,5 semanas | **4,5 semanas** |
-| 2 | 1,1 semanas | **4,1 semanas** |
-| 3 | 1,2 semanas | **4,2 semanas** |
+| 1 | 1,4 semanas | **4,4 semanas** |
+| 2 | 1,2 semanas | **4,2 semanas** |
+| 3 | 1,3 semanas | **4,3 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1490,12 +1490,14 @@ Entraron al final del sprint, con el sprint ya en 12 de 12. **Sus siete dependen
 [2.21](docs/08-plan-de-desarrollo.md#tarea-2-21), [1.4](docs/08-plan-de-desarrollo.md#tarea-1-4) y
 [3.14](docs/08-plan-de-desarrollo.md#tarea-3-14)—, así que la primera se puede tomar ya.
 
-- [ ] ⚡ [**8.13**](docs/08-plan-de-desarrollo.md#tarea-8-13) Contrato del respaldo y de la auditoría completa · Contrato
+- [x] [**8.13**](docs/08-plan-de-desarrollo.md#tarea-8-13) Contrato del respaldo y de la auditoría completa · Contrato — seis
+      operaciones, tres formularios y tres códigos en el contrato `0.30.0`: el respaldo se genera, se
+      baja por partes y se programa, y toda la auditoría se consulta con sus cuatro filtros
 - [ ] ⚡ [**8.14**](docs/08-plan-de-desarrollo.md#tarea-8-14) El bucket `respaldos` y lo que la base impone · Base
 - [ ] 🔒 [**8.15**](docs/08-plan-de-desarrollo.md#tarea-8-15) El respaldo en la API · API
 - [ ] 🔒 [**8.16**](docs/08-plan-de-desarrollo.md#tarea-8-16) La programación automática del respaldo · Base, API
 - [ ] 🔒 [**8.17**](docs/08-plan-de-desarrollo.md#tarea-8-17) La pantalla «Configuración» y el panel «Exportar respaldo» · Front
-- [ ] 🔒 [**8.18**](docs/08-plan-de-desarrollo.md#tarea-8-18) La auditoría completa en la API · API
+- [ ] ⚡ [**8.18**](docs/08-plan-de-desarrollo.md#tarea-8-18) La auditoría completa en la API · API
 - [ ] 🔒 [**8.19**](docs/08-plan-de-desarrollo.md#tarea-8-19) El panel «Auditoría» en Configuración · Front
 
 ### Amortiguador · Nómina
@@ -5092,7 +5094,7 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       no tienen otra casa, y con ella las pantallas pasan de once a doce. **Lo decide quien dirige**
 - [ ] 🔒 **Entraron siete tareas nuevas al plan y el total pasa de 157 a 164.** Las puso el
       [ADR-047](docs/adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) al final del [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8), que ya estaba en 12 de 12, y le suman unos diez
-      días. Todas sus dependencias están hechas, así que la [8.13](docs/08-plan-de-desarrollo.md#tarea-8-13) se puede tomar ya. **Conviene
+      días. Todas sus dependencias estaban hechas, así que la [8.13](docs/08-plan-de-desarrollo.md#tarea-8-13) se tomó el primer día. **Conviene
       revisar si el sprint aguanta siete tareas más o si conviene partirlo**
 - [ ] **El respaldo necesita un bucket nuevo y nadie ha mirado cuánto pesa.** La retención de doce
       del [13 §5](docs/13-respaldo-y-exportacion.md#5-generación-y-descarga), con los cuatro alcances y los tres formatos, puede crecer bastante más que
@@ -5102,6 +5104,29 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       pide el [ADR-048](docs/adr/ADR-048-las-ramas-principales-las-protege-github.md) se reporta verde sin haber comprobado nada. Se dejó así para no tocar la
       condición de un trabajo que ya existía; **lo que hay que decidir es si el informe de la base
       tiene que correr también en esas dos ramas**
+- [ ] **El respaldo baja por partes y siempre en un ZIP, y ningún documento lo decía.** Un respaldo
+      total pasa de los 5 MB que caben en un `Documento`, y el [13 §5.1](docs/13-respaldo-y-exportacion.md#51-quién-arma-el-archivo-la-api) pide que el archivo salga de la
+      API. El contrato `0.30.0` lo resuelve con `POST /respaldos/{id}/descarga` y un trozo de hasta
+      3 MiB por petición, y los tres formatos bajan dentro de un ZIP porque el manifiesto es un
+      archivo aparte. **Pedir la primera parte es lo que marca el respaldo como bajado.** El front
+      tiene que juntar las partes y comprobar el `sha256`: es lógica nueva en la 8.17. Se escribió en
+      el [13](docs/13-respaldo-y-exportacion.md). **Lo decide quien dirige** si prefiere otra salida
+- [ ] **Las tablas que se respaldan son 27, y quedaron fuera cuatro de funcionamiento.** El total y
+      «una tabla» no incluyen `nonces_vistos`, `peticiones_idempotentes`, `sesiones` ni
+      `schema_version`: no son historia de nadie y `sesiones` guarda huellas de claves de renovación.
+      Entran `auditoria` y `exportaciones`. El [13 §2](docs/13-respaldo-y-exportacion.md#2-alcance-seleccionable) dice «todas las tablas» sin decir cuáles
+- [ ] **La programación dice si opera, y programar donde no opera responde `40971`.** El
+      [13 §1.1](docs/13-respaldo-y-exportacion.md#11-el-respaldo-es-por-ambiente-y-solo-uno-importa) dice que solo opera en prod y que en los demás ambientes «no se programa». No dice si
+      la pantalla de un ambiente de pruebas debe ofrecerla: el contrato `0.30.0` trae `opera` y la
+      pantalla no pinta el bloque con `false`, para no decidir el ambiente en el front
+- [ ] **La auditoría devuelve el antes y el después tal como la base los guarda.** Los nombres de
+      columna salen sin traducir, porque traducir las 19 tablas es un catálogo que nadie pidió. La
+      [8.19](docs/08-plan-de-desarrollo.md#tarea-8-19) los va a mostrar así. **Si Gerencia debe leer «Cargo: Domiciliaria → Asistente» y no
+      un JSON, hay que decidirlo antes de la 8.18**
+- [ ] **El filtro por persona de la auditoría trae también los intentos fallidos que tecleó su
+      usuario.** Un intento fallido no tiene persona, porque nadie entró; el [BDD-23-2](docs/03-requisitos-y-bdd.md#bdd-23-2) los espera
+      al filtrar por persona, así que la API los cruza con el usuario tecleado. Lo escribió la
+      8.13 en el contrato; la 8.18 lo tiene que cumplir
 
 ---
 

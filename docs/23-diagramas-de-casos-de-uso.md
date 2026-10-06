@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [0.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/23-diagramas-de-casos-de-uso.md "Historial de cambios") | [🔍 En revisión](22-documentacion.md#estados) | 2026-10-04 | 2026-10-04 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [0.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/23-diagramas-de-casos-de-uso.md "Historial de cambios") | [🔍 En revisión](22-documentacion.md#estados) | 2026-10-04 | 2026-10-05 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Los 37 casos de uso dibujados, **dos veces cada uno**: una para quien dirige el negocio y una para
 quien programa. Los pasos, los flujos alternativos y las reglas están en
@@ -1067,9 +1067,14 @@ sequenceDiagram
     A->>A: arma los archivos, calcula los sha256 y el manifiesto.json
     A->>D: INSERT exportaciones, con su manifiesto
     A-->>F: 20100 · la ficha del respaldo, todavía sin bajar
-    F->>A: POST /api/v0/respaldos/{id}/descarga
-    A->>D: UPDATE exportaciones: descargado_en y descargado_por
-    A-->>F: el archivo, que baja con una acción explícita de la persona
+    F->>A: POST /api/v0/respaldos/{id}/descarga · parte 1, con una acción explícita de la persona
+    A->>D: UPDATE exportaciones: descargado_en y descargado_por, solo con la primera
+    A-->>F: 20000 · la parte 1 de N en base64, con el sha256 del ZIP entero
+    loop partes 2 a N
+        F->>A: POST /api/v0/respaldos/{id}/descarga · parte n
+        A-->>F: 20000 · la parte n
+    end
+    Note over F: junta las partes sin interpretarlas y comprueba el sha256
 ```
 
 ### CU-23 · Consultar auditoría
@@ -1577,9 +1582,9 @@ sequenceDiagram
 las de `contrato/openapi.json`, las tablas las del [04 §4](04-modelo-de-datos.md#4-esquema-sql) y los escenarios los del
 [03 §4](03-requisitos-y-bdd.md#4-escenarios-bdd).
 
-> **Seis rutas de esta tabla todavía no están en el contrato: las de [CU-22](02-casos-de-uso.md#cu-22) y la de la auditoría
-> completa de [CU-23](02-casos-de-uso.md#cu-23).** El [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) las puso en el plan y su diseño está en la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13), que es la
-> que las escribe. La tabla las nombra porque ya están decididas, no porque ya existan.
+> **Seis rutas de esta tabla las escribió la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13) en el contrato `0.30.0`: las de [CU-22](02-casos-de-uso.md#cu-22) y la de la auditoría
+> completa de [CU-23](02-casos-de-uso.md#cu-23).** El [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) las puso en el plan. Están acordadas pero todavía no las sirve la API: las
+> construyen las tareas [8.15](08-plan-de-desarrollo.md#tarea-8-15), [8.16](08-plan-de-desarrollo.md#tarea-8-16) y [8.18](08-plan-de-desarrollo.md#tarea-8-18).
 
 | Caso | Operación del contrato | Tablas | Función o trigger | Escenarios |
 |---|---|---|---|---|
@@ -1604,8 +1609,8 @@ las de `contrato/openapi.json`, las tablas las del [04 §4](04-modelo-de-datos.m
 | [CU-19](02-casos-de-uso.md#cu-19) | `PUT /nomina/periodos/{id}` · `PUT /nomina/liquidaciones/{id}` · `POST /nomina/periodos/{id}/cierre` | `nomina_periodos`, `nomina_detalle`, `adelantos`, `empleados`, `movimientos` | `fn_liquidar_nomina`, `nom_escritura` | [BDD-19-1](03-requisitos-y-bdd.md#bdd-19-1), [BDD-26-2](03-requisitos-y-bdd.md#bdd-26-2) |
 | [CU-20](02-casos-de-uso.md#cu-20) | `POST /consultas/desprendible` · `POST /consultas/periodos-de-nomina` | `nomina_detalle`, `nomina_periodos` | `nom_lectura`, `nom_per_lectura` | [BDD-02-4](03-requisitos-y-bdd.md#bdd-02-4), [BDD-02-6](03-requisitos-y-bdd.md#bdd-02-6) |
 | [CU-21](02-casos-de-uso.md#cu-21) | `POST /consultas/importacion` · `PUT /importaciones/{id}` | `movimientos` | — | [BDD-21-1](03-requisitos-y-bdd.md#bdd-21-1) a [BDD-21-3](03-requisitos-y-bdd.md#bdd-21-3) |
-| [CU-22](02-casos-de-uso.md#cu-22) | `POST /respaldos` · `POST /respaldos/{id}/descarga` · `POST /consultas/respaldos` · `PUT /respaldos/programacion` · `POST /consultas/respaldos/programacion`, **las escribe la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13)** | `exportaciones` ([13 §8](13-respaldo-y-exportacion.md#8-tabla-de-registro)) | RLS de cada tabla leída | [BDD-22-1](03-requisitos-y-bdd.md#bdd-22-1), [BDD-22-2](03-requisitos-y-bdd.md#bdd-22-2), [BDD-02-5](03-requisitos-y-bdd.md#bdd-02-5) |
-| [CU-23](02-casos-de-uso.md#cu-23) | `POST /consultas/auditoria`, **la escribe la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13)** · `POST /consultas/bitacora` | `auditoria` | `fn_auditar`, `fn_auditar_usuarios`, `fn_registrar_evento` | [BDD-23-1](03-requisitos-y-bdd.md#bdd-23-1), [BDD-23-2](03-requisitos-y-bdd.md#bdd-23-2), [BDD-02-6](03-requisitos-y-bdd.md#bdd-02-6) |
+| [CU-22](02-casos-de-uso.md#cu-22) | `POST /respaldos` · `POST /respaldos/{id}/descarga` · `POST /consultas/respaldos` · `PUT /respaldos/programacion` · `POST /consultas/respaldos/programacion` | `exportaciones` ([13 §8](13-respaldo-y-exportacion.md#8-tabla-de-registro)) | RLS de cada tabla leída | [BDD-22-1](03-requisitos-y-bdd.md#bdd-22-1), [BDD-22-2](03-requisitos-y-bdd.md#bdd-22-2), [BDD-02-5](03-requisitos-y-bdd.md#bdd-02-5) |
+| [CU-23](02-casos-de-uso.md#cu-23) | `POST /consultas/auditoria` · `POST /consultas/bitacora` | `auditoria` | `fn_auditar`, `fn_auditar_usuarios`, `fn_registrar_evento` | [BDD-23-1](03-requisitos-y-bdd.md#bdd-23-1), [BDD-23-2](03-requisitos-y-bdd.md#bdd-23-2), [BDD-02-6](03-requisitos-y-bdd.md#bdd-02-6) |
 | [CU-24](02-casos-de-uso.md#cu-24) | `POST /consultas/patrimonio` · `POST /consultas/tablero` | `aportes_retiros`, `movimientos` | — | [BDD-24-1](03-requisitos-y-bdd.md#bdd-24-1) |
 | [CU-25](02-casos-de-uso.md#cu-25) | `PUT /prolabore/{id}` · `POST /consultas/prolabore` | `prolabore_config`, `horas_limite_config` | `prolabore_solo_gerencia` | [BDD-25-1](03-requisitos-y-bdd.md#bdd-25-1), [BDD-25-2](03-requisitos-y-bdd.md#bdd-25-2) |
 | [CU-26](02-casos-de-uso.md#cu-26) | `PUT /adelantos/{id}` · `POST /adelantos/{id}/anulacion` · `POST /consultas/adelantos` | `adelantos`, `movimientos` | `adelantos_insercion`, `adelantos_lectura` | [BDD-26-1](03-requisitos-y-bdd.md#bdd-26-1), [BDD-26-2](03-requisitos-y-bdd.md#bdd-26-2) |
@@ -1632,10 +1637,10 @@ trae el id que generó quien registra.
 **Esto no es una lista de pendientes del proyecto** —esa es [`TODO.md`](../TODO.md)—, sino lo que hay que saber
 para no leer un diagrama de más.
 
-**Los dos casos que antes no tenían ruta ya la tienen decidida.** Hasta el [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md), el respaldo con
+**Los dos casos que antes no tenían ruta ya la tienen en el contrato.** Hasta el [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md), el respaldo con
 manifiesto de [CU-22](02-casos-de-uso.md#cu-22) no tenía operación ni tarea, y [CU-23](02-casos-de-uso.md#cu-23) solo tenía la mitad administrativa.
-Ahora los dos están en el [Sprint 8](08-plan-de-desarrollo.md#sprint-8) y sus diagramas técnicos dibujan la ruta; lo que falta es que la
-tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13) la escriba en el contrato.
+Ahora los dos están en el [Sprint 8](08-plan-de-desarrollo.md#sprint-8) y la tarea [8.13](08-plan-de-desarrollo.md#tarea-8-13) escribió sus rutas en el contrato `0.30.0`; lo que falta es
+construirlas, en las tareas [8.15](08-plan-de-desarrollo.md#tarea-8-15) a [8.19](08-plan-de-desarrollo.md#tarea-8-19).
 
 > **La descarga de pantalla de [CU-37](02-casos-de-uso.md#cu-37) sigue sin ser un respaldo.** Es la frontera que defienden
 > el [13 §2.1](13-respaldo-y-exportacion.md#21-la-descarga-del-inicio-es-una-exportación-parcial) y la regla central de [CU-22](02-casos-de-uso.md#cu-22), y el contrato la repite en la descripción de
