@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/11-riesgos-y-proteccion-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-09-18 | [Seguridad](INDICE.md#etiqueta-seguridad) · [Datos personales](INDICE.md#etiqueta-datos-personales) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/11-riesgos-y-proteccion-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-06 | [Seguridad](INDICE.md#etiqueta-seguridad) · [Datos personales](INDICE.md#etiqueta-datos-personales) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 > Este documento **no trata temas tributarios ni de facturación electrónica**, que están fuera
 > del alcance de esta versión. Ver [`14-roadmap-e-ideas.md`](14-roadmap-e-ideas.md).
@@ -72,7 +72,7 @@ El sistema no elimina estos riesgos, pero los hace **visibles a tiempo**.
 |---|---|---|
 | Gastar plata de anticipos | Caja libre negativa | 🔴 Crítica |
 | Descapitalizar el negocio | Retiros de 12 meses sobre utilidades | 🟠 Alta |
-| Vender productos a pérdida | Margen por hora bajo o negativo | 🟠 Alta |
+| Vender productos a pérdida | Margen en pesos bajo o negativo | 🟠 Alta |
 | Financiar al cliente sin saberlo | Anticipo menor al costo directo | 🟠 Alta |
 | Pagar tiempo que no se vende | Horas pagadas sobre horas facturadas | 🟡 Media |
 | Contratar sin capacidad real | Simulador con pro-labore descontado | 🔴 Crítica |

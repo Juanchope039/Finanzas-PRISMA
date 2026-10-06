@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/01-vision-y-alcance.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [Negocio](INDICE.md#etiqueta-negocio) · [Requisitos](INDICE.md#etiqueta-requisitos) |
+| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/01-vision-y-alcance.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-06 | [Negocio](INDICE.md#etiqueta-negocio) · [Requisitos](INDICE.md#etiqueta-requisitos) |
 
 ---
 
@@ -152,7 +152,7 @@ solo tiene dos columnas porque solo hay dos tipos.
 | **Movimientos** | Ingresos, gastos, categorías, doble fecha, adjuntos, anulación con motivo |
 | **Pedidos y facturas** | Registro, orden por fecha, anticipo 50%, saldo contra entrega, estados |
 | **Clientes** | Datos básicos, historial de pedidos |
-| **Productos y servicios** | Catálogo, costo unitario, margen, margen por hora, bordado por tiempo |
+| **Productos y servicios** | Catálogo, costo unitario con mano de obra en pesos, margen en pesos y porcentual |
 | **Cotizaciones y remisiones** | PDF con logo, validador de anticipo mínimo |
 | **Inversiones** | Activos del negocio, aportes de capital |
 | **Retiros** | Separados en pro-labore y distribución de utilidades |

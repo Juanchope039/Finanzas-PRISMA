@@ -1,8 +1,8 @@
-# Contrato de la API · v0.29.0
+# Contrato de la API · v0.30.0
 
 | Versión | Estado | Creado | Actualizado | Contrato | Etiquetas |
 |---|---|---|---|---|---|
-| [3.23.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/contrato/README.md "Historial de cambios") | [✅ Vigente](../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-05 | [0.29.0](openapi.json) | [Contrato](../docs/INDICE.md#etiqueta-contrato) · [API](../docs/INDICE.md#etiqueta-api) · [Front](../docs/INDICE.md#etiqueta-front) |
+| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/contrato/README.md "Historial de cambios") | [✅ Vigente](../docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-06 | [0.30.0](openapi.json) | [Contrato](../docs/INDICE.md#etiqueta-contrato) · [API](../docs/INDICE.md#etiqueta-api) · [Front](../docs/INDICE.md#etiqueta-front) |
 
 Este es **el contrato entre `prisma_front` y `prisma_api`**: lo que viaja por el cable, dicho en
 un solo archivo. Vive aquí, y no en ninguno de los repositorios de código, porque no le pertenece
@@ -271,21 +271,15 @@ viejo conserva el costo que tenía cuando se produjo.
 [`05-reglas-financieras.md`](../docs/05-reglas-financieras.md) [§7.1](../docs/05-reglas-financieras.md#71-costo-unitario) y el [RF-29](../docs/03-requisitos-y-bdd.md#rf-29), y la tabla tiene una columna para cada uno: juntarlos
 dejaría una en cero para siempre.
 
-**Ni el tiempo ni el precio son obligatorios, a propósito.** Un ítem en cero minutos es el que no
-consume tiempo de taller, y su margen por hora **no existe**: viaja vacío, no en cero. Un precio en
-cero es un producto al que todavía nadie le puso precio, y su lectura lo dice. El formulario del
-mockup exige un minuto como mínimo; eso dejaría sin poder escribirse justo los dos casos que el
-dominio modela.
+**El precio no es obligatorio, a propósito.** Un precio en cero es un producto al que todavía
+nadie le puso precio, y su lectura lo dice; exigirlo dejaría sin poder escribirse justo el caso que
+el dominio modela.
 
-**Los minutos de máquina son los del bordado** ([RF-32](../docs/03-requisitos-y-bdd.md#rf-32)), y **no le suman pesos al costo unitario**: la
-tarifa por hora es un sueldo entre horas productivas y la bordadora no cobra sueldo. Lo que hacen
-es ocupar el taller, así que el margen por hora divide entre el mayor de los dos tiempos
-([§7.2](../docs/05-reglas-financieras.md#72-los-tres-márgenes)). En cero en todo lo que no se borda, y entonces el cuadro dice lo de siempre.
-
-**La tarifa por hora no es un campo.** Sale del pro-labore o del salario de quien produce
-([§7.1](../docs/05-reglas-financieras.md#71-costo-unitario)) y la pone la API, que la congela en el costeo; sin pro-labore definido, guardar responde
-`40940`. Y un tiempo con más de dos decimales —lo que la columna `NUMERIC(6,2)` guarda— responde
-`42240` sobre `minutosTrabajo`: es la única regla de este formulario que no cabe en el descriptor.
+**La mano de obra es un campo en pesos, y el tiempo no es ningún campo.** Desde el contrato
+`0.30.0` el catálogo no pide minutos de trabajo ni minutos de máquina: lo que una unidad cuesta de
+trabajo se escribe directamente, en pesos enteros ([§7.1](../docs/05-reglas-financieras.md#71-costo-unitario)). Con eso **ninguna regla de este
+formulario se queda fuera del descriptor**: las tres cifras son plata, y plata es lo que el
+descriptor sabe decir.
 
 > **El margen objetivo del mockup no es un campo del formulario.** Su deslizador no se guarda: pide
 > un precio sugerido, y eso es `POST /api/v0/consultas/costeo` con `margenObjetivo`. Esa misma
@@ -585,6 +579,7 @@ controladores. Si difieren, la compilación falla y dice en qué línea
 
 | Versión | Qué cambió | Por qué |
 |---|---|---|
+| `0.30.0` | **El tiempo sale del contrato.** `minutosTrabajo` y `minutosMaquina` desaparecen del formulario «producto», del cuerpo de `POST /api/v0/consultas/costeo` y de la respuesta `Costeo`, y en su lugar entra `costoManoObra`, en pesos y obligatorio en el costeo guardado. `Margenes` pierde `porHora`, `CosteoCalculado` y `Prolabore` pierden `tarifaHora`, y se van la ruta `POST /api/v0/consultas/productividad` con sus tres esquemas y los códigos `40940`, `42240` y `42241` | Retroalimentación de Gerencia del 2026-10-06: el tiempo no tiene relevancia para el caso de uso y el margen es del producto, no de la hora. La mano de obra se escribe en pesos una vez por producto, que es el mismo dato sin pedir un cronómetro ([05 §7.1](../docs/05-reglas-financieras.md#71-costo-unitario), [05 §7.2](../docs/05-reglas-financieras.md#72-los-dos-márgenes)). **Rompe**, y en una versión `0.x` eso sube la MINOR: tres esquemas cambian de forma y una operación se va, así que el front y la API se publican juntos. Con el tiempo se retiran [RF-31](../docs/03-requisitos-y-bdd.md#rf-31), [RF-32](../docs/03-requisitos-y-bdd.md#rf-32) y [RF-62](../docs/03-requisitos-y-bdd.md#rf-62), y con ellos el [CU-10](../docs/02-casos-de-uso.md#cu-10) y el [CU-27](../docs/02-casos-de-uso.md#cu-27): las horas facturadas salían del tiempo por unidad y sin él no hay contra qué comparar las pagadas. Se descartó dejar los minutos guardados y solo no pedirlos, que deja un campo que nadie llena decidiendo un margen |
 | `0.29.0` | `POST /api/v0/sesiones/administrador` y su formulario «primer-administrador», el esquema `PrimerAdministrador` y dos códigos: `40303`, que el ingreso responde con la credencial temporal del ambiente cuando no hay ninguna Gerencia, y `40903`, cuando ya la hay | Tarea [9.16](../docs/08-plan-de-desarrollo.md#tarea-9-16): una base sin semilla, como la de pre-prod, no tiene quién dé de alta a la primera Gerencia. La credencial temporal no es una cuenta: la API la compara en memoria y la base decide si todavía vale. La operación nueva va sin firma ni `Idempotency-Key`, como el ingreso. **Sube la MINOR**: una operación y dos códigos más, y el ingreso suma uno que antes no podía salir |
 | `0.28.0` | El `ambiente` de la consulta de versión admite `pre-prod`, entre `uat` y `prod` | Tarea [9.14](../docs/08-plan-de-desarrollo.md#tarea-9-14) y [ADR-045](../docs/adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md): el último ambiente alojado se llama pre-prod, y `prod` se queda para el del taller, que corre la misma imagen. **Sube la MINOR**: un valor más en una respuesta, que el front ya sabe recibir porque lo desconocido lo trata como dev |
 | `0.27.0` | Los dos códigos del registro de empleadas —`42250` y `42253`— dejan de estar marcados como pendientes de emitir | Tarea [8.1](../docs/08-plan-de-desarrollo.md#tarea-8-1): la API ya los emite. El `42250` lo ataja el caso de uso al retirar con una fecha anterior al ingreso, y el `42253` sale de `empleados_usuario_id_key` cuando dos fichas cuelgan del mismo usuario. **Sube la MINOR sin cambiar ninguna operación**, como el `0.14.0` y el `0.18.0`: las cinco rutas estaban acordadas y aquí solo empiezan a existir |

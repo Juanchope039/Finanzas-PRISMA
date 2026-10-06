@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [0.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/23-diagramas-de-casos-de-uso.md "Historial de cambios") | [🔍 En revisión](22-documentacion.md#estados) | 2026-10-04 | 2026-10-04 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [0.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/23-diagramas-de-casos-de-uso.md "Historial de cambios") | [🔍 En revisión](22-documentacion.md#estados) | 2026-10-04 | 2026-10-06 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Los 37 casos de uso dibujados, **dos veces cada uno**: una para quien dirige el negocio y una para
 quien programa. Los pasos, los flujos alternativos y las reglas están en
@@ -585,12 +585,9 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-    A(["Gerencia"]) --> B{"¿Hay pro-labore definido?"}
-    B -- No --> B1[/"Se bloquea: sin tarifa por hora el margen mentiría. CU-25"/]
-    B -- Sí --> C["Da de alta el producto con su unidad y su precio"]
-    C --> D["Escribe el costeo: insumo, consumibles y tiempo"]
-    D --> E["El sistema congela la tarifa por hora del pro-labore vigente"]
-    E --> F["Pinta en vivo el costo, los tres márgenes y el precio sugerido"]
+    A(["Gerencia"]) --> C["Da de alta el producto con su unidad y su precio"]
+    C --> D["Escribe el costeo: insumo, consumibles y mano de obra en pesos"]
+    D --> F["Pinta en vivo el costo, los dos márgenes y el precio sugerido"]
     F --> G["Confirma: la ficha y su primer costeo caen juntos"]
     G --> H{"¿Después cambia el costo o el precio?"}
     H -- Sí --> H1["Se agrega una fila nueva de costeo con la fecha de hoy"]
@@ -618,6 +615,9 @@ sequenceDiagram
 ```
 
 ### CU-10 · Costear servicio de bordado
+
+> **⛔ Retirado el 2026-10-06**, con su caso de uso ([CU-10](02-casos-de-uso.md#cu-10)). Los diagramas quedan como
+> estaban, para que se entienda qué regía antes.
 
 **Negocio**
 
@@ -1145,11 +1145,9 @@ flowchart TD
     B --> C{"¿Las horas caben en el máximo del mes?"}
     C -- No --> C1[/"Se rechaza: el límite sale de las horas de una semana por 52 entre 12"/]
     C -- Sí --> D["Se escribe una definición nueva, vigente desde hoy"]
-    D --> E["Los costeos nuevos toman de aquí su tarifa por hora"]
     D --> F["Cada retiro se parte con el pro-labore vigente en su fecha"]
     D --> G["El simulador de contratación deja de estar bloqueado"]
-    E --> H[/"El pro-labore es gasto: baja la utilidad, la caja y el patrimonio"/]
-    F --> H
+    F --> H[/"El pro-labore es gasto: baja la utilidad, la caja y el patrimonio"/]
     G --> H
 ```
 
@@ -1207,6 +1205,9 @@ sequenceDiagram
 ```
 
 ### CU-27 · Horas pagadas vs. horas facturadas
+
+> **⛔ Retirado el 2026-10-06**, con su caso de uso ([CU-27](02-casos-de-uso.md#cu-27)). Los diagramas quedan como
+> estaban, para que se entienda qué regía antes.
 
 **Negocio**
 

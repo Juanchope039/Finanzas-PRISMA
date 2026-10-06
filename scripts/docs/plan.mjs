@@ -38,7 +38,7 @@ export function leerPlan(contenido) {
   let enTabla = false;
   lineas.forEach((linea, i) => {
     if (enCodigo[i]) return;
-    const encabezado = linea.match(/^###\s+(?:<a id="[^"]*"><\/a>)?Sprint (\d)\b(?:\s*·\s*([^·]+?))?(?:\s*·|\s*$)/);
+    const encabezado = linea.match(/^###\s+(?:<a id="[^"]*"><\/a>)?Sprint (\d{1,2})\b(?:\s*·\s*([^·]+?))?(?:\s*·|\s*$)/);
     if (encabezado) {
       sprint = Number(encabezado[1]);
       titulos.set(sprint, (encabezado[2] ?? '').replace(/\*\*/g, '').trim());
@@ -55,7 +55,7 @@ export function leerPlan(contenido) {
     if (/^\|[\s:|-]+\|$/.test(linea)) return;
     const [idCelda, texto, carrilCelda, dependenciasCelda, diasCelda] = celdasDeFila(linea);
     const id = idCelda.replace(/<[^>]*>/g, '').trim();
-    if (!/^\d\.\d{1,2}$/.test(id)) {
+    if (!/^\d{1,2}\.\d{1,2}$/.test(id)) {
       errores.push(`línea ${i + 1}: «${idCelda}» no es un número de tarea`);
       return;
     }
@@ -64,12 +64,12 @@ export function leerPlan(contenido) {
       if (!CARRILES_DE_TRABAJO.includes(c)) errores.push(`línea ${i + 1}: la tarea ${id} tiene el carril desconocido «${c}»`);
     }
     const sinEnlaces = dependenciasCelda.replace(/\]\([^)]*\)/g, ']');
-    const dependencias = [...sinEnlaces.matchAll(/(?<![\d.])(\d\.\d{1,2})(?![\d])|\bH(\d{1,2})\b/g)].map((m) =>
+    const dependencias = [...sinEnlaces.matchAll(/(?<![\d.])(\d{1,2}\.\d{1,2})(?![\d])|\bH(\d{1,2})\b/g)].map((m) =>
       m[1] ? m[1] : `H${m[2]}`,
     );
     const dias = Number(diasCelda.replace(',', '.'));
     if (!(dias > 0)) errores.push(`línea ${i + 1}: la tarea ${id} no tiene días válidos («${diasCelda}»)`);
-    const movida = texto.match(/⏭️\s*(?:\*\*)?(?:\[)?Sprint (\d)/);
+    const movida = texto.match(/⏭️\s*(?:\*\*)?(?:\[)?Sprint (\d{1,2})/);
     tareas.push({
       id,
       linea: i,
