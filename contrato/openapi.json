@@ -599,6 +599,48 @@
         "required" : [ "lineas" ],
         "type" : "object"
       },
+      "ConsultaDeAuditoria" : {
+        "description" : "El cuerpo de POST /api/v0/consultas/auditoria. Todo es opcional: sin nada, la primera página de toda la auditoría. Son los cuatro filtros del panel «Auditoría» (10 §4.11): fecha, persona, qué se tocó y qué pasó",
+        "properties" : {
+          "accion" : {
+            "description" : "Solo lo que pasó así. Sin él, todo",
+            "enum" : [ "INSERT", "UPDATE", "ANULAR", "inicio_sesion", "cierre_sesion", "inicio_sesion_fallido", "usuario_creado", "usuario_desactivado", "clave_restablecida", "clave_cambiada", "cargo_creado", "cargo_desactivado", "usuario_reactivado", "cambio_revertido", "nombre_cambiado", "cargo_cambiado", "tipo_cambiado", "cargo_renombrado", "cargo_reactivado" ],
+            "type" : "string"
+          },
+          "desde" : {
+            "description" : "Por la fecha de la entrada, en hora de Bogotá (RNF-08), incluida. Va con hasta o no va: una sin la otra, o desde después de hasta, responde 42215",
+            "format" : "date",
+            "type" : "string"
+          },
+          "hasta" : {
+            "description" : "Por la fecha de la entrada, en hora de Bogotá, incluida. Va con desde o no va",
+            "format" : "date",
+            "type" : "string"
+          },
+          "limite" : {
+            "description" : "Cuántas entradas por página. Sin él, el máximo, que lo decide la API; por encima del máximo responde 42200 con data.errores",
+            "format" : "int32",
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "pagina" : {
+            "description" : "Qué página, desde 1. Sin ella, la primera. Una página más allá de la última responde la lista vacía con el total",
+            "format" : "int32",
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "personaId" : {
+            "description" : "Solo lo que hizo esa persona, y además los intentos fallidos que tecleó su usuario: un intento fallido no tiene persona, porque nadie entró (BDD-23-2)",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "tabla" : {
+            "description" : "Solo lo que tocó esa tabla, con el nombre que le da la base. Los inicios y cierres de sesión y los intentos fallidos cuelgan de usuarios",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
       "ConsultaDeBitacora" : {
         "description" : "El cuerpo de POST /api/v0/consultas/bitacora",
         "properties" : {
@@ -1234,6 +1276,18 @@
         "required" : [ "en", "motivo", "por" ],
         "type" : "object"
       },
+      "DescargaDeRespaldo" : {
+        "description" : "El cuerpo de POST /api/v0/respaldos/{id}/descarga: cuál parte del archivo se pide (13 §5.1)",
+        "properties" : {
+          "parte" : {
+            "description" : "Cuál parte, desde 1. Sin ella, la primera. Una más allá de la última responde 42200 con data.errores sobre parte",
+            "format" : "int32",
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        },
+        "type" : "object"
+      },
       "DescriptorDeCampo" : {
         "properties" : {
           "ayuda" : {
@@ -1485,6 +1539,80 @@
           }
         },
         "required" : [ "activa", "fechaIngreso", "horasMensuales", "id", "nombre", "salarioAcordado" ],
+        "type" : "object"
+      },
+      "EntradaDeAuditoria" : {
+        "description" : "Una fila de auditoría tal como la escribió el trigger de la base (04 §5.4): quién, cuándo, desde dónde, sobre qué y el estado anterior y el posterior (BDD-23-1)",
+        "properties" : {
+          "accion" : {
+            "description" : "Qué pasó, con el nombre que la base le da",
+            "enum" : [ "INSERT", "UPDATE", "ANULAR", "inicio_sesion", "cierre_sesion", "inicio_sesion_fallido", "usuario_creado", "usuario_desactivado", "clave_restablecida", "clave_cambiada", "cargo_creado", "cargo_desactivado", "usuario_reactivado", "cambio_revertido", "nombre_cambiado", "cargo_cambiado", "tipo_cambiado", "cargo_renombrado", "cargo_reactivado" ],
+            "type" : "string"
+          },
+          "antes" : {
+            "additionalProperties" : { },
+            "description" : "La fila como estaba antes del cambio, con los nombres de columna de la base. Ausente en lo que no cambia una fila, como un inicio de sesión, y en una creación",
+            "type" : "object"
+          },
+          "autor" : {
+            "description" : "El nombre completo de quien lo hizo. Ausente si no hubo sesión, como en un intento fallido: ahí nadie entró",
+            "type" : "string"
+          },
+          "despues" : {
+            "additionalProperties" : { },
+            "description" : "La fila como quedó, con los nombres de columna de la base. En un intento fallido trae solo el usuario que se tecleó, y nunca la contraseña, ni completa ni parcial (RNF-18)",
+            "type" : "object"
+          },
+          "dispositivo" : {
+            "description" : "El navegador y el sistema desde donde llegó la petición, tal como los dijo la cabecera. Ausente si no se pudo leer",
+            "type" : "string"
+          },
+          "en" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "etiqueta" : {
+            "description" : "Lo que dice la columna «Qué pasó», ya redactado: Inicio de sesión, Intento fallido de ingreso con el usuario «marcela», Cambio de cargo…",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "ip" : {
+            "description" : "La dirección desde donde llegó la petición. Ausente si no se pudo leer",
+            "type" : "string"
+          },
+          "motivo" : {
+            "description" : "Ausente si el cambio no pedía motivo",
+            "type" : "string"
+          },
+          "registroId" : {
+            "description" : "El id de la fila que cambió. Ausente en un inicio o un cierre de sesión que no abrió ninguna",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "revertidaPor" : {
+            "description" : "La entrada que la deshizo. Ausente si no se ha revertido",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "revierteA" : {
+            "description" : "Solo en una reversión: la entrada que deshace",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "tabla" : {
+            "description" : "Qué se tocó, con el nombre que le da la base",
+            "type" : "string"
+          },
+          "tipo" : {
+            "description" : "El tipo de usuario con que estaba la sesión. Ausente si no hubo sesión",
+            "enum" : [ "gerencia", "operacion" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "accion", "en", "etiqueta", "id", "tabla" ],
         "type" : "object"
       },
       "EntradaDeBitacora" : {
@@ -2375,6 +2503,18 @@
         "required" : [ "cuentaId", "empleadaId", "periodoId" ],
         "type" : "object"
       },
+      "NuevaProgramacionDeRespaldo" : {
+        "description" : "El cuerpo de PUT /api/v0/respaldos/programacion: cuándo se generan los respaldos solos (13 §6)",
+        "properties" : {
+          "modo" : {
+            "description" : "desactivada: solo se genera a mano; mensual: el día 1 de cada mes, con el mes anterior completo; al_cerrar_el_mes: después de cada cierre mensual, que es la que el 13 recomienda porque ata el archivo a un estado ya verificado",
+            "enum" : [ "desactivada", "mensual", "al_cerrar_el_mes" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "modo" ],
+        "type" : "object"
+      },
       "NuevaSesion" : {
         "description" : "El formulario «acceso». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"acceso\"}",
         "properties" : {
@@ -2682,6 +2822,47 @@
         "required" : [ "justificacion", "valorMensual" ],
         "type" : "object"
       },
+      "NuevoRespaldo" : {
+        "description" : "El cuerpo de POST /api/v0/respaldos: qué se respalda y en qué formato (CU-22, 13 §2 y §3). Son las mismas casillas que pinta el panel «Exportar respaldo» (10 §4.11)",
+        "properties" : {
+          "alcance" : {
+            "description" : "Qué entra. total es toda la base y todo el histórico; mes, los movimientos, pedidos y nómina de un mes (pide anio y mes); rango, lo que cae entre dos fechas (pide desde y hasta); tabla, una sola entidad completa (pide tabla). Lo que falta, o un rango al revés, responde 42272",
+            "enum" : [ "total", "mes", "rango", "tabla" ],
+            "type" : "string"
+          },
+          "anio" : {
+            "description" : "Solo con alcance mes. Fuera de 2020..2100 responde 42200 con data.errores",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "desde" : {
+            "description" : "Solo con alcance rango, incluida. Va con hasta o no va",
+            "format" : "date",
+            "type" : "string"
+          },
+          "formato" : {
+            "description" : "csv_zip es un CSV por tabla, excel es un libro con una hoja por tabla y json es la estructura completa con sus relaciones (13 §3). Los tres bajan dentro de un ZIP, junto al manifiesto.json",
+            "enum" : [ "csv_zip", "excel", "json" ],
+            "type" : "string"
+          },
+          "hasta" : {
+            "description" : "Solo con alcance rango, incluida. Va con desde o no va",
+            "format" : "date",
+            "type" : "string"
+          },
+          "mes" : {
+            "description" : "Solo con alcance mes: de 1 a 12. Fuera de rango responde 42200 con data.errores",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "tabla" : {
+            "description" : "Solo con alcance tabla: cuál, con el nombre que le da la base. Una que no sea de las que se respaldan responde 42200 con data.errores",
+            "type" : "string"
+          }
+        },
+        "required" : [ "alcance", "formato" ],
+        "type" : "object"
+      },
       "NuevoRetiro" : {
         "description" : "El formulario «retiro». Sus reglas y sus mensajes están en POST /api/v0/consultas/formularios con {\"nombre\": \"retiro\"}",
         "properties" : {
@@ -2774,6 +2955,40 @@
         "required" : [ "cargos" ],
         "type" : "object"
       },
+      "PaginaDeAuditoria" : {
+        "description" : "Una página de la auditoría, la más reciente primero, con cuántas hay en total y lo que la pantalla necesita para no decidir nada (10 §4.11)",
+        "properties" : {
+          "entradas" : {
+            "description" : "Las más recientes primero",
+            "items" : {
+              "$ref" : "#/components/schemas/EntradaDeAuditoria"
+            },
+            "type" : "array"
+          },
+          "limite" : {
+            "description" : "Cuántas entradas caben en esta página: las pedidas o, sin pedir, el máximo",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "maximoPorPagina" : {
+            "description" : "El máximo de entradas por página. La pantalla no ofrece un tamaño mayor y arranca en él",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "pagina" : {
+            "description" : "La página que se devolvió",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "total" : {
+            "description" : "Cuántas entradas cumplen los filtros, para decir cuántas páginas hay",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "entradas", "limite", "maximoPorPagina", "pagina", "total" ],
+        "type" : "object"
+      },
       "PaginaDeBitacora" : {
         "properties" : {
           "entradas" : {
@@ -2837,6 +3052,52 @@
           }
         },
         "required" : [ "limite", "maximoPorPagina", "mesEnCurso", "movimientos", "pagina", "puedeAnular", "puedeVerAnulados", "total" ],
+        "type" : "object"
+      },
+      "ParteDeRespaldo" : {
+        "description" : "Un trozo del ZIP de un respaldo. Viaja dentro del sobre, en data y en base64, como cualquier archivo que baja de la API (tarea 8.11), pero por partes: un respaldo total pasa de los 5 MB que caben en un Documento. El front pide las partes en orden, las junta sin interpretarlas y guarda el resultado",
+        "properties" : {
+          "bytes" : {
+            "description" : "Cuánto pesa esta parte ya decodificada. Nunca más de 3.145.728",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "bytesTotales" : {
+            "description" : "Cuánto pesa el archivo entero, que es la suma de todas las partes",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "contenido" : {
+            "description" : "Esta parte en base64, sin saltos de línea ni prefijo de tipo",
+            "format" : "byte",
+            "type" : "string"
+          },
+          "nombre" : {
+            "description" : "El nombre con que conviene guardar el archivo, como respaldo-2026-09-mes.zip",
+            "type" : "string"
+          },
+          "parte" : {
+            "description" : "Cuál es esta, desde 1",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "partes" : {
+            "description" : "En cuántas se baja el archivo. Con una sola, el archivo ya está entero",
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "sha256" : {
+            "description" : "El sha256 del archivo entero, en hexadecimal minúscula, no el de esta parte. Sirve para comprobar que, al unir las partes, el archivo llegó completo",
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          },
+          "tipo" : {
+            "description" : "Siempre un ZIP: lleva los archivos del formato y el manifiesto.json al lado (13 §4)",
+            "enum" : [ "application/zip" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "bytes", "bytesTotales", "contenido", "nombre", "parte", "partes", "sha256", "tipo" ],
         "type" : "object"
       },
       "Patrimonio" : {
@@ -3165,6 +3426,22 @@
         "required" : [ "activo", "id", "nombre", "precioActual", "tipo", "unidad" ],
         "type" : "object"
       },
+      "ProgramacionDeRespaldo" : {
+        "description" : "Cómo se generan hoy los respaldos solos (13 §6) y si en este ambiente se pueden programar",
+        "properties" : {
+          "modo" : {
+            "description" : "La elegida. En un ambiente donde la programación no opera es siempre desactivada",
+            "enum" : [ "desactivada", "mensual", "al_cerrar_el_mes" ],
+            "type" : "string"
+          },
+          "opera" : {
+            "description" : "Si en este ambiente la programación corre, que es solo en prod (13 §1.1). Con false la pantalla no pinta el bloque de la programación: ni atenuado ni deshabilitado",
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "modo", "opera" ],
+        "type" : "object"
+      },
       "Prolabore" : {
         "description" : "El sueldo de la gerencia por su trabajo en el taller, que es gasto de personal y baja la utilidad (RN-08, 05 §6.3). No se sobrescribe: cada definición es una fila de prolabore_config con su vigencia (04 §4.6)",
         "properties" : {
@@ -3299,6 +3576,52 @@
           }
         },
         "required" : [ "anio", "lectura", "meses", "mesesCerrados", "utilidadAcumulada" ],
+        "type" : "object"
+      },
+      "Respaldo" : {
+        "description" : "Un respaldo de los que guarda el sistema: lo que se pidió, quién lo generó, cuánto pesa y si ya salió (CU-22, 13 §8). Sale de la tabla exportaciones y no trae el manifiesto, que se baja con el archivo (10 §4.11)",
+        "properties" : {
+          "alcance" : {
+            "description" : "Lo que se respaldó, ya redactado: «Toda la base», «Septiembre de 2026», «Del 1 al 15 de septiembre de 2026» o «Tabla: Movimientos»",
+            "type" : "string"
+          },
+          "bytes" : {
+            "description" : "Cuánto pesa el ZIP entero",
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "descargadoEn" : {
+            "description" : "Cuándo se pidió la primera parte, que es cuando salió del sistema. Ausente si todavía no se ha bajado (13 §8)",
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "descargadoPor" : {
+            "description" : "El nombre completo de quien lo bajó. Ausente si todavía no se ha bajado",
+            "type" : "string"
+          },
+          "formato" : {
+            "description" : "El formato, ya redactado: «ZIP con CSV», «Excel» o «JSON»",
+            "type" : "string"
+          },
+          "generadoEn" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "generadoPor" : {
+            "description" : "El nombre completo de quien lo generó",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "registros" : {
+            "description" : "Cuántas filas trae, sumadas todas las tablas",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "alcance", "bytes", "formato", "generadoEn", "generadoPor", "id", "registros" ],
         "type" : "object"
       },
       "ResumenDePedido" : {
@@ -3507,7 +3830,7 @@
       "Seccion" : {
         "properties" : {
           "clave" : {
-            "description" : "Qué pantalla es: dashboard, pedidos, movimientos, productos, capital, reportes, nomina o cotizador. Una clave que el front no conoce no se pinta",
+            "description" : "Qué pantalla es: dashboard, pedidos, movimientos, productos, capital, reportes, nomina, cotizador o configuracion. Una clave que el front no conoce no se pinta",
             "type" : "string"
           },
           "etiqueta" : {
@@ -4401,6 +4724,28 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobreListRespaldo" : {
+        "properties" : {
+          "data" : {
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver",
+            "items" : {
+              "$ref" : "#/components/schemas/Respaldo"
+            },
+            "type" : "array"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreListUsuario" : {
         "properties" : {
           "data" : {
@@ -4461,6 +4806,25 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobrePaginaDeAuditoria" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/PaginaDeAuditoria",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobrePaginaDeBitacora" : {
         "properties" : {
           "data" : {
@@ -4484,6 +4848,25 @@
         "properties" : {
           "data" : {
             "$ref" : "#/components/schemas/PaginaDeMovimientos",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreParteDeRespaldo" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/ParteDeRespaldo",
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
           },
           "mensaje" : {
@@ -4594,6 +4977,25 @@
         "required" : [ "mensaje", "status" ],
         "type" : "object"
       },
+      "SobreProgramacionDeRespaldo" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/ProgramacionDeRespaldo",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
       "SobreProlabore" : {
         "properties" : {
           "data" : {
@@ -4617,6 +5019,25 @@
         "properties" : {
           "data" : {
             "$ref" : "#/components/schemas/Reporte",
+            "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
+          },
+          "mensaje" : {
+            "description" : "Texto en español para mostrarle tal cual a la persona del taller",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "Código de cinco dígitos: HTTP(3) + caso(2). Su significado está en x-prisma-codigos",
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "mensaje", "status" ],
+        "type" : "object"
+      },
+      "SobreRespaldo" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Respaldo",
             "description" : "Los datos de la operación. La clave viaja siempre; su valor es null cuando no hay nada que devolver"
           },
           "mensaje" : {
@@ -4971,7 +5392,7 @@
   "info" : {
     "description" : "Toda respuesta llega con el sobre {status, mensaje, data}. El status es de cinco dígitos, HTTP(3) + caso(2), y su catálogo completo está en x-prisma-codigos. Con sesión, cada petición lleva Authorization: Bearer con el token y va firmada con X-Prisma-Nonce, X-Prisma-Timestamp y X-Prisma-Firma (ADR-021, 20 §6). Sin sesión solo responden POST /api/v0/consultas/version, POST /api/v0/sesiones, POST /api/v0/sesiones/renovacion, POST /api/v0/sesiones/administrador y los formularios «acceso» y «primer-administrador». Ninguna operación usa GET: toda lectura viaja por POST bajo /api/v0/consultas y lleva Idempotency-Key como cualquier otra petición (ADR-030).",
     "title" : "PRISMA · prisma_api",
-    "version" : "0.31.1"
+    "version" : "0.32.0"
   },
   "openapi" : "3.1.0",
   "paths" : {
@@ -6191,6 +6612,73 @@
         },
         "summary" : "Si el anticipo cubre el costo directo",
         "tags" : [ "Cotizaciones" ]
+      }
+    },
+    "/api/v0/consultas/auditoria" : {
+      "post" : {
+        "description" : "La auditoría entera (RF-67, CU-23), la más reciente primero: lee la tabla auditoria completa y no la vista de la bitácora de usuarios, que solo mira dos tablas (04 §5.6). Cada entrada dice quién, cuándo, desde qué dispositivo y qué IP, qué se tocó, qué pasó y el estado anterior y el posterior (BDD-23-1). Trae los inicios y cierres de sesión y los intentos fallidos —de estos, el usuario tecleado y nunca la contraseña, ni completa ni parcial (RNF-18)— y los cambios de contraseña (BDD-23-2). POST /api/v0/consultas/bitacora no cambia y sigue sin traer los accesos (ADR-047). La consulta no escribe nada. Un rango con una sola fecha o al revés responde 42215, y un límite por encima del máximo, 42200. Es de Gerencia, y la base no le muestra la auditoría a nadie más (BDD-02-6): a Operación le responde la página vacía. Puede devolver 20000, 40100, 40101, 40102, 40103, 40302, 42200 con data.errores y 42215.",
+        "operationId" : "auditoria",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConsultaDeAuditoria"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobrePaginaDeAuditoria"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Toda la auditoría, filtrable",
+        "tags" : [ "Auditoría" ]
       }
     },
     "/api/v0/consultas/bitacora" : {
@@ -7863,6 +8351,120 @@
         },
         "summary" : "El año mes a mes, con el promedio y el punto de equilibrio",
         "tags" : [ "Reportes" ]
+      }
+    },
+    "/api/v0/consultas/respaldos" : {
+      "post" : {
+        "description" : "Los respaldos que quedan disponibles —la retención guarda los últimos doce (13 §5)—, el más reciente primero, con cuándo se generó, su alcance y su formato, cuánto pesa, cuántos registros trae y si ya se bajó o todavía no (10 §4.11). Esa última columna distingue un respaldo generado de uno que de verdad salió del sistema. No trae el manifiesto: se baja con el archivo. Es de Gerencia, y la base no le muestra exportaciones a nadie más (13 §7): a Operación le responde la lista vacía. Puede devolver 20000, 40100, 40101, 40102, 40103 y 40302.",
+        "operationId" : "respaldos",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreListRespaldo"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Los respaldos que guarda el sistema",
+        "tags" : [ "Respaldos" ]
+      }
+    },
+    "/api/v0/consultas/respaldos/programacion" : {
+      "post" : {
+        "description" : "La programación de los respaldos automáticos (13 §6): cuál de las tres está elegida y si en este ambiente opera, que es solo en prod (13 §1.1). Con opera en false la pantalla no pinta el bloque. Es de Gerencia: a Operación la base no le deja leer la programación y responde 40300. Puede devolver 20000, 40100, 40101, 40102, 40103, 40300 y 40302.",
+        "operationId" : "programacionDeRespaldo",
+        "parameters" : [ {
+          "description" : "UUID v4 nuevo en cada consulta; solo el reintento de esa misma consulta lo reutiliza (ADR-020, ADR-030). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreProgramacionDeRespaldo"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Cómo se generan hoy los respaldos solos",
+        "tags" : [ "Respaldos" ]
       }
     },
     "/api/v0/consultas/resumen-de-pedido" : {
@@ -10680,6 +11282,216 @@
         "tags" : [ "Capital" ]
       }
     },
+    "/api/v0/respaldos" : {
+      "post" : {
+        "description" : "Arma el respaldo que se pide (RF-66, CU-22, ADR-047): la API abre la transacción con la identidad de quien pide, lee lo que la base le deje leer, arma los archivos del formato, calcula el sha256 de cada uno y escribe el manifiesto.json con los totales de control y la fila de exportaciones, todo en la misma transacción (13 §4 y §5.1). Las filas anuladas van incluidas (13 §3.1). Baja siempre como un ZIP, con el manifiesto al lado. Generar y bajar son dos acciones: esta no entrega el archivo, lo deja disponible para POST /api/v0/respaldos/{id}/descarga, y la retención guarda los últimos doce (13 §5). Un alcance al que le falta lo que pide —un mes sin año o sin mes, un rango sin sus dos fechas o con desde después de hasta, una tabla sin decir cuál— responde 42272 con data.errores sobre el campo que corresponde. Es de Gerencia, y la base rechaza a Operación con 40300 (BDD-02-5). Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902, 42200 con data.errores y 42272.",
+        "operationId" : "generarRespaldo",
+        "parameters" : [ {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevoRespaldo"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreRespaldo"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Generar un respaldo",
+        "tags" : [ "Respaldos" ]
+      }
+    },
+    "/api/v0/respaldos/programacion" : {
+      "put" : {
+        "description" : "Cambia cuándo se generan los respaldos solos (13 §6, CU-22 A5): nunca, el día 1 de cada mes con el mes anterior completo, o después de cada cierre mensual. Responde la programación que quedó. La programación solo opera en prod (13 §1.1): en cualquier otro ambiente responde 40971 y no cambia nada. Es de Gerencia, y la base rechaza a Operación con 40300. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40901, 40902, 40971 y 42200 con data.errores.",
+        "operationId" : "programarRespaldo",
+        "parameters" : [ {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NuevaProgramacionDeRespaldo"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreProgramacionDeRespaldo"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Programar los respaldos automáticos",
+        "tags" : [ "Respaldos" ]
+      }
+    },
+    "/api/v0/respaldos/{id}/descarga" : {
+      "post" : {
+        "description" : "Baja un respaldo ya generado, dentro del sobre y en base64 como cualquier archivo (tarea 8.11), pero por partes: un respaldo total pasa de los 5 MB que caben en un Documento, y el archivo sale de la API y nunca directo del almacenamiento (07 §1, 13 §5.1). Cada parte trae cuántas son, su contenido y el sha256 del ZIP entero; el front las pide en orden, de la 1 a partes, las junta sin interpretarlas y guarda el resultado. Ninguna pasa de 3.145.728 bytes, y cada una es una petición con su propia Idempotency-Key. Pedir la primera parte es la acción explícita que saca el archivo del sistema (13 §5): marca el respaldo como bajado, con quién y cuándo, y deja la entrada en la auditoría; pedir las otras no vuelve a marcarlo. Un respaldo que no existe, o que la retención ya descartó, responde 40400, y una parte más allá de la última, 42200 con data.errores sobre parte. Es de Gerencia: a Operación la base no le muestra ningún respaldo, así que para ella no existe. Puede devolver 20000, 40002, 40100, 40101, 40102, 40103, 40302, 40400, 40901, 40902 y 42200 con data.errores.",
+        "operationId" : "bajarRespaldo",
+        "parameters" : [ {
+          "description" : "El id del respaldo, el que devolvió POST /api/v0/respaldos o trae cada fila de POST /api/v0/consultas/respaldos",
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 que se genera cuando la persona decide la acción y se reutiliza en cada reintento (ADR-020). Sin ella responde 40002",
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "HMAC-SHA256 en hexadecimal minúscula de las cinco líneas del canal firmado, con la clave de firma de la sesión (20 §6.2). Si falta o no cuadra, responde 40101",
+          "in" : "header",
+          "name" : "X-Prisma-Firma",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[0-9a-f]{64}$",
+            "type" : "string"
+          }
+        }, {
+          "description" : "UUID v4 nuevo en cada petición, también en cada reintento de la misma intención. Uno ya visto dentro de la ventana responde 40103",
+          "in" : "header",
+          "name" : "X-Prisma-Nonce",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "description" : "Cuándo se firmó, ISO 8601 en UTC: 2026-09-17T19:32:07Z. Fuera de ±5 minutos del reloj de la API responde 40102",
+          "in" : "header",
+          "name" : "X-Prisma-Timestamp",
+          "required" : true,
+          "schema" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DescargaDeRespaldo"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SobreParteDeRespaldo"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Bajar un respaldo, por partes",
+        "tags" : [ "Respaldos" ]
+      }
+    },
     "/api/v0/retiros/{id}" : {
       "put" : {
         "description" : "Registra plata que la gerencia saca del negocio, partida en sus dos naturalezas (RF-47, CU-16, RN-07, RN-08): el pro-labore paga el trabajo en el taller y baja la utilidad; la distribución reparte una ganancia ya generada y no la toca. Las dos bajan la caja y el patrimonio (BDD-16-1, BDD-25-1). Escribe en una sola transacción un movimiento —retiro_prolabore o retiro_distribucion— y una fila de aportes_retiros por cada parte que no sea cero. Sin prolabore en el cuerpo, la API parte sola: pro-labore hasta completar el del mes, vigente en la fecha del retiro, y el resto distribución; es lo mismo que propone POST /api/v0/consultas/division-de-retiro. El mismo id dos veces responde 40900 (ADR-020). Solo Gerencia, y lo rechaza la base con ret_solo_gerencia (04 §7). Un retiro por encima de la caja libre responde 40990 mientras no llegue confirmado en el cuerpo (CU-16 A1, BDD-16-2); la cifra con la que se avisa la da POST /api/v0/consultas/division-de-retiro. El formulario es «retiro»; la fecha futura, la cuenta que no sirve y un pro-labore mayor que el retiro no caben en el descriptor y responden 42290, 42291 y 42292. Puede devolver 20100, 40002, 40100, 40101, 40102, 40103, 40300, 40302, 40900, 40901, 40902, 40990, 42200 con data.errores, 42290, 42291 y 42292.",
@@ -11457,6 +12269,9 @@
     "description" : "Iniciar, renovar y cerrar la sesión, y cambiar la propia contraseña",
     "name" : "Acceso"
   }, {
+    "description" : "Quién hizo qué, cuándo y desde dónde, sobre todas las tablas y los accesos",
+    "name" : "Auditoría"
+  }, {
     "description" : "Quién cambió qué sobre usuarios y cargos, y cómo se deshace sin borrar",
     "name" : "Bitácora"
   }, {
@@ -11501,6 +12316,9 @@
   }, {
     "description" : "Las tres cifras, el año mes a mes, las alertas y el cierre de cada mes",
     "name" : "Reportes"
+  }, {
+    "description" : "Generar el respaldo de la información, bajarlo por partes y programarlo",
+    "name" : "Respaldos"
   }, {
     "description" : "Las personas con acceso, su tipo y su cargo",
     "name" : "Usuarios"
@@ -11707,7 +12525,6 @@
       "sprint" : 4
     },
     "status" : 40932
-
   }, {
     "cuando" : "Los datos llegaron bien formados pero no pasan las reglas; cada campo va en data.errores",
     "http" : 422,
@@ -11754,6 +12571,14 @@
       "sprint" : 2
     },
     "status" : 42214
+  }, {
+    "cuando" : "Consultar toda la auditoría con desde sin hasta, hasta sin desde, o desde después de hasta. El error va en data.errores, sobre la fecha que falta o sobre desde",
+    "http" : 422,
+    "mensaje" : "Para ver otro rango pon las dos fechas, y la de «Desde» no puede ir después de la de «Hasta».",
+    "modulo" : "USUARIOS_Y_CARGOS",
+    "nombre" : "RANGO_DE_AUDITORIA_INVALIDO",
+    "pendienteDeEmitir" : true,
+    "status" : 42215
   }, {
     "cuando" : "El archivo que se adjunta a un movimiento o a un pedido pasa de 5 MB",
     "http" : 400,
@@ -11942,8 +12767,6 @@
       "sprint" : 4
     },
     "status" : 42235
-
-
   }, {
     "cuando" : "Un retiro por encima de la caja libre que llega sin confirmado. El rango es el de capital porque quien lo emite es el retiro, no el reporte",
     "http" : 409,
@@ -12140,6 +12963,14 @@
     "pendienteDeEmitir" : true,
     "status" : 40970
   }, {
+    "cuando" : "Programar los respaldos en un ambiente que no es prod: ahí la programación no opera ni se conserva (13 §1.1)",
+    "http" : 409,
+    "mensaje" : "La programación automática solo corre en producción. Aquí los respaldos se generan a mano.",
+    "modulo" : "EXPORTACION_IMPORTACION_Y_RESPALDO",
+    "nombre" : "PROGRAMACION_NO_OPERA_AQUI",
+    "pendienteDeEmitir" : true,
+    "status" : 40971
+  }, {
     "cuando" : "El mapeo no cubre alguna de las columnas obligatorias",
     "http" : 422,
     "mensaje" : "Falta decir qué columna del archivo es cada dato.",
@@ -12155,6 +12986,14 @@
     "nombre" : "CSV_SIN_FILAS_VALIDAS",
     "pendienteDeEmitir" : true,
     "status" : 42271
+  }, {
+    "cuando" : "Generar un respaldo cuyo alcance no trae lo que pide —un mes sin año o sin mes, un rango sin sus dos fechas o con desde después de hasta, una tabla sin cuál—. El error va en data.errores, sobre el campo que falta",
+    "http" : 422,
+    "mensaje" : "Al alcance le falta algo: un mes pide el año y el mes, un rango pide las dos fechas, y una tabla pide cuál.",
+    "modulo" : "EXPORTACION_IMPORTACION_Y_RESPALDO",
+    "nombre" : "ALCANCE_DE_RESPALDO_INCOMPLETO",
+    "pendienteDeEmitir" : true,
+    "status" : 42272
   }, {
     "cuando" : "Cerrar un mes que ya tiene su fila en cierres_mensuales. Lo rechaza cierres_mensuales_anio_mes_key, no un if. También anular un movimiento de un mes cerrado, que se corrige con un contra-asiento (CU-03 A3)",
     "http" : 409,

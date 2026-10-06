@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/13-respaldo-y-exportacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Datos personales](INDICE.md#etiqueta-datos-personales) |
+| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/13-respaldo-y-exportacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-05 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Datos personales](INDICE.md#etiqueta-datos-personales) |
 
 > **Construcción: en el [Sprint 8](08-plan-de-desarrollo.md#sprint-8), no después del go-live.** El [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) metió el respaldo al plan,
 > en las tareas [8.13](08-plan-de-desarrollo.md#tarea-8-13) a [8.17](08-plan-de-desarrollo.md#tarea-8-17), y retiró del 14 la deuda [D-05](14-roadmap-e-ideas.md#d-05) y la idea 01. Lo que este documento
@@ -131,6 +131,11 @@ promesa obligó a ampliar los dos `CHECK` de esa tabla; el punto 8 explica por q
 > quince años sin depender de ningún programa en particular. El Excel es por comodidad y el
 > JSON por fidelidad técnica; el CSV es por permanencia.
 
+**Los tres bajan dentro de un ZIP**, junto al `manifiesto.json` del punto 4. El manifiesto es un
+archivo aparte, y un libro de Excel o un JSON suelto no podría llevarlo. Qué tablas entran en el
+total y en «una tabla»: las 27 del negocio, no las cuatro de funcionamiento —`nonces_vistos`,
+`peticiones_idempotentes`, `sesiones` y `schema_version`—.
+
 ### 3.1 Los datos anulados también se exportan
 
 La exportación incluye las filas anuladas, con sus columnas de anulación completas. Un respaldo
@@ -231,6 +236,12 @@ Tres cosas mejoran con el cambio, y por eso vale la pena dejarlas escritas:
   leyó, así que no pueden quedar desfasados respecto del archivo.
 - **Un respaldo grande deja de depender de la memoria del navegador.** La API lo arma y lo entrega.
 
+**El archivo baja por partes.** Un respaldo total pasa de los 5 MB que caben en un archivo dentro del
+sobre del contrato, así que `POST /respaldos/{id}/descarga` entrega un trozo por petición, hasta
+3 MiB cada uno, con cuántos son y el `sha256` del ZIP entero. El front las pide en orden, las junta
+sin interpretarlas y comprueba el `sha256`. **La primera parte es la acción explícita del punto 5**:
+es la que marca el respaldo como bajado.
+
 Y una que no cambia, que es la importante: **el alcance por rol del punto 7 lo sigue decidiendo
 Row Level Security.** La API propaga la identidad de quien pide
 ([`ADR-012`](adr/ADR-012-identidad-a-postgres.md)); una exportación pedida por Operación no trae de
@@ -248,6 +259,9 @@ más porque **la base no se lo entrega**, no porque la API lo filtre después.
 
 La opción recomendada es **al cerrar el mes**: el respaldo queda asociado a un estado
 consistente y verificado, no a un momento arbitrario.
+
+**Solo opera en prod** (1.1): en cualquier otro ambiente la programación no corre, y la API responde
+que no opera aquí en vez de aceptarla.
 
 **Quién la ejecuta y dónde se guarda la elección: la tarea [8.16](08-plan-de-desarrollo.md#tarea-8-16).** La programación corre con
 `pg_cron`, la misma extensión con la que ya se purgan las claves de idempotencia, los nonce vistos y
@@ -341,7 +355,7 @@ lo metió al [Sprint 8](08-plan-de-desarrollo.md#sprint-8). Lo que queda fuera e
 > habilita.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [01](01-vision-y-alcance.md "01 · Visión y alcance") · [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [23](23-diagramas-de-casos-de-uso.md "23 · Diagramas de los casos de uso") · [ADR-008](adr/ADR-008-exportacion.md "ADR-008 · Exportación con descarga manual") · [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8")
+**🔗 Referenciado desde:** [01](01-vision-y-alcance.md "01 · Visión y alcance") · [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [11](11-riesgos-y-proteccion-de-datos.md "11 · Riesgos y protección de datos") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [23](23-diagramas-de-casos-de-uso.md "23 · Diagramas de los casos de uso") · [Contrato](../contrato/README.md "Contrato de la API · v0.32.0") · [ADR-008](adr/ADR-008-exportacion.md "ADR-008 · Exportación con descarga manual") · [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8")
 <!-- /generado:referenciado-desde -->
 
 ---
