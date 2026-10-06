@@ -2,7 +2,11 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-046-pre-prod-se-construye-desde-su-rama.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-10-05 | 2026-10-05 | [Entrega](../INDICE.md#etiqueta-entrega) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-046-pre-prod-se-construye-desde-su-rama.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-10-05 | 2026-10-05 | [Entrega](../INDICE.md#etiqueta-entrega) |
+
+> **Lo modifica [ADR-050](ADR-050-main-vuelve-a-ser-la-ultima-etapa.md):** `main` vuelve a ser la última etapa. La cadena es develop → qa → uat →
+> pre-prod → main, y en `main` la CI comprueba el árbol igual que en `pre-prod`. Lo demás sigue en
+> pie, y el cuerpo de abajo se conserva tal como se escribió.
 
 ## Contexto
 
@@ -76,5 +80,5 @@ puede diferir es la compilación.
 ---
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [19](../19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [ADR-045](ADR-045-pre-prod-y-prod-en-otro-repositorio.md "ADR-045 · El ambiente alojado al final se llama pre-prod, y prod vive en otro repositorio") · [ADR-048](ADR-048-la-entrega-del-release-a-prod.md "ADR-048 · La entrega del release a prod va a un repositorio espejo del taller, la dispara una persona y no recompila nada")
+**🔗 Referenciado desde:** [19](../19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [ADR-045](ADR-045-pre-prod-y-prod-en-otro-repositorio.md "ADR-045 · El ambiente alojado al final se llama pre-prod, y prod vive en otro repositorio") · [ADR-048](ADR-048-las-ramas-principales-las-protege-github.md "ADR-048 · Las cinco ramas principales las protege GitHub, y la tubería es la puerta para entrar") · [ADR-050](ADR-050-main-vuelve-a-ser-la-ultima-etapa.md "ADR-050 · main vuelve a ser la última etapa, y pre-prod entra en ella por PR") · [ADR-052](ADR-052-la-entrega-del-release-a-prod.md "ADR-052 · La entrega del release a prod va a un repositorio espejo del taller, la dispara una persona y no recompila nada")
 <!-- /generado:referenciado-desde -->

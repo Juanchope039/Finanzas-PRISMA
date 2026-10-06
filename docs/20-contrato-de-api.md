@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.14.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-04 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
+| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/20-contrato-de-api.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-15 | 2026-10-06 | [Contrato](INDICE.md#etiqueta-contrato) · [API](INDICE.md#etiqueta-api) · [Front](INDICE.md#etiqueta-front) |
 
 Qué forma tiene toda respuesta de `prisma_api`, cómo se numeran los errores y qué cabeceras lleva
 cada petición. Es el documento de referencia para quien vaya a construir o a consumir la API.
@@ -190,7 +190,8 @@ Así `42213` se lee de un vistazo: **HTTP 422, módulo de usuarios, caso 3 de es
 El rango `01`–`09` cubre **sesión, seguridad y transporte**: lo que ocurre *antes* de que la
 petición llegue a un módulo de negocio. Ahí viven los códigos del canal firmado —`40101` firma
 inválida, `40102` marca de tiempo fuera de ventana, `40103` nonce repetido— y los de idempotencia
-—`40901` clave repetida con petición distinta, `40902` operación en curso—. No son excepciones al
+—`40901` clave repetida con petición distinta, `40902` operación en curso—, y los de la cuenta de
+administrador del primer arranque, `40303` y `40903`. No son excepciones al
 reparto: son un módulo más, el del transporte.
 
 Y el primer límite deja de ser un problema por lo que significa cuando aparece:
@@ -341,7 +342,8 @@ Idempotency-Key: 0c8a5e21-4b73-4f16-9d40-7a1e5c2b9f63
 }
 ```
 
-Es **uno de los siete campos** que trae «movimiento», y ahí se ve la primera regla de abajo: como el
+Es **uno de los seis campos** que trae «movimiento» —siete, si la petición dice que el tipo es
+transferencia—, y ahí se ve la primera regla de abajo: como el
 valor no tiene tope, ni `maximo` ni su mensaje viajan —no viajan en `null`, sencillamente no están—.
 
 Un nombre que no existe responde `404` con `40400`. Y **un cuerpo sin `nombre`, o con el nombre en
@@ -353,10 +355,11 @@ sería mentir— ni `42200`, que es para datos que llegan bien formados y no pas
 |---|---|
 | `campos` llega **en el orden en que se pinta** | El front no reordena. Qué va primero es una decisión de la pantalla aprobada, no del cliente |
 | **Una clave que no aplica no viaja**, ni siquiera en `null` | Un campo sin máximo no lleva `maximo`. El front no tiene que distinguir «no hay límite» de «el límite es nulo» |
-| `tipo` es uno de `dinero`, `texto`, `fecha`, `lista`, `casilla`, `clave`, `numero` | Cada uno exige un tipo concreto en la API: `dinero` solo acepta pesos enteros ([ADR-003](adr/ADR-003-dinero-entero.md)) y `casilla`, un sí o un no. Una `clave` es un texto que se pinta oculto, con un botón para mostrarlo. Un `numero` es una cantidad que **no es plata** —los minutos de trabajo de un producto, un porcentaje—, y por eso no es `dinero`: ahí sí caben decimales |
+| `tipo` es uno de `dinero`, `texto`, `fecha`, `lista`, `casilla`, `clave`, `numero` | Cada uno exige un tipo concreto en la API: `dinero` solo acepta pesos enteros ([ADR-003](adr/ADR-003-dinero-entero.md)) y `casilla`, un sí o un no. Una `clave` es un texto que se pinta oculto, con un botón para mostrarlo. Un `numero` es una cantidad que **no es plata** —las horas productivas de un mes, un porcentaje—, y por eso no es `dinero`: ahí sí caben decimales |
 | `minimo` y `maximo` se leen según el tipo | En `dinero` son pesos; en `texto` y en `clave`, caracteres; en `numero`, la cantidad misma |
 | `teclado` es `numerico` o `texto` | Y no viaja en `fecha`, `lista` ni `casilla`, que se eligen y no abren teclado; una `clave` abre el de texto y un `numero`, el numérico |
 | **Una `lista` trae `opciones` o `origen`, nunca los dos ni ninguno** | Las opciones fijas —el tipo de una cuenta— viajan en el descriptor. Las que salen de datos —la categoría madre— dicen de qué ruta salen: una consulta del contrato, bajo `/api/v0/consultas/…`, cuya `data` es una lista de objetos con `id` y `nombre`, y el `id` es el valor. **El front no decide ni los valores ni a dónde pedirlos**, y la API vuelve a comprobar que lo elegido está entre ellos |
+| **Una elección puede cambiar qué campos trae el formulario**, y entonces la petición la lleva | `{"nombre": "movimiento", "tipo": "transferencia"}` contesta con el medio de pago de origen y el de destino; sin `tipo`, o con cualquier otro, contesta con uno solo. La elección viaja tal como la hizo quien registra, y **quien decide qué campos aplican sigue siendo la API**: el front vuelve a pedir el formulario y pinta lo que llegue, sin esconder nada por su cuenta ([§4.4](#44-las-reglas-que-caben-y-por-qué-no-caben-más)). Una elección que el formulario no conoce se ignora, no responde error |
 | `mensajes` trae un texto **por cada regla que el campo tiene** | Es el mismo texto que llega en `data.errores` cuando esa regla falla en el servidor ([§8.2](#82-los-datos-no-pasan-las-reglas--42200)), y la prueba `DescriptorContraValidacionTest` lo compara palabra por palabra |
 
 ### 4.4 Las reglas que caben, y por qué no caben más
@@ -379,6 +382,11 @@ Una regla así sigue pudiendo existir: la comprueba la API cuando llega la petic
 vuelve en `data.errores`. Lo que no puede es **anunciarse en el descriptor**, y quien diseña el
 formulario lo sabe al arrancar la API, no cuando una empleada ve un error que la pantalla nunca
 le avisó.
+
+**Pedir el formulario con una elección no rompe este borde.** Decir «el tipo es transferencia» y
+recibir un campo más no es una regla que mire dos campos: es la API devolviendo **otro
+formulario**, con sus propios campos y sus propios mensajes. El front no evalúa nada; vuelve a
+preguntar y pinta. La diferencia está en quién decide, que es lo que vigila el [ADR-018](adr/ADR-018-front-sin-decisiones.md).
 
 **Y hay un caso más, que no es una regla sino una forma: un campo que es una lista de renglones.**
 Las líneas de un pedido no son un campo con un valor, son una tabla que se agrega y se quita, y el
@@ -408,13 +416,14 @@ La regla ya no cuelga del verbo, porque desde [ADR-030](adr/ADR-030-contrato-sin
 `/api/v0/consultas/…` y cualquier otra cosa escribe. Así la frontera se comprueba con una prueba
 en vez de recordarse en cuatro sitios distintos.
 
-Se eximen dos operaciones, y por una razón que no es comodidad: `POST /api/v0/sesiones` y
-`POST /api/v0/sesiones/renovacion`. Cuando se piden todavía no hay clave de firma con qué firmar,
+Se eximen tres operaciones, y por una razón que no es comodidad: `POST /api/v0/sesiones`,
+`POST /api/v0/sesiones/renovacion` y `POST /api/v0/sesiones/administrador`, la que crea la primera
+cuenta de Gerencia (tarea [9.16](08-plan-de-desarrollo.md#tarea-9-16)). Cuando se piden todavía no hay clave de firma con qué firmar,
 y su respuesta trae secretos que no deben quedar guardados en la tabla de idempotencia.
 
 > **Eximir de la clave no exime de la transacción.** Quien abre la transacción de una petición es el
 > filtro de esta cabecera ([§5.5](#55-la-regla-que-hace-que-esto-sea-real-y-no-decorativo)), así que una ruta exenta se queda sin ella y toda consulta suya
-> viajaría sin identidad. En las dos exentas la abre el adaptador del caso de uso, que es donde por
+> viajaría sin identidad. En las tres exentas la abre el adaptador del caso de uso, que es donde por
 > fin se sabe quién pregunta: [`07-arquitectura.md`](07-arquitectura.md) [§7.2](07-arquitectura.md#72-la-solución-obligatoria) y [T-02](12-pruebas-y-calidad.md#t-02).
 
 > **La clave la genera el front en el momento en que la persona decide la acción**, no en cada
@@ -844,7 +853,7 @@ firma se arma igual que en una escritura, con `sha256` del cuerpo vacío; y esta
 | Con qué configuración corre cada ambiente y cómo se publica | [`19-ambientes-y-entrega.md`](19-ambientes-y-entrega.md) |
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.28.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [ADR-042](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md "ADR-042 · El documento OpenAPI declara la versión de la API, y la del contrato viaja en x-prisma-contrato") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [15](15-glosario.md "15 · Glosario") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [Contrato](../contrato/README.md "Contrato de la API · v0.30.0") · [ADR-030](adr/ADR-030-contrato-sin-get.md "ADR-030 · El contrato no usa GET: toda operación viaja por POST bajo /api/v0") · [ADR-042](adr/ADR-042-la-version-del-documento-es-la-de-la-api.md "ADR-042 · El documento OpenAPI declara la versión de la API, y la del contrato viaja en x-prisma-contrato") · [ADR-049](adr/ADR-049-sin-docs-clave-swagger-toma-la-clave-de-gerencia.md "ADR-049 · Sin DOCS_CLAVE, Swagger toma PREPROD_GERENCIA_CLAVE") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

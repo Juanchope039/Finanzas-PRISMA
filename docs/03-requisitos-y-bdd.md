@@ -2,13 +2,17 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [3.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/03-requisitos-y-bdd.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Calidad](INDICE.md#etiqueta-calidad) |
+| [4.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/03-requisitos-y-bdd.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-06 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Calidad](INDICE.md#etiqueta-calidad) |
 
 ---
 
 ## 1. Requisitos funcionales
 
 Prioridad **MoSCoW**: `M` imprescindible · `S` importante · `C` deseable.
+
+**Un requisito retirado no se borra: se marca ⛔ y se queda.** Su número no se vuelve a usar, y así
+un documento viejo que lo nombre sigue llevando a alguna parte y se lee por qué dejó de regir. Lo
+mismo con los casos de uso y con los escenarios que colgaban de él.
 
 ### 1.1 Acceso y seguridad
 
@@ -101,10 +105,10 @@ evalúa Row Level Security; el cargo es descriptivo y nunca decide un permiso.
 | ID | Requisito | Prio | CU |
 |---|---|:---:|---|
 | <a id="rf-28"></a>RF-28 | Mantener un catálogo de productos y servicios | M | [CU-09](02-casos-de-uso.md#cu-09) |
-| <a id="rf-29"></a>RF-29 | Registrar el costo unitario: insumo + consumibles + tiempo | M | [CU-09](02-casos-de-uso.md#cu-09) |
+| <a id="rf-29"></a>RF-29 | Registrar el costo unitario: insumo + consumibles + mano de obra en pesos | M | [CU-09](02-casos-de-uso.md#cu-09) |
 | <a id="rf-30"></a>RF-30 | Calcular margen porcentual y margen en pesos por unidad | M | [CU-09](02-casos-de-uso.md#cu-09) |
-| <a id="rf-31"></a>RF-31 | Calcular el **margen por hora de trabajo** de cada producto | M | [CU-09](02-casos-de-uso.md#cu-09) |
-| <a id="rf-32"></a>RF-32 | Costear servicios de bordado por tiempo de máquina: no suma pesos, ocupa el taller ([05 §7.1](05-reglas-financieras.md#71-costo-unitario)) | M | [CU-10](02-casos-de-uso.md#cu-10) |
+| <a id="rf-31"></a>RF-31 | ⛔ Retirado el 2026-10-06. El margen es del producto y no de la hora, y el tiempo salió del catálogo ([05 §7.2](05-reglas-financieras.md#72-los-dos-márgenes)) | M | [CU-09](02-casos-de-uso.md#cu-09) |
+| <a id="rf-32"></a>RF-32 | ⛔ Retirado el 2026-10-06. Sin tiempo en el catálogo no hay tiempo de máquina que declarar ([05 §7.1](05-reglas-financieras.md#71-costo-unitario)) | M | [CU-10](02-casos-de-uso.md#cu-10) |
 | <a id="rf-33"></a>RF-33 | Sugerir precio de venta a partir de un margen objetivo | S | [CU-09](02-casos-de-uso.md#cu-09) |
 | <a id="rf-34"></a>RF-34 | Ocultar costos y márgenes al rol Operación | M | [CU-09](02-casos-de-uso.md#cu-09) |
 | <a id="rf-35"></a>RF-35 | Conservar el historial de cambios de costo y precio | S | [CU-09](02-casos-de-uso.md#cu-09) |
@@ -150,7 +154,7 @@ evalúa Row Level Security; el cargo es descriptivo y nunca decide un permiso.
 | <a id="rf-59"></a>RF-59 | Simular la capacidad de pago con pro-labore descontado | M | [CU-18](02-casos-de-uso.md#cu-18) |
 | <a id="rf-60"></a>RF-60 | Traducir el costo de la empleada a unidades de producto por vender | M | [CU-18](02-casos-de-uso.md#cu-18) |
 | <a id="rf-61"></a>RF-61 | Declarar **no viable** la contratación cuando el presupuesto no alcanza | M | [CU-18](02-casos-de-uso.md#cu-18) |
-| <a id="rf-62"></a>RF-62 | Comparar horas pagadas contra horas facturadas | S | [CU-27](02-casos-de-uso.md#cu-27) |
+| <a id="rf-62"></a>RF-62 | ⛔ Retirado el 2026-10-06. Las horas facturadas salían del tiempo por unidad, que ya no se pide | S | [CU-27](02-casos-de-uso.md#cu-27) |
 | <a id="rf-63"></a>RF-63 | Limitar al rol Operación a ver únicamente su propio desprendible | M | [CU-20](02-casos-de-uso.md#cu-20) |
 
 ### 1.8 Administración del sistema
@@ -260,7 +264,7 @@ Las reglas que el código debe cumplir sin excepción. Cada una tiene prueba aut
 | <a id="rn-14"></a>RN-14 | Un movimiento digitado 7+ días después de ocurrido se marca como registro tardío | [05 §4](05-reglas-financieras.md#4-las-dos-fechas-de-todo-registro) |
 | <a id="rn-15"></a>RN-15 | El anticipo mínimo de un pedido es la proporción de su costo directo | [05 §5](05-reglas-financieras.md#5-anticipo-mínimo--el-validador-que-protege-cada-pedido) |
 | <a id="rn-16"></a>RN-16 | Los meses cerrados no cambian retroactivamente | [05 §8](05-reglas-financieras.md#8-cierre-mensual) |
-| <a id="rn-17"></a>RN-17 | El costeo define precios; la nómina define el resultado del mes. No se suman | [05 §7](05-reglas-financieras.md#7-costeo-por-producto-y-margen-por-hora) |
+| <a id="rn-17"></a>RN-17 | El costeo define precios; la nómina define el resultado del mes. No se suman | [05 §7](05-reglas-financieras.md#7-costeo-por-producto-y-margen) |
 | <a id="rn-18"></a>RN-18 | Un usuario nunca se elimina: se desactiva con motivo y conserva toda su historia | [04 §5](04-modelo-de-datos.md#5-diseño-de-solo-escritura) |
 | <a id="rn-19"></a>RN-19 | Siempre debe existir al menos un usuario activo de tipo Gerencia | [04 §7](04-modelo-de-datos.md#7-seguridad-por-tipo-de-usuario-rls) |
 | <a id="rn-20"></a>RN-20 | Las horas del mes no pasan del límite semanal que define Gerencia, ni para el pro-labore ni para una empleada | [05 §6.5](05-reglas-financieras.md#65-el-límite-de-horas-de-una-semana-rn-20) |
@@ -336,7 +340,7 @@ Formato Gherkin tabulado. Cada escenario se convierte en una prueba automática.
 | <a id="bdd-18-2"></a>BDD-18-2 | Simulador bloqueado sin pro-labore | No hay pro-labore definido | Abro el simulador | Se bloquea y se pide definirlo primero |
 | <a id="bdd-18-3"></a>BDD-18-3 | No viable | Presupuesto disponible de $400.000 | Ejecuto el simulador | Se declara no viable y se muestran alternativas |
 | <a id="bdd-18-4"></a>BDD-18-4 | Ventas necesarias en unidades | Costo de la empleada de $1.800.000 | Ejecuto el simulador | Se indica cuántos mugs o camisetas adicionales hay que vender |
-| <a id="bdd-27-1"></a>BDD-27-1 | Tiempo ocioso visible | 160 horas pagadas y 104 cargadas a pedidos | Consulto productividad | Se muestran 56 horas no facturadas y su costo |
+| <a id="bdd-27-1"></a>BDD-27-1 | ⛔ Retirado el 2026-10-06 · Tiempo ocioso visible | 160 horas pagadas y 104 cargadas a pedidos | Consulto productividad | Se muestran 56 horas no facturadas y su costo |
 
 ### 4.7 Permisos por rol
 
@@ -419,13 +423,13 @@ Formato Gherkin tabulado. Cada escenario se convierte en una prueba automática.
 | <a id="bdd-104-1"></a>BDD-104-1 | Cambiar cómo se lee un tipo no cambia las cifras | El anticipo recibido, que se lee «Anticipo · pasivo» y no cuenta ni en «Ingresos» ni en «Gastos», y un anticipo de $1.500.000 cobrado este mes | Gerencia lo pone a contar en «Ingresos», en verde | El libro pinta el anticipo en verde y lo muestra con el filtro «Ingresos», y la utilidad del mes no cambia: sigue siendo un pasivo |
 | <a id="bdd-104-2"></a>BDD-104-2 | Operación no cambia cómo se lee un tipo | Sesión con rol Operación | Intento cambiar el nombre con que se lee el gasto | La base de datos rechaza la operación, no solo la pantalla |
 
-### 4.14 Costeo por tiempo de máquina
+### 4.14 Costeo por tiempo de máquina *(⛔ retirado el 2026-10-06)*
 
 | ID | Escenario | Dado | Cuando | Entonces |
 |---|---|---|---|---|
-| <a id="bdd-32-2"></a>BDD-32-2 | El tiempo de máquina no le suma pesos al costo | Un bordado con cinco minutos de persona y veintidós de máquina, con la hora a $9.400 | Guardo el costeo | El costo unitario carga solo los cinco minutos de persona: la máquina no cobra sueldo y su energía ya está en los consumibles |
-| <a id="bdd-32-3"></a>BDD-32-3 | El margen por hora divide entre el tiempo que ocupa el taller | El mismo bordado, con $15.864 de margen | Miro el cuadro comparativo | El margen por hora se calcula sobre los veintidós minutos que la máquina ocupa, no sobre los cinco de la persona ni sobre la suma de los dos |
-| <a id="bdd-32-4"></a>BDD-32-4 | Sin tiempo de máquina nada cambia | Una camiseta con quince minutos de persona y ninguno de máquina | Miro su margen por hora | Es el mismo de siempre: el denominador sigue siendo el tiempo de persona |
+| <a id="bdd-32-2"></a>BDD-32-2 | ⛔ Retirado el 2026-10-06 · El tiempo de máquina no le suma pesos al costo | Un bordado con cinco minutos de persona y veintidós de máquina, con la hora a $9.400 | Guardo el costeo | El costo unitario carga solo los cinco minutos de persona: la máquina no cobra sueldo y su energía ya está en los consumibles |
+| <a id="bdd-32-3"></a>BDD-32-3 | ⛔ Retirado el 2026-10-06 · El margen por hora divide entre el tiempo que ocupa el taller | El mismo bordado, con $15.864 de margen | Miro el cuadro comparativo | El margen por hora se calcula sobre los veintidós minutos que la máquina ocupa, no sobre los cinco de la persona ni sobre la suma de los dos |
+| <a id="bdd-32-4"></a>BDD-32-4 | ⛔ Retirado el 2026-10-06 · Sin tiempo de máquina nada cambia | Una camiseta con quince minutos de persona y ninguno de máquina | Miro su margen por hora | Es el mismo de siempre: el denominador sigue siendo el tiempo de persona |
 
 ---
 
@@ -460,7 +464,7 @@ Sin huérfanos en ninguna dirección.
 37 casos de uso · 69 escenarios BDD · 11 pantallas.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [23](23-diagramas-de-casos-de-uso.md "23 · Diagramas de los casos de uso") · [Contrato](../contrato/README.md "Contrato de la API · v0.28.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-016](adr/ADR-016-flutter-web-pwa.md "ADR-016 · Flutter Web instalable como PWA") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8") · [ADR-048](adr/ADR-048-la-entrega-del-release-a-prod.md "ADR-048 · La entrega del release a prod va a un repositorio espejo del taller, la dispara una persona y no recompila nada") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [19](19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [23](23-diagramas-de-casos-de-uso.md "23 · Diagramas de los casos de uso") · [Contrato](../contrato/README.md "Contrato de la API · v0.30.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-016](adr/ADR-016-flutter-web-pwa.md "ADR-016 · Flutter Web instalable como PWA") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-032](adr/ADR-032-railway-en-dev-ahora.md "ADR-032 · Railway aloja dev desde ahora, y los otros tres ambientes siguen al final") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8") · [ADR-052](adr/ADR-052-la-entrega-del-release-a-prod.md "ADR-052 · La entrega del release a prod va a un repositorio espejo del taller, la dispara una persona y no recompila nada") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

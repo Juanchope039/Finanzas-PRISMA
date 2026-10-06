@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/AGENTS.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-21 | 2026-09-27 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [1.4.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/AGENTS.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-21 | 2026-10-05 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 Guía para los agentes de código que trabajan en la especificación de PRISMA. **Las reglas están en
 [`CLAUDE.md`](CLAUDE.md)**, tanto las del proceso como las de la arquitectura y las de este
@@ -22,6 +22,7 @@ lo que se repite está en las skills del [§3](#3-los-procedimientos).
 | [`TODO.md`](TODO.md) | El tablero: en qué va cada tarea y qué decisiones tiene que revisar quien dirige |
 | `scripts/docs/` | La herramienta que pone y verifica encabezados, enlaces y bloques generados |
 | `.claude/skills/` | Los procedimientos paso a paso del [§3](#3-los-procedimientos). Son Markdown: cualquier agente los puede leer |
+| `scripts/github/` | La herramienta que pone en GitHub las protecciones de las cinco ramas principales ([ADR-048](docs/adr/ADR-048-las-ramas-principales-las-protege-github.md)) |
 
 Los repositorios de código están al lado, en `../backend-api`, `../backend-db` y
 `../frontend-flutter`. Cuando están en disco, la herramienta también revisa sus `.md`.
@@ -40,6 +41,17 @@ node scripts/docs/documentar.mjs verificar --base origin/main   # además: versi
 - Se corre desde cualquier carpeta. Cuándo y en qué orden, lo dice la skill `documentar`.
 - `verificar --base` es lo que corre la integración continua en cada PR.
 - Qué hacer con cada mensaje de error está en `scripts/docs/README.md`.
+
+**Y las políticas de rama**, que se ponen desde aquí para los cuatro repositorios:
+
+```bash
+node scripts/github/politicas-de-ramas.mjs verificar   # compara las protecciones con la definición
+node scripts/github/politicas-de-ramas.mjs aplicar     # las pone; necesita un token que administre
+```
+
+- Qué pone cada conjunto, qué token hace falta y cómo se hace a mano: `scripts/github/README.md`.
+- Hoy solo se puede aplicar aquí: los tres repositorios de código son privados y el plan Free de
+  GitHub no tiene reglas de rama. La regla y el porqué están en el [`CLAUDE.md`](CLAUDE.md) y en [ADR-048](docs/adr/ADR-048-las-ramas-principales-las-protege-github.md).
 
 ---
 

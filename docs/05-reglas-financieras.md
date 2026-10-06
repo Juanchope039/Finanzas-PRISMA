@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/05-reglas-financieras.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-01 | [Finanzas](INDICE.md#etiqueta-finanzas) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [3.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/05-reglas-financieras.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-06 | [Finanzas](INDICE.md#etiqueta-finanzas) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 > **El documento más importante del proyecto.** Aquí viven las fórmulas exactas que el sistema
 > debe implementar. Si algo en el código contradice este documento, el código está mal.
@@ -259,10 +259,10 @@ vacía por dentro.
 
 ### 6.5 El límite de horas de una semana (RN-20)
 
-Las horas del mes son la base de dos cifras: la tarifa por hora del pro-labore, que es lo que un
-costeo cobra por el trabajo ([§7.2](#72-los-tres-márgenes)), y el valor de la hora ordinaria de cada empleada
-([06 §6.1](06-nomina-y-capacidad-de-pago.md#61-fórmulas)). **Unas horas imposibles no dan un error: dan una tarifa barata**, y con ella un
-costeo que parece sano y un precio que no cubre el trabajo.
+Las horas del mes son la base del valor de la hora ordinaria de cada empleada
+([06 §6.1](06-nomina-y-capacidad-de-pago.md#61-fórmulas)) y de lo que una hora de más cuesta de verdad. **Unas horas imposibles no dan
+un error: dan una hora barata**, y con ella una liquidación que parece sana y un recargo que no
+cubre lo que se trabajó.
 
 Por eso hay un límite, y **lo define Gerencia desde la aplicación**:
 
@@ -287,102 +287,61 @@ Horas del mes como máximo = Límite semanal × 52 ÷ 12
 
 ---
 
-## 7. Costeo por producto y margen por hora
+## 7. Costeo por producto y margen
 
 ### 7.1 Costo unitario
 
 ```
 Costo unitario = Costo del insumo
                + Costo de consumibles (tinta, papel transfer, hilo, energía)
-               + (Minutos de trabajo ÷ 60) × Tarifa por hora
+               + Costo de mano de obra
 ```
 
-La tarifa por hora se deriva del pro-labore o del salario, según quién haga el trabajo:
+**La mano de obra se escribe en pesos, una vez por producto.** No se calcula de unos minutos por
+una tarifa: quien conoce el taller sabe lo que le cuesta hacer una camiseta, y pedirle que cronometre
+cada producto es pedirle un dato que no tiene y que cambia con el día. Un número en pesos es el
+mismo dato, dicho donde se sabe.
 
-```
-Tarifa por hora = Costo mensual de quien produce ÷ Horas productivas del mes
-```
+**El tiempo no se pide en ninguna parte del catálogo.** Ni los minutos de la persona, ni los de la
+máquina: la aplicación no los pregunta, no los guarda y no los muestra. Lo que el tiempo aportaba
+—cuánto vale una hora de trabajo— ya está dentro del costo de mano de obra de cada producto.
 
-**El tiempo de máquina no entra en esta suma.** Hay trabajo que lo hace una máquina sola —el
-bordado es el caso, y por eso existe [RF-32](03-requisitos-y-bdd.md#rf-32)—: la persona monta la pieza, la máquina borda sus
-veintidós minutos y la persona, mientras tanto, está en otra cosa.
-
-Esos minutos no cuestan pesos aquí. La tarifa por hora es **un sueldo** entre horas productivas, y
-la bordadora no cobra sueldo; su energía ya está nombrada entre los consumibles de la fórmula.
-Cobrarle la tarifa de la persona a los minutos en que la persona produce otra cosa contaría dos
-veces la misma hora, que es justo lo que prohíbe [RN-17](03-requisitos-y-bdd.md#rn-17).
-
-Lo que el tiempo de máquina sí hace es **ocupar el taller**, y eso se cuenta en el margen por hora
-del [§7.2](#72-los-tres-márgenes).
-
-### 7.2 Los tres márgenes
+### 7.2 Los dos márgenes
 
 ```
 Margen en pesos     = Precio de venta − Costo unitario
 Margen porcentual   = Margen en pesos ÷ Precio de venta
-Tiempo que ocupa    = el mayor entre los minutos de trabajo y los minutos de máquina
-Margen por hora     = Margen en pesos ÷ (Tiempo que ocupa ÷ 60)
 ```
 
-**El tercero es el que casi nadie calcula y el que debe guiar las decisiones.**
+**El margen es del producto, no de la hora.** La pregunta que responde es cuánto deja cada unidad
+que sale por la puerta, y esa es la que se toma cuando hay que subir un precio o dejar de hacer
+algo.
 
-**El denominador es el tiempo que la unidad ocupa el taller, y no el que alguien le dedica.** El
-mayor de los dos, no la suma: los dos tiempos corren solapados, así que un bordado de cinco minutos
-de persona y veintidós de máquina ocupa veintidós. Mientras la bordadora corre no se puede empezar
-otro bordado, aunque nadie esté frente a ella, y la pregunta que este margen responde es
-precisamente qué producir cuando no alcanza el tiempo.
+| Producto | Costo | Precio | Margen $ | Margen % |
+|---|---:|---:|---:|---:|
+| Llavero acrílico | $2.100 | $7.000 | **$4.900** | 70% |
+| Mug estampado | $8.400 | $18.000 | **$9.600** | 53% |
+| Camiseta DTF | $19.500 | $32.000 | **$12.500** | 39% |
+| Rompecabezas A4 | $14.200 | $22.000 | **$7.800** | 35% |
+| Bordado (logo mediano) | $11.800 | $25.000 | **$13.200** | 53% |
 
-En casi todo el taller los minutos de máquina son cero y el denominador es el de siempre, así que
-el cuadro de abajo no se mueve.
+**Lectura del cuadro.** Las dos columnas no dicen lo mismo y conviene mirar las dos: por
+porcentaje el llavero es el mejor del taller, y en pesos es el que menos deja de todos. El
+rompecabezas queda último por las dos, y eso es lo que pide revisarle el precio.
 
-| Producto | Costo | Precio | Margen $ | Margen % | Minutos | **Margen/hora** |
-|---|---:|---:|---:|---:|---:|---:|
-| Llavero acrílico | $2.100 | $7.000 | $4.900 | 70% | 6 | **$49.000** |
-| Mug estampado | $8.400 | $18.000 | $9.600 | 53% | 12 | **$48.000** |
-| Camiseta DTF | $19.500 | $32.000 | $12.500 | 39% | 15 | **$50.000** |
-| Rompecabezas A4 | $14.200 | $22.000 | $7.800 | 35% | 18 | **$26.000** |
-| Bordado (logo mediano) | $11.800 | $25.000 | $13.200 | 53% | 22 | **$36.000** |
-
-El bordado de la última fila está contado con sus veintidós minutos **como si fueran de persona**,
-que es como se costeaba antes de [RF-32](03-requisitos-y-bdd.md#rf-32). Declararlos como lo que son —cinco de persona y veintidós
-de máquina— le baja el costo a $9.136 y le sube el margen por hora a $43.265, porque el margen
-crece y el denominador sigue siendo veintidós. La cifra que cambia es el costo, no la ocupación.
-
-**Lectura del cuadro.** Por margen porcentual el llavero parece el mejor y el rompecabezas el
-peor. Por margen **por hora**, la camiseta —que tiene el peor porcentaje— es la más rentable
-del taller, y el rompecabezas es la mitad de bueno que casi todo lo demás.
-
-> **Conclusión accionable:** cuando hay más pedidos que capacidad, se prioriza por **margen por
-> hora**, no por margen porcentual. Y el rompecabezas necesita subir de precio o bajar su
-> tiempo de producción.
+> **Conclusión accionable:** se prioriza por **margen en pesos**, que es lo que de verdad entra a
+> la caja por unidad, y se usa el porcentual para ver cuál producto está más apretado contra su
+> costo.
 
 ### 7.3 Evitar el doble conteo (RN-17)
 
-El costeo unitario carga el tiempo de trabajo como costo. La nómina y el pro-labore lo cargan
-otra vez como gasto mensual. **Sumar ambos contaría doble.**
+El costeo unitario carga la mano de obra como costo. La nómina y el pro-labore la cargan otra vez
+como gasto mensual. **Sumar ambos contaría doble.**
 
 Regla:
 
 > **El costeo sirve para decidir precios. La nómina y el pro-labore determinan el resultado del
 > mes.** El estado de resultados usa los segundos, nunca los primeros.
-
-### 7.4 El indicador que concilia los dos mundos
-
-```
-Horas pagadas del mes    = Horas de nómina + Horas de pro-labore
-Horas facturadas del mes = Σ (horas de persona por unidad × unidades entregadas)
-Tiempo ocioso            = Horas pagadas − Horas facturadas
-Costo del tiempo ocioso  = Tiempo ocioso × Tarifa por hora
-```
-
-**Ejemplo:** 160 horas pagadas · 104 horas cargadas a pedidos entregados →
-**56 horas no facturadas**. A $9.400 la hora son **$526.400 de capacidad sin vender**.
-
-| Tiempo ocioso | Interpretación | Qué hacer |
-|---|---|---|
-| Menos del 15% | Normal (alistamiento, limpieza) | Nada |
-| 15% – 35% | Hay capacidad libre | Buscar más demanda |
-| Más del 35% | Exceso de capacidad o trabajo no cobrado | Revisar si se regalan ajustes, diseños o repeticiones |
 
 ---
 
@@ -448,8 +407,6 @@ muestra en julio.
 | KPI | Fórmula |
 |---|---|
 | Ticket promedio | Ingresos ÷ Número de pedidos entregados |
-| Margen por hora del taller | Margen bruto ÷ Horas facturadas |
-| Tiempo ocioso | Horas pagadas − Horas facturadas |
 | Índice de puntualidad | Movimientos registrados en 48 h ÷ Total |
 | Antigüedad de anticipos | Días promedio entre anticipo y entrega |
 
@@ -583,8 +540,6 @@ Ninguna de las dos es obvia sin este cuadro. Ese es el punto de tenerlo.
 | Margen neto | 16,0% |
 | Ticket promedio (42 pedidos entregados) | $186.905 |
 | Horas pagadas | 160 |
-| Horas facturadas | 104 |
-| Tiempo ocioso | 56 h (35%) · $526.400 |
 | Punto de equilibrio | $4.871.272 |
 | Ventas sobre el punto de equilibrio | +$2.978.728 |
 | Índice de puntualidad de registro | 86% |
@@ -613,7 +568,7 @@ Caja libre  = Saldo total − Anticipos por devengar − Gastos fijos comprometi
 Si alguna de estas igualdades falla, hay un error de registro o de cálculo.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [23](23-diagramas-de-casos-de-uso.md "23 · Diagramas de los casos de uso") · [Contrato](../contrato/README.md "Contrato de la API · v0.28.0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [23](23-diagramas-de-casos-de-uso.md "23 · Diagramas de los casos de uso") · [Contrato](../contrato/README.md "Contrato de la API · v0.30.0") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---

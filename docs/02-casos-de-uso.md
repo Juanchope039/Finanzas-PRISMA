@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.5.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/02-casos-de-uso.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-04 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) |
+| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/02-casos-de-uso.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-06 | [Requisitos](INDICE.md#etiqueta-requisitos) · [Negocio](INDICE.md#etiqueta-negocio) |
 
 Los 37 casos de uso del MVP, **todos con su flujo paso a paso** en el [§2](#2-casos-de-uso-detallados). Cada uno indica el
 **rol autorizado**, y esa autorización se implementa en la base de datos, no en la pantalla.
@@ -32,8 +32,8 @@ Los diagramas de los 37 —uno para negocio y uno técnico por caso— están en
 | [CU-06](#cu-06) | Cobrar anticipo | GER · OPE | Pedido creado | Anticipo registrado **como pasivo**, no como ingreso |
 | [CU-07](#cu-07) | Entregar y cobrar saldo | GER · OPE | Pedido `en_proceso` | Venta causada, anticipo liberado, estado `entregado` |
 | [CU-08](#cu-08) | Consultar pedidos por fecha | GER · OPE | — | Listado filtrable con pendientes resaltados |
-| [CU-09](#cu-09) | Costear un producto | GER | Producto existente | Costo, margen y margen por hora recalculados |
-| [CU-10](#cu-10) | Costear servicio de bordado | GER | — | Costo por tiempo de máquina y puntadas registrado |
+| [CU-09](#cu-09) | Costear un producto | GER | Producto existente | Costo unitario y los dos márgenes recalculados |
+| [CU-10](#cu-10) | ⛔ Retirado el 2026-10-06 · Costear servicio de bordado | GER | — | Sin tiempo en el catálogo no hay tiempo de máquina que separar |
 | [CU-11](#cu-11) | Generar cotización PDF | GER · OPE | Productos costeados | PDF con logo listo para WhatsApp |
 | [CU-12](#cu-12) | Validar anticipo mínimo | SIS | Cotización con costo directo | Advertencia si el anticipo no cubre el material |
 | [CU-13](#cu-13) | Ver utilidad, caja y caja libre | GER | Movimientos del mes | Las tres cifras conciliadas |
@@ -50,7 +50,7 @@ Los diagramas de los 37 —uno para negocio y uno técnico por caso— están en
 | [CU-24](#cu-24) | Alertar descapitalización | SIS | 12 meses de historia | Aviso si los retiros superan las utilidades |
 | [CU-25](#cu-25) | Definir el pro-labore | GER | — | Sueldo propio como **gasto**; el resto como distribución |
 | [CU-26](#cu-26) | Registrar adelanto a empleada | GER | Empleada activa | Cuenta por cobrar; **no es gasto** hasta descontarse |
-| [CU-27](#cu-27) | Ver horas pagadas vs. facturadas | GER | Pedidos con tiempo cargado | Tiempo ocioso del mes y su costo |
+| [CU-27](#cu-27) | ⛔ Retirado el 2026-10-06 · Ver horas pagadas vs. facturadas | GER | Pedidos con tiempo cargado | Las horas facturadas salían del tiempo por unidad |
 | [CU-28](#cu-28) | Iniciar sesión con usuario y contraseña | GER · OPE | Usuario activo | Sesión abierta con nombre, cargo y tipo cargados |
 | [CU-29](#cu-29) | Crear un usuario | GER | Cargo existente en el catálogo | Usuario activo con clave temporal y cambio obligatorio |
 | [CU-30](#cu-30) | Desactivar un usuario | GER | Usuario activo que no sea la última Gerencia | Marcado inactivo con motivo; **nunca borrado** |
@@ -403,18 +403,17 @@ escribe nada.
 | | |
 |---|---|
 | **Actor** | Gerencia (exclusivo) |
-| **Objetivo** | Saber cuánto cuesta de verdad cada cosa que el taller vende, y cuánto deja por hora |
-| **Precondición** | El pro-labore está definido ([CU-25](#cu-25)): de él sale la tarifa por hora |
+| **Objetivo** | Saber cuánto cuesta de verdad cada cosa que el taller vende, y cuánto deja cada unidad |
+| **Precondición** | El producto está en el catálogo, con su unidad y su precio |
 | **Frecuencia** | Al dar de alta un producto, y cuando cambia un insumo |
 
 **Flujo principal**
 
 1. Gerencia abre Productos y da de alta el producto o el servicio, con su unidad y su precio.
-2. Escribe el costeo: el insumo, los consumibles y el tiempo —el de trabajo y, si lo hay, el de
-   máquina ([CU-10](#cu-10))—.
-3. **La tarifa por hora no se teclea.** La API la saca del pro-labore vigente y la **congela** en
-   ese costeo, así que un costeo viejo conserva la tarifa con la que se calculó.
-4. Mientras escribe, el sistema le pinta en vivo el costo unitario, los tres márgenes, el precio
+2. Escribe el costeo: el insumo, los consumibles y **el costo de mano de obra, en pesos**.
+3. **El tiempo no se pide.** Ni minutos de trabajo ni minutos de máquina: lo que una unidad cuesta
+   de trabajo se escribe directamente en pesos ([05 §7.1](05-reglas-financieras.md#71-costo-unitario)).
+4. Mientras escribe, el sistema le pinta en vivo el costo unitario, los dos márgenes, el precio
    que habría que cobrar para el margen objetivo y la lectura frente al resto del taller.
 5. Confirma. La ficha del producto y su primer costeo **caen juntos o no cae ninguno**: es una
    sola transacción.
@@ -425,22 +424,27 @@ escribe nada.
 
 | # | Situación | Comportamiento |
 |---|---|---|
-| A1 | No hay pro-labore definido | Se bloquea: sin tarifa por hora el costo del tiempo sería cero y el margen mentiría ([CU-25](#cu-25)) |
+| A1 | El costo de mano de obra queda en cero | Se acepta, y el margen lo dice: hay productos que no llevan trabajo. Lo que no se acepta es que sea negativo |
 | A2 | La sesión es de tipo Operación | Ve el nombre, el tipo, la unidad y el precio, y **ni el costeo ni los márgenes**, porque la base no le devuelve esas filas ([RF-34](03-requisitos-y-bdd.md#rf-34), [BDD-02-2](03-requisitos-y-bdd.md#bdd-02-2)) |
-| A3 | El tiempo lleva más de dos decimales | Se rechaza con la regla a la vista |
+| A3 | Algún costo llega con centavos | Se rechaza con la regla a la vista: el dinero es de pesos enteros ([ADR-003](adr/ADR-003-dinero-entero.md)) |
 | A4 | El producto deja de venderse | Se **desactiva**, no se borra; deja de ofrecerse y los pedidos viejos conservan el suyo |
 | A5 | Se edita dos veces el mismo día | Quedan dos filas de costeo con la misma vigencia, y manda la última: el historial no se recorta |
 
-**Postcondición** — Producto con su costeo vigente, sus tres márgenes y su margen por hora
-recalculados, y el historial de costos y precios intacto.
+**Postcondición** — Producto con su costeo vigente y sus dos márgenes recalculados, y el historial
+de costos y precios intacto.
 
 **Reglas de negocio** — [RF-28](03-requisitos-y-bdd.md#rf-28) a [RF-31](03-requisitos-y-bdd.md#rf-31), [RF-33](03-requisitos-y-bdd.md#rf-33) (precio sugerido), [RF-34](03-requisitos-y-bdd.md#rf-34) (Operación no ve costos),
-[RF-35](03-requisitos-y-bdd.md#rf-35) (historial). Las fórmulas están en [05 §7](05-reglas-financieras.md#7-costeo-por-producto-y-margen-por-hora).
+[RF-35](03-requisitos-y-bdd.md#rf-35) (historial). Las fórmulas están en [05 §7](05-reglas-financieras.md#7-costeo-por-producto-y-margen).
 
 
 ---
 
 ### <a id="cu-10"></a>CU-10 · Costear servicio de bordado
+
+> **⛔ Retirado el 2026-10-06.** El catálogo dejó de pedir tiempo, así que no hay dos tiempos que
+> separar ni margen por hora que calcular sobre el de máquina. Un bordado se costea como cualquier
+> otro producto, con su mano de obra en pesos ([CU-09](#cu-09), [05 §7.1](05-reglas-financieras.md#71-costo-unitario)). Lo que sigue queda como
+> estaba, para que se entienda qué regía antes.
 
 | | |
 |---|---|
@@ -1057,8 +1061,6 @@ negocio genera. No escribe nada: se recalcula en cada consulta.
 2. El sistema **no edita la definición anterior**: escribe una nueva, vigente desde hoy, y la
    vieja queda con su período.
 3. Desde ese día:
-   - los costeos **nuevos** toman de aquí su tarifa por hora, y los ya guardados conservan la
-     suya ([CU-09](#cu-09));
    - cada retiro se parte con el pro-labore **vigente en la fecha del retiro** ([CU-16](#cu-16));
    - el simulador de contratación deja de estar bloqueado ([CU-18](#cu-18)).
 4. El pro-labore se registra **como gasto**: baja la utilidad, la caja y el patrimonio. Lo que se
@@ -1118,6 +1120,10 @@ son [BDD-25-1](03-requisitos-y-bdd.md#bdd-25-1) y [BDD-25-2](03-requisitos-y-bdd
 ---
 
 ### <a id="cu-27"></a>CU-27 · Horas pagadas vs. horas facturadas
+
+> **⛔ Retirado el 2026-10-06.** Las horas facturadas se sacaban del tiempo por unidad del costeo,
+> y el catálogo dejó de pedirlo. Las horas pagadas se siguen viendo en nómina; lo que ya no se
+> puede calcular es contra qué compararlas. Lo que sigue queda como estaba.
 
 | | |
 |---|---|
@@ -1622,7 +1628,7 @@ de los dos quede mal descrito. Tampoco agrega tablas: reutiliza `exportaciones` 
 puntos 2.1 y 8).
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [15](15-glosario.md "15 · Glosario") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [23](23-diagramas-de-casos-de-uso.md "23 · Diagramas de los casos de uso") · [Contrato](../contrato/README.md "Contrato de la API · v0.28.0") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8")
+**🔗 Referenciado desde:** [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [04](04-modelo-de-datos.md "04 · Modelo de datos") · [05](05-reglas-financieras.md "05 · Reglas financieras y KPIs") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [09](09-plan-de-implantacion.md "09 · Plan de implantación") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [15](15-glosario.md "15 · Glosario") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [22](22-documentacion.md "22 · Documentación: versiones, estados y referencias") · [23](23-diagramas-de-casos-de-uso.md "23 · Diagramas de los casos de uso") · [Contrato](../contrato/README.md "Contrato de la API · v0.30.0") · [ADR-013](adr/ADR-013-cuatro-ambientes.md "ADR-013 · Cuatro ambientes y promoción de migraciones") · [ADR-022](adr/ADR-022-openapi-generado.md "ADR-022 · OpenAPI generado del código y verificado en integración continua") · [ADR-027](adr/ADR-027-documentacion-versionada.md "ADR-027 · La documentación se versiona, se fecha y se enlaza, y la integración continua lo verifica") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md "ADR-047 · El respaldo con manifiesto y la auditoría completa entran al Sprint 8")
 <!-- /generado:referenciado-desde -->
 
 ---

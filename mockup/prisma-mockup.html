@@ -366,6 +366,10 @@ input[type=number],select{
 .campos{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:12px}
 .campo{display:flex; flex-direction:column; gap:4px}
 .campo label{font-family:var(--mono); font-size:.62rem; letter-spacing:.07em; text-transform:uppercase; color:var(--muted)}
+/* El asterisco de los obligatorios (10 3.4). Lo dicta el descriptor con obligatorio,
+   y aqui se pinta: rojo, pegado a la etiqueta, y con su palabra para el lector de pantalla. */
+label.req::after{content:" *"; color:var(--neg); font-weight:700}
+label.req>.solo-lectores{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
 /* Los cuatro campos eran maniquíes: un <div> con texto fijo y un botón que no hacía nada.
    Ahora son controles de verdad, porque Operación tiene que poder registrar un gasto. Heredan
    el aspecto que tenían los maniquíes para que la pantalla se vea igual que antes. */
@@ -824,13 +828,13 @@ tbody tr.fila-detalle:hover{background:none}
 
     <form class="capa-form" id="form-acceso" autocomplete="on" novalidate>
       <div class="campo">
-        <label for="acc-usuario">Usuario</label>
+        <label for="acc-usuario" class="req">Usuario<span class="solo-lectores">, obligatorio</span></label>
         <input type="text" id="acc-usuario" name="usuario" autocomplete="username"
                autocapitalize="none" autocorrect="off" spellcheck="false"
                placeholder="yuliana">
       </div>
       <div class="campo">
-        <label for="acc-clave">Contraseña</label>
+        <label for="acc-clave" class="req">Contraseña<span class="solo-lectores">, obligatorio</span></label>
         <div class="clave-caja">
           <input type="password" id="acc-clave" name="clave" autocomplete="current-password">
           <button type="button" class="clave-ver" id="acc-ver-clave"
@@ -856,6 +860,9 @@ tbody tr.fila-detalle:hover{background:none}
           <b>Camila Restrepo Arango</b><span>Asistente administrativa · Operación · debe cambiar la clave</span></button>
         <button type="button" class="ghost demo-btn" data-usuario="lorena" data-clave="prisma2026">
           <b>Lorena Sáenz Mejía</b><span>Empleada de producción · inactiva · para ver el rechazo</span></button>
+        <button type="button" class="ghost demo-btn" data-usuario="Admin" data-clave="Admin"
+                data-instalacion-nueva>
+          <b>Instalación nueva</b><span>Base sin nadie · entra con la credencial temporal</span></button>
       </div>
     </div>
 
@@ -863,6 +870,59 @@ tbody tr.fila-detalle:hover{background:none}
       En este prototipo las contraseñas se comprueban en el navegador, contra un arreglo de
       JavaScript. En el sistema real la verificación ocurre en el servidor y los permisos los
       aplica la base de datos.
+    </p>
+  </div>
+</div>
+
+<!-- ===== 0a · LA CUENTA DE ADMINISTRADOR DEL PRIMER ARRANQUE (tarea 9.16) ===== -->
+<div class="capa" id="primer-admin" hidden>
+  <div class="capa-caja">
+    <span class="logo" role="img" aria-label="Prisma M&amp;Y Estampados"></span>
+    <div>
+      <div class="eyebrow">Instalación nueva</div>
+      <h1>Crea la cuenta de administrador</h1>
+    </div>
+    <p class="capa-intro">Entraste con la credencial temporal, que solo sirve para esto. La
+    cuenta que crees aquí es de Gerencia y tiene todos los permisos. Al guardarla, la temporal
+    deja de funcionar.</p>
+
+    <form class="capa-form" id="form-primer-admin" autocomplete="on" novalidate>
+      <div class="campo">
+        <label for="pa-nombre" class="req">Nombre completo<span class="solo-lectores">, obligatorio</span></label>
+        <input type="text" id="pa-nombre" name="nombre-completo" autocomplete="name"
+               placeholder="Yuliana Martínez Ríos">
+      </div>
+      <div class="campo">
+        <label for="pa-usuario" class="req">Usuario<span class="solo-lectores">, obligatorio</span></label>
+        <input type="text" id="pa-usuario" name="usuario" autocomplete="username"
+               autocapitalize="none" autocorrect="off" spellcheck="false"
+               placeholder="yuliana">
+      </div>
+      <div class="campo">
+        <label for="pa-clave" class="req">Contraseña<span class="solo-lectores">, obligatorio</span></label>
+        <div class="clave-caja">
+          <input type="password" id="pa-clave" name="clave" autocomplete="new-password">
+          <button type="button" class="clave-ver" id="pa-ver-clave"
+                  aria-controls="pa-clave" aria-pressed="false">Mostrar</button>
+        </div>
+      </div>
+      <div class="campo">
+        <label for="pa-clave2" class="req">Repite la contraseña<span class="solo-lectores">, obligatorio</span></label>
+        <input type="password" id="pa-clave2" name="clave-repetida" autocomplete="new-password">
+      </div>
+      <p class="capa-ayuda">Mínimo 8 caracteres. El usuario va en minúsculas, de 3 a 20
+      caracteres, y es con lo que vas a entrar de aquí en adelante.</p>
+      <p class="capa-error" id="pa-error" role="alert" aria-live="polite" hidden></p>
+      <button type="submit" class="cta" id="pa-crear">Crear la cuenta y entrar</button>
+    </form>
+
+    <div class="capa-pie">
+      <button type="button" class="ghost" id="pa-salir">Salir</button>
+    </div>
+
+    <p class="nota-mock">
+      La credencial temporal no es una cuenta: la API la compara en memoria y la base decide si
+      todavía vale. Cada ambiente pone la suya en su panel; sin ella, Admin y Admin.
     </p>
   </div>
 </div>
@@ -880,7 +940,7 @@ tbody tr.fila-detalle:hover{background:none}
 
     <form class="capa-form" id="form-cambio-clave" autocomplete="on" novalidate>
       <div class="campo">
-        <label for="cc-clave">Contraseña nueva</label>
+        <label for="cc-clave" class="req">Contraseña nueva<span class="solo-lectores">, obligatorio</span></label>
         <div class="clave-caja">
           <input type="password" id="cc-clave" name="clave-nueva" autocomplete="new-password">
           <button type="button" class="clave-ver" id="cc-ver-clave"
@@ -888,7 +948,7 @@ tbody tr.fila-detalle:hover{background:none}
         </div>
       </div>
       <div class="campo">
-        <label for="cc-clave2">Repite la contraseña</label>
+        <label for="cc-clave2" class="req">Repite la contraseña<span class="solo-lectores">, obligatorio</span></label>
         <input type="password" id="cc-clave2" name="clave-repetida" autocomplete="new-password">
       </div>
       <p class="capa-ayuda">Mínimo 8 caracteres. No pedimos símbolos ni mayúsculas: una clave
@@ -1189,13 +1249,8 @@ tbody tr.fila-detalle:hover{background:none}
               </div>
               <div class="alerta a-alta" data-ger>
                 <span class="tag">MARGEN</span>
-                <div><b>El rompecabezas deja la mitad por hora que los demás</b>
-                <span>$26.000/hora contra $48.000 del mug. Conviene subir el precio o bajar el tiempo</span></div>
-              </div>
-              <div class="alerta a-crit" data-ger>
-                <span class="tag">OCIO</span>
-                <div><b>56 horas pagadas sin facturar este mes</b>
-                <span>Equivalen a $526.400 de capacidad sin vender — el 35% de la jornada</span></div>
+                <div><b>El rompecabezas es el que menos deja de todos</b>
+                <span>$7.800 por unidad contra $13.200 del bordado. Conviene subirle el precio</span></div>
               </div>
             </div>
           </div>
@@ -1254,7 +1309,7 @@ tbody tr.fila-detalle:hover{background:none}
               <span class="eyebrow">El anticipo entra como pasivo, no como ingreso</span>
             </div>
             <div class="campos-form">
-              <div class="campo"><label for="n-cliente">Cliente</label>
+              <div class="campo"><label for="n-cliente" class="req">Cliente<span class="solo-lectores">, obligatorio</span></label>
                 <select id="n-cliente"></select></div>
               <div class="campo"><label for="n-fecha">Fecha de entrega</label>
                 <input type="date" id="n-fecha" value="2026-10-15"></div>
@@ -1283,7 +1338,7 @@ tbody tr.fila-detalle:hover{background:none}
                 <span class="eyebrow">Queda en el catálogo · solo el nombre es obligatorio</span>
               </div>
               <div class="campos-form">
-                <div class="campo"><label for="nc-nombre">Nombre</label>
+                <div class="campo"><label for="nc-nombre" class="req">Nombre<span class="solo-lectores">, obligatorio</span></label>
                   <input type="text" id="nc-nombre" placeholder="La persona, el colegio o la empresa"></div>
                 <div class="campo"><label for="nc-telefono">Teléfono</label>
                   <input type="text" id="nc-telefono" inputmode="tel" placeholder="3155551020"></div>
@@ -1364,7 +1419,7 @@ tbody tr.fila-detalle:hover{background:none}
               <span class="eyebrow">Solo el nombre es obligatorio</span>
             </div>
             <div class="campos-form">
-              <div class="campo"><label for="cl-nombre">Nombre</label>
+              <div class="campo"><label for="cl-nombre" class="req">Nombre<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="cl-nombre" placeholder="La persona, el colegio o la empresa"></div>
               <div class="campo"><label for="cl-telefono">Teléfono</label>
                 <input type="text" id="cl-telefono" inputmode="tel" placeholder="3155551020"></div>
@@ -1413,16 +1468,16 @@ tbody tr.fila-detalle:hover{background:none}
             <span class="eyebrow">Menos de 30 segundos</span>
           </div>
           <div class="campos">
-            <div class="campo"><label for="mv-valor">Valor</label>
+            <div class="campo"><label for="mv-valor" class="req">Valor<span class="solo-lectores">, obligatorio</span></label>
               <input type="number" id="mv-valor" value="84000" step="1000" min="0" inputmode="numeric"></div>
             <div class="campo"><label for="mv-categoria">Categoría</label>
               <select id="mv-categoria"></select></div>
             <!-- Sin data-ger a propósito: Operación registra la plata que sale y para eso
                  necesita elegir la cuenta. El <option> lleva el nombre y nada más, así que
                  elegir una cuenta no le muestra su saldo. -->
-            <div class="campo"><label for="mv-cuenta">Cuenta</label>
+            <div class="campo"><label for="mv-cuenta" class="req">Medio de pago<span class="solo-lectores">, obligatorio</span></label>
               <select id="mv-cuenta"></select></div>
-            <div class="campo"><label for="mv-fecha">Fecha del movimiento</label>
+            <div class="campo"><label for="mv-fecha" class="req">Fecha del movimiento<span class="solo-lectores">, obligatorio</span></label>
               <input type="date" id="mv-fecha" value="2026-09-12"></div>
           </div>
           <p class="capa-error" id="mv-error" role="alert" aria-live="polite" hidden
@@ -1498,17 +1553,17 @@ tbody tr.fila-detalle:hover{background:none}
 
           <div class="formulario" id="form-cuenta" hidden style="padding:14px; margin-bottom:14px">
             <div class="campo" style="margin-bottom:10px">
-              <label for="q-nombre">Nombre de la cuenta</label>
+              <label for="q-nombre" class="req">Nombre de la cuenta<span class="solo-lectores">, obligatorio</span></label>
               <input type="text" id="q-nombre" placeholder="Davivienda, Bancolombia ahorros, Bold…">
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
-              <div class="campo"><label for="q-tipo">Tipo</label>
+              <div class="campo"><label for="q-tipo" class="req">Tipo<span class="solo-lectores">, obligatorio</span></label>
                 <select id="q-tipo">
                   <option value="banco">Cuenta bancaria</option>
                   <option value="billetera">Billetera digital</option>
                   <option value="efectivo">Efectivo</option>
                 </select></div>
-              <div class="campo"><label for="q-saldo">Saldo actual</label>
+              <div class="campo"><label for="q-saldo" class="req">Saldo actual<span class="solo-lectores">, obligatorio</span></label>
                 <input type="number" id="q-saldo" value="0" step="1000" min="0"></div>
             </div>
             <div style="display:flex; gap:8px; margin-top:14px; align-items:center; flex-wrap:wrap">
@@ -1605,13 +1660,13 @@ tbody tr.fila-detalle:hover{background:none}
       <section id="s-productos" class="stack" hidden>
         <div class="pagehead">
           <div><div class="eyebrow">Catálogo y costeo</div><h1>Productos y servicios</h1>
-          <p data-ger>La columna que decide no es el margen porcentual sino el <b>margen por hora</b>:
-          cuando hay más pedidos que tiempo, es la que dice qué priorizar.</p>
+          <p data-ger>La columna que decide no es el margen porcentual sino el <b>margen en pesos</b>:
+          es lo que de verdad entra a la caja cada vez que sale una unidad.</p>
           <p data-ope hidden>Catálogo de productos con sus precios de venta.</p></div>
         </div>
         <div class="panel">
           <div class="panel-head">
-            <h2 class="grow">Ordenado por margen por hora</h2>
+            <h2 class="grow">Ordenado por margen en pesos</h2>
             <button class="ghost" id="ordenar" data-ger>Ordenar por margen %</button>
             <button class="cta" id="btn-producto" data-ger aria-expanded="false" aria-controls="form-producto">+ Nuevo producto</button>
           </div>
@@ -1619,18 +1674,18 @@ tbody tr.fila-detalle:hover{background:none}
           <div class="formulario" id="form-producto" hidden>
             <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px">
               <h3 class="grow" id="pf-titulo">Nuevo producto</h3>
-              <span class="eyebrow">El margen por hora se calcula solo</span>
+              <span class="eyebrow">El margen se calcula solo</span>
             </div>
             <div class="campos-form">
-              <div class="campo"><label for="pf-nombre">Nombre</label>
+              <div class="campo"><label for="pf-nombre" class="req">Nombre<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="pf-nombre" placeholder="Gorra bordada, tula estampada…"></div>
-              <div class="campo"><label for="pf-tipo">Tipo</label>
+              <div class="campo"><label for="pf-tipo" class="req">Tipo<span class="solo-lectores">, obligatorio</span></label>
                 <select id="pf-tipo">
                   <option value="producto">Producto</option>
                   <option value="servicio">Servicio</option>
                 </select></div>
-              <div class="campo"><label for="pf-min">Minutos de trabajo</label>
-                <input type="number" id="pf-min" value="12" min="1" max="600"></div>
+              <div class="campo"><label for="pf-mano">Costo de mano de obra</label>
+                <input type="number" id="pf-mano" value="1880" step="100" min="0"></div>
               <div class="campo"><label for="pf-precio">Precio de venta</label>
                 <input type="number" id="pf-precio" value="18000" step="500" min="0"></div>
             </div>
@@ -1651,7 +1706,6 @@ tbody tr.fila-detalle:hover{background:none}
               <div><span>Costo unitario</span><b id="pf-o-costo">$0</b></div>
               <div><span>Margen en pesos</span><b id="pf-o-margen">$0</b></div>
               <div><span>Margen porcentual</span><b id="pf-o-pct">0%</b></div>
-              <div><span>Margen por hora</span><b id="pf-o-hora">$0</b></div>
             </div>
 
             <div id="pf-alerta" class="alerta a-info" style="margin-top:14px">
@@ -1667,10 +1721,10 @@ tbody tr.fila-detalle:hover{background:none}
 
           <div class="tw"><table>
             <thead><tr>
-              <th>Producto</th><th>Tiempo</th>
+              <th>Producto</th>
               <th class="r r-mid" data-ger>Costo</th><th class="r r-mid">Precio</th>
               <th class="r r-mid" data-ger>Margen $</th><th class="r r-mid" data-ger>Margen %</th>
-              <th class="r r-mid" data-ger>Margen / hora</th><th data-ger></th><th data-ger></th>
+              <th data-ger></th><th data-ger></th>
             </tr></thead>
             <tbody id="tb-prod"></tbody>
           </table></div>
@@ -1729,11 +1783,11 @@ tbody tr.fila-detalle:hover{background:none}
               <span class="eyebrow">Rige desde hoy</span>
             </div>
             <div class="campos-form">
-              <div class="campo"><label for="pl-valor">Valor mensual</label>
+              <div class="campo"><label for="pl-valor" class="req">Valor mensual<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="pl-valor" inputmode="numeric" placeholder="1.500.000"></div>
               <div class="campo"><label for="pl-horas">Horas productivas del mes</label>
                 <input type="text" id="pl-horas" inputmode="decimal" placeholder="160"></div>
-              <div class="campo" style="grid-column:span 2"><label for="pl-justificacion">Justificación</label>
+              <div class="campo" style="grid-column:span 2"><label for="pl-justificacion" class="req">Justificación<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="pl-justificacion" placeholder="¿Cuánto le pagarías a alguien por hacer tu trabajo en el taller?"></div>
             </div>
 
@@ -1764,9 +1818,9 @@ tbody tr.fila-detalle:hover{background:none}
               <span class="eyebrow">Rige desde hoy</span>
             </div>
             <div class="campos-form">
-              <div class="campo"><label for="lh-horas">Horas de una semana</label>
+              <div class="campo"><label for="lh-horas" class="req">Horas de una semana<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="lh-horas" inputmode="decimal" placeholder="48"></div>
-              <div class="campo" style="grid-column:span 2"><label for="lh-justificacion">Justificación</label>
+              <div class="campo" style="grid-column:span 2"><label for="lh-justificacion" class="req">Justificación<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="lh-justificacion" placeholder="¿Con qué comparaste ese límite?"></div>
             </div>
 
@@ -1833,9 +1887,9 @@ tbody tr.fila-detalle:hover{background:none}
               <span class="eyebrow">Baja la caja · no es gasto</span>
             </div>
             <div class="campos-form">
-              <div class="campo"><label for="av-nombre">Nombre</label>
+              <div class="campo"><label for="av-nombre" class="req">Nombre<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="av-nombre" placeholder="Prensa de calor 40×50"></div>
-              <div class="campo"><label for="av-valor">Valor de compra</label>
+              <div class="campo"><label for="av-valor" class="req">Valor de compra<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="av-valor" inputmode="numeric" placeholder="2.500.000"></div>
               <div class="campo"><label for="av-cuenta">Cuenta</label>
                 <select id="av-cuenta"></select></div>
@@ -1875,9 +1929,9 @@ tbody tr.fila-detalle:hover{background:none}
               <span class="eyebrow">Plata que entra desde afuera</span>
             </div>
             <div class="campos-form">
-              <div class="campo"><label for="ap-valor">Valor del aporte</label>
+              <div class="campo"><label for="ap-valor" class="req">Valor del aporte<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="ap-valor" inputmode="numeric" placeholder="1.000.000"></div>
-              <div class="campo"><label for="ap-cuenta">Cuenta</label>
+              <div class="campo"><label for="ap-cuenta" class="req">Cuenta<span class="solo-lectores">, obligatorio</span></label>
                 <select id="ap-cuenta"></select></div>
               <div class="campo"><label for="ap-fecha">Fecha</label>
                 <input type="date" id="ap-fecha"></div>
@@ -1918,13 +1972,13 @@ tbody tr.fila-detalle:hover{background:none}
               <span class="eyebrow">Rige desde hoy</span>
             </div>
             <div class="campos-form">
-              <div class="campo"><label for="sb-costo">Costo directo</label>
+              <div class="campo"><label for="sb-costo" class="req">Costo directo<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="sb-costo" inputmode="numeric" placeholder="45"></div>
-              <div class="campo"><label for="sb-gastos">Gastos fijos</label>
+              <div class="campo"><label for="sb-gastos" class="req">Gastos fijos<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="sb-gastos" inputmode="numeric" placeholder="25"></div>
-              <div class="campo"><label for="sb-reserva">Reserva</label>
+              <div class="campo"><label for="sb-reserva" class="req">Reserva<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="sb-reserva" inputmode="numeric" placeholder="10"></div>
-              <div class="campo"><label for="sb-retiro">Retiro</label>
+              <div class="campo"><label for="sb-retiro" class="req">Retiro<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="sb-retiro" inputmode="numeric" placeholder="20"></div>
             </div>
 
@@ -2010,7 +2064,7 @@ tbody tr.fila-detalle:hover{background:none}
                   <input type="range" id="r-reserva" min="0" max="40" step="5" value="20">
                 </div>
                 <div class="ctrl">
-                  <div class="lb"><label for="r-salario">Salario mensual que estás evaluando</label><b id="o-salario">$1.300.000</b></div>
+                  <div class="lb"><label for="r-salario" class="req">Salario mensual que estás evaluando<span class="solo-lectores">, obligatorio</span></label><b id="o-salario">$1.300.000</b></div>
                   <input type="range" id="r-salario" min="400000" max="2200000" step="50000" value="1300000">
                 </div>
                 <div class="ctrl">
@@ -2055,13 +2109,13 @@ tbody tr.fila-detalle:hover{background:none}
                 <span class="eyebrow" id="em-nota">El salario no es el neto del mes</span>
               </div>
               <div class="campos-form">
-                <div class="campo"><label for="em-nombre">Nombre y apellido</label>
+                <div class="campo"><label for="em-nombre" class="req">Nombre y apellido<span class="solo-lectores">, obligatorio</span></label>
                   <input type="text" id="em-nombre" placeholder="Ana María Ocampo"></div>
                 <div class="campo"><label for="em-documento">Cédula <span class="eyebrow">opcional</span></label>
                   <input type="text" id="em-documento" inputmode="numeric" placeholder="1.094.xxx.xxx"></div>
-                <div class="campo" id="campo-em-ingreso"><label for="em-ingreso">Fecha de ingreso</label>
+                <div class="campo" id="campo-em-ingreso"><label for="em-ingreso" class="req">Fecha de ingreso<span class="solo-lectores">, obligatorio</span></label>
                   <input type="date" id="em-ingreso"></div>
-                <div class="campo"><label for="em-salario">Salario acordado del mes</label>
+                <div class="campo"><label for="em-salario" class="req">Salario acordado del mes<span class="solo-lectores">, obligatorio</span></label>
                   <input type="text" id="em-salario" inputmode="numeric" placeholder="1.300.000"></div>
                 <div class="campo"><label for="em-horas">Horas pactadas del mes</label>
                   <input type="text" id="em-horas" inputmode="decimal" placeholder="192"></div>
@@ -2087,9 +2141,9 @@ tbody tr.fila-detalle:hover{background:none}
                 <span class="eyebrow" id="es-nota"></span>
               </div>
               <div class="campos-form">
-                <div class="campo" id="campo-es-fecha"><label for="es-fecha">Fecha de retiro</label>
+                <div class="campo" id="campo-es-fecha"><label for="es-fecha" class="req">Fecha de retiro<span class="solo-lectores">, obligatorio</span></label>
                   <input type="date" id="es-fecha"></div>
-                <div class="campo" id="campo-es-motivo" style="grid-column:span 2"><label for="es-motivo">Motivo</label>
+                <div class="campo" id="campo-es-motivo" style="grid-column:span 2"><label for="es-motivo" class="req">Motivo<span class="solo-lectores">, obligatorio</span></label>
                   <input type="text" id="es-motivo" placeholder="¿Por qué se anula la ficha?"></div>
               </div>
 
@@ -2275,18 +2329,18 @@ tbody tr.fila-detalle:hover{background:none}
               <span class="eyebrow">La clave temporal se entrega en persona</span>
             </div>
             <div class="campos-form">
-              <div class="campo"><label for="u-nombre">Nombre completo</label>
+              <div class="campo"><label for="u-nombre" class="req">Nombre completo<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="u-nombre" placeholder="Marcela Ospina Vélez"></div>
-              <div class="campo"><label for="u-usuario">Usuario</label>
+              <div class="campo"><label for="u-usuario" class="req">Usuario<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="u-usuario" placeholder="marcela"
                        autocapitalize="none" autocorrect="off" spellcheck="false"></div>
-              <div class="campo"><label for="u-clave">Contraseña temporal</label>
+              <div class="campo"><label for="u-clave" class="req">Contraseña temporal<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="u-clave" placeholder="mínimo 8 caracteres" autocomplete="off"></div>
-              <div class="campo"><label for="u-cargo">Cargo</label>
+              <div class="campo"><label for="u-cargo" class="req">Cargo<span class="solo-lectores">, obligatorio</span></label>
                 <select id="u-cargo"></select></div>
             </div>
             <div class="campos-form" style="margin-top:12px">
-              <div class="campo"><label for="u-tipo">Tipo</label>
+              <div class="campo"><label for="u-tipo" class="req">Tipo<span class="solo-lectores">, obligatorio</span></label>
                 <select id="u-tipo">
                   <option value="gerencia">Gerencia</option>
                   <option value="operacion" selected>Operación</option>
@@ -2356,7 +2410,7 @@ tbody tr.fila-detalle:hover{background:none}
               <span class="eyebrow">Un cargo con gente activa no se puede desactivar</span>
             </div>
             <div class="campos-form">
-              <div class="campo"><label for="c-nombre">Cargo</label>
+              <div class="campo"><label for="c-nombre" class="req">Cargo<span class="solo-lectores">, obligatorio</span></label>
                 <input type="text" id="c-nombre" placeholder="Domiciliaria"></div>
               <div class="campo" style="grid-column:span 3"><label for="c-descripcion">Descripción</label>
                 <input type="text" id="c-descripcion" placeholder="Entregas a cliente y mensajería"></div>
@@ -2626,20 +2680,19 @@ var CUENTAS = [
 var PALETA_CUENTAS = ['var(--ink)','var(--accent)','var(--pos)','var(--anticipo)','var(--warn)','var(--neg)'];
 var GASTOS_FIJOS_COMPROMETIDOS = 0;
 
-var TARIFA = 9400;
+/* La mano de obra es un numero en pesos por producto (05 7.1). El catalogo
+   dejo de pedir tiempo el 2026-10-06, asi que aqui no hay minutos ni tarifa. */
 var PRODUCTOS = [
-  {n:'Camiseta DTF',           costo:19500, precio:32000, min:15},
-  {n:'Llavero acrílico',       costo: 2100, precio: 7000, min: 6},
-  {n:'Mug estampado',          costo: 8400, precio:18000, min:12},
-  {n:'Bordado logo mediano',   costo:11800, precio:25000, min:22},
-  {n:'Rompecabezas A4',        costo:14200, precio:22000, min:18}
+  {n:'Camiseta DTF',           costo:19500, precio:32000, mano:2350},
+  {n:'Llavero acrílico',       costo: 2100, precio: 7000, mano: 940},
+  {n:'Mug estampado',          costo: 8400, precio:18000, mano:1880},
+  {n:'Bordado logo mediano',   costo:11800, precio:25000, mano:3447},
+  {n:'Rompecabezas A4',        costo:14200, precio:22000, mano:2820}
 ];
 function derivar(p){
-  p.tiempo = Math.round(p.min / 60 * TARIFA);
-  p.costo  = p.insumo + p.tiempo;
+  p.costo  = p.insumo + p.mano;
   p.margen = p.precio - p.costo;
   p.pct    = p.precio ? p.margen / p.precio : 0;
-  p.hora   = p.min ? Math.round(p.margen * 60 / p.min) : 0;
   p.mc     = p.precio - p.insumo;
   return p;
 }
@@ -2647,7 +2700,7 @@ var secuenciaProd = 0;
 PRODUCTOS.forEach(function(p){
   p.id     = ++secuenciaProd;
   p.tipo   = p.tipo || 'producto';
-  p.insumo = p.costo - Math.round(p.min / 60 * TARIFA);
+  p.insumo = p.costo - p.mano;
   p.baja   = null;
   derivar(p);
 });
@@ -3544,7 +3597,7 @@ function pedirMotivoCliente(id, boton){
     '<div class="confirma"><b>¿Anular a «' + enTexto(c.nombre) + '»?</b>' +
     '<p>Deja de ofrecerse al tomar un pedido, pero no se borra: queda con quién lo anuló, cuándo ' +
     'y por qué' + (cuantos ? ', y sus ' + cuantos + ' pedidos siguen enteros' : '') + '.</p>' +
-    '<div class="campo"><label for="cla-motivo">Motivo</label>' +
+    '<div class="campo"><label for="cla-motivo" class="req">Motivo<span class="solo-lectores">, obligatorio</span></label>' +
     '<input type="text" id="cla-motivo" placeholder="Cerró el local, ya no pide…"></div>' +
     '<p class="capa-error" role="alert" aria-live="polite" hidden></p>' +
     '<div class="botones"><button type="button" class="cta" data-ok>Sí, anular</button>' +
@@ -4520,7 +4573,7 @@ function pedirMotivoAnular(id, boton){
   var extra = abrirPanelFila(boton,
     '<div class="confirma"><b>¿Anular ' + p.id + '?</b>' +
     '<p>El pedido sale de la lista, pero no se borra: queda con el motivo y la fecha.</p>' +
-    '<div class="campo"><label for="an-motivo">Motivo</label>' +
+    '<div class="campo"><label for="an-motivo" class="req">Motivo<span class="solo-lectores">, obligatorio</span></label>' +
     '<input type="text" id="an-motivo" placeholder="El cliente desistió, se digitó dos veces…"></div>' +
     (p.anticipo
       ? '<div class="campo"><label for="an-anticipo">Tiene ' + fmt(p.anticipo) +
@@ -4862,7 +4915,7 @@ function pedirMotivoAnularMov(id, boton){
     '<p>Sale de todas las cifras, pero no se borra: queda con quién lo anuló, cuándo y por qué. ' +
     'Si lo que está mal es el valor, se corrige con un contra-asiento y el original queda intacto.</p>' +
     (m.hermano ? '<p class="hermano">' + enTexto(m.hermano.aviso) + '</p>' : '') +
-    '<div class="campo"><label for="mv-an-motivo">Motivo</label>' +
+    '<div class="campo"><label for="mv-an-motivo" class="req">Motivo<span class="solo-lectores">, obligatorio</span></label>' +
     '<input type="text" id="mv-an-motivo" placeholder="Se registró dos veces, el valor está mal…"></div>' +
     '<p class="capa-error" role="alert" aria-live="polite" hidden></p>' +
     '<div class="botones"><button type="button" class="cta" data-ok>Sí, anular</button>' +
@@ -4889,28 +4942,26 @@ function pedirMotivoAnularMov(id, boton){
   });
 }
 
-var ordenPorHora = true;
+var ordenPorPesos = true;
 function tablaProductos(){
   var lista = activos().slice().sort(function(a, b){
-    return ordenPorHora ? b.hora - a.hora : b.pct - a.pct;
+    return ordenPorPesos ? b.margen - a.margen : b.pct - a.pct;
   });
-  var maxH = Math.max.apply(null, activos().map(function(p){ return Math.max(p.hora, 1); }).concat([1]));
+  var maxH = Math.max.apply(null, activos().map(function(p){ return Math.max(p.margen, 1); }).concat([1]));
   var ger = (rol === 'gerencia');
   var cuerpo = $('#tb-prod');
   /* Misma razón que en tablaPedidos(): se rehace el innerHTML y el panel abierto se va con él. */
   if (filaAbierta && cuerpo.contains(filaAbierta)) filaAbierta = null;
   cuerpo.innerHTML = lista.map(function(p){
-    var bajo = p.hora < 30000;
-    return '<tr><td style="font-weight:500">' + enTexto(p.n) + '</td><td class="mono" style="color:var(--muted)">' +
-      p.min + ' min</td>' +
+    var bajo = p.margen < 8000;
+    return '<tr><td style="font-weight:500">' + enTexto(p.n) + '</td>' +
       (ger ? '<td class="r r-mid">' + fmt(p.costo) + '</td>' : '') +
       '<td class="r r-mid">' + fmt(p.precio) + '</td>' +
-      (ger ? '<td class="r r-mid">' + fmt(p.margen) + '</td>' +
+      (ger ? '<td class="r r-mid" style="font-weight:700; color:' + (bajo ? 'var(--neg)' : 'var(--pos)') + '">' +
+               fmt(p.margen) + '</td>' +
              '<td class="r r-mid">' + Math.round(p.pct*100) + '%</td>' +
-             '<td class="r r-mid" style="font-weight:700; color:' + (bajo ? 'var(--neg)' : 'var(--pos)') + '">' +
-               fmt(p.hora) + '</td>' +
              '<td style="width:90px"><div class="bar"><i style="width:' +
-               Math.max(0, Math.round(p.hora/maxH*100)) + '%; background:' + (bajo ? 'var(--neg)' : 'var(--pos)') +
+               Math.max(0, Math.round(p.margen/maxH*100)) + '%; background:' + (bajo ? 'var(--neg)' : 'var(--pos)') +
                '"></i></div></td>' +
              '<td class="r" style="white-space:nowrap">' +
                '<button class="ghost" style="padding:3px 9px" data-editar="' + p.id + '">Editar</button> ' +
@@ -4958,7 +5009,7 @@ function pedirMotivoBaja(id, boton){
     '<div class="confirma"><b>¿Desactivar «' + enTexto(p.n) + '»?</b>' +
     '<p>Deja de ofrecerse al cotizar y al crear pedidos, pero no se borra: se queda abajo, ' +
     'atenuado, con el motivo y la fecha, y se puede reactivar.</p>' +
-    '<div class="campo"><label for="pb-motivo">Motivo</label>' +
+    '<div class="campo"><label for="pb-motivo" class="req">Motivo<span class="solo-lectores">, obligatorio</span></label>' +
     '<input type="text" id="pb-motivo" placeholder="Ya no se ofrece, insumo descontinuado…"></div>' +
     '<p class="capa-error" role="alert" aria-live="polite" hidden></p>' +
     '<div class="botones"><button type="button" class="cta" data-ok>Sí, desactivar</button>' +
@@ -4983,10 +5034,10 @@ function pedirMotivoBaja(id, boton){
   });
 }
 if ($('#ordenar')) $('#ordenar').addEventListener('click', function(){
-  ordenPorHora = !ordenPorHora;
-  this.textContent = ordenPorHora ? 'Ordenar por margen %' : 'Ordenar por margen / hora';
+  ordenPorPesos = !ordenPorPesos;
+  this.textContent = ordenPorPesos ? 'Ordenar por margen %' : 'Ordenar por margen $';
   $('#s-productos .panel-head h2').textContent =
-    ordenPorHora ? 'Ordenado por margen por hora' : 'Ordenado por margen porcentual';
+    ordenPorPesos ? 'Ordenado por margen en pesos' : 'Ordenado por margen porcentual';
   tablaProductos();
 });
 
@@ -5010,7 +5061,6 @@ function tablaReporte(){
 
 /* ---------- simulador de capacidad de pago ---------- */
 var UTILIDAD_ANTES_PROLABORE = 2680000;   /* 1.180.000 + 1.500.000 */
-var JORNADA = 192;
 
 function simular(){
   var reserva   = +$('#r-reserva').value;
@@ -5049,23 +5099,17 @@ function simular(){
   bloque.hidden = false;
 
   var faltante = -dif;
-  var horas = 0;
+  var minimo = 0;
   $('#unidades').innerHTML = activos().slice().sort(function(a,b){ return b.mc - a.mc; })
     .map(function(p){
       var u = Math.ceil(faltante / p.mc);
-      var h = u * p.min / 60;
-      if (!horas || h < horas) horas = h;
+      if (!minimo || u < minimo) minimo = u;
       return '<div class="unidad"><b>' + u + '</b><span>' + enTexto(p.n.split(' ')[0].toLowerCase()) + '</span></div>';
     }).join('');
 
-  var pct = horas / JORNADA;
-  $('#nota-unidades').innerHTML = pct < 0.2
-    ? 'La opción más rápida exige unas <b>' + horas.toFixed(1).replace('.', ',') +
-      ' horas más de trabajo al mes</b>, el ' + Math.round(pct*100) +
-      '% de una jornada. <b>La restricción no es la capacidad de producir: es la demanda.</b> ' +
-      'Contratar no resuelve un problema de ventas.'
-    : 'La opción más rápida exige unas <b>' + horas.toFixed(1).replace('.', ',') +
-      ' horas más al mes</b>, el ' + Math.round(pct*100) + '% de una jornada.';
+  $('#nota-unidades').innerHTML = 'La opción más corta son <b>' + minimo +
+    ' unidades más al mes</b>. <b>Mira primero si hay quien las compre:</b> contratar no ' +
+    'resuelve un problema de ventas.';
 }
 ['#r-reserva','#r-salario','#r-prolabore'].forEach(function(s){
   var el = $(s); if (el) el.addEventListener('input', simular);
@@ -5386,7 +5430,7 @@ function leerFormProducto(){
   return derivar({
     n     : (document.getElementById('pf-nombre').value || '').trim(),
     tipo  : document.getElementById('pf-tipo').value,
-    min   : Math.max(1, +document.getElementById('pf-min').value || 1),
+    mano  : Math.max(0, +document.getElementById('pf-mano').value || 0),
     precio: Math.max(0, +document.getElementById('pf-precio').value || 0),
     insumo: Math.max(0, +document.getElementById('pf-insumo').value || 0)
   });
@@ -5402,11 +5446,11 @@ function pintarFormProducto(){
   document.getElementById('pf-o-costo').textContent  = fmt(d.costo);
   document.getElementById('pf-o-margen').textContent = fmt(d.margen);
   document.getElementById('pf-o-pct').textContent    = Math.round(d.pct * 100) + '%';
-  document.getElementById('pf-o-hora').textContent   = fmt(d.hora);
+
 
   var refs = activos().filter(function(x){ return !editandoProd || x.id !== editandoProd; });
   var mediana = refs.length
-    ? refs.map(function(x){ return x.hora; }).sort(function(a,b){ return a-b; })[Math.floor(refs.length/2)]
+    ? refs.map(function(x){ return x.margen; }).sort(function(a,b){ return a-b; })[Math.floor(refs.length/2)]
     : 0;
   var al = document.getElementById('pf-alerta');
   if (d.margen <= 0){
@@ -5414,17 +5458,17 @@ function pintarFormProducto(){
     document.getElementById('pf-alerta-t').textContent = 'A este precio vendes a pérdida';
     document.getElementById('pf-alerta-s').textContent =
       'El costo unitario es ' + fmt(d.costo) + ' y el precio ' + fmt(d.precio) + '.';
-  } else if (mediana && d.hora < mediana * 0.7){
+  } else if (mediana && d.margen < mediana * 0.7){
     al.className = 'alerta a-alta';
-    document.getElementById('pf-alerta-t').textContent = 'Rinde menos que el resto del taller';
+    document.getElementById('pf-alerta-t').textContent = 'Deja menos que el resto del taller';
     document.getElementById('pf-alerta-s').innerHTML =
-      'Deja <b>' + fmt(d.hora) + ' por hora</b> contra ' + fmt(mediana) +
+      'Deja <b>' + fmt(d.margen) + ' por unidad</b> contra ' + fmt(mediana) +
       ' de la mediana. Con margen objetivo del ' + obj + '% el precio sería <b>' + fmt(sug) + '</b>.';
   } else {
     al.className = 'alerta a-info';
-    document.getElementById('pf-alerta-t').textContent = 'Rinde bien por hora de trabajo';
+    document.getElementById('pf-alerta-t').textContent = 'Deja bien por unidad';
     document.getElementById('pf-alerta-s').innerHTML =
-      'Deja <b>' + fmt(d.hora) + ' por hora</b>' +
+      'Deja <b>' + fmt(d.margen) + ' por unidad</b>' +
       (mediana ? ', contra ' + fmt(mediana) + ' de la mediana del taller.' : '.');
   }
 }
@@ -5439,7 +5483,7 @@ function abrirFormProducto(id){
   document.getElementById('pf-guardar').textContent = p ? 'Guardar cambios' : 'Guardar producto';
   document.getElementById('pf-nombre').value = p ? p.n : '';
   document.getElementById('pf-tipo').value   = p ? p.tipo : 'producto';
-  document.getElementById('pf-min').value    = p ? p.min : 12;
+  document.getElementById('pf-mano').value   = p ? p.mano : 1880;
   document.getElementById('pf-precio').value = p ? p.precio : 18000;
   document.getElementById('pf-insumo').value = p ? p.insumo : 6520;
 
@@ -5489,7 +5533,7 @@ function refrescarSelectores(){
   });
   document.getElementById('pf-cancelar').addEventListener('click', cerrarFormProducto);
 
-  ['pf-min','pf-precio','pf-insumo','pf-obj'].forEach(function(id){
+  ['pf-mano','pf-precio','pf-insumo','pf-obj'].forEach(function(id){
     document.getElementById(id).addEventListener('input', pintarFormProducto);
   });
 
@@ -5504,7 +5548,7 @@ function refrescarSelectores(){
     var d = leerFormProducto();
     if (editandoProd){
       var p = porId(editandoProd);
-      p.n = d.n; p.tipo = d.tipo; p.min = d.min; p.precio = d.precio; p.insumo = d.insumo;
+      p.n = d.n; p.tipo = d.tipo; p.mano = d.mano; p.precio = d.precio; p.insumo = d.insumo;
       derivar(p);
     } else {
       d.id = ++secuenciaProd;
@@ -5902,11 +5946,11 @@ function editarTipoMov(clave, boton){
     '<p>Cambia la píldora del libro y el filtro en que sale. Lo que el tipo le hace a la utilidad, ' +
     'a la caja y al patrimonio no cambia.</p>' +
     '<div class="tipo-campos">' +
-      '<div class="campo"><label for="tm-lee">Se lee como</label>' +
+      '<div class="campo"><label for="tm-lee" class="req">Se lee como<span class="solo-lectores">, obligatorio</span></label>' +
         '<input type="text" id="tm-lee" value="' + enAtributo(t.lee) + '"></div>' +
-      '<div class="campo"><label for="tm-tono">Color</label>' +
+      '<div class="campo"><label for="tm-tono" class="req">Color<span class="solo-lectores">, obligatorio</span></label>' +
         '<select id="tm-tono">' + opciones(TONOS, t.tono) + '</select></div>' +
-      '<div class="campo"><label for="tm-grupo">Cuenta en</label>' +
+      '<div class="campo"><label for="tm-grupo" class="req">Cuenta en<span class="solo-lectores">, obligatorio</span></label>' +
         '<select id="tm-grupo">' + opciones(GRUPOS_MOV, t.grupo) + '</select></div>' +
     '</div>' +
     '<p class="tipo-muestra">Así se verá en el libro: <span class="pill" id="tm-muestra"></span></p>' +
@@ -6177,6 +6221,7 @@ function pintarSesionTopbar(){
 function mostrarAcceso(){
   verShell(false);
   $('#cambio-clave').hidden = true;
+  $('#primer-admin').hidden = true;
   $('#acceso').hidden = false;
   $('#acc-usuario').focus();
 }
@@ -6202,6 +6247,7 @@ function mostrarVersionIncompatible(){
   verShell(false);
   $('#acceso').hidden = true;
   $('#cambio-clave').hidden = true;
+  $('#primer-admin').hidden = true;
   $('#vi-tiene').textContent    = VERSIONES.front;
   $('#vi-espera').textContent   = MAJOR_QUE_ESPERA;
   $('#vi-servidor').textContent = VERSION_DEL_SERVIDOR;
@@ -6235,6 +6281,7 @@ function abrirSesion(){
   sesion.ultimoAcceso = new Date();
   $('#acceso').hidden = true;
   $('#cambio-clave').hidden = true;
+  $('#primer-admin').hidden = true;
   verShell(true);
   pintarSesionTopbar();
 
@@ -6261,11 +6308,38 @@ function cerrarSesion(){
   mostrarAcceso();
 }
 
+/* Tarea 9.16. La credencial temporal del ambiente solo abre algo mientras no hay ninguna
+   Gerencia activa. En el prototipo la semilla trae Gerencia, así que la base sin nadie la enciende
+   el botón «Instalación nueva»; sin él, Admin y Admin responden como cualquier clave mala. */
+var CREDENCIAL_TEMPORAL = {usuario:'admin', clave:'Admin'};
+var instalacionNueva = false;
+
+function hayGerencia(){
+  if (instalacionNueva) return false;
+  return USUARIOS.some(function(u){ return u.tipo === 'gerencia' && u.activo; });
+}
+
+function mostrarPrimerAdmin(){
+  $('#acceso').hidden = true;
+  verShell(false);
+  ['pa-nombre', 'pa-usuario', 'pa-clave', 'pa-clave2'].forEach(function(id){ $('#' + id).value = ''; });
+  ocultarClave('pa-ver-clave', 'pa-clave');
+  avisoCampo('pa-error', '');
+  $('#primer-admin').hidden = false;
+  $('#pa-nombre').focus();
+}
+
 /* CU-28. El mensaje es el mismo para usuario inexistente y para clave mala: si fuera distinto,
    cualquiera averiguaría qué usuarios existen probando nombres. */
 function enviarAcceso(){
   var u     = usuarioPorNombre($('#acc-usuario').value);
   var clave = $('#acc-clave').value || '';
+  var escrito = String($('#acc-usuario').value || '').trim().toLowerCase();
+  if (escrito === CREDENCIAL_TEMPORAL.usuario && clave === CREDENCIAL_TEMPORAL.clave && !hayGerencia()){
+    avisoCampo('acc-error', '');
+    mostrarPrimerAdmin();
+    return;
+  }
   if (!u || u.clave !== clave){
     avisoCampo('acc-error', 'Usuario o contraseña incorrectos');
     $('#acc-clave').value = '';
@@ -6292,11 +6366,57 @@ function enviarAcceso(){
   /* Entrada rápida: rellena los dos campos y envía, igual que si los escribiera una persona. */
   $$('.demo-btn').forEach(function(b){
     b.addEventListener('click', function(){
+      if (b.hasAttribute('data-instalacion-nueva')) instalacionNueva = true;
       $('#acc-usuario').value = b.getAttribute('data-usuario');
       $('#acc-clave').value   = b.getAttribute('data-clave');
       if (typeof form.requestSubmit === 'function') form.requestSubmit();
       else enviarAcceso();
     });
+  });
+})();
+
+/* Tarea 9.16. La cuenta nace de Gerencia, con el cargo Gerente y sin contraseña pendiente; al
+   crearla hay Gerencia, y la credencial temporal deja de abrir nada. */
+(function initPrimerAdmin(){
+  var form = $('#form-primer-admin');
+  if (!form) return;
+
+  conectarVerClave('pa-ver-clave', 'pa-clave');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var nombre  = String($('#pa-nombre').value || '').trim();
+    var usuario = String($('#pa-usuario').value || '').trim().toLowerCase();
+    var clave   = $('#pa-clave').value  || '';
+    var otra    = $('#pa-clave2').value || '';
+    var error = nombre.length < 3 ? ['pa-nombre', 'Escribe el nombre completo.']
+      : !PATRON_USUARIO.test(usuario) ? ['pa-usuario', 'El usuario va en minúsculas, de 3 a 20 caracteres: letras, números, punto, guion o guion bajo.']
+      : usuarioPorNombre(usuario) ? ['pa-usuario', 'Ese usuario ya existe. Elige otro.']
+      : clave.length < 8 ? ['pa-clave', 'La contraseña debe tener mínimo 8 caracteres.']
+      : clave !== otra ? ['pa-clave2', 'Las dos contraseñas no coinciden. Escríbelas otra vez.']
+      : null;
+    if (error){
+      avisoCampo('pa-error', error[1]);
+      $('#' + error[0]).focus();
+      return;
+    }
+    if (hayGerencia()){
+      avisoCampo('pa-error', 'Ya hay una cuenta de administrador. Entra con ella.');
+      return;
+    }
+    avisoCampo('pa-error', '');
+    var u = {usuario:usuario, clave:clave, nombreCompleto:nombre,
+             cargoId:1, tipo:'gerencia', activo:true, debeCambiar:false,
+             ultimoAcceso:null, desactivadoEn:null, desactivadoPor:'', desactivadoMotivo:''};
+    USUARIOS.push(u);
+    instalacionNueva = false;
+    sesion = u;
+    abrirSesion();
+  });
+
+  $('#pa-salir').addEventListener('click', function(){
+    instalacionNueva = false;
+    cerrarSesion();
   });
 })();
 
@@ -6618,7 +6738,7 @@ function pedirReversion(e, boton){
     '<p>Esta entrada no se borra ni se edita: queda marcada como revertida y se escribe una ' +
     'entrada nueva que dice qué se deshizo y por qué. Igual que el contra-asiento de un ' +
     'movimiento errado: quedan las dos.</p>' +
-    '<div class="campo"><label for="rv-motivo">Motivo de la reversión</label>' +
+    '<div class="campo"><label for="rv-motivo" class="req">Motivo de la reversión<span class="solo-lectores">, obligatorio</span></label>' +
     '<input type="text" id="rv-motivo" placeholder="Me equivoqué de persona al desactivar"></div>' +
     '<p class="capa-error" role="alert" aria-live="polite" hidden></p>' +
     '<div class="botones"><button type="button" class="cta" data-ok>Sí, revertir</button>' +
@@ -7102,7 +7222,7 @@ function pedirClaveTemporal(usuario, boton){
   var extra = abrirPanelFila(boton,
     '<div class="confirma confirma-info"><b>Clave temporal para ' + enTexto(u.nombreCompleto) + '</b>' +
     '<p>Se la entregas en persona: no hay correo de recuperación. Al entrar tendrá que cambiarla.</p>' +
-    '<div class="campo"><label for="cl-clave">Contraseña temporal</label>' +
+    '<div class="campo"><label for="cl-clave" class="req">Contraseña temporal<span class="solo-lectores">, obligatorio</span></label>' +
     '<input type="text" id="cl-clave" placeholder="mínimo 8 caracteres" autocomplete="off"></div>' +
     '<p class="capa-error" role="alert" aria-live="polite" hidden></p>' +
     '<div class="botones"><button type="button" class="cta" data-ok>Restablecer</button>' +
@@ -7157,7 +7277,7 @@ function pedirBajaUsuario(u, boton){
     '<div class="confirma"><b>¿Desactivar a ' + enTexto(u.nombreCompleto) + '?</b>' +
     '<p>Deja de poder entrar de inmediato. No se borra nada: el historial, los movimientos y ' +
     'los pedidos quedan donde están, y la fila se queda en esta tabla con el motivo y la fecha.</p>' +
-    '<div class="campo"><label for="cb-motivo">Motivo</label>' +
+    '<div class="campo"><label for="cb-motivo" class="req">Motivo<span class="solo-lectores">, obligatorio</span></label>' +
     '<input type="text" id="cb-motivo" placeholder="Retiro voluntario, 30 de junio de 2026"></div>' +
     '<p class="capa-error" role="alert" aria-live="polite" hidden></p>' +
     '<div class="botones"><button type="button" class="cta" data-ok>Sí, desactivar</button>' +
@@ -7205,7 +7325,7 @@ function pedirAltaUsuario(u, boton){
     '. Motivo de entonces: «' + enTexto(u.desactivadoMotivo || 'sin motivo registrado') + '».</p>' +
     '<p>Al reactivarla, el sistema le exige crear una contraseña nueva en el próximo ingreso: ' +
     'quien vuelve después de meses no debería entrar con la clave vieja.</p>' +
-    '<div class="campo"><label for="ca-motivo">Motivo de la reactivación</label>' +
+    '<div class="campo"><label for="ca-motivo" class="req">Motivo de la reactivación<span class="solo-lectores">, obligatorio</span></label>' +
     '<input type="text" id="ca-motivo" placeholder="Vuelve al taller para la temporada de diciembre"></div>' +
     '<p class="capa-error" role="alert" aria-live="polite" hidden></p>' +
     '<div class="botones"><button type="button" class="cta" data-ok>Sí, reactivar</button>' +
@@ -7418,7 +7538,7 @@ function pedirMotivoCargo(id, boton){
     '<div class="confirma"><b>¿Desactivar «' + enTexto(c.nombre) + '»?</b>' +
     '<p>Deja de ofrecerse al crear usuarios, pero no se borra: quien lo tuvo lo conserva y la ' +
     'bitácora guarda el motivo, así que se puede deshacer.</p>' +
-    '<div class="campo"><label for="cbc-motivo">Motivo</label>' +
+    '<div class="campo"><label for="cbc-motivo" class="req">Motivo<span class="solo-lectores">, obligatorio</span></label>' +
     '<input type="text" id="cbc-motivo" placeholder="Ya no se contrata ese oficio…"></div>' +
     '<p class="capa-error" role="alert" aria-live="polite" hidden></p>' +
     '<div class="botones"><button type="button" class="cta" data-ok>Sí, desactivar</button>' +
