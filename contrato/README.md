@@ -1,4 +1,4 @@
-# Contrato de la API · v0.32.0
+# Contrato de la API · v0.33.0
 
 | Versión | Estado | Creado | Actualizado | Contrato | Etiquetas |
 |---|---|---|---|---|---|
