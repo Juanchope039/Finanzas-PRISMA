@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.61.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-07 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.62.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-07 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -5156,6 +5156,22 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       usuario.** Un intento fallido no tiene persona, porque nadie entró; el [BDD-23-2](docs/03-requisitos-y-bdd.md#bdd-23-2) los espera
       al filtrar por persona, así que la API los cruza con el usuario tecleado. Lo escribió la
       8.13 en el contrato; la 8.18 lo tiene que cumplir
+
+**Del arreglo de la razón de no escribir credenciales en `prisma_db`, que no es una tarea del 08:**
+
+- [ ] **La migración del rol `prisma_api` sigue diciendo que el repositorio es público, y se dejó
+      así.** Es falso desde el [ADR-051](docs/adr/ADR-051-la-visibilidad-de-un-repositorio-no-se-cambia.md), que fija que `prisma_db` es privado. Está fusionada y una
+      migración aplicada no se edita jamás, así que corregirla pide otra migración, y entonces la
+      puerta obliga a publicar el esquema siguiente y detrás va un PR de la API subiendo
+      `prisma.esquema`: dos versiones y tres PR por una frase que nadie ejecuta. **Se decidió no
+      gastarla**, y que la corrección viaje en la cabecera de la próxima migración que se escriba
+      por su cuenta. Donde sí se lee la afirmación ya está corregida: los dos guiones que la
+      repetían
+- [ ] **Las cadenas de los guiones `.ps1` se arreglaron quitándoles las tildes, no poniéndoles el
+      BOM.** Con un BOM, PowerShell 5.1 leería el archivo como UTF-8 y no haría falta la regla: se
+      arreglarían de una vez las cadenas y los comentarios. Se siguió la regla que ya estaba, porque
+      cambiar de remedio es cambiar el `AGENTS.md` de `prisma_db` y eso va con su ADR. **Si se
+      prefiere el BOM**, se escribe ese ADR y la regla se retira
 
 ---
 
