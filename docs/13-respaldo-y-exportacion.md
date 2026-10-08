@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/13-respaldo-y-exportacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-05 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Datos personales](INDICE.md#etiqueta-datos-personales) |
+| [2.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/13-respaldo-y-exportacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-08 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Datos personales](INDICE.md#etiqueta-datos-personales) |
 
 > **Construcción: en el [Sprint 8](08-plan-de-desarrollo.md#sprint-8), no después del go-live.** El [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) metió el respaldo al plan,
 > en las tareas [8.13](08-plan-de-desarrollo.md#tarea-8-13) a [8.17](08-plan-de-desarrollo.md#tarea-8-17), y retiró del 14 la deuda [D-05](14-roadmap-e-ideas.md#d-05) y la idea 01. Lo que este documento
@@ -133,8 +133,13 @@ promesa obligó a ampliar los dos `CHECK` de esa tabla; el punto 8 explica por q
 
 **Los tres bajan dentro de un ZIP**, junto al `manifiesto.json` del punto 4. El manifiesto es un
 archivo aparte, y un libro de Excel o un JSON suelto no podría llevarlo. Qué tablas entran en el
-total y en «una tabla»: las 27 del negocio, no las cuatro de funcionamiento —`nonces_vistos`,
-`peticiones_idempotentes`, `sesiones` y `schema_version`—.
+total y en «una tabla»: las 27 del negocio, no las cinco de funcionamiento —`nonces_vistos`,
+`peticiones_idempotentes`, `sesiones`, `schema_version` y `respaldo_programacion`—.
+
+`respaldo_programacion` ([04 §4.14](04-modelo-de-datos.md#414-la-programación-del-respaldo)) es la quinta desde la tarea [8.14](08-plan-de-desarrollo.md#tarea-8-14), y por la misma razón que las
+otras cuatro: no es historia de nadie. Y por una propia: un respaldo que al restaurarse devolviera
+la programación vieja encendería solo un trabajo que nadie pidió. Así las que se respaldan siguen
+siendo 27.
 
 ### 3.1 Los datos anulados también se exportan
 
@@ -202,11 +207,25 @@ que nunca fue real.
 | **Envío** | Ninguno. No se envía por correo ni a servicios externos |
 | **Acceso** | Exclusivo del rol Gerencia |
 | **Retención** | Los últimos 12 archivos generados quedan disponibles; los anteriores se descartan |
+| **Quién la aplica** | Un trabajo de `pg_cron` en la base, desde la tarea [8.14](08-plan-de-desarrollo.md#tarea-8-14) |
 | **Auditoría** | Cada generación y cada descarga queda registrada en la bitácora |
+
+**Lo que se descarta es el archivo, no la fila.** El [ADR-004](adr/ADR-004-base-solo-escritura.md) dice que nada se borra, y la fila de
+`exportaciones` es información del negocio: es el historial que el punto 7 le ofrece a Gerencia y
+el rastro que el 2.1 promete de cada descarga. Lo que pesa, y lo único que sobra, es el ZIP. Así
+«disponible» quiere decir que el archivo sigue en el bucket, y un respaldo cuyo archivo ya se
+descartó se distingue de uno que nunca existió: los dos responden `40400`, pero el historial
+sigue diciendo que ese respaldo se generó y quién se lo llevó.
 
 Este punto describe el **respaldo** ([CU-22](02-casos-de-uso.md#cu-22)). La descarga de pantalla (2.1, [CU-37](02-casos-de-uso.md#cu-37)) se genera y se
 baja en el mismo acto, no se guarda para después y no entra en la retención de 12 archivos; de
 este punto solo hereda la última fila, la auditoría.
+
+**El archivo vive en el bucket `respaldos`**, privado y solo de ZIP, desde la tarea [8.14](08-plan-de-desarrollo.md#tarea-8-14). Como el
+de los soportes, pasa siempre por la API y nunca se alcanza directo ([07 §1](07-arquitectura.md#1-stack)); a diferencia de
+aquel, sus dos políticas preguntan por el tipo de usuario, porque el punto 7 reserva el respaldo a
+Gerencia. La fila ya se lo niega a Operación, pero un objeto que pudiera leer sería la fuga que esa
+fila no alcanza a tapar.
 
 > **Por qué la descarga es manual y no hay envío automático.** Un respaldo contiene todo: datos
 > de clientes, salarios, márgenes, utilidades. Enviarlo automáticamente a un correo lo pone en
@@ -263,7 +282,12 @@ consistente y verificado, no a un momento arbitrario.
 **Solo opera en prod** (1.1): en cualquier otro ambiente la programación no corre, y la API responde
 que no opera aquí en vez de aceptarla.
 
-**Quién la ejecuta y dónde se guarda la elección: la tarea [8.16](08-plan-de-desarrollo.md#tarea-8-16).** La programación corre con
+**La elección vive en `respaldo_programacion`** ([04 §4.14](04-modelo-de-datos.md#414-la-programación-del-respaldo)), una fila por cambio, desde la tarea
+[8.14](08-plan-de-desarrollo.md#tarea-8-14): de ella cuelga qué archivos existen, así que quién la cambió y desde cuándo es historia
+del negocio. Mientras nadie elija rige **desactivada**. Si en este ambiente opera no se guarda ahí:
+la base no sabe en cuál está, y lo decide el perfil de la API.
+
+**Quién la ejecuta: la tarea [8.16](08-plan-de-desarrollo.md#tarea-8-16).** La programación corre con
 `pg_cron`, la misma extensión con la que ya se purgan las claves de idempotencia, los nonce vistos y
 las sesiones vencidas; y la tercera opción se engancha al cierre mensual de la tarea [6.8](08-plan-de-desarrollo.md#tarea-6-8), que es lo
 que la vuelve recomendable.

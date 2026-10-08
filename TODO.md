@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.62.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-07 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.63.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-08 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -56,10 +56,10 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
-| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 19 | 13 | 0 | 6 | 9 |
+| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 19 | 14 | 0 | 5 | 8 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 16 | 14 | 0 | 2 | 1 |
 | [Sprint 10](#sprint-10) · La retroalimentación de Gerencia | 3 | 3 | 0 | 0 | 0 |
-| **Total** | **168** | **160** | **0** | **8** | **10** |
+| **Total** | **168** | **161** | **0** | **7** | **9** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -242,21 +242,20 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.18](docs/08-plan-de-desarrollo.md#tarea-8-18) |
-| **Base** | [8.14](docs/08-plan-de-desarrollo.md#tarea-8-14) |
+| **API** | [8.15](docs/08-plan-de-desarrollo.md#tarea-8-15) · [8.18](docs/08-plan-de-desarrollo.md#tarea-8-18) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **8 tareas y 10 días de trabajo** de 168 tareas del plan.
+Quedan **7 tareas y 9 días de trabajo** de 168 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 1,4 semanas | **4,4 semanas** |
-| 2 | 1,2 semanas | **4,2 semanas** |
-| 3 | 1,3 semanas | **4,3 semanas** |
+| 1 | 1,2 semanas | **4,2 semanas** |
+| 2 | 0,9 semanas | **3,9 semanas** |
+| 3 | 1,0 semanas | **4,0 semanas** |
 <!-- /generado:plan-restante -->
 
 ### 1.6 Para destrabar, en orden de lo que más libera
@@ -1494,8 +1493,8 @@ Entraron al final del sprint, con el sprint ya en 12 de 12. **Sus siete dependen
 - [x] [**8.13**](docs/08-plan-de-desarrollo.md#tarea-8-13) Contrato del respaldo y de la auditoría completa · Contrato — seis
       operaciones, tres formularios y tres códigos en el contrato `0.32.0`: el respaldo se genera, se
       baja por partes y se programa, y toda la auditoría se consulta con sus cuatro filtros
-- [ ] ⚡ [**8.14**](docs/08-plan-de-desarrollo.md#tarea-8-14) El bucket `respaldos` y lo que la base impone · Base
-- [ ] 🔒 [**8.15**](docs/08-plan-de-desarrollo.md#tarea-8-15) El respaldo en la API · API
+- [x] [**8.14**](docs/08-plan-de-desarrollo.md#tarea-8-14) El bucket `respaldos` y lo que la base impone · Base
+- [ ] ⚡ [**8.15**](docs/08-plan-de-desarrollo.md#tarea-8-15) El respaldo en la API · API
 - [ ] 🔒 [**8.16**](docs/08-plan-de-desarrollo.md#tarea-8-16) La programación automática del respaldo · Base, API
 - [ ] 🔒 [**8.17**](docs/08-plan-de-desarrollo.md#tarea-8-17) La pantalla «Configuración» y el panel «Exportar respaldo» · Front
 - [ ] ⚡ [**8.18**](docs/08-plan-de-desarrollo.md#tarea-8-18) La auditoría completa en la API · API
@@ -5125,9 +5124,24 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       [ADR-047](docs/adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) al final del [Sprint 8](docs/08-plan-de-desarrollo.md#sprint-8), que ya estaba en 12 de 12, y le suman unos diez
       días. Todas sus dependencias estaban hechas, así que la [8.13](docs/08-plan-de-desarrollo.md#tarea-8-13) se tomó el primer día. **Conviene
       revisar si el sprint aguanta siete tareas más o si conviene partirlo**
-- [ ] **El respaldo necesita un bucket nuevo y nadie ha mirado cuánto pesa.** La retención de doce
-      del [13 §5](docs/13-respaldo-y-exportacion.md#5-generación-y-descarga), con los cuatro alcances y los tres formatos, puede crecer bastante más que
-      `soportes`. La [8.14](docs/08-plan-de-desarrollo.md#tarea-8-14) crea el bucket; **cuánto se le pone de tope no lo dice ningún documento**
+- [ ] 🔒 **El techo del bucket `respaldos` quedó en 512 MiB por objeto, y lo decidió la [8.14](docs/08-plan-de-desarrollo.md#tarea-8-14).**
+      Ningún documento dice cuánto puede pesar un respaldo, y el [13 §6](docs/13-respaldo-y-exportacion.md#6-programación-automática) avisa que con cuatro
+      alcances y tres formatos el bucket puede crecer más de lo previsto. 512 MiB es más de lo que
+      un taller produce en un ZIP de toda su historia y menos de lo que convertiría un error en una
+      factura; se cambia con un `UPDATE` de una línea. **Conviene mirar el tamaño real en los
+      primeros meses y decidir si ese número se queda**
+
+- [ ] 🔒 **La retención de doce descarta el archivo y deja la fila, y lo decidió la [8.14](docs/08-plan-de-desarrollo.md#tarea-8-14).** El
+      [ADR-004](docs/adr/ADR-004-base-solo-escritura.md) dice que nada se borra, y la fila de `exportaciones` es el historial que el
+      [13 §7](docs/13-respaldo-y-exportacion.md#7-alcance-por-rol) le ofrece a Gerencia; lo que pesa es el ZIP. Así «disponible» quiere decir que el
+      objeto sigue en el bucket, y un respaldo descartado se distingue de uno que nunca existió.
+      **Si quien dirige prefiere que la fila también se vaya, eso sería una excepción nueva al
+      [ADR-004](docs/adr/ADR-004-base-solo-escritura.md) y pide su propio ADR**
+
+- [ ] **`respaldo_programacion` no entra en el respaldo: es la quinta tabla de funcionamiento.** Las
+      que se respaldan siguen siendo 27 ([13 §3](docs/13-respaldo-y-exportacion.md#3-formatos)). No es historia de nadie, y un respaldo que al
+      restaurarse devolviera la programación vieja encendería solo un trabajo que nadie pidió. **Lo
+      decidió la [8.14](docs/08-plan-de-desarrollo.md#tarea-8-14)**
 - [ ] **En un PR a `main` o a `pre-prod`, la tubería de `prisma_db` no corre ningún trabajo.** Sus
       dos trabajos son solo para `develop`, `qa` y `uat`, así que la puerta «Tubería en verde» que
       pide el [ADR-048](docs/adr/ADR-048-las-ramas-principales-las-protege-github.md) se reporta verde sin haber comprobado nada. Se dejó así para no tocar la
