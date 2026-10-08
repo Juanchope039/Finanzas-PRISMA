@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-06 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
+| [6.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/04-modelo-de-datos.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-08 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Arquitectura](INDICE.md#etiqueta-arquitectura) |
 
 Base de datos PostgreSQL sobre Supabase. **Solo escritura: nada se elimina jamás.**
 
@@ -98,6 +98,7 @@ erDiagram
 | 29 | `exportaciones` | Qué se exportó, con qué alcance, cuánto pesaba y quién se lo llevó ([13 §8](13-respaldo-y-exportacion.md#8-tabla-de-registro)) | |
 | 30 | `schema_version` | Una fila por versión del esquema publicada: el historial, no un número que se pisa | |
 | 31 | `horas_limite_config` | El límite de horas de una semana que define Gerencia | ✅ |
+| 32 | `respaldo_programacion` | Cada cuánto se genera solo el respaldo: una fila por elección ([13 §6](13-respaldo-y-exportacion.md#6-programación-automática)) | ✅ |
 
 *Sensible = el acceso a la tabla está restringido por Row Level Security ([§7](#7-seguridad-por-tipo-de-usuario-rls)). En la mayoría eso
 significa «solo Gerencia», pero no en todas: en `usuarios`, `empleados`, `nomina_periodos`,
@@ -1352,6 +1353,49 @@ libro, así que la necesita. Lleva RLS aunque no sea sensible, como `cargos`, `c
 
 ---
 
+### 4.14 La programación del respaldo
+
+```sql
+CREATE TABLE respaldo_programacion (
+  id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  modo       TEXT NOT NULL
+               CONSTRAINT programacion_de_modo_valido
+                 CHECK (modo IN ('desactivada', 'mensual', 'al_cerrar_el_mes')),
+  creado_por UUID NOT NULL
+               CONSTRAINT respaldo_programacion_creado_por_fkey REFERENCES usuarios(id),
+  creado_en  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_respaldo_programacion_vigente
+  ON respaldo_programacion (creado_en DESC);
+
+CREATE TRIGGER tr_auditar_respaldo_programacion
+  AFTER INSERT OR UPDATE ON respaldo_programacion
+  FOR EACH ROW EXECUTE FUNCTION fn_auditar();
+```
+
+**Guarda la elección del [13 §6](13-respaldo-y-exportacion.md#6-programación-automática), y nada más**: desactivada, mensual el día 1 con el mes
+anterior completo, o al cerrar el mes. Quién genera el archivo con esa elección es la tarea
+[8.16](08-plan-de-desarrollo.md#tarea-8-16); esta tabla es dónde queda escrita.
+
+**Una fila por cambio**, como `prolabore_config` ([§4.6](#46-inversiones-capital-y-pro-labore)) y `horas_limite_config`: de esta
+elección cuelga qué archivos existen, así que quién la cambió y desde cuándo es historia del
+negocio ([ADR-004](adr/ADR-004-base-solo-escritura.md)). La vigente es la última por `creado_en`, y por eso el índice. Así la
+tabla no necesita ningún `UPDATE`.
+
+**Puede estar vacía a propósito.** Mientras nadie elija rige `desactivada`, que es además lo único
+que opera fuera de prod ([13 §1.1](13-respaldo-y-exportacion.md#11-el-respaldo-es-por-ambiente-y-solo-uno-importa)). El valor por omisión lo pone la API, como el del límite de
+horas.
+
+**`opera` no se guarda aquí.** El contrato lo devuelve al lado del modo, pero dice si la
+programación corre en este ambiente, y la base no sabe en cuál está. Lo decide el perfil de
+`prisma_api` ([19 §4](19-ambientes-y-entrega.md#4-versionado)).
+
+**No la lee Operación, ni para mirar** ([§7](#7-seguridad-por-tipo-de-usuario-rls)). Es la misma puerta del respaldo: el [13 §7](13-respaldo-y-exportacion.md#7-alcance-por-rol)
+reserva a Gerencia generar, descargar, ver el historial y configurar la programación.
+
+---
+
 ## 5. Diseño de solo escritura
 
 ### 5.1 Revocación real del borrado
@@ -1497,6 +1541,9 @@ el esquema `0.15.0`; sus líneas no lo llevan, como las del pedido, porque nacen
 El decimoctavo es el de `horas_limite_config` ([§4.6](#46-inversiones-capital-y-pro-labore)), que llega con la tarea [7.10](08-plan-de-desarrollo.md#tarea-7-10): define una
 cifra de la que cuelgan la tarifa del costeo y el valor de la hora de cada empleada, así que quién
 la cambió y cuándo es parte de la historia del negocio.
+Y el decimonoveno es el de `respaldo_programacion` ([§4.14](#414-la-programación-del-respaldo)), que llega con la tarea [8.14](08-plan-de-desarrollo.md#tarea-8-14), en el
+esquema `0.26.0`: cada cuánto sale del sistema el libro entero sería, sin él, el único cambio que
+no deja rastro.
 
 **De dónde salen el dispositivo y la IP lo dicen dos funciones**, y no dos expresiones escritas en
 dos sitios (tarea [2.9](08-plan-de-desarrollo.md#tarea-2-9)):
@@ -2071,6 +2118,7 @@ hay que decidir, tabla por tabla, qué alcanza el tipo Operación.
 | `activos` | Nada: conjunto vacío | Gerencia |
 | `prolabore_config` | Nada: conjunto vacío | Gerencia |
 | `horas_limite_config` | Nada: conjunto vacío | Gerencia |
+| `respaldo_programacion` | Nada: conjunto vacío | Gerencia |
 | `empleados` | **Su propia ficha**, por `usuario_id = auth.uid()` | Gerencia |
 | `nomina_periodos` | Solo los períodos donde tiene desprendible propio | Gerencia |
 | `adelantos` | **Los suyos**, los que se le descuentan | Gerencia |
@@ -2118,6 +2166,10 @@ CREATE POLICY prolabore_solo_gerencia ON prolabore_config FOR ALL
   USING (fn_es_gerencia()) WITH CHECK (fn_es_gerencia());
 CREATE POLICY horas_limite_solo_gerencia ON horas_limite_config FOR ALL
   USING (fn_es_gerencia()) WITH CHECK (fn_es_gerencia());
+CREATE POLICY respaldo_programacion_lectura ON respaldo_programacion FOR SELECT
+  USING (fn_es_gerencia());
+CREATE POLICY respaldo_programacion_escritura ON respaldo_programacion FOR ALL
+  USING (fn_es_gerencia()) WITH CHECK (fn_es_gerencia());
 CREATE POLICY sobres_solo_gerencia ON sobres_config FOR ALL
   USING (fn_es_gerencia()) WITH CHECK (fn_es_gerencia());
 CREATE POLICY cierres_solo_gerencia ON cierres_mensuales FOR ALL
@@ -2155,11 +2207,12 @@ CREATE POLICY adelantos_insercion ON adelantos FOR INSERT WITH CHECK (fn_es_gere
 CREATE POLICY adelantos_actualizacion ON adelantos FOR UPDATE
   USING (fn_es_gerencia()) WITH CHECK (fn_es_gerencia());
 
--- Recién ahora, con todas las políticas escritas, se encienden las nueve tablas.
+-- Recién ahora, con todas las políticas escritas, se encienden las diez tablas.
 ALTER TABLE clientes          ENABLE ROW LEVEL SECURITY;
 ALTER TABLE activos           ENABLE ROW LEVEL SECURITY;
 ALTER TABLE prolabore_config  ENABLE ROW LEVEL SECURITY;
 ALTER TABLE horas_limite_config ENABLE ROW LEVEL SECURITY;
+ALTER TABLE respaldo_programacion ENABLE ROW LEVEL SECURITY;
 ALTER TABLE empleados         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nomina_periodos   ENABLE ROW LEVEL SECURITY;
 ALTER TABLE adelantos         ENABLE ROW LEVEL SECURITY;
@@ -2395,6 +2448,7 @@ ALTER TABLE clientes          FORCE ROW LEVEL SECURITY;
 ALTER TABLE activos           FORCE ROW LEVEL SECURITY;
 ALTER TABLE prolabore_config  FORCE ROW LEVEL SECURITY;
 ALTER TABLE horas_limite_config FORCE ROW LEVEL SECURITY;
+ALTER TABLE respaldo_programacion FORCE ROW LEVEL SECURITY;
 ALTER TABLE empleados         FORCE ROW LEVEL SECURITY;
 ALTER TABLE nomina_periodos   FORCE ROW LEVEL SECURITY;
 ALTER TABLE adelantos         FORCE ROW LEVEL SECURITY;
@@ -2767,7 +2821,7 @@ mismas reglas que la base— solo aguanta si esta prueba corre en cada despliegu
 capas que deciden se separan y ninguna avisa.
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [23](23-diagramas-de-casos-de-uso.md "23 · Diagramas de los casos de uso") · [Contrato](../contrato/README.md "Contrato de la API · v0.33.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-020](adr/ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
+**🔗 Referenciado desde:** [02](02-casos-de-uso.md "02 · Casos de uso") · [03](03-requisitos-y-bdd.md "03 · Requisitos, reglas de negocio y escenarios BDD") · [06](06-nomina-y-capacidad-de-pago.md "06 · Nómina y capacidad de pago") · [07](07-arquitectura.md "07 · Arquitectura técnica") · [08](08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [10](10-ux-y-mockups.md "10 · Diseño de experiencia y mockups") · [12](12-pruebas-y-calidad.md "12 · Pruebas y calidad") · [13](13-respaldo-y-exportacion.md "13 · Respaldo y exportación") · [16](16-base-de-datos-y-snapshots.md "16 · Base de datos: snapshots y datos de prueba") · [17](17-resiliencia-offline-y-cache.md "17 · Resiliencia, trabajo sin conexión y caché") · [20](20-contrato-de-api.md "20 · Contrato de la API") · [21](21-trabajo-en-paralelo.md "21 · Trabajo en paralelo por carriles") · [23](23-diagramas-de-casos-de-uso.md "23 · Diagramas de los casos de uso") · [Contrato](../contrato/README.md "Contrato de la API · v0.33.0") · [ADR-010](adr/ADR-010-almacenamiento-contrasenas.md "ADR-010 · Almacenamiento de contraseñas: hashing delegado con salt por usuario") · [ADR-012](adr/ADR-012-identidad-a-postgres.md "ADR-012 · La API propaga la identidad a PostgreSQL para que RLS siga juzgando") · [ADR-020](adr/ADR-020-idempotencia.md "ADR-020 · Idempotencia obligatoria en toda escritura") · [ADR-029](adr/ADR-029-esquema-por-etiqueta.md "ADR-029 · El esquema llega a la API por etiqueta, y la integración continua lo levanta con Supabase") · [ADR-033](adr/ADR-033-service-role-solo-en-auth.md "ADR-033 · La clave de servicio entra, pero solo para crear identidades") · [CLAUDE](../CLAUDE.md "CLAUDE.md")
 <!-- /generado:referenciado-desde -->
 
 ---
