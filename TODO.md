@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.63.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-08 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.64.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-08 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -56,10 +56,10 @@ herramienta compara el tablero con el plan y la verificación falla si alguna no
 | [Sprint 5](#sprint-5) · Productos y costeo | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 6](#sprint-6) · Reportes y KPIs | 11 | 11 | 0 | 0 | 0 |
 | [Sprint 7](#sprint-7) · Capital, retiros y patrimonio | 10 | 10 | 0 | 0 | 0 |
-| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 19 | 14 | 0 | 5 | 8 |
+| [Sprint 8](#sprint-8) · Nómina, cotizador y cierre | 19 | 15 | 0 | 4 | 6,5 |
 | [Sprint 9](#sprint-9) · Promoción, PWA y endurecimiento | 16 | 14 | 0 | 2 | 1 |
 | [Sprint 10](#sprint-10) · La retroalimentación de Gerencia | 3 | 3 | 0 | 0 | 0 |
-| **Total** | **168** | **161** | **0** | **7** | **9** |
+| **Total** | **168** | **162** | **0** | **6** | **7,5** |
 <!-- /generado:plan-tablero -->
 
 ### 1.2 ✅ Hecho
@@ -242,18 +242,18 @@ de una misma fila se puede trabajar a la vez que lo de las demás.**
 <!-- generado:plan-listas-ya · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
 | Carril | Pueden empezar hoy, porque todo lo que necesitan ya está hecho |
 |---|---|
-| **API** | [8.15](docs/08-plan-de-desarrollo.md#tarea-8-15) · [8.18](docs/08-plan-de-desarrollo.md#tarea-8-18) |
+| **API** | [8.15](docs/08-plan-de-desarrollo.md#tarea-8-15) |
 | **Decisión** | [9.12](docs/08-plan-de-desarrollo.md#tarea-9-12) · [9.13](docs/08-plan-de-desarrollo.md#tarea-9-13) |
 <!-- /generado:plan-listas-ya -->
 
 ### 1.5 Cuánto falta
 
 <!-- generado:plan-restante · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-Quedan **7 tareas y 9 días de trabajo** de 168 tareas del plan.
+Quedan **6 tareas y 7,5 días de trabajo** de 168 tareas del plan.
 
 | Carriles activos | Desarrollo que falta | Con la estabilización |
 |:---:|---:|---:|
-| 1 | 1,2 semanas | **4,2 semanas** |
+| 1 | 1,0 semanas | **4,0 semanas** |
 | 2 | 0,9 semanas | **3,9 semanas** |
 | 3 | 1,0 semanas | **4,0 semanas** |
 <!-- /generado:plan-restante -->
@@ -1497,7 +1497,7 @@ Entraron al final del sprint, con el sprint ya en 12 de 12. **Sus siete dependen
 - [ ] ⚡ [**8.15**](docs/08-plan-de-desarrollo.md#tarea-8-15) El respaldo en la API · API
 - [ ] 🔒 [**8.16**](docs/08-plan-de-desarrollo.md#tarea-8-16) La programación automática del respaldo · Base, API
 - [ ] 🔒 [**8.17**](docs/08-plan-de-desarrollo.md#tarea-8-17) La pantalla «Configuración» y el panel «Exportar respaldo» · Front
-- [ ] ⚡ [**8.18**](docs/08-plan-de-desarrollo.md#tarea-8-18) La auditoría completa en la API · API
+- [x] [**8.18**](docs/08-plan-de-desarrollo.md#tarea-8-18) La auditoría completa en la API · API
 - [ ] 🔒 [**8.19**](docs/08-plan-de-desarrollo.md#tarea-8-19) El panel «Auditoría» en Configuración · Front
 
 ### Amortiguador · Nómina
@@ -5164,12 +5164,29 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       pantalla no pinta el bloque con `false`, para no decidir el ambiente en el front
 - [ ] **La auditoría devuelve el antes y el después tal como la base los guarda.** Los nombres de
       columna salen sin traducir, porque traducir las 19 tablas es un catálogo que nadie pidió. La
-      [8.19](docs/08-plan-de-desarrollo.md#tarea-8-19) los va a mostrar así. **Si Gerencia debe leer «Cargo: Domiciliaria → Asistente» y no
-      un JSON, hay que decidirlo antes de la 8.18**
+      [8.19](docs/08-plan-de-desarrollo.md#tarea-8-19) los va a mostrar así. La [8.18](docs/08-plan-de-desarrollo.md#tarea-8-18) los dejó sin traducir, así que
+      **si Gerencia debe leer «Cargo: Domiciliaria → Asistente» y no un JSON, hay que decidirlo
+      antes de la 8.19**
 - [ ] **El filtro por persona de la auditoría trae también los intentos fallidos que tecleó su
       usuario.** Un intento fallido no tiene persona, porque nadie entró; el [BDD-23-2](docs/03-requisitos-y-bdd.md#bdd-23-2) los espera
       al filtrar por persona, así que la API los cruza con el usuario tecleado. Lo escribió la
       8.13 en el contrato; la 8.18 lo tiene que cumplir
+
+**De la auditoría completa ([8.18](docs/08-plan-de-desarrollo.md#tarea-8-18)):**
+
+- [ ] **`clave_cambiada` no la escribía nadie, y ahora la escribe `CambiarMiClave`.** El [CU-23](docs/02-casos-de-uso.md#cu-23) y el
+      [BDD-23-1](docs/03-requisitos-y-bdd.md#bdd-23-1) la esperan en la auditoría, pero ninguna ruta la anotaba, así que la lista la
+      prometía vacía. Se anota en la misma transacción que marca la clave, y queda **fuera** de los
+      doce cambios de administración: cambiarse la propia clave no es uno, y meterla ahí la haría
+      aparecer en la bitácora de usuarios ofreciendo un «revertir» que no existe
+- [ ] **El antes y el después descartan cualquier clave que suene a secreto, con su valor.** Hoy
+      ninguna tabla auditada tiene columna de clave —el hash vive en `auth.users`—, así que el
+      filtro no quita nada; se puso igual porque es [RNF-18](docs/03-requisitos-y-bdd.md#rnf-18) y porque confiar en que ninguna de las
+      19 tablas tenga nunca una columna así sale más caro que sostenerlo
+- [ ] **La página de la auditoría trae 50 entradas como máximo, y es su propia variable.** El [10 §4.11](docs/10-ux-y-mockups.md#411-configuración-solo-gerencia)
+      no dice cuántas, y el techo del libro no sirve: una fila de auditoría es más ancha y la lista
+      crece con cada cambio de cada tabla. Pedir más del máximo se rechaza en vez de recortarse en
+      silencio, para que un total no deje de cuadrar sin que nadie sepa por qué
 
 **Del arreglo de la razón de no escribir credenciales en `prisma_db`, que no es una tarea del 08:**
 
