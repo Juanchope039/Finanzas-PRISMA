@@ -2,7 +2,11 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-052-la-entrega-del-release-a-prod.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-10-05 | 2026-10-06 | [Entrega](../INDICE.md#etiqueta-entrega) · [Plan](../INDICE.md#etiqueta-plan) |
+| [1.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/ADR-052-la-entrega-del-release-a-prod.md "Historial de cambios") | [✅ Aceptado](../22-documentacion.md#estados-de-un-adr) | 2026-10-05 | 2026-10-10 | [Entrega](../INDICE.md#etiqueta-entrega) · [Plan](../INDICE.md#etiqueta-plan) |
+
+> **Lo modifica [ADR-053](ADR-053-se-quita-pre-prod-y-uat-se-despliega.md):** Gerencia aprueba en uat, no en pre-prod, que se quitó. La entrega no
+> cambia de forma: sale del árbol de `main`, no recompila nada y la dispara una persona. El cuerpo de
+> abajo se conserva tal como se escribió.
 
 ## Contexto
 
@@ -163,5 +167,5 @@ la aprobación y prod hay una persona decidiendo, y un disparo automático la sa
 ---
 
 <!-- generado:referenciado-desde · no editar a mano: lo escribe scripts/docs/documentar.mjs -->
-**🔗 Referenciado desde:** [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](../19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega")
+**🔗 Referenciado desde:** [08](../08-plan-de-desarrollo.md "08 · Plan de desarrollo") · [19](../19-ambientes-y-entrega.md "19 · Ambientes, versionado y entrega") · [ADR-053](ADR-053-se-quita-pre-prod-y-uat-se-despliega.md "ADR-053 · Se quita pre-prod, y uat pasa a ser el segundo ambiente desplegado")
 <!-- /generado:referenciado-desde -->

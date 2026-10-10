@@ -38,9 +38,9 @@
       "proyecto": "prisma_db",
       "visibilidad": "privado",
       "ramas": {
-        "sin-borrar": ["main", "develop", "qa", "uat", "pre-prod"],
+        "sin-borrar": ["main", "develop", "qa", "uat"],
         "tuberia-completa": ["develop"],
-        "tuberia-en-verde": ["qa", "uat", "pre-prod", "main"]
+        "tuberia-en-verde": ["qa", "uat", "main"]
       }
     },
     {
@@ -48,9 +48,9 @@
       "proyecto": "prisma_api",
       "visibilidad": "privado",
       "ramas": {
-        "sin-borrar": ["main", "develop", "qa", "uat", "pre-prod"],
+        "sin-borrar": ["main", "develop", "qa", "uat"],
         "tuberia-completa": ["develop"],
-        "tuberia-en-verde": ["qa", "uat", "pre-prod", "main"]
+        "tuberia-en-verde": ["qa", "uat", "main"]
       }
     },
     {
@@ -58,9 +58,9 @@
       "proyecto": "prisma_front",
       "visibilidad": "privado",
       "ramas": {
-        "sin-borrar": ["main", "develop", "qa", "uat", "pre-prod"],
+        "sin-borrar": ["main", "develop", "qa", "uat"],
         "tuberia-completa": ["develop"],
-        "tuberia-en-verde": ["qa", "uat", "pre-prod", "main"]
+        "tuberia-en-verde": ["qa", "uat", "main"]
       }
     }
   ]
