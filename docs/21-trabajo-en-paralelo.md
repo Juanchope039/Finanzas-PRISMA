@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [6.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/21-trabajo-en-paralelo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-10-05 | [Paralelo](INDICE.md#etiqueta-paralelo) · [Proceso](INDICE.md#etiqueta-proceso) |
+| [6.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/21-trabajo-en-paralelo.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-16 | 2026-10-10 | [Paralelo](INDICE.md#etiqueta-paralelo) · [Proceso](INDICE.md#etiqueta-proceso) |
 
 Cómo avanza PRISMA en varios carriles a la vez sin que se bloqueen ni se pisen. **Un carril no es
 una persona:** es un frente de trabajo, y puede llevarlo una persona, un equipo o una sesión de
@@ -330,9 +330,9 @@ mitades, no antes. Lo demás del paso 7 no cambia: se espera igual a que acepten
   si están en la misma máquina, en su propio `git worktree`.
 - Se integra a `develop` al menos una vez al día por carril. El paralelismo se paga integrando
   seguido, no integrando al final.
-- **Y las cinco ramas principales las protege GitHub, no la costumbre** ([ADR-048](adr/ADR-048-las-ramas-principales-las-protege-github.md)): `develop`, `qa`,
-  `uat`, `pre-prod` y `main` no se pueden borrar, y a ninguna se entra sin PR. A `develop` con la
-  tubería terminada, aunque haya terminado mal; a las otras cuatro, con la tubería en verde. La
+- **Y las cuatro ramas principales las protege GitHub, no la costumbre** ([ADR-048](adr/ADR-048-las-ramas-principales-las-protege-github.md), [ADR-053](adr/ADR-053-se-quita-pre-prod-y-uat-se-despliega.md)): `develop`, `qa`,
+  `uat` y `main` no se pueden borrar, y a ninguna se entra sin PR. A `develop` con la
+  tubería terminada, aunque haya terminado mal; a las otras tres, con la tubería en verde. La
   definición y lo que todavía falta para poder aplicarla están en `scripts/github/README.md`.
 
 ### 6.6 El ritual mínimo

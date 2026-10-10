@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [12.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-06 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
+| [12.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/CLAUDE.md "Historial de cambios") | [✅ Vigente](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-10 | [Proceso](docs/INDICE.md#etiqueta-proceso) |
 
 Las reglas de PRISMA, para cualquier sesión en cualquiera de los cuatro repositorios.
 
@@ -62,11 +62,11 @@ ni referencias de proyectos, ni nombres de clientes.
 - **Se empuja siempre**, desde su primer commit y sin que haya que pedirlo. `develop`, `main`, `qa`,
   `uat` y `prod` no se mueven por cuenta propia.
 
-**Las cinco ramas principales las protege GitHub, no la costumbre** ([ADR-048](docs/adr/ADR-048-las-ramas-principales-las-protege-github.md)).
-- `develop`, `qa`, `uat`, `pre-prod` y `main` **no se pueden borrar**, y a ninguna se entra sin PR.
+**Las cuatro ramas principales las protege GitHub, no la costumbre** ([ADR-048](docs/adr/ADR-048-las-ramas-principales-las-protege-github.md), [ADR-053](docs/adr/ADR-053-se-quita-pre-prod-y-uat-se-despliega.md)).
+- `develop`, `qa`, `uat` y `main` **no se pueden borrar**, y a ninguna se entra sin PR.
   La especificación no tiene `develop`: su base es `main`.
 - **A `develop` se entra con la tubería terminada**, aunque haya terminado mal: es la rama de
-  integración diaria. **A las otras cuatro, con la tubería en verde**, porque de ahí sale lo que se
+  integración diaria. **A las otras tres, con la tubería en verde**, porque de ahí sale lo que se
   despliega. Lo exigen los checks «Tubería completa» y «Tubería en verde», dos trabajos al final del
   `ci.yml` de cada repositorio.
 - La definición vive en `scripts/github/politicas-de-ramas.json` y la pone su herramienta, no el

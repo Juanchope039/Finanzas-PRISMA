@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.2.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/13-respaldo-y-exportacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-08 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Datos personales](INDICE.md#etiqueta-datos-personales) |
+| [2.3.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/13-respaldo-y-exportacion.md "Historial de cambios") | [✅ Vigente](22-documentacion.md#estados) | 2026-09-13 | 2026-10-10 | [Base de datos](INDICE.md#etiqueta-base-de-datos) · [Datos personales](INDICE.md#etiqueta-datos-personales) |
 
 > **Construcción: en el [Sprint 8](08-plan-de-desarrollo.md#sprint-8), no después del go-live.** El [ADR-047](adr/ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) metió el respaldo al plan,
 > en las tareas [8.13](08-plan-de-desarrollo.md#tarea-8-13) a [8.17](08-plan-de-desarrollo.md#tarea-8-17), y retiró del 14 la deuda [D-05](14-roadmap-e-ideas.md#d-05) y la idea 01. Lo que este documento
@@ -184,7 +184,7 @@ Todo archivo de exportación incluye un `manifiesto.json`:
 | `registros` por archivo | Detecta una exportación truncada |
 | `version_esquema` | Permite saber si el respaldo corresponde a una estructura anterior |
 | `version_api` | Dice qué versión de `prisma_api` armó el archivo. Es la que genera, así que es la que responde |
-| `ambiente` | Dice de qué ambiente salió: `dev`, `qa`, `uat`, `pre-prod` o `prod` |
+| `ambiente` | Dice de qué ambiente salió: `dev`, `qa`, `uat` o `prod` |
 | `totales_control` | Permite verificar el respaldo **sin abrirlo**: si los totales no coinciden con los del sistema, algo falló |
 | `zona_horaria` | Evita que las fechas se reinterpreten mal al abrir el archivo en otro lugar |
 

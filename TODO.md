@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [9.64.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-08 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
+| [9.65.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/TODO.md "Historial de cambios") | [🔄 Vivo](docs/22-documentacion.md#estados) | 2026-09-16 | 2026-10-10 | [Plan](docs/INDICE.md#etiqueta-plan) · [Paralelo](docs/INDICE.md#etiqueta-paralelo) |
 
 Lo hecho y lo pendiente, con los números de tarea del
 [plan de desarrollo](docs/08-plan-de-desarrollo.md). El plan dice **qué** hay que hacer, **en qué
@@ -1645,17 +1645,18 @@ La toma el carril que termine primero su cadena: es la funcionalidad más indepe
       `/swagger-ui` y de `/webjars`, así que cerrar `/docs` dejaba el mapa igual de público. Se vio
       probándolo contra la aplicación levantada. **Falla cerrado**: sin credencial configurada esas
       rutas contestan como si no existieran. Se quitó el apagón provisional del perfil `prod`
-- [ ] ⚡ [**9.12**](docs/08-plan-de-desarrollo.md#tarea-9-12) El proyecto pre-prod de Supabase, el único de pago de este proyecto · Decisión — salió
-      de partir la [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4), y desde el [ADR-044](docs/adr/ADR-044-dos-ambientes-desplegados.md) ya no lleva uat. Desde el [ADR-045](docs/adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md) se llama
-      pre-prod, y el prod del taller vive en otro repositorio. El expediente y la cifra están en el
+- [ ] ⚡ [**9.12**](docs/08-plan-de-desarrollo.md#tarea-9-12) El proyecto uat de Supabase, el único de pago de este proyecto · Decisión — salió
+      de partir la [0.4](docs/08-plan-de-desarrollo.md#tarea-0-4), y desde el [ADR-044](docs/adr/ADR-044-dos-ambientes-desplegados.md) ya no llevaba uat. El [ADR-045](docs/adr/ADR-045-pre-prod-y-prod-en-otro-repositorio.md) lo llamó
+      pre-prod, y el [ADR-053](docs/adr/ADR-053-se-quita-pre-prod-y-uat-se-despliega.md) quitó pre-prod y le devolvió el papel a uat; el prod del taller sigue
+      en otro repositorio. El expediente y la cifra están en el
       [§7.1](#71-el-expediente-de-uat-y-prod) y lo único que falta es la firma
 - [ ] ⚡ [**9.13**](docs/08-plan-de-desarrollo.md#tarea-9-13) Los secretos de GitHub para correr permisos y extremo a extremo contra dev · Decisión — la configuración que los trabajos del CI ya esperan desde la [2.11](docs/08-plan-de-desarrollo.md#tarea-2-11) y la [9.6](docs/08-plan-de-desarrollo.md#tarea-9-6), que apuntaban a qa y desde el [ADR-044](docs/adr/ADR-044-dos-ambientes-desplegados.md) apuntan a dev; sin ella se saltan con aviso. Los de permisos ya se llaman `DEV_BASE_URL`, `DEV_BASE_CLAVE_DUENO`, `DEV_BASE_CLAVE_API`, `DEV_AUTH_URL`, `DEV_ANON_KEY` y `DEV_SERVICE_ROLE_KEY` ([9.5](docs/08-plan-de-desarrollo.md#tarea-9-5))
-- [x] [**9.14**](docs/08-plan-de-desarrollo.md#tarea-9-14) El nombre pre-prod en el código · API, Front — `pre-prod` entra al
-      contrato (`0.28.0`), a `PRISMA_AMBIENTE` y a un perfil de Spring con Swagger cerrado, igual
-      que prod. En el front, con franja y «Preproducción». **El front se compila una vez por
-      destino**: qa construye `…-front-pre-prod` con `PRE_PROD_*` y `…-front` con `PROD_*`, y `main`
-      marca `:pre-prod` en la API y en el front de pre-prod. `:prod` queda para la entrega ([9.15](docs/08-plan-de-desarrollo.md#tarea-9-15)).
-      La base no cambió: `sembrar.ps1` y `promover.ps1` ya se niegan con pre-prod hasta que exista
+- [x] [**9.14**](docs/08-plan-de-desarrollo.md#tarea-9-14) El ambiente de despliegue en el código · API, Front — se hizo con
+      `pre-prod`, que entró al contrato (`0.28.0`), a `PRISMA_AMBIENTE` y a un perfil de Spring con
+      Swagger cerrado, igual que prod. **El [ADR-053](docs/adr/ADR-053-se-quita-pre-prod-y-uat-se-despliega.md) quitó ese ambiente y puso a `uat` en su lugar**:
+      el contrato (`0.34.0`) deja el enum en `dev`, `qa`, `uat` y `prod`, el perfil que cierra
+      Swagger se llama `uat` y su clave es `UAT_GERENCIA_CLAVE`. `:prod` queda para la entrega ([9.15](docs/08-plan-de-desarrollo.md#tarea-9-15)).
+      La base no cambió: `sembrar.ps1` y `promover.ps1` solo admiten dev y qa
 - [x] [**9.15**](docs/08-plan-de-desarrollo.md#tarea-9-15) La entrega del release a prod, en el repositorio del taller · Base,
       Decisión — quien dirige respondió las tres preguntas, y el [ADR-052](docs/adr/ADR-052-la-entrega-del-release-a-prod.md) las escribe: un solo
       repositorio espejo de la cuenta del taller, que recibe **el árbol de `main` y además las dos
@@ -5142,11 +5143,12 @@ huecos que los documentos no cubrían y que el código tuvo que llenar para pode
       que se respaldan siguen siendo 27 ([13 §3](docs/13-respaldo-y-exportacion.md#3-formatos)). No es historia de nadie, y un respaldo que al
       restaurarse devolviera la programación vieja encendería solo un trabajo que nadie pidió. **Lo
       decidió la [8.14](docs/08-plan-de-desarrollo.md#tarea-8-14)**
-- [ ] **En un PR a `main` o a `pre-prod`, la tubería de `prisma_db` no corre ningún trabajo.** Sus
+- [ ] **En un PR a `main`, la tubería de `prisma_db` no corre ningún trabajo.** Sus
       dos trabajos son solo para `develop`, `qa` y `uat`, así que la puerta «Tubería en verde» que
       pide el [ADR-048](docs/adr/ADR-048-las-ramas-principales-las-protege-github.md) se reporta verde sin haber comprobado nada. Se dejó así para no tocar la
       condición de un trabajo que ya existía; **lo que hay que decidir es si el informe de la base
-      tiene que correr también en esas dos ramas**
+      tiene que correr también en esa rama**. Con el [ADR-053](docs/adr/ADR-053-se-quita-pre-prod-y-uat-se-despliega.md) la rama `pre-prod` dejó de existir, así que
+      ahora es una sola
 - [ ] **El respaldo baja por partes y siempre en un ZIP, y ningún documento lo decía.** Un respaldo
       total pasa de los 5 MB que caben en un `Documento`, y el [13 §5.1](docs/13-respaldo-y-exportacion.md#51-quién-arma-el-archivo-la-api) pide que el archivo salga de la
       API. El contrato `0.32.0` lo resuelve con `POST /respaldos/{id}/descarga` y un trozo de hasta

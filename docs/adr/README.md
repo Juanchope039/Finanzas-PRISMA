@@ -2,7 +2,7 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [1.23.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-10-06 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
+| [1.24.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/docs/adr/README.md "Historial de cambios") | [🔄 Vivo](../22-documentacion.md#estados) | 2026-09-13 | 2026-10-10 | [Arquitectura](../INDICE.md#etiqueta-arquitectura) |
 
 Registro de las decisiones técnicas importantes: qué se decidió, por qué, qué alternativas se
 consideraron y qué consecuencias tiene.
@@ -54,13 +54,14 @@ consideraron y qué consecuencias tiene.
 | [043](ADR-043-dependencias-solo-hacia-atras.md) | Una tarea solo depende de tareas anteriores | Aceptado |
 | [044](ADR-044-dos-ambientes-desplegados.md) | Dos ambientes desplegados, dev y prod, y qa y uat como etapas de la tubería | Aceptado |
 | [045](ADR-045-pre-prod-y-prod-en-otro-repositorio.md) | El ambiente alojado al final se llama pre-prod, y prod vive en otro repositorio | Aceptado |
-| [046](ADR-046-pre-prod-se-construye-desde-su-rama.md) | pre-prod se construye desde su rama, como dev, y es la última etapa de la tubería | Aceptado |
+| [046](ADR-046-pre-prod-se-construye-desde-su-rama.md) | pre-prod se construye desde su rama, como dev, y es la última etapa de la tubería | Reemplazado por [053](ADR-053-se-quita-pre-prod-y-uat-se-despliega.md) |
 | [047](ADR-047-el-respaldo-y-la-auditoria-entran-al-plan.md) | El respaldo con manifiesto y la auditoría completa entran al [Sprint 8](../08-plan-de-desarrollo.md#sprint-8) | Aceptado |
 | [048](ADR-048-las-ramas-principales-las-protege-github.md) | Las cinco ramas principales las protege GitHub, y la tubería es la puerta para entrar | Aceptado |
 | [049](ADR-049-sin-docs-clave-swagger-toma-la-clave-de-gerencia.md) | Sin `DOCS_CLAVE`, Swagger toma `PREPROD_GERENCIA_CLAVE` | Aceptado |
 | [050](ADR-050-main-vuelve-a-ser-la-ultima-etapa.md) | `main` vuelve a ser la última etapa, y `pre-prod` entra en ella por PR | Aceptado |
 | [051](ADR-051-la-visibilidad-de-un-repositorio-no-se-cambia.md) | La visibilidad de un repositorio no se cambia | Aceptado |
 | [052](ADR-052-la-entrega-del-release-a-prod.md) | La entrega del release a prod va a un repositorio espejo del taller, la dispara una persona y no recompila nada | Aceptado |
+| [053](ADR-053-se-quita-pre-prod-y-uat-se-despliega.md) | Se quita pre-prod, y uat pasa a ser el segundo ambiente desplegado | Aceptado |
 
 Son **45 decisiones** registradas: 36 aceptadas y 9 reemplazadas.
 

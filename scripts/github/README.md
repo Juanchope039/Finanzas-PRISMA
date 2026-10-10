@@ -2,9 +2,9 @@
 
 | Versión | Estado | Creado | Actualizado | Etiquetas |
 |---|---|---|---|---|
-| [2.0.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/scripts/github/README.md "Historial de cambios") | [✅ Vigente](../../docs/22-documentacion.md#estados) | 2026-10-05 | 2026-10-06 | [Proceso](../../docs/INDICE.md#etiqueta-proceso) |
+| [2.1.0](https://github.com/Juanchope039/Finanzas-PRISMA/commits/main/scripts/github/README.md "Historial de cambios") | [✅ Vigente](../../docs/22-documentacion.md#estados) | 2026-10-05 | 2026-10-10 | [Proceso](../../docs/INDICE.md#etiqueta-proceso) |
 
-Pone en GitHub las protecciones de las cinco ramas principales de los cuatro repositorios: que no se
+Pone en GitHub las protecciones de las cuatro ramas principales de los cuatro repositorios: que no se
 borren, y qué tiene que haber pasado para entrar en cada una. La decisión está en
 [ADR-048](../../docs/adr/ADR-048-las-ramas-principales-las-protege-github.md) y la regla, en el [`CLAUDE.md`](../../CLAUDE.md) de la especificación.
 
@@ -33,7 +33,7 @@ node scripts/github/politicas-de-ramas.mjs verificar Finanzas-PRISMA-API   # sol
 |---|---|---|
 | Las ramas principales no se borran | las cinco | Nadie puede borrarlas, ni el dueño |
 | A `develop` se entra por PR, con la tubería terminada | `develop` | PR, y el check **Tubería completa** en verde: la tubería corrió hasta el final. **No se le exige haber terminado bien** |
-| A las demás ramas principales se entra por PR, con la tubería en verde | `qa`, `uat`, `pre-prod`, `main` | PR, y el check **Tubería en verde**: ningún trabajo quedó en rojo ni cancelado |
+| A las demás ramas principales se entra por PR, con la tubería en verde | `qa`, `uat`, `main` | PR, y el check **Tubería en verde**: ningún trabajo quedó en rojo ni cancelado |
 
 Los dos checks son trabajos puerta al final del `ci.yml` de cada repositorio —y del
 `documentacion.yml` de este—, y corren con `if: always()`, así que existen aunque la tubería falle.
@@ -69,7 +69,7 @@ de los tres conjuntos de la tabla de arriba:
 1. **Ruleset Name**, el nombre de la tabla, y **Enforcement status** en `Active`.
 2. **Bypass list** vacía: nadie tiene excusa.
 3. **Target branches → Add target → Include by pattern**, una por rama: `main`, `develop`, `qa`,
-   `uat`, `pre-prod`, según el conjunto.
+   `uat`, según el conjunto.
 4. **Rules**: `Restrict deletions` en el primero. En los otros dos, `Require a pull request before
    merging` con **0** aprobaciones y `Require status checks to pass`, agregando el check por su
    nombre —**Tubería completa** o **Tubería en verde**— y dejando sin marcar «Require branches to be
